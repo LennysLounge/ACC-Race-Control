@@ -85,25 +85,32 @@ public class Vis extends PApplet {
     @Override
     public void draw() {
         background(50);
-        drawHeader();
 
-        int lineHeight = LookAndFeel.get().LINE_HEIGHT;
+        int headerSize = LookAndFeel.get().LINE_HEIGHT * 2;
+        PGraphics base = createGraphics(width, headerSize, CustomPGraphics.class.getName());
+        base.beginDraw();
+        drawHeader(base);
+        base.endDraw();
+        image(base, 0, 0);
 
         try {
             if (activeTabIndex >= 0 && activeTabIndex < panels.size()) {
-                PGraphics context = createGraphics(width, height - lineHeight * 2,
+                PGraphics context = createGraphics(width, height - headerSize,
                         CustomPGraphics.class.getName());
                 context.beginDraw();
                 panels.get(activeTabIndex).drawPanel(context);
                 context.endDraw();
-                image(context, 0, lineHeight * 2);
+                image(context, 0, headerSize * 2);
             }
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error while drawing panel.", e);
         }
     }
 
-    private void drawHeader() {
+    private void drawHeader(PGraphics base) {
+        
+        String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
+        String sessionName = sessionIdToString(client.getSessionId());
         textAlign(LEFT, CENTER);
         fill(30);
         noStroke();
@@ -119,8 +126,7 @@ public class Vis extends PApplet {
         LookAndFeel.text(this, conId, 10, lineHeight / 2f);
         LookAndFeel.text(this, packetsReceived, 200, lineHeight / 2f);
 
-        String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
-        String sessionName = sessionIdToString(client.getSessionId());
+        
         textAlign(RIGHT, CENTER);
         LookAndFeel.text(this, sessionName, width - 10, lineHeight / 2f);
         LookAndFeel.text(this, sessionTimeLeft, width - textWidth(sessionName) - 40, lineHeight / 2f);
