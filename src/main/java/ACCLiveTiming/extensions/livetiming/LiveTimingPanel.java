@@ -8,7 +8,7 @@ package ACCLiveTiming.extensions.livetiming;
 import ACCLiveTiming.client.ExtensionPanel;
 import ACCLiveTiming.networking.data.CarInfo;
 import ACCLiveTiming.utility.TimeUtils;
-import ACCLiveTiming.utility.LookAndFeel;
+import ACCLiveTiming.visualisation.LookAndFeel;
 import java.util.ArrayList;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;

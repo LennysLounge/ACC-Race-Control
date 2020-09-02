@@ -9,7 +9,7 @@ import ACCLiveTiming.client.BasicAccBroadcastingClient;
 import ACCLiveTiming.client.ExtensionPanel;
 import ACCLiveTiming.client.SessionId;
 import ACCLiveTiming.utility.TimeUtils;
-import ACCLiveTiming.utility.LookAndFeel;
+import ACCLiveTiming.visualisation.LookAndFeel;
 import ACCLiveTiming.visualisation.CustomPGraphics;
 import java.io.IOException;
 import java.util.LinkedList;

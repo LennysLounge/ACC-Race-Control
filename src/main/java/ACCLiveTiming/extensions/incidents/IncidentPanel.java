@@ -8,7 +8,7 @@ package ACCLiveTiming.extensions.incidents;
 import ACCLiveTiming.client.ExtensionPanel;
 import ACCLiveTiming.networking.enums.SessionType;
 import ACCLiveTiming.utility.TimeUtils;
-import ACCLiveTiming.utility.LookAndFeel;
+import ACCLiveTiming.visualisation.LookAndFeel;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;

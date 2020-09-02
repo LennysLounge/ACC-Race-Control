@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.utility;
+package ACCLiveTiming.visualisation;
 
 import java.io.File;
 import java.net.URL;
@@ -59,10 +59,7 @@ public class LookAndFeel {
         return instance;
     }
 
-    public static void text(PApplet context, String text, float x, float y) {
-        float offset = instance.TEXT_SIZE * instance.FONT_BASELINE_OFFSET;
-        context.text(text, x, y - offset);
-    }
+    
 
     public static void text(PGraphics context, String text, float x, float y) {
         float offset = instance.TEXT_SIZE * instance.FONT_BASELINE_OFFSET;
