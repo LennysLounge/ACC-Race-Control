@@ -8,7 +8,7 @@ package ACCLiveTiming.extensions.livetiming;
 import ACCLiveTiming.client.ExtensionPanel;
 import ACCLiveTiming.networking.data.CarInfo;
 import ACCLiveTiming.utility.TimeUtils;
-import ACCLiveTiming.utility.VisualUtils;
+import ACCLiveTiming.utility.LookAndFeel;
 import java.util.ArrayList;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
@@ -32,7 +32,7 @@ public class LiveTimingPanel extends ExtensionPanel {
 
     @Override
     public void drawPanel(PGraphics context) {
-        int lineHeight = VisualUtils.LINE_HEIGHT;
+        int lineHeight = LookAndFeel.get().LINE_HEIGHT;
 
         //sort cars for position.
         ArrayList<CarInfo> cars = new ArrayList<>();
@@ -75,7 +75,7 @@ public class LiveTimingPanel extends ExtensionPanel {
             context.fill((n % 2 == 0) ? 50 : 40);
             context.stroke((n % 2 == 0) ? 50 : 40);
             context.rect(0, y, context.width, lineHeight);
-            context.fill(VisualUtils.COLOR_RED);
+            context.fill(LookAndFeel.get().COLOR_RED);
             context.rect(x, y, lineHeight, lineHeight);
             context.fill(255);
             context.rect(x + 400, y, lineHeight * 1.5f, lineHeight);
@@ -83,18 +83,18 @@ public class LiveTimingPanel extends ExtensionPanel {
             context.noStroke();
             context.fill(255);
             context.textAlign(CENTER, CENTER);
-            VisualUtils.text(context, position, x + lineHeight / 2, y + lineHeight / 2);
+            LookAndFeel.text(context, position, x + lineHeight / 2, y + lineHeight / 2);
             context.textAlign(LEFT, CENTER);
-            VisualUtils.text(context, name, x + lineHeight + 20, y + lineHeight / 2);
+            LookAndFeel.text(context, name, x + lineHeight + 20, y + lineHeight / 2);
             context.fill(0);
             context.textAlign(CENTER, CENTER);
-            VisualUtils.text(context, carNumber, x + 400 + lineHeight * 1.5f / 2, y + lineHeight / 2);
+            LookAndFeel.text(context, carNumber, x + 400 + lineHeight * 1.5f / 2, y + lineHeight / 2);
             context.fill(255);
             context.textAlign(LEFT, CENTER);
-            VisualUtils.text(context, currentLap, x + 500, y + lineHeight / 2);
-            VisualUtils.text(context, delta, x + 650, y + lineHeight / 2);
+            LookAndFeel.text(context, currentLap, x + 500, y + lineHeight / 2);
+            LookAndFeel.text(context, delta, x + 650, y + lineHeight / 2);
         }
-        VisualUtils.drawScrollBar(context, cars.size(), visibleLines, scroll);
+        LookAndFeel.drawScrollBar(context, cars.size(), visibleLines, scroll);
     }
 
     @Override

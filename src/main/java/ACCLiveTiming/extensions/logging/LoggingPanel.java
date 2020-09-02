@@ -6,7 +6,7 @@
 package ACCLiveTiming.extensions.logging;
 
 import ACCLiveTiming.client.ExtensionPanel;
-import ACCLiveTiming.utility.VisualUtils;
+import ACCLiveTiming.utility.LookAndFeel;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class LoggingPanel extends ExtensionPanel {
 
     @Override
     public void drawPanel(PGraphics context) {
-        int lineHeight = VisualUtils.LINE_HEIGHT;
+        int lineHeight = LookAndFeel.get().LINE_HEIGHT;
         int tabSize = 130;
 
         List<String> messages = new LinkedList<>();
@@ -66,12 +66,12 @@ public class LoggingPanel extends ExtensionPanel {
             float x = 40;
             String[] partials = msg.split("\t");
             for (String partial : partials) {
-                VisualUtils.text(context, partial, x, y + lineHeight / 2);
+                LookAndFeel.text(context, partial, x, y + lineHeight / 2);
                 float msgWidth = context.textWidth(partial);
                 x += (msgWidth - (msgWidth % tabSize) + tabSize);
             }
         }
-        VisualUtils.drawScrollBar(context, messages.size(), visibleLines, scroll);
+        LookAndFeel.drawScrollBar(context, messages.size(), visibleLines, scroll);
     }
 
     @Override

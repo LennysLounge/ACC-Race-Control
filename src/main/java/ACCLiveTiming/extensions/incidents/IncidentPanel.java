@@ -8,7 +8,7 @@ package ACCLiveTiming.extensions.incidents;
 import ACCLiveTiming.client.ExtensionPanel;
 import ACCLiveTiming.networking.enums.SessionType;
 import ACCLiveTiming.utility.TimeUtils;
-import ACCLiveTiming.utility.VisualUtils;
+import ACCLiveTiming.utility.LookAndFeel;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class IncidentPanel extends ExtensionPanel {
 
     @Override
     public void drawPanel(PGraphics context) {
-        int lineHeight = VisualUtils.LINE_HEIGHT;
+        int lineHeight = LookAndFeel.get().LINE_HEIGHT;
 
         List<Accident> accidents = new LinkedList<>();
         accidents.addAll(extension.getAccidents());
@@ -63,33 +63,33 @@ public class IncidentPanel extends ExtensionPanel {
             context.rect(0, y, context.width, lineHeight);
 
             if (accident.getSessionID().getType() == SessionType.PRACTICE) {
-                context.fill(VisualUtils.COLOR_PRACTICE);
+                context.fill(LookAndFeel.get().COLOR_PRACTICE);
             } else if (accident.getSessionID().getType() == SessionType.QUALIFYING) {
-                context.fill(VisualUtils.COLOR_QUALIFYING);
+                context.fill(LookAndFeel.get().COLOR_QUALIFYING);
             } else if (accident.getSessionID().getType() == SessionType.RACE) {
-                context.fill(VisualUtils.COLOR_RACE);
+                context.fill(LookAndFeel.get().COLOR_RACE);
             }
 
             context.rect(x, y, lineHeight, lineHeight);
             context.fill(255);
             context.textAlign(CENTER, CENTER);
-            VisualUtils.text(context, "" + accident.getIncidentNumber(), x + lineHeight / 2, y + lineHeight / 2);
+            LookAndFeel.text(context, "" + accident.getIncidentNumber(), x + lineHeight / 2, y + lineHeight / 2);
             context.textAlign(LEFT, CENTER);
-            VisualUtils.text(context, TimeUtils.asDuration(accident.getEarliestTime()),
+            LookAndFeel.text(context, TimeUtils.asDuration(accident.getEarliestTime()),
                     x + lineHeight + 20, y + lineHeight / 2);
 
             int m = 0;
             for (int carId : accident.getCars()) {
                 int xx = (int) (lineHeight * 1.5f * m++);
-                context.fill(VisualUtils.COLOR_RED);
+                context.fill(LookAndFeel.get().COLOR_RED);
                 context.rect(300 + xx, y, lineHeight * 1.5f, lineHeight);
                 context.fill(255);
                 context.textAlign(CENTER, CENTER);
-                VisualUtils.text(context, "" + extension.getModel().getCar(carId).getCarNumber(),
+                LookAndFeel.text(context, "" + extension.getModel().getCar(carId).getCarNumber(),
                         300 + xx + lineHeight * 1.5f / 2, y + lineHeight / 2);
             }
         }
-        VisualUtils.drawScrollBar(context, accidents.size(), visibleLines, scroll);
+        LookAndFeel.drawScrollBar(context, accidents.size(), visibleLines, scroll);
     }
 
     @Override
