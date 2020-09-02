@@ -9,7 +9,8 @@ import ACCLiveTiming.client.BasicAccBroadcastingClient;
 import ACCLiveTiming.client.ExtensionPanel;
 import ACCLiveTiming.client.SessionId;
 import ACCLiveTiming.utility.TimeUtils;
-import ACCLiveTiming.utility.VisualUtils;
+import ACCLiveTiming.utility.LookAndFeel;
+import ACCLiveTiming.visualisation.CustomPGraphics;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -72,9 +73,10 @@ public class Vis extends PApplet {
 
     @Override
     public void setup() {
+        LookAndFeel.init(this);
         surface.setResizable(true);
         surface.setTitle("ACC Accident Tracker");
-        textFont(VisualUtils.getFont(this));
+        textFont(LookAndFeel.get().FONT);
     }
 
     int counter = 0;
@@ -85,14 +87,13 @@ public class Vis extends PApplet {
         background(50);
         drawHeader();
 
-        int lineHeight = VisualUtils.LINE_HEIGHT;
+        int lineHeight = LookAndFeel.get().LINE_HEIGHT;
 
         try {
             if (activeTabIndex >= 0 && activeTabIndex < panels.size()) {
-                PGraphics context = createGraphics(width, height - lineHeight * 2);
+                PGraphics context = createGraphics(width, height - lineHeight * 2,
+                        CustomPGraphics.class.getName());
                 context.beginDraw();
-                context.textFont(VisualUtils.getFont(this));
-                context.noStroke();
                 panels.get(activeTabIndex).drawPanel(context);
                 context.endDraw();
                 image(context, 0, lineHeight * 2);
@@ -107,7 +108,7 @@ public class Vis extends PApplet {
         fill(30);
         noStroke();
 
-        int lineHeight = VisualUtils.LINE_HEIGHT;
+        int lineHeight = LookAndFeel.get().LINE_HEIGHT;
 
         //First line
         rect(0, 0, width, lineHeight);
@@ -115,14 +116,14 @@ public class Vis extends PApplet {
         String packetsReceived = "Packets received: " + client.getPacketCount();
 
         fill(255);
-        VisualUtils.text(this, conId, 10, lineHeight / 2f);
-        VisualUtils.text(this, packetsReceived, 200, lineHeight / 2f);
+        LookAndFeel.text(this, conId, 10, lineHeight / 2f);
+        LookAndFeel.text(this, packetsReceived, 200, lineHeight / 2f);
 
         String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
         String sessionName = sessionIdToString(client.getSessionId());
         textAlign(RIGHT, CENTER);
-        VisualUtils.text(this, sessionName, width - 10, lineHeight / 2f);
-        VisualUtils.text(this, sessionTimeLeft, width - textWidth(sessionName) - 40, lineHeight / 2f);
+        LookAndFeel.text(this, sessionName, width - 10, lineHeight / 2f);
+        LookAndFeel.text(this, sessionTimeLeft, width - textWidth(sessionName) - 40, lineHeight / 2f);
 
         fill(0, 150, 0);
         rect(width - textWidth(sessionName) - 30, lineHeight * 0.1f, 10, lineHeight * 0.8f);
@@ -135,7 +136,7 @@ public class Vis extends PApplet {
             rect(i * tabSize, lineHeight, tabSize, lineHeight);
 
             fill(255);
-            VisualUtils.text(this, tabNames.get(i), i * tabSize + tabSize / 2f, lineHeight * 1.5f);
+            LookAndFeel.text(this, tabNames.get(i), i * tabSize + tabSize / 2f, lineHeight * 1.5f);
         }
     }
 
@@ -160,7 +161,7 @@ public class Vis extends PApplet {
 
     @Override
     public void mousePressed() {
-        int lineHeight = VisualUtils.LINE_HEIGHT;
+        int lineHeight = LookAndFeel.get().LINE_HEIGHT;
         if (mouseY > lineHeight && mouseY < lineHeight * 2) {
             float tabSize = width / tabNames.size();
             int clickedIndex = (int) ((mouseX - (mouseX % tabSize)) / tabSize);
