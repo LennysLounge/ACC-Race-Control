@@ -32,7 +32,7 @@ public class IncidentPanel extends ExtensionPanel {
     }
 
     @Override
-    public void drawPanel(PGraphics context) {
+    public void drawPanel(PGraphics base) {
         int lineHeight = LookAndFeel.get().LINE_HEIGHT;
 
         List<Accident> accidents = new LinkedList<>();
@@ -42,7 +42,7 @@ public class IncidentPanel extends ExtensionPanel {
         if (scroll < 0) {
             scroll = 0;
         }
-        int visibleLines = context.height / lineHeight;
+        int visibleLines = base.height / lineHeight;
         if (scroll > accidents.size() - visibleLines) {
             scroll = accidents.size() - visibleLines;
         }
@@ -57,39 +57,39 @@ public class IncidentPanel extends ExtensionPanel {
             int y = lineHeight * n++;
             int x = 20;
 
-            context.fill((n % 2 == 0) ? 50 : 40);
-            context.stroke((n % 2 == 0) ? 50 : 40);
+            base.fill((n % 2 == 0) ? 50 : 40);
+            base.stroke((n % 2 == 0) ? 50 : 40);
 
-            context.rect(0, y, context.width, lineHeight);
+            base.rect(0, y, base.width, lineHeight);
 
             if (accident.getSessionID().getType() == SessionType.PRACTICE) {
-                context.fill(LookAndFeel.get().COLOR_PRACTICE);
+                base.fill(LookAndFeel.get().COLOR_PRACTICE);
             } else if (accident.getSessionID().getType() == SessionType.QUALIFYING) {
-                context.fill(LookAndFeel.get().COLOR_QUALIFYING);
+                base.fill(LookAndFeel.get().COLOR_QUALIFYING);
             } else if (accident.getSessionID().getType() == SessionType.RACE) {
-                context.fill(LookAndFeel.get().COLOR_RACE);
+                base.fill(LookAndFeel.get().COLOR_RACE);
             }
 
-            context.rect(x, y, lineHeight, lineHeight);
-            context.fill(255);
-            context.textAlign(CENTER, CENTER);
-            LookAndFeel.text(context, "" + accident.getIncidentNumber(), x + lineHeight / 2, y + lineHeight / 2);
-            context.textAlign(LEFT, CENTER);
-            LookAndFeel.text(context, TimeUtils.asDuration(accident.getEarliestTime()),
+            base.rect(x, y, lineHeight, lineHeight);
+            base.fill(255);
+            base.textAlign(CENTER, CENTER);
+            base.text("" + accident.getIncidentNumber(), x + lineHeight / 2, y + lineHeight / 2);
+            base.textAlign(LEFT, CENTER);
+            base.text(TimeUtils.asDuration(accident.getEarliestTime()),
                     x + lineHeight + 20, y + lineHeight / 2);
 
             int m = 0;
             for (int carId : accident.getCars()) {
                 int xx = (int) (lineHeight * 1.5f * m++);
-                context.fill(LookAndFeel.get().COLOR_RED);
-                context.rect(300 + xx, y, lineHeight * 1.5f, lineHeight);
-                context.fill(255);
-                context.textAlign(CENTER, CENTER);
-                LookAndFeel.text(context, "" + extension.getModel().getCar(carId).getCarNumber(),
+                base.fill(LookAndFeel.get().COLOR_RED);
+                base.rect(300 + xx, y, lineHeight * 1.5f, lineHeight);
+                base.fill(255);
+                base.textAlign(CENTER, CENTER);
+                base.text("" + extension.getModel().getCar(carId).getCarNumber(),
                         300 + xx + lineHeight * 1.5f / 2, y + lineHeight / 2);
             }
         }
-        LookAndFeel.drawScrollBar(context, accidents.size(), visibleLines, scroll);
+        LookAndFeel.drawScrollBar(base, accidents.size(), visibleLines, scroll);
     }
 
     @Override

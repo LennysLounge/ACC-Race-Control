@@ -59,13 +59,6 @@ public class LookAndFeel {
         return instance;
     }
 
-    
-
-    public static void text(PGraphics context, String text, float x, float y) {
-        float offset = instance.TEXT_SIZE * instance.FONT_BASELINE_OFFSET;
-        context.text(text, x, y - offset);
-    }
-
     public static void drawScrollBar(PGraphics context, int listLength, int visibleItems, int scrollAmmount) {
         int barHeight = context.height;
         int barWidth = 20;

@@ -31,7 +31,7 @@ public class LoggingPanel extends ExtensionPanel {
     }
 
     @Override
-    public void drawPanel(PGraphics context) {
+    public void drawPanel(PGraphics base) {
         int lineHeight = LookAndFeel.get().LINE_HEIGHT;
         int tabSize = 130;
 
@@ -42,7 +42,7 @@ public class LoggingPanel extends ExtensionPanel {
         if (scroll < 0) {
             scroll = 0;
         }
-        int visibleLines = context.height / lineHeight;
+        int visibleLines = base.height / lineHeight;
         if (scroll > messages.size() - visibleLines) {
             scroll = messages.size() - visibleLines;
         }
@@ -56,22 +56,22 @@ public class LoggingPanel extends ExtensionPanel {
 
             int y = lineHeight * n++;
 
-            context.fill((n % 2 == 0) ? 50 : 40);
-            context.noStroke();
-            context.rect(0, y, context.width, lineHeight);
+            base.fill((n % 2 == 0) ? 50 : 40);
+            base.noStroke();
+            base.rect(0, y, base.width, lineHeight);
 
-            context.fill(255);
-            context.textAlign(LEFT, CENTER);
+            base.fill(255);
+            base.textAlign(LEFT, CENTER);
 
             float x = 40;
             String[] partials = msg.split("\t");
             for (String partial : partials) {
-                LookAndFeel.text(context, partial, x, y + lineHeight / 2);
-                float msgWidth = context.textWidth(partial);
+                base.text(partial, x, y + lineHeight / 2);
+                float msgWidth = base.textWidth(partial);
                 x += (msgWidth - (msgWidth % tabSize) + tabSize);
             }
         }
-        LookAndFeel.drawScrollBar(context, messages.size(), visibleLines, scroll);
+        LookAndFeel.drawScrollBar(base, messages.size(), visibleLines, scroll);
     }
 
     @Override

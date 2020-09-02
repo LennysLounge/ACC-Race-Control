@@ -31,7 +31,7 @@ public class LiveTimingPanel extends ExtensionPanel {
     }
 
     @Override
-    public void drawPanel(PGraphics context) {
+    public void drawPanel(PGraphics base) {
         int lineHeight = LookAndFeel.get().LINE_HEIGHT;
 
         //sort cars for position.
@@ -51,7 +51,7 @@ public class LiveTimingPanel extends ExtensionPanel {
         if (scroll < 0) {
             scroll = 0;
         }
-        int visibleLines = context.height / lineHeight;
+        int visibleLines = base.height / lineHeight;
         if (scroll > cars.size() - visibleLines) {
             scroll = cars.size() - visibleLines;
         }
@@ -72,29 +72,29 @@ public class LiveTimingPanel extends ExtensionPanel {
             int y = lineHeight * n++;
             int x = 20;
 
-            context.fill((n % 2 == 0) ? 50 : 40);
-            context.stroke((n % 2 == 0) ? 50 : 40);
-            context.rect(0, y, context.width, lineHeight);
-            context.fill(LookAndFeel.get().COLOR_RED);
-            context.rect(x, y, lineHeight, lineHeight);
-            context.fill(255);
-            context.rect(x + 400, y, lineHeight * 1.5f, lineHeight);
+            base.fill((n % 2 == 0) ? 50 : 40);
+            base.stroke((n % 2 == 0) ? 50 : 40);
+            base.rect(0, y, base.width, lineHeight);
+            base.fill(LookAndFeel.get().COLOR_RED);
+            base.rect(x, y, lineHeight, lineHeight);
+            base.fill(255);
+            base.rect(x + 400, y, lineHeight * 1.5f, lineHeight);
 
-            context.noStroke();
-            context.fill(255);
-            context.textAlign(CENTER, CENTER);
-            LookAndFeel.text(context, position, x + lineHeight / 2, y + lineHeight / 2);
-            context.textAlign(LEFT, CENTER);
-            LookAndFeel.text(context, name, x + lineHeight + 20, y + lineHeight / 2);
-            context.fill(0);
-            context.textAlign(CENTER, CENTER);
-            LookAndFeel.text(context, carNumber, x + 400 + lineHeight * 1.5f / 2, y + lineHeight / 2);
-            context.fill(255);
-            context.textAlign(LEFT, CENTER);
-            LookAndFeel.text(context, currentLap, x + 500, y + lineHeight / 2);
-            LookAndFeel.text(context, delta, x + 650, y + lineHeight / 2);
+            base.noStroke();
+            base.fill(255);
+            base.textAlign(CENTER, CENTER);
+            base.text(position, x + lineHeight / 2, y + lineHeight / 2);
+            base.textAlign(LEFT, CENTER);
+            base.text(name, x + lineHeight + 20, y + lineHeight / 2);
+            base.fill(0);
+            base.textAlign(CENTER, CENTER);
+            base.text(carNumber, x + 400 + lineHeight * 1.5f / 2, y + lineHeight / 2);
+            base.fill(255);
+            base.textAlign(LEFT, CENTER);
+            base.text(currentLap, x + 500, y + lineHeight / 2);
+            base.text(delta, x + 650, y + lineHeight / 2);
         }
-        LookAndFeel.drawScrollBar(context, cars.size(), visibleLines, scroll);
+        LookAndFeel.drawScrollBar(base, cars.size(), visibleLines, scroll);
     }
 
     @Override
