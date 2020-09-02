@@ -108,41 +108,41 @@ public class Vis extends PApplet {
     }
 
     private void drawHeader(PGraphics base) {
-        
+
         String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
         String sessionName = sessionIdToString(client.getSessionId());
-        textAlign(LEFT, CENTER);
-        fill(30);
-        noStroke();
+        base.textAlign(LEFT, CENTER);
+        base.fill(30);
+        base.noStroke();
+        base.textFont(LookAndFeel.get().FONT);
 
         int lineHeight = LookAndFeel.get().LINE_HEIGHT;
 
         //First line
-        rect(0, 0, width, lineHeight);
+        base.rect(0, 0, width, lineHeight);
         String conId = "CON-ID: " + client.getModel().getConnectionID();
         String packetsReceived = "Packets received: " + client.getPacketCount();
 
-        fill(255);
-        LookAndFeel.text(this, conId, 10, lineHeight / 2f);
-        LookAndFeel.text(this, packetsReceived, 200, lineHeight / 2f);
+        base.fill(255);
+        base.text(conId, 10, lineHeight / 2f);
+        base.text(packetsReceived, 200, lineHeight / 2f);
 
-        
-        textAlign(RIGHT, CENTER);
-        LookAndFeel.text(this, sessionName, width - 10, lineHeight / 2f);
-        LookAndFeel.text(this, sessionTimeLeft, width - textWidth(sessionName) - 40, lineHeight / 2f);
+        base.textAlign(RIGHT, CENTER);
+        base.text(sessionName, width - 10, lineHeight / 2f);
+        base.text(sessionTimeLeft, width - base.textWidth(sessionName) - 40, lineHeight / 2f);
 
-        fill(0, 150, 0);
-        rect(width - textWidth(sessionName) - 30, lineHeight * 0.1f, 10, lineHeight * 0.8f);
+        base.fill(0, 150, 0);
+        base.rect(width - base.textWidth(sessionName) - 30, lineHeight * 0.1f, 10, lineHeight * 0.8f);
 
         //tabs
-        textAlign(CENTER, CENTER);
+        base.textAlign(CENTER, CENTER);
         float tabSize = width / tabNames.size();
         for (int i = 0; i < tabNames.size(); i++) {
-            fill((i == activeTabIndex) ? 30 : 50);
-            rect(i * tabSize, lineHeight, tabSize, lineHeight);
+            base.fill((i == activeTabIndex) ? 30 : 50);
+            base.rect(i * tabSize, lineHeight, tabSize, lineHeight);
 
-            fill(255);
-            LookAndFeel.text(this, tabNames.get(i), i * tabSize + tabSize / 2f, lineHeight * 1.5f);
+            base.fill(255);
+            base.text(tabNames.get(i), i * tabSize + tabSize / 2f, lineHeight * 1.5f);
         }
     }
 
