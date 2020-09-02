@@ -5,7 +5,6 @@
  */
 package ACCLiveTiming.visualisation;
 
-import ACCLiveTiming.utility.LookAndFeel;
 import processing.awt.PGraphicsJava2D;
 
 /**
@@ -13,7 +12,14 @@ import processing.awt.PGraphicsJava2D;
  * @author Leonard
  */
 public class CustomPGraphics extends PGraphicsJava2D {
-    public CustomPGraphics(){
+
+    public CustomPGraphics() {
         super();
+    }
+
+    @Override
+    public void text(String text, float x, float y) {
+        float offset = LookAndFeel.get().TEXT_SIZE * LookAndFeel.get().FONT_BASELINE_OFFSET;
+        super.text(text, x, y - offset);
     }
 }
