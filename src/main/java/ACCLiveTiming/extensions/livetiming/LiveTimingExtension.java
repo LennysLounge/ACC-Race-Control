@@ -6,7 +6,6 @@
 package ACCLiveTiming.extensions.livetiming;
 
 import ACCLiveTiming.client.AccClientExtension;
-import ACCLiveTiming.extensions.logging.LoggingExtension;
 import ACCLiveTiming.networking.data.AccBroadcastingData;
 import java.util.logging.Logger;
 
