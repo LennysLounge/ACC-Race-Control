@@ -100,7 +100,7 @@ public class Visualisation extends PApplet {
                 context.beginDraw();
                 panels.get(activeTabIndex).drawPanel(context);
                 context.endDraw();
-                image(context, 0, headerSize * 2);
+                image(context, 0, headerSize);
             }
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error while drawing panel.", e);
