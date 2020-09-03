@@ -15,26 +15,47 @@ import java.util.List;
  */
 public class ListEntry {
 
-    private final List<String> items;
+    private final String position;
+    private final String name;
+    private final String carNumber;
+    private final String time;
     private final boolean inPits;
-    private final DriverCategory category; 
-    
-    public ListEntry(List<String> items, boolean inPits, DriverCategory category){
-        this.items = items;
+    private final DriverCategory category;
+
+    public ListEntry(String position, String name, String carNumber, String time,
+            boolean inPits, DriverCategory category) {
+        this.position = position;
+        this.name = name;
+        this.carNumber = carNumber;
+        this.time = time;
         this.inPits = inPits;
         this.category = category;
     }
-    
 
-    public List<String> getItems() {
-        return Collections.unmodifiableList(items);
+    public String getPosition() {
+        return position;
     }
-    
-    public boolean isInPits(){
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCarNumber() {
+        return carNumber;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public boolean isInPits() {
         return inPits;
     }
-    
-    public DriverCategory getCategory(){
+
+    public DriverCategory getCategory() {
         return category;
     }
+    
+
+    
 }

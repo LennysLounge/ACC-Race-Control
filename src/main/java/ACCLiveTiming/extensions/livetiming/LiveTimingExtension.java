@@ -32,10 +32,10 @@ public class LiveTimingExtension extends AccClientExtension {
 
     public LiveTimingExtension() {
         this.panel = new LiveTimingPanel(this);
-        entries.add(new ListEntry(Arrays.asList("1", "K. Bond", "80", "01:49.353"), false, DriverCategory.SILVER));
-        entries.add(new ListEntry(Arrays.asList("2", "P. Hold [FRT]", "81", "+2.427"), false, DriverCategory.SILVER));
-        entries.add(new ListEntry(Arrays.asList("3", "D. Almeida", "18", "+3.306"), false, DriverCategory.BRONZE));
-        entries.add(new ListEntry(Arrays.asList("4", "E. Rincon", "10", "--"), true, DriverCategory.BRONZE));
+        entries.add(new ListEntry("1", "K. Bond", "80", "01:49.353", false, DriverCategory.SILVER));
+        entries.add(new ListEntry("2", "P. Hold [FRT]", "81", "+2.427", false, DriverCategory.SILVER));
+        entries.add(new ListEntry("3", "D. Almeida", "18", "+3.306", false, DriverCategory.BRONZE));
+        entries.add(new ListEntry("4", "E. Rincon", "10", "--", true, DriverCategory.BRONZE));
     }
 
     public List<ListEntry> getEntries() {
