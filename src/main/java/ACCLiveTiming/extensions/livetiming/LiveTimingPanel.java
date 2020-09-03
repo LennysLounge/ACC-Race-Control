@@ -20,7 +20,7 @@ import processing.core.PGraphics;
  */
 public class LiveTimingPanel extends ExtensionPanel {
 
-    private LiveTimingExtension extension;
+    private final LiveTimingExtension extension;
 
     private int scroll;
 
@@ -30,6 +30,24 @@ public class LiveTimingPanel extends ExtensionPanel {
         this.displayName = "LIVE TIMING";
     }
 
+    public void drawPanel(PGraphics base) {
+        base.textFont(LookAndFeel.get().FONT, LookAndFeel.get().TEXT_SIZE);
+
+        int n = 0;
+        int y = 0;
+        int x = 10;
+        for (ListEntry entry : extension.getEntries()) {
+            y = LookAndFeel.get().LINE_HEIGHT * n++;
+
+            base.text(entry.getPosition(), x, y);
+            base.text(entry.getName(), x+100, y);
+            base.text(entry.getCarNumber(), x+200, y);
+            base.text(entry.getTime(), x+300, y);
+        }
+
+    }
+
+    /*
     @Override
     public void drawPanel(PGraphics base) {
         int lineHeight = LookAndFeel.get().LINE_HEIGHT;
@@ -96,7 +114,7 @@ public class LiveTimingPanel extends ExtensionPanel {
         }
         LookAndFeel.drawScrollBar(base, cars.size(), visibleLines, scroll);
     }
-
+     */
     @Override
     public void mouseWheel(int count) {
         scroll += count;
