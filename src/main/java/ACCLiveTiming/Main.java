@@ -7,6 +7,7 @@ package ACCLiveTiming;
 
 import ACCLiveTiming.visualisation.Visualisation;
 import ACCLiveTiming.client.BasicAccBroadcastingClient;
+import ACCLiveTiming.extensions.debug.DebugExtension;
 import ACCLiveTiming.extensions.incidents.IncidentExtension;
 import ACCLiveTiming.extensions.laptimes.LapTimeExtension;
 import ACCLiveTiming.extensions.livetiming.LiveTimingExtension;
@@ -100,6 +101,7 @@ public class Main {
         client.registerExtension(new IncidentExtension());
         client.registerExtension(new LapTimeExtension());
         client.registerExtension(new LoggingExtension());
+        client.registerExtension(new DebugExtension());
 
         Visualisation v = new Visualisation(client);
 
