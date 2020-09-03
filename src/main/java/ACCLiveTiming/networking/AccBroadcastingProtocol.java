@@ -215,8 +215,9 @@ public class AccBroadcastingProtocol {
             Nationality driverNationality = Nationality.fromId(readUInt16(in));
             drivers.add(new DriverInfo(firstName, lastName, shortName, category, driverNationality));
         }
-        CarInfo carInfo = new CarInfo(carId, carModelType, teamName, raceNumber, cupCatergory,
-                currentDriverIndex, carNationality, drivers, new RealtimeInfo());
+        CarInfo carInfo = new CarInfo(carId, carModelType, teamName, raceNumber,
+                cupCatergory, currentDriverIndex, carNationality, drivers,
+                new RealtimeInfo(), true);
         callback.onEntryListCarUpdate(carInfo);
     }
 

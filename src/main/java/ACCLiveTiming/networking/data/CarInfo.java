@@ -27,13 +27,14 @@ public class CarInfo {
     private int carNationality;
     private List<DriverInfo> drivers = new LinkedList<>();
     private RealtimeInfo realtime = new RealtimeInfo();
+    private boolean isConnected = false;
 
     public CarInfo() {
     }
 
-    
-    public CarInfo(int carId, byte carModelType, String teamName, int carNumber, byte cupCatergory,
-            byte currentDriverIndex, int carNationality, List<DriverInfo> drivers, RealtimeInfo realtime) {
+    public CarInfo(int carId, byte carModelType, String teamName, int carNumber,
+            byte cupCatergory, byte currentDriverIndex, int carNationality,
+            List<DriverInfo> drivers, RealtimeInfo realtime, boolean isConnected) {
         this.carId = carId;
         this.carModelType = carModelType;
         this.teamName = teamName;
@@ -43,15 +44,16 @@ public class CarInfo {
         this.carNationality = carNationality;
         this.drivers = drivers;
         this.realtime = realtime;
+        this.isConnected = isConnected;
     }
 
     public RealtimeInfo getRealtime() {
         return realtime;
     }
 
-    public CarInfo withRealtime(RealtimeInfo info) {
-        return new CarInfo(carId, carModelType, teamName, carNumber, cupCatergory, currentDriverIndex, carNationality,
-                drivers, info);
+    public CarInfo withRealtime(RealtimeInfo realtime) {
+        return new CarInfo(carId, carModelType, teamName, carNumber, cupCatergory,
+                currentDriverIndex, carNationality, drivers, realtime, isConnected);
     }
 
     public DriverInfo getDriver() {
@@ -92,5 +94,14 @@ public class CarInfo {
 
     public List<DriverInfo> getDrivers() {
         return Collections.unmodifiableList(drivers);
+    }
+
+    public CarInfo withConnected(boolean isConnected) {
+        return new CarInfo(carId, carModelType, teamName, carNumber, cupCatergory,
+                currentDriverIndex, carNationality, drivers, realtime, isConnected);
+    }
+    
+    public boolean isConnected(){
+        return isConnected;
     }
 }

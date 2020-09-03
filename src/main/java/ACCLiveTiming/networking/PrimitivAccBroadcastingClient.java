@@ -274,8 +274,19 @@ public class PrimitivAccBroadcastingClient {
 
     protected void onEntryListUpdate(List<Integer> carIds) {
         Map<Integer, CarInfo> cars = new HashMap<>();
+        cars.putAll(model.getCarsInfo());
+        //disconnect all connected cars that are not in this update.
+        cars.values().stream()
+                .filter(carInfo -> carInfo.isConnected())
+                .filter(carInfo -> !carIds.contains(carInfo.getCarId()))
+                .forEach(carInfo
+                        -> cars.put(carInfo.getCarId(), carInfo.withConnected(false))
+                );
+        //add any new carIds.
         for (int carId : carIds) {
-            cars.put(carId, new CarInfo());
+            if (!cars.containsKey(carId)) {
+                cars.put(carId, new CarInfo());
+            }
         }
         model = model.withCars(cars);
     }

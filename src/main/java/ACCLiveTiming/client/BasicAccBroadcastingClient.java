@@ -28,12 +28,12 @@ import java.util.stream.Collectors;
  */
 public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
 
-    private static Logger LOG = Logger.getLogger(BasicAccBroadcastingClient.class.getName());
+    private static final Logger LOG = Logger.getLogger(BasicAccBroadcastingClient.class.getName());
 
     /**
      * List of registered extensions.
      */
-    private List<AccClientExtension> extensions = new LinkedList<>();
+    private final List<AccClientExtension> extensions = new LinkedList<>();
     /**
      * Session ID for the current session.
      */
@@ -46,11 +46,11 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
      * A map of the session events. Maps a session Type and a session phase to a
      * method.
      */
-    private Map<SessionType, Map<SessionPhase, Runnable>> sessionEvents = new HashMap<>();
+    private final Map<SessionType, Map<SessionPhase, Runnable>> sessionEvents = new HashMap<>();
     /**
      * Counter coutns how of a session has happened.
      */
-    private Map<SessionType, Integer> sessionCounter = new HashMap<>();
+    private final Map<SessionType, Integer> sessionCounter = new HashMap<>();
     /**
      * Counts how many packets have been received.
      */
@@ -58,7 +58,7 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
     /**
      * List of logging messages.
      */
-    private List<String> messages = new LinkedList<>();
+    private final List<String> messages = new LinkedList<>();
 
     public BasicAccBroadcastingClient() throws SocketException {
         super();
@@ -155,6 +155,13 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
 
     @Override
     protected void onEntryListUpdate(List<Integer> carIds) {
+        //Find cars that are active but not in this update and fire 
+        //the disconnect event for them.
+        getModel().getCarsInfo().values().stream()
+                .filter(carInfo -> carInfo.isConnected())
+                .filter(carInfo -> !carIds.contains(carInfo.getCarId()))
+                .forEach(carInfo -> onCarDisconnect(carInfo.withConnected(false)));
+
         super.onEntryListUpdate(carIds);
         extensions.forEach(extension -> extension.onEntryListUpdate(carIds));
     }
@@ -167,6 +174,13 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
 
     @Override
     protected void onEntryListCarUpdate(CarInfo carInfo) {
+        //if there is an update for a car that is disconnected then
+        //we fire the connected event for that car
+        if (getModel().getCarsInfo().containsKey(carInfo.getCarId())) {
+            if (!getModel().getCar(carInfo.getCarId()).isConnected()) {
+                onCarConnect(carInfo);
+            }
+        }
         super.onEntryListCarUpdate(carInfo);
         extensions.forEach(extension -> extension.onEntryListCarUpdate(carInfo));
     }
@@ -262,4 +276,17 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
         extensions.forEach(extension -> extension.onRaceEnd());
     }
 
+    private void onCarDisconnect(CarInfo car) {
+        String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
+        log("Car disconnected: #" + car.getCarNumber() + "\t" + name);
+        LOG.info("Car disconnected: #" + car.getCarNumber() + "\t" + name);
+        extensions.forEach(extension -> extension.onCarDisconnect(car));
+    }
+
+    private void onCarConnect(CarInfo car) {
+        String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
+        log("Car connected: #" + car.getCarNumber() + "\t" + name);
+        LOG.info("Car connected: #" + car.getCarNumber() + "\t" + name);
+        extensions.forEach(extension -> extension.onCarConnect(car));
+    }
 }
