@@ -5,6 +5,7 @@
  */
 package ACCLiveTiming;
 
+import ACCLiveTiming.visualisation.Visualisation;
 import ACCLiveTiming.client.BasicAccBroadcastingClient;
 import ACCLiveTiming.extensions.incidents.IncidentExtension;
 import ACCLiveTiming.extensions.laptimes.LapTimeExtension;
@@ -100,7 +101,7 @@ public class Main {
         client.registerExtension(new LapTimeExtension());
         client.registerExtension(new LoggingExtension());
 
-        Vis v = new Vis(client);
+        Visualisation v = new Visualisation(client);
 
         String[] a = {"MAIN"};
         PApplet.runSketch(a, v);

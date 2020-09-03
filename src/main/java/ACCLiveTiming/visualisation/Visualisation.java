@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming;
+package ACCLiveTiming.visualisation;
 
 import ACCLiveTiming.client.BasicAccBroadcastingClient;
 import ACCLiveTiming.client.ExtensionPanel;
@@ -28,12 +28,12 @@ import processing.event.MouseEvent;
  *
  * @author Leonard
  */
-public class Vis extends PApplet {
+public class Visualisation extends PApplet {
 
     /**
      * This classes logger.
      */
-    private static Logger LOG = Logger.getLogger(Vis.class.getName());
+    private static Logger LOG = Logger.getLogger(Visualisation.class.getName());
 
     /**
      * Client for the ACC connection.
@@ -52,7 +52,7 @@ public class Vis extends PApplet {
      */
     private int activeTabIndex = 0;
 
-    public Vis(BasicAccBroadcastingClient client) {
+    public Visualisation(BasicAccBroadcastingClient client) {
         this.client = client;
         panels = client.getPanels();
         tabNames = panels.stream()
