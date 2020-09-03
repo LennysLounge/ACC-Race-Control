@@ -160,7 +160,7 @@ public class AccBroadcastingProtocol {
     }
 
     private void readRealtimeCarUpdate(ByteArrayInputStream in) {
-        int carIndex = readUInt16(in);
+        int carId = readUInt16(in);
         int driverIndex = readUInt16(in);
         byte driverCount = readByte(in);
         byte gear = readByte(in);
@@ -179,7 +179,7 @@ public class AccBroadcastingProtocol {
         LapInfo lasLap = readLap(in);
         LapInfo currentLap = readLap(in);
 
-        RealtimeInfo info = new RealtimeInfo(carIndex, driverIndex, driverCount, gear, posX, posY, yaw,
+        RealtimeInfo info = new RealtimeInfo(carId, driverIndex, driverCount, gear, posX, posY, yaw,
                 location, kmh, position, cupPosition, trackPosition, splinePosition, laps, delta,
                 bestSessionLap, lasLap, currentLap);
         callback.onRealtimeCarUpdate(info);

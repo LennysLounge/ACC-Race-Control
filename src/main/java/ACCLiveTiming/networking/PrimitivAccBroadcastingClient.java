@@ -252,8 +252,8 @@ public class PrimitivAccBroadcastingClient {
     }
 
     protected void onRealtimeCarUpdate(RealtimeInfo info) {
-        if (model.getCarsInfo().containsKey(info.getCarIndex())) {
-            CarInfo car = model.getCarsInfo().get(info.getCarIndex());
+        if (model.getCarsInfo().containsKey(info.getCarId())) {
+            CarInfo car = model.getCarsInfo().get(info.getCarId());
             car = car.withRealtime(info);
 
             Map<Integer, CarInfo> cars = new HashMap<>();

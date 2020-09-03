@@ -13,7 +13,7 @@ import ACCLiveTiming.networking.enums.CarLocation;
  */
 public class RealtimeInfo {
 
-    int carIndex;
+    int carId;
     int driverIndex;
     byte driverCount;
     byte gear;
@@ -35,10 +35,10 @@ public class RealtimeInfo {
     public RealtimeInfo() {
     }
 
-    public RealtimeInfo(int carIndex, int driverIndex, byte driverCount, byte gear, float posX, float posY, float yaw,
+    public RealtimeInfo(int carId, int driverIndex, byte driverCount, byte gear, float posX, float posY, float yaw,
             CarLocation location, int kmh, int position, int cupPosition, int trackPosition, float splinePosition, int laps,
             int delta, LapInfo bestSessionLap, LapInfo lasLap, LapInfo currentLap) {
-        this.carIndex = carIndex;
+        this.carId = carId;
         this.driverIndex = driverIndex;
         this.driverCount = driverCount;
         this.gear = gear;
@@ -58,8 +58,8 @@ public class RealtimeInfo {
         this.currentLap = currentLap;
     }
 
-    public int getCarIndex() {
-        return carIndex;
+    public int getCarId() {
+        return carId;
     }
 
     public int getDriverIndex() {
