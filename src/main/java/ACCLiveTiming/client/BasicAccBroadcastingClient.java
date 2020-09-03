@@ -155,7 +155,14 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
 
     @Override
     protected void onEntryListUpdate(List<Integer> carIds) {
-        super.onEntryListUpdate(carIds);        
+        //Find cars that are active but not in this update and fire 
+        //the disconnect event for them.
+        getModel().getCarsInfo().values().stream()
+                .filter(carInfo -> carInfo.isConnected())
+                .filter(carInfo -> !carIds.contains(carInfo.getCarId()))
+                .forEach(carInfo -> onCarDisconnect(carInfo.withConnected(false)));
+        
+        super.onEntryListUpdate(carIds);
         extensions.forEach(extension -> extension.onEntryListUpdate(carIds));
     }
 
@@ -167,6 +174,13 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
 
     @Override
     protected void onEntryListCarUpdate(CarInfo carInfo) {
+        //if there is an update for a car that is disconnected then
+        //we fire the connected event for that car
+        if(getModel().getCarsInfo().containsKey(carInfo.getCarId())){
+            if(!getModel().getCar(carInfo.getCarId()).isConnected()){
+                onCarConnect(carInfo);
+            }
+        }
         super.onEntryListCarUpdate(carInfo);
         extensions.forEach(extension -> extension.onEntryListCarUpdate(carInfo));
     }
@@ -260,6 +274,18 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
         log("Race post-session");
         LOG.info("Race post-session");
         extensions.forEach(extension -> extension.onRaceEnd());
+    }
+
+    private void onCarDisconnect(CarInfo car) {
+        log("Car disconnected: #" + car.getCarNumber());
+        LOG.info("Car disconnected: #" + car.getCarNumber());
+        extensions.forEach(extension -> extension.onCarDisconnect(car));
+    }
+
+    private void onCarConnect(CarInfo car) {
+        log("Car connected: #" + car.getCarNumber());
+        LOG.info("Car connected: #" + car.getCarNumber());
+        extensions.forEach(extension -> extension.onCarConnect(car));
     }
 
 }

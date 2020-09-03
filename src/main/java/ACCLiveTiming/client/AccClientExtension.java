@@ -98,5 +98,11 @@ public class AccClientExtension {
     
     public void onBestPersonalLap(BroadcastingEvent event){
     }
+    
+    public void onCarDisconnect(CarInfo car){
+    }
+    
+    public void onCarConnect(CarInfo car){
+    }
       
 }
