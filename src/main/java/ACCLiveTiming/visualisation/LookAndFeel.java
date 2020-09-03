@@ -25,6 +25,8 @@ public class LookAndFeel {
     public final int COLOR_GRAY;
     public final int COLOR_LIGHT_GRAY;
     public final int COLOR_WHITE;
+    public final int COLOR_BLACK;
+    public final int COLOR_NONE;
     public final int COLOR_PRACTICE;
     public final int COLOR_QUALIFYING;
     public final int COLOR_RACE;
@@ -42,15 +44,17 @@ public class LookAndFeel {
     private LookAndFeel(PApplet base) {
         COLOR_RED = base.color(224, 0, 0);
         COLOR_GREEN = base.color(0,170,89);
-        COLOR_GRAY = base.color(102);
+        COLOR_GRAY = base.color(102, 102, 102);
         COLOR_LIGHT_GRAY = base.color(188);
         COLOR_WHITE = base.color(255);
+        COLOR_BLACK = base.color(0);
+        COLOR_NONE = base.color(255,255,255,0);
         COLOR_PRACTICE = base.color(247, 81, 81);
         COLOR_QUALIFYING = base.color(92, 173, 255);
         COLOR_RACE = base.color(121, 228, 99);
         TEXT_SIZE = 20;
-        LINE_HEIGHT = 34;
-        FONT_BASELINE_OFFSET = 0.15f;
+        LINE_HEIGHT = 40;
+        FONT_BASELINE_OFFSET = 0.16f;
         PFont font;
         try {
             URL res = LookAndFeel.class

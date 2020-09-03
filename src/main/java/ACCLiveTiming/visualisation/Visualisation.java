@@ -62,7 +62,7 @@ public class Visualisation extends PApplet {
 
     @Override
     public void settings() {
-        size(1280, 720);
+        size(1600, 900);
 
         try {
             client.sendRegisterRequest();
