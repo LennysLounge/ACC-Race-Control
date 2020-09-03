@@ -155,7 +155,7 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
 
     @Override
     protected void onEntryListUpdate(List<Integer> carIds) {
-        super.onEntryListUpdate(carIds);
+        super.onEntryListUpdate(carIds);        
         extensions.forEach(extension -> extension.onEntryListUpdate(carIds));
     }
 
