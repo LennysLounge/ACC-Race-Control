@@ -34,17 +34,6 @@ public class SessionInfo {
     byte rainLevel;
     byte wetness;
     LapInfo bestSessionLap = new LapInfo();
-    
-    int packetNumber;
-
-    public static final int SESSION_TYPE_PRACTICE = 0;
-    public static final int SESSION_TYPE_QUALIFYING = 4;
-    public static final int SESSION_TYPE_SUPERPOLE = 9;
-    public static final int SESSION_TYPE_RACE = 10;
-    public static final int SESSION_TYPE_HOTLAP = 11;
-    public static final int SESSION_TYPE_HOTSTING = 12;
-    public static final int SESSION_TYPE_HOTLAPSUPERPOLE = 13;
-    public static final int SESSION_TYPE_REPLAY = 14;
   
 
     public SessionInfo() {
