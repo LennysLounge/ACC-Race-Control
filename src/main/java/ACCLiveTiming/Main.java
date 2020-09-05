@@ -15,6 +15,7 @@ import ACCLiveTiming.extensions.logging.LoggingExtension;
 import ACCLiveTiming.utility.SpreadSheetService;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -58,9 +59,6 @@ public class Main {
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "An exception has occured.", e);
         }
-        
-        
-
 
     }
 
@@ -86,8 +84,12 @@ public class Main {
         BasicAccBroadcastingClient client;
         try {
             client = new BasicAccBroadcastingClient();
+            client.sendRegisterRequest();
         } catch (SocketException e) {
             LOG.log(Level.SEVERE, "Error while creating the visualization.", e);
+            return;
+        }catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error while sending register request", e);
             return;
         }
 
@@ -96,7 +98,7 @@ public class Main {
                 dialog.getCommandPassword());
         client.setUpdateInterval(dialog.getUpdateInterval());
         client.connect(dialog.getHostAddress(), dialog.getPort());
-        
+
         client.registerExtension(new LiveTimingExtension());
         client.registerExtension(new IncidentExtension());
         client.registerExtension(new LapTimeExtension());
@@ -107,7 +109,7 @@ public class Main {
 
         String[] a = {"MAIN"};
         PApplet.runSketch(a, v);
-        
+
     }
 
 }
