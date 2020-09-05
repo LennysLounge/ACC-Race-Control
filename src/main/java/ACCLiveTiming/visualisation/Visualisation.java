@@ -63,13 +63,10 @@ public class Visualisation extends PApplet {
 
     @Override
     public void draw() {
-        if(width != sizeWidth || height != sizeHeight){
+        if (width != sizeWidth || height != sizeHeight) {
             onResize(width, height);
         }
-        
-        
-        
-        
+
         String fr = String.valueOf(round(frameRate));
         fill(0);
         rect(0, 0, textWidth(fr), 16);
@@ -77,21 +74,19 @@ public class Visualisation extends PApplet {
         textAlign(LEFT, TOP);
         text(fr, 0, 0);
     }
-    
-    public void onResize(int w, int h){
+
+    public void onResize(int w, int h) {
         sizeWidth = w;
         sizeHeight = h;
         println(w, h);
-        mainPanel.onResize(w, h);
+        mainPanel.resize((ww, hh) -> createGraphics(ww, hh, CustomPGraphics.class.getName()), w, h);
     }
 
-    
     @Override
     public void mousePressed() {
         mainPanel.mousePressed(mouseButton, mouseX, mouseY);
     }
 
-    
     @Override
     public void mouseReleased() {
         mainPanel.mouseReleased(mouseButton, mouseX, mouseY);
@@ -101,5 +96,5 @@ public class Visualisation extends PApplet {
     public void mouseWheel(MouseEvent event) {
         mainPanel.mouseWheel(event.getCount());
     }
-     
+
 }

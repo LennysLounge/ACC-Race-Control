@@ -8,6 +8,7 @@ package ACCLiveTiming.visualisation;
 import ACCLiveTiming.client.BasicAccBroadcastingClient;
 import ACCLiveTiming.client.SessionId;
 import ACCLiveTiming.extensions.ExtensionPanel;
+import ACCLiveTiming.extensions.GraphicsFactory;
 import ACCLiveTiming.utility.TimeUtils;
 import java.util.LinkedList;
 import java.util.List;
@@ -115,6 +116,12 @@ public class MainPanel extends ExtensionPanel {
 
     public int getActiveTabIndex() {
         return activeTabIndex;
+    }
+    
+    public void resize(GraphicsFactory factory, int w, int h) {
+        layer = factory.createGraphics(w, h);
+        
+        //resize panels
     }
 
 }
