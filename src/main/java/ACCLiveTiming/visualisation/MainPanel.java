@@ -9,10 +9,14 @@ import ACCLiveTiming.client.BasicAccBroadcastingClient;
 import ACCLiveTiming.client.SessionId;
 import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.extensions.GraphicsFactory;
+import ACCLiveTiming.utility.TimeUtils;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import processing.core.PApplet;
+import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.RIGHT;
 
 /**
  *
@@ -46,7 +50,7 @@ public class MainPanel extends ExtensionPanel {
     @Override
     public void drawPanel() {
 
-        /*
+        
         String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
         String sessionName = sessionIdToString(client.getSessionId());
         layer.textAlign(LEFT, CENTER);
@@ -84,7 +88,7 @@ public class MainPanel extends ExtensionPanel {
             layer.fill(255);
             layer.text(tabNames.get(i), i * tabSize + tabSize / 2f, lineHeight * 1.5f);
         }
-         */
+         
     }
 
     private String sessionIdToString(SessionId sessionId) {
