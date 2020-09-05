@@ -6,7 +6,6 @@
 package ACCLiveTiming.extensions.livetiming;
 
 import ACCLiveTiming.client.ExtensionPanel;
-import ACCLiveTiming.networking.enums.DriverCategory;
 import ACCLiveTiming.visualisation.LookAndFeel;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class LiveTimingPanel extends ExtensionPanel {
         new Column("#", 1.25f, false, CENTER),
         new Column("Laps", 1.5f, true, RIGHT),
         new Column("Gap", 2, true, RIGHT),
-        new Column("Leader", 2, true, RIGHT),
+        new Column("distance", 2, true, RIGHT),
         new Column("Delta", 2, true, RIGHT),
         new Column("Lap", 2, true, RIGHT),
         new Column("S1", 2, true, RIGHT),
@@ -62,26 +61,25 @@ public class LiveTimingPanel extends ExtensionPanel {
         for (int i = 0; i < columns.length; i++) {
             drawCell(base, columns[i].head, i, 0, base.color(30), laf.COLOR_WHITE);
         }
-
         padding = 1;
 
-        base.strokeWeight(10);
+        List<ListEntry> sorted = extension.getSortedEntries();
+
+        drawCell(base, "" + extension.getSortedEntries().size(), 3, 0, base.color(30), laf.COLOR_WHITE);
 
         int n = 1;
-        for (ListEntry entry : extension.getEntries()) {
+        for (ListEntry entry : sorted) {
             if (!entry.isConnected()) {
                 continue;
             }
 
-            if(entry.isFocused()){
+            if (entry.isFocused()) {
                 drawCellBackground(base, n, base.color(100));
-            }
-            else{
+            } else {
                 if (n % 2 == 0) {
                     drawCellBackground(base, n, base.color(40));
                 }
             }
-            
 
             if (entry.isConnected()) {
                 if (entry.isFocused()) {
@@ -116,6 +114,9 @@ public class LiveTimingPanel extends ExtensionPanel {
 
             drawCell(base, entry.getLapCount(), 5, n, laf.COLOR_NONE, laf.COLOR_WHITE);
             drawCell(base, entry.getGap(), 6, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(base, "" + entry.getDistanceToFront(), 7, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+
+            /*
             drawCell(base, entry.getToLeader(), 7, n, laf.COLOR_NONE, laf.COLOR_WHITE);
             drawCell(base, entry.getDelta(), 8, n, laf.COLOR_NONE, laf.COLOR_WHITE);
             drawCell(base, entry.getCurrentLap(), 9, n, laf.COLOR_NONE, laf.COLOR_WHITE);
@@ -124,107 +125,9 @@ public class LiveTimingPanel extends ExtensionPanel {
             drawCell(base, entry.getSectorThree(), 12, n, laf.COLOR_NONE, laf.COLOR_WHITE);
             drawCell(base, entry.getLastLap(), 13, n, laf.COLOR_NONE, laf.COLOR_WHITE);
             drawCell(base, entry.getBestLap(), 14, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-
+             */
             n++;
         }
-
-        /*
-        int n = 1;
-        float y = 0;
-        float x = 0;
-        float lineHeight = LookAndFeel.get().LINE_HEIGHT;
-        for (ListEntry entry : extension.getEntries()) {
-            y = lineHeight * n++;
-            x = 10;
-
-            base.noStroke();
-            base.fill(LookAndFeel.get().COLOR_RED);
-            base.rect(x + 1, y + 1, lineHeight - 2, lineHeight - 2);
-
-            //Position
-            base.textAlign(CENTER, CENTER);
-            base.fill(255);
-            base.text(entry.getPosition(), x + lineHeight / 2, y + lineHeight / 2);
-
-            //Name
-            x = 10 + lineHeight + 5;
-            base.textAlign(LEFT, CENTER);
-            base.text(entry.getName(), x, y + lineHeight / 2);
-
-            //Car number
-            x = 300;
-            float width = lineHeight * 1.25f;
-            switch (entry.getCategory()) {
-                case BRONZE:
-                    base.fill(LookAndFeel.get().COLOR_RED);
-                    break;
-                case SILVER:
-                    base.fill(LookAndFeel.get().COLOR_GRAY);
-                    break;
-                case GOLD:
-                case PLATINUM:
-                    base.fill(LookAndFeel.get().COLOR_WHITE);
-                    break;
-                default:
-                    base.fill(LookAndFeel.get().COLOR_RED);
-            }
-            base.rect(x + 1, y + 1, width - 1, lineHeight - 2);
-            if (entry.getCategory() == DriverCategory.SILVER) {
-                base.fill(255);
-            } else {
-                base.fill(0);
-            }
-            base.textAlign(CENTER, CENTER);
-            base.text(entry.getCarNumber(), x + width / 2, y + lineHeight / 2);
-
-            //pit sign
-            x += width;
-            if (entry.isInPits()) {
-                width = 12;
-                base.fill(255);
-                base.rect(x, y + 1, width, lineHeight - 2);
-                base.fill(0);
-                
-                base.text("P", x + width / 2, y + lineHeight / 2);
-                base.textSize(LookAndFeel.get().TEXT_SIZE);
-
-            }
-
-            x += 50;
-            base.fill(255);
-            base.textAlign(LEFT, CENTER);
-            base.text(entry.getLapCount(), x, y + lineHeight / 2);
-
-            x += 100;
-            base.text(entry.getGap(), x, y + lineHeight / 2);
-
-            x += 100;
-            base.text(entry.getToLeader(), x, y + lineHeight / 2);
-
-            x += 100;
-            base.text(entry.getDelta(), x, y + lineHeight / 2);
-
-            x += 100;
-            base.text(entry.getCurrentLap(), x, y + lineHeight / 2);
-
-            x += 100;
-            base.text(entry.getSectorOne(), x, y + lineHeight / 2);
-
-            x += 100;
-            base.text(entry.getSectorTwo(), x, y + lineHeight / 2);
-
-            x += 100;
-            base.text(entry.getSectorThree(), x, y + lineHeight / 2);
-
-            x += 100;
-            base.text(entry.getBestLap(), x, y + lineHeight / 2);
-
-            x += 100;
-            base.text(entry.getLastLap(), x, y + lineHeight / 2);
-            
-        }
-
-         */
     }
 
     @Override

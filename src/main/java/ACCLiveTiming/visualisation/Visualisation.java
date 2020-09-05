@@ -51,6 +51,8 @@ public class Visualisation extends PApplet {
      * Index of the currently active tab.
      */
     private int activeTabIndex = 0;
+    
+    private boolean enableDraw = true;
 
     public Visualisation(BasicAccBroadcastingClient client) {
         this.client = client;
@@ -84,6 +86,9 @@ public class Visualisation extends PApplet {
 
     @Override
     public void draw() {
+        if(!enableDraw){
+            return;
+        }
         background(50);
 
         int headerSize = LookAndFeel.get().LINE_HEIGHT * 2;
@@ -185,6 +190,11 @@ public class Visualisation extends PApplet {
     @Override
     public void mouseWheel(MouseEvent event) {
         panels.get(activeTabIndex).mouseWheel(event.getCount());
+    }
+    
+    public void keyPressed(){
+        enableDraw = !enableDraw;
+        LOG.info("enableDraw: " + enableDraw);
     }
 
 }

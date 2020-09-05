@@ -6,10 +6,9 @@
 package ACCLiveTiming.extensions.livetiming;
 
 import ACCLiveTiming.client.AccClientExtension;
-import ACCLiveTiming.networking.data.AccBroadcastingData;
 import ACCLiveTiming.networking.data.CarInfo;
 import ACCLiveTiming.networking.data.RealtimeInfo;
-import java.util.Collections;
+import ACCLiveTiming.networking.data.SessionInfo;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,81 +27,51 @@ public class LiveTimingExtension extends AccClientExtension {
      */
     private static Logger LOG = Logger.getLogger(LiveTimingExtension.class.getName());
     /**
-     * Map of entries to their carId.
+     * Map from carId to ListEntry.
      */
-    private Map<Integer, CarInfo> map = new HashMap<>();
+    private final Map<Integer, ListEntry> entires = new HashMap<>();
     /**
-     * sorted list of the entries.
+     * Sorted list of ListEntries.
      */
-    private List<ListEntry> entries = new LinkedList<>();
+    private List<ListEntry> sortedEntries = new LinkedList<>();
 
     public LiveTimingExtension() {
         this.panel = new LiveTimingPanel(this);
-        /*
-        entries.add(new ListEntry("1", "K. Bond", "80", "12", "--.--", "--.--", "-0.52", "1:00.12", "12.02", "16.45", "18.64", "1:37.59", "1:38.21",
-                false, DriverCategory.SILVER));
-        entries.add(new ListEntry("2", "P. Hold [FRT]", "81", "12", "+2.52", "+2.52", "+2.34", "55.12", "12.08", "16.56", "18.69", "1.38.59", "1:38.59",
-                true, DriverCategory.SILVER));
-        entries.add(new ListEntry("3", "D. Almeida", "18", "12", "+4.82", "+7.34", "-0.02", "0:40.89", "12.20", "16.57", "18.81", "1:38.13", "1:38.59",
-                false, DriverCategory.BRONZE));
-        entries.add(new ListEntry("4", "E. Rincon", "10", "11", "+6.23", "+13.56", "+0.59", "0:20.55", "12.17", "16.64", "18.71", "1:38.37", "1:38.65",
-                true, DriverCategory.GOLD));
-         */
     }
 
-    public List<ListEntry> getEntries() {
-        return Collections.unmodifiableList(entries);
-    }
-
-    public AccBroadcastingData getModel() {
-        return client.getModel();
+    public List<ListEntry> getSortedEntries() {
+        return new LinkedList<>(sortedEntries);
     }
 
     @Override
-    public void onRealtimeCarUpdate(RealtimeInfo info) {
-        CarInfo car = client.getModel().getCar(info.getCarId());
-        map.put(car.getCarId(), car);
-        sortEntries();
-    }
-
-    private void sortEntries() {
-        if (map.isEmpty()) {
-            return;
-        }
-        
-        List<CarInfo> sortedCars = new LinkedList<>();
-        List<CarInfo> disconnectedCars = new LinkedList<>();
-        List<CarInfo> carsToSort = new LinkedList<>(map.values());
-        
-        while (carsToSort.size() > 0) {
-            CarInfo smallest = carsToSort.get(0);
-            if (!smallest.isConnected()) {
-                disconnectedCars.add(smallest);
-                carsToSort.remove(smallest);
-                continue;
-            }
-
-            //find smallest
-            for (CarInfo subject : carsToSort) {
-                //Sorting function
-                if(subject.getRealtime().getPosition() < smallest.getRealtime().getPosition()){
-                    smallest = subject;
-                }
-            }
-
-            sortedCars.add(smallest);
-            carsToSort.remove(smallest);
-        }
-
-        sortedCars.addAll(disconnectedCars);
-        
-        //convert to entries
-        entries = sortedCars.stream()
-                .map(car -> new ListEntry(car, isFocused(car)))
+    public void onRealtimeUpdate(SessionInfo sessionInfo) {
+        List<ListEntry> sorted = entires.values().stream()
+                .filter(entry -> entry.isConnected())
+                .sorted((e1, e2) -> compareTo(e1.getCarInfo(), e2.getCarInfo()))
                 .collect(Collectors.toList());
+        
+        sortedEntries = sorted;
     }
-    
-    private boolean isFocused(CarInfo car){
+
+
+    @Override
+    public void onRealtimeCarUpdate(RealtimeInfo info) {
+        CarInfo car = client.getModel().getCarsInfo().getOrDefault(info.getCarId(), new CarInfo());
+        if(entires.containsKey(car.getCarId())){
+            entires.get(car.getCarId()).setCarInfo(car);
+        }
+        else{
+            ListEntry entry = new ListEntry();
+            entry.setCarInfo(car);
+            entires.put(car.getCarId(), entry);
+        }
+    }
+
+    private int compareTo(CarInfo c1, CarInfo c2) {
+        return (int) Math.signum(c1.getRealtime().getPosition() - c2.getRealtime().getPosition());
+    }
+
+    private boolean isFocused(CarInfo car) {
         return car.getCarId() == client.getModel().getSessionInfo().getFocusedCarIndex();
     }
 

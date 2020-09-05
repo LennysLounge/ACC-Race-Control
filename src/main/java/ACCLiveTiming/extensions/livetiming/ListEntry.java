@@ -15,20 +15,40 @@ import ACCLiveTiming.networking.enums.DriverCategory;
  */
 public class ListEntry {
 
-    private final CarInfo car;
-    
-    private final boolean isFocused;
+    private CarInfo car;
 
-    public ListEntry(CarInfo car, boolean isFocused) {
-        this.car = car;
-        this.isFocused = isFocused;
+    private boolean isFocused;
+
+    private float gap;
+
+    private float gap2;
+
+    private float distanceToFront;
+
+    public ListEntry() {
     }
-    
-    public boolean isFocused(){
+
+    public void setCarInfo(CarInfo car) {
+        this.car = car;
+    }
+
+    public CarInfo getCarInfo() {
+        return car;
+    }
+
+    public void setDistanceToFront(float distanceToFront) {
+        this.distanceToFront = distanceToFront;
+    }
+
+    public float getDistanceToFront() {
+        return distanceToFront;
+    }
+
+    public boolean isFocused() {
         return isFocused;
     }
-    
-    public boolean isConnected(){
+
+    public boolean isConnected() {
         return car.isConnected();
     }
 
@@ -40,7 +60,7 @@ public class ListEntry {
         String firstname = car.getDriver().getFirstName();
         String lastname = car.getDriver().getLastName();
         firstname = firstname.substring(0, Math.min(firstname.length(), 1));
-        return String.format("%s. %s",firstname, lastname);
+        return String.format("%s. %s", firstname, lastname);
     }
 
     public String getCarNumber() {
@@ -64,7 +84,7 @@ public class ListEntry {
     }
 
     public String getCurrentLap() {
-        return "";
+        return String.valueOf(car.getRealtime().getCurrentLap().getLapTimeMS());
     }
 
     public String getSectorOne() {
