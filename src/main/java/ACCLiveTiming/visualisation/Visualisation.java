@@ -40,28 +40,14 @@ public class Visualisation extends PApplet {
      */
     private BasicAccBroadcastingClient client;
     /**
-     * List of the extension panels.
-     */
-    private List<ExtensionPanel> panels = new LinkedList<>();
-    /**
-     * List with the tab names.
-     */
-    private List<String> tabNames = new LinkedList<>();
-    /**
      * Index of the currently active tab.
      */
     private int activeTabIndex = 0;
 
-    private boolean enableDraw = true;
-    
     private final MainPanel headerPanel;
 
     public Visualisation(BasicAccBroadcastingClient client) {
         this.client = client;
-        panels = client.getPanels();
-        tabNames = panels.stream()
-                .map(panel -> panel.getDisplayName())
-                .collect(Collectors.toList());
         headerPanel = new MainPanel(this, client);
     }
 
@@ -81,101 +67,21 @@ public class Visualisation extends PApplet {
         LookAndFeel.init(this);
         surface.setResizable(true);
         surface.setTitle("ACC Accident Tracker");
-        textFont(LookAndFeel.get().FONT);
+        frameRate(1000);
     }
-
-    int counter = 0;
-    int n = 0;
 
     @Override
     public void draw() {
-        if (!enableDraw) {
-            return;
-        }
-        background(50);
-
-        int headerSize = LookAndFeel.get().LINE_HEIGHT * 2;
-        PGraphics base = createGraphics(width, headerSize, CustomPGraphics.class.getName());
-        base.beginDraw();
-        drawHeader(base);
-        base.endDraw();
-        image(base, 0, 0);
-
-        try {
-            if (activeTabIndex >= 0 && activeTabIndex < panels.size()) {
-                PGraphics context = createGraphics(width, height - headerSize,
-                        CustomPGraphics.class.getName());
-                context.beginDraw();
-                panels.get(activeTabIndex).setLayer(context);
-                panels.get(activeTabIndex).drawPanel();
-                context.endDraw();
-                image(context, 0, headerSize);
-            }
-        } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Error while drawing panel.", e);
-        }
+        String fr = String.valueOf(round(frameRate));
+        float width = textWidth(fr);
+        fill(0);
+        rect(0, 0, width, 16);
+        fill(255);
+        textAlign(LEFT, TOP);
+        text(fr, 0, 0);
     }
 
-    private void drawHeader(PGraphics base) {
-        String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
-        String sessionName = sessionIdToString(client.getSessionId());
-        base.textAlign(LEFT, CENTER);
-        base.fill(30);
-        base.noStroke();
-        base.textFont(LookAndFeel.get().FONT);
-
-        int lineHeight = LookAndFeel.get().LINE_HEIGHT;
-
-        //First line
-        base.rect(0, 0, width, lineHeight);
-        String conId = "CON-ID: " + client.getModel().getConnectionID();
-        String packetsReceived = "Packets received: " + client.getPacketCount();
-        String fr = "FrameRate:" + frameRate;
-
-        base.fill(255);
-        base.text(conId, 10, lineHeight / 2f);
-        base.text(packetsReceived, 200, lineHeight / 2f);
-        base.text(fr, 400, lineHeight / 2f);
-
-        base.textAlign(RIGHT, CENTER);
-        base.text(sessionName, width - 10, lineHeight / 2f);
-        base.text(sessionTimeLeft, width - base.textWidth(sessionName) - 40, lineHeight / 2f);
-
-        base.fill(0, 150, 0);
-        base.rect(width - base.textWidth(sessionName) - 30, lineHeight * 0.1f, 10, lineHeight * 0.8f);
-
-        //tabs
-        base.textAlign(CENTER, CENTER);
-        float tabSize = width / tabNames.size();
-        for (int i = 0; i < tabNames.size(); i++) {
-            base.fill((i == activeTabIndex) ? 30 : 50);
-            base.rect(i * tabSize, lineHeight, tabSize, lineHeight);
-
-            base.fill(255);
-            base.text(tabNames.get(i), i * tabSize + tabSize / 2f, lineHeight * 1.5f);
-        }
-
-    }
-
-    private String sessionIdToString(SessionId sessionId) {
-        String result = "";
-        switch (sessionId.getType()) {
-            case PRACTICE:
-                result = "PRACTICE";
-                break;
-            case QUALIFYING:
-                result = "QUALIFYING";
-                break;
-            case RACE:
-                result = "RACE";
-                break;
-            default:
-                result = "NOT SUPPORTED";
-                break;
-        }
-        return result + " " + sessionId.getNumber();
-    }
-
+    /*
     @Override
     public void mousePressed() {
         int lineHeight = LookAndFeel.get().LINE_HEIGHT;
@@ -188,6 +94,7 @@ public class Visualisation extends PApplet {
         panels.get(activeTabIndex).mousePressed(mouseButton, mouseX, mouseY);
     }
 
+    
     @Override
     public void mouseReleased() {
         panels.get(activeTabIndex).mouseReleased(mouseButton, mouseX, mouseY);
@@ -202,5 +109,5 @@ public class Visualisation extends PApplet {
         enableDraw = !enableDraw;
         LOG.info("enableDraw: " + enableDraw);
     }
-
+     */
 }

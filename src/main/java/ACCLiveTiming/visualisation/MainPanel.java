@@ -48,6 +48,8 @@ public class MainPanel extends ExtensionPanel {
 
     @Override
     public void drawPanel() {
+
+        /*
         String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
         String sessionName = sessionIdToString(client.getSessionId());
         layer.textAlign(LEFT, CENTER);
@@ -85,6 +87,7 @@ public class MainPanel extends ExtensionPanel {
             layer.fill(255);
             layer.text(tabNames.get(i), i * tabSize + tabSize / 2f, lineHeight * 1.5f);
         }
+         */
     }
 
     private String sessionIdToString(SessionId sessionId) {
