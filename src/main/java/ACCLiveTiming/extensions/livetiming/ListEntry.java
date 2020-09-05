@@ -8,6 +8,7 @@ package ACCLiveTiming.extensions.livetiming;
 import ACCLiveTiming.networking.data.CarInfo;
 import ACCLiveTiming.networking.enums.CarLocation;
 import ACCLiveTiming.networking.enums.DriverCategory;
+import ACCLiveTiming.utility.TimeUtils;
 
 /**
  *
@@ -80,31 +81,37 @@ public class ListEntry {
     }
 
     public String getDelta() {
-        return String.valueOf(car.getRealtime().getDelta());
+        if(isInPits()){
+            return "--.--";
+        }
+        return TimeUtils.asDelta(car.getRealtime().getDelta());
     }
 
     public String getCurrentLap() {
-        return String.valueOf(car.getRealtime().getCurrentLap().getLapTimeMS());
+        if(isInPits()){
+            return "--.--";
+        }
+        return TimeUtils.asLapTime(car.getRealtime().getCurrentLap().getLapTimeMS());
     }
 
     public String getSectorOne() {
-        return "";
+        return "--.--";
     }
 
     public String getSectorTwo() {
-        return "";
+        return "--.--";
     }
 
     public String getSectorThree() {
-        return "";
+        return "--.--";
     }
 
     public String getBestLap() {
-        return "";
+        return TimeUtils.asLapTime(car.getRealtime().getBestSessionLap().getLapTimeMS());
     }
 
     public String getLastLap() {
-        return "";
+        return TimeUtils.asLapTime(car.getRealtime().getLastLap().getLapTimeMS());
     }
 
     public boolean isInPits() {

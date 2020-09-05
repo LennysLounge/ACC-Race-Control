@@ -32,7 +32,7 @@ public class LiveTimingPanel extends ExtensionPanel {
         new Column("#", 1.25f, false, CENTER),
         new Column("Laps", 1.5f, true, RIGHT),
         new Column("Gap", 2, true, RIGHT),
-        new Column("distance", 2, true, RIGHT),
+        new Column("Leader", 2, true, RIGHT),
         new Column("Delta", 2, true, RIGHT),
         new Column("Lap", 2, true, RIGHT),
         new Column("S1", 2, true, RIGHT),
@@ -113,11 +113,8 @@ public class LiveTimingPanel extends ExtensionPanel {
             }
 
             drawCell(base, entry.getLapCount(), 5, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getGap(), 6, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, "" + entry.getDistanceToFront(), 7, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-
-            /*
-            drawCell(base, entry.getToLeader(), 7, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(base, "--.--", 6, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(base, "--.--", 7, n, laf.COLOR_NONE, laf.COLOR_WHITE);
             drawCell(base, entry.getDelta(), 8, n, laf.COLOR_NONE, laf.COLOR_WHITE);
             drawCell(base, entry.getCurrentLap(), 9, n, laf.COLOR_NONE, laf.COLOR_WHITE);
             drawCell(base, entry.getSectorOne(), 10, n, laf.COLOR_NONE, laf.COLOR_WHITE);
@@ -125,7 +122,7 @@ public class LiveTimingPanel extends ExtensionPanel {
             drawCell(base, entry.getSectorThree(), 12, n, laf.COLOR_NONE, laf.COLOR_WHITE);
             drawCell(base, entry.getLastLap(), 13, n, laf.COLOR_NONE, laf.COLOR_WHITE);
             drawCell(base, entry.getBestLap(), 14, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-             */
+            
             n++;
         }
     }

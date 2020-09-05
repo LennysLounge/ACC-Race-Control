@@ -127,10 +127,13 @@ public class Visualisation extends PApplet {
         base.rect(0, 0, width, lineHeight);
         String conId = "CON-ID: " + client.getModel().getConnectionID();
         String packetsReceived = "Packets received: " + client.getPacketCount();
+        String fr = "FrameRate:" + frameRate;
 
         base.fill(255);
         base.text(conId, 10, lineHeight / 2f);
         base.text(packetsReceived, 200, lineHeight / 2f);
+        base.text(fr, 400, lineHeight / 2f);
+
 
         base.textAlign(RIGHT, CENTER);
         base.text(sessionName, width - 10, lineHeight / 2f);
