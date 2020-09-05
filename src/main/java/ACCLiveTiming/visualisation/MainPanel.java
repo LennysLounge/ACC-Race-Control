@@ -9,14 +9,10 @@ import ACCLiveTiming.client.BasicAccBroadcastingClient;
 import ACCLiveTiming.client.SessionId;
 import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.extensions.GraphicsFactory;
-import ACCLiveTiming.utility.TimeUtils;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import processing.core.PApplet;
-import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.LEFT;
-import static processing.core.PConstants.RIGHT;
 
 /**
  *
@@ -118,6 +114,7 @@ public class MainPanel extends ExtensionPanel {
         return activeTabIndex;
     }
     
+    @Override
     public void resize(GraphicsFactory factory, int w, int h) {
         layer = factory.createGraphics(w, h);
         
