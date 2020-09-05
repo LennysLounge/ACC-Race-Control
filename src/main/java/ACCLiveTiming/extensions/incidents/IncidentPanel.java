@@ -5,7 +5,7 @@
  */
 package ACCLiveTiming.extensions.incidents;
 
-import ACCLiveTiming.client.ExtensionPanel;
+import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.networking.enums.SessionType;
 import ACCLiveTiming.utility.TimeUtils;
 import ACCLiveTiming.visualisation.LookAndFeel;
@@ -32,7 +32,7 @@ public class IncidentPanel extends ExtensionPanel {
     }
 
     @Override
-    public void drawPanel(PGraphics base) {
+    public void drawPanel() {
         int lineHeight = LookAndFeel.get().LINE_HEIGHT;
 
         List<Accident> accidents = new LinkedList<>();
@@ -42,7 +42,7 @@ public class IncidentPanel extends ExtensionPanel {
         if (scroll < 0) {
             scroll = 0;
         }
-        int visibleLines = base.height / lineHeight;
+        int visibleLines = layer.height / lineHeight;
         if (scroll > accidents.size() - visibleLines) {
             scroll = accidents.size() - visibleLines;
         }
@@ -57,39 +57,39 @@ public class IncidentPanel extends ExtensionPanel {
             int y = lineHeight * n++;
             int x = 20;
 
-            base.fill((n % 2 == 0) ? 50 : 40);
-            base.stroke((n % 2 == 0) ? 50 : 40);
+            layer.fill((n % 2 == 0) ? 50 : 40);
+            layer.stroke((n % 2 == 0) ? 50 : 40);
 
-            base.rect(0, y, base.width, lineHeight);
+            layer.rect(0, y, layer.width, lineHeight);
 
             if (accident.getSessionID().getType() == SessionType.PRACTICE) {
-                base.fill(LookAndFeel.get().COLOR_PRACTICE);
+                layer.fill(LookAndFeel.get().COLOR_PRACTICE);
             } else if (accident.getSessionID().getType() == SessionType.QUALIFYING) {
-                base.fill(LookAndFeel.get().COLOR_QUALIFYING);
+                layer.fill(LookAndFeel.get().COLOR_QUALIFYING);
             } else if (accident.getSessionID().getType() == SessionType.RACE) {
-                base.fill(LookAndFeel.get().COLOR_RACE);
+                layer.fill(LookAndFeel.get().COLOR_RACE);
             }
 
-            base.rect(x, y, lineHeight, lineHeight);
-            base.fill(255);
-            base.textAlign(CENTER, CENTER);
-            base.text("" + accident.getIncidentNumber(), x + lineHeight / 2, y + lineHeight / 2);
-            base.textAlign(LEFT, CENTER);
-            base.text(TimeUtils.asDuration(accident.getEarliestTime()),
+            layer.rect(x, y, lineHeight, lineHeight);
+            layer.fill(255);
+            layer.textAlign(CENTER, CENTER);
+            layer.text("" + accident.getIncidentNumber(), x + lineHeight / 2, y + lineHeight / 2);
+            layer.textAlign(LEFT, CENTER);
+            layer.text(TimeUtils.asDuration(accident.getEarliestTime()),
                     x + lineHeight + 20, y + lineHeight / 2);
 
             int m = 0;
             for (int carId : accident.getCars()) {
                 int xx = (int) (lineHeight * 1.5f * m++);
-                base.fill(LookAndFeel.get().COLOR_RED);
-                base.rect(300 + xx, y, lineHeight * 1.5f, lineHeight);
-                base.fill(255);
-                base.textAlign(CENTER, CENTER);
-                base.text("" + extension.getModel().getCar(carId).getCarNumber(),
+                layer.fill(LookAndFeel.get().COLOR_RED);
+                layer.rect(300 + xx, y, lineHeight * 1.5f, lineHeight);
+                layer.fill(255);
+                layer.textAlign(CENTER, CENTER);
+                layer.text("" + extension.getModel().getCar(carId).getCarNumber(),
                         300 + xx + lineHeight * 1.5f / 2, y + lineHeight / 2);
             }
         }
-        LookAndFeel.drawScrollBar(base, accidents.size(), visibleLines, scroll);
+        LookAndFeel.drawScrollBar(layer, accidents.size(), visibleLines, scroll);
     }
 
     @Override

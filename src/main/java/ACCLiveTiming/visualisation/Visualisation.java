@@ -6,7 +6,7 @@
 package ACCLiveTiming.visualisation;
 
 import ACCLiveTiming.client.BasicAccBroadcastingClient;
-import ACCLiveTiming.client.ExtensionPanel;
+import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.client.SessionId;
 import ACCLiveTiming.utility.TimeUtils;
 import ACCLiveTiming.visualisation.LookAndFeel;
@@ -103,7 +103,8 @@ public class Visualisation extends PApplet {
                 PGraphics context = createGraphics(width, height - headerSize,
                         CustomPGraphics.class.getName());
                 context.beginDraw();
-                panels.get(activeTabIndex).drawPanel(context);
+                panels.get(activeTabIndex).setLayer(context);
+                panels.get(activeTabIndex).drawPanel();
                 context.endDraw();
                 image(context, 0, headerSize);
             }

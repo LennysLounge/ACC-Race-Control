@@ -5,7 +5,7 @@
  */
 package ACCLiveTiming.extensions.laptimes;
 
-import ACCLiveTiming.client.AccClientExtension;
+import ACCLiveTiming.extensions.AccClientExtension;
 import ACCLiveTiming.extensions.incidents.IncidentExtension;
 import ACCLiveTiming.extensions.logging.LoggingExtension;
 import ACCLiveTiming.networking.data.BroadcastingEvent;

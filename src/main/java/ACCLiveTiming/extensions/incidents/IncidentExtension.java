@@ -5,7 +5,7 @@
  */
 package ACCLiveTiming.extensions.incidents;
 
-import ACCLiveTiming.client.AccClientExtension;
+import ACCLiveTiming.extensions.AccClientExtension;
 import ACCLiveTiming.client.SessionId;
 import ACCLiveTiming.networking.data.AccBroadcastingData;
 import ACCLiveTiming.networking.data.BroadcastingEvent;

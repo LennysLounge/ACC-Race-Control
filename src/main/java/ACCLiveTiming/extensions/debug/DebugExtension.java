@@ -5,7 +5,7 @@
  */
 package ACCLiveTiming.extensions.debug;
 
-import ACCLiveTiming.client.AccClientExtension;
+import ACCLiveTiming.extensions.AccClientExtension;
 import ACCLiveTiming.networking.data.AccBroadcastingData;
 
 /**

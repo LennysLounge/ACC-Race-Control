@@ -5,7 +5,7 @@
  */
 package ACCLiveTiming.extensions.logging;
 
-import ACCLiveTiming.client.ExtensionPanel;
+import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.visualisation.LookAndFeel;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -31,7 +31,7 @@ public class LoggingPanel extends ExtensionPanel {
     }
 
     @Override
-    public void drawPanel(PGraphics base) {
+    public void drawPanel() {
         int lineHeight = LookAndFeel.get().LINE_HEIGHT;
         int tabSize = 130;
 
@@ -42,7 +42,7 @@ public class LoggingPanel extends ExtensionPanel {
         if (scroll < 0) {
             scroll = 0;
         }
-        int visibleLines = base.height / lineHeight;
+        int visibleLines = layer.height / lineHeight;
         if (scroll > messages.size() - visibleLines) {
             scroll = messages.size() - visibleLines;
         }
@@ -56,22 +56,22 @@ public class LoggingPanel extends ExtensionPanel {
 
             int y = lineHeight * n++;
 
-            base.fill((n % 2 == 0) ? 50 : 40);
-            base.noStroke();
-            base.rect(0, y, base.width, lineHeight);
+            layer.fill((n % 2 == 0) ? 50 : 40);
+            layer.noStroke();
+            layer.rect(0, y, layer.width, lineHeight);
 
-            base.fill(255);
-            base.textAlign(LEFT, CENTER);
+            layer.fill(255);
+            layer.textAlign(LEFT, CENTER);
 
             float x = 40;
             String[] partials = msg.split("\t");
             for (String partial : partials) {
-                base.text(partial, x, y + lineHeight / 2);
-                float msgWidth = base.textWidth(partial);
+                layer.text(partial, x, y + lineHeight / 2);
+                float msgWidth = layer.textWidth(partial);
                 x += (msgWidth - (msgWidth % tabSize) + tabSize);
             }
         }
-        LookAndFeel.drawScrollBar(base, messages.size(), visibleLines, scroll);
+        LookAndFeel.drawScrollBar(layer, messages.size(), visibleLines, scroll);
     }
 
     @Override

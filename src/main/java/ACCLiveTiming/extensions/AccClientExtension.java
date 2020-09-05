@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.client;
+package ACCLiveTiming.extensions;
 
+import ACCLiveTiming.client.BasicAccBroadcastingClient;
 import ACCLiveTiming.networking.data.BroadcastingEvent;
 import ACCLiveTiming.networking.data.CarInfo;
 import ACCLiveTiming.networking.data.RealtimeInfo;
@@ -41,7 +42,7 @@ public class AccClientExtension {
         return panel;
     }
     
-    protected void setClient(BasicAccBroadcastingClient client){
+    public void setClient(BasicAccBroadcastingClient client){
         this.client = client;
     }
 

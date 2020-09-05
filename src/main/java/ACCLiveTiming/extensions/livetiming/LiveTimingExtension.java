@@ -5,7 +5,7 @@
  */
 package ACCLiveTiming.extensions.livetiming;
 
-import ACCLiveTiming.client.AccClientExtension;
+import ACCLiveTiming.extensions.AccClientExtension;
 import ACCLiveTiming.networking.data.CarInfo;
 import ACCLiveTiming.networking.data.RealtimeInfo;
 import ACCLiveTiming.networking.data.SessionInfo;

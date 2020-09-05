@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.client;
+package ACCLiveTiming.extensions;
 
 import processing.core.PGraphics;
 
@@ -14,12 +14,14 @@ import processing.core.PGraphics;
 public abstract class ExtensionPanel {
 
     protected String displayName = "none";
+    
+    protected PGraphics layer;
 
     public String getDisplayName() {
         return displayName;
     }
 
-    public abstract void drawPanel(PGraphics context);
+    public abstract void drawPanel();
 
     public void mousePressed(int mouseButton, int mouseX, int mouseY) {
     }
@@ -28,5 +30,13 @@ public abstract class ExtensionPanel {
     }
     
     public void mouseWheel(int count){
+    }
+    
+    public void setLayer(PGraphics layer){
+        this.layer = layer;
+    }
+    
+    public PGraphics getLayer(){
+        return layer;
     }
 }
