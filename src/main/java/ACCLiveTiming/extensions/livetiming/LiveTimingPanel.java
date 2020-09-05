@@ -23,7 +23,10 @@ public class LiveTimingPanel extends ExtensionPanel {
 
     private final LiveTimingExtension extension;
 
+    private int padding = 0;
+
     private Column[] columns = {
+        new Column("", 1, false, LEFT),
         new Column("P", 1, false, CENTER),
         new Column("Name", 6, false, LEFT),
         new Column("", 0.4f, false, CENTER),
@@ -46,91 +49,81 @@ public class LiveTimingPanel extends ExtensionPanel {
         this.displayName = "LIVE TIMING";
     }
 
-    private void drawCell(PGraphics base, String text, int x, int y, int background, int forground) {
-        float lineHeight = LookAndFeel.get().LINE_HEIGHT;
-
-        float xoffset = 0;
-        for (int i = 0; i < x; i++) {
-            xoffset += columns[i].size;
-        }
-
-        float w = columns[x].size;
-
-        base.fill(background);
-        base.noStroke();
-        base.rect(xoffset * lineHeight, y * lineHeight, w * lineHeight, lineHeight);
-
-        switch (columns[x].alignment) {
-            case LEFT:
-                xoffset += 0.2f;
-                break;
-            case RIGHT:
-                xoffset += w - 0.2f;
-                break;
-            case CENTER:
-                xoffset += w / 2;
-                break;
-        }
-
-        base.fill(forground);
-        base.textAlign(columns[x].alignment, CENTER);
-        base.text(text, xoffset * lineHeight, y * lineHeight + lineHeight / 2);
-
-    }
-
+    @Override
     public void drawPanel(PGraphics base) {
         LookAndFeel laf = LookAndFeel.get();
         calculateColumnWidths(base.width);
 
         base.textFont(LookAndFeel.get().FONT, LookAndFeel.get().TEXT_SIZE);
         base.textAlign(LEFT, CENTER);
+        base.noStroke();
 
+        padding = 0;
         for (int i = 0; i < columns.length; i++) {
             drawCell(base, columns[i].head, i, 0, base.color(30), laf.COLOR_WHITE);
         }
 
+        padding = 1;
+
+        base.strokeWeight(10);
+
         int n = 1;
         for (ListEntry entry : extension.getEntries()) {
-            drawCell(base, entry.getPosition(), 0, n, laf.COLOR_RED, laf.COLOR_WHITE);
-            drawCell(base, entry.getName(), 1, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            if (!entry.isConnected()) {
+                continue;
+            }
+
+            if(entry.isFocused()){
+                drawCellBackground(base, n, base.color(100));
+            }
+            else{
+                if (n % 2 == 0) {
+                    drawCellBackground(base, n, base.color(40));
+                }
+            }
+            
+
+            if (entry.isConnected()) {
+                if (entry.isFocused()) {
+                    drawCell(base, entry.getPosition(), 1, n, laf.COLOR_WHITE, laf.COLOR_BLACK);
+                } else {
+                    drawCell(base, entry.getPosition(), 1, n, laf.COLOR_RED, laf.COLOR_WHITE);
+                }
+            } else {
+                drawCell(base, entry.getPosition(), 1, n, laf.COLOR_GRAY, laf.COLOR_WHITE);
+            }
+
+            drawCell(base, entry.getName(), 2, n, laf.COLOR_NONE, laf.COLOR_WHITE);
 
             if (entry.isInPits()) {
                 base.textSize(12);
-                drawCell(base, "P", 2, n, laf.COLOR_WHITE, laf.COLOR_BLACK);
+                drawCell(base, "P", 3, n, laf.COLOR_WHITE, laf.COLOR_BLACK);
                 base.textSize(laf.TEXT_SIZE);
             }
 
-            int background;
             switch (entry.getCategory()) {
                 case BRONZE:
-                    background = laf.COLOR_RED;
+                    drawCell(base, entry.getCarNumber(), 4, n, laf.COLOR_RED, laf.COLOR_BLACK);
                     break;
                 case SILVER:
-                    background = laf.COLOR_GRAY;
+                    drawCell(base, entry.getCarNumber(), 4, n, laf.COLOR_GRAY, laf.COLOR_WHITE);
                     break;
                 case GOLD:
                 case PLATINUM:
-                    background = laf.COLOR_WHITE;
+                    drawCell(base, entry.getCarNumber(), 4, n, laf.COLOR_WHITE, laf.COLOR_BLACK);
                     break;
-                default:
-                    background = laf.COLOR_RED;
             }
-            int forground = laf.COLOR_BLACK;
-            if (entry.getCategory() == DriverCategory.SILVER) {
-                forground = laf.COLOR_WHITE;
-            }
-            drawCell(base, entry.getCarNumber(), 3, n, background, forground);
 
-            drawCell(base, entry.getLapCount(), 4, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getGap(), 5, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getToLeader(), 6, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getDelta(), 7, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getCurrentLap(), 8, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getSectorOne(), 9, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getSectorTwo(), 10, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getSectorThree(), 11, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getLastLap(), 12, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getBestLap(), 13, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(base, entry.getLapCount(), 5, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(base, entry.getGap(), 6, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(base, entry.getToLeader(), 7, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(base, entry.getDelta(), 8, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(base, entry.getCurrentLap(), 9, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(base, entry.getSectorOne(), 10, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(base, entry.getSectorTwo(), 11, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(base, entry.getSectorThree(), 12, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(base, entry.getLastLap(), 13, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(base, entry.getBestLap(), 14, n, laf.COLOR_NONE, laf.COLOR_WHITE);
 
             n++;
         }
@@ -257,6 +250,51 @@ public class LiveTimingPanel extends ExtensionPanel {
         final float dynamicSize = Math.max(w - staticSize, 0);
         final int count = dynamicCount;
         dynamicColumns.forEach(column -> column.size = Math.max(dynamicSize / count, column.minSize));
+    }
+
+    private void drawCellBackground(PGraphics base, int line, int color) {
+        float lineHeight = LookAndFeel.get().LINE_HEIGHT;
+
+        float xoffset = 0;
+        float width = 0;
+        for (Column c : columns) {
+            width += c.size;
+        }
+        base.fill(color);
+        base.rect(xoffset * lineHeight, line * lineHeight,
+                width * lineHeight, lineHeight);
+    }
+
+    private void drawCell(PGraphics base, String text, int x, int y, int background, int forground) {
+        float lineHeight = LookAndFeel.get().LINE_HEIGHT;
+
+        float xoffset = 0;
+        for (int i = 0; i < x; i++) {
+            xoffset += columns[i].size;
+        }
+
+        float w = columns[x].size;
+
+        base.fill(background);
+        base.rect(xoffset * lineHeight + padding, y * lineHeight + padding,
+                w * lineHeight - padding * 2, lineHeight - padding * 2);
+
+        switch (columns[x].alignment) {
+            case LEFT:
+                xoffset += 0.2f;
+                break;
+            case RIGHT:
+                xoffset += w - 0.2f;
+                break;
+            case CENTER:
+                xoffset += w / 2;
+                break;
+        }
+
+        base.fill(forground);
+        base.textAlign(columns[x].alignment, CENTER);
+        base.text(text, xoffset * lineHeight, y * lineHeight + lineHeight / 2);
+
     }
 
     private class Column {

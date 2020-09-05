@@ -5,9 +5,9 @@
  */
 package ACCLiveTiming.extensions.livetiming;
 
+import ACCLiveTiming.networking.data.CarInfo;
+import ACCLiveTiming.networking.enums.CarLocation;
 import ACCLiveTiming.networking.enums.DriverCategory;
-import java.util.Collections;
-import java.util.List;
 
 /**
  *
@@ -15,99 +15,84 @@ import java.util.List;
  */
 public class ListEntry {
 
-    private final String position;
-    private final String name;
-    private final String carNumber;
-    private final String lapCount;
-    private final String gap;
-    private final String toLeader;
-    private final String delta;
-    private final String currentLap;
-    private final String sectorOne;
-    private final String sectorTwo;
-    private final String sectorThree;
-    private final String bestLap;
-    private final String lastLap;
+    private final CarInfo car;
+    
+    private final boolean isFocused;
 
-    private final boolean inPits;
-    private final DriverCategory category;
-
-    public ListEntry(String position, String name, String carNumber, String lapCount, String gap, String toLeader, String delta, String currentLap, String sectorOne, String sectorTwo, String sectorThree, String bestLap, String lastLap, boolean inPits, DriverCategory category) {
-        this.position = position;
-        this.name = name;
-        this.carNumber = carNumber;
-        this.lapCount = lapCount;
-        this.gap = gap;
-        this.toLeader = toLeader;
-        this.delta = delta;
-        this.currentLap = currentLap;
-        this.sectorOne = sectorOne;
-        this.sectorTwo = sectorTwo;
-        this.sectorThree = sectorThree;
-        this.bestLap = bestLap;
-        this.lastLap = lastLap;
-        this.inPits = inPits;
-        this.category = category;
+    public ListEntry(CarInfo car, boolean isFocused) {
+        this.car = car;
+        this.isFocused = isFocused;
+    }
+    
+    public boolean isFocused(){
+        return isFocused;
+    }
+    
+    public boolean isConnected(){
+        return car.isConnected();
     }
 
     public String getPosition() {
-        return position;
+        return String.valueOf(car.getRealtime().getPosition());
     }
 
     public String getName() {
-        return name;
+        String firstname = car.getDriver().getFirstName();
+        String lastname = car.getDriver().getLastName();
+        firstname = firstname.substring(0, Math.min(firstname.length(), 1));
+        return String.format("%s. %s",firstname, lastname);
     }
 
     public String getCarNumber() {
-        return carNumber;
+        return String.valueOf(car.getCarNumber());
     }
 
     public String getLapCount() {
-        return lapCount;
+        return String.valueOf(car.getRealtime().getLaps());
     }
 
     public String getGap() {
-        return gap;
+        return "";
     }
 
     public String getToLeader() {
-        return toLeader;
+        return "";
     }
 
     public String getDelta() {
-        return delta;
+        return String.valueOf(car.getRealtime().getDelta());
     }
 
     public String getCurrentLap() {
-        return currentLap;
+        return "";
     }
 
     public String getSectorOne() {
-        return sectorOne;
+        return "";
     }
 
     public String getSectorTwo() {
-        return sectorTwo;
+        return "";
     }
 
     public String getSectorThree() {
-        return sectorThree;
+        return "";
     }
 
     public String getBestLap() {
-        return bestLap;
+        return "";
     }
 
     public String getLastLap() {
-        return lastLap;
+        return "";
     }
 
     public boolean isInPits() {
-        return inPits;
+        return car.getRealtime().getLocation() != CarLocation.TRACK;
     }
 
     public DriverCategory getCategory() {
-        return category;
+        return car.getDriver().getCategory();
     }
 
 }

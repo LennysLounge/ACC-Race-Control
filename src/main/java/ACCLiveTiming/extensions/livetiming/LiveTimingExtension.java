@@ -7,13 +7,15 @@ package ACCLiveTiming.extensions.livetiming;
 
 import ACCLiveTiming.client.AccClientExtension;
 import ACCLiveTiming.networking.data.AccBroadcastingData;
+import ACCLiveTiming.networking.data.CarInfo;
 import ACCLiveTiming.networking.data.RealtimeInfo;
-import ACCLiveTiming.networking.enums.DriverCategory;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -28,10 +30,15 @@ public class LiveTimingExtension extends AccClientExtension {
     /**
      * Map of entries to their carId.
      */
+    private Map<Integer, CarInfo> map = new HashMap<>();
+    /**
+     * sorted list of the entries.
+     */
     private List<ListEntry> entries = new LinkedList<>();
 
     public LiveTimingExtension() {
         this.panel = new LiveTimingPanel(this);
+        /*
         entries.add(new ListEntry("1", "K. Bond", "80", "12", "--.--", "--.--", "-0.52", "1:00.12", "12.02", "16.45", "18.64", "1:37.59", "1:38.21",
                 false, DriverCategory.SILVER));
         entries.add(new ListEntry("2", "P. Hold [FRT]", "81", "12", "+2.52", "+2.52", "+2.34", "55.12", "12.08", "16.56", "18.69", "1.38.59", "1:38.59",
@@ -40,6 +47,7 @@ public class LiveTimingExtension extends AccClientExtension {
                 false, DriverCategory.BRONZE));
         entries.add(new ListEntry("4", "E. Rincon", "10", "11", "+6.23", "+13.56", "+0.59", "0:20.55", "12.17", "16.64", "18.71", "1:38.37", "1:38.65",
                 true, DriverCategory.GOLD));
+         */
     }
 
     public List<ListEntry> getEntries() {
@@ -52,6 +60,50 @@ public class LiveTimingExtension extends AccClientExtension {
 
     @Override
     public void onRealtimeCarUpdate(RealtimeInfo info) {
+        CarInfo car = client.getModel().getCar(info.getCarId());
+        map.put(car.getCarId(), car);
+        sortEntries();
+    }
+
+    private void sortEntries() {
+        if (map.isEmpty()) {
+            return;
+        }
+        
+        List<CarInfo> sortedCars = new LinkedList<>();
+        List<CarInfo> disconnectedCars = new LinkedList<>();
+        List<CarInfo> carsToSort = new LinkedList<>(map.values());
+        
+        while (carsToSort.size() > 0) {
+            CarInfo smallest = carsToSort.get(0);
+            if (!smallest.isConnected()) {
+                disconnectedCars.add(smallest);
+                carsToSort.remove(smallest);
+                continue;
+            }
+
+            //find smallest
+            for (CarInfo subject : carsToSort) {
+                //Sorting function
+                if(subject.getRealtime().getPosition() < smallest.getRealtime().getPosition()){
+                    smallest = subject;
+                }
+            }
+
+            sortedCars.add(smallest);
+            carsToSort.remove(smallest);
+        }
+
+        sortedCars.addAll(disconnectedCars);
+        
+        //convert to entries
+        entries = sortedCars.stream()
+                .map(car -> new ListEntry(car, isFocused(car)))
+                .collect(Collectors.toList());
+    }
+    
+    private boolean isFocused(CarInfo car){
+        return car.getCarId() == client.getModel().getSessionInfo().getFocusedCarIndex();
     }
 
 }
