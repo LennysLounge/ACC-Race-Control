@@ -16,9 +16,31 @@ public abstract class ExtensionPanel {
     protected String displayName = "none";
     
     protected PGraphics layer;
+    
+    protected int posX;
+    
+    protected int posY;
 
     public String getDisplayName() {
         return displayName;
+    }
+    
+    public void setSize(int width, int height){
+        if(layer.width != width || layer.height != height){
+            //TODO:
+        }
+    }
+    
+    public void setPosition(int posX, int posY){
+        this.posX = posX;
+        this.posY = posY;
+    }
+    
+    public int getPosX(){
+        return posX;
+    }
+    public int getPosY(){
+        return posY;
     }
 
     public abstract void drawPanel();
@@ -39,4 +61,6 @@ public abstract class ExtensionPanel {
     public PGraphics getLayer(){
         return layer;
     }
+    
+    
 }
