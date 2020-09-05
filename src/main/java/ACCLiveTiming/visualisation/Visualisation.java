@@ -51,8 +51,10 @@ public class Visualisation extends PApplet {
      * Index of the currently active tab.
      */
     private int activeTabIndex = 0;
-    
+
     private boolean enableDraw = true;
+    
+    private final MainPanel headerPanel;
 
     public Visualisation(BasicAccBroadcastingClient client) {
         this.client = client;
@@ -60,6 +62,7 @@ public class Visualisation extends PApplet {
         tabNames = panels.stream()
                 .map(panel -> panel.getDisplayName())
                 .collect(Collectors.toList());
+        headerPanel = new MainPanel(this, client);
     }
 
     @Override
@@ -86,7 +89,7 @@ public class Visualisation extends PApplet {
 
     @Override
     public void draw() {
-        if(!enableDraw){
+        if (!enableDraw) {
             return;
         }
         background(50);
@@ -114,7 +117,6 @@ public class Visualisation extends PApplet {
     }
 
     private void drawHeader(PGraphics base) {
-
         String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
         String sessionName = sessionIdToString(client.getSessionId());
         base.textAlign(LEFT, CENTER);
@@ -135,7 +137,6 @@ public class Visualisation extends PApplet {
         base.text(packetsReceived, 200, lineHeight / 2f);
         base.text(fr, 400, lineHeight / 2f);
 
-
         base.textAlign(RIGHT, CENTER);
         base.text(sessionName, width - 10, lineHeight / 2f);
         base.text(sessionTimeLeft, width - base.textWidth(sessionName) - 40, lineHeight / 2f);
@@ -153,6 +154,7 @@ public class Visualisation extends PApplet {
             base.fill(255);
             base.text(tabNames.get(i), i * tabSize + tabSize / 2f, lineHeight * 1.5f);
         }
+
     }
 
     private String sessionIdToString(SessionId sessionId) {
@@ -195,8 +197,8 @@ public class Visualisation extends PApplet {
     public void mouseWheel(MouseEvent event) {
         panels.get(activeTabIndex).mouseWheel(event.getCount());
     }
-    
-    public void keyPressed(){
+
+    public void keyPressed() {
         enableDraw = !enableDraw;
         LOG.info("enableDraw: " + enableDraw);
     }
