@@ -34,32 +34,23 @@ public class Visualisation extends PApplet {
      * This classes logger.
      */
     private static Logger LOG = Logger.getLogger(Visualisation.class.getName());
-
     /**
-     * Client for the ACC connection.
+     * Main panel.
      */
-    private BasicAccBroadcastingClient client;
+    private final MainPanel mainPanel;
     /**
-     * Index of the currently active tab.
+     * Size of the window.
      */
-    private int activeTabIndex = 0;
-
-    private final MainPanel headerPanel;
+    private int sizeWidth;
+    private int sizeHeight;
 
     public Visualisation(BasicAccBroadcastingClient client) {
-        this.client = client;
-        headerPanel = new MainPanel(this, client);
+        mainPanel = new MainPanel(this, client);
     }
 
     @Override
     public void settings() {
         size(1600, 900);
-
-        try {
-            client.sendRegisterRequest();
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, "Error while sending register request", e);
-        }
     }
 
     @Override
@@ -72,42 +63,43 @@ public class Visualisation extends PApplet {
 
     @Override
     public void draw() {
+        if(width != sizeWidth || height != sizeHeight){
+            onResize(width, height);
+        }
+        
+        
+        
+        
         String fr = String.valueOf(round(frameRate));
-        float width = textWidth(fr);
         fill(0);
-        rect(0, 0, width, 16);
+        rect(0, 0, textWidth(fr), 16);
         fill(255);
         textAlign(LEFT, TOP);
         text(fr, 0, 0);
     }
+    
+    public void onResize(int w, int h){
+        sizeWidth = w;
+        sizeHeight = h;
+        println(w, h);
+        mainPanel.onResize(w, h);
+    }
 
-    /*
+    
     @Override
     public void mousePressed() {
-        int lineHeight = LookAndFeel.get().LINE_HEIGHT;
-        if (mouseY > lineHeight && mouseY < lineHeight * 2) {
-            float tabSize = width / tabNames.size();
-            int clickedIndex = (int) ((mouseX - (mouseX % tabSize)) / tabSize);
-            activeTabIndex = clickedIndex;
-        }
-
-        panels.get(activeTabIndex).mousePressed(mouseButton, mouseX, mouseY);
+        mainPanel.mousePressed(mouseButton, mouseX, mouseY);
     }
 
     
     @Override
     public void mouseReleased() {
-        panels.get(activeTabIndex).mouseReleased(mouseButton, mouseX, mouseY);
+        mainPanel.mouseReleased(mouseButton, mouseX, mouseY);
     }
 
     @Override
     public void mouseWheel(MouseEvent event) {
-        panels.get(activeTabIndex).mouseWheel(event.getCount());
+        mainPanel.mouseWheel(event.getCount());
     }
-
-    public void keyPressed() {
-        enableDraw = !enableDraw;
-        LOG.info("enableDraw: " + enableDraw);
-    }
-     */
+     
 }

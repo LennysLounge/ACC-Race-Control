@@ -54,6 +54,9 @@ public abstract class ExtensionPanel {
     public void mouseWheel(int count){
     }
     
+    public void onResize(int w, int h){
+    }
+    
     public void setLayer(PGraphics layer){
         this.layer = layer;
     }
