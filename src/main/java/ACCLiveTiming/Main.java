@@ -84,14 +84,12 @@ public class Main {
         BasicAccBroadcastingClient client;
         try {
             client = new BasicAccBroadcastingClient();
-            client.sendRegisterRequest();
+
         } catch (SocketException e) {
             LOG.log(Level.SEVERE, "Error while creating the visualization.", e);
             return;
-        }catch (IOException e) {
-            LOG.log(Level.SEVERE, "Error while sending register request", e);
-            return;
         }
+        
 
         client.setCredentials(dialog.getDisplayName(),
                 dialog.getConnectionPassword(),

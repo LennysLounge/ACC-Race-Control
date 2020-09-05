@@ -25,12 +25,6 @@ public abstract class ExtensionPanel {
         return displayName;
     }
 
-    public void setSize(int width, int height) {
-        if (layer.width != width || layer.height != height) {
-            //TODO:
-        }
-    }
-
     public void setPosition(int posX, int posY) {
         this.posX = posX;
         this.posY = posY;

@@ -46,6 +46,13 @@ public class Visualisation extends PApplet {
 
     public Visualisation(BasicAccBroadcastingClient client) {
         mainPanel = new MainPanel(this, client);
+
+        try {
+            client.sendRegisterRequest();
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error while sending register request", e);
+            return;
+        }
     }
 
     @Override
@@ -66,14 +73,13 @@ public class Visualisation extends PApplet {
         if (width != sizeWidth || height != sizeHeight) {
             onResize(width, height);
         }
-        
-        
+
         mainPanel.getLayer().beginDraw();
         mainPanel.drawPanel();
         mainPanel.getLayer().endDraw();
-        
+
         image(mainPanel.getLayer(), 0, 0);
-        
+
         String fr = String.valueOf(round(frameRate));
         fill(0);
         rect(0, 0, textWidth(fr), 16);

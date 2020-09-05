@@ -49,8 +49,6 @@ public class MainPanel extends ExtensionPanel {
 
     @Override
     public void drawPanel() {
-
-        
         String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
         String sessionName = sessionIdToString(client.getSessionId());
         layer.textAlign(LEFT, CENTER);
@@ -80,15 +78,24 @@ public class MainPanel extends ExtensionPanel {
 
         //tabs
         layer.textAlign(CENTER, CENTER);
+        layer.fill(50);
+        layer.rect(0, lineHeight, layer.width, lineHeight);
         float tabSize = layer.width / tabNames.size();
         for (int i = 0; i < tabNames.size(); i++) {
-            layer.fill((i == activeTabIndex) ? 30 : 50);
-            layer.rect(i * tabSize, lineHeight, tabSize, lineHeight);
-
+            if (i == activeTabIndex) {
+                layer.fill(30);
+                layer.rect(i * tabSize, lineHeight, tabSize, lineHeight);
+            }
             layer.fill(255);
             layer.text(tabNames.get(i), i * tabSize + tabSize / 2f, lineHeight * 1.5f);
         }
-         
+        
+        //draw panel
+        ExtensionPanel panel = panels.get(activeTabIndex);
+        panel.getLayer().beginDraw();
+        panel.drawPanel();
+        panel.getLayer().endDraw();
+        layer.image(panel.getLayer(), panel.getPosX(), panel.getPosY());
     }
 
     private String sessionIdToString(SessionId sessionId) {
@@ -117,12 +124,33 @@ public class MainPanel extends ExtensionPanel {
     public int getActiveTabIndex() {
         return activeTabIndex;
     }
-    
+
+    @Override
+    public void mousePressed(int mouseButton, int mouseX, int mouseY) {
+        int lineHeight = LookAndFeel.get().LINE_HEIGHT;
+        if (mouseY > lineHeight && mouseY < lineHeight * 2) {
+            float tabSize = layer.width / tabNames.size();
+            int clickedIndex = (int) ((mouseX - (mouseX % tabSize)) / tabSize);
+            activeTabIndex = clickedIndex;
+        }
+    }
+
+    @Override
+    public void mouseReleased(int mouseButton, int mouseX, int mouseY) {
+
+    }
+
     @Override
     public void resize(GraphicsFactory factory, int w, int h) {
         layer = factory.createGraphics(w, h);
         
-        //resize panels
+        int ww = layer.width;
+        int hh = layer.height - LookAndFeel.get().LINE_HEIGHT * 2;
+
+        for(ExtensionPanel panel : panels){
+            panel.resize(factory, ww, hh);
+            panel.setPosition(0, LookAndFeel.get().LINE_HEIGHT * 2);
+        }
     }
 
 }
