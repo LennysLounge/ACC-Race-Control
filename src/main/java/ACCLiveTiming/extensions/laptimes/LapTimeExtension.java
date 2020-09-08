@@ -13,6 +13,8 @@ import ACCLiveTiming.networking.data.LapInfo;
 import ACCLiveTiming.networking.data.RealtimeInfo;
 import ACCLiveTiming.networking.enums.LapType;
 import ACCLiveTiming.utility.TimeUtils;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -28,6 +30,8 @@ public class LapTimeExtension extends AccClientExtension {
     private final Map<Integer, Integer> lapCount = new HashMap<>();
 
     public LapTimeExtension() {
+        Date now = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
     }
 
     @Override
