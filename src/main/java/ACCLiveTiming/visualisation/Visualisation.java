@@ -53,9 +53,14 @@ public class Visualisation extends PApplet {
     private int activeTabIndex = 0;
     
     private boolean enableDraw = true;
+    
+    private int updateInterval;
+    
+    private int timer = 0;
 
-    public Visualisation(BasicAccBroadcastingClient client) {
+    public Visualisation(BasicAccBroadcastingClient client, int updateInterval) {
         this.client = client;
+        this.updateInterval = updateInterval;
         panels = client.getPanels();
         tabNames = panels.stream()
                 .map(panel -> panel.getDisplayName())
@@ -81,14 +86,16 @@ public class Visualisation extends PApplet {
         textFont(LookAndFeel.get().FONT);
     }
 
-    int counter = 0;
-    int n = 0;
 
     @Override
     public void draw() {
-        if(!enableDraw){
+        int dt = (int)(1000 / frameRate);
+        timer += dt;
+        if(timer < updateInterval){
             return;
-        }
+        } 
+        timer -= updateInterval;
+        
         background(50);
 
         int headerSize = LookAndFeel.get().LINE_HEIGHT * 2;

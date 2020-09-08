@@ -103,7 +103,7 @@ public class Main {
         client.registerExtension(new LoggingExtension());
         client.registerExtension(new DebugExtension());
 
-        Visualisation v = new Visualisation(client);
+        Visualisation v = new Visualisation(client, dialog.getUpdateInterval());
 
         String[] a = {"MAIN"};
         PApplet.runSketch(a, v);
