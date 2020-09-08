@@ -104,5 +104,8 @@ public class AccClientExtension {
     
     public void onCarConnect(CarInfo car){
     }
+    
+    public void onSessionChanged(SessionId oldId, SessionId newId){
+    }
       
 }

@@ -134,7 +134,11 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
             int sessionIndex = sessionInfo.getSessionIndex();
             int sessionNumber = sessionCounter.getOrDefault(type, -1) + 1;
             sessionCounter.put(type, sessionNumber);
-            sessionId = new SessionId(type, sessionIndex, sessionNumber);
+            
+            SessionId newSessionId = new SessionId(type, sessionIndex, sessionNumber);
+            onSessionChanged(sessionId, newSessionId);
+            sessionId = newSessionId;
+            
             sessionPhase = SessionPhase.NONE;
             LOG.info("session + " + type.name() + " started. Session nr:" + sessionNumber + " sessionIndex:" + sessionIndex);
         }
@@ -222,6 +226,10 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
             }
         }
         LOG.info("no method found for type:" + type.name() + ", phase:" + phase.name());
+    }
+
+    private void onSessionChanged(SessionId oldId, SessionId newId) {
+        extensions.forEach(extension -> extension.onSessionChanged(oldId, newId));
     }
 
     private void onAccident(BroadcastingEvent event) {
