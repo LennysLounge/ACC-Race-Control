@@ -14,11 +14,16 @@ import ACCLiveTiming.networking.data.RealtimeInfo;
 import ACCLiveTiming.networking.enums.LapType;
 import ACCLiveTiming.utility.TimeUtils;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,13 +33,34 @@ import java.util.logging.Logger;
  */
 public class LapTimeExtension extends AccClientExtension {
 
+    /**
+     * This classes logger.
+     */
     private static Logger LOG = Logger.getLogger(IncidentExtension.class.getName());
-
+    /**
+     * Counts the laps for each car
+     */
     private final Map<Integer, Integer> lapCount = new HashMap<>();
-
+    /**
+     * Directory where the files are in
+     */
     private File dir;
-
+    /**
+     * current log file
+     */
     private File logFile;
+    /**
+     * Lists of lap times. Maps car ids to a list of lap times
+     */
+    private final Map<Integer, List<Integer>> laps = new HashMap<>();
+    /**
+     * Maps car ids to their row in the log file.
+     */
+    private final Map<Integer, Integer> rows = new HashMap<>();
+    /**
+     * Counts how many rows are needed.
+     */
+    private int rowCounter = 0;
 
     public LapTimeExtension() {
         Date now = new Date();
@@ -63,6 +89,18 @@ public class LapTimeExtension extends AccClientExtension {
     private void onLapComplete(LapInfo lap, boolean isPB, boolean isSB) {
         CarInfo car = client.getModel().getCar(lap.getCarId());
 
+        if (!laps.containsKey(car.getCarId())) {
+            laps.put(car.getCarId(), new LinkedList<>());
+            rows.put(car.getCarId(), rowCounter++);
+        }
+        laps.get(car.getCarId()).add(lap.getLapTimeMS());
+
+        try {
+            printLapToFile();
+        } catch (Exception e) {
+            LOG.log(Level.WARNING, "File not found", e);
+        }
+
         String message = "Lap completed: #" + car.getCarNumber()
                 + "\t" + TimeUtils.asLapTime(lap.getLapTimeMS()) + "\t";
         if (isPB) {
@@ -81,16 +119,40 @@ public class LapTimeExtension extends AccClientExtension {
         LOG.info(message);
     }
 
+    private void printLapToFile() {
+        try ( PrintWriter writer = new PrintWriter(logFile)) {
+
+            for (Entry<Integer, List<Integer>> entry : laps.entrySet()) {
+                CarInfo car = client.getModel().getCar(entry.getKey());
+                writer.print(car.getCarNumber());
+                writer.print("," + car.getDriver().getFirstName() + " " + car.getDriver().getLastName());
+
+                for (int lap : entry.getValue()) {
+                    writer.print("," + lap);
+                }
+
+                writer.println();
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(LapTimeExtension.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     @Override
     public void onSessionChanged(SessionId oldId, SessionId newId) {
-        //Create new log file for this session
+        if (logFile != null) {
+            printLapToFile();
+        }
+
+        laps.clear();
+
         logFile = new File(dir.getAbsolutePath() + "/" + newId.getType().name() + "_" + newId.getNumber() + ".csv");
         try {
             logFile.createNewFile();
-        } catch (IOException ex) {
-            Logger.getLogger(LapTimeExtension.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException e) {
+            LOG.log(Level.WARNING, "Error creating laps log file.", e);
         }
-        
 
     }
 
