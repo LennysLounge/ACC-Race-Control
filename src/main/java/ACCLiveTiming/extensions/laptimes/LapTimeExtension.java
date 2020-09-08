@@ -6,17 +6,20 @@
 package ACCLiveTiming.extensions.laptimes;
 
 import ACCLiveTiming.client.AccClientExtension;
+import ACCLiveTiming.client.SessionId;
 import ACCLiveTiming.extensions.incidents.IncidentExtension;
-import ACCLiveTiming.networking.data.BroadcastingEvent;
 import ACCLiveTiming.networking.data.CarInfo;
 import ACCLiveTiming.networking.data.LapInfo;
 import ACCLiveTiming.networking.data.RealtimeInfo;
 import ACCLiveTiming.networking.enums.LapType;
 import ACCLiveTiming.utility.TimeUtils;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -29,14 +32,19 @@ public class LapTimeExtension extends AccClientExtension {
 
     private final Map<Integer, Integer> lapCount = new HashMap<>();
 
+    private File dir;
+
+    private File logFile;
+
     public LapTimeExtension() {
         Date now = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-    }
-
-    @Override
-    public void afterPacketReceived(byte type) {
-
+        //create folder for this event.
+        dir = new File("laps/" + dateFormat.format(now));
+        boolean success = dir.mkdir();
+        if (!success) {
+            LOG.warning("Error creating the laps directory.");
+        }
     }
 
     @Override
@@ -74,17 +82,15 @@ public class LapTimeExtension extends AccClientExtension {
     }
 
     @Override
-    public void onLapComplete(BroadcastingEvent event) {
-
-    }
-
-    @Override
-    public void onBestSessionLap(BroadcastingEvent event) {
-
-    }
-
-    @Override
-    public void onBestPersonalLap(BroadcastingEvent event) {
+    public void onSessionChanged(SessionId oldId, SessionId newId) {
+        //Create new log file for this session
+        logFile = new File(dir.getAbsolutePath() + "/" + newId.getType().name() + "_" + newId.getNumber() + ".csv");
+        try {
+            logFile.createNewFile();
+        } catch (IOException ex) {
+            Logger.getLogger(LapTimeExtension.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
 
     }
 

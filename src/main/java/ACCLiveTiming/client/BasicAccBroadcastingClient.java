@@ -140,7 +140,6 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
             sessionId = newSessionId;
             
             sessionPhase = SessionPhase.NONE;
-            LOG.info("session + " + type.name() + " started. Session nr:" + sessionNumber + " sessionIndex:" + sessionIndex);
         }
         //Fast forward to current phase
         while (sessionInfo.getPhase().getId() > sessionPhase.getId()) {
@@ -229,6 +228,7 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
     }
 
     private void onSessionChanged(SessionId oldId, SessionId newId) {
+        LOG.info("session changed to " + newId.getType().name() + " nr:" + newId.getNumber() + " Index:" + newId.getIndex());
         extensions.forEach(extension -> extension.onSessionChanged(oldId, newId));
     }
 
