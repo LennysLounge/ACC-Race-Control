@@ -16,7 +16,7 @@ import java.util.List;
 public class LapInfo {
 
     int lapTimeMS;
-    int carIndex;
+    int carId;
     int driverIndex;
     List<Integer> splits = new LinkedList<>();
     boolean isInvalid;
@@ -29,7 +29,7 @@ public class LapInfo {
     public LapInfo(int lapTimeMS, int carIndex, int driverIndex, List<Integer> splits, boolean isInvalid,
             boolean isValidForBest, LapType type) {
         this.lapTimeMS = lapTimeMS;
-        this.carIndex = carIndex;
+        this.carId = carIndex;
         this.driverIndex = driverIndex;
         this.splits = splits;
         this.isInvalid = isInvalid;
@@ -41,8 +41,8 @@ public class LapInfo {
         return lapTimeMS;
     }
 
-    public int getCarIndex() {
-        return carIndex;
+    public int getCarId() {
+        return carId;
     }
 
     public int getDriverIndex() {
