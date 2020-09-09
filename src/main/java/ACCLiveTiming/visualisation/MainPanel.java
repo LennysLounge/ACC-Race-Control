@@ -88,7 +88,7 @@ public class MainPanel extends ExtensionPanel {
             applet.fill(255);
             applet.text(tabNames.get(i), i * tabSize + tabSize / 2f, lineHeight * 1.5f);
         }
-        
+
         //draw panel
         ExtensionPanel panel = panels.get(activeTabIndex);
         applet.translate(panel.getPosX(), panel.getPosY());
@@ -130,6 +130,7 @@ public class MainPanel extends ExtensionPanel {
             float tabSize = applet.width / tabNames.size();
             int clickedIndex = (int) ((mouseX - (mouseX % tabSize)) / tabSize);
             activeTabIndex = clickedIndex;
+            applet.forceRedraw();
         }
     }
 
@@ -139,22 +140,28 @@ public class MainPanel extends ExtensionPanel {
     }
 
     @Override
+    public void mouseWheel(int count) {
+        ExtensionPanel panel = panels.get(activeTabIndex);
+        panel.mouseWheel(count);
+    }
+
+    @Override
     public void resize(int w, int h) {
-        super.resize(w,h);
-        
+        super.resize(w, h);
+
         int ww = applet.width;
         int hh = applet.height - LookAndFeel.get().LINE_HEIGHT * 2;
 
-        for(ExtensionPanel panel : panels){
+        for (ExtensionPanel panel : panels) {
             panel.resize(ww, hh);
             panel.setPosition(0, LookAndFeel.get().LINE_HEIGHT * 2);
         }
     }
-    
+
     @Override
-    public void setPApplet(PApplet applet) {
+    public void setPApplet(CustomPApplet applet) {
         super.setPApplet(applet);
-        for(ExtensionPanel panel : panels){
+        for (ExtensionPanel panel : panels) {
             panel.setPApplet(applet);
         }
     }

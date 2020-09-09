@@ -9,15 +9,13 @@ import ACCLiveTiming.client.BasicAccBroadcastingClient;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import processing.core.PApplet;
-import static processing.core.PConstants.LEFT;
 import processing.event.MouseEvent;
 
 /**
  *
  * @author Leonard
  */
-public class Visualisation extends PApplet {
+public class Visualisation extends CustomPApplet {
 
     /**
      * This classes logger.
@@ -40,10 +38,6 @@ public class Visualisation extends PApplet {
      * Connection client.
      */
     private BasicAccBroadcastingClient client;
-    /**
-     * Flag to force the applet to redraw.
-     */
-    private boolean forceRedraw = false;
 
     public Visualisation(BasicAccBroadcastingClient client) {
         this.client = client;
@@ -68,7 +62,7 @@ public class Visualisation extends PApplet {
         LookAndFeel.init(this);
         surface.setResizable(true);
         surface.setTitle("ACC Accident Tracker");
-        frameRate(1000);
+        frameRate(30);
     }
 
     @Override
@@ -80,19 +74,15 @@ public class Visualisation extends PApplet {
         int dt = (int) (1000 / frameRate);
         timer += dt;
         if (timer > client.getUpdateInterval() || forceRedraw) {
-            timer -= client.getUpdateInterval();
+            timer = 0;
+            if(forceRedraw){
+                background(50);
+            }
             forceRedraw = false;
             
             translate(mainPanel.getPosX(), mainPanel.getPosY());
             mainPanel.drawPanel();
-            translate(-mainPanel.getPosX(), -mainPanel.getPosY());
-
-            String fr = String.valueOf(round(frameRate));
-            fill(0);
-            rect(0, 0, textWidth(fr), 16);
-            fill(255);
-            textAlign(LEFT, TOP);
-            text(fr, 0, 0);
+            translate(-mainPanel.getPosX(), -mainPanel.getPosY());   
         }
     }
 
@@ -115,10 +105,6 @@ public class Visualisation extends PApplet {
     @Override
     public void mouseWheel(MouseEvent event) {
         mainPanel.mouseWheel(event.getCount());
-    }
-    
-    public void forceRedraw(){
-        this.forceRedraw = true;
     }
 
 }

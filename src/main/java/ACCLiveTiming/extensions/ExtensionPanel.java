@@ -5,6 +5,8 @@
  */
 package ACCLiveTiming.extensions;
 
+import ACCLiveTiming.visualisation.CustomPApplet;
+import ACCLiveTiming.visualisation.Visualisation;
 import processing.core.PApplet;
 
 /**
@@ -15,7 +17,7 @@ public abstract class ExtensionPanel {
 
     protected String displayName = "none";
 
-    protected PApplet applet;
+    protected CustomPApplet applet;
 
     protected int posX;
 
@@ -58,7 +60,7 @@ public abstract class ExtensionPanel {
         this.height = h;
     }
 
-    public void setPApplet(PApplet applet) {
+    public void setPApplet(CustomPApplet applet) {
         this.applet = applet;
     }
 

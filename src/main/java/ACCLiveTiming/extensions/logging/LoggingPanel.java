@@ -76,6 +76,7 @@ public class LoggingPanel extends ExtensionPanel {
     @Override
     public void mouseWheel(int count) {
         scroll += count;
+        applet.forceRedraw();
     }
 
 }

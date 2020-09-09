@@ -5,21 +5,23 @@
  */
 package ACCLiveTiming.visualisation;
 
-import processing.awt.PGraphicsJava2D;
+import processing.core.PApplet;
 
 /**
  *
  * @author Leonard
  */
-public class CustomPGraphics extends PGraphicsJava2D {
-
-    public CustomPGraphics() {
-        super();
-    }
-
+public class CustomPApplet extends PApplet {
+    
+    protected boolean forceRedraw;
+    
     @Override
     public void text(String text, float x, float y) {
         float offset = LookAndFeel.get().TEXT_SIZE * LookAndFeel.get().FONT_BASELINE_OFFSET;
         super.text(text, x, y - offset);
+    }
+    
+    public void forceRedraw(){
+        forceRedraw = true;
     }
 }
