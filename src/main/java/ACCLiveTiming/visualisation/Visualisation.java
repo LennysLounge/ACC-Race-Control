@@ -6,22 +6,11 @@
 package ACCLiveTiming.visualisation;
 
 import ACCLiveTiming.client.BasicAccBroadcastingClient;
-import ACCLiveTiming.extensions.ExtensionPanel;
-import ACCLiveTiming.client.SessionId;
-import ACCLiveTiming.utility.TimeUtils;
-import ACCLiveTiming.visualisation.LookAndFeel;
-import ACCLiveTiming.visualisation.CustomPGraphics;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import processing.core.PApplet;
-import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import static processing.core.PConstants.RIGHT;
-import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
 /**
@@ -43,8 +32,21 @@ public class Visualisation extends PApplet {
      */
     private int sizeWidth;
     private int sizeHeight;
+    /**
+     * Timer since the last draw.
+     */
+    private int timer = 0;
+    /**
+     * Connection client.
+     */
+    private BasicAccBroadcastingClient client;
+    /**
+     * Flag to force the applet to redraw.
+     */
+    private boolean forceRedraw = false;
 
     public Visualisation(BasicAccBroadcastingClient client) {
+        this.client = client;
         mainPanel = new MainPanel(this, client);
         mainPanel.setPApplet(this);
 
@@ -74,19 +76,24 @@ public class Visualisation extends PApplet {
         if (width != sizeWidth || height != sizeHeight) {
             onResize(width, height);
         }
-        
 
-        translate(mainPanel.getPosX(), mainPanel.getPosY());
-        mainPanel.drawPanel();
-        translate(-mainPanel.getPosX(), -mainPanel.getPosY());
+        int dt = (int) (1000 / frameRate);
+        timer += dt;
+        if (timer > client.getUpdateInterval() || forceRedraw) {
+            timer -= client.getUpdateInterval();
+            forceRedraw = false;
+            
+            translate(mainPanel.getPosX(), mainPanel.getPosY());
+            mainPanel.drawPanel();
+            translate(-mainPanel.getPosX(), -mainPanel.getPosY());
 
-
-        String fr = String.valueOf(round(frameRate));
-        fill(0);
-        rect(0, 0, textWidth(fr), 16);
-        fill(255);
-        textAlign(LEFT, TOP);
-        text(fr, 0, 0);
+            String fr = String.valueOf(round(frameRate));
+            fill(0);
+            rect(0, 0, textWidth(fr), 16);
+            fill(255);
+            textAlign(LEFT, TOP);
+            text(fr, 0, 0);
+        }
     }
 
     public void onResize(int w, int h) {
@@ -108,6 +115,10 @@ public class Visualisation extends PApplet {
     @Override
     public void mouseWheel(MouseEvent event) {
         mainPanel.mouseWheel(event.getCount());
+    }
+    
+    public void forceRedraw(){
+        this.forceRedraw = true;
     }
 
 }
