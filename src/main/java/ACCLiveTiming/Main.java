@@ -39,7 +39,7 @@ public class Main {
         try {
 
             Date now = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
             String logPath = System.getProperty("user.dir") + "/log/" + dateFormat.format(now) + ".log";
 
             Properties prop = new Properties();

@@ -32,6 +32,9 @@ public class LoggingPanel extends ExtensionPanel {
 
     @Override
     public void drawPanel(PGraphics base) {
+        base.textFont(LookAndFeel.get().FONT, LookAndFeel.get().TEXT_SIZE);
+        
+        
         int lineHeight = LookAndFeel.get().LINE_HEIGHT;
         int tabSize = 130;
 
