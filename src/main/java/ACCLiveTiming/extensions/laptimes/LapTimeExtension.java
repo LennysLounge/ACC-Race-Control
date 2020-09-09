@@ -77,37 +77,43 @@ public class LapTimeExtension extends AccClientExtension {
     public void onRealtimeCarUpdate(RealtimeInfo info) {
         if (lapCount.containsKey(info.getCarId())) {
             if (lapCount.get(info.getCarId()) != info.getLaps()) {
+                lapCount.put(info.getCarId(), info.getLaps());
                 LapInfo lap = info.getLastLap();
                 boolean isPersonalBest = lap.getLapTimeMS() == info.getBestSessionLap().getLapTimeMS();
                 boolean isSessionBest = lap.getLapTimeMS() == client.getModel().getSessionInfo().getBestSessionLap().getLapTimeMS();
                 onLapComplete(lap, isPersonalBest, isSessionBest);
             }
+        } else {
+            lapCount.put(info.getCarId(), info.getLaps());
         }
-        lapCount.put(info.getCarId(), info.getLaps());
     }
 
     private void onLapComplete(LapInfo lap, boolean isPB, boolean isSB) {
         CarInfo car = client.getModel().getCar(lap.getCarId());
 
+        boolean isFirstLap = lapCount.get(lap.getCarId()) == 1;
+        int lapNr = lapCount.get(lap.getCarId());
+
         if (!laps.containsKey(car.getCarId())) {
             laps.put(car.getCarId(), new LinkedList<>());
             rows.put(car.getCarId(), rowCounter++);
         }
-        laps.get(car.getCarId()).add(lap.getLapTimeMS());
-
-        try {
+        
+        if (!isFirstLap && lap.getType() == LapType.REGULAR) {
+            laps.get(car.getCarId()).add(lap.getLapTimeMS());
             printLapToFile();
-        } catch (Exception e) {
-            LOG.log(Level.WARNING, "File not found", e);
         }
 
         String message = "Lap completed: #" + car.getCarNumber()
                 + "\t" + TimeUtils.asLapTime(lap.getLapTimeMS()) + "\t";
+        if (isFirstLap) {
+            message += "[Lap 1]";
+        }
         if (isPB) {
-            message += "[Personal Best]";
+            message += "[PB]";
         }
         if (isSB) {
-            message += "[Session Best]";
+            message += "[SB]";
         }
         if (lap.getType() == LapType.INLAP) {
             message += "[Inlap]";
@@ -115,6 +121,7 @@ public class LapTimeExtension extends AccClientExtension {
         if (lap.getType() == LapType.OUTLAP) {
             message += "[Outlap]";
         }
+
         client.log(message);
         LOG.info(message);
     }
@@ -126,11 +133,9 @@ public class LapTimeExtension extends AccClientExtension {
                 CarInfo car = client.getModel().getCar(entry.getKey());
                 writer.print(car.getCarNumber());
                 writer.print("," + car.getDriver().getFirstName() + " " + car.getDriver().getLastName());
-
                 for (int lap : entry.getValue()) {
                     writer.print("," + lap);
                 }
-
                 writer.println();
             }
 
@@ -146,6 +151,8 @@ public class LapTimeExtension extends AccClientExtension {
         }
 
         laps.clear();
+        //Set lap counts to 0
+        lapCount.forEach((key, count) -> lapCount.put(key, 0));
 
         logFile = new File(dir.getAbsolutePath() + "/" + newId.getType().name() + "_" + newId.getNumber() + ".csv");
         try {
