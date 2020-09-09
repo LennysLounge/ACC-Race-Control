@@ -39,7 +39,7 @@ public class Visualisation extends CustomPApplet {
      */
     private BasicAccBroadcastingClient client;
 
-    public Visualisation(BasicAccBroadcastingClient client) {
+    public Visualisation(BasicAccBroadcastingClient client, int updateInterval) {
         this.client = client;
         mainPanel = new MainPanel(this, client);
         mainPanel.setPApplet(this);

@@ -40,7 +40,7 @@ public class Main {
         try {
 
             Date now = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
             String logPath = System.getProperty("user.dir") + "/log/" + dateFormat.format(now) + ".log";
 
             Properties prop = new Properties();
@@ -103,7 +103,7 @@ public class Main {
         client.registerExtension(new LoggingExtension());
         client.registerExtension(new DebugExtension());
 
-        Visualisation v = new Visualisation(client);
+        Visualisation v = new Visualisation(client, dialog.getUpdateInterval());
 
         String[] a = {"MAIN"};
         PApplet.runSketch(a, v);
