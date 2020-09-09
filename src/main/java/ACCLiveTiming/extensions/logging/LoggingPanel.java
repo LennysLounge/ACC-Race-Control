@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import processing.core.PGraphics;
 
 /**
  *

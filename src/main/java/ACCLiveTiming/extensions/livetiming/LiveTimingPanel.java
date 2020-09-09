@@ -13,7 +13,6 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
-import processing.core.PGraphics;
 
 /**
  *

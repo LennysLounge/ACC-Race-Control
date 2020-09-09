@@ -111,6 +111,13 @@ public class PrimitivAccBroadcastingClient {
     public void setUpdateInterval(int interval) {
         this.updateInterval = interval;
     }
+    /**
+     * Gives the update interval for the connection.
+     * @return The update interval.
+     */
+    public int getUpdateInterval(){
+        return updateInterval;
+    }
 
     /**
      * Returns the current model.

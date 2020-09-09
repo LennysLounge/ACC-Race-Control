@@ -10,7 +10,6 @@ import java.net.URL;
 import java.nio.file.Paths;
 import processing.core.PApplet;
 import processing.core.PFont;
-import processing.core.PGraphics;
 
 /**
  *
