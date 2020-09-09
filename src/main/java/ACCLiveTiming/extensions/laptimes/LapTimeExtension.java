@@ -6,7 +6,6 @@
 package ACCLiveTiming.extensions.laptimes;
 
 import ACCLiveTiming.extensions.AccClientExtension;
-import ACCLiveTiming.client.AccClientExtension;
 import ACCLiveTiming.client.SessionId;
 import ACCLiveTiming.extensions.incidents.IncidentExtension;
 import ACCLiveTiming.networking.data.CarInfo;
