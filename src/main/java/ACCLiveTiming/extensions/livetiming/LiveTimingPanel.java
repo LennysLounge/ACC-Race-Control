@@ -9,6 +9,7 @@ import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.visualisation.LookAndFeel;
 import java.util.LinkedList;
 import java.util.List;
+import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
@@ -51,21 +52,21 @@ public class LiveTimingPanel extends ExtensionPanel {
     @Override
     public void drawPanel() {
         LookAndFeel laf = LookAndFeel.get();
-        calculateColumnWidths(layer.width);
+        calculateColumnWidths(applet.width);
 
-        layer.textFont(LookAndFeel.get().FONT, LookAndFeel.get().TEXT_SIZE);
-        layer.textAlign(LEFT, CENTER);
-        layer.noStroke();
+        applet.textFont(LookAndFeel.get().FONT, LookAndFeel.get().TEXT_SIZE);
+        applet.textAlign(LEFT, CENTER);
+        applet.noStroke();
 
         padding = 0;
         for (int i = 0; i < columns.length; i++) {
-            drawCell(layer, columns[i].head, i, 0, layer.color(30), laf.COLOR_WHITE);
+            drawCell(applet, columns[i].head, i, 0, applet.color(30), laf.COLOR_WHITE);
         }
         padding = 1;
 
         List<ListEntry> sorted = extension.getSortedEntries();
 
-        drawCell(layer, "" + extension.getSortedEntries().size(), 3, 0, layer.color(30), laf.COLOR_WHITE);
+        drawCell(applet, "" + extension.getSortedEntries().size(), 3, 0, applet.color(30), laf.COLOR_WHITE);
 
         int n = 1;
         for (ListEntry entry : sorted) {
@@ -74,54 +75,54 @@ public class LiveTimingPanel extends ExtensionPanel {
             }
 
             if (entry.isFocused()) {
-                drawCellBackground(layer, n, layer.color(100));
+                drawCellBackground(applet, n, applet.color(100));
             } else {
                 if (n % 2 == 0) {
-                    drawCellBackground(layer, n, layer.color(40));
+                    drawCellBackground(applet, n, applet.color(40));
                 }
             }
 
             if (entry.isConnected()) {
                 if (entry.isFocused()) {
-                    drawCell(layer, entry.getPosition(), 1, n, laf.COLOR_WHITE, laf.COLOR_BLACK);
+                    drawCell(applet, entry.getPosition(), 1, n, laf.COLOR_WHITE, laf.COLOR_BLACK);
                 } else {
-                    drawCell(layer, entry.getPosition(), 1, n, laf.COLOR_RED, laf.COLOR_WHITE);
+                    drawCell(applet, entry.getPosition(), 1, n, laf.COLOR_RED, laf.COLOR_WHITE);
                 }
             } else {
-                drawCell(layer, entry.getPosition(), 1, n, laf.COLOR_GRAY, laf.COLOR_WHITE);
+                drawCell(applet, entry.getPosition(), 1, n, laf.COLOR_GRAY, laf.COLOR_WHITE);
             }
 
-            drawCell(layer, entry.getName(), 2, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(applet, entry.getName(), 2, n, laf.COLOR_NONE, laf.COLOR_WHITE);
 
             if (entry.isInPits()) {
-                layer.textSize(12);
-                drawCell(layer, "P", 3, n, laf.COLOR_WHITE, laf.COLOR_BLACK);
-                layer.textSize(laf.TEXT_SIZE);
+                applet.textSize(12);
+                drawCell(applet, "P", 3, n, laf.COLOR_WHITE, laf.COLOR_BLACK);
+                applet.textSize(laf.TEXT_SIZE);
             }
 
             switch (entry.getCategory()) {
                 case BRONZE:
-                    drawCell(layer, entry.getCarNumber(), 4, n, laf.COLOR_RED, laf.COLOR_BLACK);
+                    drawCell(applet, entry.getCarNumber(), 4, n, laf.COLOR_RED, laf.COLOR_BLACK);
                     break;
                 case SILVER:
-                    drawCell(layer, entry.getCarNumber(), 4, n, laf.COLOR_GRAY, laf.COLOR_WHITE);
+                    drawCell(applet, entry.getCarNumber(), 4, n, laf.COLOR_GRAY, laf.COLOR_WHITE);
                     break;
                 case GOLD:
                 case PLATINUM:
-                    drawCell(layer, entry.getCarNumber(), 4, n, laf.COLOR_WHITE, laf.COLOR_BLACK);
+                    drawCell(applet, entry.getCarNumber(), 4, n, laf.COLOR_WHITE, laf.COLOR_BLACK);
                     break;
             }
 
-            drawCell(layer, entry.getLapCount(), 5, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(layer, "--.--", 6, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(layer, "--.--", 7, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(layer, entry.getDelta(), 8, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(layer, entry.getCurrentLap(), 9, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(layer, entry.getSectorOne(), 10, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(layer, entry.getSectorTwo(), 11, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(layer, entry.getSectorThree(), 12, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(layer, entry.getLastLap(), 13, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(layer, entry.getBestLap(), 14, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(applet, entry.getLapCount(), 5, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(applet, "--.--", 6, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(applet, "--.--", 7, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(applet, entry.getDelta(), 8, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(applet, entry.getCurrentLap(), 9, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(applet, entry.getSectorOne(), 10, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(applet, entry.getSectorTwo(), 11, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(applet, entry.getSectorThree(), 12, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(applet, entry.getLastLap(), 13, n, laf.COLOR_NONE, laf.COLOR_WHITE);
+            drawCell(applet, entry.getBestLap(), 14, n, laf.COLOR_NONE, laf.COLOR_WHITE);
             
             n++;
         }
@@ -152,7 +153,7 @@ public class LiveTimingPanel extends ExtensionPanel {
         dynamicColumns.forEach(column -> column.size = Math.max(dynamicSize / count, column.minSize));
     }
 
-    private void drawCellBackground(PGraphics layer, int line, int color) {
+    private void drawCellBackground(PApplet applet, int line, int color) {
         float lineHeight = LookAndFeel.get().LINE_HEIGHT;
 
         float xoffset = 0;
@@ -160,12 +161,12 @@ public class LiveTimingPanel extends ExtensionPanel {
         for (Column c : columns) {
             width += c.size;
         }
-        layer.fill(color);
-        layer.rect(xoffset * lineHeight, line * lineHeight,
+        applet.fill(color);
+        applet.rect(xoffset * lineHeight, line * lineHeight,
                 width * lineHeight, lineHeight);
     }
 
-    private void drawCell(PGraphics layer, String text, int x, int y, int background, int forground) {
+    private void drawCell(PApplet applet, String text, int x, int y, int background, int forground) {
         float lineHeight = LookAndFeel.get().LINE_HEIGHT;
 
         float xoffset = 0;
@@ -175,8 +176,8 @@ public class LiveTimingPanel extends ExtensionPanel {
 
         float w = columns[x].size;
 
-        layer.fill(background);
-        layer.rect(xoffset * lineHeight + padding, y * lineHeight + padding,
+        applet.fill(background);
+        applet.rect(xoffset * lineHeight + padding, y * lineHeight + padding,
                 w * lineHeight - padding * 2, lineHeight - padding * 2);
 
         switch (columns[x].alignment) {
@@ -191,9 +192,9 @@ public class LiveTimingPanel extends ExtensionPanel {
                 break;
         }
 
-        layer.fill(forground);
-        layer.textAlign(columns[x].alignment, CENTER);
-        layer.text(text, xoffset * lineHeight, y * lineHeight + lineHeight / 2);
+        applet.fill(forground);
+        applet.textAlign(columns[x].alignment, CENTER);
+        applet.text(text, xoffset * lineHeight, y * lineHeight + lineHeight / 2);
 
     }
 

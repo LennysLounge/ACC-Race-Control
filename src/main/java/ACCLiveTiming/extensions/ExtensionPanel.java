@@ -5,7 +5,7 @@
  */
 package ACCLiveTiming.extensions;
 
-import processing.core.PGraphics;
+import processing.core.PApplet;
 
 /**
  *
@@ -15,11 +15,15 @@ public abstract class ExtensionPanel {
 
     protected String displayName = "none";
 
-    protected PGraphics layer;
+    protected PApplet applet;
 
     protected int posX;
 
     protected int posY;
+    
+    protected int width;
+    
+    protected int height;
 
     public String getDisplayName() {
         return displayName;
@@ -49,16 +53,17 @@ public abstract class ExtensionPanel {
     public void mouseWheel(int count) {
     }
 
-    public void resize(GraphicsFactory factory, int w, int h) {
-        layer = factory.createGraphics(w, h);
+    public void resize(int w, int h) {
+        this.width = w;
+        this.height = h;
     }
 
-    public void setLayer(PGraphics layer) {
-        this.layer = layer;
+    public void setPApplet(PApplet applet) {
+        this.applet = applet;
     }
 
-    public PGraphics getLayer() {
-        return layer;
+    public PApplet getApplet() {
+        return applet;
     }
 
 }

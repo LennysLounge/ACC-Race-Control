@@ -46,6 +46,7 @@ public class Visualisation extends PApplet {
 
     public Visualisation(BasicAccBroadcastingClient client) {
         mainPanel = new MainPanel(this, client);
+        mainPanel.setPApplet(this);
 
         try {
             client.sendRegisterRequest();
@@ -73,12 +74,12 @@ public class Visualisation extends PApplet {
         if (width != sizeWidth || height != sizeHeight) {
             onResize(width, height);
         }
+        
 
-        mainPanel.getLayer().beginDraw();
+        translate(mainPanel.getPosX(), mainPanel.getPosY());
         mainPanel.drawPanel();
-        mainPanel.getLayer().endDraw();
+        translate(-mainPanel.getPosX(), -mainPanel.getPosY());
 
-        image(mainPanel.getLayer(), 0, 0);
 
         String fr = String.valueOf(round(frameRate));
         fill(0);
@@ -91,8 +92,7 @@ public class Visualisation extends PApplet {
     public void onResize(int w, int h) {
         sizeWidth = w;
         sizeHeight = h;
-        println(w, h);
-        mainPanel.resize((ww, hh) -> createGraphics(ww, hh, CustomPGraphics.class.getName()), w, h);
+        mainPanel.resize(w, h);
     }
 
     @Override

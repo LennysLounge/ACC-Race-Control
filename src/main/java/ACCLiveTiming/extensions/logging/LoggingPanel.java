@@ -42,7 +42,7 @@ public class LoggingPanel extends ExtensionPanel {
         if (scroll < 0) {
             scroll = 0;
         }
-        int visibleLines = layer.height / lineHeight;
+        int visibleLines = applet.height / lineHeight;
         if (scroll > messages.size() - visibleLines) {
             scroll = messages.size() - visibleLines;
         }
@@ -56,22 +56,22 @@ public class LoggingPanel extends ExtensionPanel {
 
             int y = lineHeight * n++;
 
-            layer.fill((n % 2 == 0) ? 50 : 40);
-            layer.noStroke();
-            layer.rect(0, y, layer.width, lineHeight);
+            applet.fill((n % 2 == 0) ? 50 : 40);
+            applet.noStroke();
+            applet.rect(0, y, applet.width, lineHeight);
 
-            layer.fill(255);
-            layer.textAlign(LEFT, CENTER);
+            applet.fill(255);
+            applet.textAlign(LEFT, CENTER);
 
             float x = 40;
             String[] partials = msg.split("\t");
             for (String partial : partials) {
-                layer.text(partial, x, y + lineHeight / 2);
-                float msgWidth = layer.textWidth(partial);
+                applet.text(partial, x, y + lineHeight / 2);
+                float msgWidth = applet.textWidth(partial);
                 x += (msgWidth - (msgWidth % tabSize) + tabSize);
             }
         }
-        LookAndFeel.drawScrollBar(layer, messages.size(), visibleLines, scroll);
+        LookAndFeel.drawScrollBar(applet, messages.size(), visibleLines, scroll);
     }
 
     @Override
