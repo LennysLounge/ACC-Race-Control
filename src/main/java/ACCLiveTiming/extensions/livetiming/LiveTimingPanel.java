@@ -19,12 +19,19 @@ import static processing.core.PConstants.RIGHT;
  */
 public class LiveTimingPanel extends ExtensionPanel {
 
+    /**
+     * Reference to the extension this panel is representing.
+     */
     private final LiveTimingExtension extension;
 
-    private int padding = 0;
+    private int visibleRows = 0;
 
-    private Column[] columns = {
-        new Column("", 1, false, LEFT),
+    private int scroll = 0;
+
+    private List<ListEntry> entries = new LinkedList<>();
+
+    private final Column[] columns = {
+        new Column("", 0.4f, false, LEFT),
         new Column("P", 1, false, CENTER),
         new Column("Name", 6, false, LEFT),
         new Column("", 0.4f, false, CENTER),
@@ -50,31 +57,38 @@ public class LiveTimingPanel extends ExtensionPanel {
     @Override
     public void drawPanel() {
         LookAndFeel laf = LookAndFeel.get();
-        List<ListEntry> entries = extension.getSortedEntries();
+        entries = extension.getSortedEntries();
 
         applet.textFont(LookAndFeel.get().FONT, LookAndFeel.get().TEXT_SIZE);
         applet.textAlign(LEFT, CENTER);
         applet.noStroke();
 
-        int visibleLines = height / laf.LINE_HEIGHT + 1;
-
         //Draw Header
         applet.fill(laf.COLOR_DARK_DARK_GRAY);
         applet.rect(0, 0, width, laf.LINE_HEIGHT);
         applet.fill(laf.COLOR_WHITE);
-        for (int i = 0; i < columns.length; i++) {
-            drawCellText(columns[i].head, columns[i], 0, laf.COLOR_WHITE);
+        for (Column column : columns) {
+            drawCellText(column.head, column, 0, laf.COLOR_WHITE);
         }
 
         //Draw background
-        for (int i = 1; i < visibleLines; i++) {
-            applet.fill(i % 2 == 0 ? laf.COLOR_DARK_DARK_GRAY : laf.COLOR_DARK_GRAY);
-            applet.rect(0, i * laf.LINE_HEIGHT, width, laf.LINE_HEIGHT);
+        int rows = Math.min(visibleRows, entries.size() + 1);
+        int yOffset = laf.LINE_HEIGHT;
+        for (int i = 1; i < rows; i++) {
+            applet.fill((i + scroll) % 2 == 0 ? laf.COLOR_DARK_DARK_GRAY : laf.COLOR_DARK_GRAY);
+            applet.rect(0, yOffset, width, laf.LINE_HEIGHT);
+            yOffset += laf.LINE_HEIGHT;
         }
+        applet.fill(laf.COLOR_DARK_GRAY);
+        applet.rect(0, yOffset, width, height - yOffset);
 
         //Draw entries
         int n = 1;
+        int scrollSkip = scroll;
         for (ListEntry entry : extension.getSortedEntries()) {
+            if (scrollSkip-- > 0) {
+                continue;
+            }
             if (entry.isFocused()) {
                 applet.fill(applet.color(255, 255, 255, 100));
                 applet.rect(0, n * laf.LINE_HEIGHT, width, laf.LINE_HEIGHT);
@@ -120,11 +134,24 @@ public class LiveTimingPanel extends ExtensionPanel {
             n++;
         }
 
+        //Draw scroll bar.
+        float barWidth = columns[0].size * laf.LINE_HEIGHT;
+        float maxBarHeight = height - laf.LINE_HEIGHT;
+        float itemHeight = maxBarHeight / entries.size();
+        float barHeight = Math.min(itemHeight * (visibleRows - 1), maxBarHeight);
+        applet.fill(laf.COLOR_DARK_DARK_GRAY);
+        applet.rect(0, laf.LINE_HEIGHT, barWidth, maxBarHeight);
+        applet.fill(laf.COLOR_RED);
+        applet.rect(barWidth * 0.2f, laf.LINE_HEIGHT + scroll * itemHeight, barWidth * 0.6f, barHeight);
+
     }
 
     @Override
     public void mouseWheel(int count) {
-        //scroll += count;
+        int min = 0;
+        int max = Math.max(entries.size() - (visibleRows - 1), 0);
+        scroll = Math.min(Math.max(scroll + count, min), max);
+        applet.forceRedraw();
     }
 
     private void drawCellBackground(Column c, int y, int color) {
@@ -158,6 +185,7 @@ public class LiveTimingPanel extends ExtensionPanel {
     public void resize(int w, int h) {
         super.resize(w, h);
         calculateColumnWidths();
+        visibleRows = h / LookAndFeel.get().LINE_HEIGHT;
     }
 
     private void calculateColumnWidths() {
