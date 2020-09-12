@@ -52,7 +52,9 @@ public class IncidentExtension extends AccClientExtension {
     }
 
     public List<Accident> getAccidents() {
-        return Collections.unmodifiableList(accidents);
+        List<Accident> a = new LinkedList<>(accidents);
+        Collections.reverse(a);
+        return Collections.unmodifiableList(a);
     }
 
     @Override
