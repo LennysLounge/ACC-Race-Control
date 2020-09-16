@@ -5,6 +5,8 @@
  */
 package ACCLiveTiming.visualisation;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -13,6 +15,11 @@ import processing.core.PFont;
  * @author Leonard
  */
 public class LookAndFeel {
+
+    /**
+     * This classes logger.
+     */
+    private static Logger LOG = Logger.getLogger(LookAndFeel.class.getName());
 
     private static LookAndFeel instance = null;
 
@@ -24,7 +31,6 @@ public class LookAndFeel {
     public final int COLOR_LIGHT_GRAY;
     public final int COLOR_DARK_GRAY;
     public final int COLOR_DARK_DARK_GRAY;
-    
     public final int COLOR_NONE;
     public final int COLOR_PRACTICE;
     public final int COLOR_QUALIFYING;
@@ -49,7 +55,6 @@ public class LookAndFeel {
         COLOR_LIGHT_GRAY = base.color(188);
         COLOR_DARK_GRAY = base.color(50);
         COLOR_DARK_DARK_GRAY = base.color(30);
-
         COLOR_NONE = base.color(255, 255, 255, 0);
         COLOR_PRACTICE = base.color(247, 81, 81);
         COLOR_QUALIFYING = base.color(92, 173, 255);
@@ -62,6 +67,7 @@ public class LookAndFeel {
             String path = System.getProperty("user.dir") + "/font/Heebo-Medium.ttf";
             font = base.createFont(path, TEXT_SIZE, true);
         } catch (Exception e) {
+            LOG.log(Level.WARNING, "Font not found.", e);
             font = base.createFont("Arial", TEXT_SIZE, true);
         }
         FONT = font;
