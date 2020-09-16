@@ -44,7 +44,7 @@ public class LapTimeExtension extends AccClientExtension {
     /**
      * Directory where the files are in
      */
-    private File dir;
+    private final File dir;
     /**
      * current log file
      */
@@ -66,7 +66,7 @@ public class LapTimeExtension extends AccClientExtension {
         Date now = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         //create folder for this event.
-        dir = new File("laps/" + dateFormat.format(now));
+        dir = new File("log/laps_" + dateFormat.format(now));
         boolean success = dir.mkdir();
         if (!success) {
             LOG.warning("Error creating the laps directory.");
