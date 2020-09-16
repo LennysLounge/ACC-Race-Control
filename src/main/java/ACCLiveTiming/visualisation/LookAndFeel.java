@@ -64,8 +64,7 @@ public class LookAndFeel {
         FONT_BASELINE_OFFSET = 0.16f;
         PFont font;
         try {
-            String path = System.getProperty("user.dir") + "/font/Heebo-Medium.ttf";
-            font = base.createFont(path, TEXT_SIZE, true);
+            font = base.createFont("font/Heebo-Medium.ttf", TEXT_SIZE, true);
         } catch (Exception e) {
             LOG.log(Level.WARNING, "Font not found.", e);
             font = base.createFont("Arial", TEXT_SIZE, true);
