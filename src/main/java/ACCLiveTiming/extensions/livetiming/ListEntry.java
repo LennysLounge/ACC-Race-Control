@@ -48,6 +48,10 @@ public class ListEntry {
     public boolean isFocused() {
         return isFocused;
     }
+    
+    public void setFocused(boolean isFocused){
+        this.isFocused = isFocused;
+    }
 
     public boolean isConnected() {
         return car.isConnected();

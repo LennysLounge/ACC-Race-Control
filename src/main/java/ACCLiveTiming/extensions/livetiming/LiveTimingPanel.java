@@ -5,14 +5,13 @@
  */
 package ACCLiveTiming.extensions.livetiming;
 
-import ACCLiveTiming.client.ExtensionPanel;
+import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.visualisation.LookAndFeel;
 import java.util.LinkedList;
 import java.util.List;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
-import processing.core.PGraphics;
 
 /**
  *
@@ -20,12 +19,19 @@ import processing.core.PGraphics;
  */
 public class LiveTimingPanel extends ExtensionPanel {
 
+    /**
+     * Reference to the extension this panel is representing.
+     */
     private final LiveTimingExtension extension;
 
-    private int padding = 0;
+    private int visibleRows = 0;
 
-    private Column[] columns = {
-        new Column("", 1, false, LEFT),
+    private int scroll = 0;
+
+    private List<ListEntry> entries = new LinkedList<>();
+
+    private final Column[] columns = {
+        new Column("", 0.4f, false, LEFT),
         new Column("P", 1, false, CENTER),
         new Column("Name", 6, false, LEFT),
         new Column("", 0.4f, false, CENTER),
@@ -49,90 +55,140 @@ public class LiveTimingPanel extends ExtensionPanel {
     }
 
     @Override
-    public void drawPanel(PGraphics base) {
+    public void drawPanel() {
         LookAndFeel laf = LookAndFeel.get();
-        calculateColumnWidths(base.width);
+        entries = extension.getSortedEntries();
 
-        base.textFont(LookAndFeel.get().FONT, LookAndFeel.get().TEXT_SIZE);
-        base.textAlign(LEFT, CENTER);
-        base.noStroke();
+        applet.textFont(LookAndFeel.get().FONT, LookAndFeel.get().TEXT_SIZE);
+        applet.textAlign(LEFT, CENTER);
+        applet.noStroke();
 
-        padding = 0;
-        for (int i = 0; i < columns.length; i++) {
-            drawCell(base, columns[i].head, i, 0, base.color(30), laf.COLOR_WHITE);
+        //Draw Header
+        applet.fill(laf.COLOR_DARK_DARK_GRAY);
+        applet.rect(0, 0, width, laf.LINE_HEIGHT);
+        applet.fill(laf.COLOR_WHITE);
+        for (Column column : columns) {
+            drawCellText(column.head, column, 0, laf.COLOR_WHITE);
         }
-        padding = 1;
 
-        List<ListEntry> sorted = extension.getSortedEntries();
+        //Draw background
+        int rows = Math.min(visibleRows, entries.size() + 1);
+        int yOffset = laf.LINE_HEIGHT;
+        for (int i = 1; i < rows; i++) {
+            applet.fill((i + scroll) % 2 == 0 ? laf.COLOR_DARK_DARK_GRAY : laf.COLOR_DARK_GRAY);
+            applet.rect(0, yOffset, width, laf.LINE_HEIGHT);
+            yOffset += laf.LINE_HEIGHT;
+        }
+        applet.fill(laf.COLOR_DARK_GRAY);
+        applet.rect(0, yOffset, width, height - yOffset);
 
-        drawCell(base, "" + extension.getSortedEntries().size(), 3, 0, base.color(30), laf.COLOR_WHITE);
-
+        //Draw entries
         int n = 1;
-        for (ListEntry entry : sorted) {
-            if (!entry.isConnected()) {
+        int scrollSkip = scroll;
+        for (ListEntry entry : extension.getSortedEntries()) {
+            if (scrollSkip-- > 0) {
                 continue;
             }
-
             if (entry.isFocused()) {
-                drawCellBackground(base, n, base.color(100));
-            } else {
-                if (n % 2 == 0) {
-                    drawCellBackground(base, n, base.color(40));
-                }
+                applet.fill(applet.color(255, 255, 255, 100));
+                applet.rect(0, n * laf.LINE_HEIGHT, width, laf.LINE_HEIGHT);
             }
 
-            if (entry.isConnected()) {
-                if (entry.isFocused()) {
-                    drawCell(base, entry.getPosition(), 1, n, laf.COLOR_WHITE, laf.COLOR_BLACK);
-                } else {
-                    drawCell(base, entry.getPosition(), 1, n, laf.COLOR_RED, laf.COLOR_WHITE);
-                }
-            } else {
-                drawCell(base, entry.getPosition(), 1, n, laf.COLOR_GRAY, laf.COLOR_WHITE);
-            }
-
-            drawCell(base, entry.getName(), 2, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-
+            drawCellBackground(columns[1], n, entry.isFocused() ? laf.COLOR_WHITE : laf.COLOR_RED);
+            drawCellText(entry.getPosition(), columns[1], n, entry.isFocused() ? laf.COLOR_BLACK : laf.COLOR_WHITE);
+            drawCellText(entry.getName(), columns[2], n, laf.COLOR_WHITE);
             if (entry.isInPits()) {
-                base.textSize(12);
-                drawCell(base, "P", 3, n, laf.COLOR_WHITE, laf.COLOR_BLACK);
-                base.textSize(laf.TEXT_SIZE);
+                applet.textSize(12);
+                drawCellBackground(columns[3], n, laf.COLOR_WHITE);
+                drawCellText("P", columns[3], n, laf.COLOR_BLACK);
+                applet.textSize(laf.TEXT_SIZE);
             }
 
             switch (entry.getCategory()) {
                 case BRONZE:
-                    drawCell(base, entry.getCarNumber(), 4, n, laf.COLOR_RED, laf.COLOR_BLACK);
+                    drawCellBackground(columns[4], n, laf.COLOR_RED);
+                    drawCellText(entry.getCarNumber(), columns[4], n, laf.COLOR_BLACK);
                     break;
                 case SILVER:
-                    drawCell(base, entry.getCarNumber(), 4, n, laf.COLOR_GRAY, laf.COLOR_WHITE);
+                    drawCellBackground(columns[4], n, laf.COLOR_GRAY);
+                    drawCellText(entry.getCarNumber(), columns[4], n, laf.COLOR_WHITE);
                     break;
                 case GOLD:
                 case PLATINUM:
-                    drawCell(base, entry.getCarNumber(), 4, n, laf.COLOR_WHITE, laf.COLOR_BLACK);
+                    drawCellBackground(columns[4], n, laf.COLOR_WHITE);
+                    drawCellText(entry.getCarNumber(), columns[4], n, laf.COLOR_BLACK);
                     break;
             }
 
-            drawCell(base, entry.getLapCount(), 5, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, "--.--", 6, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, "--.--", 7, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getDelta(), 8, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getCurrentLap(), 9, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getSectorOne(), 10, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getSectorTwo(), 11, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getSectorThree(), 12, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getLastLap(), 13, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            drawCell(base, entry.getBestLap(), 14, n, laf.COLOR_NONE, laf.COLOR_WHITE);
-            
+            drawCellText(entry.getLapCount(), columns[5], n, laf.COLOR_WHITE);
+            drawCellText("--.--", columns[6], n, laf.COLOR_WHITE);
+            drawCellText("--.--", columns[7], n, laf.COLOR_WHITE);
+            drawCellText(entry.getDelta(), columns[8], n, laf.COLOR_WHITE);
+            drawCellText(entry.getCurrentLap(), columns[9], n, laf.COLOR_WHITE);
+            drawCellText(entry.getSectorOne(), columns[10], n, laf.COLOR_WHITE);
+            drawCellText(entry.getSectorTwo(), columns[11], n, laf.COLOR_WHITE);
+            drawCellText(entry.getSectorThree(), columns[12], n, laf.COLOR_WHITE);
+            drawCellText(entry.getLastLap(), columns[13], n, laf.COLOR_WHITE);
+            drawCellText(entry.getBestLap(), columns[14], n, laf.COLOR_WHITE);
+
             n++;
         }
+
+        //Draw scroll bar.
+        float barWidth = columns[0].size * laf.LINE_HEIGHT;
+        float maxBarHeight = height - laf.LINE_HEIGHT;
+        float itemHeight = maxBarHeight / entries.size();
+        float barHeight = Math.min(itemHeight * (visibleRows - 1), maxBarHeight);
+        applet.fill(laf.COLOR_DARK_DARK_GRAY);
+        applet.rect(0, laf.LINE_HEIGHT, barWidth, maxBarHeight);
+        applet.fill(laf.COLOR_RED);
+        applet.rect(barWidth * 0.2f, laf.LINE_HEIGHT + scroll * itemHeight, barWidth * 0.6f, barHeight);
+
     }
 
     @Override
     public void mouseWheel(int count) {
-        //scroll += count;
+        int min = 0;
+        int max = Math.max(entries.size() - (visibleRows - 1), 0);
+        scroll = Math.min(Math.max(scroll + count, min), max);
+        applet.forceRedraw();
     }
 
-    private void calculateColumnWidths(float width) {
+    private void drawCellBackground(Column c, int y, int color) {
+        float lineHeight = LookAndFeel.get().LINE_HEIGHT;
+        applet.fill(color);
+        applet.rect(c.xOffset * lineHeight + 1, y * lineHeight + 1,
+                c.size * lineHeight - 2, lineHeight - 2);
+    }
+
+    private void drawCellText(String text, Column c, int y, int color) {
+        float lineHeight = LookAndFeel.get().LINE_HEIGHT;
+
+        float xoffset = c.xOffset;
+        switch (c.alignment) {
+            case LEFT:
+                xoffset += 0.2f;
+                break;
+            case RIGHT:
+                xoffset += c.size - 0.2f;
+                break;
+            case CENTER:
+                xoffset += c.size / 2;
+                break;
+        }
+        applet.fill(color);
+        applet.textAlign(c.alignment, CENTER);
+        applet.text(text, xoffset * lineHeight, y * lineHeight + lineHeight / 2);
+    }
+
+    @Override
+    public void resize(int w, int h) {
+        super.resize(w, h);
+        calculateColumnWidths();
+        visibleRows = h / LookAndFeel.get().LINE_HEIGHT;
+    }
+
+    private void calculateColumnWidths() {
         float lineHeight = LookAndFeel.get().LINE_HEIGHT;
         float w = width / lineHeight;
 
@@ -150,57 +206,20 @@ public class LiveTimingPanel extends ExtensionPanel {
         final float dynamicSize = Math.max(w - staticSize, 0);
         final int count = dynamicCount;
         dynamicColumns.forEach(column -> column.size = Math.max(dynamicSize / count, column.minSize));
-    }
 
-    private void drawCellBackground(PGraphics base, int line, int color) {
-        float lineHeight = LookAndFeel.get().LINE_HEIGHT;
-
-        float xoffset = 0;
-        float width = 0;
+        //calculate offset for each column.
+        float xOffset = 0;
         for (Column c : columns) {
-            width += c.size;
+            c.xOffset = xOffset;
+            xOffset += c.size;
         }
-        base.fill(color);
-        base.rect(xoffset * lineHeight, line * lineHeight,
-                width * lineHeight, lineHeight);
-    }
-
-    private void drawCell(PGraphics base, String text, int x, int y, int background, int forground) {
-        float lineHeight = LookAndFeel.get().LINE_HEIGHT;
-
-        float xoffset = 0;
-        for (int i = 0; i < x; i++) {
-            xoffset += columns[i].size;
-        }
-
-        float w = columns[x].size;
-
-        base.fill(background);
-        base.rect(xoffset * lineHeight + padding, y * lineHeight + padding,
-                w * lineHeight - padding * 2, lineHeight - padding * 2);
-
-        switch (columns[x].alignment) {
-            case LEFT:
-                xoffset += 0.2f;
-                break;
-            case RIGHT:
-                xoffset += w - 0.2f;
-                break;
-            case CENTER:
-                xoffset += w / 2;
-                break;
-        }
-
-        base.fill(forground);
-        base.textAlign(columns[x].alignment, CENTER);
-        base.text(text, xoffset * lineHeight, y * lineHeight + lineHeight / 2);
-
     }
 
     private class Column {
 
         public final String head;
         public float size;
+        public float xOffset;
         public float minSize;
         public final boolean dynamicSize;
         public final int alignment;

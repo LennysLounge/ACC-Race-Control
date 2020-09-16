@@ -5,7 +5,7 @@
  */
 package ACCLiveTiming.extensions.incidents;
 
-import ACCLiveTiming.client.AccClientExtension;
+import ACCLiveTiming.extensions.AccClientExtension;
 import ACCLiveTiming.client.SessionId;
 import ACCLiveTiming.networking.data.AccBroadcastingData;
 import ACCLiveTiming.networking.data.BroadcastingEvent;
@@ -52,7 +52,9 @@ public class IncidentExtension extends AccClientExtension {
     }
 
     public List<Accident> getAccidents() {
-        return Collections.unmodifiableList(accidents);
+        List<Accident> a = new LinkedList<>(accidents);
+        Collections.reverse(a);
+        return Collections.unmodifiableList(a);
     }
 
     @Override

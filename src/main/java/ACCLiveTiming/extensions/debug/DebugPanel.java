@@ -5,9 +5,8 @@
  */
 package ACCLiveTiming.extensions.debug;
 
-import ACCLiveTiming.client.ExtensionPanel;
+import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.networking.data.SessionInfo;
-import processing.core.PGraphics;
 
 /**
  *
@@ -24,17 +23,17 @@ public class DebugPanel extends ExtensionPanel {
     }
 
     @Override
-    public void drawPanel(PGraphics base) {
+    public void drawPanel() {
         SessionInfo session = extension.getModel().getSessionInfo();
         
-        base.fill(255);
-        base.text("Ambient:" + session.getAmbientTemp(), 20, 20);
-        base.text("current hud page:" + session.getCurrentHudPage(), 20, 40);
-        base.text("cloud level:" + session.getCloudLevel(), 20, 60);
-        base.text("focused car:" + session.getFocusedCarIndex(), 20, 80);
-        base.text("session end time:" + session.getSessionEndTime(), 20, 100);
-        base.text("session time remaining:" + session.getSessionTime(), 20, 120);
-        base.text("track temp:" + session.getTrackTemp(), 20, 140);
+        applet.fill(255);
+        applet.text("Ambient:" + session.getAmbientTemp(), 20, 20);
+        applet.text("current hud page:" + session.getCurrentHudPage(), 20, 40);
+        applet.text("cloud level:" + session.getCloudLevel(), 20, 60);
+        applet.text("focused car:" + session.getFocusedCarIndex(), 20, 80);
+        applet.text("session end time:" + session.getSessionEndTime(), 20, 100);
+        applet.text("session time remaining:" + session.getSessionTime(), 20, 120);
+        applet.text("track temp:" + session.getTrackTemp(), 20, 140);
 
     }
 

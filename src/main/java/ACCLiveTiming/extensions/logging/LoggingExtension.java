@@ -5,7 +5,7 @@
  */
 package ACCLiveTiming.extensions.logging;
 
-import ACCLiveTiming.client.AccClientExtension;
+import ACCLiveTiming.extensions.AccClientExtension;
 import java.util.List;
 
 /**

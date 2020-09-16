@@ -5,7 +5,7 @@
  */
 package ACCLiveTiming.extensions.livetiming;
 
-import ACCLiveTiming.client.AccClientExtension;
+import ACCLiveTiming.extensions.AccClientExtension;
 import ACCLiveTiming.networking.data.CarInfo;
 import ACCLiveTiming.networking.data.RealtimeInfo;
 import ACCLiveTiming.networking.data.SessionInfo;
@@ -49,18 +49,19 @@ public class LiveTimingExtension extends AccClientExtension {
                 .filter(entry -> entry.isConnected())
                 .sorted((e1, e2) -> compareTo(e1.getCarInfo(), e2.getCarInfo()))
                 .collect(Collectors.toList());
-        
+
+        entires.values().forEach(
+                entry -> entry.setFocused(entry.getCarInfo().getCarId() == sessionInfo.getFocusedCarIndex())
+        );
         sortedEntries = sorted;
     }
-
 
     @Override
     public void onRealtimeCarUpdate(RealtimeInfo info) {
         CarInfo car = client.getModel().getCarsInfo().getOrDefault(info.getCarId(), new CarInfo());
-        if(entires.containsKey(car.getCarId())){
+        if (entires.containsKey(car.getCarId())) {
             entires.get(car.getCarId()).setCarInfo(car);
-        }
-        else{
+        } else {
             ListEntry entry = new ListEntry();
             entry.setCarInfo(car);
             entires.put(car.getCarId(), entry);

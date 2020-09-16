@@ -5,14 +5,13 @@
  */
 package ACCLiveTiming.extensions.logging;
 
-import ACCLiveTiming.client.ExtensionPanel;
+import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.visualisation.LookAndFeel;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import processing.core.PGraphics;
 
 /**
  *
@@ -31,10 +30,7 @@ public class LoggingPanel extends ExtensionPanel {
     }
 
     @Override
-    public void drawPanel(PGraphics base) {
-        base.textFont(LookAndFeel.get().FONT, LookAndFeel.get().TEXT_SIZE);
-        
-        
+    public void drawPanel() {
         int lineHeight = LookAndFeel.get().LINE_HEIGHT;
         int tabSize = 130;
 
@@ -45,7 +41,7 @@ public class LoggingPanel extends ExtensionPanel {
         if (scroll < 0) {
             scroll = 0;
         }
-        int visibleLines = base.height / lineHeight;
+        int visibleLines = applet.height / lineHeight;
         if (scroll > messages.size() - visibleLines) {
             scroll = messages.size() - visibleLines;
         }
@@ -59,27 +55,28 @@ public class LoggingPanel extends ExtensionPanel {
 
             int y = lineHeight * n++;
 
-            base.fill((n % 2 == 0) ? 50 : 40);
-            base.noStroke();
-            base.rect(0, y, base.width, lineHeight);
+            applet.fill((n % 2 == 0) ? 50 : 40);
+            applet.noStroke();
+            applet.rect(0, y, applet.width, lineHeight);
 
-            base.fill(255);
-            base.textAlign(LEFT, CENTER);
+            applet.fill(255);
+            applet.textAlign(LEFT, CENTER);
 
             float x = 40;
             String[] partials = msg.split("\t");
             for (String partial : partials) {
-                base.text(partial, x, y + lineHeight / 2);
-                float msgWidth = base.textWidth(partial);
+                applet.text(partial, x, y + lineHeight / 2);
+                float msgWidth = applet.textWidth(partial);
                 x += (msgWidth - (msgWidth % tabSize) + tabSize);
             }
         }
-        LookAndFeel.drawScrollBar(base, messages.size(), visibleLines, scroll);
+        LookAndFeel.drawScrollBar(applet, messages.size(), visibleLines, scroll);
     }
 
     @Override
     public void mouseWheel(int count) {
         scroll += count;
+        applet.forceRedraw();
     }
 
 }

@@ -10,7 +10,6 @@ import java.net.URL;
 import java.nio.file.Paths;
 import processing.core.PApplet;
 import processing.core.PFont;
-import processing.core.PGraphics;
 
 /**
  *
@@ -77,7 +76,7 @@ public class LookAndFeel {
         return instance;
     }
 
-    public static void drawScrollBar(PGraphics context, int listLength, int visibleItems, int scrollAmmount) {
+    public static void drawScrollBar(PApplet context, int listLength, int visibleItems, int scrollAmmount) {
         int barHeight = context.height;
         int barWidth = 20;
         int padding = 3;
