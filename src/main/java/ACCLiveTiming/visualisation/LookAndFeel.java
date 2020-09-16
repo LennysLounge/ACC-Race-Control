@@ -5,9 +5,6 @@
  */
 package ACCLiveTiming.visualisation;
 
-import java.io.File;
-import java.net.URL;
-import java.nio.file.Paths;
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -62,10 +59,8 @@ public class LookAndFeel {
         FONT_BASELINE_OFFSET = 0.16f;
         PFont font;
         try {
-            URL res = LookAndFeel.class
-                    .getResource("/fonts/Heebo/static/Heebo-Medium.ttf");
-            File fontFile = Paths.get(res.toURI()).toFile();
-            font = base.createFont(fontFile.getAbsolutePath(), TEXT_SIZE, true);
+            String path = System.getProperty("user.dir") + "/font/Heebo-Medium.ttf";
+            font = base.createFont(path, TEXT_SIZE, true);
         } catch (Exception e) {
             font = base.createFont("Arial", TEXT_SIZE, true);
         }
