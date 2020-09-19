@@ -15,6 +15,7 @@ import ACCLiveTiming.networking.data.SessionInfo;
 import ACCLiveTiming.networking.data.TrackInfo;
 import ACCLiveTiming.networking.enums.SessionPhase;
 import ACCLiveTiming.networking.enums.SessionType;
+import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -62,9 +63,34 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
      */
     private final List<String> messages = new LinkedList<>();
 
-    public BasicAccBroadcastingClient() throws SocketException {
-        super();
-        //Init session events.
+    /**
+     * Creates a new broadcasting client for ACC.
+     *
+     * @param displayName The display name of this connection.
+     * @param connectionPassword The password for this connection.
+     * @param commandPassword The command password.
+     * @param updateInterval The interval in which to receive updates.
+     * @param hostAddress Host address of the server.
+     * @param hostPort Host port of the server.
+     * @throws java.net.SocketException
+     */
+    public BasicAccBroadcastingClient(String displayName,
+            String connectionPassword,
+            String commandPassword,
+            int updateInterval,
+            InetAddress hostAddress,
+            int hostPort) throws SocketException {
+        super(displayName,
+                connectionPassword,
+                commandPassword,
+                updateInterval,
+                hostAddress,
+                hostPort);
+
+        initSessionEvents();
+    }
+
+    private void initSessionEvents() {
         Map<SessionPhase, Runnable> practiceEvents = new HashMap<>();
         practiceEvents.put(SessionPhase.STARTING, this::onPracticeStart);
         practiceEvents.put(SessionPhase.POSTSESSION, this::onPracticeEnd);
@@ -136,11 +162,11 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
             int sessionIndex = sessionInfo.getSessionIndex();
             int sessionNumber = sessionCounter.getOrDefault(type, -1) + 1;
             sessionCounter.put(type, sessionNumber);
-            
+
             SessionId newSessionId = new SessionId(type, sessionIndex, sessionNumber);
             onSessionChanged(sessionId, newSessionId);
             sessionId = newSessionId;
-            
+
             sessionPhase = SessionPhase.NONE;
         }
         //Fast forward to current phase

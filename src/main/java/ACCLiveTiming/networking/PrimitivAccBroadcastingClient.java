@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,7 +66,7 @@ public class PrimitivAccBroadcastingClient {
     /**
      * Thread where the connection loop is running.
      */
-    private Thread udpListenerThread;
+    private Thread accListenerThread;
     /**
      * Model that holds the data.
      */
@@ -85,37 +86,69 @@ public class PrimitivAccBroadcastingClient {
 
     /**
      * Default contructor.
-     */
-    public PrimitivAccBroadcastingClient() throws SocketException {
-        socket = new DatagramSocket();
-    }
-
-    /**
-     * Set the credentials for the ACC connection.
      *
-     * @param name The display name.
-     * @param password The connection password.
+     * @param displayName The display name of this connection.
+     * @param connectionPassword The password for this connection.
      * @param commandPassword The command password.
+     * @param updateInterval The interval in which to receive updates.
+     * @param hostAddress Host address of the server.
+     * @param hostPort Host port of the server.
+     * @throws java.net.SocketException
      */
-    public void setCredentials(String name, String password, String commandPassword) {
-        this.displayName = name;
-        this.connectionPassword = password;
-        this.commandPassword = commandPassword;
+    public PrimitivAccBroadcastingClient(String displayName,
+            String connectionPassword,
+            String commandPassword,
+            int updateInterval,
+            InetAddress hostAddress,
+            int hostPort) throws SocketException {
+        this.displayName = requireNonNull(displayName, "displayName");
+        this.connectionPassword = requireNonNull(connectionPassword, "connectionPassword");
+        this.commandPassword = requireNonNull(commandPassword, "commandPassword");
+        if (updateInterval < 0) {
+            throw new IllegalArgumentException("Update interval cannot be less than 0");
+        }
+        this.updateInterval = updateInterval;
+        this.hostAddress = requireNonNull(hostAddress, "hostAddress");
+        this.hostPort = requireNonNull(hostPort, "hostPort");
+
+        socket = new DatagramSocket();
+        startListernerThread();
     }
 
-    /**
-     * Sets the update interval for this connection.
-     *
-     * @param interval The interval.
-     */
-    public void setUpdateInterval(int interval) {
-        this.updateInterval = interval;
+    private void startListernerThread() {
+        forceSocketClose = false;
+
+        //socket.connect(this.hostAddress, this.hostPort);
+        accListenerThread = new Thread("ACC listener") {
+            public void run() {
+                LOG.info("Starting Listener thread");
+                try {
+                    udpListener();
+                } catch (Exception e) {
+                    LOG.log(Level.SEVERE, "Error in the listener thread", e);
+                } catch (StackOverflowError e) {
+                    LOG.log(Level.SEVERE, "Overflow in listener thread", e);
+                }
+                LOG.info("Listener thread done");
+            }
+        };
+        accListenerThread.start();
     }
+    
+    public void waitForFinish(){
+        try {
+            accListenerThread.join();
+        } catch (InterruptedException ex) {
+            LOG.info("exceptioN!!!!");
+        }
+    }
+
     /**
      * Gives the update interval for the connection.
+     *
      * @return The update interval.
      */
-    public int getUpdateInterval(){
+    public int getUpdateInterval() {
         return updateInterval;
     }
 
@@ -135,7 +168,7 @@ public class PrimitivAccBroadcastingClient {
      * @return True when connected.
      */
     public boolean isConnected() {
-        return socket.isConnected() && udpListenerThread.isAlive();
+        return socket.isConnected() && accListenerThread.isAlive();
     }
 
     /**
@@ -176,32 +209,6 @@ public class PrimitivAccBroadcastingClient {
     }
 
     /**
-     * Connect the socket and start the listener thread.
-     *
-     * @param hostAddress Host address of the game.
-     * @param hostPort Host port of the game.
-     */
-    public void connect(InetAddress hostAddress, int hostPort) {
-        forceSocketClose = false;
-        this.hostAddress = hostAddress;
-        this.hostPort = hostPort;
-        socket.connect(this.hostAddress, this.hostPort);
-
-        udpListenerThread = new Thread("UDP listener Thread") {
-            public void run() {
-                try {
-                    udpListener();
-                } catch (Exception e) {
-                    LOG.log(Level.SEVERE, "Error in the listener thread", e);
-                } catch (StackOverflowError e) {
-                    LOG.log(Level.SEVERE, "Overflow in listener", e);
-                }
-            }
-        };
-        udpListenerThread.start();
-    }
-
-    /**
      * Disconnect from the game.
      */
     public void disconnect() {
@@ -218,7 +225,6 @@ public class PrimitivAccBroadcastingClient {
 
     // Threading
     private void udpListener() {
-        LOG.info("Starting Listener thread");
         while (true) {
             try {
                 DatagramPacket response = new DatagramPacket(new byte[512], 512);
@@ -226,18 +232,13 @@ public class PrimitivAccBroadcastingClient {
                 protocol.processMessage(new ByteArrayInputStream(response.getData()));
                 afterPacketReceived(response.getData()[0]);
             } catch (SocketException e) {
-                if (forceSocketClose) {
-                    LOG.info("Socket closed");
-                } else {
-                    LOG.log(Level.SEVERE, "Socket closed unexpected.", e);
-                }
-                break;
+                LOG.log(Level.SEVERE, "Socket closed unexpected.", e);
+                return;
             } catch (IOException e) {
                 LOG.log(Level.SEVERE, "Error while receiving a response", e);
-                break;
+                return;
             }
         }
-        LOG.info("Listener thread done");
     }
 
     protected void onRegistrationResult(int connectionID, boolean success, boolean readOnly, String message) {

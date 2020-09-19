@@ -49,15 +49,15 @@ public class Main {
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "An error happened while setting up the logger.", e);
         }
-        
+
         startApp();
     }
 
     public static void startApp() {
         LOG.info("Starting");
+
         ConnectionDialog dialog = new ConnectionDialog();
         dialog.setVisible(true);
-
         if (!dialog.exitWithConnect()) {
             return;
         }
@@ -74,19 +74,16 @@ public class Main {
 
         BasicAccBroadcastingClient client;
         try {
-            client = new BasicAccBroadcastingClient();
-
+            client = new BasicAccBroadcastingClient(dialog.getDisplayName(),
+                    dialog.getConnectionPassword(),
+                    dialog.getCommandPassword(),
+                    dialog.getUpdateInterval(),
+                    dialog.getHostAddress(),
+                    dialog.getPort());
         } catch (SocketException e) {
-            LOG.log(Level.SEVERE, "Error while creating the visualization.", e);
+            LOG.log(Level.SEVERE, "Error while creating the broadcasting client.", e);
             return;
         }
-        
-
-        client.setCredentials(dialog.getDisplayName(),
-                dialog.getConnectionPassword(),
-                dialog.getCommandPassword());
-        client.setUpdateInterval(dialog.getUpdateInterval());
-        client.connect(dialog.getHostAddress(), dialog.getPort());
 
         client.registerExtension(new LiveTimingExtension());
         client.registerExtension(new IncidentExtension());
@@ -94,11 +91,16 @@ public class Main {
         client.registerExtension(new LoggingExtension());
         client.registerExtension(new DebugExtension());
 
-        Visualisation v = new Visualisation(client, dialog.getUpdateInterval());
+        try {
+            client.sendRegisterRequest();
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error while sending register request", e);
+            return;
+        }
 
+        Visualisation v = new Visualisation(client, dialog.getUpdateInterval());
         String[] a = {"MAIN"};
         PApplet.runSketch(a, v);
-
     }
 
 }
