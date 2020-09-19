@@ -44,12 +44,6 @@ public class Visualisation extends CustomPApplet {
         mainPanel = new MainPanel(this, client);
         mainPanel.setPApplet(this);
 
-        try {
-            client.sendRegisterRequest();
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, "Error while sending register request", e);
-            return;
-        }
     }
 
     @Override
