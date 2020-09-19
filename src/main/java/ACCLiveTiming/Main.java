@@ -35,31 +35,22 @@ public class Main {
     private static Logger LOG = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
-
+        //set logging file.
         LogManager logManager = LogManager.getLogManager();
         try {
-
-            Date now = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-            String logPath = System.getProperty("user.dir") + "/log/" + dateFormat.format(now) + ".log";
-
+            String logPath = System.getProperty("user.dir") + "/log/" + dateFormat.format(new Date()) + ".log";
             Properties prop = new Properties();
             prop.load(Main.class.getResourceAsStream("/logging.properties"));
             prop.put("java.util.logging.FileHandler.pattern", logPath);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             prop.store(out, "");
-
             logManager.readConfiguration(new ByteArrayInputStream(out.toByteArray()));
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "An error happened while setting up the logger.", e);
         }
-
-        try {
-            startApp();
-        } catch (Exception e) {
-            LOG.log(Level.SEVERE, "An exception has occured.", e);
-        }
-
+        
+        startApp();
     }
 
     public static void startApp() {
