@@ -38,26 +38,26 @@ import java.util.stream.Collectors;
  * @author Leonard
  */
 public class SpreadSheetService {
-    
+
     private static Logger LOG = Logger.getLogger(SpreadSheetService.class.getName());
-    
+
     private static Sheets sheetService;
-    
+
     private static String spreadSheetID;
-    
+
     private static Thread eventLoop;
-    
+
     private static LinkedBlockingQueue<Object> queue = new LinkedBlockingQueue<>();
-    
+
     private static boolean running = false;
-    
+
     private SpreadSheetService() {
     }
-    
+
     public static boolean isRunning() {
         return running;
     }
-    
+
     public static void start(String spreadSheetURL) throws IllegalArgumentException, RuntimeException {
         //find spreadsheet id with regex
         Pattern p = Pattern.compile(".*/spreadsheets/d/([a-zA-Z0-9-_]+).*");
@@ -87,7 +87,7 @@ public class SpreadSheetService {
         };
         eventLoop.start();
     }
-    
+
     private static void eventLoop() throws InterruptedException {
         while (running) {
             Object o = queue.take();
@@ -99,18 +99,18 @@ public class SpreadSheetService {
             }
         }
     }
-    
-    public static void sendAccident(List<Integer> carNumber, int sessionTime, SessionId id) {
+
+    public static void sendAccident(List<Integer> carNumber, float sessionTime, SessionId id) {
         queue.add(new AccidentEvent(carNumber, sessionTime, id));
     }
-    
+
     private static void sendAccident(AccidentEvent e) {
         String carNumbers = e.carNumbers.stream()
                 .map(i -> String.valueOf(i))
                 .collect(Collectors.joining(", "));
         LOG.info("Sending Accident: " + carNumbers + ", " + TimeUtils.asDuration(e.sessionTime));
     }
-    
+
     private static Sheets createSheetsService() throws IOException, GeneralSecurityException {
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
@@ -121,38 +121,38 @@ public class SpreadSheetService {
         if (in == null) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIAL_PATH);
         }
-        
+
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(in));
         List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS);
         String TOKENS_DIRECTORY_PATH = "tokens";
-        
+
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 httpTransport, jsonFactory, clientSecrets, SCOPES)
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
-        
+
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
         Credential credentials = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
-        
+
         return new Sheets.Builder(httpTransport, jsonFactory, credentials)
                 .setApplicationName("ACC_AccidentTracker/0.1")
                 .build();
     }
-    
+
     private static class AccidentEvent {
-        
+
         public List<Integer> carNumbers;
-        public int sessionTime;
+        public float sessionTime;
         public SessionId sessionID;
-        
-        public AccidentEvent(List<Integer> carNumbers, int sessionTime, SessionId id) {
+
+        public AccidentEvent(List<Integer> carNumbers, float sessionTime, SessionId id) {
             this.carNumbers = carNumbers;
             this.sessionTime = sessionTime;
             this.sessionID = id;
         }
     }
-    
+
     private static class QuitEvent {
     }
 }

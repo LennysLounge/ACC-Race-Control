@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -106,7 +107,10 @@ public class IncidentExtension extends AccClientExtension {
         accidents = newAccidents;
 
         if (SpreadSheetService.isRunning()) {
-            //SpreadSheetService.sendAccident(a, id);
+            List<Integer> carNumbers = a.getCars().stream()
+                    .map(id -> client.getModel().getCar(id).getCarNumber())
+                    .collect(Collectors.toList());
+            SpreadSheetService.sendAccident(carNumbers, a.getEarliestTime(), a.getSessionID());
         }
     }
 
