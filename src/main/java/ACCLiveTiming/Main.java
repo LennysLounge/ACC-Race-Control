@@ -87,7 +87,7 @@ public class Main {
 
         client.registerExtension(new LiveTimingExtension());
         client.registerExtension(new IncidentExtension());
-        client.registerExtension(new LapTimeExtension());
+        client.registerExtension(new LapTimeExtension(dialog.isLapTimeLoggingEnabled()));
         client.registerExtension(new LoggingExtension());
         client.registerExtension(new DebugExtension());
 
