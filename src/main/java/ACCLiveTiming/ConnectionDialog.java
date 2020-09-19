@@ -78,11 +78,13 @@ public class ConnectionDialog extends javax.swing.JDialog {
         updateIntervalTextField = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         commandPasswordTextField = new javax.swing.JTextField();
-        connectButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         spreadsheetURLTextField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         enableSheetsAPICheckBox = new javax.swing.JCheckBox();
+        jLabel3 = new javax.swing.JLabel();
+        enableLapTimeLoggingCheckBox = new javax.swing.JCheckBox();
+        connectButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -97,8 +99,6 @@ public class ConnectionDialog extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(jLabel8, gridBagConstraints);
 
         ipTextField.setText("127.0.0.1");
@@ -115,8 +115,6 @@ public class ConnectionDialog extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(jLabel9, gridBagConstraints);
 
         portTextField.setText("9000");
@@ -133,8 +131,6 @@ public class ConnectionDialog extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(jLabel10, gridBagConstraints);
 
         displayNameTextField.setText("Your name");
@@ -151,8 +147,6 @@ public class ConnectionDialog extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(jLabel11, gridBagConstraints);
 
         connectionPasswordTextField.setText("asd");
@@ -169,8 +163,6 @@ public class ConnectionDialog extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(jLabel12, gridBagConstraints);
 
         updateIntervalTextField.setText("250");
@@ -187,8 +179,6 @@ public class ConnectionDialog extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(jLabel13, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -198,45 +188,29 @@ public class ConnectionDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(commandPasswordTextField, gridBagConstraints);
 
-        connectButton.setText("Connect");
-        connectButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                connectButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(9, 3, 3, 3);
-        jPanel1.add(connectButton, gridBagConstraints);
-
         jLabel1.setText("Google Spreadsheet link:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        jPanel1.add(jLabel1, gridBagConstraints);
-
-        spreadsheetURLTextField.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        gridBagConstraints.insets = new java.awt.Insets(3, 0, 3, 3);
+        jPanel1.add(jLabel1, gridBagConstraints);
+
+        spreadsheetURLTextField.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 3, 3);
         jPanel1.add(spreadsheetURLTextField, gridBagConstraints);
 
         jLabel2.setText("Use Sheets API:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(jLabel2, gridBagConstraints);
 
         enableSheetsAPICheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -251,19 +225,46 @@ public class ConnectionDialog extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(enableSheetsAPICheckBox, gridBagConstraints);
+
+        jLabel3.setText("Log lap times:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel1.add(jLabel3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel1.add(enableLapTimeLoggingCheckBox, gridBagConstraints);
+
+        connectButton.setText("Connect");
+        connectButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                connectButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(connectButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(connectButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getAccessibleContext().setAccessibleName("ACC Live Timing connetion");
@@ -320,6 +321,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
     private javax.swing.JButton connectButton;
     private javax.swing.JTextField connectionPasswordTextField;
     private javax.swing.JTextField displayNameTextField;
+    private javax.swing.JCheckBox enableLapTimeLoggingCheckBox;
     private javax.swing.JCheckBox enableSheetsAPICheckBox;
     private javax.swing.JTextField ipTextField;
     private javax.swing.JLabel jLabel1;
@@ -328,6 +330,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -366,5 +369,9 @@ public class ConnectionDialog extends javax.swing.JDialog {
 
     public boolean isSheetsAPIEnabled() {
         return enableSheetsAPICheckBox.isSelected();
+    }
+    
+    public boolean isLapTimeLoggingEnabled(){
+        return enableLapTimeLoggingCheckBox.isSelected();
     }
 }
