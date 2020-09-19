@@ -105,8 +105,8 @@ public class IncidentExtension extends AccClientExtension {
         newAccidents.add(a);
         accidents = newAccidents;
 
-        if (SpreadSheetService.isEnabled()) {
-            //sendAccidentToSpreadSheet(a);
+        if (SpreadSheetService.isRunning()) {
+            //SpreadSheetService.sendAccident(a, id);
         }
     }
 

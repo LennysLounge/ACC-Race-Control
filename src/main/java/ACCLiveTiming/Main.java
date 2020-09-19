@@ -64,11 +64,12 @@ public class Main {
 
         //eable spreadSheet service.
         if (dialog.isSheetsAPIEnabled()) {
-            SpreadSheetService.setEnable(dialog.isSheetsAPIEnabled());
-            SpreadSheetService.setSpreadsheetURL(dialog.getSpreadsheetURL());
-
-            if (!SpreadSheetService.isEnabled()) {
-                JOptionPane.showMessageDialog(null, "Error enabling the Spreadsheet API");
+            try {
+                SpreadSheetService.start(dialog.getSpreadsheetURL());
+            } catch (IllegalArgumentException e) {
+                LOG.log(Level.WARNING, "URL is not a valid SpreadSheet url");
+            } catch (RuntimeException e) {
+                LOG.log(Level.WARNING, "Error enabling the Spreadsheet API");
             }
         }
 
