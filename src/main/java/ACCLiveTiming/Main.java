@@ -91,12 +91,7 @@ public class Main {
         client.registerExtension(new LoggingExtension());
         client.registerExtension(new DebugExtension());
 
-        try {
-            client.sendRegisterRequest();
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, "Error while sending register request", e);
-            return;
-        }
+        client.sendRegisterRequest();
 
         Visualisation v = new Visualisation(client, dialog.getUpdateInterval());
         String[] a = {"MAIN"};

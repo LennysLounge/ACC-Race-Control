@@ -174,27 +174,24 @@ public class PrimitivAccBroadcastingClient {
     /**
      * Send a register command.
      *
-     * @throws IOException
      */
-    public void sendRegisterRequest() throws IOException {
+    public void sendRegisterRequest() {
         sendRequest(protocol.buildRegisterRequest(displayName, connectionPassword, updateInterval, commandPassword));
     }
 
     /**
      * Send unregister command.
      *
-     * @throws IOException
      */
-    public void sendUnregisterRequest() throws IOException {
+    public void sendUnregisterRequest() {
         sendRequest(protocol.buildUnregisterRequest());
     }
 
     /**
      * Send a request for the current entry list.
      *
-     * @throws IOException
      */
-    public void sendEntryListRequest() throws IOException {
+    public void sendEntryListRequest() {
         lastTimeEntryListRequest = System.currentTimeMillis();
         sendRequest(protocol.buildEntryListRequest(model.getConnectionID()));
     }
@@ -202,9 +199,8 @@ public class PrimitivAccBroadcastingClient {
     /**
      * Send a request for the current track data.
      *
-     * @throws IOException
      */
-    public void sendTrackDataRequest() throws IOException {
+    public void sendTrackDataRequest() {
         sendRequest(protocol.buildTrackDataRequest(model.getConnectionID()));
     }
 
@@ -217,9 +213,13 @@ public class PrimitivAccBroadcastingClient {
         socket.close();
     }
 
-    private void sendRequest(byte[] requestBytes) throws IOException {
+    private void sendRequest(byte[] requestBytes) {
         if (socket.isConnected()) {
+            try{
             socket.send(new DatagramPacket(requestBytes, requestBytes.length));
+            }catch(IOException e){
+                LOG.log(Level.SEVERE, "Error sending request.", e);
+            }
         }
     }
 
