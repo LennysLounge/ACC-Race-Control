@@ -118,7 +118,7 @@ public class PrimitivAccBroadcastingClient {
     private void startListernerThread() {
         forceSocketClose = false;
 
-        //socket.connect(this.hostAddress, this.hostPort);
+        socket.connect(this.hostAddress, this.hostPort);
         accListenerThread = new Thread("ACC listener") {
             public void run() {
                 LOG.info("Starting Listener thread");
