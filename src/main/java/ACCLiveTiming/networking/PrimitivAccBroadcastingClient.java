@@ -33,36 +33,36 @@ import java.util.logging.Logger;
  */
 public class PrimitivAccBroadcastingClient {
 
-    private static Logger LOG = Logger.getLogger(PrimitivAccBroadcastingClient.class.getName());
+    private static final Logger LOG = Logger.getLogger(PrimitivAccBroadcastingClient.class.getName());
 
     /**
      * Address where the ACC broadcast server is running.
      */
-    private InetAddress hostAddress;
+    private final InetAddress hostAddress;
     /**
      * Port where the ACC broadcast server is running.
      */
-    private int hostPort;
+    private final int hostPort;
     /**
      * Display name of this connection.
      */
-    private String displayName = "Your Name";
+    private final String displayName;
     /**
      * Connection password.
      */
-    private String connectionPassword = "";
+    private final String connectionPassword;
     /**
      * Command password.
      */
-    private String commandPassword = "";
+    private final String commandPassword;
     /**
      * Interval in which to receive updated in ms.
      */
-    private int updateInterval = 250;
+    private final int updateInterval;
     /**
      * Socket used for the connection.
      */
-    private DatagramSocket socket;
+    private final DatagramSocket socket;
     /**
      * Thread where the connection loop is running.
      */
@@ -74,7 +74,7 @@ public class PrimitivAccBroadcastingClient {
     /**
      * Protocoll used to communicate with ACC.
      */
-    private AccBroadcastingProtocol protocol = new AccBroadcastingProtocol(this);
+    private final AccBroadcastingProtocol protocol = new AccBroadcastingProtocol(this);
     /**
      * Time when the entry list was requested.
      */
@@ -134,8 +134,8 @@ public class PrimitivAccBroadcastingClient {
         };
         accListenerThread.start();
     }
-    
-    public void waitForFinish(){
+
+    public void waitForFinish() {
         try {
             accListenerThread.join();
         } catch (InterruptedException ex) {
@@ -215,9 +215,9 @@ public class PrimitivAccBroadcastingClient {
 
     private void sendRequest(byte[] requestBytes) {
         if (socket.isConnected()) {
-            try{
-            socket.send(new DatagramPacket(requestBytes, requestBytes.length));
-            }catch(IOException e){
+            try {
+                socket.send(new DatagramPacket(requestBytes, requestBytes.length));
+            } catch (IOException e) {
                 LOG.log(Level.SEVERE, "Error sending request.", e);
             }
         }
