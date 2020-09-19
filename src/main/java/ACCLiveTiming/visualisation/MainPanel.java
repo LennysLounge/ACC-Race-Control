@@ -61,12 +61,10 @@ public class MainPanel extends ExtensionPanel {
         applet.rect(0, 0, applet.width, lineHeight);
         String conId = "CON-ID: " + client.getModel().getConnectionID();
         String packetsReceived = "Packets received: " + client.getPacketCount();
-        String fr = "FrameRate:" + visualisation.frameRate;
 
         applet.fill(255);
         applet.text(conId, 10, lineHeight / 2f);
         applet.text(packetsReceived, 200, lineHeight / 2f);
-        applet.text(fr, 400, lineHeight / 2f);
 
         applet.textAlign(RIGHT, CENTER);
         applet.text(sessionName, applet.width - 10, lineHeight / 2f);
