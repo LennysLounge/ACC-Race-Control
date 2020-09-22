@@ -102,6 +102,9 @@ public class SpreadSheetService {
             if (o instanceof AccidentEvent) {
                 sendAccident((AccidentEvent) o);
             }
+            if (o instanceof GreenFlagEvent) {
+                sendGreenFlag((GreenFlagEvent) o);
+            }
         }
     }
 
@@ -144,6 +147,47 @@ public class SpreadSheetService {
             updateCells(range, line);
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "Error sending spreadsheet values", e);
+            return;
+        }
+    }
+
+    public static void sendGreenFlagOffset(int time, SessionId id) {
+        queue.add(new GreenFlagEvent(time, id));
+    }
+
+    private static void sendGreenFlag(GreenFlagEvent event) {
+        Optional<String> s = getSheet(event.sessionId);
+        if (s.isEmpty()) {
+            return;
+        }
+        String sheet = s.get();
+        String range = sheet + "B1:C500";
+        List<List<Object>> values;
+        try {
+            values = getCells(range);
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error getting spreadsheet values", e);
+            return;
+        }
+
+        //find row
+        int rowNumber = -1;
+        for (int i = 0; i < values.size(); i++) {
+            for (Object o : values.get(i)) {
+                if (((String) o).equals("Greenflag offset:")) {
+                    rowNumber = i + 1;
+                }
+            }
+        }
+        if (rowNumber < 0) {
+            LOG.log(Level.SEVERE, "Green flag offset not found.");
+        }
+
+        range = sheet + "D" + rowNumber + ":D" + rowNumber;
+        try {
+            updateCells(range, Arrays.asList(Arrays.asList(TimeUtils.asDuration(event.time))));
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error setting spreadsheet value", e);
             return;
         }
     }
@@ -234,5 +278,16 @@ public class SpreadSheetService {
     }
 
     private static class QuitEvent {
+    }
+
+    private static class GreenFlagEvent {
+
+        public int time;
+        public SessionId sessionId;
+
+        public GreenFlagEvent(int time, SessionId sessionId) {
+            this.time = time;
+            this.sessionId = sessionId;
+        }
     }
 }
