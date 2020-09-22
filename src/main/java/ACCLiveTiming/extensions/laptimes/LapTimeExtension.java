@@ -44,7 +44,7 @@ public class LapTimeExtension extends AccClientExtension {
     /**
      * Directory where the files are in
      */
-    private final File dir;
+    private File dir;
     /**
      * current log file
      */
@@ -61,8 +61,19 @@ public class LapTimeExtension extends AccClientExtension {
      * Counts how many rows are needed.
      */
     private int rowCounter = 0;
+    /**
+     * Is the logging for this extension enabled.
+     */
+    private final boolean isLoggingEnabled;
 
-    public LapTimeExtension() {
+    public LapTimeExtension(boolean isLoggingEnabled) {
+        this.isLoggingEnabled = isLoggingEnabled;
+        if (isLoggingEnabled) {
+            createFolder();
+        }
+    }
+
+    private void createFolder() {
         Date now = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         //create folder for this event.
@@ -98,10 +109,12 @@ public class LapTimeExtension extends AccClientExtension {
             laps.put(car.getCarId(), new LinkedList<>());
             rows.put(car.getCarId(), rowCounter++);
         }
-        
+
         if (!isFirstLap && lap.getType() == LapType.REGULAR) {
             laps.get(car.getCarId()).add(lap.getLapTimeMS());
-            printLapToFile();
+            if(isLoggingEnabled){
+                printLapToFile();
+            }
         }
 
         String message = "Lap completed: #" + car.getCarNumber()
@@ -146,19 +159,23 @@ public class LapTimeExtension extends AccClientExtension {
 
     @Override
     public void onSessionChanged(SessionId oldId, SessionId newId) {
-        if (logFile != null) {
-            printLapToFile();
+        if(isLoggingEnabled){
+            if (logFile != null) {
+                printLapToFile();
+            }
         }
 
         laps.clear();
         //Set lap counts to 0
         lapCount.forEach((key, count) -> lapCount.put(key, 0));
 
-        logFile = new File(dir.getAbsolutePath() + "/" + newId.getType().name() + "_" + newId.getNumber() + ".csv");
-        try {
-            logFile.createNewFile();
-        } catch (IOException e) {
-            LOG.log(Level.WARNING, "Error creating laps log file.", e);
+        if(isLoggingEnabled){
+            logFile = new File(dir.getAbsolutePath() + "/" + newId.getType().name() + "_" + newId.getNumber() + ".csv");
+            try {
+                logFile.createNewFile();
+            } catch (IOException e) {
+                LOG.log(Level.WARNING, "Error creating laps log file.", e);
+            }
         }
 
     }

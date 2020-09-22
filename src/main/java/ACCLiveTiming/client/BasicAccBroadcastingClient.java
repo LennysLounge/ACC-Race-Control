@@ -101,6 +101,7 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
 
         Map<SessionPhase, Runnable> raceEvents = new HashMap<>();
         raceEvents.put(SessionPhase.STARTING, this::onRaceStart);
+        raceEvents.put(SessionPhase.SESSION, this::onRaceSessionStart);
         raceEvents.put(SessionPhase.POSTSESSION, this::onRaceEnd);
 
         sessionEvents.put(SessionType.PRACTICE, practiceEvents);
@@ -304,6 +305,12 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
         log("Race starting");
         LOG.info("Race starting");
         extensions.forEach(extension -> extension.onRaceStart());
+    }
+
+    private void onRaceSessionStart() {
+        log("Race session starting");
+        LOG.info("Race session starting");
+        extensions.forEach(extension -> extension.onRaceSessionStart());
     }
 
     private void onRaceEnd() {
