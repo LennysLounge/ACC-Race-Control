@@ -43,6 +43,10 @@ public class IncidentExtension extends AccClientExtension {
      * List of accidents that have happened.
      */
     private List<Accident> accidents = new LinkedList<>();
+    /**
+     * Timestamp for when the race session started.
+     */
+    private long raceStartTimestamp;
 
     public IncidentExtension() {
         this.panel = new IncidentPanel(this);
@@ -118,5 +122,17 @@ public class IncidentExtension extends AccClientExtension {
         int result = incidentCounter.getOrDefault(sessionId, 0);
         incidentCounter.put(sessionId, result + 1);
         return result;
+    }
+
+    @Override
+    public void onRaceStart() {
+        raceStartTimestamp = System.currentTimeMillis();
+    }
+
+    @Override
+    public void onRaceSessionStart() {
+        long now = System.currentTimeMillis();
+        int diff = (int) (now - raceStartTimestamp);
+        SpreadSheetService.sendGreenFlagOffset(diff, client.getSessionId());
     }
 }
