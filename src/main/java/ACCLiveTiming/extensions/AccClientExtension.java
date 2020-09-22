@@ -85,6 +85,9 @@ public class AccClientExtension {
 
     public void onRaceStart() {
     }
+    
+    public void onRaceSessionStart(){
+    }
 
     public void onRaceEnd() {
     }
