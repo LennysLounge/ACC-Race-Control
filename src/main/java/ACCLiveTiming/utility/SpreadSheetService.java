@@ -19,13 +19,18 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
+import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
+import com.google.api.services.sheets.v4.model.ValueRange;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -104,11 +109,86 @@ public class SpreadSheetService {
         queue.add(new AccidentEvent(carNumber, sessionTime, id));
     }
 
-    private static void sendAccident(AccidentEvent e) {
-        String carNumbers = e.carNumbers.stream()
+    private static void sendAccident(AccidentEvent event) {
+        String carNumbers = event.carNumbers.stream()
                 .map(i -> String.valueOf(i))
                 .collect(Collectors.joining(", "));
-        LOG.info("Sending Accident: " + carNumbers + ", " + TimeUtils.asDuration(e.sessionTime));
+
+        LOG.info("Sending Accident: " + carNumbers + ", " + TimeUtils.asDuration(event.sessionTime));
+
+        Optional<String> s = getSheet(event.sessionID);
+        if (s.isEmpty()) {
+            return;
+        }
+        String sheet = s.get();
+        String range = sheet + "B1:C500";
+
+        List<List<Object>> values;
+        try {
+            values = getCells(range);
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error getting spreadsheet values", e);
+            return;
+        }
+        int emptyLine = values.size() + 1;
+
+        range = sheet + "B" + emptyLine + ":C" + emptyLine;
+
+        List<List<Object>> line = new LinkedList<>();
+        String sessionTime = TimeUtils.asDuration(event.sessionTime);
+        String carsInvolved = event.carNumbers.stream()
+                .map(n -> String.valueOf(n))
+                .collect(Collectors.joining(", "));
+        line.add(Arrays.asList(sessionTime, carsInvolved));
+        try {
+            updateCells(range, line);
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error sending spreadsheet values", e);
+            return;
+        }
+    }
+
+    private static Optional<String> getSheet(SessionId sessionId) {
+        switch (sessionId.getType()) {
+            case PRACTICE:
+                return Optional.of("Practice!");
+            case QUALIFYING:
+                return Optional.of("Qualifying!");
+            case RACE:
+                if (sessionId.getNumber() < 2) {
+                    return Optional.of("Race " + (sessionId.getNumber() + 1) + "!");
+                } else {
+                    return Optional.empty();
+                }
+            default:
+                return Optional.empty();
+        }
+    }
+
+    private static void updateCells(String range, List<List<Object>> values) throws IOException {
+        String valueInputOption = "RAW";
+        ValueRange requestBody = new ValueRange();
+        requestBody.setRange(range);
+        requestBody.setValues(values);
+        requestBody.setMajorDimension("ROWS");
+
+        Sheets.Spreadsheets.Values.Update request
+                = sheetService.spreadsheets().values().update(spreadSheetID, range, requestBody);
+        request.setValueInputOption(valueInputOption);
+
+        UpdateValuesResponse response = request.execute();
+    }
+
+    private static List<List<Object>> getCells(String range) throws IOException {
+        Sheets.Spreadsheets.Values.Get request
+                = sheetService.spreadsheets().values().get(spreadSheetID, range);
+        request.setValueRenderOption("FORMATTED_VALUE");
+        request.setDateTimeRenderOption("FORMATTED_STRING");
+        request.setMajorDimension("ROWS");
+
+        ValueRange response = request.execute();
+
+        return response.getValues();
     }
 
     private static Sheets createSheetsService() throws IOException, GeneralSecurityException {
