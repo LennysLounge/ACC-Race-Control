@@ -67,9 +67,9 @@ public class Main {
             try {
                 SpreadSheetService.start(dialog.getSpreadsheetURL());
             } catch (IllegalArgumentException e) {
-                LOG.log(Level.WARNING, "URL is not a valid SpreadSheet url");
+                LOG.log(Level.WARNING, "URL is not a valid SpreadSheet url", e);
             } catch (RuntimeException e) {
-                LOG.log(Level.WARNING, "Error enabling the Spreadsheet API");
+                LOG.log(Level.WARNING, "Error enabling the Spreadsheet API", e);
             }
         }
 
