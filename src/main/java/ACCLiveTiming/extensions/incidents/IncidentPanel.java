@@ -7,7 +7,6 @@ package ACCLiveTiming.extensions.incidents;
 
 import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.networking.data.CarInfo;
-import ACCLiveTiming.networking.enums.SessionType;
 import ACCLiveTiming.utility.TimeUtils;
 import ACCLiveTiming.visualisation.LookAndFeel;
 import java.util.LinkedList;
@@ -88,7 +87,8 @@ public class IncidentPanel extends ExtensionPanel {
             }
             drawCellText(String.valueOf(accident.getIncidentNumber()), columns[1], n, laf.COLOR_WHITE);
             drawCellText(TimeUtils.asDuration(accident.getEarliestTime()), columns[2], n, laf.COLOR_WHITE);
-
+            
+            //Draw car numbres
             float x = columns[3].xOffset * laf.LINE_HEIGHT;
             for (int carId : accident.getCars()) {
                 CarInfo car = extension.getModel().getCar(carId);
@@ -117,7 +117,7 @@ public class IncidentPanel extends ExtensionPanel {
                 applet.fill(background_color);
                 applet.rect(x + 1, laf.LINE_HEIGHT * n + 1, w - 2, laf.LINE_HEIGHT - 2);
                 applet.fill(text_color);
-                applet.textAlign(CENTER);
+                applet.textAlign(CENTER,CENTER);
                 applet.text(carNumber, x + w / 2, laf.LINE_HEIGHT * (n + 0.5f));
                 x += w;
             }
