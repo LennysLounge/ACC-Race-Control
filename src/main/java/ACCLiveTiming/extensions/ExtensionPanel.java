@@ -6,7 +6,6 @@
 package ACCLiveTiming.extensions;
 
 import ACCLiveTiming.visualisation.CustomPApplet;
-import ACCLiveTiming.visualisation.Visualisation;
 import processing.core.PApplet;
 
 /**

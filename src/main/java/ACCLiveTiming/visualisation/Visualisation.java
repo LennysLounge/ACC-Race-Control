@@ -6,8 +6,6 @@
 package ACCLiveTiming.visualisation;
 
 import ACCLiveTiming.client.BasicAccBroadcastingClient;
-import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import processing.event.MouseEvent;
 

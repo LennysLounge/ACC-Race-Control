@@ -5,8 +5,8 @@
  */
 package ACCLiveTiming.extensions.laptimes;
 
-import ACCLiveTiming.extensions.AccClientExtension;
 import ACCLiveTiming.client.SessionId;
+import ACCLiveTiming.extensions.AccClientExtension;
 import ACCLiveTiming.extensions.incidents.IncidentExtension;
 import ACCLiveTiming.networking.data.CarInfo;
 import ACCLiveTiming.networking.data.LapInfo;

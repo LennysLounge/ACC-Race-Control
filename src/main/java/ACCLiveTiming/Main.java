@@ -5,7 +5,6 @@
  */
 package ACCLiveTiming;
 
-import ACCLiveTiming.visualisation.Visualisation;
 import ACCLiveTiming.client.BasicAccBroadcastingClient;
 import ACCLiveTiming.extensions.debug.DebugExtension;
 import ACCLiveTiming.extensions.incidents.IncidentExtension;
@@ -13,9 +12,9 @@ import ACCLiveTiming.extensions.laptimes.LapTimeExtension;
 import ACCLiveTiming.extensions.livetiming.LiveTimingExtension;
 import ACCLiveTiming.extensions.logging.LoggingExtension;
 import ACCLiveTiming.utility.SpreadSheetService;
+import ACCLiveTiming.visualisation.Visualisation;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,7 +22,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import processing.core.PApplet;
 
 /**
