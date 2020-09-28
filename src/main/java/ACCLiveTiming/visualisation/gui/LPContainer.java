@@ -62,7 +62,7 @@ public class LPContainer
                 }
             }
             //run mouse pressed event for this component.
-            mousePressed();
+            mousePressed(mouseX, mouseY, mouseButton);
         }
         return clickedComponent;
     }

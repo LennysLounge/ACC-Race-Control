@@ -187,14 +187,14 @@ public class LPComponent {
             clickedComponent = this;
 
             //run mouse pressed event for this component.
-            mousePressed();
+            mousePressed(mouseX, mouseY, mouseButton);
         }
         return clickedComponent;
     }
     /**
      * Mouse pressed event.
      */
-    public void mousePressed() {
+    public void mousePressed(int x, int y, int button) {
     }
     /**
      * Mouse released event. Used internaly.
@@ -203,7 +203,7 @@ public class LPComponent {
      * @param mouseButton which mouse button was pressed.
      */
     public void mouseReleasedInternal(int mouseX, int mouseY, int mouseButton) {
-        mouseReleased();
+        mouseReleased(mouseX, mouseY, mouseButton);
         if (parent != null) {
             parent.mouseReleasedInternal(mouseX, mouseY, mouseButton);
         }
@@ -211,7 +211,7 @@ public class LPComponent {
     /**
      * mouse released event.
      */
-    public void mouseReleased() {
+    public void mouseReleased(int x, int y, int button) {
     }
     /**
      * Resize event.
