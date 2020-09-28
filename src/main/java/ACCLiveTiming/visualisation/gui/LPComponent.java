@@ -118,6 +118,13 @@ public class LPComponent {
         this.name = name;
     }
     /**
+     * Returns the name of this component.
+     * @return 
+     */
+    public String getName(){
+        return name;
+    }
+    /**
      * Invalidate this component to mark it to be redrawn.
      */
     public void invalidate() {
