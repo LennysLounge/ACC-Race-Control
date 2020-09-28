@@ -21,6 +21,10 @@ public class LPContainer
         components.add(c);
         c.setParent(this);
     }
+    
+    public void removeComponent(LPComponent c){
+        components.remove(c);
+    }
 
     @Override
     public void invalidate() {
