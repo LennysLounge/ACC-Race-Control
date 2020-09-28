@@ -19,7 +19,7 @@ public class LPComponent {
     /**
      * Reference to the PApplet.
      */
-    protected PApplet applet;
+    protected static PApplet applet;
     /**
      * horizontal position in the applet.
      */
@@ -49,7 +49,7 @@ public class LPComponent {
      */
     public LPComponent(){
     }
-
+    
     /**
      * Sets the position of this component.
      * @param x X-position.
@@ -100,8 +100,8 @@ public class LPComponent {
      * Set the base PApplet.
      * @param applet PApplet.
      */
-    protected void setApplet(PApplet applet) {
-        this.applet = applet;
+    public static void setApplet(PApplet a) {
+        applet = a;
     }
     /**
      * Set the parent element for this component.

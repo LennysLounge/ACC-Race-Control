@@ -5,13 +5,13 @@
  */
 package ACCLiveTiming.visualisation.gui;
 
-import processing.core.PApplet;
+import ACCLiveTiming.visualisation.CustomPApplet;
 
 /**
  *
  * @author Leonard
  */
-public class LPBase extends PApplet {
+public class LPBase extends CustomPApplet {
 
     private int sizeWidth;
     private int sizeHeight;

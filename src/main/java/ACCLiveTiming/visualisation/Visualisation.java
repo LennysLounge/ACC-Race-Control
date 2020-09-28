@@ -5,7 +5,10 @@
  */
 package ACCLiveTiming.visualisation;
 
+import ACCLiveTiming.visualisation.components.BasePanel;
 import ACCLiveTiming.client.BasicAccBroadcastingClient;
+import ACCLiveTiming.visualisation.gui.LPBase;
+import ACCLiveTiming.visualisation.gui.LPComponent;
 import java.util.logging.Logger;
 import processing.event.MouseEvent;
 
@@ -13,7 +16,7 @@ import processing.event.MouseEvent;
  *
  * @author Leonard
  */
-public class Visualisation extends CustomPApplet {
+public class Visualisation extends LPBase {
 
     /**
      * This classes logger.
@@ -40,8 +43,11 @@ public class Visualisation extends CustomPApplet {
     public Visualisation(BasicAccBroadcastingClient client, int updateInterval) {
         this.client = client;
         mainPanel = new MainPanel(this, client);
-        mainPanel.setPApplet(this);
-
+        //mainPanel.setPApplet(this);
+        
+        LPComponent.setApplet(this);
+        BasePanel mainPanel = new BasePanel(client);
+        setComponent(mainPanel);
     }
 
     @Override
@@ -59,6 +65,9 @@ public class Visualisation extends CustomPApplet {
 
     @Override
     public void draw() {
+        super.draw();
+
+        /*
         if (width != sizeWidth || height != sizeHeight) {
             onResize(width, height);
         }
@@ -76,8 +85,10 @@ public class Visualisation extends CustomPApplet {
             mainPanel.drawPanel();
             translate(-mainPanel.getPosX(), -mainPanel.getPosY());   
         }
+         */
     }
 
+    /*
     public void onResize(int w, int h) {
         sizeWidth = w;
         sizeHeight = h;
@@ -93,7 +104,7 @@ public class Visualisation extends CustomPApplet {
     public void mouseReleased() {
         mainPanel.mouseReleased(mouseButton, mouseX, mouseY);
     }
-
+     */
     @Override
     public void mouseWheel(MouseEvent event) {
         mainPanel.mouseWheel(event.getCount());

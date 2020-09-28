@@ -19,7 +19,6 @@ public class LPContainer
 
     public void addComponent(LPComponent c) {
         components.add(c);
-        c.setApplet(applet);
         c.setParent(this);
     }
 
