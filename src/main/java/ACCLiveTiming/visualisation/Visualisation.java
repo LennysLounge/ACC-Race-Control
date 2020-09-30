@@ -23,10 +23,6 @@ public class Visualisation extends LPBase {
      */
     private static Logger LOG = Logger.getLogger(Visualisation.class.getName());
     /**
-     * Main panel.
-     */
-    private final MainPanel mainPanel;
-    /**
      * Size of the window.
      */
     private int sizeWidth;
@@ -42,8 +38,6 @@ public class Visualisation extends LPBase {
 
     public Visualisation(BasicAccBroadcastingClient client, int updateInterval) {
         this.client = client;
-        mainPanel = new MainPanel(this, client);
-        //mainPanel.setPApplet(this);
     }
 
     @Override
@@ -57,7 +51,7 @@ public class Visualisation extends LPBase {
         surface.setResizable(true);
         surface.setTitle("ACC Accident Tracker");
         frameRate(30);
-        
+
         //init components.
         LPComponent.setApplet(this);
         BasePanel mainPanel = new BasePanel(client);
@@ -105,10 +99,10 @@ public class Visualisation extends LPBase {
     public void mouseReleased() {
         mainPanel.mouseReleased(mouseButton, mouseX, mouseY);
     }
-     */
+     
     @Override
     public void mouseWheel(MouseEvent event) {
         mainPanel.mouseWheel(event.getCount());
     }
-
+     */
 }
