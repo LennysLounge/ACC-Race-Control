@@ -15,41 +15,30 @@ import ACCLiveTiming.visualisation.gui.LPTabPanel;
  *
  * @author Leonard
  */
-public class BasePanel extends LPContainer{
-    
+public class BasePanel extends LPContainer {
+
     private final LPComponent header;
     private final LPComponent body;
-    
-    public BasePanel(BasicAccBroadcastingClient client){
+
+    public BasePanel(BasicAccBroadcastingClient client) {
         header = new HeaderPanel(client);
         addComponent(header);
-        
-        
+
         LPTabPanel tabs = new LPTabPanel();
-        LPPanel l = new LPPanel();
-        l.setName("T1");
-        l.color = 50;
-        tabs.addTab(l);
-        l = new LPPanel();
-        l.setName("T2");
-        l.color = 100;
-        tabs.addTab(l);
-        l = new LPPanel();
-        l.setName("T3");
-        l.color = 150;
-        tabs.addTab(l);
-        tabs.setTabIndex(0);
+        for (LPContainer c : client.getPanels()) {
+            tabs.addTab(c);
+        }
         body = tabs;
         addComponent(body);
     }
-    
+
     @Override
-    public void onResize(int w, int h){
+    public void onResize(int w, int h) {
         header.setSize(w, LookAndFeel.get().LINE_HEIGHT);
         header.setPosition(0, 0);
-        body.setSize(w, h-LookAndFeel.get().LINE_HEIGHT);
+        body.setSize(w, h - LookAndFeel.get().LINE_HEIGHT);
         body.setPosition(0, LookAndFeel.get().LINE_HEIGHT);
         invalidate();
     }
-    
+
 }

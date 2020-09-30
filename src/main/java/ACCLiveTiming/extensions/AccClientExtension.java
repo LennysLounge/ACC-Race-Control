@@ -12,6 +12,7 @@ import ACCLiveTiming.networking.data.CarInfo;
 import ACCLiveTiming.networking.data.RealtimeInfo;
 import ACCLiveTiming.networking.data.SessionInfo;
 import ACCLiveTiming.networking.data.TrackInfo;
+import ACCLiveTiming.visualisation.gui.LPContainer;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class AccClientExtension {
      * The panel that is attached to this extension.
      * If null then no panel is attached.
      */
-    protected ExtensionPanel panel = null;
+    protected LPContainer panel = null;
     /**
      * Returns true if there is an extension Panel for this extension.
      * @return If there is an extension.
@@ -39,7 +40,7 @@ public class AccClientExtension {
      * Returns the attached panel for this extension.
      * @return The attached panel.
      */
-    public ExtensionPanel getPanel(){
+    public LPContainer getPanel(){
         return panel;
     }
     
