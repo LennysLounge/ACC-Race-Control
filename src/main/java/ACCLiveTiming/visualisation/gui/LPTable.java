@@ -34,6 +34,24 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
      */
     private int visibleEntries = 0;
 
+    private final static Renderer standardCellRenderer
+            = (applet, column, text, width, height) -> {
+                applet.fill(applet.color(100, 0, 0));
+                applet.rect(0, 0, width, height);
+                applet.fill(255);
+                int padding = (int) (height * 0.2f);
+                applet.textAlign(column.alignment, CENTER);
+                if (column.alignment == LEFT) {
+                    applet.text(text, padding, height / 2f);
+                }
+                if (column.alignment == CENTER) {
+                    applet.text(text, width / 2f, height / 2f);
+                }
+                if (column.alignment == RIGHT) {
+                    applet.text(text, width - padding, height / 2f);
+                }
+            };
+
     @Override
     public void draw() {
         applet.fill(50);
@@ -61,14 +79,24 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
 
         //Draw entries
         int rowLimit = Math.min(visibleEntries, entries.size());
-        for(int i=0; i<rowLimit; i++){
-            for(Column c : columns){
-                applet.fill(applet.color(100,0,0));
-                applet.rect(c.xOffset,(i+1)*LookAndFeel.get().LINE_HEIGHT,
+        for (int i = 0; i < rowLimit; i++) {
+            for (Column c : columns) {
+                applet.translate(c.xOffset, (i + 1) * LookAndFeel.get().LINE_HEIGHT);
+                c.renderer.draw(applet,
+                        c,
+                        c.contentFunction.apply(entries.get(i)),
+                        (int) c.size,
+                        LookAndFeel.get().LINE_HEIGHT);
+                applet.translate(-c.xOffset, -(i + 1) * LookAndFeel.get().LINE_HEIGHT);
+
+                /*
+                applet.fill(applet.color(100, 0, 0));
+                applet.rect(c.xOffset, (i + 1) * LookAndFeel.get().LINE_HEIGHT,
                         c.size, LookAndFeel.get().LINE_HEIGHT);
                 applet.fill(255);
-                applet.textAlign(LEFT,CENTER);
-                applet.text(c.contentFunction.apply(entries.get(i)),c.xOffset, (i+1.5f)*LookAndFeel.get().LINE_HEIGHT);
+                applet.textAlign(LEFT, CENTER);
+                applet.text(c.contentFunction.apply(entries.get(i)), c.xOffset, (i + 1.5f) * LookAndFeel.get().LINE_HEIGHT);
+                 */
             }
         }
     }
@@ -78,7 +106,8 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
             boolean dynamicSize,
             int alignment,
             Function<T, String> content) {
-        columns.add(new Column(head, size, dynamicSize, alignment, content));
+        columns.add(new Column(head, size, dynamicSize, alignment, content,
+                standardCellRenderer));
     }
 
     public void addEntry(T entry) {
@@ -96,8 +125,8 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
     @Override
     public void onResize(int w, int h) {
         calculateColumnWidths();
-        
-        visibleEntries = (int)Math.floor(getHeight() / LookAndFeel.get().LINE_HEIGHT) - 1;
+
+        visibleEntries = (int) Math.floor(getHeight() / LookAndFeel.get().LINE_HEIGHT) - 1;
     }
 
     private void calculateColumnWidths() {
@@ -153,19 +182,27 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
         public final boolean dynamicSize;
         public final int alignment;
         public final Function<T, String> contentFunction;
+        public final Renderer renderer;
 
         public Column(String head, float size, boolean dynamicSize, int alignment,
-                Function<T, String> contentFunction) {
+                Function<T, String> contentFunction, Renderer renderer) {
             this.head = head;
             this.size = size;
             this.minSize = size;
             this.dynamicSize = dynamicSize;
             this.alignment = alignment;
             this.contentFunction = contentFunction;
+            this.renderer = renderer;
         }
     }
 
     public static class Entry {
     }
-    
+
+    @FunctionalInterface
+    public static interface Renderer {
+
+        void draw(PApplet applet, LPTable.Column column, String text, int width, int height);
+    }
+
 }
