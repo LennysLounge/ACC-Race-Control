@@ -90,6 +90,7 @@ public class LPComponent {
         this.width = w;
         this.height = h;
         onResize((int)w, (int)h);
+        invalidate();
     }
 
     /**

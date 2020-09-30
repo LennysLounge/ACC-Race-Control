@@ -34,8 +34,6 @@ public class LPPanel
     
     @Override
     public void onResize(int w, int h){
-        setSize(w, h);
-        invalidate();
     }
    
 
