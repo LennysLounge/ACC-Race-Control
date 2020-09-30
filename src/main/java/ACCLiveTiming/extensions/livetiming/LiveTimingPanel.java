@@ -61,12 +61,19 @@ public class LiveTimingPanel extends LPContainer {
         table.addColumn("Center", 100, true, CENTER, LiveTimingEntry.twoContent);
         table.addColumn("Right", 100, false, RIGHT, LiveTimingEntry.threeContent);
 
-        table.addEntry(new LiveTimingEntry("one", 2, 3.33f));
-        table.addEntry(new LiveTimingEntry("two", 2, 3.33f));
-        table.addEntry(new LiveTimingEntry("three", 2, 3.33f));
-        table.addEntry(new LiveTimingEntry("four", 2, 3.33f));
-        table.addEntry(new LiveTimingEntry("five", 2, 3.33f));
-
+        table.addEntry(new LiveTimingEntry("1", 2, 3.33f));
+        table.addEntry(new LiveTimingEntry("2", 2, 3.33f));
+        table.addEntry(new LiveTimingEntry("3", 2, 3.33f));
+        table.addEntry(new LiveTimingEntry("4", 2, 3.33f));
+        table.addEntry(new LiveTimingEntry("5", 2, 3.33f));
+        table.addEntry(new LiveTimingEntry("6", 2, 3.33f));
+        table.addEntry(new LiveTimingEntry("7", 2, 3.33f));
+        table.addEntry(new LiveTimingEntry("8", 2, 3.33f));
+        table.addEntry(new LiveTimingEntry("9", 2, 3.33f));
+        table.addEntry(new LiveTimingEntry("10", 2, 3.33f));
+        
+        table.drawBottomRow(true);
+        
         testPanel = table;
         addComponent(testPanel);
     }

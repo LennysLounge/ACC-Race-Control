@@ -33,10 +33,25 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
      * The ammount of visible entries at the moment.
      */
     private int visibleEntries = 0;
+    /**
+     * Ammount of scroll in the table.
+     */
+    private int scroll = 0;
+    /**
+     * Flag to show it a scroll bar is visible.
+     */
+    private boolean displayScrollBar = false;
+    /**
+     * Width of the scroll bar.
+     */
+    private final int scrollBarWidth = 15;
+
+    private boolean drawBottomRow = false;
 
     private final static Renderer standardCellRenderer
-            = (applet, column, text, width, height) -> {
-                applet.fill(applet.color(100, 0, 0));
+            = (applet, column, text, width, height, isOdd) -> {
+                applet.noStroke();
+                applet.fill(isOdd ? 40 : 50);
                 applet.rect(0, 0, width, height);
                 applet.fill(255);
                 int padding = (int) (height * 0.2f);
@@ -58,10 +73,12 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
         applet.noStroke();
         applet.rect(0, 0, getWidth(), getHeight());
 
+        applet.fill(30);
+        applet.rect(0, 0, getWidth(), LookAndFeel.get().LINE_HEIGHT);
         //Draw headers
         for (Column c : columns) {
             applet.fill(30);
-            applet.stroke(255);
+            applet.noStroke();
             applet.rect(c.xOffset, 0, c.size, LookAndFeel.get().LINE_HEIGHT);
             applet.fill(255);
             applet.textAlign(c.alignment, CENTER);
@@ -77,28 +94,50 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
             }
         }
 
-        //Draw entries
-        int rowLimit = Math.min(visibleEntries, entries.size());
-        for (int i = 0; i < rowLimit; i++) {
+        int lowerLimit = scroll;
+        int upperLimit = scroll + visibleEntries;
+        if (drawBottomRow) {
+            upperLimit += 1;
+        }
+        int rowCount = -1;
+        for (T entry : entries) {
+            rowCount++;
+            if (rowCount < lowerLimit) {
+                continue;
+            }
+            if (rowCount >= upperLimit) {
+                break;
+            }
             for (Column c : columns) {
-                applet.translate(c.xOffset, (i + 1) * LookAndFeel.get().LINE_HEIGHT);
+                applet.translate(c.xOffset, (rowCount - scroll + 1) * LookAndFeel.get().LINE_HEIGHT);
                 c.renderer.draw(applet,
                         c,
-                        c.contentFunction.apply(entries.get(i)),
+                        c.contentFunction.apply(entry),
                         (int) c.size,
-                        LookAndFeel.get().LINE_HEIGHT);
-                applet.translate(-c.xOffset, -(i + 1) * LookAndFeel.get().LINE_HEIGHT);
-
-                /*
-                applet.fill(applet.color(100, 0, 0));
-                applet.rect(c.xOffset, (i + 1) * LookAndFeel.get().LINE_HEIGHT,
-                        c.size, LookAndFeel.get().LINE_HEIGHT);
-                applet.fill(255);
-                applet.textAlign(LEFT, CENTER);
-                applet.text(c.contentFunction.apply(entries.get(i)), c.xOffset, (i + 1.5f) * LookAndFeel.get().LINE_HEIGHT);
-                 */
+                        LookAndFeel.get().LINE_HEIGHT,
+                        rowCount % 2 == 1);
+                applet.translate(-c.xOffset, -(rowCount - scroll + 1) * LookAndFeel.get().LINE_HEIGHT);
             }
         }
+
+        if (displayScrollBar) {
+            if (!drawBottomRow) {
+                float lowest = getHeight() - (getHeight() % LookAndFeel.get().LINE_HEIGHT);
+                boolean isOdd = (scroll + visibleEntries % 2) == 1;
+                applet.fill(isOdd ? 40 : 50);
+                applet.rect(0, lowest, getWidth(), getHeight() - lowest);
+            }
+            float entryHeigth = getHeight() / entries.size();
+            float barHeight = entryHeigth * visibleEntries;
+            float yoffset = entryHeigth * scroll;
+            float padding = scrollBarWidth * 0.2f;
+            applet.noStroke();
+            applet.fill(LookAndFeel.get().COLOR_DARK_DARK_GRAY);
+            applet.rect(0, 0, scrollBarWidth, getHeight());
+            applet.fill(LookAndFeel.get().COLOR_RED);
+            applet.rect(padding, yoffset + padding, scrollBarWidth - padding * 2, barHeight - padding * 2);
+        }
+
     }
 
     public void addColumn(String head,
@@ -122,11 +161,25 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
         this.entries = entries;
     }
 
+    public void drawBottomRow(boolean state) {
+        drawBottomRow = state;
+    }
+
     @Override
     public void onResize(int w, int h) {
-        calculateColumnWidths();
-
         visibleEntries = (int) Math.floor(getHeight() / LookAndFeel.get().LINE_HEIGHT) - 1;
+        displayScrollBar = visibleEntries < entries.size();
+        calculateColumnWidths();
+        //limit scroll
+        int maxScroll = Math.max(0, entries.size() - visibleEntries);
+        scroll = Math.max(Math.min(scroll, maxScroll), 0);
+    }
+
+    @Override
+    public void mouseScroll(int scrollDir) {
+        int maxScroll = Math.max(0, entries.size() - visibleEntries);
+        scroll = Math.max(Math.min(scroll + scrollDir, maxScroll), 0);
+        invalidate();
     }
 
     private void calculateColumnWidths() {
@@ -135,41 +188,60 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
             minSize += c.minSize;
         }
         if (getWidth() < minSize) {
-            int xoffset = 0;
-            for (Column c : columns) {
-                c.size = getWidth() / columns.size();
-                c.xOffset = xoffset;
-                xoffset += c.size;
-            }
+            calculateColumnsAllStatic();
         } else {
-            float staticSize = 0;
-            int dynamicCount = 0;
-            List<Column> dynamicColumns = new LinkedList<>();
-            List<Column> staticColumns = new LinkedList<>();
-            for (Column c : columns) {
-                if (!c.dynamicSize) {
-                    staticSize += c.minSize;
-                    staticColumns.add(c);
-                } else {
-                    dynamicColumns.add(c);
-                    dynamicCount++;
-                }
+            calculateColumnsDynamic();
+        }
+    }
+
+    private void calculateColumnsAllStatic() {
+        int width = (int) getWidth();
+        int xoffset = 0;
+        if (displayScrollBar) {
+            width -= scrollBarWidth;
+            xoffset += scrollBarWidth;
+        }
+
+        for (Column c : columns) {
+            c.size = width / columns.size();
+            c.xOffset = xoffset;
+            xoffset += c.size;
+        }
+    }
+
+    private void calculateColumnsDynamic() {
+        int width = (int) getWidth();
+        int xOffset = 0;
+        if (displayScrollBar) {
+            width -= scrollBarWidth;
+            xOffset += scrollBarWidth;
+        }
+        float staticSize = 0;
+        int dynamicCount = 0;
+        List<Column> dynamicColumns = new LinkedList<>();
+        List<Column> staticColumns = new LinkedList<>();
+        for (Column c : columns) {
+            if (!c.dynamicSize) {
+                staticSize += c.minSize;
+                staticColumns.add(c);
+            } else {
+                dynamicColumns.add(c);
+                dynamicCount++;
             }
-            //resize dynamic columns
-            final float dynamicSize = Math.max(getWidth() - staticSize, 0);
-            for (Column c : dynamicColumns) {
-                c.size = Math.max(dynamicSize / dynamicCount, c.minSize);
-            }
-            //resize static columns in case they were shrunken.
-            for (Column c : staticColumns) {
-                c.size = c.minSize;
-            }
-            //calculate offset for each column.
-            float xOffset = 0;
-            for (Column c : columns) {
-                c.xOffset = xOffset;
-                xOffset += c.size;
-            }
+        }
+        //resize dynamic columns
+        final float dynamicSize = Math.max(width - staticSize, 0);
+        for (Column c : dynamicColumns) {
+            c.size = Math.max(dynamicSize / dynamicCount, c.minSize);
+        }
+        //resize static columns in case they were shrunken.
+        for (Column c : staticColumns) {
+            c.size = c.minSize;
+        }
+        //calculate offset for each column.
+        for (Column c : columns) {
+            c.xOffset = xOffset;
+            xOffset += c.size;
         }
     }
 
@@ -202,7 +274,12 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
     @FunctionalInterface
     public static interface Renderer {
 
-        void draw(PApplet applet, LPTable.Column column, String text, int width, int height);
+        void draw(PApplet applet,
+                LPTable.Column column,
+                String text,
+                int width,
+                int height,
+                boolean isOdd);
     }
 
 }
