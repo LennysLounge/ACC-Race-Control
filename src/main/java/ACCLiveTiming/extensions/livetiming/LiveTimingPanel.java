@@ -5,7 +5,6 @@
  */
 package ACCLiveTiming.extensions.livetiming;
 
-import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.visualisation.LookAndFeel;
 import ACCLiveTiming.visualisation.components.LPPanel;
 import ACCLiveTiming.visualisation.gui.LPComponent;

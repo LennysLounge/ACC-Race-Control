@@ -5,7 +5,6 @@
  */
 package ACCLiveTiming.extensions.logging;
 
-import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.visualisation.LookAndFeel;
 import ACCLiveTiming.visualisation.gui.LPContainer;
 import java.util.Collections;
