@@ -6,7 +6,6 @@
 package ACCLiveTiming.extensions.livetiming;
 
 import ACCLiveTiming.visualisation.LookAndFeel;
-import ACCLiveTiming.visualisation.components.LPPanel;
 import ACCLiveTiming.visualisation.gui.LPComponent;
 import ACCLiveTiming.visualisation.gui.LPContainer;
 import ACCLiveTiming.visualisation.gui.LPTable;
@@ -51,26 +50,37 @@ public class LiveTimingPanel extends LPContainer {
         new Column("Best", 2, true, RIGHT),
         new Column("", 0.5f, false, RIGHT)
     };
-    
+
     private LPComponent testPanel;
 
     public LiveTimingPanel(LiveTimingExtension extension) {
         this.extension = extension;
         setName("LIVE TIMING");
-        testPanel = new LPTable();
+        LPTable table = new LPTable<LiveTimingEntry>();
+        table.addColumn("Left", 100, false, LEFT, LiveTimingEntry.oneContent);
+        table.addColumn("Center", 100, true, CENTER, LiveTimingEntry.twoContent);
+        table.addColumn("Right", 100, false, RIGHT, LiveTimingEntry.threeContent);
+
+        table.addEntry(new LiveTimingEntry("one", 2, 3.33f));
+        table.addEntry(new LiveTimingEntry("two", 2, 3.33f));
+        table.addEntry(new LiveTimingEntry("three", 2, 3.33f));
+        table.addEntry(new LiveTimingEntry("four", 2, 3.33f));
+        table.addEntry(new LiveTimingEntry("five", 2, 3.33f));
+
+        testPanel = table;
         addComponent(testPanel);
     }
-    
+
     @Override
-    public void onResize(int w, int h){
+    public void onResize(int w, int h) {
         testPanel.setPosition(100, 100);
-        testPanel.setSize(w-200, h-200);
+        testPanel.setSize(w - 200, h - 200);
     }
 
     @Override
     public void draw() {
-        applet.fill(applet.color(255,100,100));
-        applet.rect(0,0,getWidth(), getHeight());
+        applet.fill(applet.color(255, 100, 100));
+        applet.rect(0, 0, getWidth(), getHeight());
         return;
         /*
         LookAndFeel laf = LookAndFeel.get();
@@ -160,8 +170,9 @@ public class LiveTimingPanel extends LPContainer {
         applet.rect(0, laf.LINE_HEIGHT, barWidth, maxBarHeight);
         applet.fill(laf.COLOR_RED);
         applet.rect(barWidth * 0.2f, laf.LINE_HEIGHT + scroll * itemHeight, barWidth * 0.6f, barHeight);
-        */
+         */
     }
+
     /*
     @Override
     public void mouseWheel(int count) {
@@ -170,7 +181,7 @@ public class LiveTimingPanel extends LPContainer {
         scroll = Math.min(Math.max(scroll + count, min), max);
         applet.forceRedraw();
     }
-    */
+     */
     private void drawCellBackground(Column c, int y, int color) {
         float lineHeight = LookAndFeel.get().LINE_HEIGHT;
         applet.fill(color);
@@ -197,6 +208,7 @@ public class LiveTimingPanel extends LPContainer {
         applet.textAlign(c.alignment, CENTER);
         applet.text(text, xoffset * lineHeight, y * lineHeight + lineHeight / 2);
     }
+
     /*
     @Override
     public void resize(int w, int h) {
@@ -204,7 +216,7 @@ public class LiveTimingPanel extends LPContainer {
         calculateColumnWidths();
         visibleRows = h / LookAndFeel.get().LINE_HEIGHT;
     }
-    */
+     */
     private void calculateColumnWidths() {
         float lineHeight = LookAndFeel.get().LINE_HEIGHT;
         float w = getWidth() / lineHeight;
