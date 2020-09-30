@@ -9,6 +9,7 @@ import ACCLiveTiming.visualisation.LookAndFeel;
 import ACCLiveTiming.visualisation.components.LPPanel;
 import ACCLiveTiming.visualisation.gui.LPComponent;
 import ACCLiveTiming.visualisation.gui.LPContainer;
+import ACCLiveTiming.visualisation.gui.LPTable;
 import java.util.LinkedList;
 import java.util.List;
 import static processing.core.PConstants.CENTER;
@@ -56,7 +57,7 @@ public class LiveTimingPanel extends LPContainer {
     public LiveTimingPanel(LiveTimingExtension extension) {
         this.extension = extension;
         setName("LIVE TIMING");
-        testPanel = new LPPanel();
+        testPanel = new LPTable();
         addComponent(testPanel);
     }
     
