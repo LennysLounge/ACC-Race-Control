@@ -21,8 +21,8 @@ public class LPContainer
         components.add(c);
         c.setParent(this);
     }
-    
-    public void removeComponent(LPComponent c){
+
+    public void removeComponent(LPComponent c) {
         components.remove(c);
     }
 
@@ -62,7 +62,8 @@ public class LPContainer
                 }
             }
             //run mouse pressed event for this component.
-            mousePressed(mouseX, mouseY, mouseButton);
+            mousePressed((int) (mouseX - getPosX()),
+                    (int) (mouseY - getPosY()), mouseButton);
         }
         return clickedComponent;
     }
