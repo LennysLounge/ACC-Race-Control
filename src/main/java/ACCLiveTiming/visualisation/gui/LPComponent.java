@@ -89,6 +89,7 @@ public class LPComponent {
     public void setSize(float w, float h) {
         this.width = w;
         this.height = h;
+        onResize((int)w, (int)h);
     }
 
     /**
@@ -256,7 +257,7 @@ public class LPComponent {
      * @param w
      * @param h
      */
-    public void onParentResize(int w, int h) {
+    public void onResize(int w, int h) {
 
     }
 

@@ -33,7 +33,7 @@ public class LPPanel
     }
     
     @Override
-    public void onParentResize(int w, int h){
+    public void onResize(int w, int h){
         setSize(w, h);
         invalidate();
     }

@@ -42,7 +42,7 @@ public class LPBase extends CustomPApplet {
     protected void onResize(int w, int h) {
         sizeWidth = w;
         sizeHeight = h;
-        base.onParentResize(w, h);
+        base.setSize(w, h);
     }
 
     @Override

@@ -40,7 +40,7 @@ public class BasePanel extends LPContainer{
     }
     
     @Override
-    public void onParentResize(int w, int h){
+    public void onResize(int w, int h){
         header.setSize(w, LookAndFeel.get().LINE_HEIGHT);
         header.setPosition(0, 0);
         body.setSize(w, h-LookAndFeel.get().LINE_HEIGHT);
