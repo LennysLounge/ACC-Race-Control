@@ -5,10 +5,10 @@
  */
 package ACCLiveTiming.extensions.incidents;
 
-import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.networking.data.CarInfo;
 import ACCLiveTiming.utility.TimeUtils;
 import ACCLiveTiming.visualisation.LookAndFeel;
+import ACCLiveTiming.visualisation.gui.LPContainer;
 import java.util.LinkedList;
 import java.util.List;
 import static processing.core.PConstants.CENTER;
@@ -19,7 +19,7 @@ import static processing.core.PConstants.RIGHT;
  *
  * @author Leonard
  */
-public class IncidentPanel extends ExtensionPanel {
+public class IncidentPanel extends LPContainer {
 
     private final IncidentExtension extension;
 
@@ -38,23 +38,23 @@ public class IncidentPanel extends ExtensionPanel {
 
     public IncidentPanel(IncidentExtension extension) {
         this.extension = extension;
-        this.displayName = "INCIDENTS";
+        setName("INCIDENTS");
     }
 
     @Override
-    public void drawPanel() {
+    public void draw() {
         LookAndFeel laf = LookAndFeel.get();
         incidents = extension.getAccidents();
         //Draw Button row.
         applet.fill(laf.COLOR_DARK_DARK_GRAY);
-        applet.rect(0, 0, width, laf.LINE_HEIGHT);
+        applet.rect(0, 0, getWidth(), laf.LINE_HEIGHT);
         applet.fill(laf.COLOR_WHITE);
         applet.textAlign(LEFT, CENTER);
-        applet.text("Click to add empty incident:", columns[1].xOffset*laf.LINE_HEIGHT, laf.LINE_HEIGHT*0.5f);
+        applet.text("Click to add empty incident:", columns[1].xOffset * laf.LINE_HEIGHT, laf.LINE_HEIGHT * 0.5f);
 
         //Draw Header
         applet.fill(laf.COLOR_DARK_DARK_GRAY);
-        applet.rect(0, laf.LINE_HEIGHT, width, laf.LINE_HEIGHT);
+        applet.rect(0, laf.LINE_HEIGHT, getWidth(), laf.LINE_HEIGHT);
         applet.fill(laf.COLOR_WHITE);
         for (Column column : columns) {
             drawCellText(column.head, column, 1, laf.COLOR_WHITE);
@@ -62,14 +62,14 @@ public class IncidentPanel extends ExtensionPanel {
 
         //Draw background
         int rows = Math.min(visibleRows, incidents.size() + 1);
-        int yOffset = laf.LINE_HEIGHT*2;
+        int yOffset = laf.LINE_HEIGHT * 2;
         for (int i = 2; i < rows; i++) {
             applet.fill((i + scroll) % 2 == 0 ? laf.COLOR_DARK_DARK_GRAY : laf.COLOR_DARK_GRAY);
-            applet.rect(0, yOffset, width, laf.LINE_HEIGHT);
+            applet.rect(0, yOffset, getWidth(), laf.LINE_HEIGHT);
             yOffset += laf.LINE_HEIGHT;
         }
         applet.fill(laf.COLOR_DARK_GRAY);
-        applet.rect(0, yOffset, width, height - yOffset);
+        applet.rect(0, yOffset, getWidth(), getHeight() - yOffset);
 
         int n = 2;
         int scrollSkip = scroll;
@@ -132,7 +132,7 @@ public class IncidentPanel extends ExtensionPanel {
 
         //Draw scroll bar.
         float barWidth = 0.4f * laf.LINE_HEIGHT;
-        float maxBarHeight = height - laf.LINE_HEIGHT;
+        float maxBarHeight = getHeight() - laf.LINE_HEIGHT;
         float itemHeight = maxBarHeight / Math.max(incidents.size(), 1);
         float barHeight = Math.min(itemHeight * (visibleRows - 1), maxBarHeight);
         applet.fill(laf.COLOR_DARK_DARK_GRAY);
@@ -141,6 +141,7 @@ public class IncidentPanel extends ExtensionPanel {
         applet.rect(barWidth * 0.2f, laf.LINE_HEIGHT + scroll * itemHeight, barWidth * 0.6f, barHeight);
     }
 
+    /*
     @Override
     public void mouseWheel(int count) {
         int min = 0;
@@ -155,7 +156,7 @@ public class IncidentPanel extends ExtensionPanel {
         calculateColumnWidths();
         visibleRows = h / LookAndFeel.get().LINE_HEIGHT;
     }
-
+     */
     private void drawCellBackground(Column c, int y, int color) {
         float lineHeight = LookAndFeel.get().LINE_HEIGHT;
         applet.fill(color);
@@ -185,7 +186,7 @@ public class IncidentPanel extends ExtensionPanel {
 
     private void calculateColumnWidths() {
         float lineHeight = LookAndFeel.get().LINE_HEIGHT;
-        float w = width / lineHeight;
+        float w = getWidth() / lineHeight;
 
         float staticSize = 0;
         int dynamicCount = 0;

@@ -7,6 +7,7 @@ package ACCLiveTiming.extensions.logging;
 
 import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.visualisation.LookAndFeel;
+import ACCLiveTiming.visualisation.gui.LPContainer;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,7 +18,7 @@ import static processing.core.PConstants.LEFT;
  *
  * @author Leonard
  */
-public class LoggingPanel extends ExtensionPanel {
+public class LoggingPanel extends LPContainer {
 
     private LoggingExtension extension;
 
@@ -26,11 +27,11 @@ public class LoggingPanel extends ExtensionPanel {
     public LoggingPanel(LoggingExtension extension) {
         this.extension = extension;
 
-        this.displayName = "LOGGING";
+        setName("LOGGING");
     }
 
     @Override
-    public void drawPanel() {
+    public void draw() {
         int lineHeight = LookAndFeel.get().LINE_HEIGHT;
         int tabSize = 130;
 
@@ -73,10 +74,11 @@ public class LoggingPanel extends ExtensionPanel {
         LookAndFeel.drawScrollBar(applet, messages.size(), visibleLines, scroll);
     }
 
+    /*
     @Override
     public void mouseWheel(int count) {
         scroll += count;
         applet.forceRedraw();
     }
-
+     */
 }

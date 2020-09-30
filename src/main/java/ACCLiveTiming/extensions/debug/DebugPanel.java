@@ -5,25 +5,25 @@
  */
 package ACCLiveTiming.extensions.debug;
 
-import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.networking.data.SessionInfo;
+import ACCLiveTiming.visualisation.gui.LPContainer;
 
 /**
  *
  * @author Leonard
  */
-public class DebugPanel extends ExtensionPanel {
+public class DebugPanel extends LPContainer {
 
     private DebugExtension extension;
 
     public DebugPanel(DebugExtension extension) {
         this.extension = extension;
 
-        this.displayName = "DEBUG";
+        setName("DEBUG");
     }
 
     @Override
-    public void drawPanel() {
+    public void draw() {
         SessionInfo session = extension.getModel().getSessionInfo();
         
         applet.fill(255);

@@ -7,6 +7,7 @@ package ACCLiveTiming.extensions.livetiming;
 
 import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.visualisation.LookAndFeel;
+import ACCLiveTiming.visualisation.gui.LPContainer;
 import java.util.LinkedList;
 import java.util.List;
 import static processing.core.PConstants.CENTER;
@@ -17,7 +18,7 @@ import static processing.core.PConstants.RIGHT;
  *
  * @author Leonard
  */
-public class LiveTimingPanel extends ExtensionPanel {
+public class LiveTimingPanel extends LPContainer {
 
     /**
      * Reference to the extension this panel is representing.
@@ -51,11 +52,11 @@ public class LiveTimingPanel extends ExtensionPanel {
 
     public LiveTimingPanel(LiveTimingExtension extension) {
         this.extension = extension;
-        this.displayName = "LIVE TIMING";
+        setName("LIVE TIMING");
     }
 
     @Override
-    public void drawPanel() {
+    public void draw() {
         LookAndFeel laf = LookAndFeel.get();
         entries = extension.getSortedEntries();
 
@@ -65,7 +66,7 @@ public class LiveTimingPanel extends ExtensionPanel {
 
         //Draw Header
         applet.fill(laf.COLOR_DARK_DARK_GRAY);
-        applet.rect(0, 0, width, laf.LINE_HEIGHT);
+        applet.rect(0, 0, getWidth(), laf.LINE_HEIGHT);
         applet.fill(laf.COLOR_WHITE);
         for (Column column : columns) {
             drawCellText(column.head, column, 0, laf.COLOR_WHITE);
@@ -76,11 +77,11 @@ public class LiveTimingPanel extends ExtensionPanel {
         int yOffset = laf.LINE_HEIGHT;
         for (int i = 1; i < rows; i++) {
             applet.fill((i + scroll) % 2 == 0 ? laf.COLOR_DARK_DARK_GRAY : laf.COLOR_DARK_GRAY);
-            applet.rect(0, yOffset, width, laf.LINE_HEIGHT);
+            applet.rect(0, yOffset, getWidth(), laf.LINE_HEIGHT);
             yOffset += laf.LINE_HEIGHT;
         }
         applet.fill(laf.COLOR_DARK_GRAY);
-        applet.rect(0, yOffset, width, height - yOffset);
+        applet.rect(0, yOffset, getWidth(), getHeight() - yOffset);
 
         //Draw entries
         int n = 1;
@@ -91,7 +92,7 @@ public class LiveTimingPanel extends ExtensionPanel {
             }
             if (entry.isFocused()) {
                 applet.fill(applet.color(255, 255, 255, 100));
-                applet.rect(0, n * laf.LINE_HEIGHT, width, laf.LINE_HEIGHT);
+                applet.rect(0, n * laf.LINE_HEIGHT, getWidth(), laf.LINE_HEIGHT);
             }
 
             drawCellBackground(columns[1], n, entry.isFocused() ? laf.COLOR_WHITE : laf.COLOR_RED);
@@ -136,7 +137,7 @@ public class LiveTimingPanel extends ExtensionPanel {
 
         //Draw scroll bar.
         float barWidth = columns[0].size * laf.LINE_HEIGHT;
-        float maxBarHeight = height - laf.LINE_HEIGHT;
+        float maxBarHeight = getHeight() - laf.LINE_HEIGHT;
         float itemHeight = maxBarHeight / entries.size();
         float barHeight = Math.min(itemHeight * (visibleRows - 1), maxBarHeight);
         applet.fill(laf.COLOR_DARK_DARK_GRAY);
@@ -145,7 +146,7 @@ public class LiveTimingPanel extends ExtensionPanel {
         applet.rect(barWidth * 0.2f, laf.LINE_HEIGHT + scroll * itemHeight, barWidth * 0.6f, barHeight);
 
     }
-
+    /*
     @Override
     public void mouseWheel(int count) {
         int min = 0;
@@ -153,7 +154,7 @@ public class LiveTimingPanel extends ExtensionPanel {
         scroll = Math.min(Math.max(scroll + count, min), max);
         applet.forceRedraw();
     }
-
+    */
     private void drawCellBackground(Column c, int y, int color) {
         float lineHeight = LookAndFeel.get().LINE_HEIGHT;
         applet.fill(color);
@@ -180,17 +181,17 @@ public class LiveTimingPanel extends ExtensionPanel {
         applet.textAlign(c.alignment, CENTER);
         applet.text(text, xoffset * lineHeight, y * lineHeight + lineHeight / 2);
     }
-
+    /*
     @Override
     public void resize(int w, int h) {
         super.resize(w, h);
         calculateColumnWidths();
         visibleRows = h / LookAndFeel.get().LINE_HEIGHT;
     }
-
+    */
     private void calculateColumnWidths() {
         float lineHeight = LookAndFeel.get().LINE_HEIGHT;
-        float w = width / lineHeight;
+        float w = getWidth() / lineHeight;
 
         float staticSize = 0;
         int dynamicCount = 0;
