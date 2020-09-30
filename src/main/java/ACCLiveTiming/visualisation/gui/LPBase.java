@@ -6,6 +6,7 @@
 package ACCLiveTiming.visualisation.gui;
 
 import ACCLiveTiming.visualisation.CustomPApplet;
+import processing.event.MouseEvent;
 
 /**
  *
@@ -65,6 +66,11 @@ public class LPBase extends CustomPApplet {
         if (mousePressedTarget != null) {
             mousePressedTarget.mouseReleasedInternal(mouseX, mouseY, mouseButton);
         }
+    }
+    
+    @Override
+    public void mouseWheel(MouseEvent event){
+        base.mouseScrollInternal(mouseX, mouseY, event.getCount());
     }
 
 }

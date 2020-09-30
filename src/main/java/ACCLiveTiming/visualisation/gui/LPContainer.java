@@ -67,5 +67,31 @@ public class LPContainer
         }
         return clickedComponent;
     }
+    
+    @Override
+    public LPComponent mouseScrollInternal(int mouseX, int mouseY, int scrolDir) {
+        LPComponent target = null;
+        if (mouseX > getPosX() && mouseX < getPosX() + getWidth()
+                && mouseY > getPosY() && mouseY < getPosY() + getHeight()) {
+            target = this;
+
+            //find if child components where clicked
+            LPComponent child = null;
+            for (LPComponent c : components) {
+                child = c.mouseScrollInternal((int) (mouseX - getPosX()),
+                        (int) (mouseY - getPosY()),
+                        scrolDir);
+                if (child != null) {
+                    target = child;
+                    break;
+                }
+            }
+            
+            //run mouse pressed event for this component.
+            mousePressed((int) (mouseX - getPosX()),
+                    (int) (mouseY - getPosY()), scrolDir);
+        }
+        return target;
+    }
 
 }

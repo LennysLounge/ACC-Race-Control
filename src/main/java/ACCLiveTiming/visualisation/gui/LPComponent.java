@@ -89,7 +89,7 @@ public class LPComponent {
     public void setSize(float w, float h) {
         this.width = w;
         this.height = h;
-        onResize((int)w, (int)h);
+        onResize((int) w, (int) h);
         invalidate();
     }
 
@@ -250,6 +250,24 @@ public class LPComponent {
      * mouse released event.
      */
     public void mouseReleased(int x, int y, int button) {
+    }
+
+    public LPComponent mouseScrollInternal(int mouseX, int mouseY, int scrolDir) {
+        LPComponent target = null;
+        if (mouseX > posX && mouseX < posX + width
+                && mouseY > posY && mouseY < posY + height) {
+            target = this;
+            mouseScroll(scrolDir);
+            
+        }
+        return target;
+    }
+    
+    /**
+     * mouse scroll event.
+     * @param scrollDir Direction of the scroll.
+     */
+    public void mouseScroll(int scrollDir){
     }
 
     /**
