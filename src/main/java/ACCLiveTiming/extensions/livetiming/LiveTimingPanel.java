@@ -7,6 +7,8 @@ package ACCLiveTiming.extensions.livetiming;
 
 import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.visualisation.LookAndFeel;
+import ACCLiveTiming.visualisation.components.LPPanel;
+import ACCLiveTiming.visualisation.gui.LPComponent;
 import ACCLiveTiming.visualisation.gui.LPContainer;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,14 +51,28 @@ public class LiveTimingPanel extends LPContainer {
         new Column("Best", 2, true, RIGHT),
         new Column("", 0.5f, false, RIGHT)
     };
+    
+    private LPComponent testPanel;
 
     public LiveTimingPanel(LiveTimingExtension extension) {
         this.extension = extension;
         setName("LIVE TIMING");
+        testPanel = new LPPanel();
+        addComponent(testPanel);
+    }
+    
+    @Override
+    public void onResize(int w, int h){
+        testPanel.setPosition(100, 100);
+        testPanel.setSize(w-200, h-200);
     }
 
     @Override
     public void draw() {
+        applet.fill(applet.color(255,100,100));
+        applet.rect(0,0,getWidth(), getHeight());
+        return;
+        /*
         LookAndFeel laf = LookAndFeel.get();
         entries = extension.getSortedEntries();
 
@@ -144,7 +160,7 @@ public class LiveTimingPanel extends LPContainer {
         applet.rect(0, laf.LINE_HEIGHT, barWidth, maxBarHeight);
         applet.fill(laf.COLOR_RED);
         applet.rect(barWidth * 0.2f, laf.LINE_HEIGHT + scroll * itemHeight, barWidth * 0.6f, barHeight);
-
+        */
     }
     /*
     @Override
