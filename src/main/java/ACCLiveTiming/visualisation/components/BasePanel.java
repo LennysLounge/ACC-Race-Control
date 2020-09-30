@@ -28,6 +28,7 @@ public class BasePanel extends LPContainer {
         for (LPContainer c : client.getPanels()) {
             tabs.addTab(c);
         }
+        tabs.setTabIndex(0);
         body = tabs;
         addComponent(body);
     }

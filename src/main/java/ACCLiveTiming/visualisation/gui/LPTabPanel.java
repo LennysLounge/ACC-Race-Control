@@ -25,6 +25,8 @@ public class LPTabPanel extends LPContainer {
 
     public void addTab(LPContainer tab) {
         tabs.add(tab);
+        currentTab = tab;
+        tabIndex = tabs.size()-1;
     }
 
     public void removeTab(LPContainer tab) {
