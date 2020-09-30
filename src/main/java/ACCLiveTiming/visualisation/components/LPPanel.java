@@ -17,12 +17,14 @@ public class LPPanel
     
     private int drawCounter = 0;
     
+    public int color = 50;
+    
     public LPPanel(){
     }
     
     @Override
     public void draw(){
-        applet.fill(50);
+        applet.fill(color);
         applet.noStroke();
         applet.rect(0, 0, getWidth(), getHeight());
         

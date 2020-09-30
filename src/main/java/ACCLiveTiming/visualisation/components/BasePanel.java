@@ -28,13 +28,17 @@ public class BasePanel extends LPContainer{
         LPTabPanel tabs = new LPTabPanel();
         LPPanel l = new LPPanel();
         l.setName("T1");
+        l.color = 50;
         tabs.addTab(l);
         l = new LPPanel();
         l.setName("T2");
+        l.color = 100;
         tabs.addTab(l);
         l = new LPPanel();
         l.setName("T3");
+        l.color = 150;
         tabs.addTab(l);
+        tabs.setTabIndex(0);
         body = tabs;
         addComponent(body);
     }
