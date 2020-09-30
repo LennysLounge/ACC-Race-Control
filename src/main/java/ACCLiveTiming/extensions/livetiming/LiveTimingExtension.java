@@ -29,23 +29,23 @@ public class LiveTimingExtension extends AccClientExtension {
     /**
      * Map from carId to ListEntry.
      */
-    private final Map<Integer, ListEntry> entires = new HashMap<>();
+    private final Map<Integer, LiveTimingEntry> entires = new HashMap<>();
     /**
      * Sorted list of ListEntries.
      */
-    private List<ListEntry> sortedEntries = new LinkedList<>();
+    private List<LiveTimingEntry> sortedEntries = new LinkedList<>();
 
     public LiveTimingExtension() {
         this.panel = new LiveTimingPanel(this);
     }
 
-    public List<ListEntry> getSortedEntries() {
+    public List<LiveTimingEntry> getSortedEntries() {
         return new LinkedList<>(sortedEntries);
     }
 
     @Override
     public void onRealtimeUpdate(SessionInfo sessionInfo) {
-        List<ListEntry> sorted = entires.values().stream()
+        List<LiveTimingEntry> sorted = entires.values().stream()
                 .filter(entry -> entry.isConnected())
                 .sorted((e1, e2) -> compareTo(e1.getCarInfo(), e2.getCarInfo()))
                 .collect(Collectors.toList());
@@ -54,6 +54,7 @@ public class LiveTimingExtension extends AccClientExtension {
                 entry -> entry.setFocused(entry.getCarInfo().getCarId() == sessionInfo.getFocusedCarIndex())
         );
         sortedEntries = sorted;
+        panel.invalidate();
     }
 
     @Override
@@ -62,7 +63,7 @@ public class LiveTimingExtension extends AccClientExtension {
         if (entires.containsKey(car.getCarId())) {
             entires.get(car.getCarId()).setCarInfo(car);
         } else {
-            ListEntry entry = new ListEntry();
+            LiveTimingEntry entry = new LiveTimingEntry();
             entry.setCarInfo(car);
             entires.put(car.getCarId(), entry);
         }

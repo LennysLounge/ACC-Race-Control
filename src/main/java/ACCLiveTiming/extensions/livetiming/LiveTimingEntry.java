@@ -5,6 +5,10 @@
  */
 package ACCLiveTiming.extensions.livetiming;
 
+import ACCLiveTiming.networking.data.CarInfo;
+import ACCLiveTiming.networking.enums.CarLocation;
+import ACCLiveTiming.networking.enums.DriverCategory;
+import ACCLiveTiming.utility.TimeUtils;
 import ACCLiveTiming.visualisation.gui.LPTable;
 import java.util.function.Function;
 
@@ -14,43 +18,105 @@ import java.util.function.Function;
  */
 public class LiveTimingEntry extends LPTable.Entry {
 
-    private String one;
-    public static Function<LiveTimingEntry, String> oneContent = (e) -> e.getOne();
+    public static final Function<LiveTimingEntry, String> getPosition = (e) -> {
+        return String.valueOf(e.getCarInfo().getRealtime().getPosition());
+    };
 
-    private int two;
-    public static Function<LiveTimingEntry, String> twoContent = (e) -> e.getTwo();
+    public static final Function<LiveTimingEntry, String> getName = (e) -> {
+        String firstname = e.getCarInfo().getDriver().getFirstName();
+        String lastname = e.getCarInfo().getDriver().getLastName();
+        firstname = firstname.substring(0, Math.min(firstname.length(), 1));
+        return String.format("%s. %s", firstname, lastname);
+    };
 
-    private float three;
-    public static Function<LiveTimingEntry, String> threeContent = (e) -> e.getThree();
+    public static final Function<LiveTimingEntry, String> getCarNumber = (e) -> {
+        return String.valueOf(e.getCarInfo().getCarNumber());
+    };
+
+    public static final Function<LiveTimingEntry, String> getLapCount = (e) -> {
+        return String.valueOf(e.getCarInfo().getRealtime().getLaps());
+    };
+
+    public static final Function<LiveTimingEntry, String> getDelta = (e) -> {
+        if (e.isInPits()) {
+            return "--.--";
+        }
+        return TimeUtils.asDelta(e.getCarInfo().getRealtime().getDelta());
+    };
+
+    public static final Function<LiveTimingEntry, String> getCurrentLap = (e) -> {
+        if (e.isInPits()) {
+            return "--.--";
+        }
+        return TimeUtils.asLapTime(e.getCarInfo().getRealtime().getCurrentLap().getLapTimeMS());
+    };
+
+    public static final Function<LiveTimingEntry, String> getBestLap = (e) -> {
+        return TimeUtils.asLapTime(e.getCarInfo().getRealtime().getBestSessionLap().getLapTimeMS());
+    };
+
+    public static final Function<LiveTimingEntry, String> getLastLap = (e) -> {
+        return TimeUtils.asLapTime(e.getCarInfo().getRealtime().getLastLap().getLapTimeMS());
+    };
     
-    public LiveTimingEntry(String one, int two, float three){
-        this.one = one;
-        this.two = two;
-        this.three = three;
+    /**
+     * Car this entry represents.
+     */
+    private CarInfo car;
+    /**
+     * Indicates that this car is currently focused on in game.
+     */
+    private boolean isFocused;
+
+    public LiveTimingEntry() {
     }
 
-    public void setOne(String one){
-        this.one = one;
-    }
-    
-    public String getOne() {
-        return one;
+    public void setCarInfo(CarInfo car) {
+        this.car = car;
     }
 
-    public void setTwo(int two){
-        this.two = two;
-    }
-    
-    public String getTwo() {
-        return String.valueOf(two);
+    public CarInfo getCarInfo() {
+        return car;
     }
 
-    public void setThree(float three){
-        this.three = three;
+    public boolean isFocused() {
+        return isFocused;
     }
-    
-    public String getThree() {
-        return String.valueOf(three);
+
+    public void setFocused(boolean isFocused) {
+        this.isFocused = isFocused;
+    }
+
+    public boolean isConnected() {
+        return car.isConnected();
+    }
+
+    public String getGap() {
+        return "";
+    }
+
+    public String getToLeader() {
+        return "";
+    }
+
+    public String getSectorOne() {
+        return "--.--";
+    }
+
+    public String getSectorTwo() {
+        return "--.--";
+    }
+
+    public String getSectorThree() {
+        return "--.--";
+    }
+
+    public boolean isInPits() {
+        return car.getRealtime().getLocation() != CarLocation.TRACK;
+    }
+
+    public DriverCategory getCategory() {
+        return car.getDriver().getCategory();
     }
 
 }
