@@ -44,10 +44,6 @@ public class Visualisation extends LPBase {
         this.client = client;
         mainPanel = new MainPanel(this, client);
         //mainPanel.setPApplet(this);
-        
-        LPComponent.setApplet(this);
-        BasePanel mainPanel = new BasePanel(client);
-        setComponent(mainPanel);
     }
 
     @Override
@@ -61,6 +57,11 @@ public class Visualisation extends LPBase {
         surface.setResizable(true);
         surface.setTitle("ACC Accident Tracker");
         frameRate(30);
+        
+        //init components.
+        LPComponent.setApplet(this);
+        BasePanel mainPanel = new BasePanel(client);
+        setComponent(mainPanel);
     }
 
     @Override
