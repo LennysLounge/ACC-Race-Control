@@ -139,6 +139,10 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
         }
 
     }
+    
+    public void addColumn(String head, int size, boolean dynamicSize){
+        addColumn(head, size, dynamicSize, LEFT, (e)->"");
+    }
 
     public void addColumn(String head,
             int size,
