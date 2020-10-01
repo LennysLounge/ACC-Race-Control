@@ -49,13 +49,14 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
     private boolean drawBottomRow = false;
 
     private final static Renderer standardCellRenderer
-            = (applet, column, text, width, height, isOdd) -> {
+            = (applet, column, entry, width, height, isOdd) -> {
                 applet.noStroke();
                 applet.fill(isOdd ? 40 : 50);
                 applet.rect(0, 0, width, height);
                 applet.fill(255);
                 int padding = (int) (height * 0.2f);
                 applet.textAlign(column.alignment, CENTER);
+                String text = (String) column.contentFunction.apply(entry);
                 if (column.alignment == LEFT) {
                     applet.text(text, padding, height / 2f);
                 }
@@ -112,7 +113,7 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
                 applet.translate(c.xOffset, (rowCount - scroll + 1) * LookAndFeel.get().LINE_HEIGHT);
                 c.renderer.draw(applet,
                         c,
-                        c.contentFunction.apply(entry),
+                        entry,
                         (int) c.size,
                         LookAndFeel.get().LINE_HEIGHT,
                         rowCount % 2 == 1);
@@ -139,9 +140,9 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
         }
 
     }
-    
-    public void addColumn(String head, int size, boolean dynamicSize){
-        addColumn(head, size, dynamicSize, LEFT, (e)->"");
+
+    public void addColumn(String head, int size, boolean dynamicSize) {
+        addColumn(head, size, dynamicSize, LEFT, (e) -> "");
     }
 
     public void addColumn(String head,
@@ -149,8 +150,24 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
             boolean dynamicSize,
             int alignment,
             Function<T, String> content) {
+        addColumn(head, size, dynamicSize, alignment, content, standardCellRenderer);
+    }
+
+    public void addColumn(String head,
+            int size,
+            boolean dynamicSize,
+            Renderer renderer) {
+        addColumn(head, size, dynamicSize, LEFT, (e) -> "", renderer);
+    }
+
+    private void addColumn(String head,
+            int size,
+            boolean dynamicSize,
+            int alignment,
+            Function<T, String> content,
+            Renderer renderer) {
         columns.add(new Column(head, size, dynamicSize, alignment, content,
-                standardCellRenderer));
+                renderer));
     }
 
     public void addEntry(T entry) {
@@ -280,7 +297,7 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
 
         void draw(PApplet applet,
                 LPTable.Column column,
-                String text,
+                LPTable.Entry entry,
                 int width,
                 int height,
                 boolean isOdd);

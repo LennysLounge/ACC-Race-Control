@@ -33,10 +33,10 @@ public class LiveTimingPanel extends LPContainer {
     public LiveTimingPanel(LiveTimingExtension extension) {
         this.extension = extension;
         setName("LIVE TIMING");
-        table.addColumn("P", 40, false, CENTER, LiveTimingEntry.getPosition);
+        table.addColumn("P", 40, false, LiveTimingEntry.positionRenderer);
         table.addColumn("Name", 240, false, LEFT, LiveTimingEntry.getName);
-        table.addColumn("pit", 16, false);
-        table.addColumn("#", 50, false, CENTER, LiveTimingEntry.getCarNumber);
+        table.addColumn("", 16, false, LiveTimingEntry.pitRenderer );
+        table.addColumn("#", 50, false, LiveTimingEntry.carNumberRenderer);
         table.addColumn("Laps", 60, true, RIGHT, LiveTimingEntry.getLapCount);
         table.addColumn("Gap", 80, true);
         table.addColumn("Leader", 80, true);
