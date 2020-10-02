@@ -38,13 +38,13 @@ public class LiveTimingPanel extends LPContainer {
         table.addColumn("", 16, false, LiveTimingEntry.pitRenderer );
         table.addColumn("#", 50, false, LiveTimingEntry.carNumberRenderer);
         table.addColumn("Laps", 60, true, RIGHT, LiveTimingEntry.getLapCount);
-        table.addColumn("Gap", 80, true);
-        table.addColumn("Leader", 80, true);
+        //table.addColumn("Gap", 80, true);
+        //table.addColumn("Leader", 80, true);
         table.addColumn("Delta", 80, true, RIGHT, LiveTimingEntry.getDelta);
         table.addColumn("Lap", 80, true, RIGHT, LiveTimingEntry.getCurrentLap);
-        table.addColumn("S1", 80, true);
-        table.addColumn("S2", 80, true);
-        table.addColumn("S3", 80, true);
+        //table.addColumn("S1", 80, true);
+        //table.addColumn("S2", 80, true);
+        //table.addColumn("S3", 80, true);
         table.addColumn("Last", 80, true, RIGHT, LiveTimingEntry.getLastLap);
         table.addColumn("Best", 80, true, RIGHT, LiveTimingEntry.getBestLap);
         table.addColumn("", 20, false);
