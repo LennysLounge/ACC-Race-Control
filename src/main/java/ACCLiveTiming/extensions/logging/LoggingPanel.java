@@ -7,7 +7,6 @@ package ACCLiveTiming.extensions.logging;
 
 import ACCLiveTiming.visualisation.gui.LPContainer;
 import ACCLiveTiming.visualisation.gui.LPTable;
-import static processing.core.PConstants.LEFT;
 
 /**
  *
@@ -26,7 +25,7 @@ public class LoggingPanel extends LPContainer {
         setName("LOGGING");
         
         table = new LPTable<>();
-        table.addColumn("message", 100, true, LEFT, LogMessage.getMessage);
+        table.addColumn("Messages:", 100, true, LogMessage.logRenderer);
         table.drawBottomRow(true);
         addComponent(table);
 
