@@ -69,4 +69,10 @@ public class Visualisation extends LPBase {
         }
         super.draw();
     }
+    
+    public void keyPressed(){
+        if(key == ESC){
+            key = 0;
+        }
+    }
 }
