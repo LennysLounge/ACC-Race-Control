@@ -116,9 +116,7 @@ public class IncidentExtension extends AccClientExtension {
                     .map(car -> car.getCarNumber())
                     .collect(Collectors.toList());
             SpreadSheetService.sendAccident(carNumbers, a.getEarliestTime(), a.getSessionID());
-        }
-        
-        panel.invalidate();
+        }        
     }
 
     private int getAndIncrementCounter(SessionId sessionId) {

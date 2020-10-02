@@ -54,7 +54,6 @@ public class LiveTimingExtension extends AccClientExtension {
                 entry -> entry.setFocused(entry.getCarInfo().getCarId() == sessionInfo.getFocusedCarIndex())
         );
         sortedEntries = sorted;
-        panel.invalidate();
     }
 
     @Override
