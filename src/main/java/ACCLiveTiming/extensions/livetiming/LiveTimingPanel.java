@@ -5,13 +5,8 @@
  */
 package ACCLiveTiming.extensions.livetiming;
 
-import ACCLiveTiming.visualisation.LookAndFeel;
-import ACCLiveTiming.visualisation.gui.LPComponent;
 import ACCLiveTiming.visualisation.gui.LPContainer;
 import ACCLiveTiming.visualisation.gui.LPTable;
-import java.util.LinkedList;
-import java.util.List;
-import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
 

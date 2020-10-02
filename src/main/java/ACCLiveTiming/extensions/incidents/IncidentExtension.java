@@ -84,7 +84,7 @@ public class IncidentExtension extends AccClientExtension {
         SessionId sessionId = client.getSessionId();
         if (stagedAccident == null) {
             stagedAccident = new Accident(sessionTime,
-                    event.getCarId(),
+                    client.getModel().getCar(event.getCarId()),
                     System.currentTimeMillis(),
                     sessionId,
                     getAndIncrementCounter(sessionId));
@@ -93,13 +93,14 @@ public class IncidentExtension extends AccClientExtension {
             if (timeDif > 1000) {
                 commitAccident(stagedAccident);
                 stagedAccident = new Accident(sessionTime,
-                        event.getCarId(),
+                        client.getModel().getCar(event.getCarId()),
                         System.currentTimeMillis(),
                         sessionId,
                         getAndIncrementCounter(sessionId));
             } else {
                 stagedAccident = stagedAccident.addCar(sessionTime,
-                        event.getCarId(), System.currentTimeMillis());
+                        client.getModel().getCar(event.getCarId()),
+                        System.currentTimeMillis());
             }
         }
     }
@@ -112,10 +113,12 @@ public class IncidentExtension extends AccClientExtension {
 
         if (SpreadSheetService.isRunning()) {
             List<Integer> carNumbers = a.getCars().stream()
-                    .map(id -> client.getModel().getCar(id).getCarNumber())
+                    .map(car -> car.getCarNumber())
                     .collect(Collectors.toList());
             SpreadSheetService.sendAccident(carNumbers, a.getEarliestTime(), a.getSessionID());
         }
+        
+        panel.invalidate();
     }
 
     private int getAndIncrementCounter(SessionId sessionId) {
