@@ -24,6 +24,7 @@ public class LookAndFeel {
     private static LookAndFeel instance = null;
 
     public final int COLOR_RED;
+    public final int COLOR_DARK_RED;
     public final int COLOR_GREEN;
     public final int COLOR_WHITE;
     public final int COLOR_BLACK;
@@ -48,6 +49,7 @@ public class LookAndFeel {
 
     private LookAndFeel(PApplet base) {
         COLOR_RED = base.color(224, 0, 0);
+        COLOR_DARK_RED = base.color(170,0,0);
         COLOR_GREEN = base.color(0, 170, 89);
         COLOR_WHITE = base.color(255);
         COLOR_BLACK = base.color(0);
