@@ -6,6 +6,7 @@
 package ACCLiveTiming.extensions.incidents;
 
 import ACCLiveTiming.extensions.livetiming.LiveTimingEntry;
+import ACCLiveTiming.utility.SpreadSheetService;
 import ACCLiveTiming.visualisation.LookAndFeel;
 import ACCLiveTiming.visualisation.gui.LPButton;
 import ACCLiveTiming.visualisation.gui.LPContainer;
@@ -23,8 +24,14 @@ public class IncidentPanel extends LPContainer {
      * The table that display the incidents.
      */
     private LPTable table = new LPTable<LiveTimingEntry>();
-    
+    /**
+     * Button to send an empty accident.
+     */
     private LPButton sendEmptyActionButton = new LPButton("Send empty incident");
+    /**
+     * Indicates it the sendEmptyActionButton is visible.
+     */
+    private boolean showSendActionButton = false;
 
     public IncidentPanel(IncidentExtension extension) {
         this.extension = extension;
@@ -37,16 +44,23 @@ public class IncidentPanel extends LPContainer {
         t.drawBottomRow(true);
         table = t;
         addComponent(table);
-        addComponent(sendEmptyActionButton);
         
-        sendEmptyActionButton.setAction(()->{
-            System.out.println("Hello");
-        });
+        showSendActionButton = SpreadSheetService.isRunning();
+        
+        if(showSendActionButton){
+            addComponent(sendEmptyActionButton);
+            sendEmptyActionButton.setAction(()->{
+                extension.addEmptyAccident();
+            });
+        }
     }
 
     @Override
     public void onResize(int w, int h) {
         float height = LookAndFeel.get().LINE_HEIGHT;
+        if(!showSendActionButton){
+            height = 0;
+        }
         sendEmptyActionButton.setPosition(height*0.1f, height*0.1f);
         sendEmptyActionButton.setSize(300, height*0.8f);
         table.setPosition(0, height);
@@ -56,7 +70,7 @@ public class IncidentPanel extends LPContainer {
     @Override
     public void draw() {
         applet.fill(LookAndFeel.get().COLOR_DARK_DARK_GRAY);
-        applet.rect(0, 0, getWidth(), LookAndFeel.get().LINE_HEIGHT*1.5f);
+        applet.rect(0,0,getWidth(), LookAndFeel.get().LINE_HEIGHT);
         table.setEntries(extension.getAccidents());
     }
 

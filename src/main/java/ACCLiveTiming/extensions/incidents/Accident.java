@@ -112,9 +112,12 @@ public class Accident extends LPTable.Entry {
                 }
             };
 
-    public Accident(float time, CarInfo car, long timestamp, SessionId sessionID,
-            int incidentNumber) {
-        this(time, time, Arrays.asList(car), timestamp, sessionID, incidentNumber);
+    public Accident(float time, CarInfo car, SessionId sessionID) {
+        this(time, time, Arrays.asList(car), System.currentTimeMillis(), sessionID, 0);
+    }
+    
+    public Accident(float time, SessionId sessionId){
+        this(time, time, new LinkedList<CarInfo>(), System.currentTimeMillis(), sessionId, 0);
     }
 
     private Accident(float earliestTime, float latestTime, List<CarInfo> cars,
@@ -140,7 +143,12 @@ public class Accident extends LPTable.Entry {
     }
 
     public Accident withIncidentNumber(int incidentNumber) {
-        return new Accident(earliestTime, latestTime, cars, timestamp, sessionID, incidentNumber);
+        return new Accident(earliestTime,
+                latestTime,
+                cars,
+                timestamp,
+                sessionID,
+                incidentNumber);
     }
 
     public float getEarliestTime() {

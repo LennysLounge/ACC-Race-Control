@@ -85,18 +85,14 @@ public class IncidentExtension extends AccClientExtension {
         if (stagedAccident == null) {
             stagedAccident = new Accident(sessionTime,
                     client.getModel().getCar(event.getCarId()),
-                    System.currentTimeMillis(),
-                    sessionId,
-                    getAndIncrementCounter(sessionId));
+                    sessionId);
         } else {
             float timeDif = stagedAccident.getLatestTime() - sessionTime;
             if (timeDif > 1000) {
                 commitAccident(stagedAccident);
                 stagedAccident = new Accident(sessionTime,
                         client.getModel().getCar(event.getCarId()),
-                        System.currentTimeMillis(),
-                        sessionId,
-                        getAndIncrementCounter(sessionId));
+                        sessionId);
             } else {
                 stagedAccident = stagedAccident.addCar(sessionTime,
                         client.getModel().getCar(event.getCarId()),
@@ -104,11 +100,16 @@ public class IncidentExtension extends AccClientExtension {
             }
         }
     }
+    
+    public void addEmptyAccident(){
+        commitAccident(new Accident(client.getModel().getSessionInfo().getSessionTime(),
+                client.getSessionId()));
+    }
 
     private void commitAccident(Accident a) {
         List<Accident> newAccidents = new LinkedList<>();
         newAccidents.addAll(accidents);
-        newAccidents.add(a);
+        newAccidents.add(a.withIncidentNumber(getAndIncrementCounter(client.getSessionId())));
         accidents = newAccidents;
 
         if (SpreadSheetService.isRunning()) {
@@ -116,7 +117,7 @@ public class IncidentExtension extends AccClientExtension {
                     .map(car -> car.getCarNumber())
                     .collect(Collectors.toList());
             SpreadSheetService.sendAccident(carNumbers, a.getEarliestTime(), a.getSessionID());
-        }        
+        }
     }
 
     private int getAndIncrementCounter(SessionId sessionId) {
