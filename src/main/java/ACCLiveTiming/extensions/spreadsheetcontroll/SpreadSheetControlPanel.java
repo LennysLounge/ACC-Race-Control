@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.extensions.debug;
+package ACCLiveTiming.extensions.spreadsheetcontroll;
 
 import ACCLiveTiming.networking.data.SessionInfo;
 import ACCLiveTiming.visualisation.gui.LPContainer;
@@ -12,14 +12,14 @@ import ACCLiveTiming.visualisation.gui.LPContainer;
  *
  * @author Leonard
  */
-public class DebugPanel extends LPContainer {
+public class SpreadSheetControlPanel extends LPContainer {
 
-    private DebugExtension extension;
+    private SpreadSheetControlExtension extension;
 
-    public DebugPanel(DebugExtension extension) {
+    public SpreadSheetControlPanel(SpreadSheetControlExtension extension) {
         this.extension = extension;
 
-        setName("DEBUG");
+        setName("Sheets API");
     }
 
     @Override

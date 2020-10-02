@@ -6,11 +6,11 @@
 package ACCLiveTiming;
 
 import ACCLiveTiming.client.BasicAccBroadcastingClient;
-import ACCLiveTiming.extensions.debug.DebugExtension;
 import ACCLiveTiming.extensions.incidents.IncidentExtension;
 import ACCLiveTiming.extensions.laptimes.LapTimeExtension;
 import ACCLiveTiming.extensions.livetiming.LiveTimingExtension;
 import ACCLiveTiming.extensions.logging.LoggingExtension;
+import ACCLiveTiming.extensions.spreadsheetcontroll.SpreadSheetControlExtension;
 import ACCLiveTiming.utility.SpreadSheetService;
 import ACCLiveTiming.visualisation.Visualisation;
 import java.io.ByteArrayInputStream;
@@ -88,7 +88,9 @@ public class Main {
         client.registerExtension(new IncidentExtension());
         client.registerExtension(new LapTimeExtension(dialog.isLapTimeLoggingEnabled()));
         client.registerExtension(new LoggingExtension());
-        client.registerExtension(new DebugExtension());
+        if (dialog.isSheetsAPIEnabled()) {
+            client.registerExtension(new SpreadSheetControlExtension());
+        }
 
         client.sendRegisterRequest();
 
