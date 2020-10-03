@@ -6,6 +6,7 @@
 package ACCLiveTiming.visualisation.components;
 
 import ACCLiveTiming.client.BasicAccBroadcastingClient;
+import ACCLiveTiming.utility.SpreadSheetService;
 import ACCLiveTiming.visualisation.LookAndFeel;
 import ACCLiveTiming.visualisation.gui.LPComponent;
 import ACCLiveTiming.visualisation.gui.LPContainer;
@@ -21,7 +22,7 @@ public class BasePanel extends LPContainer {
     private final LPComponent body;
 
     public BasePanel(BasicAccBroadcastingClient client) {
-        header = new HeaderPanel(client);
+        header = new HeaderPanel(client, SpreadSheetService.isRunning());
         addComponent(header);
 
         LPTabPanel tabs = new LPTabPanel();
@@ -35,10 +36,15 @@ public class BasePanel extends LPContainer {
 
     @Override
     public void onResize(int w, int h) {
-        header.setSize(w, LookAndFeel.get().LINE_HEIGHT);
+        int headerSize = LookAndFeel.get().LINE_HEIGHT;
+        if(SpreadSheetService.isRunning()){
+            headerSize = LookAndFeel.get().LINE_HEIGHT*2;
+        }
+        header.setSize(w, headerSize);
         header.setPosition(0, 0);
-        body.setSize(w, h - LookAndFeel.get().LINE_HEIGHT);
-        body.setPosition(0, LookAndFeel.get().LINE_HEIGHT);
+        
+        body.setSize(w, h - headerSize);
+        body.setPosition(0, headerSize);
         invalidate();
     }
 
