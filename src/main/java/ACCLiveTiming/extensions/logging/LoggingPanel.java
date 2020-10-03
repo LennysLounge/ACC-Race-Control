@@ -7,6 +7,8 @@ package ACCLiveTiming.extensions.logging;
 
 import ACCLiveTiming.visualisation.gui.LPContainer;
 import ACCLiveTiming.visualisation.gui.LPTable;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -39,6 +41,8 @@ public class LoggingPanel extends LPContainer {
 
     @Override
     public void draw() {
-        table.setEntries(extension.getMessages());
+        List<LogMessage> messages = extension.getMessages();
+        Collections.reverse(messages);
+        table.setEntries(messages);
     }
 }
