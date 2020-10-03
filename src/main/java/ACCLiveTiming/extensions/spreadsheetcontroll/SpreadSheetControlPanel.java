@@ -5,7 +5,8 @@
  */
 package ACCLiveTiming.extensions.spreadsheetcontroll;
 
-import ACCLiveTiming.networking.data.SessionInfo;
+import ACCLiveTiming.visualisation.LookAndFeel;
+import ACCLiveTiming.visualisation.gui.LPButton;
 import ACCLiveTiming.visualisation.gui.LPContainer;
 
 /**
@@ -15,26 +16,39 @@ import ACCLiveTiming.visualisation.gui.LPContainer;
 public class SpreadSheetControlPanel extends LPContainer {
 
     private SpreadSheetControlExtension extension;
+    
+    private LPButton setToPractice = new LPButton("Send to \"Practice!\"");
+    private LPButton setToQuali = new LPButton("Send to \"Qualifying!\"");
+    private LPButton setToRace1 = new LPButton("Send to \"Race 1!\"");
+    private LPButton setToRace2 = new LPButton("Send to \"Race 2!\"");
 
     public SpreadSheetControlPanel(SpreadSheetControlExtension extension) {
         this.extension = extension;
-
         setName("Sheets API");
+        
+        setToPractice.setSize(200, 80);
+        setToQuali.setSize(200, 80);
+        setToRace1.setSize(200, 80);
+        setToRace2.setSize(200, 80);
+        
+        addComponent(setToPractice);
+        addComponent(setToQuali);
+        addComponent(setToRace1);
+        addComponent(setToRace2);
     }
 
     @Override
     public void draw() {
-        SessionInfo session = extension.getModel().getSessionInfo();
-        
-        applet.fill(255);
-        applet.text("Ambient:" + session.getAmbientTemp(), 20, 20);
-        applet.text("current hud page:" + session.getCurrentHudPage(), 20, 40);
-        applet.text("cloud level:" + session.getCloudLevel(), 20, 60);
-        applet.text("focused car:" + session.getFocusedCarIndex(), 20, 80);
-        applet.text("session end time:" + session.getSessionEndTime(), 20, 100);
-        applet.text("session time remaining:" + session.getSessionTime(), 20, 120);
-        applet.text("track temp:" + session.getTrackTemp(), 20, 140);
-
+        applet.fill(LookAndFeel.get().COLOR_DARK_GRAY);
+        applet.rect(0,0,getWidth(), getHeight());
+    }
+    
+    @Override
+    public void onResize(int w, int h){
+        setToPractice.setPosition(10, 10);
+        setToQuali.setPosition(10, 110);
+        setToRace1.setPosition(10, 210);
+        setToRace2.setPosition(10, 310);
     }
 
 }
