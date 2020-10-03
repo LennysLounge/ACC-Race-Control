@@ -192,7 +192,7 @@ public class SpreadSheetService {
         }
     }
 
-    private static Optional<String> getSheet(SessionId sessionId) {
+    public static Optional<String> getSheet(SessionId sessionId) {
         switch (sessionId.getType()) {
             case PRACTICE:
                 return Optional.of("Practice!");

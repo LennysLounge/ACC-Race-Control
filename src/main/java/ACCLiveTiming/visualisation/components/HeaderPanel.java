@@ -7,6 +7,7 @@ package ACCLiveTiming.visualisation.components;
 
 import ACCLiveTiming.client.BasicAccBroadcastingClient;
 import ACCLiveTiming.client.SessionId;
+import ACCLiveTiming.utility.SpreadSheetService;
 import ACCLiveTiming.utility.TimeUtils;
 import ACCLiveTiming.visualisation.LookAndFeel;
 import ACCLiveTiming.visualisation.gui.LPComponent;
@@ -39,6 +40,10 @@ public class HeaderPanel extends LPComponent {
         if (showSpreadSheetStatus) {
             applet.fill(LookAndFeel.get().COLOR_RACE);
             applet.rect(0, 0, getWidth(), LookAndFeel.get().LINE_HEIGHT);
+            applet.fill(30);
+
+            String targetSheet = SpreadSheetService.getSheet(client.getSessionId()).orElse("Not Supported");
+            applet.text("Target Sheet:\"" + targetSheet + "\"", 10, LookAndFeel.get().LINE_HEIGHT * 0.5f);
             y += LookAndFeel.get().LINE_HEIGHT;
         }
 
@@ -57,7 +62,7 @@ public class HeaderPanel extends LPComponent {
                 applet.width - applet.textWidth(sessionName) - 40,
                 y + LookAndFeel.get().LINE_HEIGHT / 2f);
 
-        applet.fill(0, 150, 0);
+        applet.fill(LookAndFeel.get().COLOR_RACE);
         applet.rect(applet.width - applet.textWidth(sessionName) - 30,
                 y + LookAndFeel.get().LINE_HEIGHT * 0.1f,
                 10, LookAndFeel.get().LINE_HEIGHT * 0.8f);
@@ -80,7 +85,7 @@ public class HeaderPanel extends LPComponent {
                 result = "NOT SUPPORTED";
                 break;
         }
-        return result + " " + sessionId.getNumber();
+        return result;
     }
 
 }
