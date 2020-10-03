@@ -100,8 +100,8 @@ public class IncidentExtension extends AccClientExtension {
             }
         }
     }
-    
-    public void addEmptyAccident(){
+
+    public void addEmptyAccident() {
         commitAccident(new Accident(client.getModel().getSessionInfo().getSessionTime(),
                 client.getSessionId()));
     }
@@ -127,8 +127,19 @@ public class IncidentExtension extends AccClientExtension {
     }
 
     @Override
+    public void onPracticeStart() {
+        SpreadSheetService.setTargetSheetBySession(client.getSessionId());
+    }
+
+    @Override
+    public void onQualifyingStart() {
+        SpreadSheetService.setTargetSheetBySession(client.getSessionId());
+    }
+
+    @Override
     public void onRaceStart() {
         raceStartTimestamp = System.currentTimeMillis();
+        SpreadSheetService.setTargetSheetBySession(client.getSessionId());
     }
 
     @Override
