@@ -47,6 +47,8 @@ public class Main {
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "An error happened while setting up the logger.", e);
         }
+        
+        Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
 
         startApp();
     }
@@ -97,6 +99,16 @@ public class Main {
         Visualisation v = new Visualisation(client, dialog.getUpdateInterval());
         String[] a = {"MAIN"};
         PApplet.runSketch(a, v);
+    }
+    
+    public static class UncoughtExceptionHandler
+            implements Thread.UncaughtExceptionHandler{
+
+        @Override
+        public void uncaughtException(Thread t, Throwable e) {
+            LOG.log(Level.SEVERE, "Uncought exception:", e);
+        }
+        
     }
 
 }
