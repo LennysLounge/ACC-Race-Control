@@ -42,7 +42,8 @@ public class HeaderPanel extends LPComponent {
             applet.rect(0, 0, getWidth(), LookAndFeel.get().LINE_HEIGHT);
             applet.fill(30);
 
-            String targetSheet = SpreadSheetService.getSheet(client.getSessionId()).orElse("Not Supported");
+            String targetSheet = SpreadSheetService.getSheet();
+            applet.textAlign(LEFT, CENTER);
             applet.text("Target Sheet:\"" + targetSheet + "\"", 10, LookAndFeel.get().LINE_HEIGHT * 0.5f);
             y += LookAndFeel.get().LINE_HEIGHT;
         }

@@ -191,8 +191,12 @@ public class SpreadSheetService {
             return;
         }
     }
+    
+    public static String getSheet(){
+        return targetSheet.orElse("Not Supported");
+    }
 
-    public static Optional<String> getSheet(SessionId sessionId) {
+    private static Optional<String> getSheet(SessionId sessionId) {
         switch (sessionId.getType()) {
             case PRACTICE:
                 return Optional.of("Practice!");

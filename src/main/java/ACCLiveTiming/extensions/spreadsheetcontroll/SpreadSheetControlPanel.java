@@ -5,6 +5,7 @@
  */
 package ACCLiveTiming.extensions.spreadsheetcontroll;
 
+import ACCLiveTiming.utility.SpreadSheetService;
 import ACCLiveTiming.visualisation.LookAndFeel;
 import ACCLiveTiming.visualisation.gui.LPButton;
 import ACCLiveTiming.visualisation.gui.LPContainer;
@@ -27,9 +28,21 @@ public class SpreadSheetControlPanel extends LPContainer {
         setName("Sheets API");
         
         setToPractice.setSize(200, 80);
+        setToPractice.setAction(()->{
+            SpreadSheetService.setTargetSheet("Practice!");
+        });
         setToQuali.setSize(200, 80);
+        setToQuali.setAction(()->{
+            SpreadSheetService.setTargetSheet("Qualifying!");
+        });
         setToRace1.setSize(200, 80);
+        setToRace1.setAction(()->{
+            SpreadSheetService.setTargetSheet("Race 1!");
+        });
         setToRace2.setSize(200, 80);
+        setToRace2.setAction(()->{
+            SpreadSheetService.setTargetSheet("Race 2!");
+        });
         
         addComponent(setToPractice);
         addComponent(setToQuali);
