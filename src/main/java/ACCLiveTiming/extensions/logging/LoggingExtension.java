@@ -7,6 +7,7 @@ package ACCLiveTiming.extensions.logging;
 
 import ACCLiveTiming.extensions.AccClientExtension;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -17,8 +18,10 @@ public class LoggingExtension extends AccClientExtension {
     public LoggingExtension() {
         this.panel = new LoggingPanel(this);
     }
-    
-    public List<String> getMessages(){
-        return client.getMessages();
+
+    public List<LogMessage> getMessages() {
+        return client.getMessages().stream()
+                .map(s -> new LogMessage(s))
+                .collect(Collectors.toList());
     }
 }

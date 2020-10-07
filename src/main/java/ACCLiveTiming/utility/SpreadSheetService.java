@@ -55,6 +55,8 @@ public class SpreadSheetService {
     private static LinkedBlockingQueue<Object> queue = new LinkedBlockingQueue<>();
 
     private static boolean running = false;
+    
+    private static Optional<String> targetSheet = Optional.empty();
 
     private SpreadSheetService() {
     }
@@ -118,12 +120,11 @@ public class SpreadSheetService {
                 .collect(Collectors.joining(", "));
 
         LOG.info("Sending Accident: " + carNumbers + ", " + TimeUtils.asDuration(event.sessionTime));
-
-        Optional<String> s = getSheet(event.sessionID);
-        if (s.isEmpty()) {
+        
+        if (targetSheet.isEmpty()) {
             return;
         }
-        String sheet = s.get();
+        String sheet = targetSheet.get();
         String range = sheet + "B1:C500";
 
         List<List<Object>> values;
@@ -156,11 +157,10 @@ public class SpreadSheetService {
     }
 
     private static void sendGreenFlag(GreenFlagEvent event) {
-        Optional<String> s = getSheet(event.sessionId);
-        if (s.isEmpty()) {
+        if (targetSheet.isEmpty()) {
             return;
         }
-        String sheet = s.get();
+        String sheet = targetSheet.get();
         String range = sheet + "B1:C500";
         List<List<Object>> values;
         try {
@@ -191,6 +191,10 @@ public class SpreadSheetService {
             return;
         }
     }
+    
+    public static String getSheet(){
+        return targetSheet.orElse("Not Supported");
+    }
 
     private static Optional<String> getSheet(SessionId sessionId) {
         switch (sessionId.getType()) {
@@ -207,6 +211,14 @@ public class SpreadSheetService {
             default:
                 return Optional.empty();
         }
+    }
+    
+    public static void setTargetSheetBySession(SessionId sessionId){
+        targetSheet = getSheet(sessionId);
+    }
+    
+    public static void setTargetSheet(String sheet){
+        targetSheet = Optional.of(sheet);
     }
 
     private static void updateCells(String range, List<List<Object>> values) throws IOException {

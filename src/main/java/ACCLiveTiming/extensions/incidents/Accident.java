@@ -6,18 +6,27 @@
 package ACCLiveTiming.extensions.incidents;
 
 import ACCLiveTiming.client.SessionId;
+import ACCLiveTiming.networking.data.CarInfo;
+import static ACCLiveTiming.networking.enums.SessionType.PRACTICE;
+import static ACCLiveTiming.networking.enums.SessionType.QUALIFYING;
+import static ACCLiveTiming.networking.enums.SessionType.RACE;
+import ACCLiveTiming.utility.TimeUtils;
+import ACCLiveTiming.visualisation.LookAndFeel;
+import ACCLiveTiming.visualisation.gui.LPTable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.logging.Logger;
+import static processing.core.PConstants.CENTER;
 
 /**
  *
  * @author Leonard
  */
-public class Accident {
-    
+public class Accident extends LPTable.Entry {
+
     private static Logger LOG = Logger.getLogger(Accident.class.getName());
 
     /**
@@ -31,7 +40,7 @@ public class Accident {
     /**
      * List of cars involved by carID.
      */
-    private final List<Integer> cars;
+    private final List<CarInfo> cars;
     /**
      * System timestamp for this accident.
      */
@@ -45,13 +54,73 @@ public class Accident {
      */
     private final int incidentNumber;
 
-    public Accident(float time, int carId, long timestamp, SessionId sessionID,
-            int incidentNumber) {
-        this(time, time, Arrays.asList(carId), timestamp, sessionID, incidentNumber);
+    public static final LPTable.Renderer numberRenderer
+            = (applet, column, entry, width, height, isOdd) -> {
+                switch (((Accident) entry).getSessionID().getType()) {
+                    case PRACTICE:
+                        applet.fill(LookAndFeel.get().COLOR_PRACTICE);
+                        break;
+                    case QUALIFYING:
+                        applet.fill(LookAndFeel.get().COLOR_QUALIFYING);
+                        break;
+                    case RACE:
+                        applet.fill(LookAndFeel.get().COLOR_RACE);
+                        break;
+
+                }
+                applet.rect(1, 1, width - 2, height - 2);
+                applet.fill(255);
+                applet.textAlign(CENTER, CENTER);
+                applet.text(((Accident) entry).getIncidentNumber(),
+                        width / 2f, height / 2f);
+            };
+    public static final Function<Accident, String> getTime
+            = (a) -> TimeUtils.asDuration(a.getEarliestTime());
+
+    public static final LPTable.Renderer carNumberRenderer
+            = (applet, column, entry, width, height, isOdd) -> {
+                //Draw car numbres
+                Accident accident = (Accident) entry;
+                float x = 0;
+                for (CarInfo car : accident.getCars()) {;
+                    String carNumber = String.valueOf(car.getCarNumber());
+                    int background_color = 0;
+                    int text_color = 0;
+                    switch (car.getDriver().getCategory()) {
+                        case BRONZE:
+                            background_color = LookAndFeel.get().COLOR_RED;
+                            text_color = LookAndFeel.get().COLOR_BLACK;
+                            break;
+                        case SILVER:
+                            background_color = LookAndFeel.get().COLOR_GRAY;
+                            text_color = LookAndFeel.get().COLOR_WHITE;
+                            break;
+                        case GOLD:
+                        case PLATINUM:
+                            background_color = LookAndFeel.get().COLOR_WHITE;
+                            text_color = LookAndFeel.get().COLOR_BLACK;
+                            break;
+                    }
+
+                    float w = LookAndFeel.get().LINE_HEIGHT * 1.25f;
+                    applet.fill(background_color);
+                    applet.rect(x + 1, 1, w - 2, height - 2);
+                    applet.fill(text_color);
+                    applet.textAlign(CENTER, CENTER);
+                    applet.text(carNumber, x + w / 2, height / 2f);
+                    x += w;
+                }
+            };
+
+    public Accident(float time, CarInfo car, SessionId sessionID) {
+        this(time, time, Arrays.asList(car), System.currentTimeMillis(), sessionID, 0);
     }
     
+    public Accident(float time, SessionId sessionId){
+        this(time, time, new LinkedList<CarInfo>(), System.currentTimeMillis(), sessionId, 0);
+    }
 
-    private Accident(float earliestTime, float latestTime, List<Integer> cars,
+    private Accident(float earliestTime, float latestTime, List<CarInfo> cars,
             long timestamp, SessionId sessionID, int incidentNumber) {
         this.earliestTime = earliestTime;
         this.latestTime = latestTime;
@@ -61,10 +130,10 @@ public class Accident {
         this.incidentNumber = incidentNumber;
     }
 
-    public Accident addCar(float time, int carId, long timestamp) {
-        List<Integer> c = new LinkedList<>();
+    public Accident addCar(float time, CarInfo car, long timestamp) {
+        List<CarInfo> c = new LinkedList<>();
         c.addAll(cars);
-        c.add(carId);
+        c.add(car);
         return new Accident(earliestTime,
                 time,
                 c,
@@ -74,7 +143,12 @@ public class Accident {
     }
 
     public Accident withIncidentNumber(int incidentNumber) {
-        return new Accident(earliestTime, latestTime, cars, timestamp, sessionID, incidentNumber);
+        return new Accident(earliestTime,
+                latestTime,
+                cars,
+                timestamp,
+                sessionID,
+                incidentNumber);
     }
 
     public float getEarliestTime() {
@@ -85,7 +159,7 @@ public class Accident {
         return latestTime;
     }
 
-    public List<Integer> getCars() {
+    public List<CarInfo> getCars() {
         return Collections.unmodifiableList(cars);
     }
 

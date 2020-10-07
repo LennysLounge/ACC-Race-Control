@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.extensions.debug;
+package ACCLiveTiming.extensions.spreadsheetcontroll;
 
 import ACCLiveTiming.extensions.AccClientExtension;
 import ACCLiveTiming.networking.data.AccBroadcastingData;
@@ -12,10 +12,10 @@ import ACCLiveTiming.networking.data.AccBroadcastingData;
  *
  * @author Leonard
  */
-public class DebugExtension extends AccClientExtension {
+public class SpreadSheetControlExtension extends AccClientExtension {
 
-    public DebugExtension() {
-        this.panel = new DebugPanel(this);
+    public SpreadSheetControlExtension() {
+        this.panel = new SpreadSheetControlPanel(this);
     }
 
     public AccBroadcastingData getModel() {

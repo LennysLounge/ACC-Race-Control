@@ -84,35 +84,37 @@ public class IncidentExtension extends AccClientExtension {
         SessionId sessionId = client.getSessionId();
         if (stagedAccident == null) {
             stagedAccident = new Accident(sessionTime,
-                    event.getCarId(),
-                    System.currentTimeMillis(),
-                    sessionId,
-                    getAndIncrementCounter(sessionId));
+                    client.getModel().getCar(event.getCarId()),
+                    sessionId);
         } else {
             float timeDif = stagedAccident.getLatestTime() - sessionTime;
             if (timeDif > 1000) {
                 commitAccident(stagedAccident);
                 stagedAccident = new Accident(sessionTime,
-                        event.getCarId(),
-                        System.currentTimeMillis(),
-                        sessionId,
-                        getAndIncrementCounter(sessionId));
+                        client.getModel().getCar(event.getCarId()),
+                        sessionId);
             } else {
                 stagedAccident = stagedAccident.addCar(sessionTime,
-                        event.getCarId(), System.currentTimeMillis());
+                        client.getModel().getCar(event.getCarId()),
+                        System.currentTimeMillis());
             }
         }
+    }
+
+    public void addEmptyAccident() {
+        commitAccident(new Accident(client.getModel().getSessionInfo().getSessionTime(),
+                client.getSessionId()));
     }
 
     private void commitAccident(Accident a) {
         List<Accident> newAccidents = new LinkedList<>();
         newAccidents.addAll(accidents);
-        newAccidents.add(a);
+        newAccidents.add(a.withIncidentNumber(getAndIncrementCounter(client.getSessionId())));
         accidents = newAccidents;
 
         if (SpreadSheetService.isRunning()) {
             List<Integer> carNumbers = a.getCars().stream()
-                    .map(id -> client.getModel().getCar(id).getCarNumber())
+                    .map(car -> car.getCarNumber())
                     .collect(Collectors.toList());
             SpreadSheetService.sendAccident(carNumbers, a.getEarliestTime(), a.getSessionID());
         }
@@ -125,8 +127,19 @@ public class IncidentExtension extends AccClientExtension {
     }
 
     @Override
+    public void onPracticeStart() {
+        SpreadSheetService.setTargetSheetBySession(client.getSessionId());
+    }
+
+    @Override
+    public void onQualifyingStart() {
+        SpreadSheetService.setTargetSheetBySession(client.getSessionId());
+    }
+
+    @Override
     public void onRaceStart() {
         raceStartTimestamp = System.currentTimeMillis();
+        SpreadSheetService.setTargetSheetBySession(client.getSessionId());
     }
 
     @Override

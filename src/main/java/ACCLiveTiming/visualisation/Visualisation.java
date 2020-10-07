@@ -5,24 +5,22 @@
  */
 package ACCLiveTiming.visualisation;
 
+import ACCLiveTiming.visualisation.components.BasePanel;
 import ACCLiveTiming.client.BasicAccBroadcastingClient;
+import ACCLiveTiming.visualisation.gui.LPBase;
+import ACCLiveTiming.visualisation.gui.LPComponent;
 import java.util.logging.Logger;
-import processing.event.MouseEvent;
 
 /**
  *
  * @author Leonard
  */
-public class Visualisation extends CustomPApplet {
+public class Visualisation extends LPBase {
 
     /**
      * This classes logger.
      */
     private static Logger LOG = Logger.getLogger(Visualisation.class.getName());
-    /**
-     * Main panel.
-     */
-    private final MainPanel mainPanel;
     /**
      * Size of the window.
      */
@@ -36,12 +34,11 @@ public class Visualisation extends CustomPApplet {
      * Connection client.
      */
     private BasicAccBroadcastingClient client;
+    
+    private BasePanel basePanel;
 
     public Visualisation(BasicAccBroadcastingClient client, int updateInterval) {
         this.client = client;
-        mainPanel = new MainPanel(this, client);
-        mainPanel.setPApplet(this);
-
     }
 
     @Override
@@ -55,48 +52,27 @@ public class Visualisation extends CustomPApplet {
         surface.setResizable(true);
         surface.setTitle("ACC Accident Tracker");
         frameRate(30);
-    }
+
+        //init components.
+        LPComponent.setApplet(this);
+        basePanel = new BasePanel(client);
+        setComponent(basePanel);
+    } 
 
     @Override
     public void draw() {
-        if (width != sizeWidth || height != sizeHeight) {
-            onResize(width, height);
-        }
-
+        
         int dt = (int) (1000 / frameRate);
         timer += dt;
         if (timer > client.getUpdateInterval() || forceRedraw) {
-            timer = 0;
-            if(forceRedraw){
-                background(50);
-            }
-            forceRedraw = false;
-            
-            translate(mainPanel.getPosX(), mainPanel.getPosY());
-            mainPanel.drawPanel();
-            translate(-mainPanel.getPosX(), -mainPanel.getPosY());   
+            basePanel.invalidate();
+        }
+        super.draw();
+    }
+    
+    public void keyPressed(){
+        if(key == ESC){
+            key = 0;
         }
     }
-
-    public void onResize(int w, int h) {
-        sizeWidth = w;
-        sizeHeight = h;
-        mainPanel.resize(w, h);
-    }
-
-    @Override
-    public void mousePressed() {
-        mainPanel.mousePressed(mouseButton, mouseX, mouseY);
-    }
-
-    @Override
-    public void mouseReleased() {
-        mainPanel.mouseReleased(mouseButton, mouseX, mouseY);
-    }
-
-    @Override
-    public void mouseWheel(MouseEvent event) {
-        mainPanel.mouseWheel(event.getCount());
-    }
-
 }

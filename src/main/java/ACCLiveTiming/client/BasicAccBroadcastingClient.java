@@ -6,7 +6,6 @@
 package ACCLiveTiming.client;
 
 import ACCLiveTiming.extensions.AccClientExtension;
-import ACCLiveTiming.extensions.ExtensionPanel;
 import ACCLiveTiming.networking.PrimitivAccBroadcastingClient;
 import ACCLiveTiming.networking.data.BroadcastingEvent;
 import ACCLiveTiming.networking.data.CarInfo;
@@ -15,6 +14,7 @@ import ACCLiveTiming.networking.data.SessionInfo;
 import ACCLiveTiming.networking.data.TrackInfo;
 import ACCLiveTiming.networking.enums.SessionPhase;
 import ACCLiveTiming.networking.enums.SessionType;
+import ACCLiveTiming.visualisation.gui.LPContainer;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.Collections;
@@ -118,7 +118,7 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
         extensions.remove(e);
     }
 
-    public List<ExtensionPanel> getPanels() {
+    public List<LPContainer> getPanels() {
         return extensions.stream()
                 .filter(extension -> extension.hasPanel())
                 .map(extension -> extension.getPanel())
