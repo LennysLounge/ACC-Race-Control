@@ -98,7 +98,6 @@ public class LPTabPanel extends LPContainer {
         if (tabs.isEmpty()) {
             return;
         }
-        System.out.println("hi");
         int lineHeight = LookAndFeel.LINE_HEIGHT;
         if (y > 0 && y < lineHeight) {
             float tabSize = applet.width / tabs.size();

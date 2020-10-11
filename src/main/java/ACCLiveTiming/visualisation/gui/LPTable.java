@@ -314,7 +314,6 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
             int diff = y - dragScrollbarY;
             float entrySize = (getHeight() / visibleEntries);
             int scrolldiff = (int) (diff / entrySize);
-            System.out.println(scrolldiff);
             setScroll(dragScrollbarScrollAmmount + scrolldiff);
         }
     }
