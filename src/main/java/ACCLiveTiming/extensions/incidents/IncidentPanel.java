@@ -57,7 +57,7 @@ public class IncidentPanel extends LPContainer {
 
     @Override
     public void onResize(int w, int h) {
-        float height = LookAndFeel.get().LINE_HEIGHT;
+        float height = LookAndFeel.LINE_HEIGHT;
         if(!showSendActionButton){
             height = 0;
         }
@@ -69,8 +69,8 @@ public class IncidentPanel extends LPContainer {
 
     @Override
     public void draw() {
-        applet.fill(LookAndFeel.get().COLOR_DARK_DARK_GRAY);
-        applet.rect(0,0,getWidth(), LookAndFeel.get().LINE_HEIGHT);
+        applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
+        applet.rect(0,0,getWidth(), LookAndFeel.LINE_HEIGHT);
         table.setEntries(extension.getAccidents());
     }
 

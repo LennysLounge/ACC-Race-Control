@@ -38,14 +38,14 @@ public class HeaderPanel extends LPComponent {
         int y = 0;
         //Draw Spreasheet status.
         if (showSpreadSheetStatus) {
-            applet.fill(LookAndFeel.get().COLOR_RACE);
-            applet.rect(0, 0, getWidth(), LookAndFeel.get().LINE_HEIGHT);
+            applet.fill(LookAndFeel.COLOR_RACE);
+            applet.rect(0, 0, getWidth(), LookAndFeel.LINE_HEIGHT);
             applet.fill(30);
 
             String targetSheet = SpreadSheetService.getSheet();
             applet.textAlign(LEFT, CENTER);
-            applet.text("Target Sheet:\"" + targetSheet + "\"", 10, LookAndFeel.get().LINE_HEIGHT * 0.5f);
-            y += LookAndFeel.get().LINE_HEIGHT;
+            applet.text("Target Sheet:\"" + targetSheet + "\"", 10, LookAndFeel.LINE_HEIGHT * 0.5f);
+            y += LookAndFeel.LINE_HEIGHT;
         }
 
         String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
@@ -54,19 +54,19 @@ public class HeaderPanel extends LPComponent {
         String packetsReceived = "Packets received: " + client.getPacketCount();
         applet.fill(255);
         applet.textAlign(LEFT, CENTER);
-        applet.textFont(LookAndFeel.get().FONT);
-        applet.text(conId, 10, y + LookAndFeel.get().LINE_HEIGHT * 0.5f);
-        applet.text(packetsReceived, 200, y + LookAndFeel.get().LINE_HEIGHT * 0.5f);
+        applet.textFont(LookAndFeel.font());
+        applet.text(conId, 10, y + LookAndFeel.LINE_HEIGHT * 0.5f);
+        applet.text(packetsReceived, 200, y + LookAndFeel.LINE_HEIGHT * 0.5f);
         applet.textAlign(RIGHT, CENTER);
-        applet.text(sessionName, applet.width - 10, y + LookAndFeel.get().LINE_HEIGHT * 0.5f);
+        applet.text(sessionName, applet.width - 10, y + LookAndFeel.LINE_HEIGHT * 0.5f);
         applet.text(sessionTimeLeft,
                 applet.width - applet.textWidth(sessionName) - 40,
-                y + LookAndFeel.get().LINE_HEIGHT / 2f);
+                y + LookAndFeel.LINE_HEIGHT / 2f);
 
-        applet.fill(LookAndFeel.get().COLOR_RACE);
+        applet.fill(LookAndFeel.COLOR_RACE);
         applet.rect(applet.width - applet.textWidth(sessionName) - 30,
-                y + LookAndFeel.get().LINE_HEIGHT * 0.1f,
-                10, LookAndFeel.get().LINE_HEIGHT * 0.8f);
+                y + LookAndFeel.LINE_HEIGHT * 0.1f,
+                10, LookAndFeel.LINE_HEIGHT * 0.8f);
 
     }
 

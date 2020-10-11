@@ -38,12 +38,12 @@ public class LPButton extends LPComponent {
 
     @Override
     public void draw() {
-        applet.stroke(LookAndFeel.get().COLOR_DARK_RED);
+        applet.stroke(LookAndFeel.COLOR_DARK_RED);
         applet.strokeWeight(2);
         if (clicked) {
-            applet.fill(LookAndFeel.get().COLOR_DARK_RED);
+            applet.fill(LookAndFeel.COLOR_DARK_RED);
         } else {
-            applet.fill(LookAndFeel.get().COLOR_RED);
+            applet.fill(LookAndFeel.COLOR_RED);
         }
         applet.rect(0, 0, getWidth(), getHeight(), 2);
         applet.fill(0);

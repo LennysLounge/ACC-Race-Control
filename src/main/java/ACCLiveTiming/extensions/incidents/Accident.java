@@ -58,13 +58,13 @@ public class Accident extends LPTable.Entry {
             = (applet, column, entry, width, height, isOdd) -> {
                 switch (((Accident) entry).getSessionID().getType()) {
                     case PRACTICE:
-                        applet.fill(LookAndFeel.get().COLOR_PRACTICE);
+                        applet.fill(LookAndFeel.COLOR_PRACTICE);
                         break;
                     case QUALIFYING:
-                        applet.fill(LookAndFeel.get().COLOR_QUALIFYING);
+                        applet.fill(LookAndFeel.COLOR_QUALIFYING);
                         break;
                     case RACE:
-                        applet.fill(LookAndFeel.get().COLOR_RACE);
+                        applet.fill(LookAndFeel.COLOR_RACE);
                         break;
 
                 }
@@ -88,21 +88,21 @@ public class Accident extends LPTable.Entry {
                     int text_color = 0;
                     switch (car.getDriver().getCategory()) {
                         case BRONZE:
-                            background_color = LookAndFeel.get().COLOR_RED;
-                            text_color = LookAndFeel.get().COLOR_BLACK;
+                            background_color = LookAndFeel.COLOR_RED;
+                            text_color = LookAndFeel.COLOR_BLACK;
                             break;
                         case SILVER:
-                            background_color = LookAndFeel.get().COLOR_GRAY;
-                            text_color = LookAndFeel.get().COLOR_WHITE;
+                            background_color = LookAndFeel.COLOR_GRAY;
+                            text_color = LookAndFeel.COLOR_WHITE;
                             break;
                         case GOLD:
                         case PLATINUM:
-                            background_color = LookAndFeel.get().COLOR_WHITE;
-                            text_color = LookAndFeel.get().COLOR_BLACK;
+                            background_color = LookAndFeel.COLOR_WHITE;
+                            text_color = LookAndFeel.COLOR_BLACK;
                             break;
                     }
 
-                    float w = LookAndFeel.get().LINE_HEIGHT * 1.25f;
+                    float w = LookAndFeel.LINE_HEIGHT * 1.25f;
                     applet.fill(background_color);
                     applet.rect(x + 1, 1, w - 2, height - 2);
                     applet.fill(text_color);

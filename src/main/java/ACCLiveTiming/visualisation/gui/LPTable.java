@@ -75,23 +75,23 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
         applet.rect(0, 0, getWidth(), getHeight());
 
         applet.fill(30);
-        applet.rect(0, 0, getWidth(), LookAndFeel.get().LINE_HEIGHT);
+        applet.rect(0, 0, getWidth(), LookAndFeel.LINE_HEIGHT);
         //Draw headers
         for (Column c : columns) {
             applet.fill(30);
             applet.noStroke();
-            applet.rect(c.xOffset, 0, c.size, LookAndFeel.get().LINE_HEIGHT);
+            applet.rect(c.xOffset, 0, c.size, LookAndFeel.LINE_HEIGHT);
             applet.fill(255);
             applet.textAlign(c.alignment, CENTER);
-            int padding = (int) (LookAndFeel.get().LINE_HEIGHT * 0.2f);
+            int padding = (int) (LookAndFeel.LINE_HEIGHT * 0.2f);
             if (c.alignment == LEFT) {
-                applet.text(c.head, c.xOffset + padding, LookAndFeel.get().LINE_HEIGHT / 2f);
+                applet.text(c.head, c.xOffset + padding, LookAndFeel.LINE_HEIGHT / 2f);
             }
             if (c.alignment == CENTER) {
-                applet.text(c.head, c.xOffset + c.size / 2f, LookAndFeel.get().LINE_HEIGHT / 2f);
+                applet.text(c.head, c.xOffset + c.size / 2f, LookAndFeel.LINE_HEIGHT / 2f);
             }
             if (c.alignment == RIGHT) {
-                applet.text(c.head, c.xOffset + c.size - padding, LookAndFeel.get().LINE_HEIGHT / 2f);
+                applet.text(c.head, c.xOffset + c.size - padding, LookAndFeel.LINE_HEIGHT / 2f);
             }
         }
 
@@ -110,20 +110,20 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
                 break;
             }
             for (Column c : columns) {
-                applet.translate(c.xOffset, (rowCount - scroll + 1) * LookAndFeel.get().LINE_HEIGHT);
+                applet.translate(c.xOffset, (rowCount - scroll + 1) * LookAndFeel.LINE_HEIGHT);
                 c.renderer.draw(applet,
                         c,
                         entry,
                         (int) c.size,
-                        LookAndFeel.get().LINE_HEIGHT,
+                        LookAndFeel.LINE_HEIGHT,
                         rowCount % 2 == 1);
-                applet.translate(-c.xOffset, -(rowCount - scroll + 1) * LookAndFeel.get().LINE_HEIGHT);
+                applet.translate(-c.xOffset, -(rowCount - scroll + 1) * LookAndFeel.LINE_HEIGHT);
             }
         }
 
         if (displayScrollBar) {
             if (!drawBottomRow) {
-                float lowest = getHeight() - (getHeight() % LookAndFeel.get().LINE_HEIGHT);
+                float lowest = getHeight() - (getHeight() % LookAndFeel.LINE_HEIGHT);
                 boolean isOdd = (scroll + visibleEntries % 2) == 1;
                 applet.fill(isOdd ? 40 : 50);
                 applet.rect(0, lowest, getWidth(), getHeight() - lowest);
@@ -133,9 +133,9 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
             float yoffset = entryHeigth * scroll;
             float padding = scrollBarWidth * 0.2f;
             applet.noStroke();
-            applet.fill(LookAndFeel.get().COLOR_DARK_DARK_GRAY);
+            applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
             applet.rect(0, 0, scrollBarWidth, getHeight());
-            applet.fill(LookAndFeel.get().COLOR_RED);
+            applet.fill(LookAndFeel.COLOR_RED);
             applet.rect(padding, yoffset + padding, scrollBarWidth - padding * 2, barHeight - padding * 2);
         }
 
@@ -188,7 +188,7 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
 
     @Override
     public void onResize(int w, int h) {
-        visibleEntries = (int) Math.floor(getHeight() / LookAndFeel.get().LINE_HEIGHT) - 1;
+        visibleEntries = (int) Math.floor(getHeight() / LookAndFeel.LINE_HEIGHT) - 1;
         displayScrollBar = visibleEntries < entries.size();
         calculateColumnWidths();
         //limit scroll

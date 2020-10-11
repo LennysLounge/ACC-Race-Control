@@ -61,7 +61,6 @@ public class Visualisation extends LPBase {
 
     @Override
     public void draw() {
-        
         int dt = (int) (1000 / frameRate);
         timer += dt;
         if (timer > client.getUpdateInterval() || forceRedraw) {

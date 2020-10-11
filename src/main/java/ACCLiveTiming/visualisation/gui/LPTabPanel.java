@@ -33,12 +33,13 @@ public class LPTabPanel extends LPContainer {
         tabs.remove(tab);
     }
 
+    @Override
     public void draw() {
         if (tabs.isEmpty()) {
             return;
         }
 
-        int lineHeight = LookAndFeel.get().LINE_HEIGHT;
+        int lineHeight = LookAndFeel.LINE_HEIGHT;
 
         applet.textAlign(CENTER, CENTER);
         applet.fill(50);
@@ -60,7 +61,7 @@ public class LPTabPanel extends LPContainer {
         if (tabs.isEmpty()) {
             return;
         }
-        int lineHeight = LookAndFeel.get().LINE_HEIGHT;
+        int lineHeight = LookAndFeel.LINE_HEIGHT;
         if (y > 0 && y < lineHeight) {
             float tabSize = applet.width / tabs.size();
             int clickedIndex = (int) ((x - (x % tabSize)) / tabSize);
@@ -77,16 +78,16 @@ public class LPTabPanel extends LPContainer {
             removeComponent(currentTab);
         }
         currentTab = tabs.get(tabIndex);
-        currentTab.setPosition(0, LookAndFeel.get().LINE_HEIGHT);
-        currentTab.setSize(getWidth(), getHeight() - LookAndFeel.get().LINE_HEIGHT);
+        currentTab.setPosition(0, LookAndFeel.LINE_HEIGHT);
+        currentTab.setSize(getWidth(), getHeight() - LookAndFeel.LINE_HEIGHT);
         addComponent(currentTab);
         invalidate();
     }
     
     @Override
     public void onResize(int w, int h){
-        currentTab.setPosition(0, LookAndFeel.get().LINE_HEIGHT);
-        currentTab.setSize(getWidth(), getHeight() - LookAndFeel.get().LINE_HEIGHT);
+        currentTab.setPosition(0, LookAndFeel.LINE_HEIGHT);
+        currentTab.setSize(getWidth(), getHeight() - LookAndFeel.LINE_HEIGHT);
     }
 
 }

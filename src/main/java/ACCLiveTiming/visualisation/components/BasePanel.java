@@ -36,9 +36,9 @@ public class BasePanel extends LPContainer {
 
     @Override
     public void onResize(int w, int h) {
-        int headerSize = LookAndFeel.get().LINE_HEIGHT;
+        int headerSize = LookAndFeel.LINE_HEIGHT;
         if(SpreadSheetService.isRunning()){
-            headerSize = LookAndFeel.get().LINE_HEIGHT*2;
+            headerSize = LookAndFeel.LINE_HEIGHT*2;
         }
         header.setSize(w, headerSize);
         header.setPosition(0, 0);

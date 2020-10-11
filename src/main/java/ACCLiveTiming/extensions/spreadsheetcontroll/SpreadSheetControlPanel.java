@@ -16,12 +16,12 @@ import ACCLiveTiming.visualisation.gui.LPContainer;
  */
 public class SpreadSheetControlPanel extends LPContainer {
 
-    private SpreadSheetControlExtension extension;
+    private final SpreadSheetControlExtension extension;
     
-    private LPButton setToPractice = new LPButton("Send to \"Practice!\"");
-    private LPButton setToQuali = new LPButton("Send to \"Qualifying!\"");
-    private LPButton setToRace1 = new LPButton("Send to \"Race 1!\"");
-    private LPButton setToRace2 = new LPButton("Send to \"Race 2!\"");
+    private final LPButton setToPractice = new LPButton("Send to \"Practice!\"");
+    private final LPButton setToQuali = new LPButton("Send to \"Qualifying!\"");
+    private final LPButton setToRace1 = new LPButton("Send to \"Race 1!\"");
+    private final LPButton setToRace2 = new LPButton("Send to \"Race 2!\"");
 
     public SpreadSheetControlPanel(SpreadSheetControlExtension extension) {
         this.extension = extension;
@@ -52,7 +52,7 @@ public class SpreadSheetControlPanel extends LPContainer {
 
     @Override
     public void draw() {
-        applet.fill(LookAndFeel.get().COLOR_DARK_GRAY);
+        applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.rect(0,0,getWidth(), getHeight());
     }
     

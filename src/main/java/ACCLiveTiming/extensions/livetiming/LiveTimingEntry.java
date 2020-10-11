@@ -23,7 +23,7 @@ public class LiveTimingEntry extends LPTable.Entry {
     public static final LPTable.Renderer positionRenderer
             = (applet, column, entry, width, height, isOdd) -> {
                 applet.noStroke();
-                applet.fill(LookAndFeel.get().COLOR_RED);
+                applet.fill(LookAndFeel.COLOR_RED);
                 applet.rect(1, 1, width-2, height-2);
                 applet.fill(255);
                 applet.textAlign(CENTER, CENTER);
@@ -43,13 +43,13 @@ public class LiveTimingEntry extends LPTable.Entry {
                 LiveTimingEntry e = (LiveTimingEntry) entry;
                 if (e.isInPits()) {
                     applet.noStroke();
-                    applet.fill(LookAndFeel.get().COLOR_WHITE);
+                    applet.fill(LookAndFeel.COLOR_WHITE);
                     applet.rect(1, 1, width-2, height-2);
                     applet.fill(0);
                     applet.textAlign(CENTER, CENTER);
                     applet.textSize(12);
                     applet.text("P", width / 2f, height / 2f);
-                    applet.textSize(LookAndFeel.get().TEXT_SIZE);
+                    applet.textSize(LookAndFeel.TEXT_SIZE);
                     
                 } else {
                     applet.fill(isOdd ? 40 : 50);
@@ -64,17 +64,17 @@ public class LiveTimingEntry extends LPTable.Entry {
                 int frontColor = 0;
                 switch(e.getCategory()){
                     case BRONZE:
-                        backColor = LookAndFeel.get().COLOR_RED;
-                        frontColor = LookAndFeel.get().COLOR_BLACK;
+                        backColor = LookAndFeel.COLOR_RED;
+                        frontColor = LookAndFeel.COLOR_BLACK;
                         break;
                     case SILVER:
-                        backColor = LookAndFeel.get().COLOR_GRAY;
-                        frontColor = LookAndFeel.get().COLOR_WHITE;
+                        backColor = LookAndFeel.COLOR_GRAY;
+                        frontColor = LookAndFeel.COLOR_WHITE;
                         break;
                     case GOLD:
                     case PLATINUM:
-                        backColor = LookAndFeel.get().COLOR_WHITE;
-                        frontColor = LookAndFeel.get().COLOR_BLACK;
+                        backColor = LookAndFeel.COLOR_WHITE;
+                        frontColor = LookAndFeel.COLOR_BLACK;
                         break;
                 }
                 applet.noStroke();
