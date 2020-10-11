@@ -16,9 +16,22 @@ import static processing.core.PConstants.CENTER;
  */
 public class LPTabPanel extends LPContainer {
 
+    /**
+     * List of tabs.
+     */
     private List<LPContainer> tabs = new LinkedList<>();
+    /**
+     * The index of the currently displayed panel.
+     */
     private int tabIndex = 0;
+    /**
+     * The currently displayed tab.
+     */
     private LPComponent currentTab = null;
+    /**
+     * The tab index the mouse is over.
+     */
+    private int mouseOverTab = -1;
 
     public LPTabPanel() {
     }
@@ -26,7 +39,7 @@ public class LPTabPanel extends LPContainer {
     public void addTab(LPContainer tab) {
         tabs.add(tab);
         currentTab = tab;
-        tabIndex = tabs.size()-1;
+        tabIndex = tabs.size() - 1;
     }
 
     public void removeTab(LPContainer tab) {
@@ -42,18 +55,42 @@ public class LPTabPanel extends LPContainer {
         int lineHeight = LookAndFeel.LINE_HEIGHT;
 
         applet.textAlign(CENTER, CENTER);
-        applet.fill(50);
+        applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
         applet.noStroke();
         applet.rect(0, 0, applet.width, lineHeight);
         float tabSize = applet.width / tabs.size();
         for (int i = 0; i < tabs.size(); i++) {
             if (i == tabIndex) {
-                applet.fill(30);
+                applet.fill(LookAndFeel.COLOR_MEDIUM_DARK_GRAY);
+                applet.rect(i * tabSize, 0, tabSize, lineHeight);
+            }
+            if(i == mouseOverTab){
+                applet.fill(LookAndFeel.TRANSPARENT_WHITE);
                 applet.rect(i * tabSize, 0, tabSize, lineHeight);
             }
             applet.fill(255);
             applet.text(tabs.get(i).getName(), i * tabSize + tabSize / 2f, lineHeight * 0.5f);
         }
+    }
+    
+    @Override
+    public void onMouseMove(int x, int y){
+        if (tabs.isEmpty()) {
+            mouseOverTab = -1;
+            return;
+        }
+        if (y > 0 && y < LookAndFeel.LINE_HEIGHT) {
+            float tabSize = applet.width / tabs.size();
+            int clickedIndex = (int) ((x - (x % tabSize)) / tabSize);
+            mouseOverTab = clickedIndex;
+        }else{
+            mouseOverTab = -1;
+        }
+    }
+    
+    @Override
+    public void onMouseLeave(){
+        mouseOverTab = -1;
     }
 
     @Override
@@ -61,6 +98,7 @@ public class LPTabPanel extends LPContainer {
         if (tabs.isEmpty()) {
             return;
         }
+        System.out.println("hi");
         int lineHeight = LookAndFeel.LINE_HEIGHT;
         if (y > 0 && y < lineHeight) {
             float tabSize = applet.width / tabs.size();
@@ -83,9 +121,9 @@ public class LPTabPanel extends LPContainer {
         addComponent(currentTab);
         invalidate();
     }
-    
+
     @Override
-    public void onResize(int w, int h){
+    public void onResize(int w, int h) {
         currentTab.setPosition(0, LookAndFeel.LINE_HEIGHT);
         currentTab.setSize(getWidth(), getHeight() - LookAndFeel.LINE_HEIGHT);
     }

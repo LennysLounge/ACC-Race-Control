@@ -32,7 +32,7 @@ public class HeaderPanel extends LPComponent {
 
     @Override
     public void draw() {
-        applet.fill(30);
+        applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
         applet.noStroke();
         applet.rect(0, 0, getWidth(), getHeight());
         int y = 0;
@@ -40,7 +40,7 @@ public class HeaderPanel extends LPComponent {
         if (showSpreadSheetStatus) {
             applet.fill(LookAndFeel.COLOR_RACE);
             applet.rect(0, 0, getWidth(), LookAndFeel.LINE_HEIGHT);
-            applet.fill(30);
+            applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
 
             String targetSheet = SpreadSheetService.getSheet();
             applet.textAlign(LEFT, CENTER);

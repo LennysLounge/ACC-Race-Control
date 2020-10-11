@@ -71,7 +71,7 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
     private final static Renderer standardCellRenderer
             = (applet, column, entry, width, height, isOdd) -> {
                 applet.noStroke();
-                applet.fill(isOdd ? 40 : 50);
+                applet.fill(isOdd ? LookAndFeel.COLOR_MEDIUM_DARK_GRAY : LookAndFeel.COLOR_DARK_GRAY);
                 applet.rect(0, 0, width, height);
                 applet.fill(255);
                 int padding = (int) (height * 0.2f);
@@ -90,15 +90,15 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
 
     @Override
     public void draw() {
-        applet.fill(50);
+        applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.noStroke();
         applet.rect(0, 0, getWidth(), getHeight());
 
-        applet.fill(30);
+        applet.fill(LookAndFeel.COLOR_MEDIUM_DARK_GRAY);
         applet.rect(0, 0, getWidth(), LookAndFeel.LINE_HEIGHT);
         //Draw headers
         for (Column c : columns) {
-            applet.fill(30);
+            applet.fill(LookAndFeel.COLOR_MEDIUM_DARK_GRAY);
             applet.noStroke();
             applet.rect(c.xOffset, 0, c.size, LookAndFeel.LINE_HEIGHT);
             applet.fill(255);
@@ -153,7 +153,7 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
             float yoffset = entryHeigth * scroll;
             float padding = scrollBarWidth * 0.2f;
             applet.noStroke();
-            applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
+            applet.fill(LookAndFeel.COLOR_MEDIUM_DARK_GRAY);
             applet.rect(0, 0, scrollBarWidth, getHeight());
             applet.stroke(70);
             applet.line(scrollBarWidth / 2, 0, scrollBarWidth / 2, getHeight());
