@@ -44,6 +44,16 @@ public class LPComponent {
 
     private String name;
     private LPComponent parent;
+    
+    /**
+     * Indicates that the mouse in ontop of this component.
+     */
+    private boolean isMouseOntop = false;
+    /**
+     * mouse position on this component.
+     */
+    private int mouseX;
+    private int mouseY;
 
     /**
      * Creates a new instance.
@@ -279,5 +289,45 @@ public class LPComponent {
     public void onResize(int w, int h) {
 
     }
+    
+    public void onMouseEnter(){
+    }
+    
+    public void onMouseLeave(){
+    }
+    
+    public void onMouseMove(int x, int y){
+    }
+    
+    public int mouseX(){
+        return mouseX;
+    }
+    
+    public int mouseY(){
+        return mouseY;
+    }
+    
+    public boolean isMouseOntop(){
+        return isMouseOntop;
+    }
+    
+    public void onMouseMoveInternal(int x, int y){
+        if (x > posX && x < posX + width
+                && y > posY && y < posY + height) {
+            if(!isMouseOntop){
+                isMouseOntop = true;
+                onMouseEnter();
+            }
+            mouseX = x;
+            mouseY = y;
+            onMouseMove((int)(x-posX),(int)(y-posY));
+        }else{
+            if(isMouseOntop){
+                isMouseOntop = false;
+                onMouseLeave();
+            }
+        }
+    }
+    
 
 }

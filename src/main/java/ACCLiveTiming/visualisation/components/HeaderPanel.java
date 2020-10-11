@@ -67,7 +67,6 @@ public class HeaderPanel extends LPComponent {
         applet.rect(applet.width - applet.textWidth(sessionName) - 30,
                 y + LookAndFeel.LINE_HEIGHT * 0.1f,
                 10, LookAndFeel.LINE_HEIGHT * 0.8f);
-
     }
 
     private String sessionIdToString(SessionId sessionId) {

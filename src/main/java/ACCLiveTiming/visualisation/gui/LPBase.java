@@ -49,7 +49,7 @@ public class LPBase extends CustomPApplet {
     @Override
     public void mousePressed() {
         LPComponent clickedComponent = base.mousePressedInternal(mouseX, mouseY, mouseButton);
-        
+
         //invalidate current focused component.
         if (LPContainer.getFocused() != null) {
             LPContainer.getFocused().invalidate();
@@ -67,10 +67,20 @@ public class LPBase extends CustomPApplet {
             mousePressedTarget.mouseReleasedInternal(mouseX, mouseY, mouseButton);
         }
     }
-    
+
     @Override
-    public void mouseWheel(MouseEvent event){
+    public void mouseWheel(MouseEvent event) {
         base.mouseScrollInternal(mouseX, mouseY, event.getCount());
+    }
+
+    @Override
+    public void mouseMoved() {
+        base.onMouseMoveInternal(mouseX, mouseY);
+    }
+
+    @Override
+    public void mouseDragged() {
+        base.onMouseMoveInternal(mouseX, mouseY);
     }
 
 }
