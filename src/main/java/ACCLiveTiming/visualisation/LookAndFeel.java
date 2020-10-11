@@ -23,47 +23,25 @@ public class LookAndFeel {
 
     private static LookAndFeel instance = null;
 
-    public final int COLOR_RED;
-    public final int COLOR_DARK_RED;
-    public final int COLOR_GREEN;
-    public final int COLOR_WHITE;
-    public final int COLOR_BLACK;
-    public final int COLOR_GRAY;
-    public final int COLOR_LIGHT_GRAY;
-    public final int COLOR_DARK_GRAY;
-    public final int COLOR_DARK_DARK_GRAY;
-    public final int COLOR_NONE;
-    public final int COLOR_PRACTICE;
-    public final int COLOR_QUALIFYING;
-    public final int COLOR_RACE;
-    public final int TEXT_SIZE;
-    public final int LINE_HEIGHT;
-    public final float FONT_BASELINE_OFFSET;
-    public final PFont FONT;
+    public static final int COLOR_RED = 0xffe00000;
+    public static final int COLOR_DARK_RED = 0xffaa0000;
+    public static final int COLOR_GREEN = 0xff00aa59;
+    public static final int COLOR_WHITE = 0xffffffff;
+    public static final int COLOR_BLACK = 0xff000000;
+    public static final int COLOR_GRAY = 0xff666666;
+    public static final int COLOR_LIGHT_GRAY = 0xffbcbcbc;
+    public static final int COLOR_DARK_GRAY = 0xff323232;
+    public static final int COLOR_DARK_DARK_GRAY = 0xff1e1e1e;
+    public static final int COLOR_PRACTICE = 0xfff75151;
+    public static final int COLOR_QUALIFYING = 0xff5cadff;
+    public static final int COLOR_RACE = 0xff79e463;
+    public static final int TEXT_SIZE = 20;
+    public static final int LINE_HEIGHT = 40;
+    public static final float FONT_BASELINE_OFFSET = 0.16f;
+    
+    private static PFont FONT;
 
     public static void init(PApplet base) {
-        if (instance == null) {
-            instance = new LookAndFeel(base);
-        }
-    }
-
-    private LookAndFeel(PApplet base) {
-        COLOR_RED = base.color(224, 0, 0);
-        COLOR_DARK_RED = base.color(170,0,0);
-        COLOR_GREEN = base.color(0, 170, 89);
-        COLOR_WHITE = base.color(255);
-        COLOR_BLACK = base.color(0);
-        COLOR_GRAY = base.color(102, 102, 102);
-        COLOR_LIGHT_GRAY = base.color(188);
-        COLOR_DARK_GRAY = base.color(50);
-        COLOR_DARK_DARK_GRAY = base.color(30);
-        COLOR_NONE = base.color(255, 255, 255, 0);
-        COLOR_PRACTICE = base.color(247, 81, 81);
-        COLOR_QUALIFYING = base.color(92, 173, 255);
-        COLOR_RACE = base.color(121, 228, 99);
-        TEXT_SIZE = 20;
-        LINE_HEIGHT = 40;
-        FONT_BASELINE_OFFSET = 0.16f;
         PFont font;
         try {
             font = base.createFont("font/Heebo-Medium.ttf", TEXT_SIZE, true);
@@ -74,23 +52,7 @@ public class LookAndFeel {
         FONT = font;
     }
 
-    public static LookAndFeel get() {
-        return instance;
+    public static PFont font(){
+        return FONT;
     }
-
-    public static void drawScrollBar(PApplet context, int listLength, int visibleItems, int scrollAmmount) {
-        int barHeight = context.height;
-        int barWidth = 20;
-        int padding = 3;
-
-        float itemHeight = barHeight * 1f / listLength * 1f;
-        context.fill(30);
-        context.noStroke();
-        context.rect(0, 0, barWidth, barHeight);
-        context.fill(instance.COLOR_RED);
-        context.noStroke();
-        context.rect(padding, itemHeight * scrollAmmount,
-                barWidth - padding * 2, itemHeight * visibleItems);
-    }
-
 }
