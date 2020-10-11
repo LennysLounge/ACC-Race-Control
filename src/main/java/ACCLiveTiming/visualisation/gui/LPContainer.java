@@ -103,5 +103,13 @@ public class LPContainer
             }
         }
     }
+    
+    @Override
+    public void onMouseLeaveInternal(){
+        super.onMouseLeaveInternal();
+        for (LPComponent c : components) {
+                c.onMouseLeaveInternal();
+            }
+    }
 
 }

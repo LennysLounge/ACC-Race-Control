@@ -311,12 +311,20 @@ public class LPComponent {
         return isMouseOntop;
     }
     
+    public void onMouseEnterInternal(){
+        onMouseEnter();
+    }
+    
+    public void onMouseLeaveInternal(){
+        onMouseLeave();
+    }
+    
     public void onMouseMoveInternal(int x, int y){
         if (x > posX && x < posX + width
                 && y > posY && y < posY + height) {
             if(!isMouseOntop){
                 isMouseOntop = true;
-                onMouseEnter();
+                onMouseEnterInternal();
             }
             mouseX = x;
             mouseY = y;
@@ -324,7 +332,7 @@ public class LPComponent {
         }else{
             if(isMouseOntop){
                 isMouseOntop = false;
-                onMouseLeave();
+                onMouseLeaveInternal();
             }
         }
     }

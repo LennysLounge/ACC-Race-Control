@@ -45,7 +45,27 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
      * Width of the scroll bar.
      */
     private final int scrollBarWidth = 15;
-
+    /**
+     * Indicates that the mouse is above the scrollbar.
+     */
+    private boolean mouseAboveScrollBar = false;
+    /**
+     * Indicates that the scroll bar is beeing draged by the user.
+     */
+    private boolean dragScrollbar = false;
+    /**
+     * y position of the mouse when dragging the scrolbar.
+     */
+    private int dragScrollbarY;
+    /**
+     * The scroll ammount before draging the scrollbar.
+     */
+    private int dragScrollbarScrollAmmount;
+    /**
+     * Indicates that the bottom row will be drawsn beyond the boundaries of thi
+     * component.
+     *
+     */
     private boolean drawBottomRow = false;
 
     private final static Renderer standardCellRenderer
@@ -135,10 +155,16 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
             applet.noStroke();
             applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
             applet.rect(0, 0, scrollBarWidth, getHeight());
-            applet.fill(LookAndFeel.COLOR_RED);
+            applet.stroke(70);
+            applet.line(scrollBarWidth / 2, 0, scrollBarWidth / 2, getHeight());
+            applet.noStroke();
+            if (mouseAboveScrollBar || dragScrollbar) {
+                applet.fill(LookAndFeel.COLOR_WHITE);
+            } else {
+                applet.fill(LookAndFeel.COLOR_RED);
+            }
             applet.rect(padding, yoffset + padding, scrollBarWidth - padding * 2, barHeight - padding * 2);
         }
-
     }
 
     public void addColumn(String head, int size, boolean dynamicSize) {
@@ -172,14 +198,20 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
 
     public void addEntry(T entry) {
         entries.add(entry);
+        displayScrollBar = visibleEntries < entries.size();
+        calculateColumnWidths();
     }
 
     public void removeEntry(T entry) {
         entries.remove(entry);
+        displayScrollBar = visibleEntries < entries.size();
+        calculateColumnWidths();
     }
 
     public void setEntries(List<T> entries) {
         this.entries = entries;
+        displayScrollBar = visibleEntries < entries.size();
+        calculateColumnWidths();
     }
 
     public void drawBottomRow(boolean state) {
@@ -192,15 +224,18 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
         displayScrollBar = visibleEntries < entries.size();
         calculateColumnWidths();
         //limit scroll
-        int maxScroll = Math.max(0, entries.size() - visibleEntries);
-        scroll = Math.max(Math.min(scroll, maxScroll), 0);
+        setScroll(scroll);
     }
 
     @Override
     public void mouseScroll(int scrollDir) {
-        int maxScroll = Math.max(0, entries.size() - visibleEntries);
-        scroll = Math.max(Math.min(scroll + scrollDir, maxScroll), 0);
+        setScroll(scroll + scrollDir);
         invalidate();
+    }
+
+    private void setScroll(int s) {
+        int maxScroll = Math.max(0, entries.size() - visibleEntries);
+        scroll = Math.max(Math.min(s, maxScroll), 0);
     }
 
     private void calculateColumnWidths() {
@@ -264,6 +299,43 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
             c.xOffset = xOffset;
             xOffset += c.size;
         }
+    }
+
+    @Override
+    public void onMouseMove(int x, int y) {
+        if (displayScrollBar) {
+            if (mouseX() < scrollBarWidth) {
+                mouseAboveScrollBar = true;
+            } else {
+                mouseAboveScrollBar = false;
+            }
+        }
+        if (dragScrollbar) {
+            int diff = y - dragScrollbarY;
+            float entrySize = (getHeight() / visibleEntries);
+            int scrolldiff = (int) (diff / entrySize);
+            System.out.println(scrolldiff);
+            setScroll(dragScrollbarScrollAmmount + scrolldiff);
+        }
+    }
+
+    @Override
+    public void onMouseLeave() {
+        mouseAboveScrollBar = false;
+    }
+
+    @Override
+    public void mousePressed(int x, int y, int button) {
+        if (mouseAboveScrollBar) {
+            dragScrollbar = true;
+            dragScrollbarY = y;
+            dragScrollbarScrollAmmount = scroll;
+        }
+    }
+
+    @Override
+    public void mouseReleased(int x, int y, int button) {
+        dragScrollbar = false;
     }
 
     public class Column {
