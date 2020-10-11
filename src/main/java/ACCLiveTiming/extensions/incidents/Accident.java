@@ -71,7 +71,7 @@ public class Accident extends LPTable.Entry {
                 applet.rect(1, 1, width - 2, height - 2);
                 applet.fill(255);
                 applet.textAlign(CENTER, CENTER);
-                applet.text(((Accident) entry).getIncidentNumber(),
+                applet.text(String.valueOf(((Accident) entry).getIncidentNumber()),
                         width / 2f, height / 2f);
             };
     public static final Function<Accident, String> getTime
