@@ -44,12 +44,12 @@ public class IncidentPanel extends LPContainer {
         t.drawBottomRow(true);
         table = t;
         addComponent(table);
-        
+
         showSendActionButton = SpreadSheetService.isRunning();
-        
-        if(showSendActionButton){
+
+        if (showSendActionButton) {
             addComponent(sendEmptyActionButton);
-            sendEmptyActionButton.setAction(()->{
+            sendEmptyActionButton.setAction(() -> {
                 extension.addEmptyAccident();
             });
         }
@@ -58,19 +58,19 @@ public class IncidentPanel extends LPContainer {
     @Override
     public void onResize(int w, int h) {
         float height = LookAndFeel.LINE_HEIGHT;
-        if(!showSendActionButton){
+        if (!showSendActionButton) {
             height = 0;
         }
-        sendEmptyActionButton.setPosition(height*0.1f, height*0.1f);
-        sendEmptyActionButton.setSize(300, height*0.8f);
+        sendEmptyActionButton.setPosition(height * 0.1f, height * 0.1f);
+        sendEmptyActionButton.setSize(300, height * 0.8f);
         table.setPosition(0, height);
-        table.setSize(w, h-height);
+        table.setSize(w, h - height);
     }
 
     @Override
     public void draw() {
-        applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
-        applet.rect(0,0,getWidth(), LookAndFeel.LINE_HEIGHT);
+        applet.fill(LookAndFeel.COLOR_MEDIUM_DARK_GRAY);
+        applet.rect(0, 0, getWidth(), LookAndFeel.LINE_HEIGHT);
         table.setEntries(extension.getAccidents());
     }
 
