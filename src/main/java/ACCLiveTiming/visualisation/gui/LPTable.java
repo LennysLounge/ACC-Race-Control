@@ -68,25 +68,27 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
      */
     private boolean drawBottomRow = false;
 
-    private final static Renderer standardCellRenderer
-            = (applet, column, entry, width, height, isOdd) -> {
-                applet.noStroke();
-                applet.fill(isOdd ? LookAndFeel.COLOR_MEDIUM_DARK_GRAY : LookAndFeel.COLOR_DARK_GRAY);
-                applet.rect(0, 0, width, height);
-                applet.fill(255);
-                int padding = (int) (height * 0.2f);
-                applet.textAlign(column.alignment, CENTER);
-                String text = (String) column.contentFunction.apply(entry);
-                if (column.alignment == LEFT) {
-                    applet.text(text, padding, height / 2f);
-                }
-                if (column.alignment == CENTER) {
-                    applet.text(text, width / 2f, height / 2f);
-                }
-                if (column.alignment == RIGHT) {
-                    applet.text(text, width - padding, height / 2f);
-                }
-            };
+    private final static Renderer standardCellRenderer = new LPTable.Renderer() {
+        @Override
+        public void draw(LPTable.Entry entry) {
+            applet.noStroke();
+            applet.fill(isOdd ? LookAndFeel.COLOR_MEDIUM_DARK_GRAY : LookAndFeel.COLOR_DARK_GRAY);
+            applet.rect(0, 0, width, height);
+            applet.fill(255);
+            int padding = (int) (height * 0.2f);
+            applet.textAlign(column.alignment, CENTER);
+            String text = (String) column.contentFunction.apply(entry);
+            if (column.alignment == LEFT) {
+                applet.text(text, padding, height / 2f);
+            }
+            if (column.alignment == CENTER) {
+                applet.text(text, width / 2f, height / 2f);
+            }
+            if (column.alignment == RIGHT) {
+                applet.text(text, width - padding, height / 2f);
+            }
+        }
+    };
 
     @Override
     public void draw() {
@@ -131,12 +133,14 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
             }
             for (Column c : columns) {
                 applet.translate(c.xOffset, (rowCount - scroll + 1) * LookAndFeel.LINE_HEIGHT);
-                c.renderer.draw(applet,
-                        c,
-                        entry,
-                        (int) c.size,
-                        LookAndFeel.LINE_HEIGHT,
-                        rowCount % 2 == 1);
+                c.renderer.setWidth((int) c.size);
+                c.renderer.setHeight(LookAndFeel.LINE_HEIGHT);
+                c.renderer.setIsOdd(rowCount % 2 == 1);
+                c.renderer.setIsMouseOverRow(false);
+                c.renderer.setIsFocused(false);
+                c.renderer.setApplet(applet);
+                c.renderer.setColumn(c);
+                c.renderer.draw(entry);
                 applet.translate(-c.xOffset, -(rowCount - scroll + 1) * LookAndFeel.LINE_HEIGHT);
             }
         }
@@ -192,8 +196,9 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
             int alignment,
             Function<T, String> content,
             Renderer renderer) {
-        columns.add(new Column(head, size, dynamicSize, alignment, content,
-                renderer));
+        Column column = new Column(head, size, dynamicSize, alignment, content,
+                renderer);
+        columns.add(column);
     }
 
     public void addEntry(T entry) {
@@ -363,15 +368,64 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
     public static class Entry {
     }
 
-    @FunctionalInterface
-    public static interface Renderer {
+    public static abstract class Renderer {
 
-        void draw(PApplet applet,
-                LPTable.Column column,
-                LPTable.Entry entry,
-                int width,
-                int height,
-                boolean isOdd);
+        /**
+         * The column for this render
+         */
+        protected LPTable.Column column;
+        /**
+         * Width and height of this cell.
+         */
+        protected int width;
+        protected int height;
+        /**
+         * applet for this renderer.
+         */
+        protected PApplet applet;
+        /**
+         * indicates that this cell is on an odd row.
+         */
+        protected boolean isOdd;
+        /**
+         * Indicates that the mouse is currently over this row.
+         */
+        protected boolean isMouseOverRow;
+        /**
+         * Indicates that this cell is curently focused.
+         */
+        protected boolean isFocused;
+
+        public void setColumn(LPTable.Column column) {
+            this.column = column;
+        }
+
+        public void setWidth(int width) {
+            this.width = width;
+        }
+
+        public void setHeight(int height) {
+            this.height = height;
+        }
+
+        public void setApplet(PApplet applet) {
+            this.applet = applet;
+        }
+
+        public void setIsOdd(boolean isOdd) {
+            this.isOdd = isOdd;
+        }
+
+        public void setIsMouseOverRow(boolean isMouseOverRow) {
+            this.isMouseOverRow = isMouseOverRow;
+        }
+
+        public void setIsFocused(boolean isFocused) {
+            this.isFocused = isFocused;
+        }
+
+        public abstract void draw(LPTable.Entry entry);
+
     }
 
 }
