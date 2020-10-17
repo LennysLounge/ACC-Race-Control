@@ -19,9 +19,6 @@ public class LogMessage extends LPTable.Entry {
     public static LPTable.Renderer logRenderer = new LPTable.Renderer() {
         @Override
         public void draw(LPTable.Entry entry) {
-            applet.fill(isOdd ? 40 : 50);
-            applet.rect(0, 0, width, height);
-
             String message = ((LogMessage) entry).getMessage();
             applet.fill(255);
             applet.textAlign(LEFT, CENTER);

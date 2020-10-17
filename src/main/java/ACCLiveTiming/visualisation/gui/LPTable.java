@@ -71,6 +71,11 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
      *
      */
     private boolean drawBottomRow = false;
+    
+    /**
+     * The padding around the cells.
+     */
+    private int cellPadding = 1;
 
     private final static Renderer standardCellRenderer = new LPTable.Renderer() {
     };
@@ -102,34 +107,50 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
             }
         }
 
-        //Draw entries.
+        //Draw entries. 
         int lowerLimit = scroll;
         int upperLimit = scroll + visibleEntries;
         if (drawBottomRow) {
             upperLimit += 1;
         }
-        int rowCount = -1;
+        int entryCount = -1;
         for (T entry : entries) {
-            rowCount++;
-            if (rowCount < lowerLimit) {
+            entryCount++;
+            if (entryCount < lowerLimit) {
                 continue;
             }
-            if (rowCount >= upperLimit) {
+            if (entryCount >= upperLimit) {
                 break;
             }
+            int row = entryCount - scroll + 1;
+            //Draw row background
+            int scrollbarOffset = displayScrollBar ? scrollBarWidth : 0;
+            applet.fill((row + scroll) % 2 == 0
+                    ? LookAndFeel.COLOR_MEDIUM_DARK_GRAY
+                    : LookAndFeel.COLOR_DARK_GRAY);
+            applet.rect(scrollbarOffset + cellPadding,
+                    row * LookAndFeel.LINE_HEIGHT + cellPadding,
+                    getWidth() - cellPadding * 2,
+                    LookAndFeel.LINE_HEIGHT - cellPadding * 2);
+            if (row == mouseAboveRow) {
+                applet.fill(LookAndFeel.TRANSPARENT_RED);
+                applet.rect(scrollbarOffset + cellPadding,
+                        row * LookAndFeel.LINE_HEIGHT + cellPadding,
+                        getWidth() - cellPadding * 2,
+                        LookAndFeel.LINE_HEIGHT - cellPadding * 2);
+            }
+            //Draw cells
             for (Column c : columns) {
-                int row = rowCount - scroll + 1;
-                applet.translate(c.xOffset, row * LookAndFeel.LINE_HEIGHT);
-                c.renderer.setWidth((int) c.size);
-                c.renderer.setHeight(LookAndFeel.LINE_HEIGHT);
-                c.renderer.setIsOdd(rowCount % 2 == 1);
+                applet.translate(c.xOffset + cellPadding, row * LookAndFeel.LINE_HEIGHT + cellPadding);
+                c.renderer.setWidth((int) c.size - cellPadding * 2);
+                c.renderer.setHeight(LookAndFeel.LINE_HEIGHT - cellPadding * 2);
                 c.renderer.setIsMouseOverRow(false);
                 c.renderer.setIsFocused(false);
                 c.renderer.setIsMouseOverRow(row == mouseAboveRow);
                 c.renderer.setApplet(applet);
                 c.renderer.setColumn(c);
                 c.renderer.draw(entry);
-                applet.translate(-c.xOffset, -row * LookAndFeel.LINE_HEIGHT);
+                applet.translate(-c.xOffset - cellPadding, -row * LookAndFeel.LINE_HEIGHT - cellPadding);
             }
         }
         //Draw scrollbar.
@@ -382,10 +403,6 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
          */
         protected PApplet applet;
         /**
-         * indicates that this cell is on an odd row.
-         */
-        protected boolean isOdd;
-        /**
          * Indicates that the mouse is currently over this row.
          */
         protected boolean isMouseOverRow;
@@ -410,10 +427,6 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
             this.applet = applet;
         }
 
-        public void setIsOdd(boolean isOdd) {
-            this.isOdd = isOdd;
-        }
-
         public void setIsMouseOverRow(boolean isMouseOverRow) {
             this.isMouseOverRow = isMouseOverRow;
         }
@@ -423,13 +436,6 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
         }
 
         public void draw(LPTable.Entry entry) {
-            applet.noStroke();
-            applet.fill(isOdd ? LookAndFeel.COLOR_MEDIUM_DARK_GRAY : LookAndFeel.COLOR_DARK_GRAY);
-            applet.rect(0, 0, width, height);
-            if (isMouseOverRow) {
-                applet.fill(LookAndFeel.TRANSPARENT_RED);
-                applet.rect(0, 0, width, height);
-            }
             applet.fill(255);
             int padding = (int) (height * 0.2f);
             applet.textAlign(column.alignment, CENTER);

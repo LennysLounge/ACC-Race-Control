@@ -25,7 +25,7 @@ public class LiveTimingEntry extends LPTable.Entry {
         public void draw(LPTable.Entry entry) {
             applet.noStroke();
             applet.fill(LookAndFeel.COLOR_RED);
-            applet.rect(1, 1, width - 2, height - 2);
+            applet.rect(0, 0, width, height);
             applet.fill(255);
             applet.textAlign(CENTER, CENTER);
             LiveTimingEntry e = (LiveTimingEntry) entry;
@@ -47,7 +47,7 @@ public class LiveTimingEntry extends LPTable.Entry {
             if (e.isInPits()) {
                 applet.noStroke();
                 applet.fill(LookAndFeel.COLOR_WHITE);
-                applet.rect(1, 1, width - 2, height - 2);
+                applet.rect(0, 0, width, height);
                 applet.fill(0);
                 applet.textAlign(CENTER, CENTER);
                 applet.textSize(12);
@@ -55,8 +55,7 @@ public class LiveTimingEntry extends LPTable.Entry {
                 applet.textSize(LookAndFeel.TEXT_SIZE);
 
             } else {
-                applet.fill(isOdd ? 40 : 50);
-                applet.rect(0, 0, width, height);
+                super.draw(entry);
             }
         }
     };
@@ -84,7 +83,7 @@ public class LiveTimingEntry extends LPTable.Entry {
             }
             applet.noStroke();
             applet.fill(backColor);
-            applet.rect(1, 1, width - 2, height - 2);
+            applet.rect(0, 0, width, height);
             applet.fill(frontColor);
             applet.textAlign(CENTER, CENTER);
             applet.text(e.getCarNumber(), width / 2f, height / 2f);
