@@ -7,6 +7,7 @@ package ACCLiveTiming.extensions.livetiming;
 
 import ACCLiveTiming.visualisation.gui.LPContainer;
 import ACCLiveTiming.visualisation.gui.LPTable;
+import java.util.logging.Logger;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
 
@@ -15,6 +16,11 @@ import static processing.core.PConstants.RIGHT;
  * @author Leonard
  */
 public class LiveTimingPanel extends LPContainer {
+
+    /**
+     * This classes logger.
+     */
+    private static final Logger LOG = Logger.getLogger(LiveTimingPanel.class.getName());
 
     /**
      * Reference to the extension this panel is representing.
@@ -30,7 +36,7 @@ public class LiveTimingPanel extends LPContainer {
         setName("LIVE TIMING");
         table.addColumn("P", 40, false, LiveTimingEntry.positionRenderer);
         table.addColumn("Name", 240, false, LEFT, LiveTimingEntry.getName);
-        table.addColumn("", 16, false, LiveTimingEntry.pitRenderer );
+        table.addColumn("", 16, false, LiveTimingEntry.pitRenderer);
         table.addColumn("#", 50, false, LiveTimingEntry.carNumberRenderer);
         table.addColumn("Laps", 60, true, RIGHT, LiveTimingEntry.getLapCount);
         //table.addColumn("Gap", 80, true);
@@ -45,6 +51,10 @@ public class LiveTimingPanel extends LPContainer {
         table.addColumn("", 20, false);
         table.drawBottomRow(true);
         addComponent(table);
+
+        table.setRowClickedAction((entry) -> {
+            LOG.info(((LiveTimingEntry)entry).getCarNumber());
+        });
     }
 
     @Override

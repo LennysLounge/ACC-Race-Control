@@ -8,7 +8,9 @@ package ACCLiveTiming.visualisation.gui;
 import ACCLiveTiming.visualisation.LookAndFeel;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.logging.Logger;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
@@ -20,6 +22,8 @@ import static processing.core.PConstants.RIGHT;
  * @param <T> The class this table is representing.
  */
 public class LPTable<T extends LPTable.Entry> extends LPComponent {
+
+    private static final Logger LOG = Logger.getLogger(LPTable.class.getName());
 
     /**
      * List of the avaiable columns in this table.
@@ -71,11 +75,13 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
      *
      */
     private boolean drawBottomRow = false;
-    
     /**
      * The padding around the cells.
      */
     private int cellPadding = 1;
+
+    private Consumer<LPTable.Entry> rowClickedAction = (e) -> {
+    };
 
     private final static Renderer standardCellRenderer = new LPTable.Renderer() {
     };
@@ -232,6 +238,10 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
         drawBottomRow = state;
     }
 
+    public void setRowClickedAction(Consumer<LPTable.Entry> action) {
+        rowClickedAction = action;
+    }
+
     @Override
     public void onResize(int w, int h) {
         visibleEntries = (int) Math.floor(getHeight() / LookAndFeel.LINE_HEIGHT) - 1;
@@ -348,6 +358,14 @@ public class LPTable<T extends LPTable.Entry> extends LPComponent {
             dragScrollbarY = y;
             dragScrollbarScrollAmmount = scroll;
         }
+        int row = y / LookAndFeel.LINE_HEIGHT - 1;
+        int entryIndex = row + scroll;
+        if (entryIndex < entries.size() && entryIndex > 0) {
+            rowClickedAction.accept(entries.get(entryIndex));
+        } else {
+            LOG.info("no entry pressed");
+        }
+
     }
 
     @Override
