@@ -7,7 +7,6 @@ package ACCLiveTiming.visualisation;
 
 import ACCLiveTiming.visualisation.components.BasePanel;
 import ACCLiveTiming.client.BasicAccBroadcastingClient;
-import ACCLiveTiming.visualisation.gui.LPBase;
 import ACCLiveTiming.visualisation.gui.LPComponent;
 import java.util.logging.Logger;
 
@@ -15,7 +14,7 @@ import java.util.logging.Logger;
  *
  * @author Leonard
  */
-public class Visualisation extends LPBase {
+public class Visualisation extends CustomPApplet {
 
     /**
      * This classes logger.

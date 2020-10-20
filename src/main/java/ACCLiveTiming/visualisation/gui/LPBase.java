@@ -5,14 +5,14 @@
  */
 package ACCLiveTiming.visualisation.gui;
 
-import ACCLiveTiming.visualisation.CustomPApplet;
+import processing.core.PApplet;
 import processing.event.MouseEvent;
 
 /**
  *
  * @author Leonard
  */
-public class LPBase extends CustomPApplet {
+public class LPBase extends PApplet {
 
     private int sizeWidth;
     private int sizeHeight;
@@ -82,5 +82,7 @@ public class LPBase extends CustomPApplet {
     public void mouseDragged() {
         base.onMouseMoveInternal(mouseX, mouseY);
     }
+    
+
 
 }
