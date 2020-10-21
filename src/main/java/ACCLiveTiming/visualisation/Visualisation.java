@@ -7,10 +7,10 @@ package ACCLiveTiming.visualisation;
 
 import ACCLiveTiming.visualisation.components.BasePanel;
 import ACCLiveTiming.client.BasicAccBroadcastingClient;
-import ACCLiveTiming.visualisation.gui.LPComponent;
 import java.util.logging.Logger;
 
 /**
+ * The base for the processing visualization.
  *
  * @author Leonard
  */
@@ -19,12 +19,7 @@ public class Visualisation extends CustomPApplet {
     /**
      * This classes logger.
      */
-    private static Logger LOG = Logger.getLogger(Visualisation.class.getName());
-    /**
-     * Size of the window.
-     */
-    private int sizeWidth;
-    private int sizeHeight;
+    private static final Logger LOG = Logger.getLogger(Visualisation.class.getName());
     /**
      * Timer since the last draw.
      */
@@ -33,10 +28,16 @@ public class Visualisation extends CustomPApplet {
      * Connection client.
      */
     private BasicAccBroadcastingClient client;
-    
+    /**
+     * The base panel to use.
+     */
     private BasePanel basePanel;
 
-    public Visualisation(BasicAccBroadcastingClient client, int updateInterval) {
+    /**
+     * Creates a new instance of this object.
+     * @param client The ACC client connection to use.
+     */
+    public Visualisation(BasicAccBroadcastingClient client) {
         this.client = client;
     }
 
@@ -53,10 +54,9 @@ public class Visualisation extends CustomPApplet {
         frameRate(30);
 
         //init components.
-        LPComponent.setApplet(this);
         basePanel = new BasePanel(client);
         setComponent(basePanel);
-    } 
+    }
 
     @Override
     public void draw() {
@@ -67,9 +67,10 @@ public class Visualisation extends CustomPApplet {
         }
         super.draw();
     }
-    
-    public void keyPressed(){
-        if(key == ESC){
+
+    @Override
+    public void keyPressed() {
+        if (key == ESC) {
             key = 0;
         }
     }

@@ -42,7 +42,7 @@ public class LPComponent {
      */
     private boolean isInvalid = false;
 
-    private String name;
+    private String name = "";
     private LPComponent parent;
     
     /**

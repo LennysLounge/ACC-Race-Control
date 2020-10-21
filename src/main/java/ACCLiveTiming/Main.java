@@ -96,19 +96,19 @@ public class Main {
 
         client.sendRegisterRequest();
 
-        Visualisation v = new Visualisation(client, dialog.getUpdateInterval());
+        Visualisation v = new Visualisation(client);
         String[] a = {"MAIN"};
         PApplet.runSketch(a, v);
     }
-    
+
     public static class UncoughtExceptionHandler
-            implements Thread.UncaughtExceptionHandler{
+            implements Thread.UncaughtExceptionHandler {
 
         @Override
         public void uncaughtException(Thread t, Throwable e) {
             LOG.log(Level.SEVERE, "Uncought exception:", e);
         }
-        
+
     }
 
 }

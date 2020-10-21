@@ -20,6 +20,7 @@ public class LPBase extends PApplet {
     private LPComponent base;
 
     public LPBase() {
+        LPComponent.setApplet(this);
     }
 
     public void setComponent(LPComponent c) {
