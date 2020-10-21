@@ -18,6 +18,7 @@ public class TestomatoPanel extends LPContainer {
     
     public TestomatoPanel(){
         table = new NewLPTable();
+        table.setTableModel(new TestomatoTableModel());
         addComponent(table);
     }
 
