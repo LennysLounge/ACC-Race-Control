@@ -11,6 +11,7 @@ import ACCLiveTiming.extensions.laptimes.LapTimeExtension;
 import ACCLiveTiming.extensions.livetiming.LiveTimingExtension;
 import ACCLiveTiming.extensions.logging.LoggingExtension;
 import ACCLiveTiming.extensions.spreadsheetcontroll.SpreadSheetControlExtension;
+import ACCLiveTiming.extensions.testomato.TestomatoExtension;
 import ACCLiveTiming.utility.SpreadSheetService;
 import ACCLiveTiming.visualisation.Visualisation;
 import java.io.ByteArrayInputStream;
@@ -47,7 +48,7 @@ public class Main {
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "An error happened while setting up the logger.", e);
         }
-        
+
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
 
         startApp();
@@ -86,10 +87,12 @@ public class Main {
             return;
         }
 
+        client.registerExtension(new TestomatoExtension());
         client.registerExtension(new LiveTimingExtension());
         client.registerExtension(new IncidentExtension());
         client.registerExtension(new LapTimeExtension(dialog.isLapTimeLoggingEnabled()));
         client.registerExtension(new LoggingExtension());
+
         if (dialog.isSheetsAPIEnabled()) {
             client.registerExtension(new SpreadSheetControlExtension());
         }
