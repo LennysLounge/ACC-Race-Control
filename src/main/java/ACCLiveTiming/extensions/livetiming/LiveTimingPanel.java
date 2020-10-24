@@ -7,6 +7,7 @@ package ACCLiveTiming.extensions.livetiming;
 
 import ACCLiveTiming.visualisation.gui.LPContainer;
 import ACCLiveTiming.visualisation.gui.LPTable;
+import ACCLiveTiming.visualisation.gui.NewLPTable;
 import java.util.logging.Logger;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
@@ -29,11 +30,18 @@ public class LiveTimingPanel extends LPContainer {
     /**
      * The table that display the live timing.
      */
-    private LPTable table = new LPTable<LiveTimingEntry>();
+    private NewLPTable table = new NewLPTable();
+
+    private LiveTimingTableModel model = new LiveTimingTableModel();
 
     public LiveTimingPanel(LiveTimingExtension extension) {
         this.extension = extension;
         setName("LIVE TIMING");
+
+        table.setTableModel(model);
+        addComponent(table);
+
+        /*
         table.addColumn("P", 40, false, LiveTimingEntry.positionRenderer);
         table.addColumn("Name", 240, false, LEFT, LiveTimingEntry.getName);
         table.addColumn("", 16, false, LiveTimingEntry.pitRenderer);
@@ -55,6 +63,7 @@ public class LiveTimingPanel extends LPContainer {
         table.setRowClickedAction((entry) -> {
             LOG.info(((LiveTimingEntry)entry).getCarNumber());
         });
+         */
     }
 
     @Override
@@ -65,7 +74,7 @@ public class LiveTimingPanel extends LPContainer {
 
     @Override
     public void draw() {
-        table.setEntries(extension.getSortedEntries());
+        model.setEntries(extension.getSortedEntries());
     }
 
 }
