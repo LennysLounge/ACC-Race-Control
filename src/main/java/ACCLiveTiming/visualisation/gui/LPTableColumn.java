@@ -5,17 +5,20 @@
  */
 package ACCLiveTiming.visualisation.gui;
 
+import processing.core.PApplet;
+import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.LEFT;
+
 /**
  *
  * @author Leonard
  */
-public class Column {
+public class LPTableColumn {
 
     /**
      * Header for this column.
      */
     private String header;
-
     /**
      * Growthrate describes how fast it grows into the available space.
      */
@@ -24,27 +27,39 @@ public class Column {
      * Maximum size for this column.
      */
     private float maxWidth = Float.MAX_VALUE;
-
     /**
      * Minimum size for this column.
      */
     private float minWidth = 0;
 
-    public Column(String header) {
+    private NewLPTable.CellRenderer renderer = (
+            PApplet applet,
+            Object object,
+            boolean isSelected,
+            boolean isMouseOverRow,
+            boolean isMouseOverColumn,
+            float width,
+            float height) -> {
+        applet.fill(255);
+        applet.textAlign(LEFT, CENTER);
+        applet.text(object.toString(), height / 2, height / 2);
+    };
+
+    public LPTableColumn(String header) {
         this.header = header;
     }
 
-    public Column setGrowthRate(float growthRate) {
+    public LPTableColumn setGrowthRate(float growthRate) {
         this.growthRate = growthRate;
         return this;
     }
 
-    public Column setMaxWidth(float maxWidth) {
+    public LPTableColumn setMaxWidth(float maxWidth) {
         this.maxWidth = maxWidth;
         return this;
     }
 
-    public Column setMinWidth(float minWidth) {
+    public LPTableColumn setMinWidth(float minWidth) {
         this.minWidth = minWidth;
         return this;
     }
@@ -63,5 +78,9 @@ public class Column {
 
     public float getMinWidth() {
         return minWidth;
+    }
+
+    public NewLPTable.CellRenderer getRenderer() {
+        return renderer;
     }
 }
