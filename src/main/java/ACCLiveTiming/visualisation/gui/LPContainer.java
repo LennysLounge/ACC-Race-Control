@@ -86,10 +86,8 @@ public class LPContainer
                     break;
                 }
             }
-
             //run mouse pressed event for this component.
-            mousePressed((int) (mouseX - getPosX()),
-                    (int) (mouseY - getPosY()), scrolDir);
+            mouseScroll(scrolDir);
         }
         return target;
     }
