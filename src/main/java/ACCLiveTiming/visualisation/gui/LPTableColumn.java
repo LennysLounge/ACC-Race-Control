@@ -64,6 +64,11 @@ public class LPTableColumn {
         return this;
     }
 
+    public LPTableColumn setCellRenderer(NewLPTable.CellRenderer renderer) {
+        this.renderer = renderer;
+        return this;
+    }
+
     public String getHeader() {
         return header;
     }
