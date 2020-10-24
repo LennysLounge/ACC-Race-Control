@@ -23,7 +23,7 @@ public class IncidentPanel extends LPContainer {
     /**
      * The table that display the incidents.
      */
-    private LPTable table = new LPTable<LiveTimingEntry>();
+    //private LPTable table = new LPTable<LiveTimingEntry>();
     /**
      * Button to send an empty accident.
      */
@@ -37,6 +37,7 @@ public class IncidentPanel extends LPContainer {
         this.extension = extension;
         setName("INCIDENTS");
 
+        /*
         LPTable<Accident> t = new LPTable<>();
         t.addColumn("Nr.", 40, false, Accident.numberRenderer);
         t.addColumn("Session Time", 250, false, LEFT, Accident.getTime);
@@ -53,10 +54,12 @@ public class IncidentPanel extends LPContainer {
                 extension.addEmptyAccident();
             });
         }
+         */
     }
 
     @Override
     public void onResize(int w, int h) {
+        /*
         float height = LookAndFeel.LINE_HEIGHT;
         if (!showSendActionButton) {
             height = 0;
@@ -65,13 +68,16 @@ public class IncidentPanel extends LPContainer {
         sendEmptyActionButton.setSize(300, height * 0.8f);
         table.setPosition(0, height);
         table.setSize(w, h - height);
+         */
     }
 
     @Override
     public void draw() {
+        /*
         applet.fill(LookAndFeel.COLOR_MEDIUM_DARK_GRAY);
         applet.rect(0, 0, getWidth(), LookAndFeel.LINE_HEIGHT);
         table.setEntries(extension.getAccidents());
+         */
     }
 
 }
