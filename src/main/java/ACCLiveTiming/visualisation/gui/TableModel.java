@@ -5,9 +5,6 @@
  */
 package ACCLiveTiming.visualisation.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author Leonard
@@ -26,7 +23,7 @@ public abstract class TableModel {
      *
      * @return Array of table columns.
      */
-    public abstract Column[] getColumns();
+    public abstract LPTableColumn[] getColumns();
 
     /**
      * Returns the value at the specified cell.
@@ -36,5 +33,31 @@ public abstract class TableModel {
      * @return The object at that cell.
      */
     public abstract Object getValueAt(int column, int row);
+
+    /**
+     * Returns the currently selected row.
+     *
+     * @return the selected row.
+     */
+    public int getSelectedRow() {
+        return -1;
+    }
+
+    /**
+     * Gets called when a cell has been clicked.
+     *
+     * @param column the column that has been clicekd
+     * @param row the row that has been clicked.
+     */
+    public void onClick(int column, int row) {
+    }
+
+    /**
+     * Gets called when a header has been clicked
+     *
+     * @param column the column that has been clicked.
+     */
+    public void onHeaderClicked(int column) {
+    }
 
 }
