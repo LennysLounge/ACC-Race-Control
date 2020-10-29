@@ -37,25 +37,6 @@ public class IncidentPanel extends LPContainer {
         table.setOverdrawForLastLine(true);
         table.setTableModel(extension.getTableModel());
         addComponent(table);
-
-        /*
-        LPTable<Accident> t = new LPTable<>();
-        t.addColumn("Nr.", 40, false, Accident.numberRenderer);
-        t.addColumn("Session Time", 250, false, LEFT, Accident.getTime);
-        t.addColumn("#", 50, true, Accident.carNumberRenderer);
-        t.drawBottomRow(true);
-        table = t;
-        addComponent(table);
-
-        showSendActionButton = SpreadSheetService.isRunning();
-
-        if (showSendActionButton) {
-            addComponent(sendEmptyActionButton);
-            sendEmptyActionButton.setAction(() -> {
-                extension.addEmptyAccident();
-            });
-        }
-         */
     }
 
     @Override
