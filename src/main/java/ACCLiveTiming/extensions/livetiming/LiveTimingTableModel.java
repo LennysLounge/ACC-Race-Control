@@ -44,7 +44,7 @@ public class LiveTimingTableModel extends TableModel {
             fgColor = LookAndFeel.COLOR_BLACK;
         }
         applet.fill(bgColor);
-        applet.rect(0, 0, width, height);
+        applet.rect(1, 1, width-2, height-2);
         applet.fill(fgColor);
         applet.textAlign(CENTER, CENTER);
         applet.text(String.valueOf(t.left),
@@ -63,7 +63,7 @@ public class LiveTimingTableModel extends TableModel {
         if (isInPits) {
             applet.noStroke();
             applet.fill(LookAndFeel.COLOR_WHITE);
-            applet.rect(0, 0, width, height);
+            applet.rect(1, 1, width-2, height-2);
             applet.fill(0);
             applet.textAlign(CENTER, CENTER);
             applet.textSize(12);
@@ -100,7 +100,7 @@ public class LiveTimingTableModel extends TableModel {
         }
         applet.noStroke();
         applet.fill(backColor);
-        applet.rect(0, 0, width, height);
+        applet.rect(1, 1, width-2, height-2);
         applet.fill(frontColor);
         applet.textAlign(CENTER, CENTER);
         applet.text(String.valueOf(t.left), width / 2f, height / 2f);
