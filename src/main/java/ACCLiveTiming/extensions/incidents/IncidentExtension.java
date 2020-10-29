@@ -48,6 +48,10 @@ public class IncidentExtension extends AccClientExtension {
      * Timestamp for when the race session started.
      */
     private long raceStartTimestamp;
+    /**
+     * Table model for the incident panel table.
+     */
+    private IncidentTableModel model = new IncidentTableModel();
 
     public IncidentExtension() {
         this.panel = new IncidentPanel(this);
@@ -55,6 +59,10 @@ public class IncidentExtension extends AccClientExtension {
 
     public AccBroadcastingData getModel() {
         return client.getModel();
+    }
+    
+    public IncidentTableModel getTableModel(){
+        return model;
     }
 
     public List<Accident> getAccidents() {
@@ -112,6 +120,7 @@ public class IncidentExtension extends AccClientExtension {
         newAccidents.addAll(accidents);
         newAccidents.add(a.withIncidentNumber(getAndIncrementCounter(client.getSessionId())));
         accidents = newAccidents;
+        model.setAccidents(accidents);
 
         if (SpreadSheetService.isRunning()) {
             List<Integer> carNumbers = a.getCars().stream()

@@ -5,8 +5,10 @@
  */
 package ACCLiveTiming.extensions.incidents;
 
+import ACCLiveTiming.visualisation.LookAndFeel;
 import ACCLiveTiming.visualisation.gui.LPButton;
 import ACCLiveTiming.visualisation.gui.LPContainer;
+import ACCLiveTiming.visualisation.gui.NewLPTable;
 
 /**
  *
@@ -18,19 +20,23 @@ public class IncidentPanel extends LPContainer {
     /**
      * The table that display the incidents.
      */
-    //private LPTable table = new LPTable<LiveTimingEntry>();
+    private final NewLPTable table = new NewLPTable();
     /**
      * Button to send an empty accident.
      */
-    private LPButton sendEmptyActionButton = new LPButton("Send empty incident");
+    private final LPButton sendEmptyActionButton = new LPButton("Send empty incident");
     /**
      * Indicates it the sendEmptyActionButton is visible.
      */
-    private boolean showSendActionButton = false;
+    private final boolean showSendActionButton = false;
 
     public IncidentPanel(IncidentExtension extension) {
         this.extension = extension;
         setName("INCIDENTS");
+
+        table.setOverdrawForLastLine(true);
+        table.setTableModel(extension.getTableModel());
+        addComponent(table);
 
         /*
         LPTable<Accident> t = new LPTable<>();
@@ -54,7 +60,6 @@ public class IncidentPanel extends LPContainer {
 
     @Override
     public void onResize(int w, int h) {
-        /*
         float height = LookAndFeel.LINE_HEIGHT;
         if (!showSendActionButton) {
             height = 0;
@@ -63,16 +68,6 @@ public class IncidentPanel extends LPContainer {
         sendEmptyActionButton.setSize(300, height * 0.8f);
         table.setPosition(0, height);
         table.setSize(w, h - height);
-         */
-    }
-
-    @Override
-    public void draw() {
-        /*
-        applet.fill(LookAndFeel.COLOR_MEDIUM_DARK_GRAY);
-        applet.rect(0, 0, getWidth(), LookAndFeel.LINE_HEIGHT);
-        table.setEntries(extension.getAccidents());
-         */
     }
 
 }

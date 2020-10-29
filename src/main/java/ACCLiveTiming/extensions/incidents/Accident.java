@@ -79,43 +79,6 @@ public class Accident extends LPTable.Entry {
     public static final Function<Accident, String> getTime
             = (a) -> TimeUtils.asDuration(a.getEarliestTime());
 
-    public static final LPTable.Renderer carNumberRenderer = new LPTable.Renderer() {
-        @Override
-        public void draw(LPTable.Entry entry) {
-            //Draw car numbres
-            Accident accident = (Accident) entry;
-            float x = 0;
-            for (CarInfo car : accident.getCars()) {;
-                String carNumber = String.valueOf(car.getCarNumber());
-                int background_color = 0;
-                int text_color = 0;
-                switch (car.getDriver().getCategory()) {
-                    case BRONZE:
-                        background_color = LookAndFeel.COLOR_RED;
-                        text_color = LookAndFeel.COLOR_BLACK;
-                        break;
-                    case SILVER:
-                        background_color = LookAndFeel.COLOR_GRAY;
-                        text_color = LookAndFeel.COLOR_WHITE;
-                        break;
-                    case GOLD:
-                    case PLATINUM:
-                        background_color = LookAndFeel.COLOR_WHITE;
-                        text_color = LookAndFeel.COLOR_BLACK;
-                        break;
-                }
-
-                float w = LookAndFeel.LINE_HEIGHT * 1.25f;
-                applet.fill(background_color);
-                applet.rect(x + 1, 1, w - 2, height - 2);
-                applet.fill(text_color);
-                applet.textAlign(CENTER, CENTER);
-                applet.text(carNumber, x + w / 2, height / 2f);
-                x += w;
-            }
-        }
-    };
-
     public Accident(float time, CarInfo car, SessionId sessionID) {
         this(time, time, Arrays.asList(car), System.currentTimeMillis(), sessionID, 0);
     }
