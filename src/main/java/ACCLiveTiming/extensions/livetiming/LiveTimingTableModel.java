@@ -6,6 +6,8 @@
 package ACCLiveTiming.extensions.livetiming;
 
 import ACCLiveTiming.networking.data.CarInfo;
+import ACCLiveTiming.networking.enums.CarLocation;
+import ACCLiveTiming.networking.enums.DriverCategory;
 import static ACCLiveTiming.networking.enums.DriverCategory.BRONZE;
 import static ACCLiveTiming.networking.enums.DriverCategory.GOLD;
 import static ACCLiveTiming.networking.enums.DriverCategory.PLATINUM;
@@ -78,10 +80,10 @@ public class LiveTimingTableModel extends TableModel {
             boolean isMouseOverColumn,
             float width,
             float height) -> {
-        CarInfo car = (CarInfo) object;
+        Tuple t = (Tuple) object;
         int backColor = 0;
         int frontColor = 0;
-        switch (car.getDriver().getCategory()) {
+        switch ((DriverCategory) t.right) {
             case BRONZE:
                 backColor = LookAndFeel.COLOR_RED;
                 frontColor = LookAndFeel.COLOR_BLACK;
@@ -101,10 +103,17 @@ public class LiveTimingTableModel extends TableModel {
         applet.rect(0, 0, width, height);
         applet.fill(frontColor);
         applet.textAlign(CENTER, CENTER);
-        applet.text(car.getCarNumber(), width / 2f, height / 2f);
+        applet.text(String.valueOf(t.left), width / 2f, height / 2f);
     };
 
-    private List<LiveTimingEntry> entries = new LinkedList<>();
+    /**
+     * Ordered list of car entries
+     */
+    private List<CarInfo> entries = new LinkedList<>();
+    /**
+     * Car id of the focused car.
+     */
+    private int focusedCarId = -1;
 
     @Override
     public int getRowCount() {
@@ -134,27 +143,37 @@ public class LiveTimingTableModel extends TableModel {
 
     @Override
     public Object getValueAt(int column, int row) {
-        LiveTimingEntry entry = entries.get(row);
+        CarInfo car = entries.get(row);
         switch (column) {
             case 0:
                 return new Tuple(
-                        entry.getCarInfo().getRealtime().getPosition(),
-                        entry.isFocused()
+                        car.getRealtime().getPosition(),
+                        car.getCarId() == focusedCarId
                 );
             case 1:
-                return entry.getName();
+                String firstname = car.getDriver().getFirstName();
+                String lastname = car.getDriver().getLastName();
+                firstname = firstname.substring(0, Math.min(firstname.length(), 1));
+                return String.format("%s. %s", firstname, lastname);
             case 2:
-                return entry.isInPits();
+                return car.getRealtime().getLocation() != CarLocation.TRACK;
             case 3:
-                return entry.getCarInfo();
+                return new Tuple(
+                        car.getCarNumber(),
+                        car.getDriver().getCategory()
+                );
             case 4:
                 return "--:--.--";
         }
         return "-";
     }
 
-    public void setEntries(List<LiveTimingEntry> entries) {
+    public void setEntries(List<CarInfo> entries) {
         this.entries = entries;
+    }
+
+    public void setFocusedCarId(int carId) {
+        focusedCarId = carId;
     }
 
     private class Tuple {

@@ -6,11 +6,8 @@
 package ACCLiveTiming.extensions.livetiming;
 
 import ACCLiveTiming.visualisation.gui.LPContainer;
-import ACCLiveTiming.visualisation.gui.LPTable;
 import ACCLiveTiming.visualisation.gui.NewLPTable;
 import java.util.logging.Logger;
-import static processing.core.PConstants.LEFT;
-import static processing.core.PConstants.RIGHT;
 
 /**
  *
@@ -32,13 +29,11 @@ public class LiveTimingPanel extends LPContainer {
      */
     private NewLPTable table = new NewLPTable();
 
-    private LiveTimingTableModel model = new LiveTimingTableModel();
-
     public LiveTimingPanel(LiveTimingExtension extension) {
         this.extension = extension;
         setName("LIVE TIMING");
 
-        table.setTableModel(model);
+        table.setTableModel(extension.getTableModel());
         table.setOverdrawForLastLine(true);
         addComponent(table);
 
@@ -71,11 +66,6 @@ public class LiveTimingPanel extends LPContainer {
     public void onResize(int w, int h) {
         table.setPosition(0, 0);
         table.setSize(w, h);
-    }
-
-    @Override
-    public void draw() {
-        model.setEntries(extension.getSortedEntries());
     }
 
 }

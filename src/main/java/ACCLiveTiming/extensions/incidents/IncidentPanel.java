@@ -5,13 +5,8 @@
  */
 package ACCLiveTiming.extensions.incidents;
 
-import ACCLiveTiming.extensions.livetiming.LiveTimingEntry;
-import ACCLiveTiming.utility.SpreadSheetService;
-import ACCLiveTiming.visualisation.LookAndFeel;
 import ACCLiveTiming.visualisation.gui.LPButton;
 import ACCLiveTiming.visualisation.gui.LPContainer;
-import ACCLiveTiming.visualisation.gui.LPTable;
-import static processing.core.PConstants.LEFT;
 
 /**
  *

@@ -10,9 +10,11 @@ import ACCLiveTiming.networking.data.CarInfo;
 import ACCLiveTiming.networking.data.RealtimeInfo;
 import ACCLiveTiming.networking.data.SessionInfo;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -29,43 +31,35 @@ public class LiveTimingExtension extends AccClientExtension {
     /**
      * Map from carId to ListEntry.
      */
-    private final Map<Integer, LiveTimingEntry> entires = new HashMap<>();
+    private final Map<Integer, CarInfo> entires = new HashMap<>();
     /**
-     * Sorted list of ListEntries.
+     * Table model to display the live timing.
      */
-    private List<LiveTimingEntry> sortedEntries = new LinkedList<>();
+    private LiveTimingTableModel model = new LiveTimingTableModel();
 
     public LiveTimingExtension() {
         this.panel = new LiveTimingPanel(this);
     }
-
-    public List<LiveTimingEntry> getSortedEntries() {
-        return new LinkedList<>(sortedEntries);
+    
+    public LiveTimingTableModel getTableModel(){
+        return model;
     }
 
     @Override
     public void onRealtimeUpdate(SessionInfo sessionInfo) {
-        List<LiveTimingEntry> sorted = entires.values().stream()
+        List<CarInfo> sorted = entires.values().stream()
                 .filter(entry -> entry.isConnected())
-                .sorted((e1, e2) -> compareTo(e1.getCarInfo(), e2.getCarInfo()))
+                .sorted((e1, e2) -> compareTo(e1, e2))
                 .collect(Collectors.toList());
-
-        entires.values().forEach(
-                entry -> entry.setFocused(entry.getCarInfo().getCarId() == sessionInfo.getFocusedCarIndex())
-        );
-        sortedEntries = sorted;
+        
+        model.setEntries(sorted);
+        model.setFocusedCarId(sessionInfo.getFocusedCarIndex());
     }
 
     @Override
     public void onRealtimeCarUpdate(RealtimeInfo info) {
         CarInfo car = client.getModel().getCarsInfo().getOrDefault(info.getCarId(), new CarInfo());
-        if (entires.containsKey(car.getCarId())) {
-            entires.get(car.getCarId()).setCarInfo(car);
-        } else {
-            LiveTimingEntry entry = new LiveTimingEntry();
-            entry.setCarInfo(car);
-            entires.put(car.getCarId(), entry);
-        }
+        entires.put(car.getCarId(), car);
     }
 
     private int compareTo(CarInfo c1, CarInfo c2) {
