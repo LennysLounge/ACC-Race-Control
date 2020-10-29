@@ -11,7 +11,6 @@ import ACCLiveTiming.extensions.laptimes.LapTimeExtension;
 import ACCLiveTiming.extensions.livetiming.LiveTimingExtension;
 import ACCLiveTiming.extensions.logging.LoggingExtension;
 import ACCLiveTiming.extensions.spreadsheetcontroll.SpreadSheetControlExtension;
-import ACCLiveTiming.extensions.testomato.TestomatoExtension;
 import ACCLiveTiming.utility.SpreadSheetService;
 import ACCLiveTiming.visualisation.Visualisation;
 import java.io.ByteArrayInputStream;
@@ -87,7 +86,6 @@ public class Main {
             return;
         }
 
-        client.registerExtension(new TestomatoExtension());
         client.registerExtension(new LiveTimingExtension());
         client.registerExtension(new IncidentExtension());
         client.registerExtension(new LapTimeExtension(dialog.isLapTimeLoggingEnabled()));
