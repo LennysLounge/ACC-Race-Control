@@ -39,6 +39,7 @@ public class LiveTimingPanel extends LPContainer {
         setName("LIVE TIMING");
 
         table.setTableModel(model);
+        table.setOverdrawForLastLine(true);
         addComponent(table);
 
         /*

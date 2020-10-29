@@ -24,7 +24,7 @@ import static processing.core.PConstants.CENTER;
  * @author Leonard
  */
 public class LiveTimingTableModel extends TableModel {
-    
+
     private final NewLPTable.CellRenderer positionRenderer = (
             PApplet applet,
             Object object,
@@ -33,14 +33,22 @@ public class LiveTimingTableModel extends TableModel {
             boolean isMouseOverColumn,
             float width,
             float height) -> {
+        Tuple t = (Tuple) object;
         applet.noStroke();
-        applet.fill(LookAndFeel.COLOR_RED);
+        int bgColor = LookAndFeel.COLOR_RED;
+        int fgColor = LookAndFeel.COLOR_WHITE;
+        if ((boolean) t.right) {
+            bgColor = LookAndFeel.COLOR_WHITE;
+            fgColor = LookAndFeel.COLOR_BLACK;
+        }
+        applet.fill(bgColor);
         applet.rect(0, 0, width, height);
-        applet.fill(255);
+        applet.fill(fgColor);
         applet.textAlign(CENTER, CENTER);
-        applet.text(object.toString(), width / 2f, height / 2f);
+        applet.text(String.valueOf(t.left),
+                width / 2f, height / 2f);
     };
-    
+
     private final NewLPTable.CellRenderer pitRenderer = (
             PApplet applet,
             Object object,
@@ -61,7 +69,7 @@ public class LiveTimingTableModel extends TableModel {
             applet.textSize(LookAndFeel.TEXT_SIZE);
         }
     };
-    
+
     private final NewLPTable.CellRenderer carNumberRenderer = (
             PApplet applet,
             Object object,
@@ -95,14 +103,14 @@ public class LiveTimingTableModel extends TableModel {
         applet.textAlign(CENTER, CENTER);
         applet.text(car.getCarNumber(), width / 2f, height / 2f);
     };
-    
+
     private List<LiveTimingEntry> entries = new LinkedList<>();
-    
+
     @Override
     public int getRowCount() {
         return entries.size();
     }
-    
+
     @Override
     public LPTableColumn[] getColumns() {
         return new LPTableColumn[]{
@@ -123,13 +131,16 @@ public class LiveTimingTableModel extends TableModel {
             new LPTableColumn("lap")
         };
     }
-    
+
     @Override
     public Object getValueAt(int column, int row) {
         LiveTimingEntry entry = entries.get(row);
         switch (column) {
             case 0:
-                return entry.getPosition();
+                return new Tuple(
+                        entry.getCarInfo().getRealtime().getPosition(),
+                        entry.isFocused()
+                );
             case 1:
                 return entry.getName();
             case 2:
@@ -141,9 +152,20 @@ public class LiveTimingTableModel extends TableModel {
         }
         return "-";
     }
-    
+
     public void setEntries(List<LiveTimingEntry> entries) {
         this.entries = entries;
     }
-    
+
+    private class Tuple {
+
+        public Object left;
+        public Object right;
+
+        public Tuple(Object left, Object right) {
+            this.left = left;
+            this.right = right;
+        }
+    }
+
 }
