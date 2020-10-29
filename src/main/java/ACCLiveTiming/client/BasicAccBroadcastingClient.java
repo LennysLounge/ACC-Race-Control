@@ -6,6 +6,7 @@
 package ACCLiveTiming.client;
 
 import ACCLiveTiming.extensions.AccClientExtension;
+import ACCLiveTiming.extensions.logging.LoggingExtension;
 import ACCLiveTiming.networking.PrimitivAccBroadcastingClient;
 import ACCLiveTiming.networking.data.BroadcastingEvent;
 import ACCLiveTiming.networking.data.CarInfo;
@@ -278,57 +279,57 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
     }
 
     private void onPracticeStart() {
-        log("Practice starting");
+        LoggingExtension.log("Practice starting");
         LOG.info("Practice starting");
         extensions.forEach(extension -> extension.onPracticeStart());
     }
 
     private void onPracticeEnd() {
-        log("Practice post-session");
+        LoggingExtension.log("Practice post-session");
         LOG.info("Practice post-session");
         extensions.forEach(extension -> extension.onPracticeEnd());
     }
 
     private void onQualifyingStart() {
-        log("Qualifying starting");
+        LoggingExtension.log("Qualifying starting");
         LOG.info("Qualfifying starting");
         extensions.forEach(extension -> extension.onQualifyingStart());
     }
 
     private void onQualifyingEnd() {
-        log("Qualifying post-session");
+        LoggingExtension.log("Qualifying post-session");
         LOG.info("Qualfifying post-session");
         extensions.forEach(extension -> extension.onQualifyingEnd());
     }
 
     private void onRaceStart() {
-        log("Race starting");
+        LoggingExtension.log("Race starting");
         LOG.info("Race starting");
         extensions.forEach(extension -> extension.onRaceStart());
     }
 
     private void onRaceSessionStart() {
-        log("Race session starting");
+        LoggingExtension.log("Race session starting");
         LOG.info("Race session starting");
         extensions.forEach(extension -> extension.onRaceSessionStart());
     }
 
     private void onRaceEnd() {
-        log("Race post-session");
+        LoggingExtension.log("Race post-session");
         LOG.info("Race post-session");
         extensions.forEach(extension -> extension.onRaceEnd());
     }
 
     private void onCarDisconnect(CarInfo car) {
         String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
-        log("Car disconnected: #" + car.getCarNumber() + "\t" + name);
+        LoggingExtension.log("Car disconnected: #" + car.getCarNumber() + "\t" + name);
         LOG.info("Car disconnected: #" + car.getCarNumber() + "\t" + name);
         extensions.forEach(extension -> extension.onCarDisconnect(car));
     }
 
     private void onCarConnect(CarInfo car) {
         String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
-        log("Car connected: #" + car.getCarNumber() + "\t" + name);
+        LoggingExtension.log("Car connected: #" + car.getCarNumber() + "\t" + name);
         LOG.info("Car connected: #" + car.getCarNumber() + "\t" + name);
         extensions.forEach(extension -> extension.onCarConnect(car));
     }

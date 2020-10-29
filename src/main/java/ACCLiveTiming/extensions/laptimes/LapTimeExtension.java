@@ -8,6 +8,7 @@ package ACCLiveTiming.extensions.laptimes;
 import ACCLiveTiming.client.SessionId;
 import ACCLiveTiming.extensions.AccClientExtension;
 import ACCLiveTiming.extensions.incidents.IncidentExtension;
+import ACCLiveTiming.extensions.logging.LoggingExtension;
 import ACCLiveTiming.networking.data.CarInfo;
 import ACCLiveTiming.networking.data.LapInfo;
 import ACCLiveTiming.networking.data.RealtimeInfo;
@@ -135,7 +136,7 @@ public class LapTimeExtension extends AccClientExtension {
             message += "[Outlap]";
         }
 
-        client.log(message);
+        LoggingExtension.log(message);
         LOG.info(message);
     }
 

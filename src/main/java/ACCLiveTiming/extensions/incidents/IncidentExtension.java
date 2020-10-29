@@ -7,6 +7,7 @@ package ACCLiveTiming.extensions.incidents;
 
 import ACCLiveTiming.client.SessionId;
 import ACCLiveTiming.extensions.AccClientExtension;
+import ACCLiveTiming.extensions.logging.LoggingExtension;
 import ACCLiveTiming.networking.data.AccBroadcastingData;
 import ACCLiveTiming.networking.data.BroadcastingEvent;
 import ACCLiveTiming.utility.SpreadSheetService;
@@ -77,7 +78,7 @@ public class IncidentExtension extends AccClientExtension {
     public void onAccident(BroadcastingEvent event) {
         String logMessage = "Accident: #" + client.getModel().getCar(event.getCarId()).getCarNumber()
                 + "\t" + TimeUtils.asDuration(client.getModel().getSessionInfo().getSessionTime());
-        client.log(logMessage);
+        LoggingExtension.log(logMessage);
         LOG.info(logMessage);
 
         float sessionTime = client.getModel().getSessionInfo().getSessionTime();

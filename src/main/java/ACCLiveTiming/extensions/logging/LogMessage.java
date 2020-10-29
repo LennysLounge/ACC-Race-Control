@@ -5,36 +5,23 @@
  */
 package ACCLiveTiming.extensions.logging;
 
-import ACCLiveTiming.visualisation.gui.LPTable;
-import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.LEFT;
+import java.util.Date;
 
 /**
  *
  * @author Leonard
  */
-public class LogMessage extends LPTable.Entry {
-
+public class LogMessage {
+    private Date timeStamp;
     private String message;
-    public static LPTable.Renderer logRenderer = new LPTable.Renderer() {
-        @Override
-        public void draw(LPTable.Entry entry) {
-            String message = ((LogMessage) entry).getMessage();
-            applet.fill(255);
-            applet.textAlign(LEFT, CENTER);
-            float x = 10;
-            int tabSize = 140;
-            String[] partials = message.split("\t");
-            for (String partial : partials) {
-                applet.text(partial, x, height / 2f);
-                float msgWidth = applet.textWidth(partial);
-                x += (msgWidth - (msgWidth % tabSize) + tabSize);
-            }
-        }
-    };
 
-    public LogMessage(String message) {
+    public LogMessage(String message){
         this.message = message;
+        this.timeStamp = new Date();
+    }
+
+    public Date getTimeStamp() {
+        return timeStamp;
     }
 
     public String getMessage() {
