@@ -74,6 +74,11 @@ public class NewLPTable extends LPContainer {
      * Indicates that the column headers are clickable.
      */
     private boolean clickableColumnHeaders = false;
+    /**
+     * Indicates that the last line will be drawn over the edge of this
+     * component.
+     */
+    private boolean overdrawForLastLine = false;
 
     @Override
     public void draw() {
@@ -131,6 +136,9 @@ public class NewLPTable extends LPContainer {
 
         //Draw model
         int rowLimit = Math.min(model.getRowCount(), visibleRows);
+        if (overdrawForLastLine) {
+            rowLimit = Math.min(model.getRowCount()-scrollbar.scroll, visibleRows + 1);
+        }
         for (int row = 0; row < rowLimit; row++) {
             float columnOffset = scrollbar.width;
             float rowOffset = row * rowHeight;
@@ -297,6 +305,10 @@ public class NewLPTable extends LPContainer {
 
     public void setClickableHeader(boolean state) {
         this.clickableColumnHeaders = state;
+    }
+
+    public void setOverdrawForLastLine(boolean state) {
+        this.overdrawForLastLine = state;
     }
 
     private float[] calculateColumnWidths(LPTableColumn[] columns, float totalWidth) {

@@ -20,6 +20,7 @@ public class TestomatoPanel extends LPContainer {
         table = new NewLPTable();
         table.setTableModel(new TestomatoTableModel());
         table.setClickableHeader(true);
+        table.setOverdrawForLastLine(true);
         addComponent(table);
     }
 
