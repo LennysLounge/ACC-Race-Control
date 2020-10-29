@@ -8,7 +8,7 @@ package ACCLiveTiming.extensions.incidents;
 import ACCLiveTiming.visualisation.LookAndFeel;
 import ACCLiveTiming.visualisation.gui.LPButton;
 import ACCLiveTiming.visualisation.gui.LPContainer;
-import ACCLiveTiming.visualisation.gui.NewLPTable;
+import ACCLiveTiming.visualisation.gui.LPTable;
 
 /**
  *
@@ -20,7 +20,7 @@ public class IncidentPanel extends LPContainer {
     /**
      * The table that display the incidents.
      */
-    private final NewLPTable table = new NewLPTable();
+    private final LPTable table = new LPTable();
     /**
      * Button to send an empty accident.
      */

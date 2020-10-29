@@ -8,9 +8,8 @@ package ACCLiveTiming.extensions.incidents;
 import ACCLiveTiming.networking.data.CarInfo;
 import ACCLiveTiming.utility.TimeUtils;
 import ACCLiveTiming.visualisation.LookAndFeel;
-import ACCLiveTiming.visualisation.gui.LPTable;
 import ACCLiveTiming.visualisation.gui.LPTableColumn;
-import ACCLiveTiming.visualisation.gui.NewLPTable;
+import ACCLiveTiming.visualisation.gui.LPTable;
 import ACCLiveTiming.visualisation.gui.TableModel;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +22,7 @@ import static processing.core.PConstants.CENTER;
  */
 public class IncidentTableModel extends TableModel {
 
-    private final NewLPTable.CellRenderer carsRenderer = (
+    private final LPTable.CellRenderer carsRenderer = (
             PApplet applet,
             Object object,
             boolean isSelected,

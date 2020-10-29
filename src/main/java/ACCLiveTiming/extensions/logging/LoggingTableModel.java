@@ -6,7 +6,7 @@
 package ACCLiveTiming.extensions.logging;
 
 import ACCLiveTiming.visualisation.gui.LPTableColumn;
-import ACCLiveTiming.visualisation.gui.NewLPTable;
+import ACCLiveTiming.visualisation.gui.LPTable;
 import ACCLiveTiming.visualisation.gui.TableModel;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,7 +22,7 @@ import static processing.core.PConstants.LEFT;
  */
 public class LoggingTableModel extends TableModel {
 
-    private final NewLPTable.CellRenderer messageRenderer = (
+    private final LPTable.CellRenderer messageRenderer = (
             PApplet applet,
             Object object,
             boolean isSelected,

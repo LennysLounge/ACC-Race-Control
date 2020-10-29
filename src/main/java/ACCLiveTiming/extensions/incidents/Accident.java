@@ -7,25 +7,17 @@ package ACCLiveTiming.extensions.incidents;
 
 import ACCLiveTiming.client.SessionId;
 import ACCLiveTiming.networking.data.CarInfo;
-import static ACCLiveTiming.networking.enums.SessionType.PRACTICE;
-import static ACCLiveTiming.networking.enums.SessionType.QUALIFYING;
-import static ACCLiveTiming.networking.enums.SessionType.RACE;
-import ACCLiveTiming.utility.TimeUtils;
-import ACCLiveTiming.visualisation.LookAndFeel;
-import ACCLiveTiming.visualisation.gui.LPTable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.logging.Logger;
-import static processing.core.PConstants.CENTER;
 
 /**
  *
  * @author Leonard
  */
-public class Accident extends LPTable.Entry {
+public class Accident {
 
     private static Logger LOG = Logger.getLogger(Accident.class.getName());
 
@@ -53,31 +45,6 @@ public class Accident extends LPTable.Entry {
      * The number of this accident.
      */
     private final int incidentNumber;
-
-    public static final LPTable.Renderer numberRenderer = new LPTable.Renderer() {
-        @Override
-        public void draw(LPTable.Entry entry) {
-            switch (((Accident) entry).getSessionID().getType()) {
-                case PRACTICE:
-                    applet.fill(LookAndFeel.COLOR_PRACTICE);
-                    break;
-                case QUALIFYING:
-                    applet.fill(LookAndFeel.COLOR_QUALIFYING);
-                    break;
-                case RACE:
-                    applet.fill(LookAndFeel.COLOR_RACE);
-                    break;
-
-            }
-            applet.rect(1, 1, width - 2, height - 2);
-            applet.fill(255);
-            applet.textAlign(CENTER, CENTER);
-            applet.text(String.valueOf(((Accident) entry).getIncidentNumber()),
-                    width / 2f, height / 2f);
-        }
-    };
-    public static final Function<Accident, String> getTime
-            = (a) -> TimeUtils.asDuration(a.getEarliestTime());
 
     public Accident(float time, CarInfo car, SessionId sessionID) {
         this(time, time, Arrays.asList(car), System.currentTimeMillis(), sessionID, 0);

@@ -7,9 +7,6 @@ package ACCLiveTiming.extensions.logging;
 
 import ACCLiveTiming.visualisation.gui.LPContainer;
 import ACCLiveTiming.visualisation.gui.LPTable;
-import ACCLiveTiming.visualisation.gui.NewLPTable;
-import java.util.Collections;
-import java.util.List;
 
 /**
  *
@@ -21,7 +18,7 @@ public class LoggingPanel extends LPContainer {
     /**
      * The table that display the messages.
      */
-    private NewLPTable table = new NewLPTable();
+    private LPTable table = new LPTable();
 
     public LoggingPanel(LoggingExtension extension) {
         this.extension = extension;

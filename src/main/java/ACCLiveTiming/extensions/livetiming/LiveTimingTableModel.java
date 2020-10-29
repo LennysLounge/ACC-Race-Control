@@ -14,7 +14,7 @@ import static ACCLiveTiming.networking.enums.DriverCategory.PLATINUM;
 import static ACCLiveTiming.networking.enums.DriverCategory.SILVER;
 import ACCLiveTiming.visualisation.LookAndFeel;
 import ACCLiveTiming.visualisation.gui.LPTableColumn;
-import ACCLiveTiming.visualisation.gui.NewLPTable;
+import ACCLiveTiming.visualisation.gui.LPTable;
 import ACCLiveTiming.visualisation.gui.TableModel;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +27,7 @@ import static processing.core.PConstants.CENTER;
  */
 public class LiveTimingTableModel extends TableModel {
 
-    private final NewLPTable.CellRenderer positionRenderer = (
+    private final LPTable.CellRenderer positionRenderer = (
             PApplet applet,
             Object object,
             boolean isSelected,
@@ -51,7 +51,7 @@ public class LiveTimingTableModel extends TableModel {
                 width / 2f, height / 2f);
     };
 
-    private final NewLPTable.CellRenderer pitRenderer = (
+    private final LPTable.CellRenderer pitRenderer = (
             PApplet applet,
             Object object,
             boolean isSelected,
@@ -72,7 +72,7 @@ public class LiveTimingTableModel extends TableModel {
         }
     };
 
-    private final NewLPTable.CellRenderer carNumberRenderer = (
+    private final LPTable.CellRenderer carNumberRenderer = (
             PApplet applet,
             Object object,
             boolean isSelected,

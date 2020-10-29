@@ -32,7 +32,7 @@ public class LPTableColumn {
      */
     private float minWidth = 0;
 
-    private NewLPTable.CellRenderer renderer = (
+    private LPTable.CellRenderer renderer = (
             PApplet applet,
             Object object,
             boolean isSelected,
@@ -64,7 +64,7 @@ public class LPTableColumn {
         return this;
     }
 
-    public LPTableColumn setCellRenderer(NewLPTable.CellRenderer renderer) {
+    public LPTableColumn setCellRenderer(LPTable.CellRenderer renderer) {
         this.renderer = renderer;
         return this;
     }
@@ -85,7 +85,7 @@ public class LPTableColumn {
         return minWidth;
     }
 
-    public NewLPTable.CellRenderer getRenderer() {
+    public LPTable.CellRenderer getRenderer() {
         return renderer;
     }
 }

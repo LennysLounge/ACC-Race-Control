@@ -6,7 +6,7 @@
 package ACCLiveTiming.extensions.livetiming;
 
 import ACCLiveTiming.visualisation.gui.LPContainer;
-import ACCLiveTiming.visualisation.gui.NewLPTable;
+import ACCLiveTiming.visualisation.gui.LPTable;
 import java.util.logging.Logger;
 
 /**
@@ -27,7 +27,7 @@ public class LiveTimingPanel extends LPContainer {
     /**
      * The table that display the live timing.
      */
-    private NewLPTable table = new NewLPTable();
+    private LPTable table = new LPTable();
 
     public LiveTimingPanel(LiveTimingExtension extension) {
         this.extension = extension;
