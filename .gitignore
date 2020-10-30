@@ -27,7 +27,8 @@ hs_err_pid*
 .project
 fonts
 api_credentials
-
+base/build
+extension/build
 
 
 
