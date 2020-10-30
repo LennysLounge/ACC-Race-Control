@@ -25,9 +25,9 @@ hs_err_pid*
 .gradle
 .settings
 .project
-build
-tokens
 fonts
 api_credentials
+
+
 
 

@@ -1,0 +1,30 @@
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'application'
+
+
+mainClassName = 'ACCLiveTiming.Main'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testImplementation     'junit:junit:4.13'
+    implementation project(":base")
+}
+
+installDist.dependsOn(":base:installDist")
+
+distributions{
+    main{
+        contents.from{
+            project(":base").ext.collectableDistDir
+        }
+    }
+}
+
+run{
+    dependsOn installDist
+    workingDir new File(new File(buildDir, 'install'), project.name)    
+}
