@@ -5,16 +5,16 @@
  */
 package extension;
 
-import ACCLiveTiming.monitor.ACCLiveTimingExtension;
 import ACCLiveTiming.monitor.extensions.AccClientExtension;
 import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
 import javax.swing.JPanel;
+import ACCLiveTiming.ACCLiveTimingExtensionModule;
 
 /**
  *
  * @author Leonard
  */
-public class Extension implements ACCLiveTimingExtension{
+public class Extension implements ACCLiveTimingExtensionModule{
 
     @Override
     public String getName() {
