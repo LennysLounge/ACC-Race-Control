@@ -29,6 +29,8 @@ public class GoogleSheetsAPIConfigurationPanel extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
 
+        setName("Google Sheets API"); // NOI18N
+
         jLabel1.setText("hi");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -47,6 +49,8 @@ public class GoogleSheetsAPIConfigurationPanel extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addContainerGap(174, Short.MAX_VALUE))
         );
+
+        getAccessibleContext().setAccessibleName("");
     }// </editor-fold>//GEN-END:initComponents
 
 

@@ -24,6 +24,7 @@ import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.JPanel;
 
 /**
  *
@@ -71,6 +72,12 @@ public class Main {
     }
 
     private static void showConfigurationDialog() {
+        for (ACCLiveTimingExtensionModule module : modules) {
+            JPanel configurationPanel = module.getExtensionConfigurationPanel();
+            if (configurationPanel != null) {
+                dialog.addTabPanel(configurationPanel);
+            }
+        }
         dialog.setVisible(true);
     }
 
@@ -126,8 +133,8 @@ public class Main {
         String[] a = {"MAIN"};
         PApplet.runSketch(a, v);
     }
-    
-    public static List<LPContainer> getExtensionPanels(){
+
+    public static List<LPContainer> getExtensionPanels() {
         return modules.stream()
                 .map(module -> module.getExtensionPanel())
                 .filter(panel -> panel != null)
@@ -143,7 +150,5 @@ public class Main {
         }
 
     }
-    
-    
 
 }

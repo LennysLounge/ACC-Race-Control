@@ -5,11 +5,13 @@
  */
 package ACCLiveTiming.monitor;
 
+import java.awt.Dimension;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.UnsupportedLookAndFeelException;
 
 /**
@@ -65,6 +67,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         ipTextField = new javax.swing.JTextField();
@@ -87,6 +90,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
         connectButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Connection"));
         java.awt.GridBagLayout jPanel1Layout = new java.awt.GridBagLayout();
@@ -247,24 +251,25 @@ public class ConnectionDialog extends javax.swing.JDialog {
                 connectButtonActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 3, 3);
+        jPanel1.add(connectButton, gridBagConstraints);
+
+        jTabbedPane1.addTab("Connection", jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(connectButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(connectButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jTabbedPane1)
         );
 
         getAccessibleContext().setAccessibleName("ACC Live Timing connetion");
@@ -334,6 +339,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField portTextField;
     private javax.swing.JTextField spreadsheetURLTextField;
     private javax.swing.JTextField updateIntervalTextField;
@@ -373,5 +379,13 @@ public class ConnectionDialog extends javax.swing.JDialog {
     
     public boolean isLapTimeLoggingEnabled(){
         return enableLapTimeLoggingCheckBox.isSelected();
+    }
+    
+    public void addTabPanel(JPanel panel){
+        jTabbedPane1.addTab(panel.getName(), panel);
+        Dimension size = panel.getPreferredSize();
+        int width = Math.max(size.width, getWidth());
+        int height = Math.max(size.height, getHeight());
+        setSize(width, height);
     }
 }
