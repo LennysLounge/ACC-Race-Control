@@ -5,6 +5,11 @@
  */
 package ACCLiveTiming.monitor.extensions.livetiming;
 
+import ACCLiveTiming.monitor.client.events.RealtimeCarUpdate;
+import ACCLiveTiming.monitor.client.events.RealtimeUpdate;
+import ACCLiveTiming.monitor.eventbus.Event;
+import ACCLiveTiming.monitor.eventbus.EventBus;
+import ACCLiveTiming.monitor.eventbus.EventListener;
 import ACCLiveTiming.monitor.extensions.AccClientExtension;
 import ACCLiveTiming.monitor.networking.data.CarInfo;
 import ACCLiveTiming.monitor.networking.data.RealtimeInfo;
@@ -19,7 +24,9 @@ import java.util.stream.Collectors;
  *
  * @author Leonard
  */
-public class LiveTimingExtension extends AccClientExtension {
+public class LiveTimingExtension
+        extends AccClientExtension
+        implements EventListener {
 
     /**
      * This classes logger.
@@ -35,24 +42,32 @@ public class LiveTimingExtension extends AccClientExtension {
     private LiveTimingTableModel model = new LiveTimingTableModel();
 
     public LiveTimingExtension() {
+        EventBus.register(this);
     }
-    
-    public LiveTimingTableModel getTableModel(){
+
+    public LiveTimingTableModel getTableModel() {
         return model;
     }
 
     @Override
+    public void onEvent(Event e) {
+        if (e instanceof RealtimeUpdate) {
+            onRealtimeUpdate(((RealtimeUpdate) e).getSessionInfo());
+        } else if (e instanceof RealtimeCarUpdate) {
+            onRealtimeCarUpdate(((RealtimeCarUpdate) e).getInfo());
+        }
+    }
+
     public void onRealtimeUpdate(SessionInfo sessionInfo) {
         List<CarInfo> sorted = entires.values().stream()
                 .filter(entry -> entry.isConnected())
                 .sorted((e1, e2) -> compareTo(e1, e2))
                 .collect(Collectors.toList());
-        
+
         model.setEntries(sorted);
         model.setFocusedCarId(sessionInfo.getFocusedCarIndex());
     }
 
-    @Override
     public void onRealtimeCarUpdate(RealtimeInfo info) {
         CarInfo car = client.getModel().getCarsInfo().getOrDefault(info.getCarId(), new CarInfo());
         entires.put(car.getCarId(), car);
