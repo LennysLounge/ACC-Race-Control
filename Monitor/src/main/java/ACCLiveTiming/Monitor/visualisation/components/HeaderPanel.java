@@ -1,0 +1,91 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ACCLiveTiming.monitor.visualisation.components;
+
+import ACCLiveTiming.monitor.client.BasicAccBroadcastingClient;
+import ACCLiveTiming.monitor.client.SessionId;
+import ACCLiveTiming.monitor.utility.SpreadSheetService;
+import ACCLiveTiming.monitor.utility.TimeUtils;
+import ACCLiveTiming.monitor.visualisation.LookAndFeel;
+import ACCLiveTiming.monitor.visualisation.gui.LPComponent;
+import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.RIGHT;
+
+/**
+ *
+ * @author Leonard
+ */
+public class HeaderPanel extends LPComponent {
+
+    private final BasicAccBroadcastingClient client;
+
+    private boolean showSpreadSheetStatus;
+
+    public HeaderPanel(BasicAccBroadcastingClient client, boolean showSpreadSheetStatus) {
+        this.client = client;
+        this.showSpreadSheetStatus = showSpreadSheetStatus;
+    }
+
+    @Override
+    public void draw() {
+        applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
+        applet.noStroke();
+        applet.rect(0, 0, getWidth(), getHeight());
+        int y = 0;
+        //Draw Spreasheet status.
+        if (showSpreadSheetStatus) {
+            applet.fill(LookAndFeel.COLOR_RACE);
+            applet.rect(0, 0, getWidth(), LookAndFeel.LINE_HEIGHT);
+            applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
+
+            String targetSheet = SpreadSheetService.getSheet();
+            applet.textAlign(LEFT, CENTER);
+            applet.text("Target Sheet:\"" + targetSheet + "\"", 10, LookAndFeel.LINE_HEIGHT * 0.5f);
+            y += LookAndFeel.LINE_HEIGHT;
+        }
+
+        String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
+        String sessionName = sessionIdToString(client.getSessionId());
+        String conId = "CON-ID: " + client.getModel().getConnectionID();
+        String packetsReceived = "Packets received: " + client.getPacketCount();
+        applet.fill(255);
+        applet.textAlign(LEFT, CENTER);
+        applet.textFont(LookAndFeel.font());
+        applet.text(conId, 10, y + LookAndFeel.LINE_HEIGHT * 0.5f);
+        applet.text(packetsReceived, 200, y + LookAndFeel.LINE_HEIGHT * 0.5f);
+        applet.textAlign(RIGHT, CENTER);
+        applet.text(sessionName, applet.width - 10, y + LookAndFeel.LINE_HEIGHT * 0.5f);
+        applet.text(sessionTimeLeft,
+                applet.width - applet.textWidth(sessionName) - 40,
+                y + LookAndFeel.LINE_HEIGHT / 2f);
+
+        applet.fill(LookAndFeel.COLOR_RACE);
+        applet.rect(applet.width - applet.textWidth(sessionName) - 30,
+                y + LookAndFeel.LINE_HEIGHT * 0.1f,
+                10, LookAndFeel.LINE_HEIGHT * 0.8f);
+    }
+
+    private String sessionIdToString(SessionId sessionId) {
+        String result = "";
+        switch (sessionId.getType()) {
+            case PRACTICE:
+                result = "PRACTICE";
+                break;
+            case QUALIFYING:
+                result = "QUALIFYING";
+                break;
+            case RACE:
+                result = "RACE";
+                break;
+            default:
+                result = "NOT SUPPORTED";
+                break;
+        }
+        return result;
+    }
+
+}
