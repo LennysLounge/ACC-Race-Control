@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import processing.core.PApplet;
+import ACCLiveTiming.ACCLiveTimingExtensionModule;
 
 /**
  *
@@ -35,10 +36,8 @@ public class Main {
 
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
-        
         setupLogging();
         loadExtensions();
-        
         startApp();
     }
 
@@ -97,7 +96,8 @@ public class Main {
             LOG.log(Level.SEVERE, "Error while creating the broadcasting client.", e);
             return;
         }
-
+        
+        /*
         client.registerExtension(new LiveTimingExtension());
         client.registerExtension(new IncidentExtension());
         client.registerExtension(new LapTimeExtension(dialog.isLapTimeLoggingEnabled()));
@@ -106,6 +106,7 @@ public class Main {
         if (dialog.isSheetsAPIEnabled()) {
             client.registerExtension(new SpreadSheetControlExtension());
         }
+        */
 
         client.sendRegisterRequest();
 
