@@ -9,6 +9,7 @@ import ACCLiveTiming.monitor.client.SessionId;
 import ACCLiveTiming.monitor.client.events.RealtimeCarUpdate;
 import ACCLiveTiming.monitor.client.events.SessionChanged;
 import ACCLiveTiming.monitor.eventbus.Event;
+import ACCLiveTiming.monitor.eventbus.EventBus;
 import ACCLiveTiming.monitor.eventbus.EventListener;
 import ACCLiveTiming.monitor.extensions.AccClientExtension;
 import ACCLiveTiming.monitor.extensions.incidents.IncidentExtension;
@@ -78,6 +79,7 @@ public class LapTimeExtension
         if (isLoggingEnabled) {
             createFolder();
         }
+        EventBus.register(this);
     }
 
     private void createFolder() {

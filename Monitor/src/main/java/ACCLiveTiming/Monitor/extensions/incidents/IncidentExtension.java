@@ -11,6 +11,7 @@ import ACCLiveTiming.monitor.client.events.BroadcastingEventEvent;
 import ACCLiveTiming.monitor.client.events.SessionChanged;
 import ACCLiveTiming.monitor.client.events.SessionPhaseChanged;
 import ACCLiveTiming.monitor.eventbus.Event;
+import ACCLiveTiming.monitor.eventbus.EventBus;
 import ACCLiveTiming.monitor.eventbus.EventListener;
 import ACCLiveTiming.monitor.extensions.AccClientExtension;
 import ACCLiveTiming.monitor.extensions.logging.LoggingExtension;
@@ -67,6 +68,7 @@ public class IncidentExtension
 
     public IncidentExtension() {
         this.panel = new IncidentPanel(this);
+        EventBus.register(this);
     }
 
     public AccBroadcastingData getModel() {
@@ -192,6 +194,7 @@ public class IncidentExtension
     public void onRaceSessionStart() {
         long now = System.currentTimeMillis();
         int diff = (int) (now - raceStartTimestamp);
+        LOG.info("GreenFlag offset: " + TimeUtils.asDuration(diff));
         SpreadSheetService.sendGreenFlagOffset(diff, client.getSessionId());
     }
 
