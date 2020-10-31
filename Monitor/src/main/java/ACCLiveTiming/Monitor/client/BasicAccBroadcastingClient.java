@@ -5,6 +5,19 @@
  */
 package ACCLiveTiming.monitor.client;
 
+import ACCLiveTiming.monitor.client.events.AfterPacketReceived;
+import ACCLiveTiming.monitor.client.events.BroadcastingEventEvent;
+import ACCLiveTiming.monitor.client.events.CarConnect;
+import ACCLiveTiming.monitor.client.events.CarDisconnect;
+import ACCLiveTiming.monitor.client.events.EntryListCarUpdate;
+import ACCLiveTiming.monitor.client.events.EntryListUpdate;
+import ACCLiveTiming.monitor.client.events.RealtimeCarUpdate;
+import ACCLiveTiming.monitor.client.events.RealtimeUpdate;
+import ACCLiveTiming.monitor.client.events.RegistrationResult;
+import ACCLiveTiming.monitor.client.events.SessionChanged;
+import ACCLiveTiming.monitor.client.events.SessionPhaseChanged;
+import ACCLiveTiming.monitor.client.events.TrackData;
+import ACCLiveTiming.monitor.eventbus.EventBus;
 import ACCLiveTiming.monitor.extensions.AccClientExtension;
 import ACCLiveTiming.monitor.extensions.logging.LoggingExtension;
 import ACCLiveTiming.monitor.networking.PrimitivAccBroadcastingClient;
@@ -47,11 +60,6 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
      */
     private SessionPhase sessionPhase = SessionPhase.NONE;
     /**
-     * A map of the session events. Maps a session Type and a session phase to a
-     * method.
-     */
-    private final Map<SessionType, Map<SessionPhase, Runnable>> sessionEvents = new HashMap<>();
-    /**
      * Counter coutns how of a session has happened.
      */
     private final Map<SessionType, Integer> sessionCounter = new HashMap<>();
@@ -87,27 +95,6 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
                 updateInterval,
                 hostAddress,
                 hostPort);
-
-        initSessionEvents();
-    }
-
-    private void initSessionEvents() {
-        Map<SessionPhase, Runnable> practiceEvents = new HashMap<>();
-        practiceEvents.put(SessionPhase.STARTING, this::onPracticeStart);
-        practiceEvents.put(SessionPhase.POSTSESSION, this::onPracticeEnd);
-
-        Map<SessionPhase, Runnable> qualiEvents = new HashMap<>();
-        qualiEvents.put(SessionPhase.STARTING, this::onQualifyingStart);
-        qualiEvents.put(SessionPhase.POSTSESSION, this::onQualifyingEnd);
-
-        Map<SessionPhase, Runnable> raceEvents = new HashMap<>();
-        raceEvents.put(SessionPhase.STARTING, this::onRaceStart);
-        raceEvents.put(SessionPhase.SESSION, this::onRaceSessionStart);
-        raceEvents.put(SessionPhase.POSTSESSION, this::onRaceEnd);
-
-        sessionEvents.put(SessionType.PRACTICE, practiceEvents);
-        sessionEvents.put(SessionType.QUALIFYING, qualiEvents);
-        sessionEvents.put(SessionType.RACE, raceEvents);
     }
 
     public void registerExtension(AccClientExtension e) {
@@ -145,7 +132,7 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
     @Override
     protected void onRegistrationResult(int connectionID, boolean success, boolean readOnly, String message) {
         super.onRegistrationResult(connectionID, success, readOnly, message);
-        extensions.forEach(extension -> extension.onRegistrationResult(connectionID, success, readOnly, message));
+        EventBus.publish(new RegistrationResult(connectionID, success, readOnly, message));
     }
 
     @Override
@@ -157,7 +144,7 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
             //fast forward currnet session to result UI
             while (sessionPhase != SessionPhase.RESULTUI) {
                 sessionPhase = SessionPhase.getNext(sessionPhase);
-                runSessionEvent(sessionId.getType(), sessionPhase);
+                onSessionPhaseChaged(sessionPhase, sessionInfo);
             }
             //Move to next sessionId;
             SessionType type = sessionInfo.getSessionType();
@@ -166,7 +153,7 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
             sessionCounter.put(type, sessionNumber);
 
             SessionId newSessionId = new SessionId(type, sessionIndex, sessionNumber);
-            onSessionChanged(sessionId, newSessionId);
+            onSessionChanged(newSessionId, sessionInfo);
             sessionId = newSessionId;
 
             sessionPhase = SessionPhase.NONE;
@@ -174,16 +161,15 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
         //Fast forward to current phase
         while (sessionInfo.getPhase().getId() > sessionPhase.getId()) {
             sessionPhase = SessionPhase.getNext(sessionPhase);
-            runSessionEvent(sessionId.getType(), sessionPhase);
+            onSessionPhaseChaged(sessionPhase, sessionInfo);
         }
-
-        extensions.forEach(extension -> extension.onRealtimeUpdate(sessionInfo));
+        EventBus.publish(new RealtimeUpdate(sessionInfo));
     }
 
     @Override
     protected void onRealtimeCarUpdate(RealtimeInfo info) {
         super.onRealtimeCarUpdate(info);
-        extensions.forEach(extension -> extension.onRealtimeCarUpdate(info));
+        EventBus.publish(new RealtimeCarUpdate(info));
     }
 
     @Override
@@ -196,13 +182,13 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
                 .forEach(carInfo -> onCarDisconnect(carInfo.withConnected(false)));
 
         super.onEntryListUpdate(carIds);
-        extensions.forEach(extension -> extension.onEntryListUpdate(carIds));
+        EventBus.publish(new EntryListUpdate(carIds));
     }
 
     @Override
     protected void onTrackData(TrackInfo info) {
         super.onTrackData(info);
-        extensions.forEach(extension -> extension.onTrackData(info));
+        EventBus.publish(new TrackData(info));
     }
 
     @Override
@@ -215,122 +201,53 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
             }
         }
         super.onEntryListCarUpdate(carInfo);
-        extensions.forEach(extension -> extension.onEntryListCarUpdate(carInfo));
+        EventBus.publish(new EntryListCarUpdate(carInfo));
     }
 
     @Override
     protected void onBroadcastingEvent(BroadcastingEvent event) {
         super.onBroadcastingEvent(event);
-        extensions.forEach(extension -> extension.onBroadcastingEvent(event));
-        switch (event.getType()) {
-            case ACCIDENT:
-                onAccident(event);
-                break;
-            case LAPCOMPLETED:
-                onLapComplete(event);
-                break;
-            case BESTPERSONALLAP:
-                onBestPersonalLap(event);
-                break;
-            case BESTSESSIONLAP:
-                onBestSessionLap(event);
-                break;
-        }
+        EventBus.publish(new BroadcastingEventEvent(event));
     }
 
     @Override
     protected void afterPacketReceived(byte type) {
         super.afterPacketReceived(type);
         packetCount++;
-        extensions.forEach(extension -> extension.afterPacketReceived(type));
+        EventBus.publish(new AfterPacketReceived(type, packetCount));
     }
 
-    private void runSessionEvent(SessionType type, SessionPhase phase) {
-        Map<SessionPhase, Runnable> events = sessionEvents.get(type);
-        if (events != null) {
-            Runnable event = events.get(phase);
-            if (event != null) {
-                event.run();
-                return;
-            }
-        }
-        LOG.info("no method found for type:" + type.name() + ", phase:" + phase.name());
-    }
-
-    private void onSessionChanged(SessionId oldId, SessionId newId) {
+    private void onSessionChanged(SessionId newId, SessionInfo info) {
         LOG.info("session changed to " + newId.getType().name() + " nr:" + newId.getNumber() + " Index:" + newId.getIndex());
-        extensions.forEach(extension -> extension.onSessionChanged(oldId, newId));
+        EventBus.publish(new SessionChanged(newId, info));
     }
 
-    private void onAccident(BroadcastingEvent event) {
-        extensions.forEach(extension -> extension.onAccident(event));
-    }
+    private void onSessionPhaseChaged(SessionPhase phase, SessionInfo info) {
+        LOG.info("session phase changed to " + phase.name());
+        //Create sessionInfo object with the correct sessionPhase
+        SessionInfo correctedSessionInfo = new SessionInfo(info.getEventIndex(),
+                info.getSessionIndex(), info.getSessionType(), phase,
+                info.getSessionTime(), info.getSessionEndTime(), info.getFocusedCarIndex(),
+                info.getActiveCameraSet(), info.getActiveCamera(), info.getCurrentHudPage(),
+                info.getIsReplayPlaying(), info.getReplaySessionTime(), info.getReplayRemainingTime(),
+                info.getTimeOfDay(), info.getAmbientTemp(), info.getTrackTemp(),
+                info.getCloudLevel(), info.getRainLevel(), info.getWetness(),
+                info.getBestSessionLap());
+        EventBus.publish(new SessionPhaseChanged(correctedSessionInfo));
 
-    private void onLapComplete(BroadcastingEvent event) {
-        extensions.forEach(extension -> extension.onLapComplete(event));
-    }
-
-    private void onBestSessionLap(BroadcastingEvent event) {
-        extensions.forEach(extension -> extension.onBestSessionLap(event));
-    }
-
-    private void onBestPersonalLap(BroadcastingEvent event) {
-        extensions.forEach(extension -> extension.onBestPersonalLap(event));
-    }
-
-    private void onPracticeStart() {
-        LoggingExtension.log("Practice starting");
-        LOG.info("Practice starting");
-        extensions.forEach(extension -> extension.onPracticeStart());
-    }
-
-    private void onPracticeEnd() {
-        LoggingExtension.log("Practice post-session");
-        LOG.info("Practice post-session");
-        extensions.forEach(extension -> extension.onPracticeEnd());
-    }
-
-    private void onQualifyingStart() {
-        LoggingExtension.log("Qualifying starting");
-        LOG.info("Qualfifying starting");
-        extensions.forEach(extension -> extension.onQualifyingStart());
-    }
-
-    private void onQualifyingEnd() {
-        LoggingExtension.log("Qualifying post-session");
-        LOG.info("Qualfifying post-session");
-        extensions.forEach(extension -> extension.onQualifyingEnd());
-    }
-
-    private void onRaceStart() {
-        LoggingExtension.log("Race starting");
-        LOG.info("Race starting");
-        extensions.forEach(extension -> extension.onRaceStart());
-    }
-
-    private void onRaceSessionStart() {
-        LoggingExtension.log("Race session starting");
-        LOG.info("Race session starting");
-        extensions.forEach(extension -> extension.onRaceSessionStart());
-    }
-
-    private void onRaceEnd() {
-        LoggingExtension.log("Race post-session");
-        LOG.info("Race post-session");
-        extensions.forEach(extension -> extension.onRaceEnd());
     }
 
     private void onCarDisconnect(CarInfo car) {
         String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
         LoggingExtension.log("Car disconnected: #" + car.getCarNumber() + "\t" + name);
         LOG.info("Car disconnected: #" + car.getCarNumber() + "\t" + name);
-        extensions.forEach(extension -> extension.onCarDisconnect(car));
+        EventBus.publish(new CarDisconnect(car));
     }
 
     private void onCarConnect(CarInfo car) {
         String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
         LoggingExtension.log("Car connected: #" + car.getCarNumber() + "\t" + name);
         LOG.info("Car connected: #" + car.getCarNumber() + "\t" + name);
-        extensions.forEach(extension -> extension.onCarConnect(car));
+        EventBus.publish(new CarConnect(car));
     }
 }
