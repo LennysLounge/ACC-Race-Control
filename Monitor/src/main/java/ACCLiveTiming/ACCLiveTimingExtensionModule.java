@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor;
+package ACCLiveTiming;
 
 import ACCLiveTiming.monitor.extensions.AccClientExtension;
 import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
@@ -13,7 +13,7 @@ import javax.swing.JPanel;
  *
  * @author Leonard
  */
-public interface ACCLiveTimingExtension {
+public interface ACCLiveTimingExtensionModule {
     /**
      * Returns the name for this extension.
      * @return The name.
@@ -35,7 +35,5 @@ public interface ACCLiveTimingExtension {
      * if this extension does not have a configuration panel.
      * @return 
      */
-    public JPanel getExtensionConfigurationPanel();
-    
-    
+    public JPanel getExtensionConfigurationPanel();   
 }

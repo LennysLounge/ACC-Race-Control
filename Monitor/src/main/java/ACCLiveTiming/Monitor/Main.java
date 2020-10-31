@@ -60,7 +60,7 @@ public class Main {
     }
 
     public static void loadExtensions() {
-        ServiceLoader.load(ACCLiveTimingExtension.class).forEach(extension -> {
+        ServiceLoader.load(ACCLiveTimingExtensionModule.class).forEach(extension -> {
             LOG.info("Loading extension " + extension.getName());
         });
     }
