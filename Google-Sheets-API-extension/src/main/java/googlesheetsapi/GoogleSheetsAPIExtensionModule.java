@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package extension;
+package googlesheetsapi;
 
 import ACCLiveTiming.monitor.extensions.AccClientExtension;
 import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
@@ -14,7 +14,7 @@ import ACCLiveTiming.ACCLiveTimingExtensionModule;
  *
  * @author Leonard
  */
-public class Extension implements ACCLiveTimingExtensionModule{
+public class GoogleSheetsAPIExtensionModule implements ACCLiveTimingExtensionModule{
 
     @Override
     public String getName() {
@@ -33,7 +33,7 @@ public class Extension implements ACCLiveTimingExtensionModule{
 
     @Override
     public JPanel getExtensionConfigurationPanel() {
-        return null;
+        return new GoogleSheetsAPIConfigurationPanel();
     }
     
 }
