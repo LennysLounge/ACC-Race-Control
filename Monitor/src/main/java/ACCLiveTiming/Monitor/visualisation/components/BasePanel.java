@@ -5,6 +5,7 @@
  */
 package ACCLiveTiming.monitor.visualisation.components;
 
+import ACCLiveTiming.monitor.Main;
 import ACCLiveTiming.monitor.client.BasicAccBroadcastingClient;
 import ACCLiveTiming.monitor.utility.SpreadSheetService;
 import ACCLiveTiming.monitor.visualisation.LookAndFeel;
@@ -26,7 +27,7 @@ public class BasePanel extends LPContainer {
         addComponent(header);
 
         LPTabPanel tabs = new LPTabPanel();
-        for (LPContainer c : client.getPanels()) {
+        for (LPContainer c : Main.getExtensionPanels()) {
             tabs.addTab(c);
         }
         tabs.setTabIndex(0);

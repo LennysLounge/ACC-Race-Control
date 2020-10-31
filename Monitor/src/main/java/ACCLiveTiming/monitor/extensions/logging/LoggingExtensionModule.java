@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.extensions.livetiming;
+package ACCLiveTiming.monitor.extensions.logging;
 
 import ACCLiveTiming.ACCLiveTimingExtensionModule;
 import ACCLiveTiming.monitor.extensions.AccClientExtension;
@@ -14,20 +14,21 @@ import javax.swing.JPanel;
  *
  * @author Leonard
  */
-public class LiveTimingExtensionModule
+public class LoggingExtensionModule
         implements ACCLiveTimingExtensionModule {
-    
-    private LiveTimingExtension extension;
-    private LiveTimingPanel panel;
-    
-    public LiveTimingExtensionModule(){
-        extension = new LiveTimingExtension();
-        panel = new LiveTimingPanel(extension);
+
+    private LoggingExtension extension;
+    private LoggingPanel panel;
+
+    public LoggingExtensionModule() {
+        extension = new LoggingExtension();
+        panel = new LoggingPanel(extension);
+
     }
 
     @Override
     public String getName() {
-        return "Live Timing Extension";
+        return "Logging extension";
     }
 
     @Override

@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.extensions.livetiming;
+package ACCLiveTiming.monitor.extensions.incidents;
 
-import ACCLiveTiming.ACCLiveTimingExtensionModule;
 import ACCLiveTiming.monitor.extensions.AccClientExtension;
 import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
 import javax.swing.JPanel;
@@ -14,20 +13,20 @@ import javax.swing.JPanel;
  *
  * @author Leonard
  */
-public class LiveTimingExtensionModule
-        implements ACCLiveTimingExtensionModule {
+public class IncidentExtensionModule
+    implements ACCLiveTiming.ACCLiveTimingExtensionModule{
     
-    private LiveTimingExtension extension;
-    private LiveTimingPanel panel;
+    private IncidentExtension extension;
+    private IncidentPanel panel;
     
-    public LiveTimingExtensionModule(){
-        extension = new LiveTimingExtension();
-        panel = new LiveTimingPanel(extension);
+    public IncidentExtensionModule(){
+        extension = new IncidentExtension();
+        panel = new IncidentPanel(extension);
     }
 
     @Override
     public String getName() {
-        return "Live Timing Extension";
+        return "Incident extension";
     }
 
     @Override
@@ -44,5 +43,6 @@ public class LiveTimingExtensionModule
     public JPanel getExtensionConfigurationPanel() {
         return null;
     }
-
+    
+    
 }

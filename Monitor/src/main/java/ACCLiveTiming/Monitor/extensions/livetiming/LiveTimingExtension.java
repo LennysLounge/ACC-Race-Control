@@ -35,7 +35,6 @@ public class LiveTimingExtension extends AccClientExtension {
     private LiveTimingTableModel model = new LiveTimingTableModel();
 
     public LiveTimingExtension() {
-        this.panel = new LiveTimingPanel(this);
     }
     
     public LiveTimingTableModel getTableModel(){

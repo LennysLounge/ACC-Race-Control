@@ -6,12 +6,6 @@
 package ACCLiveTiming.monitor;
 
 import ACCLiveTiming.monitor.client.BasicAccBroadcastingClient;
-import ACCLiveTiming.monitor.extensions.incidents.IncidentExtension;
-import ACCLiveTiming.monitor.extensions.laptimes.LapTimeExtension;
-import ACCLiveTiming.monitor.extensions.livetiming.LiveTimingExtension;
-import ACCLiveTiming.monitor.extensions.logging.LoggingExtension;
-import ACCLiveTiming.monitor.extensions.spreadsheetcontroll.SpreadSheetControlExtension;
-import ACCLiveTiming.monitor.utility.SpreadSheetService;
 import ACCLiveTiming.monitor.visualisation.Visualisation;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -25,6 +19,11 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import processing.core.PApplet;
 import ACCLiveTiming.ACCLiveTimingExtensionModule;
+import ACCLiveTiming.monitor.extensions.AccClientExtension;
+import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -33,12 +32,18 @@ import ACCLiveTiming.ACCLiveTimingExtensionModule;
 public class Main {
 
     private static Logger LOG = Logger.getLogger(Main.class.getName());
+    private static List<ACCLiveTimingExtensionModule> modules = new LinkedList<>();
+    private static ConnectionDialog dialog = new ConnectionDialog();
 
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
         setupLogging();
-        loadExtensions();
-        startApp();
+
+        loadModules();
+        showConfigurationDialog();
+        if (dialog.exitWithConnect()) {
+            startApp();
+        }
     }
 
     private static void setupLogging() {
@@ -58,21 +63,21 @@ public class Main {
         }
     }
 
-    public static void loadExtensions() {
-        ServiceLoader.load(ACCLiveTimingExtensionModule.class).forEach(extension -> {
-            LOG.info("Loading extension " + extension.getName());
+    private static void loadModules() {
+        ServiceLoader.load(ACCLiveTimingExtensionModule.class).forEach(module -> {
+            LOG.info("Loading extension " + module.getName());
+            modules.add(module);
         });
+    }
+
+    private static void showConfigurationDialog() {
+        dialog.setVisible(true);
     }
 
     public static void startApp() {
         LOG.info("Starting");
 
-        ConnectionDialog dialog = new ConnectionDialog();
-        dialog.setVisible(true);
-        if (!dialog.exitWithConnect()) {
-            return;
-        }
-
+        /*
         //eable spreadSheet service.
         if (dialog.isSheetsAPIEnabled()) {
             try {
@@ -83,7 +88,7 @@ public class Main {
                 LOG.log(Level.WARNING, "Error enabling the Spreadsheet API", e);
             }
         }
-
+         */
         BasicAccBroadcastingClient client;
         try {
             client = new BasicAccBroadcastingClient(dialog.getDisplayName(),
@@ -96,7 +101,15 @@ public class Main {
             LOG.log(Level.SEVERE, "Error while creating the broadcasting client.", e);
             return;
         }
-        
+
+        //Register extensions.
+        for (ACCLiveTimingExtensionModule module : modules) {
+            AccClientExtension extension = module.getExtension();
+            if (extension != null) {
+                client.registerExtension(extension);
+            }
+        }
+
         /*
         client.registerExtension(new LiveTimingExtension());
         client.registerExtension(new IncidentExtension());
@@ -106,13 +119,19 @@ public class Main {
         if (dialog.isSheetsAPIEnabled()) {
             client.registerExtension(new SpreadSheetControlExtension());
         }
-        */
-
+         */
         client.sendRegisterRequest();
 
         Visualisation v = new Visualisation(client);
         String[] a = {"MAIN"};
         PApplet.runSketch(a, v);
+    }
+    
+    public static List<LPContainer> getExtensionPanels(){
+        return modules.stream()
+                .map(module -> module.getExtensionPanel())
+                .filter(panel -> panel != null)
+                .collect(Collectors.toList());
     }
 
     public static class UncoughtExceptionHandler
@@ -124,5 +143,7 @@ public class Main {
         }
 
     }
+    
+    
 
 }

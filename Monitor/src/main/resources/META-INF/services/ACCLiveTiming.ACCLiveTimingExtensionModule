@@ -1,1 +1,3 @@
 ACCLiveTiming.monitor.extensions.livetiming.LiveTimingExtensionModule
+ACCLiveTiming.monitor.extensions.logging.LoggingExtensionModule
+ACCLiveTiming.monitor.extensions.incidents.IncidentExtensionModule
