@@ -6,10 +6,20 @@
 package ACCLiveTiming.monitor.extensions.incidents;
 
 import ACCLiveTiming.monitor.client.SessionId;
+import ACCLiveTiming.monitor.client.events.AfterPacketReceived;
+import ACCLiveTiming.monitor.client.events.BroadcastingEventEvent;
+import ACCLiveTiming.monitor.client.events.SessionChanged;
+import ACCLiveTiming.monitor.client.events.SessionPhaseChanged;
+import ACCLiveTiming.monitor.eventbus.Event;
+import ACCLiveTiming.monitor.eventbus.EventListener;
 import ACCLiveTiming.monitor.extensions.AccClientExtension;
 import ACCLiveTiming.monitor.extensions.logging.LoggingExtension;
 import ACCLiveTiming.monitor.networking.data.AccBroadcastingData;
 import ACCLiveTiming.monitor.networking.data.BroadcastingEvent;
+import ACCLiveTiming.monitor.networking.data.SessionInfo;
+import ACCLiveTiming.monitor.networking.enums.BroadcastingEventType;
+import ACCLiveTiming.monitor.networking.enums.SessionPhase;
+import ACCLiveTiming.monitor.networking.enums.SessionType;
 import ACCLiveTiming.monitor.utility.SpreadSheetService;
 import ACCLiveTiming.monitor.utility.TimeUtils;
 import java.util.Collections;
@@ -24,7 +34,9 @@ import java.util.stream.Collectors;
  *
  * @author Leonard
  */
-public class IncidentExtension extends AccClientExtension {
+public class IncidentExtension
+        extends AccClientExtension
+        implements EventListener {
 
     /**
      * This classes logger.
@@ -60,8 +72,8 @@ public class IncidentExtension extends AccClientExtension {
     public AccBroadcastingData getModel() {
         return client.getModel();
     }
-    
-    public IncidentTableModel getTableModel(){
+
+    public IncidentTableModel getTableModel() {
         return model;
     }
 
@@ -72,6 +84,35 @@ public class IncidentExtension extends AccClientExtension {
     }
 
     @Override
+    public void onEvent(Event e) {
+        if (e instanceof AfterPacketReceived) {
+            afterPacketReceived(((AfterPacketReceived) e).getType());
+        } else if (e instanceof BroadcastingEventEvent) {
+            BroadcastingEvent event = ((BroadcastingEventEvent) e).getEvent();
+            if (event.getType() == BroadcastingEventType.ACCIDENT) {
+                onAccident(event);
+            }
+        } else if (e instanceof SessionChanged) {
+            SessionInfo info = ((SessionChanged) e).getSessionInfo();
+            switch (info.getSessionType()) {
+                case PRACTICE:
+                    onPracticeStart();
+                    break;
+                case QUALIFYING:
+                    onQualifyingStart();
+                    break;
+                case RACE:
+                    onRaceStart();
+                    break;
+            }
+        } else if (e instanceof SessionPhaseChanged) {
+            SessionInfo info = ((SessionPhaseChanged) e).getSessionInfo();
+            if (info.getSessionType() == SessionType.RACE && info.getPhase() == SessionPhase.SESSION) {
+                onRaceSessionStart();
+            }
+        }
+    }
+
     public void afterPacketReceived(byte type) {
         if (stagedAccident != null) {
             long now = System.currentTimeMillis();
@@ -82,7 +123,6 @@ public class IncidentExtension extends AccClientExtension {
         }
     }
 
-    @Override
     public void onAccident(BroadcastingEvent event) {
         String logMessage = "Accident: #" + client.getModel().getCar(event.getCarId()).getCarNumber()
                 + "\t" + TimeUtils.asDuration(client.getModel().getSessionInfo().getSessionTime());
@@ -136,26 +176,23 @@ public class IncidentExtension extends AccClientExtension {
         return result;
     }
 
-    @Override
     public void onPracticeStart() {
         SpreadSheetService.setTargetSheetBySession(client.getSessionId());
     }
 
-    @Override
     public void onQualifyingStart() {
         SpreadSheetService.setTargetSheetBySession(client.getSessionId());
     }
 
-    @Override
     public void onRaceStart() {
         raceStartTimestamp = System.currentTimeMillis();
         SpreadSheetService.setTargetSheetBySession(client.getSessionId());
     }
 
-    @Override
     public void onRaceSessionStart() {
         long now = System.currentTimeMillis();
         int diff = (int) (now - raceStartTimestamp);
         SpreadSheetService.sendGreenFlagOffset(diff, client.getSessionId());
     }
+
 }

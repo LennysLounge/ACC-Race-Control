@@ -6,6 +6,10 @@
 package ACCLiveTiming.monitor.extensions.laptimes;
 
 import ACCLiveTiming.monitor.client.SessionId;
+import ACCLiveTiming.monitor.client.events.RealtimeCarUpdate;
+import ACCLiveTiming.monitor.client.events.SessionChanged;
+import ACCLiveTiming.monitor.eventbus.Event;
+import ACCLiveTiming.monitor.eventbus.EventListener;
 import ACCLiveTiming.monitor.extensions.AccClientExtension;
 import ACCLiveTiming.monitor.extensions.incidents.IncidentExtension;
 import ACCLiveTiming.monitor.extensions.logging.LoggingExtension;
@@ -32,7 +36,9 @@ import java.util.logging.Logger;
  *
  * @author Leonard
  */
-public class LapTimeExtension extends AccClientExtension {
+public class LapTimeExtension
+        extends AccClientExtension
+        implements EventListener {
 
     /**
      * This classes logger.
@@ -86,6 +92,15 @@ public class LapTimeExtension extends AccClientExtension {
     }
 
     @Override
+    public void onEvent(Event e) {
+        if (e instanceof RealtimeCarUpdate) {
+            onRealtimeCarUpdate(((RealtimeCarUpdate) e).getInfo());
+        } else if (e instanceof SessionChanged) {
+            onSessionChanged(((SessionChanged) e).getSessionId());
+        }
+
+    }
+
     public void onRealtimeCarUpdate(RealtimeInfo info) {
         if (lapCount.containsKey(info.getCarId())) {
             if (lapCount.get(info.getCarId()) != info.getLaps()) {
@@ -113,7 +128,7 @@ public class LapTimeExtension extends AccClientExtension {
 
         if (!isFirstLap && lap.getType() == LapType.REGULAR) {
             laps.get(car.getCarId()).add(lap.getLapTimeMS());
-            if(isLoggingEnabled){
+            if (isLoggingEnabled) {
                 printLapToFile();
             }
         }
@@ -158,9 +173,8 @@ public class LapTimeExtension extends AccClientExtension {
         }
     }
 
-    @Override
-    public void onSessionChanged(SessionId oldId, SessionId newId) {
-        if(isLoggingEnabled){
+    public void onSessionChanged(SessionId newId) {
+        if (isLoggingEnabled) {
             if (logFile != null) {
                 printLapToFile();
             }
@@ -170,7 +184,7 @@ public class LapTimeExtension extends AccClientExtension {
         //Set lap counts to 0
         lapCount.forEach((key, count) -> lapCount.put(key, 0));
 
-        if(isLoggingEnabled){
+        if (isLoggingEnabled) {
             logFile = new File(dir.getAbsolutePath() + "/" + newId.getType().name() + "_" + newId.getNumber() + ".csv");
             try {
                 logFile.createNewFile();
