@@ -12,6 +12,12 @@ repositories {
 dependencies {
     testImplementation     'junit:junit:4.13'
     implementation project(":Monitor")
+    
+    //compile group: 'com.google.api-client', name: 'google-api-client', version: '1.30.10'
+    implementation 'com.google.apis:google-api-services-sheets:v4-rev20200707-1.30.10'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.30.4'
+    implementation 'com.google.api-client:google-api-client:1.30.4'
+    implementation 'org.processing:core:3.3.6'
 }
 
 installDist.dependsOn(":Monitor:installDist")

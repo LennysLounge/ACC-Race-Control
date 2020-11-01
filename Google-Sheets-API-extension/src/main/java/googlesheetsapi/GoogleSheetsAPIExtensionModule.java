@@ -15,6 +15,16 @@ import ACCLiveTiming.ACCLiveTimingExtensionModule;
  * @author Leonard
  */
 public class GoogleSheetsAPIExtensionModule implements ACCLiveTimingExtensionModule{
+    
+    private GoogleSheetsAPIExtension extension;
+    private GoogleSheetsAPIPanel panel;
+    private GoogleSheetsAPIConfigurationPanel configurationPanel;
+    
+    public GoogleSheetsAPIExtensionModule(){
+        configurationPanel = new GoogleSheetsAPIConfigurationPanel();
+        extension = new GoogleSheetsAPIExtension();
+        panel = new GoogleSheetsAPIPanel(extension);
+    }
 
     @Override
     public String getName() {
@@ -23,17 +33,23 @@ public class GoogleSheetsAPIExtensionModule implements ACCLiveTimingExtensionMod
 
     @Override
     public AccClientExtension getExtension() {
+        if(configurationPanel.isExtensionEnabled()){
+            return extension;
+        }
         return null;
     }
 
     @Override
     public LPContainer getExtensionPanel() {
+        if(configurationPanel.isExtensionEnabled()){
+            return panel;
+        }
         return null;
     }
 
     @Override
     public JPanel getExtensionConfigurationPanel() {
-        return new GoogleSheetsAPIConfigurationPanel();
+        return configurationPanel;
     }
     
 }

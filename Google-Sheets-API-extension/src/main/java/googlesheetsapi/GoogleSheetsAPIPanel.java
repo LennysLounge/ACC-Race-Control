@@ -5,8 +5,6 @@
  */
 package googlesheetsapi;
 
-import ACCLiveTiming.monitor.extensions.spreadsheetcontroll.SpreadSheetControlExtension;
-import googlesheetsapi.GoogleSheetsAPIExtension;
 import ACCLiveTiming.monitor.visualisation.LookAndFeel;
 import ACCLiveTiming.monitor.visualisation.gui.LPButton;
 import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
@@ -17,14 +15,14 @@ import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
  */
 public class GoogleSheetsAPIPanel extends LPContainer {
 
-    private final SpreadSheetControlExtension extension;
+    private final GoogleSheetsAPIExtension extension;
     
     private final LPButton setToPractice = new LPButton("Send to \"Practice!\"");
     private final LPButton setToQuali = new LPButton("Send to \"Qualifying!\"");
     private final LPButton setToRace1 = new LPButton("Send to \"Race 1!\"");
     private final LPButton setToRace2 = new LPButton("Send to \"Race 2!\"");
 
-    public GoogleSheetsAPIPanel(SpreadSheetControlExtension extension) {
+    public GoogleSheetsAPIPanel(GoogleSheetsAPIExtension extension) {
         this.extension = extension;
         setName("Sheets API");
         

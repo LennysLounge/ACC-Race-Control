@@ -81,10 +81,6 @@ public class ConnectionDialog extends javax.swing.JDialog {
         updateIntervalTextField = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         commandPasswordTextField = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        spreadsheetURLTextField = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        enableSheetsAPICheckBox = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
         enableLapTimeLoggingCheckBox = new javax.swing.JCheckBox();
         connectButton = new javax.swing.JButton();
@@ -192,47 +188,6 @@ public class ConnectionDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(commandPasswordTextField, gridBagConstraints);
 
-        jLabel1.setText("Google Spreadsheet link:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(3, 0, 3, 3);
-        jPanel1.add(jLabel1, gridBagConstraints);
-
-        spreadsheetURLTextField.setEditable(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 3, 3);
-        jPanel1.add(spreadsheetURLTextField, gridBagConstraints);
-
-        jLabel2.setText("Use Sheets API:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel1.add(jLabel2, gridBagConstraints);
-
-        enableSheetsAPICheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                enableSheetsAPICheckBoxStateChanged(evt);
-            }
-        });
-        enableSheetsAPICheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                enableSheetsAPICheckBoxActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        jPanel1.add(enableSheetsAPICheckBox, gridBagConstraints);
-
         jLabel3.setText("Log lap times:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -253,7 +208,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 3, 3);
@@ -313,13 +268,6 @@ public class ConnectionDialog extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_connectButtonActionPerformed
 
-    private void enableSheetsAPICheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enableSheetsAPICheckBoxActionPerformed
-        spreadsheetURLTextField.setEditable(enableSheetsAPICheckBox.isSelected());
-    }//GEN-LAST:event_enableSheetsAPICheckBoxActionPerformed
-
-    private void enableSheetsAPICheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_enableSheetsAPICheckBoxStateChanged
-    }//GEN-LAST:event_enableSheetsAPICheckBoxStateChanged
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField commandPasswordTextField;
@@ -327,21 +275,17 @@ public class ConnectionDialog extends javax.swing.JDialog {
     private javax.swing.JTextField connectionPasswordTextField;
     private javax.swing.JTextField displayNameTextField;
     private javax.swing.JCheckBox enableLapTimeLoggingCheckBox;
-    private javax.swing.JCheckBox enableSheetsAPICheckBox;
     private javax.swing.JTextField ipTextField;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField portTextField;
-    private javax.swing.JTextField spreadsheetURLTextField;
     private javax.swing.JTextField updateIntervalTextField;
     // End of variables declaration//GEN-END:variables
 
@@ -367,14 +311,6 @@ public class ConnectionDialog extends javax.swing.JDialog {
 
     public int getUpdateInterval() {
         return updateInterval;
-    }
-
-    public String getSpreadsheetURL() {
-        return spreadsheetURLTextField.getText();
-    }
-
-    public boolean isSheetsAPIEnabled() {
-        return enableSheetsAPICheckBox.isSelected();
     }
     
     public boolean isLapTimeLoggingEnabled(){
