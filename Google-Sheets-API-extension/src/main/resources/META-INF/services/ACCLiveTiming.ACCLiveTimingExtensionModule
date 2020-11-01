@@ -1,1 +1,2 @@
-googlesheetsapi.GoogleSheetsAPIExtensionModule
+ACCLiveTiming.extensions.googlesheetsapi.GoogleSheetsAPIExtensionModule
+ACCLiveTiming.extensions.fullcourseyellow.FullCourseYellowExtensionModule
