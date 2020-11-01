@@ -31,12 +31,6 @@ run{
     workingDir new File(new File(buildDir, 'install'), project.name)    
 }
 
-sourceSets{
-    main{
-        resources{
-            srcDirs = ["api_credentials", "src/main/resources"]
-        }
-    }
-}
+
 
 //startScripts.enabled = false
