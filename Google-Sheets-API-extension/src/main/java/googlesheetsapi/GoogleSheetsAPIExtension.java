@@ -14,6 +14,7 @@ import ACCLiveTiming.monitor.eventbus.EventListener;
 import ACCLiveTiming.monitor.extensions.AccClientExtension;
 import ACCLiveTiming.monitor.extensions.incidents.IncidentInfo;
 import ACCLiveTiming.monitor.extensions.incidents.events.Accident;
+import ACCLiveTiming.monitor.extensions.logging.LoggingExtension;
 import ACCLiveTiming.monitor.utility.TimeUtils;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -92,6 +93,8 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
         if (e instanceof SessionChanged) {
             currentSessionId = ((SessionChanged) e).getSessionId();
             currentSheetTarget = getTargetSheet(currentSessionId);
+            LOG.info("Target Sheet changed to \"" + currentSheetTarget + "\"");
+            LoggingExtension.log("Spreasheet target changed to \"" + currentSheetTarget + "\"");
         } else if (e instanceof Accident) {
             IncidentInfo info = ((Accident) e).getInfo();
             String sessionTime = TimeUtils.asDuration(info.getEarliestTime());

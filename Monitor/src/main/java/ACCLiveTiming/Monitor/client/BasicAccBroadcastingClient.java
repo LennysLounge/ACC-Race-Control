@@ -140,7 +140,6 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
         super.onRealtimeUpdate(sessionInfo);
 
         if (sessionId.getIndex() != sessionInfo.getSessionIndex()) {
-            LOG.info("session Index mismatch");
             //fast forward currnet session to result UI
             while (sessionPhase != SessionPhase.RESULTUI) {
                 sessionPhase = SessionPhase.getNext(sessionPhase);
@@ -218,7 +217,7 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
     }
 
     private void onSessionChanged(SessionId newId, SessionInfo info) {
-        LOG.info("session changed to " + newId.getType().name() + " nr:" + newId.getNumber() + " Index:" + newId.getIndex());
+        LOG.info("session changed to " + newId.getType().name() + " Index:" + newId.getIndex() + " sessionCount:" + newId.getNumber());
         EventBus.publish(new SessionChanged(newId, info));
     }
 
