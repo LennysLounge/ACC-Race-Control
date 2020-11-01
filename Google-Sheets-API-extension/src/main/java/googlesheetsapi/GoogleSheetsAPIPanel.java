@@ -5,9 +5,12 @@
  */
 package googlesheetsapi;
 
+import ACCLiveTiming.monitor.utility.TimeUtils;
 import ACCLiveTiming.monitor.visualisation.LookAndFeel;
 import ACCLiveTiming.monitor.visualisation.gui.LPButton;
 import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
+import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.LEFT;
 
 /**
  *
@@ -16,7 +19,7 @@ import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
 public class GoogleSheetsAPIPanel extends LPContainer {
 
     private final GoogleSheetsAPIExtension extension;
-    
+
     private final LPButton setToPractice = new LPButton("Send to \"Practice!\"");
     private final LPButton setToQuali = new LPButton("Send to \"Qualifying!\"");
     private final LPButton setToRace1 = new LPButton("Send to \"Race 1!\"");
@@ -25,24 +28,24 @@ public class GoogleSheetsAPIPanel extends LPContainer {
     public GoogleSheetsAPIPanel(GoogleSheetsAPIExtension extension) {
         this.extension = extension;
         setName("Sheets API");
-        
-        setToPractice.setSize(200, 80);
-        setToPractice.setAction(()->{
-            SpreadSheetService.setTargetSheet("Practice!");
+
+        setToPractice.setSize(200, LookAndFeel.LINE_HEIGHT);
+        setToPractice.setAction(() -> {
+            extension.setCurrentTargetSheet("Practice!");
         });
-        setToQuali.setSize(200, 80);
-        setToQuali.setAction(()->{
-            SpreadSheetService.setTargetSheet("Qualifying!");
+        setToQuali.setSize(200, LookAndFeel.LINE_HEIGHT);
+        setToQuali.setAction(() -> {
+            extension.setCurrentTargetSheet("Qualifying!");
         });
-        setToRace1.setSize(200, 80);
-        setToRace1.setAction(()->{
-            SpreadSheetService.setTargetSheet("Race 1!");
+        setToRace1.setSize(200, LookAndFeel.LINE_HEIGHT);
+        setToRace1.setAction(() -> {
+            extension.setCurrentTargetSheet("Race 1!");
         });
-        setToRace2.setSize(200, 80);
-        setToRace2.setAction(()->{
-            SpreadSheetService.setTargetSheet("Race 2!");
+        setToRace2.setSize(200, LookAndFeel.LINE_HEIGHT);
+        setToRace2.setAction(() -> {
+            extension.setCurrentTargetSheet("Race 2!");
         });
-        
+
         addComponent(setToPractice);
         addComponent(setToQuali);
         addComponent(setToRace1);
@@ -52,15 +55,32 @@ public class GoogleSheetsAPIPanel extends LPContainer {
     @Override
     public void draw() {
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
-        applet.rect(0,0,getWidth(), getHeight());
+        applet.rect(0, 0, getWidth(), getHeight());
+        applet.fill(255);
+        applet.textAlign(LEFT, CENTER);
+        applet.text("Current sheet target: " + extension.getCurrentTargetSheet(),
+                10, LookAndFeel.LINE_HEIGHT * 0.5f);
+
+        applet.text("Is green flag offset measured: "
+                + (extension.isGreenFlagOffsetBeeingMeasured() ? "True" : "False"),
+                350, LookAndFeel.LINE_HEIGHT * 0.5f);
+        String offset = "Offset: ";
+        if (extension.isGreenFlagOffsetBeeingMeasured()) {
+            long diff = System.currentTimeMillis() - extension.getGreenFlagTimeStamp();
+            offset += TimeUtils.asDuration(diff);
+        } else {
+            offset += "-";
+        }
+        applet.text(offset, 350, LookAndFeel.LINE_HEIGHT * 1.5f);
+
     }
-    
+
     @Override
-    public void onResize(int w, int h){
-        setToPractice.setPosition(10, 10);
-        setToQuali.setPosition(10, 110);
-        setToRace1.setPosition(10, 210);
-        setToRace2.setPosition(10, 310);
+    public void onResize(int w, int h) {
+        setToPractice.setPosition(10, 40);
+        setToQuali.setPosition(10, 80);
+        setToRace1.setPosition(10, 120);
+        setToRace2.setPosition(10, 160);
     }
 
 }

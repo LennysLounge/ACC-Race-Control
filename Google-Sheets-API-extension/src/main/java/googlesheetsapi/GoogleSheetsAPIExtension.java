@@ -8,6 +8,7 @@ package googlesheetsapi;
 import ACCLiveTiming.monitor.Main;
 import ACCLiveTiming.monitor.client.SessionId;
 import ACCLiveTiming.monitor.client.events.SessionChanged;
+import ACCLiveTiming.monitor.client.events.SessionPhaseChanged;
 import ACCLiveTiming.monitor.eventbus.Event;
 import ACCLiveTiming.monitor.eventbus.EventBus;
 import ACCLiveTiming.monitor.eventbus.EventListener;
@@ -15,6 +16,9 @@ import ACCLiveTiming.monitor.extensions.AccClientExtension;
 import ACCLiveTiming.monitor.extensions.incidents.IncidentInfo;
 import ACCLiveTiming.monitor.extensions.incidents.events.Accident;
 import ACCLiveTiming.monitor.extensions.logging.LoggingExtension;
+import ACCLiveTiming.monitor.networking.data.SessionInfo;
+import ACCLiveTiming.monitor.networking.enums.SessionPhase;
+import ACCLiveTiming.monitor.networking.enums.SessionType;
 import ACCLiveTiming.monitor.utility.TimeUtils;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -83,6 +87,9 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
      * Current target sheet.
      */
     private String currentSheetTarget = "";
+    
+    private boolean isMeasuringGreenFlagOffset = false;
+    private long greenFlagOffsetTimestamp = 0;
 
     public GoogleSheetsAPIExtension() {
         EventBus.register(this);
@@ -103,6 +110,18 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
                     .collect(Collectors.joining(", "));
             queue.add(new SendIncidentEvent(sessionTime, carNumbers));
             LOG.info("accident received: " + carNumbers);
+        } else if (e instanceof SessionPhaseChanged) {
+            SessionInfo info = ((SessionPhaseChanged)e).getSessionInfo();
+            if(info.getSessionType() == SessionType.RACE){
+                if(info.getPhase() == SessionPhase.STARTING){
+                    isMeasuringGreenFlagOffset = true;
+                    greenFlagOffsetTimestamp = System.currentTimeMillis();
+                }else if(info.getPhase() == SessionPhase.SESSION && isMeasuringGreenFlagOffset){
+                    long diff = System.currentTimeMillis() - greenFlagOffsetTimestamp;
+                    queue.add(new GreenFlagEvent((int)diff));
+                    isMeasuringGreenFlagOffset = false;
+                }
+            }
         }
     }
 
@@ -149,9 +168,20 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
         };
         eventLoop.start();
     }
-    
-    public String getCurrentTargetSheet(){
+
+    public String getCurrentTargetSheet() {
         return currentSheetTarget;
+    }
+
+    public void setCurrentTargetSheet(String sheet) {
+        this.currentSheetTarget = sheet;
+    }
+    
+    public long getGreenFlagTimeStamp(){
+        return greenFlagOffsetTimestamp;
+    }
+    public boolean isGreenFlagOffsetBeeingMeasured(){
+        return isMeasuringGreenFlagOffset;
     }
 
     private void eventLoop() throws InterruptedException {
@@ -164,7 +194,7 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
                 sendIncident((SendIncidentEvent) o);
             }
             if (o instanceof GreenFlagEvent) {
-                //sendGreenFlag((GreenFlagEvent) o);
+                sendGreenFlag((GreenFlagEvent) o);
             }
         }
     }
@@ -191,6 +221,39 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
             updateCells(range, line);
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "Error sending spreadsheet values", e);
+        }
+    }
+    
+    private void sendGreenFlag(GreenFlagEvent event) {
+        String sheet = currentSheetTarget;
+        String range = sheet + "B1:C500";
+        List<List<Object>> values;
+        try {
+            values = getCells(range);
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error getting spreadsheet values", e);
+            return;
+        }
+
+        //find row
+        int rowNumber = -1;
+        for (int i = 0; i < values.size(); i++) {
+            for (Object o : values.get(i)) {
+                if (((String) o).equals("Greenflag offset:")) {
+                    rowNumber = i + 1;
+                }
+            }
+        }
+        if (rowNumber < 0) {
+            LOG.log(Level.SEVERE, "Green flag offset not found.");
+        }
+
+        range = sheet + "D" + rowNumber + ":D" + rowNumber;
+        try {
+            updateCells(range, Arrays.asList(Arrays.asList(TimeUtils.asDuration(event.time))));
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error setting spreadsheet value", e);
+            return;
         }
     }
 
@@ -266,11 +329,9 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
     private class GreenFlagEvent {
 
         public int time;
-        public SessionId sessionId;
 
-        public GreenFlagEvent(int time, SessionId sessionId) {
+        public GreenFlagEvent(int time) {
             this.time = time;
-            this.sessionId = sessionId;
         }
     }
 }
