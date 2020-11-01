@@ -17,9 +17,9 @@ import java.util.logging.Logger;
  *
  * @author Leonard
  */
-public class Accident {
+public class IncidentInfo {
 
-    private static Logger LOG = Logger.getLogger(Accident.class.getName());
+    private static Logger LOG = Logger.getLogger(IncidentInfo.class.getName());
 
     /**
      * time of the earliest accident event.
@@ -46,15 +46,15 @@ public class Accident {
      */
     private final int incidentNumber;
 
-    public Accident(float time, CarInfo car, SessionId sessionID) {
+    public IncidentInfo(float time, CarInfo car, SessionId sessionID) {
         this(time, time, Arrays.asList(car), System.currentTimeMillis(), sessionID, 0);
     }
 
-    public Accident(float time, SessionId sessionId) {
+    public IncidentInfo(float time, SessionId sessionId) {
         this(time, time, new LinkedList<CarInfo>(), System.currentTimeMillis(), sessionId, 0);
     }
 
-    private Accident(float earliestTime, float latestTime, List<CarInfo> cars,
+    private IncidentInfo(float earliestTime, float latestTime, List<CarInfo> cars,
             long timestamp, SessionId sessionID, int incidentNumber) {
         this.earliestTime = earliestTime;
         this.latestTime = latestTime;
@@ -64,11 +64,11 @@ public class Accident {
         this.incidentNumber = incidentNumber;
     }
 
-    public Accident addCar(float time, CarInfo car, long timestamp) {
+    public IncidentInfo addCar(float time, CarInfo car, long timestamp) {
         List<CarInfo> c = new LinkedList<>();
         c.addAll(cars);
         c.add(car);
-        return new Accident(earliestTime,
+        return new IncidentInfo(earliestTime,
                 time,
                 c,
                 timestamp,
@@ -76,8 +76,8 @@ public class Accident {
                 incidentNumber);
     }
 
-    public Accident withIncidentNumber(int incidentNumber) {
-        return new Accident(earliestTime,
+    public IncidentInfo withIncidentNumber(int incidentNumber) {
+        return new IncidentInfo(earliestTime,
                 latestTime,
                 cars,
                 timestamp,

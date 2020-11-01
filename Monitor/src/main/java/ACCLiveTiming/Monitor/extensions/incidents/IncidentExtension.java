@@ -8,8 +8,6 @@ package ACCLiveTiming.monitor.extensions.incidents;
 import ACCLiveTiming.monitor.client.SessionId;
 import ACCLiveTiming.monitor.client.events.AfterPacketReceived;
 import ACCLiveTiming.monitor.client.events.BroadcastingEventEvent;
-import ACCLiveTiming.monitor.client.events.SessionChanged;
-import ACCLiveTiming.monitor.client.events.SessionPhaseChanged;
 import ACCLiveTiming.monitor.eventbus.Event;
 import ACCLiveTiming.monitor.eventbus.EventBus;
 import ACCLiveTiming.monitor.eventbus.EventListener;
@@ -17,11 +15,9 @@ import ACCLiveTiming.monitor.extensions.AccClientExtension;
 import ACCLiveTiming.monitor.extensions.logging.LoggingExtension;
 import ACCLiveTiming.monitor.networking.data.AccBroadcastingData;
 import ACCLiveTiming.monitor.networking.data.BroadcastingEvent;
-import ACCLiveTiming.monitor.networking.data.SessionInfo;
 import ACCLiveTiming.monitor.networking.enums.BroadcastingEventType;
-import ACCLiveTiming.monitor.networking.enums.SessionPhase;
-import ACCLiveTiming.monitor.networking.enums.SessionType;
 import ACCLiveTiming.monitor.utility.TimeUtils;
+import ACCLiveTiming.monitor.extensions.incidents.events.Accident;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -50,11 +46,11 @@ public class IncidentExtension
     /**
      * Last accident that is waiting to be commited.
      */
-    private Accident stagedAccident = null;
+    private IncidentInfo stagedAccident = null;
     /**
      * List of accidents that have happened.
      */
-    private List<Accident> accidents = new LinkedList<>();
+    private List<IncidentInfo> accidents = new LinkedList<>();
     /**
      * Timestamp for when the race session started.
      */
@@ -77,8 +73,8 @@ public class IncidentExtension
         return model;
     }
 
-    public List<Accident> getAccidents() {
-        List<Accident> a = new LinkedList<>(accidents);
+    public List<IncidentInfo> getAccidents() {
+        List<IncidentInfo> a = new LinkedList<>(accidents);
         Collections.reverse(a);
         return Collections.unmodifiableList(a);
     }
@@ -114,14 +110,14 @@ public class IncidentExtension
         float sessionTime = client.getModel().getSessionInfo().getSessionTime();
         SessionId sessionId = client.getSessionId();
         if (stagedAccident == null) {
-            stagedAccident = new Accident(sessionTime,
+            stagedAccident = new IncidentInfo(sessionTime,
                     client.getModel().getCar(event.getCarId()),
                     sessionId);
         } else {
             float timeDif = stagedAccident.getLatestTime() - sessionTime;
             if (timeDif > 1000) {
                 commitAccident(stagedAccident);
-                stagedAccident = new Accident(sessionTime,
+                stagedAccident = new IncidentInfo(sessionTime,
                         client.getModel().getCar(event.getCarId()),
                         sessionId);
             } else {
@@ -133,16 +129,18 @@ public class IncidentExtension
     }
 
     public void addEmptyAccident() {
-        commitAccident(new Accident(client.getModel().getSessionInfo().getSessionTime(),
+        commitAccident(new IncidentInfo(client.getModel().getSessionInfo().getSessionTime(),
                 client.getSessionId()));
     }
 
-    private void commitAccident(Accident a) {
-        List<Accident> newAccidents = new LinkedList<>();
+    private void commitAccident(IncidentInfo a) {
+        List<IncidentInfo> newAccidents = new LinkedList<>();
         newAccidents.addAll(accidents);
         newAccidents.add(a.withIncidentNumber(getAndIncrementCounter(client.getSessionId())));
         accidents = newAccidents;
         model.setAccidents(accidents);
+
+        EventBus.publish(new Accident(a));
     }
 
     private int getAndIncrementCounter(SessionId sessionId) {

@@ -63,7 +63,7 @@ public class IncidentTableModel extends TableModel {
         }
     };
 
-    private List<Accident> accidents = new LinkedList<>();
+    private List<IncidentInfo> accidents = new LinkedList<>();
 
     @Override
     public int getRowCount() {
@@ -86,7 +86,7 @@ public class IncidentTableModel extends TableModel {
 
     @Override
     public Object getValueAt(int column, int row) {
-        Accident a = accidents.get(accidents.size() - row - 1);
+        IncidentInfo a = accidents.get(accidents.size() - row - 1);
         switch (column) {
             case 0:
                 return String.valueOf(accidents.size() - row - 1);
@@ -98,7 +98,7 @@ public class IncidentTableModel extends TableModel {
         return "-";
     }
 
-    public void setAccidents(List<Accident> accidents) {
+    public void setAccidents(List<IncidentInfo> accidents) {
         this.accidents = accidents;
     }
 
