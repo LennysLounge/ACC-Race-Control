@@ -34,6 +34,7 @@ public class GoogleSheetsAPIExtensionModule implements ACCLiveTimingExtensionMod
     @Override
     public AccClientExtension getExtension() {
         if(configurationPanel.isExtensionEnabled()){
+            extension.start(configurationPanel.getSpreadSheetLink());
             return extension;
         }
         return null;
