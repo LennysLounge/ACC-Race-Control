@@ -78,6 +78,10 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
      * The current sessionId.
      */
     private SessionId currentSessionId;
+    /**
+     * Current target sheet.
+     */
+    private String currentSheetTarget = "";
 
     public GoogleSheetsAPIExtension() {
         EventBus.register(this);
@@ -87,14 +91,14 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
     public void onEvent(Event e) {
         if (e instanceof SessionChanged) {
             currentSessionId = ((SessionChanged) e).getSessionId();
+            currentSheetTarget = getTargetSheet(currentSessionId);
         } else if (e instanceof Accident) {
             IncidentInfo info = ((Accident) e).getInfo();
             String sessionTime = TimeUtils.asDuration(info.getEarliestTime());
             String carNumbers = info.getCars().stream()
                     .map(car -> String.valueOf(car.getCarNumber()))
                     .collect(Collectors.joining(", "));
-            String targetSheet = getTargetSheet(info.getSessionID());
-            queue.add(new SendIncidentEvent(sessionTime, carNumbers, targetSheet));
+            queue.add(new SendIncidentEvent(sessionTime, carNumbers));
             LOG.info("accident received: " + carNumbers);
         }
     }
@@ -142,6 +146,10 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
         };
         eventLoop.start();
     }
+    
+    public String getCurrentTargetSheet(){
+        return currentSheetTarget;
+    }
 
     private void eventLoop() throws InterruptedException {
         while (running) {
@@ -160,7 +168,7 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
 
     private void sendIncident(SendIncidentEvent event) {
 
-        String sheet = event.targetSheet;
+        String sheet = currentSheetTarget;
         String range = sheet + "B1:C500";
 
         List<List<Object>> values;
@@ -242,12 +250,10 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
 
         public String sessionTime;
         public String carsInvolved;
-        public String targetSheet;
 
-        public SendIncidentEvent(String sessionTime, String carsInvolved, String targetSheet) {
+        public SendIncidentEvent(String sessionTime, String carsInvolved) {
             this.sessionTime = sessionTime;
             this.carsInvolved = carsInvolved;
-            this.targetSheet = targetSheet;
         }
     }
 
