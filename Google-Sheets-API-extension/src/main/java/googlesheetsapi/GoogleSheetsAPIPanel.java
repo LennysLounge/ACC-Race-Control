@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.extensions.spreadsheetcontroll;
+package googlesheetsapi;
 
-import ACCLiveTiming.monitor.utility.SpreadSheetService;
+import ACCLiveTiming.monitor.extensions.spreadsheetcontroll.SpreadSheetControlExtension;
+import googlesheetsapi.GoogleSheetsAPIExtension;
 import ACCLiveTiming.monitor.visualisation.LookAndFeel;
 import ACCLiveTiming.monitor.visualisation.gui.LPButton;
 import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
@@ -14,7 +15,7 @@ import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
  *
  * @author Leonard
  */
-public class SpreadSheetControlPanel extends LPContainer {
+public class GoogleSheetsAPIPanel extends LPContainer {
 
     private final SpreadSheetControlExtension extension;
     
@@ -23,7 +24,7 @@ public class SpreadSheetControlPanel extends LPContainer {
     private final LPButton setToRace1 = new LPButton("Send to \"Race 1!\"");
     private final LPButton setToRace2 = new LPButton("Send to \"Race 2!\"");
 
-    public SpreadSheetControlPanel(SpreadSheetControlExtension extension) {
+    public GoogleSheetsAPIPanel(SpreadSheetControlExtension extension) {
         this.extension = extension;
         setName("Sheets API");
         

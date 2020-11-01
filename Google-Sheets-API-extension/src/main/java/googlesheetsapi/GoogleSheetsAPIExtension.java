@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.extensions.spreadsheetcontroll;
+package googlesheetsapi;
 
 import ACCLiveTiming.monitor.extensions.AccClientExtension;
 import ACCLiveTiming.monitor.networking.data.AccBroadcastingData;
@@ -12,10 +12,10 @@ import ACCLiveTiming.monitor.networking.data.AccBroadcastingData;
  *
  * @author Leonard
  */
-public class SpreadSheetControlExtension extends AccClientExtension {
+public class GoogleSheetsAPIExtension extends AccClientExtension {
 
-    public SpreadSheetControlExtension() {
-        this.panel = new SpreadSheetControlPanel(this);
+    public GoogleSheetsAPIExtension() {
+        this.panel = new GoogleSheetsAPIPanel(this);
     }
 
     public AccBroadcastingData getModel() {

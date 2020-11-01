@@ -21,7 +21,6 @@ import ACCLiveTiming.monitor.networking.data.SessionInfo;
 import ACCLiveTiming.monitor.networking.enums.BroadcastingEventType;
 import ACCLiveTiming.monitor.networking.enums.SessionPhase;
 import ACCLiveTiming.monitor.networking.enums.SessionType;
-import ACCLiveTiming.monitor.utility.SpreadSheetService;
 import ACCLiveTiming.monitor.utility.TimeUtils;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,7 +28,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -94,24 +92,6 @@ public class IncidentExtension
             if (event.getType() == BroadcastingEventType.ACCIDENT) {
                 onAccident(event);
             }
-        } else if (e instanceof SessionChanged) {
-            SessionInfo info = ((SessionChanged) e).getSessionInfo();
-            switch (info.getSessionType()) {
-                case PRACTICE:
-                    onPracticeStart();
-                    break;
-                case QUALIFYING:
-                    onQualifyingStart();
-                    break;
-                case RACE:
-                    onRaceStart();
-                    break;
-            }
-        } else if (e instanceof SessionPhaseChanged) {
-            SessionInfo info = ((SessionPhaseChanged) e).getSessionInfo();
-            if (info.getSessionType() == SessionType.RACE && info.getPhase() == SessionPhase.SESSION) {
-                onRaceSessionStart();
-            }
         }
     }
 
@@ -163,39 +143,12 @@ public class IncidentExtension
         newAccidents.add(a.withIncidentNumber(getAndIncrementCounter(client.getSessionId())));
         accidents = newAccidents;
         model.setAccidents(accidents);
-
-        if (SpreadSheetService.isRunning()) {
-            List<Integer> carNumbers = a.getCars().stream()
-                    .map(car -> car.getCarNumber())
-                    .collect(Collectors.toList());
-            SpreadSheetService.sendAccident(carNumbers, a.getEarliestTime(), a.getSessionID());
-        }
     }
 
     private int getAndIncrementCounter(SessionId sessionId) {
         int result = incidentCounter.getOrDefault(sessionId, 0);
         incidentCounter.put(sessionId, result + 1);
         return result;
-    }
-
-    public void onPracticeStart() {
-        SpreadSheetService.setTargetSheetBySession(client.getSessionId());
-    }
-
-    public void onQualifyingStart() {
-        SpreadSheetService.setTargetSheetBySession(client.getSessionId());
-    }
-
-    public void onRaceStart() {
-        raceStartTimestamp = System.currentTimeMillis();
-        SpreadSheetService.setTargetSheetBySession(client.getSessionId());
-    }
-
-    public void onRaceSessionStart() {
-        long now = System.currentTimeMillis();
-        int diff = (int) (now - raceStartTimestamp);
-        LOG.info("GreenFlag offset: " + TimeUtils.asDuration(diff));
-        SpreadSheetService.sendGreenFlagOffset(diff, client.getSessionId());
     }
 
 }

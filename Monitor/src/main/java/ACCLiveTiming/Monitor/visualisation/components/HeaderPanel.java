@@ -7,7 +7,6 @@ package ACCLiveTiming.monitor.visualisation.components;
 
 import ACCLiveTiming.monitor.client.BasicAccBroadcastingClient;
 import ACCLiveTiming.monitor.client.SessionId;
-import ACCLiveTiming.monitor.utility.SpreadSheetService;
 import ACCLiveTiming.monitor.utility.TimeUtils;
 import ACCLiveTiming.monitor.visualisation.LookAndFeel;
 import ACCLiveTiming.monitor.visualisation.gui.LPComponent;
@@ -23,11 +22,8 @@ public class HeaderPanel extends LPComponent {
 
     private final BasicAccBroadcastingClient client;
 
-    private boolean showSpreadSheetStatus;
-
-    public HeaderPanel(BasicAccBroadcastingClient client, boolean showSpreadSheetStatus) {
+    public HeaderPanel(BasicAccBroadcastingClient client) {
         this.client = client;
-        this.showSpreadSheetStatus = showSpreadSheetStatus;
     }
 
     @Override
@@ -36,17 +32,6 @@ public class HeaderPanel extends LPComponent {
         applet.noStroke();
         applet.rect(0, 0, getWidth(), getHeight());
         int y = 0;
-        //Draw Spreasheet status.
-        if (showSpreadSheetStatus) {
-            applet.fill(LookAndFeel.COLOR_RACE);
-            applet.rect(0, 0, getWidth(), LookAndFeel.LINE_HEIGHT);
-            applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
-
-            String targetSheet = SpreadSheetService.getSheet();
-            applet.textAlign(LEFT, CENTER);
-            applet.text("Target Sheet:\"" + targetSheet + "\"", 10, LookAndFeel.LINE_HEIGHT * 0.5f);
-            y += LookAndFeel.LINE_HEIGHT;
-        }
 
         String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
         String sessionName = sessionIdToString(client.getSessionId());

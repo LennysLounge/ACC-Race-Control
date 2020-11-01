@@ -18,7 +18,7 @@ public class GoogleSheetsAPIExtensionModule implements ACCLiveTimingExtensionMod
 
     @Override
     public String getName() {
-        return "Test extension";
+        return "Google Sheets API extension";
     }
 
     @Override
