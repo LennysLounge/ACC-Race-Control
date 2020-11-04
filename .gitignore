@@ -25,7 +25,10 @@ hs_err_pid*
 .gradle
 .settings
 .project
-build
-tokens
+fonts
+api_credentials
+Monitor/build
+Google-Sheets-API-extension/build
+
 
 

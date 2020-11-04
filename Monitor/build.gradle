@@ -1,0 +1,44 @@
+plugins{
+    id 'java'
+    id 'jacoco'
+    id 'application'
+}
+
+apply from: "${rootDir}/gradle/versioning.gradle"
+
+ext.collectableDistDir = new File(projectDir, "src\\dist")
+
+task testo{
+    print("")
+}
+
+application{
+    mainClassName = 'ACCLiveTiming.monitor.Main'
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation     'junit:junit:4.13'
+    
+    //compile group: 'org.processing', name: 'core', version: '3.3.6'
+    implementation 'org.processing:core:3.3.6'
+}
+
+run{
+    dependsOn installDist
+    workingDir new File(new File(buildDir, 'install'), project.name)    
+}
+
+distributions{
+    main{
+        distributionBaseName = "ACC Live Timing Monitor" + project.ext.versionString
+    }
+}
+
+
+
+//startScripts.enabled = false

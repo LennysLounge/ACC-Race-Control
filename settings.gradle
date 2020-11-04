@@ -1,1 +1,4 @@
 rootProject.name = 'ACC Live Timing'
+
+include ":Monitor"
+include ":Google-Sheets-API-extension"
