@@ -4,6 +4,8 @@ plugins{
     id 'application'
 }
 
+apply from: "${rootDir}/gradle/versioning.gradle"
+
 ext.collectableDistDir = new File(projectDir, "src\\dist")
 
 task testo{
@@ -29,6 +31,12 @@ dependencies {
 run{
     dependsOn installDist
     workingDir new File(new File(buildDir, 'install'), project.name)    
+}
+
+distributions{
+    main{
+        distributionBaseName = "ACC Live Timing Monitor" + project.ext.versionString
+    }
 }
 
 

@@ -2,8 +2,11 @@ apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'application'
 
+apply from: "${rootDir}/gradle/versioning.gradle"
+
 
 mainClassName = 'ACCLiveTiming.monitor.Main'
+
 
 repositories {
     jcenter()
@@ -24,6 +27,7 @@ installDist.dependsOn(":Monitor:installDist")
 
 distributions{
     main{
+        distributionBaseName = "ACC Live Timing Monitor ACCSS" + project.ext.versionString
         contents.from{
             project(":Monitor").ext.collectableDistDir
         }
