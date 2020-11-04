@@ -1,2 +1,2 @@
 @echo off
-start /b ./jre/bin/javaw.exe -cp .\lib\* ACCLiveTiming.Main
+start /b ./jre/bin/javaw.exe -cp .\lib\* ACCLiveTiming.monitor.Main
