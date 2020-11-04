@@ -36,6 +36,7 @@ public class LookAndFeel {
     public static final int COLOR_PRACTICE = 0xfff75151;
     public static final int COLOR_QUALIFYING = 0xff5cadff;
     public static final int COLOR_RACE = 0xff79e463;
+    public static final int COLOR_YELLOW = 0xffaaaa00;
     public static final int TRANSPARENT_WHITE = 0x14ffffff;
     public static final int TRANSPARENT_RED = 0x96ff0000;
     public static final int TEXT_SIZE = 20;

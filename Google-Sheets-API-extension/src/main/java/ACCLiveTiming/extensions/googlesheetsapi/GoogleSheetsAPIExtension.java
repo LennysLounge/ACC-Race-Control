@@ -5,6 +5,9 @@
  */
 package ACCLiveTiming.extensions.googlesheetsapi;
 
+import ACCLiveTiming.extensions.fullcourseyellow.events.FCYStart;
+import ACCLiveTiming.extensions.fullcourseyellow.events.FCYStop;
+import ACCLiveTiming.extensions.fullcourseyellow.events.FCYViolation;
 import ACCLiveTiming.monitor.Main;
 import ACCLiveTiming.monitor.client.SessionId;
 import ACCLiveTiming.monitor.client.events.SessionChanged;
@@ -87,7 +90,7 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
      * Current target sheet.
      */
     private String currentSheetTarget = "";
-    
+
     private boolean isMeasuringGreenFlagOffset = false;
     private long greenFlagOffsetTimestamp = 0;
 
@@ -111,17 +114,31 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
             queue.add(new SendIncidentEvent(sessionTime, carNumbers));
             LOG.info("accident received: " + carNumbers);
         } else if (e instanceof SessionPhaseChanged) {
-            SessionInfo info = ((SessionPhaseChanged)e).getSessionInfo();
-            if(info.getSessionType() == SessionType.RACE){
-                if(info.getPhase() == SessionPhase.STARTING){
+            SessionInfo info = ((SessionPhaseChanged) e).getSessionInfo();
+            if (info.getSessionType() == SessionType.RACE) {
+                if (info.getPhase() == SessionPhase.STARTING) {
                     isMeasuringGreenFlagOffset = true;
                     greenFlagOffsetTimestamp = System.currentTimeMillis();
-                }else if(info.getPhase() == SessionPhase.SESSION && isMeasuringGreenFlagOffset){
+                } else if (info.getPhase() == SessionPhase.SESSION && isMeasuringGreenFlagOffset) {
                     long diff = System.currentTimeMillis() - greenFlagOffsetTimestamp;
-                    queue.add(new GreenFlagEvent((int)diff));
+                    queue.add(new GreenFlagEvent((int) diff));
                     isMeasuringGreenFlagOffset = false;
                 }
             }
+        } else if (e instanceof FCYStart) {
+            FCYStart event = ((FCYStart) e);
+            String sessionTime = TimeUtils.asDuration(event.getSessionTime());
+            queue.add(new SendIncidentEvent(sessionTime, "Start FCY"));
+        } else if (e instanceof FCYStop) {
+            FCYStop event = ((FCYStop) e);
+            String sessionTime = TimeUtils.asDuration(event.getSessionTime());
+            queue.add(new SendIncidentEvent(sessionTime, "Stop FCY"));
+        } else if (e instanceof FCYViolation) {
+            FCYViolation event = ((FCYViolation) e);
+            String sessionTime = TimeUtils.asDuration(event.getTimeStamp());
+            String message = String.valueOf(event.getCar().getCarNumber())
+                    + ", " + String.valueOf(event.getSpeed()) + "km/h";
+            queue.add(new SendIncidentEvent(sessionTime, message));
         }
     }
 
@@ -176,11 +193,12 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
     public void setCurrentTargetSheet(String sheet) {
         this.currentSheetTarget = sheet;
     }
-    
-    public long getGreenFlagTimeStamp(){
+
+    public long getGreenFlagTimeStamp() {
         return greenFlagOffsetTimestamp;
     }
-    public boolean isGreenFlagOffsetBeeingMeasured(){
+
+    public boolean isGreenFlagOffsetBeeingMeasured() {
         return isMeasuringGreenFlagOffset;
     }
 
@@ -223,7 +241,7 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
             LOG.log(Level.SEVERE, "Error sending spreadsheet values", e);
         }
     }
-    
+
     private void sendGreenFlag(GreenFlagEvent event) {
         String sheet = currentSheetTarget;
         String range = sheet + "B1:C500";
