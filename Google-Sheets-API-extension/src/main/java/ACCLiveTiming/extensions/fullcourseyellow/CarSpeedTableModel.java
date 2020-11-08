@@ -74,7 +74,7 @@ public class CarSpeedTableModel extends TableModel {
                 if (index >= entries.size()) {
                     return null;
                 }
-                return (Integer)entries.get(index).getRealtime().getKMH();
+                return (Integer)entries.get(index).getRealtime().getPosition();
         }
         return "-";
     }
