@@ -128,17 +128,19 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
         } else if (e instanceof FCYStart) {
             FCYStart event = ((FCYStart) e);
             String sessionTime = TimeUtils.asDuration(event.getSessionTime());
-            queue.add(new SendIncidentEvent(sessionTime, "Start FCY"));
+            queue.add(new SendIncidentEvent(sessionTime, "Start FCC"));
         } else if (e instanceof FCYStop) {
             FCYStop event = ((FCYStop) e);
             String sessionTime = TimeUtils.asDuration(event.getSessionTime());
-            queue.add(new SendIncidentEvent(sessionTime, "Stop FCY"));
+            queue.add(new SendIncidentEvent(sessionTime, "Stop FCC"));
         } else if (e instanceof FCYViolation) {
+            /*
             FCYViolation event = ((FCYViolation) e);
             String sessionTime = TimeUtils.asDuration(event.getTimeStamp());
             String message = String.valueOf(event.getCar().getCarNumber())
                     + ", " + String.valueOf(event.getSpeed()) + "km/h";
             queue.add(new SendIncidentEvent(sessionTime, message));
+             */
         }
     }
 
@@ -154,6 +156,13 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
             default:
                 return "Practice!";
         }
+    }
+
+    public void sendEmptyIncident() {
+        queue.add(new SendIncidentEvent(
+                TimeUtils.asDuration(client.getModel().getSessionInfo().getSessionTime()),
+                "empty")
+        );
     }
 
     public void start(String spreadSheetURL) throws IllegalArgumentException, RuntimeException {

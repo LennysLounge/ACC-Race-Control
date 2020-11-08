@@ -42,10 +42,10 @@ public class CarSpeedTableModel extends TableModel {
             columns[i * 3 + 1] = new LPTableColumn("#")
                     .setMaxWidth(LookAndFeel.LINE_HEIGHT * 1.5f)
                     .setMinWidth(LookAndFeel.LINE_HEIGHT * 1.5f);
-            columns[i * 3 + 2] = new LPTableColumn("km/h")
+            columns[i * 3 + 2] = new LPTableColumn("P")
                     .setMaxWidth(LookAndFeel.LINE_HEIGHT * 3f)
-                    .setMinWidth(LookAndFeel.LINE_HEIGHT * 3f)
-                    .setCellRenderer(speedRenderer);
+                    .setMinWidth(LookAndFeel.LINE_HEIGHT * 3f);
+                    //.setCellRenderer(speedRenderer);
         }
         return columns;
     }

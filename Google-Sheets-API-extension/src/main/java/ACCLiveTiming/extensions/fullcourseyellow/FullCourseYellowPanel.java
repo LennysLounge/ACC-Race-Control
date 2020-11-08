@@ -23,7 +23,7 @@ public class FullCourseYellowPanel extends LPContainer {
     private final LPTable carSpeedTable = new LPTable();
 
     public FullCourseYellowPanel(FullCourseYellowExtension extension) {
-        setName("FCY");
+        setName("FCC");
         this.extension = extension;
 
         startFCYButton.setSize(200, LookAndFeel.LINE_HEIGHT);

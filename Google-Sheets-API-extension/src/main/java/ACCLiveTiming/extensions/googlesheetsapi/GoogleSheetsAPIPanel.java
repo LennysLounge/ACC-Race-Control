@@ -24,6 +24,7 @@ public class GoogleSheetsAPIPanel extends LPContainer {
     private final LPButton setToQuali = new LPButton("Send to \"Qualifying!\"");
     private final LPButton setToRace1 = new LPButton("Send to \"Race 1!\"");
     private final LPButton setToRace2 = new LPButton("Send to \"Race 2!\"");
+    private final LPButton sendEmptyIncident = new LPButton("Send empty incident");
 
     public GoogleSheetsAPIPanel(GoogleSheetsAPIExtension extension) {
         this.extension = extension;
@@ -45,11 +46,17 @@ public class GoogleSheetsAPIPanel extends LPContainer {
         setToRace2.setAction(() -> {
             extension.setCurrentTargetSheet("Race 2!");
         });
+        
+        sendEmptyIncident.setSize(200, LookAndFeel.LINE_HEIGHT);
+        sendEmptyIncident.setAction(()->{
+           extension.sendEmptyIncident();
+        });
 
         addComponent(setToPractice);
         addComponent(setToQuali);
         addComponent(setToRace1);
         addComponent(setToRace2);
+        addComponent(sendEmptyIncident);
     }
 
     @Override
@@ -81,6 +88,7 @@ public class GoogleSheetsAPIPanel extends LPContainer {
         setToQuali.setPosition(10, 80);
         setToRace1.setPosition(10, 120);
         setToRace2.setPosition(10, 160);
+        sendEmptyIncident.setPosition(10, 300);
     }
 
 }
