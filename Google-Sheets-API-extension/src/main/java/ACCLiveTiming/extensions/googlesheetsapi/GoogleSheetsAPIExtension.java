@@ -19,6 +19,7 @@ import ACCLiveTiming.monitor.extensions.AccClientExtension;
 import ACCLiveTiming.monitor.extensions.incidents.IncidentInfo;
 import ACCLiveTiming.monitor.extensions.incidents.events.Accident;
 import ACCLiveTiming.monitor.extensions.logging.LoggingExtension;
+import ACCLiveTiming.monitor.networking.data.CarInfo;
 import ACCLiveTiming.monitor.networking.data.SessionInfo;
 import ACCLiveTiming.monitor.networking.enums.SessionPhase;
 import ACCLiveTiming.monitor.networking.enums.SessionType;
@@ -109,8 +110,8 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
             IncidentInfo info = ((Accident) e).getInfo();
             String sessionTime = TimeUtils.asDuration(info.getEarliestTime());
             String carNumbers = info.getCars().stream()
-                    .map(car -> String.valueOf(car.getCarNumber()))
-                    .collect(Collectors.joining(", "));
+                    .map(car -> getCarNumberAndLapCount(car))
+                    .collect(Collectors.joining("\n"));
             queue.add(new SendIncidentEvent(sessionTime, carNumbers));
             LOG.info("accident received: " + carNumbers);
         } else if (e instanceof SessionPhaseChanged) {
@@ -142,6 +143,10 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
             queue.add(new SendIncidentEvent(sessionTime, message));
              */
         }
+    }
+    
+    private String getCarNumberAndLapCount(CarInfo car){
+        return car.getCarNumber() + " [" + (car.getRealtime().getLaps()+1) + "]";
     }
 
     private String getTargetSheet(SessionId sessionId) {
@@ -229,23 +234,27 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
     private void sendIncident(SendIncidentEvent event) {
 
         String sheet = currentSheetTarget;
-        String range = sheet + "B1:C500";
+        String rangeSession = sheet + "B1:D500";
 
         List<List<Object>> values;
         try {
-            values = getCells(range);
+            values = getCells(rangeSession);
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "Error getting spreadsheet values", e);
             return;
         }
         int emptyLine = values.size() + 1;
 
-        range = sheet + "B" + emptyLine + ":C" + emptyLine;
+        rangeSession = sheet + "B" + emptyLine;
+        String rangeCars = sheet + "D" + emptyLine;
 
-        List<List<Object>> line = new LinkedList<>();
-        line.add(Arrays.asList(event.sessionTime, event.carsInvolved));
+        List<List<Object>> lineSession = new LinkedList<>();
+        lineSession.add(Arrays.asList(event.sessionTime));
+        List<List<Object>> lineCars = new LinkedList<>();
+        lineCars.add(Arrays.asList(event.carsInvolved));
         try {
-            updateCells(range, line);
+            updateCells(rangeSession, lineSession);
+            updateCells(rangeCars, lineCars);
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "Error sending spreadsheet values", e);
         }
@@ -275,7 +284,7 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
             LOG.log(Level.SEVERE, "Green flag offset not found.");
         }
 
-        range = sheet + "D" + rowNumber + ":D" + rowNumber;
+        range = sheet + "C" + rowNumber + ":C" + rowNumber;
         try {
             updateCells(range, Arrays.asList(Arrays.asList(TimeUtils.asDuration(event.time))));
         } catch (IOException e) {
