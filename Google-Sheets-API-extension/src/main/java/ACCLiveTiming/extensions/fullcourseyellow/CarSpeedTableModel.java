@@ -72,7 +72,7 @@ public class CarSpeedTableModel extends TableModel {
                 return String.valueOf(entries.get(index).getCarNumber());
             case 2:
                 if (index >= entries.size()) {
-                    return null;
+                    return "";
                 }
                 return (Integer)entries.get(index).getRealtime().getPosition();
         }
