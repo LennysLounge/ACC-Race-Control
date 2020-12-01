@@ -74,4 +74,11 @@ public class Visualisation extends CustomPApplet {
             key = 0;
         }
     }
+    
+    @Override
+    public void exit(){
+        println("Stopping");
+        client.sendUnregisterRequest();
+        super.exit();
+    }
 }
