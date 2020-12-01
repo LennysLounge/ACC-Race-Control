@@ -184,7 +184,7 @@ public class PrimitivAccBroadcastingClient {
      *
      */
     public void sendUnregisterRequest() {
-        sendRequest(protocol.buildUnregisterRequest());
+        sendRequest(protocol.buildUnregisterRequest(model.getConnectionID()));
     }
 
     /**

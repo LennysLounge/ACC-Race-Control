@@ -273,9 +273,10 @@ public class AccBroadcastingProtocol {
         return message.toByteArray();
     }
 
-    public byte[] buildUnregisterRequest() {
+    public byte[] buildUnregisterRequest(int connectionID) {
         ByteArrayOutputStream message = new ByteArrayOutputStream();
         message.write(OutboundMessageTypes.UNREGISTER_COMMAND_APPLICATION);
+        message.write(toByteArray(connectionID, 4), 0, 4);
         return message.toByteArray();
     }
 
