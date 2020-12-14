@@ -65,11 +65,11 @@ public class AccBroadcastingProtocol {
     /**
      * Version of the broadcasting protocoll.
      */
-    private final byte BROADCASTING_PROTOCOL_VERSION = 0x04;
+    private static final byte BROADCASTING_PROTOCOL_VERSION = 0x04;
     /**
      * Callback to trigger the events.
      */
-    private PrimitivAccBroadcastingClient callback;
+    private AccBroadcastingClientListener callback;
 
     /**
      * Because the entryList is split in multiple packets we need this as a
@@ -79,7 +79,7 @@ public class AccBroadcastingProtocol {
 
     private long lastTimeEntryListRequest = 0;
 
-    public AccBroadcastingProtocol(PrimitivAccBroadcastingClient callback) {
+    public AccBroadcastingProtocol(AccBroadcastingClientListener callback) {
         this.callback = callback;
     }
 
@@ -262,7 +262,7 @@ public class AccBroadcastingProtocol {
         callback.onTrackData(info);
     }
 
-    public byte[] buildRegisterRequest(String name, String password, int interval, String commandPassword) {
+    public static byte[] buildRegisterRequest(String name, String password, int interval, String commandPassword) {
         ByteArrayOutputStream message = new ByteArrayOutputStream();
         message.write(OutboundMessageTypes.REGISTER_COMMAND_APPLICATION);
         message.write(BROADCASTING_PROTOCOL_VERSION);
@@ -273,33 +273,33 @@ public class AccBroadcastingProtocol {
         return message.toByteArray();
     }
 
-    public byte[] buildUnregisterRequest(int connectionID) {
+    public static byte[] buildUnregisterRequest(int connectionID) {
         ByteArrayOutputStream message = new ByteArrayOutputStream();
         message.write(OutboundMessageTypes.UNREGISTER_COMMAND_APPLICATION);
         message.write(toByteArray(connectionID, 4), 0, 4);
         return message.toByteArray();
     }
 
-    public byte[] buildEntryListRequest(int connectionID) {
+    public static byte[] buildEntryListRequest(int connectionID) {
         ByteArrayOutputStream message = new ByteArrayOutputStream();
         message.write(OutboundMessageTypes.REQUEST_ENTRY_LIST);
         message.write(toByteArray(connectionID, 4), 0, 4);
         return message.toByteArray();
     }
 
-    public byte[] buildTrackDataRequest(int connectionID) {
+    public static byte[] buildTrackDataRequest(int connectionID) {
         ByteArrayOutputStream message = new ByteArrayOutputStream();
         message.write(OutboundMessageTypes.REQUEST_TRACK_DATA);
         message.write(toByteArray(connectionID, 4), 0, 4);
         return message.toByteArray();
     }
 
-    private void writeString(ByteArrayOutputStream o, String message) {
+    private static void writeString(ByteArrayOutputStream o, String message) {
         o.write(toByteArray(message.length(), 2), 0, 2);
         o.write(message.getBytes(), 0, message.length());
     }
 
-    private byte[] toByteArray(int n, int length) {
+    private static byte[] toByteArray(int n, int length) {
         byte[] result = new byte[length];
         for (int i = 0; i < length; i++) {
             result[i] = (byte) (n & 0xFF);

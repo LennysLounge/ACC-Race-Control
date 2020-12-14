@@ -72,10 +72,6 @@ public class PrimitivAccBroadcastingClient {
      */
     private AccBroadcastingData model = new AccBroadcastingData();
     /**
-     * Protocoll used to communicate with ACC.
-     */
-    private final AccBroadcastingProtocol protocol = new AccBroadcastingProtocol(this);
-    /**
      * Time when the entry list was requested.
      */
     private long lastTimeEntryListRequest = 0;
@@ -165,7 +161,11 @@ public class PrimitivAccBroadcastingClient {
      *
      */
     public void sendRegisterRequest() {
-        sendRequest(protocol.buildRegisterRequest(displayName, connectionPassword, updateInterval, commandPassword));
+        sendRequest(AccBroadcastingProtocol.buildRegisterRequest(displayName,
+                connectionPassword,
+                updateInterval,
+                commandPassword
+        ));
     }
 
     /**
@@ -173,7 +173,9 @@ public class PrimitivAccBroadcastingClient {
      *
      */
     public void sendUnregisterRequest() {
-        sendRequest(protocol.buildUnregisterRequest(model.getConnectionID()));
+        sendRequest(AccBroadcastingProtocol.buildUnregisterRequest(
+                model.getConnectionID()
+        ));
     }
 
     /**
@@ -182,7 +184,9 @@ public class PrimitivAccBroadcastingClient {
      */
     public void sendEntryListRequest() {
         lastTimeEntryListRequest = System.currentTimeMillis();
-        sendRequest(protocol.buildEntryListRequest(model.getConnectionID()));
+        sendRequest(AccBroadcastingProtocol.buildEntryListRequest(
+                model.getConnectionID()
+        ));
     }
 
     /**
@@ -190,7 +194,9 @@ public class PrimitivAccBroadcastingClient {
      *
      */
     public void sendTrackDataRequest() {
-        sendRequest(protocol.buildTrackDataRequest(model.getConnectionID()));
+        sendRequest(AccBroadcastingProtocol.buildTrackDataRequest(
+                model.getConnectionID()
+        ));
     }
 
     /**
@@ -212,9 +218,15 @@ public class PrimitivAccBroadcastingClient {
     }
 
     private class UdpListener
-            extends Thread {
+            extends Thread
+            implements AccBroadcastingClientListener {
 
         private final Logger LOG = Logger.getLogger(UdpListener.class.getName());
+
+        /**
+         * Protocoll used to communicate with ACC.
+         */
+        private final AccBroadcastingProtocol protocol = new AccBroadcastingProtocol(this);
 
         public UdpListener(String name) {
             super(name);
@@ -249,87 +261,94 @@ public class PrimitivAccBroadcastingClient {
                 }
             }
         }
-    }
 
-    // Threading
-    protected void onRegistrationResult(int connectionID, boolean success, boolean readOnly, String message) {
-        if (success == false) {
-            LOG.info("Connection refused\n" + message);
+        @Override
+        public void onRegistrationResult(int connectionID, boolean success, boolean readOnly, String message) {
+            if (success == false) {
+                LOG.info("Connection refused\n" + message);
+            }
+            model = model.withConnectionId(connectionID);
+
+            try {
+                sendEntryListRequest();
+                sendTrackDataRequest();
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "Error while sending entrylist and trackdata request", e);
+            }
         }
-        model = model.withConnectionId(connectionID);
 
-        try {
-            sendEntryListRequest();
-            sendTrackDataRequest();
-        } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Error while sending entrylist and trackdata request", e);
+        @Override
+        public void onRealtimeUpdate(SessionInfo sessionInfo) {
+            model = model.withSessionInfo(sessionInfo);
         }
-    }
 
-    protected void onRealtimeUpdate(SessionInfo sessionInfo) {
-        model = model.withSessionInfo(sessionInfo);
-    }
+        @Override
+        public void onRealtimeCarUpdate(RealtimeInfo info) {
+            if (model.getCarsInfo().containsKey(info.getCarId())) {
+                CarInfo car = model.getCarsInfo().get(info.getCarId());
+                car = car.withRealtime(info);
 
-    protected void onRealtimeCarUpdate(RealtimeInfo info) {
-        if (model.getCarsInfo().containsKey(info.getCarId())) {
-            CarInfo car = model.getCarsInfo().get(info.getCarId());
-            car = car.withRealtime(info);
-
-            Map<Integer, CarInfo> cars = new HashMap<>();
-            cars.putAll(model.getCarsInfo());
-            cars.put(car.getCarId(), car);
-            model = model.withCars(cars);
-        } else {
-            long now = System.currentTimeMillis();
-            if (now - lastTimeEntryListRequest > 5000) {
-                try {
-                    sendEntryListRequest();
-                } catch (Exception e) {
-                    LOG.log(Level.SEVERE, "Error while sending entrylist request", e);
+                Map<Integer, CarInfo> cars = new HashMap<>();
+                cars.putAll(model.getCarsInfo());
+                cars.put(car.getCarId(), car);
+                model = model.withCars(cars);
+            } else {
+                long now = System.currentTimeMillis();
+                if (now - lastTimeEntryListRequest > 5000) {
+                    try {
+                        sendEntryListRequest();
+                    } catch (Exception e) {
+                        LOG.log(Level.SEVERE, "Error while sending entrylist request", e);
+                    }
                 }
             }
         }
-    }
 
-    protected void onEntryListUpdate(List<Integer> carIds) {
-        Map<Integer, CarInfo> cars = new HashMap<>();
-        cars.putAll(model.getCarsInfo());
-        //disconnect all connected cars that are not in this update.
-        cars.values().stream()
-                .filter(carInfo -> carInfo.isConnected())
-                .filter(carInfo -> !carIds.contains(carInfo.getCarId()))
-                .forEach(carInfo
-                        -> cars.put(carInfo.getCarId(), carInfo.withConnected(false))
-                );
-        //add any new carIds.
-        for (int carId : carIds) {
-            if (!cars.containsKey(carId)) {
-                cars.put(carId, new CarInfo());
+        @Override
+        public void onEntryListUpdate(List<Integer> carIds) {
+            Map<Integer, CarInfo> cars = new HashMap<>();
+            cars.putAll(model.getCarsInfo());
+            //disconnect all connected cars that are not in this update.
+            cars.values().stream()
+                    .filter(carInfo -> carInfo.isConnected())
+                    .filter(carInfo -> !carIds.contains(carInfo.getCarId()))
+                    .forEach(carInfo
+                            -> cars.put(carInfo.getCarId(), carInfo.withConnected(false))
+                    );
+            //add any new carIds.
+            for (int carId : carIds) {
+                if (!cars.containsKey(carId)) {
+                    cars.put(carId, new CarInfo());
+                }
             }
+            model = model.withCars(cars);
         }
-        model = model.withCars(cars);
-    }
 
-    protected void onTrackData(TrackInfo info) {
-        model = model.withTrackInfo(info);
-    }
+        @Override
+        public void onTrackData(TrackInfo info) {
+            model = model.withTrackInfo(info);
+        }
 
-    protected void onEntryListCarUpdate(CarInfo carInfo) {
-        Map<Integer, CarInfo> cars = new HashMap<>();
-        cars.putAll(model.getCarsInfo());
+        @Override
+        public void onEntryListCarUpdate(CarInfo carInfo) {
+            Map<Integer, CarInfo> cars = new HashMap<>();
+            cars.putAll(model.getCarsInfo());
 
-        cars.put(carInfo.getCarId(), carInfo);
-        model = model.withCars(cars);
-    }
+            cars.put(carInfo.getCarId(), carInfo);
+            model = model.withCars(cars);
+        }
 
-    protected void onBroadcastingEvent(BroadcastingEvent event) {
-        List<BroadcastingEvent> events = new LinkedList<>();
-        events.addAll(model.getEvents());
-        events.add(event);
+        @Override
+        public void onBroadcastingEvent(BroadcastingEvent event) {
+            List<BroadcastingEvent> events = new LinkedList<>();
+            events.addAll(model.getEvents());
+            events.add(event);
 
-        model = model.withEvents(events);
-    }
+            model = model.withEvents(events);
+        }
 
-    protected void afterPacketReceived(byte type) {
+        @Override
+        public void afterPacketReceived(byte type) {
+        }
     }
 }
