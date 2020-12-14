@@ -29,8 +29,6 @@ import ACCLiveTiming.monitor.networking.data.TrackInfo;
 import ACCLiveTiming.monitor.networking.enums.SessionPhase;
 import ACCLiveTiming.monitor.networking.enums.SessionType;
 import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
-import java.net.InetAddress;
-import java.net.SocketException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -74,14 +72,6 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
 
     /**
      * Creates a new broadcasting client for ACC.
-     *
-     * @param displayName The display name of this connection.
-     * @param connectionPassword The password for this connection.
-     * @param commandPassword The command password.
-     * @param updateInterval The interval in which to receive updates.
-     * @param hostAddress Host address of the server.
-     * @param hostPort Host port of the server.
-     * @throws java.net.SocketException
      */
     public BasicAccBroadcastingClient() {
     }
@@ -117,13 +107,13 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
     public List<String> getMessages() {
         return Collections.unmodifiableList(messages);
     }
-
+    
+    /*
     @Override
     protected void onRegistrationResult(int connectionID, boolean success, boolean readOnly, String message) {
         super.onRegistrationResult(connectionID, success, readOnly, message);
         EventBus.publish(new RegistrationResult(connectionID, success, readOnly, message));
     }
-
     @Override
     protected void onRealtimeUpdate(SessionInfo sessionInfo) {
         super.onRealtimeUpdate(sessionInfo);
@@ -157,7 +147,6 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
     @Override
     protected void onRealtimeCarUpdate(RealtimeInfo info) {
         super.onRealtimeCarUpdate(info);
-        EventBus.publish(new RealtimeCarUpdate(info));
     }
 
     @Override
@@ -176,7 +165,6 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
     @Override
     protected void onTrackData(TrackInfo info) {
         super.onTrackData(info);
-        EventBus.publish(new TrackData(info));
     }
 
     @Override
@@ -204,6 +192,7 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
         packetCount++;
         EventBus.publish(new AfterPacketReceived(type, packetCount));
     }
+    */
 
     private void onSessionChanged(SessionId newId, SessionInfo info) {
         LOG.info("session changed to " + newId.getType().name() + " Index:" + newId.getIndex() + " sessionCount:" + newId.getNumber());
@@ -222,7 +211,6 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
                 info.getCloudLevel(), info.getRainLevel(), info.getWetness(),
                 info.getBestSessionLap());
         EventBus.publish(new SessionPhaseChanged(correctedSessionInfo));
-
     }
 
     private void onCarDisconnect(CarInfo car) {

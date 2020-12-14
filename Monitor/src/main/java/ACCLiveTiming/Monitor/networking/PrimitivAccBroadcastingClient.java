@@ -5,12 +5,29 @@
  */
 package ACCLiveTiming.monitor.networking;
 
+import ACCLiveTiming.monitor.client.SessionId;
+import ACCLiveTiming.monitor.client.events.AfterPacketReceived;
+import ACCLiveTiming.monitor.client.events.BroadcastingEventEvent;
+import ACCLiveTiming.monitor.client.events.CarConnect;
+import ACCLiveTiming.monitor.client.events.CarDisconnect;
+import ACCLiveTiming.monitor.client.events.EntryListCarUpdate;
+import ACCLiveTiming.monitor.client.events.EntryListUpdate;
+import ACCLiveTiming.monitor.client.events.RealtimeCarUpdate;
+import ACCLiveTiming.monitor.client.events.RealtimeUpdate;
+import ACCLiveTiming.monitor.client.events.RegistrationResult;
+import ACCLiveTiming.monitor.client.events.SessionChanged;
+import ACCLiveTiming.monitor.client.events.SessionPhaseChanged;
+import ACCLiveTiming.monitor.client.events.TrackData;
+import ACCLiveTiming.monitor.eventbus.EventBus;
+import ACCLiveTiming.monitor.extensions.logging.LoggingExtension;
 import ACCLiveTiming.monitor.networking.data.AccBroadcastingData;
 import ACCLiveTiming.monitor.networking.data.BroadcastingEvent;
 import ACCLiveTiming.monitor.networking.data.CarInfo;
 import ACCLiveTiming.monitor.networking.data.RealtimeInfo;
 import ACCLiveTiming.monitor.networking.data.SessionInfo;
 import ACCLiveTiming.monitor.networking.data.TrackInfo;
+import ACCLiveTiming.monitor.networking.enums.SessionPhase;
+import ACCLiveTiming.monitor.networking.enums.SessionType;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -75,6 +92,22 @@ public class PrimitivAccBroadcastingClient {
      * Time when the entry list was requested.
      */
     private long lastTimeEntryListRequest = 0;
+    /**
+     * Session ID for the current session.
+     */
+    private SessionId sessionId = new SessionId(SessionType.NONE, -1, 0);
+    /**
+     * Current Phase of the session.
+     */
+    private SessionPhase sessionPhase = SessionPhase.NONE;
+    /**
+     * Counter coutns how many of a session have happened.
+     */
+    private final Map<SessionType, Integer> sessionCounter = new HashMap<>();
+    /**
+     * Counts how many packets have been received.
+     */
+    private static int packetCount = 0;
 
     /**
      * Default contructor.
@@ -275,11 +308,38 @@ public class PrimitivAccBroadcastingClient {
             } catch (Exception e) {
                 LOG.log(Level.SEVERE, "Error while sending entrylist and trackdata request", e);
             }
+
+            EventBus.publish(new RegistrationResult(connectionID, success, readOnly, message));
         }
 
         @Override
         public void onRealtimeUpdate(SessionInfo sessionInfo) {
             model = model.withSessionInfo(sessionInfo);
+
+            if (sessionId.getIndex() != sessionInfo.getSessionIndex()) {
+                //fast forward currnet session to result UI
+                while (sessionPhase != SessionPhase.RESULTUI) {
+                    sessionPhase = SessionPhase.getNext(sessionPhase);
+                    onSessionPhaseChaged(sessionPhase, sessionInfo);
+                }
+                //Move to next sessionId;
+                SessionType type = sessionInfo.getSessionType();
+                int sessionIndex = sessionInfo.getSessionIndex();
+                int sessionNumber = sessionCounter.getOrDefault(type, -1) + 1;
+                sessionCounter.put(type, sessionNumber);
+
+                SessionId newSessionId = new SessionId(type, sessionIndex, sessionNumber);
+                onSessionChanged(newSessionId, sessionInfo);
+                sessionId = newSessionId;
+
+                sessionPhase = SessionPhase.NONE;
+            }
+            //Fast forward to current phase
+            while (sessionInfo.getPhase().getId() > sessionPhase.getId()) {
+                sessionPhase = SessionPhase.getNext(sessionPhase);
+                onSessionPhaseChaged(sessionPhase, sessionInfo);
+            }
+            EventBus.publish(new RealtimeUpdate(sessionInfo));
         }
 
         @Override
@@ -302,6 +362,7 @@ public class PrimitivAccBroadcastingClient {
                     }
                 }
             }
+            EventBus.publish(new RealtimeCarUpdate(info));
         }
 
         @Override
@@ -312,9 +373,11 @@ public class PrimitivAccBroadcastingClient {
             cars.values().stream()
                     .filter(carInfo -> carInfo.isConnected())
                     .filter(carInfo -> !carIds.contains(carInfo.getCarId()))
-                    .forEach(carInfo
-                            -> cars.put(carInfo.getCarId(), carInfo.withConnected(false))
-                    );
+                    .forEach(carInfo -> {
+                        cars.put(carInfo.getCarId(), carInfo.withConnected(false));
+                        onCarDisconnect(cars.get(carInfo.getCarId()));
+                    });
+
             //add any new carIds.
             for (int carId : carIds) {
                 if (!cars.containsKey(carId)) {
@@ -322,20 +385,32 @@ public class PrimitivAccBroadcastingClient {
                 }
             }
             model = model.withCars(cars);
+            EventBus.publish(new EntryListUpdate(carIds));
         }
 
         @Override
         public void onTrackData(TrackInfo info) {
             model = model.withTrackInfo(info);
+            EventBus.publish(new TrackData(info));
+
         }
 
         @Override
         public void onEntryListCarUpdate(CarInfo carInfo) {
+            //if there is an update for a car that is disconnected then
+            //we fire the connected event for that car
+            if (getModel().getCarsInfo().containsKey(carInfo.getCarId())) {
+                if (!getModel().getCar(carInfo.getCarId()).isConnected()) {
+                    onCarConnect(carInfo);
+                }
+            }
+            //add car to the model.
             Map<Integer, CarInfo> cars = new HashMap<>();
             cars.putAll(model.getCarsInfo());
-
             cars.put(carInfo.getCarId(), carInfo);
             model = model.withCars(cars);
+
+            EventBus.publish(new EntryListCarUpdate(carInfo));
         }
 
         @Override
@@ -345,10 +420,47 @@ public class PrimitivAccBroadcastingClient {
             events.add(event);
 
             model = model.withEvents(events);
+            EventBus.publish(new BroadcastingEventEvent(event));
+
         }
 
         @Override
         public void afterPacketReceived(byte type) {
+            packetCount++;
+            EventBus.publish(new AfterPacketReceived(type, packetCount));
+        }
+
+        private void onSessionChanged(SessionId newId, SessionInfo info) {
+            LOG.info("session changed to " + newId.getType().name() + " Index:" + newId.getIndex() + " sessionCount:" + newId.getNumber());
+            EventBus.publish(new SessionChanged(newId, info));
+        }
+
+        private void onSessionPhaseChaged(SessionPhase phase, SessionInfo info) {
+            LOG.info("session phase changed to " + phase.name());
+            //Create sessionInfo object with the correct sessionPhase
+            SessionInfo correctedSessionInfo = new SessionInfo(info.getEventIndex(),
+                    info.getSessionIndex(), info.getSessionType(), phase,
+                    info.getSessionTime(), info.getSessionEndTime(), info.getFocusedCarIndex(),
+                    info.getActiveCameraSet(), info.getActiveCamera(), info.getCurrentHudPage(),
+                    info.getIsReplayPlaying(), info.getReplaySessionTime(), info.getReplayRemainingTime(),
+                    info.getTimeOfDay(), info.getAmbientTemp(), info.getTrackTemp(),
+                    info.getCloudLevel(), info.getRainLevel(), info.getWetness(),
+                    info.getBestSessionLap());
+            EventBus.publish(new SessionPhaseChanged(correctedSessionInfo));
+        }
+
+        private void onCarDisconnect(CarInfo car) {
+            String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
+            LoggingExtension.log("Car disconnected: #" + car.getCarNumber() + "\t" + name);
+            LOG.info("Car disconnected: #" + car.getCarNumber() + "\t" + name);
+            EventBus.publish(new CarDisconnect(car));
+        }
+
+        private void onCarConnect(CarInfo car) {
+            String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
+            LoggingExtension.log("Car connected: #" + car.getCarNumber() + "\t" + name);
+            LOG.info("Car connected: #" + car.getCarNumber() + "\t" + name);
+            EventBus.publish(new CarConnect(car));
         }
     }
 }
