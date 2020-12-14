@@ -190,6 +190,23 @@ public class PrimitivAccBroadcastingClient {
     }
 
     /**
+     * Returns the ammount of received packets.
+     *
+     * @return the current packet count.
+     */
+    public int getPacketCount() {
+        return packetCount;
+    }
+    
+    /**
+     * Returns the current SessionId object.
+     * @return the current SessionId.
+     */
+    public SessionId getSessionId() {
+        return sessionId;
+    }
+
+    /**
      * Send a register command.
      *
      */
