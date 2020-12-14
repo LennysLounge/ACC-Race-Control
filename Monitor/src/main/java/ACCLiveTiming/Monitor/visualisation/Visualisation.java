@@ -6,7 +6,7 @@
 package ACCLiveTiming.monitor.visualisation;
 
 import ACCLiveTiming.monitor.visualisation.components.BasePanel;
-import ACCLiveTiming.monitor.client.BasicAccBroadcastingClient;
+import ACCLiveTiming.monitor.networking.PrimitivAccBroadcastingClient;
 import java.util.logging.Logger;
 
 /**
@@ -27,7 +27,7 @@ public class Visualisation extends CustomPApplet {
     /**
      * Connection client.
      */
-    private BasicAccBroadcastingClient client;
+    private PrimitivAccBroadcastingClient client;
     /**
      * The base panel to use.
      */
@@ -37,7 +37,7 @@ public class Visualisation extends CustomPApplet {
      * Creates a new instance of this object.
      * @param client The ACC client connection to use.
      */
-    public Visualisation(BasicAccBroadcastingClient client) {
+    public Visualisation(PrimitivAccBroadcastingClient client) {
         this.client = client;
     }
 

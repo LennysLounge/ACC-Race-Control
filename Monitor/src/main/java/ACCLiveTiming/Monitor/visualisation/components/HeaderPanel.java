@@ -5,8 +5,8 @@
  */
 package ACCLiveTiming.monitor.visualisation.components;
 
-import ACCLiveTiming.monitor.client.BasicAccBroadcastingClient;
 import ACCLiveTiming.monitor.client.SessionId;
+import ACCLiveTiming.monitor.networking.PrimitivAccBroadcastingClient;
 import ACCLiveTiming.monitor.utility.TimeUtils;
 import ACCLiveTiming.monitor.visualisation.LookAndFeel;
 import ACCLiveTiming.monitor.visualisation.gui.LPComponent;
@@ -20,9 +20,9 @@ import static processing.core.PConstants.RIGHT;
  */
 public class HeaderPanel extends LPComponent {
 
-    private final BasicAccBroadcastingClient client;
+    private final PrimitivAccBroadcastingClient client;
 
-    public HeaderPanel(BasicAccBroadcastingClient client) {
+    public HeaderPanel(PrimitivAccBroadcastingClient client) {
         this.client = client;
     }
 

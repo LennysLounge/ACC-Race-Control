@@ -5,7 +5,6 @@
  */
 package ACCLiveTiming.monitor;
 
-import ACCLiveTiming.monitor.client.BasicAccBroadcastingClient;
 import ACCLiveTiming.monitor.visualisation.Visualisation;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -19,7 +18,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import processing.core.PApplet;
 import ACCLiveTiming.ACCLiveTimingExtensionModule;
-import ACCLiveTiming.monitor.extensions.AccClientExtension;
+import ACCLiveTiming.monitor.networking.PrimitivAccBroadcastingClient;
 import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
 import java.util.LinkedList;
 import java.util.List;
@@ -98,7 +97,7 @@ public class Main {
             }
         }
          */
-        BasicAccBroadcastingClient client = new BasicAccBroadcastingClient();
+        PrimitivAccBroadcastingClient client = new PrimitivAccBroadcastingClient();
         try {
             client.connect(dialog.getDisplayName(),
                     dialog.getConnectionPassword(),
@@ -112,12 +111,14 @@ public class Main {
         }
 
         //Register extensions.
+        /*
         for (ACCLiveTimingExtensionModule module : modules) {
             AccClientExtension extension = module.getExtension();
             if (extension != null) {
                 client.registerExtension(extension);
             }
         }
+        */
 
         /*
         client.registerExtension(new LiveTimingExtension());

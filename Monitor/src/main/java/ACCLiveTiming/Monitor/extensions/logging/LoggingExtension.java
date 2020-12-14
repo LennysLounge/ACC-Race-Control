@@ -33,12 +33,6 @@ public class LoggingExtension extends AccClientExtension {
     public LoggingTableModel getTableModel(){
         return model;
     }
-
-    public List<LogMessage> getMessages() {
-        return client.getMessages().stream()
-                .map(s -> new LogMessage(s))
-                .collect(Collectors.toList());
-    }
     
     public static void log(String message){
         messages.add(new LogMessage(message));

@@ -6,7 +6,7 @@
 package ACCLiveTiming.monitor.visualisation.components;
 
 import ACCLiveTiming.monitor.Main;
-import ACCLiveTiming.monitor.client.BasicAccBroadcastingClient;
+import ACCLiveTiming.monitor.networking.PrimitivAccBroadcastingClient;
 import ACCLiveTiming.monitor.visualisation.LookAndFeel;
 import ACCLiveTiming.monitor.visualisation.gui.LPComponent;
 import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
@@ -21,7 +21,7 @@ public class BasePanel extends LPContainer {
     private final LPComponent header;
     private final LPComponent body;
 
-    public BasePanel(BasicAccBroadcastingClient client) {
+    public BasePanel(PrimitivAccBroadcastingClient client) {
         header = new HeaderPanel(client);
         addComponent(header);
 
