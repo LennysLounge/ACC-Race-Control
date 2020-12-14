@@ -83,18 +83,7 @@ public class BasicAccBroadcastingClient extends PrimitivAccBroadcastingClient {
      * @param hostPort Host port of the server.
      * @throws java.net.SocketException
      */
-    public BasicAccBroadcastingClient(String displayName,
-            String connectionPassword,
-            String commandPassword,
-            int updateInterval,
-            InetAddress hostAddress,
-            int hostPort) throws SocketException {
-        super(displayName,
-                connectionPassword,
-                commandPassword,
-                updateInterval,
-                hostAddress,
-                hostPort);
+    public BasicAccBroadcastingClient() {
     }
 
     public void registerExtension(AccClientExtension e) {

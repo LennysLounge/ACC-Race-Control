@@ -45,6 +45,8 @@ public class Main {
         if (dialog.exitWithConnect()) {
             startApp();
         }
+        
+        LOG.info("Done");
     }
 
     private static void setupLogging() {
@@ -96,9 +98,9 @@ public class Main {
             }
         }
          */
-        BasicAccBroadcastingClient client;
+        BasicAccBroadcastingClient client = new BasicAccBroadcastingClient();
         try {
-            client = new BasicAccBroadcastingClient(dialog.getDisplayName(),
+            client.connect(dialog.getDisplayName(),
                     dialog.getConnectionPassword(),
                     dialog.getCommandPassword(),
                     dialog.getUpdateInterval(),
@@ -132,6 +134,8 @@ public class Main {
         Visualisation v = new Visualisation(client);
         String[] a = {"MAIN"};
         PApplet.runSketch(a, v);
+        
+        client.waitForFinish();
     }
 
     public static List<LPContainer> getExtensionPanels() {

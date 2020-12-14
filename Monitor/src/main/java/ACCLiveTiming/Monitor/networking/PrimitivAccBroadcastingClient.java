@@ -38,31 +38,31 @@ public class PrimitivAccBroadcastingClient {
     /**
      * Address where the ACC broadcast server is running.
      */
-    private final InetAddress hostAddress;
+    private InetAddress hostAddress = null;
     /**
      * Port where the ACC broadcast server is running.
      */
-    private final int hostPort;
+    private int hostPort;
     /**
      * Display name of this connection.
      */
-    private final String displayName;
+    private String displayName = "";
     /**
      * Connection password.
      */
-    private final String connectionPassword;
+    private String connectionPassword = "";
     /**
      * Command password.
      */
-    private final String commandPassword;
+    private String commandPassword = "";
     /**
      * Interval in which to receive updated in ms.
      */
-    private final int updateInterval;
+    private int updateInterval;
     /**
      * Socket used for the connection.
      */
-    private final DatagramSocket socket;
+    private DatagramSocket socket;
     /**
      * Thread where the connection loop is running.
      */
@@ -79,14 +79,15 @@ public class PrimitivAccBroadcastingClient {
      * Time when the entry list was requested.
      */
     private long lastTimeEntryListRequest = 0;
-    /**
-     * Flag to show that the socket was closed forcefully.
-     */
-    private boolean forceSocketClose = false;
 
     /**
      * Default contructor.
-     *
+     */
+    public PrimitivAccBroadcastingClient() {
+    }
+
+    /**
+     *  Connects to the game client.
      * @param displayName The display name of this connection.
      * @param connectionPassword The password for this connection.
      * @param commandPassword The command password.
@@ -95,7 +96,7 @@ public class PrimitivAccBroadcastingClient {
      * @param hostPort Host port of the server.
      * @throws java.net.SocketException
      */
-    public PrimitivAccBroadcastingClient(String displayName,
+    public void connect(String displayName,
             String connectionPassword,
             String commandPassword,
             int updateInterval,
@@ -112,14 +113,14 @@ public class PrimitivAccBroadcastingClient {
         this.hostPort = requireNonNull(hostPort, "hostPort");
 
         socket = new DatagramSocket();
+        socket.connect(this.hostAddress, this.hostPort);
+
         startListernerThread();
     }
 
     private void startListernerThread() {
-        forceSocketClose = false;
-
-        socket.connect(this.hostAddress, this.hostPort);
         accListenerThread = new Thread("ACC listener") {
+            @Override
             public void run() {
                 LOG.info("Starting Listener thread");
                 try {
@@ -208,7 +209,6 @@ public class PrimitivAccBroadcastingClient {
      * Disconnect from the game.
      */
     public void disconnect() {
-        forceSocketClose = true;
         socket.disconnect();
         socket.close();
     }
