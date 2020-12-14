@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.Monitor.networking;
+package ACCLiveTiming.monitor.networking;
 
 import ACCLiveTiming.monitor.networking.data.BroadcastingEvent;
 import ACCLiveTiming.monitor.networking.data.CarInfo;
