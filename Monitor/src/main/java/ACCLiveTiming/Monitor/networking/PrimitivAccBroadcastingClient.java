@@ -87,7 +87,8 @@ public class PrimitivAccBroadcastingClient {
     }
 
     /**
-     *  Connects to the game client.
+     * Connects to the game client.
+     *
      * @param displayName The display name of this connection.
      * @param connectionPassword The password for this connection.
      * @param commandPassword The command password.
@@ -119,20 +120,7 @@ public class PrimitivAccBroadcastingClient {
     }
 
     private void startListernerThread() {
-        accListenerThread = new Thread("ACC listener") {
-            @Override
-            public void run() {
-                LOG.info("Starting Listener thread");
-                try {
-                    udpListener();
-                } catch (Exception e) {
-                    LOG.log(Level.SEVERE, "Error in the listener thread", e);
-                } catch (StackOverflowError e) {
-                    LOG.log(Level.SEVERE, "Overflow in listener thread", e);
-                }
-                LOG.info("Listener thread done");
-            }
-        };
+        accListenerThread = new UdpListener("ACC listener thread");
         accListenerThread.start();
     }
 
@@ -223,24 +211,47 @@ public class PrimitivAccBroadcastingClient {
         }
     }
 
-    // Threading
-    private void udpListener() {
-        while (true) {
+    private class UdpListener
+            extends Thread {
+
+        private final Logger LOG = Logger.getLogger(UdpListener.class.getName());
+
+        public UdpListener(String name) {
+            super(name);
+        }
+
+        @Override
+        public void run() {
+            LOG.info("Starting Listener thread");
             try {
-                DatagramPacket response = new DatagramPacket(new byte[512], 512);
-                socket.receive(response);
-                protocol.processMessage(new ByteArrayInputStream(response.getData()));
-                afterPacketReceived(response.getData()[0]);
-            } catch (SocketException e) {
-                LOG.log(Level.SEVERE, "Socket closed unexpected.", e);
-                return;
-            } catch (IOException e) {
-                LOG.log(Level.SEVERE, "Error while receiving a response", e);
-                return;
+                udpListener();
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "Error in the listener thread", e);
+            } catch (StackOverflowError e) {
+                LOG.log(Level.SEVERE, "Overflow in listener thread", e);
+            }
+            LOG.info("Listener thread done");
+        }
+
+        private void udpListener() {
+            while (true) {
+                try {
+                    DatagramPacket response = new DatagramPacket(new byte[512], 512);
+                    socket.receive(response);
+                    protocol.processMessage(new ByteArrayInputStream(response.getData()));
+                    afterPacketReceived(response.getData()[0]);
+                } catch (SocketException e) {
+                    LOG.log(Level.SEVERE, "Socket closed unexpected.", e);
+                    return;
+                } catch (IOException e) {
+                    LOG.log(Level.SEVERE, "Error while receiving a response", e);
+                    return;
+                }
             }
         }
     }
 
+    // Threading
     protected void onRegistrationResult(int connectionID, boolean success, boolean readOnly, String message) {
         if (success == false) {
             LOG.info("Connection refused\n" + message);
