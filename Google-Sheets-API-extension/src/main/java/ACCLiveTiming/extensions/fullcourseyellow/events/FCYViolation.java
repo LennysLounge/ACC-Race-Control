@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.extensions.fullcourseyellow.events;
+package acclivetiming.extensions.fullcourseyellow.events;
 
 import acclivetiming.monitor.eventbus.Event;
 import acclivetiming.monitor.networking.data.CarInfo;

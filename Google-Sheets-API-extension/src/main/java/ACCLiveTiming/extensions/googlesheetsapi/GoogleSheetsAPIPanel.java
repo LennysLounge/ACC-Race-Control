@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.extensions.googlesheetsapi;
+package acclivetiming.extensions.googlesheetsapi;
 
 
 import acclivetiming.monitor.utility.TimeUtils;

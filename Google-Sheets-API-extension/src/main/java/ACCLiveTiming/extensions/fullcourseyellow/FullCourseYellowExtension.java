@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.extensions.fullcourseyellow;
+package acclivetiming.extensions.fullcourseyellow;
 
-import ACCLiveTiming.extensions.fullcourseyellow.events.FCYStart;
-import ACCLiveTiming.extensions.fullcourseyellow.events.FCYStop;
-import ACCLiveTiming.extensions.fullcourseyellow.events.FCYViolation;
+import acclivetiming.extensions.fullcourseyellow.events.FCYStart;
+import acclivetiming.extensions.fullcourseyellow.events.FCYStop;
+import acclivetiming.extensions.fullcourseyellow.events.FCYViolation;
 import acclivetiming.monitor.client.events.RealtimeCarUpdate;
 import acclivetiming.monitor.client.events.RealtimeUpdate;
 import acclivetiming.monitor.eventbus.Event;

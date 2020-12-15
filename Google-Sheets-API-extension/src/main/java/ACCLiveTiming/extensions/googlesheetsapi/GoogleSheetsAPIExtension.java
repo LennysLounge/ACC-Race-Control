@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.extensions.googlesheetsapi;
+package acclivetiming.extensions.googlesheetsapi;
 
-import ACCLiveTiming.extensions.fullcourseyellow.events.FCYStart;
-import ACCLiveTiming.extensions.fullcourseyellow.events.FCYStop;
-import ACCLiveTiming.extensions.fullcourseyellow.events.FCYViolation;
+import acclivetiming.extensions.fullcourseyellow.events.FCYStart;
+import acclivetiming.extensions.fullcourseyellow.events.FCYStop;
+import acclivetiming.extensions.fullcourseyellow.events.FCYViolation;
 import acclivetiming.monitor.Main;
 import acclivetiming.monitor.client.SessionId;
 import acclivetiming.monitor.client.events.SessionChanged;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.extensions.fullcourseyellow;
+package acclivetiming.extensions.fullcourseyellow;
 
 import acclivetiming.ACCLiveTimingExtensionModule;
 import acclivetiming.monitor.extensions.AccClientExtension;
