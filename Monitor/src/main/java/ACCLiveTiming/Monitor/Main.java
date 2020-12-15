@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor;
+package acclivetiming.monitor;
 
-import acclivetiming.Monitor.visualisation.Visualisation;
+import acclivetiming.monitor.visualisation.Visualisation;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.SocketException;
@@ -18,8 +18,8 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import processing.core.PApplet;
 import acclivetiming.ACCLiveTimingExtensionModule;
-import acclivetiming.Monitor.networking.PrimitivAccBroadcastingClient;
-import acclivetiming.Monitor.visualisation.gui.LPContainer;
+import acclivetiming.monitor.networking.PrimitivAccBroadcastingClient;
+import acclivetiming.monitor.visualisation.gui.LPContainer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;

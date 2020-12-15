@@ -5,8 +5,8 @@
  */
 package acclivetiming;
 
-import acclivetiming.Monitor.extensions.AccClientExtension;
-import acclivetiming.Monitor.visualisation.gui.LPContainer;
+import acclivetiming.monitor.extensions.AccClientExtension;
+import acclivetiming.monitor.visualisation.gui.LPContainer;
 import javax.swing.JPanel;
 
 /**

@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.extensions.incidents;
+package acclivetiming.monitor.extensions.incidents;
 
-import acclivetiming.Monitor.extensions.AccClientExtension;
-import acclivetiming.Monitor.visualisation.gui.LPContainer;
+import acclivetiming.monitor.extensions.AccClientExtension;
+import acclivetiming.monitor.visualisation.gui.LPContainer;
 import javax.swing.JPanel;
 
 /**

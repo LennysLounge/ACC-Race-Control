@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor;
+package acclivetiming.monitor;
 
 import java.awt.Dimension;
 import java.net.InetAddress;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.visualisation.gui;
+package acclivetiming.monitor.visualisation.gui;
 
 import processing.core.PApplet;
 

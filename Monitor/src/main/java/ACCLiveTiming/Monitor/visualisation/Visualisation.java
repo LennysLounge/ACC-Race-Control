@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.visualisation;
+package acclivetiming.monitor.visualisation;
 
-import acclivetiming.Monitor.visualisation.components.BasePanel;
-import acclivetiming.Monitor.networking.PrimitivAccBroadcastingClient;
+import acclivetiming.monitor.visualisation.components.BasePanel;
+import acclivetiming.monitor.networking.PrimitivAccBroadcastingClient;
 import java.util.logging.Logger;
 
 /**

@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.visualisation.gui;
+package acclivetiming.monitor.visualisation.gui;
 
-import acclivetiming.Monitor.visualisation.LookAndFeel;
+import acclivetiming.monitor.visualisation.LookAndFeel;
 import java.util.LinkedList;
 import java.util.List;
 import static processing.core.PConstants.CENTER;

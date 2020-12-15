@@ -1,5 +1,5 @@
 
-package acclivetiming.Monitor.networking.enums;
+package acclivetiming.monitor.networking.enums;
 
 /**
  *

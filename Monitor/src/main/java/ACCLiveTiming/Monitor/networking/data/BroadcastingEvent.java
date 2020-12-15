@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.networking.data;
+package acclivetiming.monitor.networking.data;
 
-import acclivetiming.Monitor.networking.enums.BroadcastingEventType;
+import acclivetiming.monitor.networking.enums.BroadcastingEventType;
 import static java.util.Objects.requireNonNull;
 
 /**

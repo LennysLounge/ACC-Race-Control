@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.extensions.incidents;
+package acclivetiming.monitor.extensions.incidents;
 
-import acclivetiming.Monitor.networking.data.CarInfo;
-import acclivetiming.Monitor.utility.TimeUtils;
-import acclivetiming.Monitor.visualisation.LookAndFeel;
-import acclivetiming.Monitor.visualisation.gui.LPTableColumn;
-import acclivetiming.Monitor.visualisation.gui.LPTable;
-import acclivetiming.Monitor.visualisation.gui.TableModel;
+import acclivetiming.monitor.networking.data.CarInfo;
+import acclivetiming.monitor.utility.TimeUtils;
+import acclivetiming.monitor.visualisation.LookAndFeel;
+import acclivetiming.monitor.visualisation.gui.LPTableColumn;
+import acclivetiming.monitor.visualisation.gui.LPTable;
+import acclivetiming.monitor.visualisation.gui.TableModel;
 import java.util.LinkedList;
 import java.util.List;
 import processing.core.PApplet;

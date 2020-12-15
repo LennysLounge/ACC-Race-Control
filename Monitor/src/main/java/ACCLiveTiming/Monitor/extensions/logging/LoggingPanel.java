@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.extensions.logging;
+package acclivetiming.monitor.extensions.logging;
 
-import acclivetiming.Monitor.visualisation.gui.LPContainer;
-import acclivetiming.Monitor.visualisation.gui.LPTable;
+import acclivetiming.monitor.visualisation.gui.LPContainer;
+import acclivetiming.monitor.visualisation.gui.LPTable;
 
 /**
  *

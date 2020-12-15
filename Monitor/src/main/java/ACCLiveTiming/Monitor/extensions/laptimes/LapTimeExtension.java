@@ -3,22 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.extensions.laptimes;
+package acclivetiming.monitor.extensions.laptimes;
 
-import acclivetiming.Monitor.client.SessionId;
-import acclivetiming.Monitor.client.events.RealtimeCarUpdate;
-import acclivetiming.Monitor.client.events.SessionChanged;
-import acclivetiming.Monitor.eventbus.Event;
-import acclivetiming.Monitor.eventbus.EventBus;
-import acclivetiming.Monitor.eventbus.EventListener;
-import acclivetiming.Monitor.extensions.AccClientExtension;
-import acclivetiming.Monitor.extensions.incidents.IncidentExtension;
-import acclivetiming.Monitor.extensions.logging.LoggingExtension;
-import acclivetiming.Monitor.networking.data.CarInfo;
-import acclivetiming.Monitor.networking.data.LapInfo;
-import acclivetiming.Monitor.networking.data.RealtimeInfo;
-import acclivetiming.Monitor.networking.enums.LapType;
-import acclivetiming.Monitor.utility.TimeUtils;
+import acclivetiming.monitor.client.SessionId;
+import acclivetiming.monitor.client.events.RealtimeCarUpdate;
+import acclivetiming.monitor.client.events.SessionChanged;
+import acclivetiming.monitor.eventbus.Event;
+import acclivetiming.monitor.eventbus.EventBus;
+import acclivetiming.monitor.eventbus.EventListener;
+import acclivetiming.monitor.extensions.AccClientExtension;
+import acclivetiming.monitor.extensions.incidents.IncidentExtension;
+import acclivetiming.monitor.extensions.logging.LoggingExtension;
+import acclivetiming.monitor.networking.data.CarInfo;
+import acclivetiming.monitor.networking.data.LapInfo;
+import acclivetiming.monitor.networking.data.RealtimeInfo;
+import acclivetiming.monitor.networking.enums.LapType;
+import acclivetiming.monitor.utility.TimeUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

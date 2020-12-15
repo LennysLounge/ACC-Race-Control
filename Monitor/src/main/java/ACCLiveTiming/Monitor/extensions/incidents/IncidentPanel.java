@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.extensions.incidents;
+package acclivetiming.monitor.extensions.incidents;
 
-import acclivetiming.Monitor.visualisation.LookAndFeel;
-import acclivetiming.Monitor.visualisation.gui.LPButton;
-import acclivetiming.Monitor.visualisation.gui.LPContainer;
-import acclivetiming.Monitor.visualisation.gui.LPTable;
+import acclivetiming.monitor.visualisation.LookAndFeel;
+import acclivetiming.monitor.visualisation.gui.LPButton;
+import acclivetiming.monitor.visualisation.gui.LPContainer;
+import acclivetiming.monitor.visualisation.gui.LPTable;
 
 /**
  *

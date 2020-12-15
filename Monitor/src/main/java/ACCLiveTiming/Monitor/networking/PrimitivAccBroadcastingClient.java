@@ -3,31 +3,31 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.networking;
+package acclivetiming.monitor.networking;
 
-import acclivetiming.Monitor.client.SessionId;
-import acclivetiming.Monitor.client.events.AfterPacketReceived;
-import acclivetiming.Monitor.client.events.BroadcastingEventEvent;
-import acclivetiming.Monitor.client.events.CarConnect;
-import acclivetiming.Monitor.client.events.CarDisconnect;
-import acclivetiming.Monitor.client.events.EntryListCarUpdate;
-import acclivetiming.Monitor.client.events.EntryListUpdate;
-import acclivetiming.Monitor.client.events.RealtimeCarUpdate;
-import acclivetiming.Monitor.client.events.RealtimeUpdate;
-import acclivetiming.Monitor.client.events.RegistrationResult;
-import acclivetiming.Monitor.client.events.SessionChanged;
-import acclivetiming.Monitor.client.events.SessionPhaseChanged;
-import acclivetiming.Monitor.client.events.TrackData;
-import acclivetiming.Monitor.eventbus.EventBus;
-import acclivetiming.Monitor.extensions.logging.LoggingExtension;
-import acclivetiming.Monitor.networking.data.AccBroadcastingData;
-import acclivetiming.Monitor.networking.data.BroadcastingEvent;
-import acclivetiming.Monitor.networking.data.CarInfo;
-import acclivetiming.Monitor.networking.data.RealtimeInfo;
-import acclivetiming.Monitor.networking.data.SessionInfo;
-import acclivetiming.Monitor.networking.data.TrackInfo;
-import acclivetiming.Monitor.networking.enums.SessionPhase;
-import acclivetiming.Monitor.networking.enums.SessionType;
+import acclivetiming.monitor.client.SessionId;
+import acclivetiming.monitor.client.events.AfterPacketReceived;
+import acclivetiming.monitor.client.events.BroadcastingEventEvent;
+import acclivetiming.monitor.client.events.CarConnect;
+import acclivetiming.monitor.client.events.CarDisconnect;
+import acclivetiming.monitor.client.events.EntryListCarUpdate;
+import acclivetiming.monitor.client.events.EntryListUpdate;
+import acclivetiming.monitor.client.events.RealtimeCarUpdate;
+import acclivetiming.monitor.client.events.RealtimeUpdate;
+import acclivetiming.monitor.client.events.RegistrationResult;
+import acclivetiming.monitor.client.events.SessionChanged;
+import acclivetiming.monitor.client.events.SessionPhaseChanged;
+import acclivetiming.monitor.client.events.TrackData;
+import acclivetiming.monitor.eventbus.EventBus;
+import acclivetiming.monitor.extensions.logging.LoggingExtension;
+import acclivetiming.monitor.networking.data.AccBroadcastingData;
+import acclivetiming.monitor.networking.data.BroadcastingEvent;
+import acclivetiming.monitor.networking.data.CarInfo;
+import acclivetiming.monitor.networking.data.RealtimeInfo;
+import acclivetiming.monitor.networking.data.SessionInfo;
+import acclivetiming.monitor.networking.data.TrackInfo;
+import acclivetiming.monitor.networking.enums.SessionPhase;
+import acclivetiming.monitor.networking.enums.SessionType;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;

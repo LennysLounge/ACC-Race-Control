@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.networking.data;
+package acclivetiming.monitor.networking.data;
 
-import acclivetiming.Monitor.networking.enums.LapType;
+import acclivetiming.monitor.networking.enums.LapType;
 import java.util.LinkedList;
 import java.util.List;
 

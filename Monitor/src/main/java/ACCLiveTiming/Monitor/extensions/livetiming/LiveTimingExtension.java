@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.extensions.livetiming;
+package acclivetiming.monitor.extensions.livetiming;
 
-import acclivetiming.Monitor.client.events.RealtimeCarUpdate;
-import acclivetiming.Monitor.client.events.RealtimeUpdate;
-import acclivetiming.Monitor.eventbus.Event;
-import acclivetiming.Monitor.eventbus.EventBus;
-import acclivetiming.Monitor.eventbus.EventListener;
-import acclivetiming.Monitor.extensions.AccClientExtension;
-import acclivetiming.Monitor.networking.data.CarInfo;
-import acclivetiming.Monitor.networking.data.RealtimeInfo;
-import acclivetiming.Monitor.networking.data.SessionInfo;
+import acclivetiming.monitor.client.events.RealtimeCarUpdate;
+import acclivetiming.monitor.client.events.RealtimeUpdate;
+import acclivetiming.monitor.eventbus.Event;
+import acclivetiming.monitor.eventbus.EventBus;
+import acclivetiming.monitor.eventbus.EventListener;
+import acclivetiming.monitor.extensions.AccClientExtension;
+import acclivetiming.monitor.networking.data.CarInfo;
+import acclivetiming.monitor.networking.data.RealtimeInfo;
+import acclivetiming.monitor.networking.data.SessionInfo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -3,22 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.extensions.livetiming;
+package acclivetiming.monitor.extensions.livetiming;
 
-import acclivetiming.Monitor.networking.data.CarInfo;
-import acclivetiming.Monitor.networking.data.LapInfo;
-import acclivetiming.Monitor.networking.enums.CarLocation;
-import acclivetiming.Monitor.networking.enums.DriverCategory;
-import static acclivetiming.Monitor.networking.enums.DriverCategory.BRONZE;
-import static acclivetiming.Monitor.networking.enums.DriverCategory.GOLD;
-import static acclivetiming.Monitor.networking.enums.DriverCategory.PLATINUM;
-import static acclivetiming.Monitor.networking.enums.DriverCategory.SILVER;
-import acclivetiming.Monitor.networking.enums.LapType;
-import acclivetiming.Monitor.utility.TimeUtils;
-import acclivetiming.Monitor.visualisation.LookAndFeel;
-import acclivetiming.Monitor.visualisation.gui.LPTableColumn;
-import acclivetiming.Monitor.visualisation.gui.LPTable;
-import acclivetiming.Monitor.visualisation.gui.TableModel;
+import acclivetiming.monitor.networking.data.CarInfo;
+import acclivetiming.monitor.networking.data.LapInfo;
+import acclivetiming.monitor.networking.enums.CarLocation;
+import acclivetiming.monitor.networking.enums.DriverCategory;
+import static acclivetiming.monitor.networking.enums.DriverCategory.BRONZE;
+import static acclivetiming.monitor.networking.enums.DriverCategory.GOLD;
+import static acclivetiming.monitor.networking.enums.DriverCategory.PLATINUM;
+import static acclivetiming.monitor.networking.enums.DriverCategory.SILVER;
+import acclivetiming.monitor.networking.enums.LapType;
+import acclivetiming.monitor.utility.TimeUtils;
+import acclivetiming.monitor.visualisation.LookAndFeel;
+import acclivetiming.monitor.visualisation.gui.LPTableColumn;
+import acclivetiming.monitor.visualisation.gui.LPTable;
+import acclivetiming.monitor.visualisation.gui.TableModel;
 import java.util.LinkedList;
 import java.util.List;
 import processing.core.PApplet;

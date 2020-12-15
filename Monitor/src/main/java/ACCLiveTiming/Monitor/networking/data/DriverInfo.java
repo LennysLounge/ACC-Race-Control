@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.networking.data;
+package acclivetiming.monitor.networking.data;
 
-import acclivetiming.Monitor.networking.enums.DriverCategory;
-import acclivetiming.Monitor.networking.enums.Nationality;
+import acclivetiming.monitor.networking.enums.DriverCategory;
+import acclivetiming.monitor.networking.enums.Nationality;
 
 
 /**

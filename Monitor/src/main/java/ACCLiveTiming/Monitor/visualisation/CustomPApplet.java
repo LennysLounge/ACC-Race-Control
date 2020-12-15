@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.visualisation;
+package acclivetiming.monitor.visualisation;
 
-import acclivetiming.Monitor.visualisation.gui.LPBase;
+import acclivetiming.monitor.visualisation.gui.LPBase;
 
 /**
  *

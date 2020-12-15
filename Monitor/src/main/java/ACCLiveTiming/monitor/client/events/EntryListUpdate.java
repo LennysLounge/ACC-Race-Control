@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.Monitor.client.events;
+package acclivetiming.monitor.client.events;
 
-import acclivetiming.Monitor.eventbus.Event;
+import acclivetiming.monitor.eventbus.Event;
 import java.util.List;
 
 /**
