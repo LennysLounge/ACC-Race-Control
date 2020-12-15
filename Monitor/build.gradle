@@ -14,7 +14,7 @@ task testo{
 }
 
 application{
-    mainClassName = 'ACCLiveTiming.monitor.Main'
+    mainClassName = 'acclivetiming.monitor.Main'
 }
 
 repositories {
