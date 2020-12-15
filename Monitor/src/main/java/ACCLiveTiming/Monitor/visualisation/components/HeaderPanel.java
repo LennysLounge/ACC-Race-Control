@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.visualisation.components;
+package acclivetiming.Monitor.visualisation.components;
 
-import ACCLiveTiming.monitor.client.SessionId;
-import ACCLiveTiming.monitor.networking.PrimitivAccBroadcastingClient;
-import ACCLiveTiming.monitor.utility.TimeUtils;
-import ACCLiveTiming.monitor.visualisation.LookAndFeel;
-import ACCLiveTiming.monitor.visualisation.gui.LPComponent;
+import acclivetiming.Monitor.client.SessionId;
+import acclivetiming.Monitor.networking.PrimitivAccBroadcastingClient;
+import acclivetiming.Monitor.utility.TimeUtils;
+import acclivetiming.Monitor.visualisation.LookAndFeel;
+import acclivetiming.Monitor.visualisation.gui.LPComponent;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;

@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.extensions.logging;
+package acclivetiming.Monitor.extensions.logging;
 
-import ACCLiveTiming.monitor.extensions.AccClientExtension;
+import acclivetiming.Monitor.extensions.AccClientExtension;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;

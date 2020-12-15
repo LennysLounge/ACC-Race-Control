@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.extensions.incidents.events;
+package acclivetiming.Monitor.extensions.incidents.events;
 
-import ACCLiveTiming.monitor.eventbus.Event;
-import ACCLiveTiming.monitor.extensions.incidents.IncidentInfo;
+import acclivetiming.Monitor.eventbus.Event;
+import acclivetiming.Monitor.extensions.incidents.IncidentInfo;
 
 /**
  *

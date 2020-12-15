@@ -3,21 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.extensions.incidents;
+package acclivetiming.Monitor.extensions.incidents;
 
-import ACCLiveTiming.monitor.client.SessionId;
-import ACCLiveTiming.monitor.client.events.AfterPacketReceived;
-import ACCLiveTiming.monitor.client.events.BroadcastingEventEvent;
-import ACCLiveTiming.monitor.eventbus.Event;
-import ACCLiveTiming.monitor.eventbus.EventBus;
-import ACCLiveTiming.monitor.eventbus.EventListener;
-import ACCLiveTiming.monitor.extensions.AccClientExtension;
-import ACCLiveTiming.monitor.extensions.logging.LoggingExtension;
-import ACCLiveTiming.monitor.networking.data.AccBroadcastingData;
-import ACCLiveTiming.monitor.networking.data.BroadcastingEvent;
-import ACCLiveTiming.monitor.networking.enums.BroadcastingEventType;
-import ACCLiveTiming.monitor.utility.TimeUtils;
-import ACCLiveTiming.monitor.extensions.incidents.events.Accident;
+import acclivetiming.Monitor.client.SessionId;
+import acclivetiming.Monitor.client.events.AfterPacketReceived;
+import acclivetiming.Monitor.client.events.BroadcastingEventEvent;
+import acclivetiming.Monitor.eventbus.Event;
+import acclivetiming.Monitor.eventbus.EventBus;
+import acclivetiming.Monitor.eventbus.EventListener;
+import acclivetiming.Monitor.extensions.AccClientExtension;
+import acclivetiming.Monitor.extensions.logging.LoggingExtension;
+import acclivetiming.Monitor.networking.data.AccBroadcastingData;
+import acclivetiming.Monitor.networking.data.BroadcastingEvent;
+import acclivetiming.Monitor.networking.enums.BroadcastingEventType;
+import acclivetiming.Monitor.utility.TimeUtils;
+import acclivetiming.Monitor.extensions.incidents.events.Accident;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;

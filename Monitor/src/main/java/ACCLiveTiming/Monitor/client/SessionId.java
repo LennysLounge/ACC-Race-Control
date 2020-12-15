@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.client;
+package acclivetiming.Monitor.client;
 
-import ACCLiveTiming.monitor.networking.enums.SessionType;
+import acclivetiming.Monitor.networking.enums.SessionType;
 
 /**
  *

@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.extensions;
+package acclivetiming.Monitor.extensions;
 
-import ACCLiveTiming.monitor.networking.PrimitivAccBroadcastingClient;
-import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
+import acclivetiming.Monitor.networking.PrimitivAccBroadcastingClient;
+import acclivetiming.Monitor.visualisation.gui.LPContainer;
 
 /**
  *

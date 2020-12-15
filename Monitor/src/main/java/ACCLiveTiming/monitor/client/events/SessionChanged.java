@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.client.events;
+package acclivetiming.Monitor.client.events;
 
-import ACCLiveTiming.monitor.client.SessionId;
-import ACCLiveTiming.monitor.eventbus.Event;
-import ACCLiveTiming.monitor.networking.data.SessionInfo;
+import acclivetiming.Monitor.client.SessionId;
+import acclivetiming.Monitor.eventbus.Event;
+import acclivetiming.Monitor.networking.data.SessionInfo;
 
 /**
  *

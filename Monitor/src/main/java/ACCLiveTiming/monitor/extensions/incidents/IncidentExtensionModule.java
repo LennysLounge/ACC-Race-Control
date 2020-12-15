@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.extensions.incidents;
+package acclivetiming.Monitor.extensions.incidents;
 
-import ACCLiveTiming.monitor.extensions.AccClientExtension;
-import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
+import acclivetiming.Monitor.extensions.AccClientExtension;
+import acclivetiming.Monitor.visualisation.gui.LPContainer;
 import javax.swing.JPanel;
 
 /**
@@ -14,7 +14,7 @@ import javax.swing.JPanel;
  * @author Leonard
  */
 public class IncidentExtensionModule
-    implements ACCLiveTiming.ACCLiveTimingExtensionModule{
+    implements acclivetiming.ACCLiveTimingExtensionModule{
     
     private IncidentExtension extension;
     private IncidentPanel panel;

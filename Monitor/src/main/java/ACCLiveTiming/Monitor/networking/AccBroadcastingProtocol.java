@@ -3,22 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.networking;
+package acclivetiming.Monitor.networking;
 
-import ACCLiveTiming.monitor.networking.data.BroadcastingEvent;
-import ACCLiveTiming.monitor.networking.data.CarInfo;
-import ACCLiveTiming.monitor.networking.data.DriverInfo;
-import ACCLiveTiming.monitor.networking.data.LapInfo;
-import ACCLiveTiming.monitor.networking.data.RealtimeInfo;
-import ACCLiveTiming.monitor.networking.data.SessionInfo;
-import ACCLiveTiming.monitor.networking.data.TrackInfo;
-import ACCLiveTiming.monitor.networking.enums.BroadcastingEventType;
-import ACCLiveTiming.monitor.networking.enums.CarLocation;
-import ACCLiveTiming.monitor.networking.enums.DriverCategory;
-import ACCLiveTiming.monitor.networking.enums.LapType;
-import ACCLiveTiming.monitor.networking.enums.Nationality;
-import ACCLiveTiming.monitor.networking.enums.SessionPhase;
-import ACCLiveTiming.monitor.networking.enums.SessionType;
+import acclivetiming.Monitor.networking.data.BroadcastingEvent;
+import acclivetiming.Monitor.networking.data.CarInfo;
+import acclivetiming.Monitor.networking.data.DriverInfo;
+import acclivetiming.Monitor.networking.data.LapInfo;
+import acclivetiming.Monitor.networking.data.RealtimeInfo;
+import acclivetiming.Monitor.networking.data.SessionInfo;
+import acclivetiming.Monitor.networking.data.TrackInfo;
+import acclivetiming.Monitor.networking.enums.BroadcastingEventType;
+import acclivetiming.Monitor.networking.enums.CarLocation;
+import acclivetiming.Monitor.networking.enums.DriverCategory;
+import acclivetiming.Monitor.networking.enums.LapType;
+import acclivetiming.Monitor.networking.enums.Nationality;
+import acclivetiming.Monitor.networking.enums.SessionPhase;
+import acclivetiming.Monitor.networking.enums.SessionType;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;

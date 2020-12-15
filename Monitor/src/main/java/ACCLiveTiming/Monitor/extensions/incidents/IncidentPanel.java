@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.extensions.incidents;
+package acclivetiming.Monitor.extensions.incidents;
 
-import ACCLiveTiming.monitor.visualisation.LookAndFeel;
-import ACCLiveTiming.monitor.visualisation.gui.LPButton;
-import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
-import ACCLiveTiming.monitor.visualisation.gui.LPTable;
+import acclivetiming.Monitor.visualisation.LookAndFeel;
+import acclivetiming.Monitor.visualisation.gui.LPButton;
+import acclivetiming.Monitor.visualisation.gui.LPContainer;
+import acclivetiming.Monitor.visualisation.gui.LPTable;
 
 /**
  *

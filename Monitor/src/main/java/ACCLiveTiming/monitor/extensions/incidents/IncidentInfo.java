@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.extensions.incidents;
+package acclivetiming.Monitor.extensions.incidents;
 
-import ACCLiveTiming.monitor.client.SessionId;
-import ACCLiveTiming.monitor.networking.data.CarInfo;
+import acclivetiming.Monitor.client.SessionId;
+import acclivetiming.Monitor.networking.data.CarInfo;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;

@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.networking.data;
+package acclivetiming.Monitor.networking.data;
 
-import ACCLiveTiming.monitor.networking.enums.SessionPhase;
-import ACCLiveTiming.monitor.networking.enums.SessionType;
+import acclivetiming.Monitor.networking.enums.SessionPhase;
+import acclivetiming.Monitor.networking.enums.SessionType;
 
 /**
  *

@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.networking;
+package acclivetiming.Monitor.networking;
 
-import ACCLiveTiming.monitor.networking.data.BroadcastingEvent;
-import ACCLiveTiming.monitor.networking.data.CarInfo;
-import ACCLiveTiming.monitor.networking.data.RealtimeInfo;
-import ACCLiveTiming.monitor.networking.data.SessionInfo;
-import ACCLiveTiming.monitor.networking.data.TrackInfo;
+import acclivetiming.Monitor.networking.data.BroadcastingEvent;
+import acclivetiming.Monitor.networking.data.CarInfo;
+import acclivetiming.Monitor.networking.data.RealtimeInfo;
+import acclivetiming.Monitor.networking.data.SessionInfo;
+import acclivetiming.Monitor.networking.data.TrackInfo;
 import java.util.List;
 
 /**

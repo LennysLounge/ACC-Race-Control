@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.extensions.logging;
+package acclivetiming.Monitor.extensions.logging;
 
-import ACCLiveTiming.monitor.visualisation.gui.LPTableColumn;
-import ACCLiveTiming.monitor.visualisation.gui.LPTable;
-import ACCLiveTiming.monitor.visualisation.gui.TableModel;
+import acclivetiming.Monitor.visualisation.gui.LPTableColumn;
+import acclivetiming.Monitor.visualisation.gui.LPTable;
+import acclivetiming.Monitor.visualisation.gui.TableModel;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;

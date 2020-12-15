@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.visualisation.components;
+package acclivetiming.Monitor.visualisation.components;
 
-import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
+import acclivetiming.Monitor.visualisation.gui.LPContainer;
 
 
 /**

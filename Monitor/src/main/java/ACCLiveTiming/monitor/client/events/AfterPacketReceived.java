@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ACCLiveTiming.monitor.client.events;
+package acclivetiming.Monitor.client.events;
 
-import ACCLiveTiming.monitor.eventbus.Event;
+import acclivetiming.Monitor.eventbus.Event;
 
 /**
  *
