@@ -6,7 +6,7 @@ apply from: "${rootDir}/gradle/versioning.gradle"
 def distributionName = "ACC Live Timing Monitor ACCSS" + project.ext.versionString
 
 
-mainClassName = 'acclivetiming.monitor.Main'
+mainClassName = 'base.screen.Main'
 
 
 repositories {
