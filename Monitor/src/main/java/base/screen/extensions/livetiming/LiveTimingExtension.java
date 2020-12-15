@@ -5,8 +5,8 @@
  */
 package base.screen.extensions.livetiming;
 
-import base.screen.client.events.RealtimeCarUpdate;
-import base.screen.client.events.RealtimeUpdate;
+import base.screen.networking.events.RealtimeCarUpdate;
+import base.screen.networking.RealtimeUpdate;
 import base.screen.eventbus.Event;
 import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;

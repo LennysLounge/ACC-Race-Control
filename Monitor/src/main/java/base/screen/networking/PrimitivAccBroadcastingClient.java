@@ -5,19 +5,14 @@
  */
 package base.screen.networking;
 
-import base.screen.client.SessionId;
-import base.screen.client.events.AfterPacketReceived;
-import base.screen.client.events.BroadcastingEventEvent;
-import base.screen.client.events.CarConnect;
-import base.screen.client.events.CarDisconnect;
-import base.screen.client.events.EntryListCarUpdate;
-import base.screen.client.events.EntryListUpdate;
-import base.screen.client.events.RealtimeCarUpdate;
-import base.screen.client.events.RealtimeUpdate;
-import base.screen.client.events.RegistrationResult;
-import base.screen.client.events.SessionChanged;
-import base.screen.client.events.SessionPhaseChanged;
-import base.screen.client.events.TrackData;
+import base.screen.networking.events.AfterPacketReceived;
+import base.screen.networking.events.CarConnect;
+import base.screen.networking.events.CarDisconnect;
+import base.screen.networking.events.EntryListCarUpdate;
+import base.screen.networking.events.RealtimeCarUpdate;
+import base.screen.networking.events.RegistrationResult;
+import base.screen.networking.events.SessionPhaseChanged;
+import base.screen.networking.events.TrackData;
 import base.screen.eventbus.EventBus;
 import base.screen.extensions.logging.LoggingExtension;
 import base.screen.networking.data.AccBroadcastingData;

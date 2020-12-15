@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package base.screen.client.events;
+package base.screen.networking;
 
 import base.screen.eventbus.Event;
 import base.screen.networking.data.SessionInfo;
@@ -12,11 +12,11 @@ import base.screen.networking.data.SessionInfo;
  *
  * @author Leonard
  */
-public class SessionPhaseChanged extends Event {
+public class RealtimeUpdate extends Event {
 
     private SessionInfo sessionInfo;
 
-    public SessionPhaseChanged(SessionInfo sessionInfo) {
+    public RealtimeUpdate(SessionInfo sessionInfo) {
         this.sessionInfo = sessionInfo;
     }
 

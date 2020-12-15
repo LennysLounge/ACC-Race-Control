@@ -3,25 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package base.screen.client.events;
+package base.screen.networking.events;
 
 import base.screen.eventbus.Event;
-import base.screen.networking.data.TrackInfo;
+import base.screen.networking.data.CarInfo;
 
 /**
  *
  * @author Leonard
  */
-public class TrackData extends Event {
+public class CarConnect extends Event {
 
-    private TrackInfo info;
+    private CarInfo car;
 
-    public TrackData(TrackInfo info) {
-        this.info = info;
+    public CarConnect(CarInfo car) {
+        this.car = car;
     }
 
-    public TrackInfo getInfo() {
-        return info;
+    public CarInfo getCar() {
+        return car;
     }
 
 }

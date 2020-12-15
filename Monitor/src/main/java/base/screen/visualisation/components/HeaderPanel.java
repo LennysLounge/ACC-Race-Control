@@ -5,7 +5,7 @@
  */
 package base.screen.visualisation.components;
 
-import base.screen.client.SessionId;
+import base.screen.networking.SessionId;
 import base.screen.networking.PrimitivAccBroadcastingClient;
 import base.screen.utility.TimeUtils;
 import base.screen.visualisation.LookAndFeel;

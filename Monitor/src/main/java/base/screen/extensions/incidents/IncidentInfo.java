@@ -5,7 +5,7 @@
  */
 package base.screen.extensions.incidents;
 
-import base.screen.client.SessionId;
+import base.screen.networking.SessionId;
 import base.screen.networking.data.CarInfo;
 import java.util.Arrays;
 import java.util.Collections;

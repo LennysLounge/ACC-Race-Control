@@ -5,9 +5,9 @@
  */
 package base.screen.extensions.incidents;
 
-import base.screen.client.SessionId;
-import base.screen.client.events.AfterPacketReceived;
-import base.screen.client.events.BroadcastingEventEvent;
+import base.screen.networking.SessionId;
+import base.screen.networking.events.AfterPacketReceived;
+import base.screen.networking.BroadcastingEventEvent;
 import base.screen.eventbus.Event;
 import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;

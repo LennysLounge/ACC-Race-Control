@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package base.screen.client.events;
+package base.screen.networking.events;
 
 import base.screen.eventbus.Event;
 import base.screen.networking.data.CarInfo;
@@ -12,16 +12,16 @@ import base.screen.networking.data.CarInfo;
  *
  * @author Leonard
  */
-public class CarConnect extends Event {
+public class EntryListCarUpdate extends Event {
 
-    private CarInfo car;
+    private CarInfo info;
 
-    public CarConnect(CarInfo car) {
-        this.car = car;
+    public EntryListCarUpdate(CarInfo info) {
+        this.info = info;
     }
 
-    public CarInfo getCar() {
-        return car;
+    public CarInfo getSessionInfo() {
+        return info;
     }
 
 }

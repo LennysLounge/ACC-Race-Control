@@ -5,9 +5,9 @@
  */
 package base.screen.extensions.laptimes;
 
-import base.screen.client.SessionId;
-import base.screen.client.events.RealtimeCarUpdate;
-import base.screen.client.events.SessionChanged;
+import base.screen.networking.SessionId;
+import base.screen.networking.events.RealtimeCarUpdate;
+import base.screen.networking.SessionChanged;
 import base.screen.eventbus.Event;
 import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
