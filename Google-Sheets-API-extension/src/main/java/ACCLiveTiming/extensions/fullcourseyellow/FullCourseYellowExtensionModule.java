@@ -5,9 +5,9 @@
  */
 package ACCLiveTiming.extensions.fullcourseyellow;
 
-import ACCLiveTiming.ACCLiveTimingExtensionModule;
-import ACCLiveTiming.monitor.extensions.AccClientExtension;
-import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
+import acclivetiming.ACCLiveTimingExtensionModule;
+import acclivetiming.monitor.extensions.AccClientExtension;
+import acclivetiming.monitor.visualisation.gui.LPContainer;
 import javax.swing.JPanel;
 
 /**

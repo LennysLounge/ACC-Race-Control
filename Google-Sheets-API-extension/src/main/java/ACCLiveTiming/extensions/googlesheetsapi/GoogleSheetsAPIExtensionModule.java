@@ -5,10 +5,10 @@
  */
 package ACCLiveTiming.extensions.googlesheetsapi;
 
-import ACCLiveTiming.monitor.extensions.AccClientExtension;
-import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
+import acclivetiming.monitor.extensions.AccClientExtension;
+import acclivetiming.monitor.visualisation.gui.LPContainer;
 import javax.swing.JPanel;
-import ACCLiveTiming.ACCLiveTimingExtensionModule;
+import acclivetiming.ACCLiveTimingExtensionModule;
 
 /**
  *

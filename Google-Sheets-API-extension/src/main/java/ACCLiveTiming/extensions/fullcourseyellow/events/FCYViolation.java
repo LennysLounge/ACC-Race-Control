@@ -5,8 +5,8 @@
  */
 package ACCLiveTiming.extensions.fullcourseyellow.events;
 
-import ACCLiveTiming.monitor.eventbus.Event;
-import ACCLiveTiming.monitor.networking.data.CarInfo;
+import acclivetiming.monitor.eventbus.Event;
+import acclivetiming.monitor.networking.data.CarInfo;
 
 /**
  *

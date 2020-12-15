@@ -5,10 +5,10 @@
  */
 package ACCLiveTiming.extensions.fullcourseyellow;
 
-import ACCLiveTiming.monitor.visualisation.LookAndFeel;
-import ACCLiveTiming.monitor.visualisation.gui.LPButton;
-import ACCLiveTiming.monitor.visualisation.gui.LPContainer;
-import ACCLiveTiming.monitor.visualisation.gui.LPTable;
+import acclivetiming.monitor.visualisation.LookAndFeel;
+import acclivetiming.monitor.visualisation.gui.LPButton;
+import acclivetiming.monitor.visualisation.gui.LPContainer;
+import acclivetiming.monitor.visualisation.gui.LPTable;
 
 /**
  *

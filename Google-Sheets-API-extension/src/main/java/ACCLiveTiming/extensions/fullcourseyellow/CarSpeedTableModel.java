@@ -5,11 +5,11 @@
  */
 package ACCLiveTiming.extensions.fullcourseyellow;
 
-import ACCLiveTiming.monitor.networking.data.CarInfo;
-import ACCLiveTiming.monitor.visualisation.LookAndFeel;
-import ACCLiveTiming.monitor.visualisation.gui.LPTable;
-import ACCLiveTiming.monitor.visualisation.gui.LPTableColumn;
-import ACCLiveTiming.monitor.visualisation.gui.TableModel;
+import acclivetiming.monitor.networking.data.CarInfo;
+import acclivetiming.monitor.visualisation.LookAndFeel;
+import acclivetiming.monitor.visualisation.gui.LPTable;
+import acclivetiming.monitor.visualisation.gui.LPTableColumn;
+import acclivetiming.monitor.visualisation.gui.TableModel;
 import java.util.LinkedList;
 import java.util.List;
 import processing.core.PApplet;
