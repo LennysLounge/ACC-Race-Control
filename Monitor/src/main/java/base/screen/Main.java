@@ -30,22 +30,35 @@ import javax.swing.JPanel;
  * @author Leonard
  */
 public class Main {
-
+    
+    /**
+     * This classes logger.
+     */
     private static Logger LOG = Logger.getLogger(Main.class.getName());
+    /**
+     * Extension modules.
+     */
     private static List<ACCLiveTimingExtensionModule> modules = new LinkedList<>();
+    /**
+     * Connection dialog
+     */
     private static ConnectionDialog dialog = new ConnectionDialog();
+    /**
+     * Connection client.
+     */
+    private static PrimitivAccBroadcastingClient client;
 
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
         setupLogging();
-
         loadModules();
-        showConfigurationDialog();
-        if (dialog.exitWithConnect()) {
-            startApp();
-        }
         
-        LOG.info("Done");
+        client = new PrimitivAccBroadcastingClient();
+        
+        showVis();
+        
+        startApp();
+        
     }
 
     private static void setupLogging() {
@@ -84,59 +97,31 @@ public class Main {
 
     public static void startApp() {
         LOG.info("Starting");
-
-        /*
-        //eable spreadSheet service.
-        if (dialog.isSheetsAPIEnabled()) {
+        
+        showConfigurationDialog();
+        if(dialog.exitWithConnect()){
             try {
-                SpreadSheetService.start(dialog.getSpreadsheetURL());
-            } catch (IllegalArgumentException e) {
-                LOG.log(Level.WARNING, "URL is not a valid SpreadSheet url", e);
-            } catch (RuntimeException e) {
-                LOG.log(Level.WARNING, "Error enabling the Spreadsheet API", e);
+                client.connect(dialog.getDisplayName(),
+                        dialog.getConnectionPassword(),
+                        dialog.getCommandPassword(),
+                        dialog.getUpdateInterval(),
+                        dialog.getHostAddress(),
+                        dialog.getPort());
+                client.sendRegisterRequest();
+                
+                client.waitForFinish();
+            } catch (SocketException e) {
+                LOG.log(Level.SEVERE, "Error connecting to game.", e);
             }
         }
-         */
-        PrimitivAccBroadcastingClient client = new PrimitivAccBroadcastingClient();
-        try {
-            client.connect(dialog.getDisplayName(),
-                    dialog.getConnectionPassword(),
-                    dialog.getCommandPassword(),
-                    dialog.getUpdateInterval(),
-                    dialog.getHostAddress(),
-                    dialog.getPort());
-        } catch (SocketException e) {
-            LOG.log(Level.SEVERE, "Error while creating the broadcasting client.", e);
-            return;
-        }
-
-        //Register extensions.
-        /*
-        for (ACCLiveTimingExtensionModule module : modules) {
-            AccClientExtension extension = module.getExtension();
-            if (extension != null) {
-                client.registerExtension(extension);
-            }
-        }
-        */
-
-        /*
-        client.registerExtension(new LiveTimingExtension());
-        client.registerExtension(new IncidentExtension());
-        client.registerExtension(new LapTimeExtension(dialog.isLapTimeLoggingEnabled()));
-        client.registerExtension(new LoggingExtension());
-
-        if (dialog.isSheetsAPIEnabled()) {
-            client.registerExtension(new SpreadSheetControlExtension());
-        }
-         */
-        client.sendRegisterRequest();
-
+        
+        LOG.info("Stopping");
+    }
+    
+    private static void showVis(){
         Visualisation v = new Visualisation(client);
         String[] a = {"MAIN"};
         PApplet.runSketch(a, v);
-        
-        client.waitForFinish();
     }
 
     public static List<LPContainer> getExtensionPanels() {
