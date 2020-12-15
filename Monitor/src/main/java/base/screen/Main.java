@@ -47,6 +47,10 @@ public class Main {
      * Connection client.
      */
     private static PrimitivAccBroadcastingClient client;
+    /**
+     * Visualisation for this program.
+     */
+    private static Visualisation visualisation;
 
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
@@ -54,10 +58,14 @@ public class Main {
         loadModules();
 
         client = new PrimitivAccBroadcastingClient();
+        visualisation = new Visualisation(client);
 
+        //start the program
         showVis();
-
-        startApp();
+        startConnection();
+        
+        //stop the program
+        visualisation.exitExplicit();
 
     }
 
@@ -95,7 +103,7 @@ public class Main {
         dialog.setVisible(true);
     }
 
-    public static void startApp() {
+    public static void startConnection() {
         LOG.info("Starting");
 
         boolean retryConnection;
@@ -128,9 +136,8 @@ public class Main {
     }
 
     private static void showVis() {
-        Visualisation v = new Visualisation(client);
         String[] a = {"MAIN"};
-        PApplet.runSketch(a, v);
+        PApplet.runSketch(a, visualisation);
     }
 
     public static List<LPContainer> getExtensionPanels() {
