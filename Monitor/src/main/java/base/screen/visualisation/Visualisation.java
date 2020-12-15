@@ -77,11 +77,10 @@ public class Visualisation extends CustomPApplet {
     
     @Override
     public void exit(){
-        println("Stopping");
+        LOG.info("Stopping Visualisation");
         //stop the client connection.
         //client.sendUnregisterRequest();
-        
-        exitExplicit();
+        client.stopKill();
     }
     
     public void exitExplicit(){
