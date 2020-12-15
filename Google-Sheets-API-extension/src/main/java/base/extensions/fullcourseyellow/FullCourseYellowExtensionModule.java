@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.extensions.fullcourseyellow;
+package base.extensions.fullcourseyellow;
 
-import acclivetiming.ACCLiveTimingExtensionModule;
-import acclivetiming.monitor.extensions.AccClientExtension;
-import acclivetiming.monitor.visualisation.gui.LPContainer;
+import base.ACCLiveTimingExtensionModule;
+import base.screen.extensions.AccClientExtension;
+import base.screen.visualisation.gui.LPContainer;
 import javax.swing.JPanel;
 
 /**

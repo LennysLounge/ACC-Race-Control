@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.extensions.fullcourseyellow;
+package base.extensions.fullcourseyellow;
 
-import acclivetiming.monitor.networking.data.CarInfo;
-import acclivetiming.monitor.visualisation.LookAndFeel;
-import acclivetiming.monitor.visualisation.gui.LPTable;
-import acclivetiming.monitor.visualisation.gui.LPTableColumn;
-import acclivetiming.monitor.visualisation.gui.TableModel;
+import base.screen.networking.data.CarInfo;
+import base.screen.visualisation.LookAndFeel;
+import base.screen.visualisation.gui.LPTable;
+import base.screen.visualisation.gui.LPTableColumn;
+import base.screen.visualisation.gui.TableModel;
 import java.util.LinkedList;
 import java.util.List;
 import processing.core.PApplet;

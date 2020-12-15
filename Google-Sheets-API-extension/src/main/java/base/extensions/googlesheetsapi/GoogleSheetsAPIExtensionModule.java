@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.extensions.googlesheetsapi;
+package base.extensions.googlesheetsapi;
 
-import acclivetiming.monitor.extensions.AccClientExtension;
-import acclivetiming.monitor.visualisation.gui.LPContainer;
+import base.screen.extensions.AccClientExtension;
+import base.screen.visualisation.gui.LPContainer;
 import javax.swing.JPanel;
-import acclivetiming.ACCLiveTimingExtensionModule;
+import base.ACCLiveTimingExtensionModule;
 
 /**
  *

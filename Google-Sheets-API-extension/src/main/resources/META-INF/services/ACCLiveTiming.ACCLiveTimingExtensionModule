@@ -1,2 +1,2 @@
-acclivetiming.extensions.googlesheetsapi.GoogleSheetsAPIExtensionModule
-acclivetiming.extensions.fullcourseyellow.FullCourseYellowExtensionModule
+base.extensions.googlesheetsapi.GoogleSheetsAPIExtensionModule
+base.extensions.fullcourseyellow.FullCourseYellowExtensionModule

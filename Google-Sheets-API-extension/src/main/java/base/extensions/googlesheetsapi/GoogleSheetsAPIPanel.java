@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.extensions.googlesheetsapi;
+package base.extensions.googlesheetsapi;
 
 
-import acclivetiming.monitor.utility.TimeUtils;
-import acclivetiming.monitor.visualisation.LookAndFeel;
-import acclivetiming.monitor.visualisation.gui.LPButton;
-import acclivetiming.monitor.visualisation.gui.LPContainer;
+import base.screen.utility.TimeUtils;
+import base.screen.visualisation.LookAndFeel;
+import base.screen.visualisation.gui.LPButton;
+import base.screen.visualisation.gui.LPContainer;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 

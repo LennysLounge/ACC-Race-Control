@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.extensions.fullcourseyellow;
+package base.extensions.fullcourseyellow;
 
-import acclivetiming.monitor.visualisation.LookAndFeel;
-import acclivetiming.monitor.visualisation.gui.LPButton;
-import acclivetiming.monitor.visualisation.gui.LPContainer;
-import acclivetiming.monitor.visualisation.gui.LPTable;
+import base.screen.visualisation.LookAndFeel;
+import base.screen.visualisation.gui.LPButton;
+import base.screen.visualisation.gui.LPContainer;
+import base.screen.visualisation.gui.LPTable;
 
 /**
  *

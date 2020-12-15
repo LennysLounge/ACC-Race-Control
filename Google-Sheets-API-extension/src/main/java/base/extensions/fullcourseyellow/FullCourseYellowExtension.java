@@ -3,22 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.extensions.fullcourseyellow;
+package base.extensions.fullcourseyellow;
 
-import acclivetiming.extensions.fullcourseyellow.events.FCYStart;
-import acclivetiming.extensions.fullcourseyellow.events.FCYStop;
-import acclivetiming.extensions.fullcourseyellow.events.FCYViolation;
-import acclivetiming.monitor.client.events.RealtimeCarUpdate;
-import acclivetiming.monitor.client.events.RealtimeUpdate;
-import acclivetiming.monitor.eventbus.Event;
-import acclivetiming.monitor.eventbus.EventBus;
-import acclivetiming.monitor.eventbus.EventListener;
-import acclivetiming.monitor.extensions.AccClientExtension;
-import acclivetiming.monitor.extensions.logging.LoggingExtension;
-import acclivetiming.monitor.networking.data.CarInfo;
-import acclivetiming.monitor.networking.data.RealtimeInfo;
-import acclivetiming.monitor.networking.data.SessionInfo;
-import acclivetiming.monitor.utility.TimeUtils;
+import base.extensions.fullcourseyellow.events.FCYStart;
+import base.extensions.fullcourseyellow.events.FCYStop;
+import base.extensions.fullcourseyellow.events.FCYViolation;
+import base.screen.client.events.RealtimeCarUpdate;
+import base.screen.client.events.RealtimeUpdate;
+import base.screen.eventbus.Event;
+import base.screen.eventbus.EventBus;
+import base.screen.eventbus.EventListener;
+import base.screen.extensions.AccClientExtension;
+import base.screen.extensions.logging.LoggingExtension;
+import base.screen.networking.data.CarInfo;
+import base.screen.networking.data.RealtimeInfo;
+import base.screen.networking.data.SessionInfo;
+import base.screen.utility.TimeUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

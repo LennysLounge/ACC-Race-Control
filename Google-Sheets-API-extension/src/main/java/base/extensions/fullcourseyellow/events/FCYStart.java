@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package acclivetiming.extensions.fullcourseyellow.events;
+package base.extensions.fullcourseyellow.events;
 
-import acclivetiming.monitor.eventbus.Event;
+import base.screen.eventbus.Event;
 
 /**
  *
