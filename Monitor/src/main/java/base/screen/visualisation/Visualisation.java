@@ -78,7 +78,7 @@ public class Visualisation extends CustomPApplet {
     @Override
     public void exit(){
         println("Stopping");
-        client.sendUnregisterRequest();
+        //client.sendUnregisterRequest();
         super.exit();
     }
 }

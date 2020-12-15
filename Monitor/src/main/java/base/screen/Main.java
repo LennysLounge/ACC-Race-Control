@@ -30,7 +30,7 @@ import javax.swing.JPanel;
  * @author Leonard
  */
 public class Main {
-    
+
     /**
      * This classes logger.
      */
@@ -52,13 +52,13 @@ public class Main {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
         setupLogging();
         loadModules();
-        
+
         client = new PrimitivAccBroadcastingClient();
-        
+
         showVis();
-        
+
         startApp();
-        
+
     }
 
     private static void setupLogging() {
@@ -97,28 +97,37 @@ public class Main {
 
     public static void startApp() {
         LOG.info("Starting");
-        
-        showConfigurationDialog();
-        if(dialog.exitWithConnect()){
-            try {
-                client.connect(dialog.getDisplayName(),
-                        dialog.getConnectionPassword(),
-                        dialog.getCommandPassword(),
-                        dialog.getUpdateInterval(),
-                        dialog.getHostAddress(),
-                        dialog.getPort());
+
+        boolean retryConnection;
+        do {
+            retryConnection = false;
+            showConfigurationDialog();
+            if (dialog.exitWithConnect()) {
+                try {
+                    client.connect(dialog.getDisplayName(),
+                            dialog.getConnectionPassword(),
+                            dialog.getCommandPassword(),
+                            dialog.getUpdateInterval(),
+                            dialog.getHostAddress(),
+                            dialog.getPort());
+
+                } catch (SocketException e) {
+                    LOG.log(Level.SEVERE, "Error starting the connection to the game.", e);
+                }
+
                 client.sendRegisterRequest();
-                
-                client.waitForFinish();
-            } catch (SocketException e) {
-                LOG.log(Level.SEVERE, "Error connecting to game.", e);
+
+                int exitstatus = client.waitForFinish();
+                if (exitstatus == 1) {
+                    retryConnection = true;
+                }
             }
-        }
-        
+        } while (retryConnection);
+
         LOG.info("Stopping");
     }
-    
-    private static void showVis(){
+
+    private static void showVis() {
         Visualisation v = new Visualisation(client);
         String[] a = {"MAIN"};
         PApplet.runSketch(a, v);
@@ -129,6 +138,7 @@ public class Main {
                 .map(module -> module.getExtensionPanel())
                 .filter(panel -> panel != null)
                 .collect(Collectors.toList());
+
     }
 
     public static class UncoughtExceptionHandler

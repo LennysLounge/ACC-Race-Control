@@ -268,6 +268,11 @@ public class ConnectionDialog extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_connectButtonActionPerformed
 
+    @Override
+    public void setVisible(boolean state){
+        exitWithConnect = false;
+        super.setVisible(state);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField commandPasswordTextField;

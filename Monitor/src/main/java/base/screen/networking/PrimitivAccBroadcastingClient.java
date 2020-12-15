@@ -148,12 +148,17 @@ public class PrimitivAccBroadcastingClient {
         accListenerThread.start();
     }
 
-    public void waitForFinish() {
+    /**
+     * Blocks until the connection to the game is closed.
+     * @return 0 for normal exit, 1 for abnormal exit.
+     */
+    public int waitForFinish() {
         try {
             accListenerThread.join();
         } catch (InterruptedException ex) {
             LOG.info("exceptioN!!!!");
         }
+        return 1;
     }
 
     /**
