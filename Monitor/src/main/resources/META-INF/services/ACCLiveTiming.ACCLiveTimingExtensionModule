@@ -1,4 +1,4 @@
-acclivetiming.monitor.extensions.livetiming.LiveTimingExtensionModule
-acclivetiming.monitor.extensions.incidents.IncidentExtensionModule
-acclivetiming.monitor.extensions.logging.LoggingExtensionModule
-acclivetiming.monitor.extensions.laptimes.LaptimeExtensionModule
+base.screen.extensions.livetiming.LiveTimingExtensionModule
+base.screen.extensions.incidents.IncidentExtensionModule
+base.screen.extensions.logging.LoggingExtensionModule
+base.screen.extensions.laptimes.LaptimeExtensionModule
