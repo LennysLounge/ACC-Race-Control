@@ -78,7 +78,7 @@ public class PrimitivAccBroadcastingClient {
     /**
      * Thread where the connection loop is running.
      */
-    private Thread accListenerThread;
+    private UdpListener accListenerThread;
     /**
      * Model that holds the data.
      */
@@ -150,6 +150,7 @@ public class PrimitivAccBroadcastingClient {
 
     /**
      * Blocks until the connection to the game is closed.
+     *
      * @return 0 for normal exit, 1 for abnormal exit.
      */
     public int waitForFinish() {
@@ -158,7 +159,12 @@ public class PrimitivAccBroadcastingClient {
         } catch (InterruptedException ex) {
             LOG.info("exceptioN!!!!");
         }
-        return 1;
+        return accListenerThread.getExitState();
+    }
+
+    public void stopKill() {
+        LOG.info("interupting listener");
+        accListenerThread.interrupt();
     }
 
     /**
@@ -197,9 +203,10 @@ public class PrimitivAccBroadcastingClient {
     public int getPacketCount() {
         return packetCount;
     }
-    
+
     /**
      * Returns the current SessionId object.
+     *
      * @return the current SessionId.
      */
     public SessionId getSessionId() {
@@ -278,6 +285,15 @@ public class PrimitivAccBroadcastingClient {
          */
         private final AccBroadcastingProtocol protocol = new AccBroadcastingProtocol(this);
 
+        /**
+         * exit state of this thread.
+         */
+        private int exitState = 0;
+        /**
+         * flag to indicate that the socket was closed by the user.
+         */
+        private boolean forceExit = false;
+
         public UdpListener(String name) {
             super(name);
         }
@@ -289,10 +305,23 @@ public class PrimitivAccBroadcastingClient {
                 udpListener();
             } catch (Exception e) {
                 LOG.log(Level.SEVERE, "Error in the listener thread", e);
+                exitState = 1;
             } catch (StackOverflowError e) {
                 LOG.log(Level.SEVERE, "Overflow in listener thread", e);
+                exitState = 1;
             }
             LOG.info("Listener thread done");
+        }
+
+        @Override
+        public void interrupt() {
+            super.interrupt();
+            forceExit = true;
+            socket.close();
+        }
+        
+        public int getExitState(){
+            return exitState;
         }
 
         private void udpListener() {
@@ -303,10 +332,17 @@ public class PrimitivAccBroadcastingClient {
                     protocol.processMessage(new ByteArrayInputStream(response.getData()));
                     afterPacketReceived(response.getData()[0]);
                 } catch (SocketException e) {
-                    LOG.log(Level.SEVERE, "Socket closed unexpected.", e);
+                    
+                    if (forceExit) {
+                        LOG.info("Socket was closed by user.");
+                    }else{
+                        LOG.log(Level.SEVERE, "Socket closed unexpected.", e);
+                        exitState = 1;
+                    }
                     return;
                 } catch (IOException e) {
                     LOG.log(Level.SEVERE, "Error while receiving a response", e);
+                    exitState = 1;
                     return;
                 }
             }
