@@ -15,11 +15,13 @@ import base.screen.eventbus.EventListener;
 import base.screen.extensions.AccClientExtension;
 import base.screen.extensions.incidents.IncidentExtension;
 import base.screen.extensions.logging.LoggingExtension;
+import base.screen.networking.AccBroadcastingClient;
 import base.screen.networking.data.CarInfo;
 import base.screen.networking.data.LapInfo;
 import base.screen.networking.data.RealtimeInfo;
 import base.screen.networking.enums.LapType;
 import base.screen.utility.TimeUtils;
+import base.screen.visualisation.gui.LPContainer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -39,13 +41,17 @@ import java.util.logging.Logger;
  * @author Leonard
  */
 public class LapTimeExtension
-        extends AccClientExtension
-        implements EventListener {
+        implements EventListener, AccClientExtension {
 
     /**
      * This classes logger.
      */
     private static Logger LOG = Logger.getLogger(IncidentExtension.class.getName());
+    /**
+     * Reference to the client.
+     */
+    private AccBroadcastingClient client;
+    
     /**
      * Counts the laps for each car
      */
@@ -76,7 +82,7 @@ public class LapTimeExtension
     private final boolean isLoggingEnabled;
 
     public LapTimeExtension(boolean isLoggingEnabled) {
-        setClient(Main.getClient());
+        this.client = Main.getClient();
         
         this.isLoggingEnabled = isLoggingEnabled;
         if (isLoggingEnabled) {
@@ -198,6 +204,11 @@ public class LapTimeExtension
             }
         }
 
+    }
+
+    @Override
+    public LPContainer getPanel() {
+        return null;
     }
 
 }
