@@ -157,6 +157,7 @@ public class IncidentExtension
         model.setAccidents(accidents);
 
         EventBus.publish(new Accident(a));
+        panel.invalidate();
     }
 
     private int getAndIncrementCounter(SessionId sessionId) {

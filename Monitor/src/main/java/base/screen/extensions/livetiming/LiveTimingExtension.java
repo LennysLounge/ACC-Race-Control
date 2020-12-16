@@ -84,6 +84,7 @@ public class LiveTimingExtension
 
         model.setEntries(sorted);
         model.setFocusedCarId(sessionInfo.getFocusedCarIndex());
+        panel.invalidate();
     }
 
     public void onRealtimeCarUpdate(RealtimeInfo info) {
