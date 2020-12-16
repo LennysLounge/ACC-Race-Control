@@ -85,8 +85,11 @@ public class LPTabPanel extends LPContainer {
         }
         if (y > 0 && y < LookAndFeel.LINE_HEIGHT) {
             float tabSize = applet.width / tabs.size();
-            int clickedIndex = (int) ((x - (x % tabSize)) / tabSize);
-            mouseOverTab = clickedIndex;
+            int index = (int) ((x - (x % tabSize)) / tabSize);
+            if(index != mouseOverTab){
+                invalidate();
+            }
+            mouseOverTab = index;
         } else {
             mouseOverTab = -1;
         }
