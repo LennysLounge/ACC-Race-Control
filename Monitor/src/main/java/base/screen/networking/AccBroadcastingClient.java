@@ -276,6 +276,7 @@ public class AccBroadcastingClient {
 
     public enum ExitState {
         NORMAL,
+        REFUSED,
         PORT_UNREACHABLE,
         EXCEPTION
     };
@@ -338,7 +339,6 @@ public class AccBroadcastingClient {
                     protocol.processMessage(new ByteArrayInputStream(response.getData()));
                     afterPacketReceived(response.getData()[0]);
                 } catch (SocketException e) {
-
                     if (forceExit) {
                         LOG.info("Socket was closed by user.");
                     } else {
@@ -358,6 +358,9 @@ public class AccBroadcastingClient {
         public void onRegistrationResult(int connectionID, boolean success, boolean readOnly, String message) {
             if (success == false) {
                 LOG.info("Connection refused\n" + message);
+                exitState = ExitState.REFUSED;
+                stopAndKill();
+                return;
             }
             model = model.withConnectionId(connectionID);
 

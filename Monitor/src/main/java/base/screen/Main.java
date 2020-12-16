@@ -135,6 +135,12 @@ public class Main {
                                 "Error connecting to game",
                                 JOptionPane.ERROR_MESSAGE);
                     }
+                    if (exitstatus == AccBroadcastingClient.ExitState.REFUSED) {
+                        JOptionPane.showMessageDialog(null,
+                                "Connection refused by the game. Wrong password.",
+                                "Error connecting to game",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                     if (exitstatus == AccBroadcastingClient.ExitState.EXCEPTION) {
                         JOptionPane.showMessageDialog(null,
                                 "Unknown error while connecting to game",
