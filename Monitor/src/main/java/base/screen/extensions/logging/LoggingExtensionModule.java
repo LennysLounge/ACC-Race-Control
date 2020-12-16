@@ -17,15 +17,6 @@ import javax.swing.JPanel;
 public class LoggingExtensionModule
         implements ACCLiveTimingExtensionModule {
 
-    private LoggingExtension extension;
-    private LoggingPanel panel;
-
-    public LoggingExtensionModule() {
-        extension = new LoggingExtension();
-        panel = new LoggingPanel(extension);
-
-    }
-
     @Override
     public String getName() {
         return "Logging extension";
@@ -33,12 +24,7 @@ public class LoggingExtensionModule
 
     @Override
     public AccClientExtension getExtension() {
-        return extension;
-    }
-
-    @Override
-    public LPContainer getExtensionPanel() {
-        return panel;
+        return new LoggingExtension();
     }
 
     @Override
