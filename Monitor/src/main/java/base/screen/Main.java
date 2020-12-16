@@ -18,6 +18,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import processing.core.PApplet;
 import base.ACCLiveTimingExtensionModule;
+import base.screen.extensions.AccClientExtension;
 import base.screen.networking.AccBroadcastingClient;
 import base.screen.visualisation.gui.LPContainer;
 import java.util.LinkedList;
@@ -41,6 +42,10 @@ public class Main {
      */
     private static List<ACCLiveTimingExtensionModule> modules = new LinkedList<>();
     /**
+     * List of client extensions.
+     */
+    private static List<AccClientExtension> extensions = new LinkedList<>();
+    /**
      * Connection dialog
      */
     private static ConnectionDialog dialog = new ConnectionDialog();
@@ -61,13 +66,15 @@ public class Main {
         client = new AccBroadcastingClient();
         visualisation = new Visualisation(client);
 
-        //start the program
-        showVis();
+        //start the visualisation
+        String[] a = {"MAIN"};
+        PApplet.runSketch(a, visualisation);
+
+        //start the client
         startConnection();
 
         //stop the program
         visualisation.exitExplicit();
-
     }
 
     private static void setupLogging() {
@@ -108,10 +115,11 @@ public class Main {
         LOG.info("Starting");
 
         boolean retryConnection = true;
-        while(retryConnection) {
+        while (retryConnection) {
             retryConnection = false;
             showConfigurationDialog();
             if (dialog.exitWithConnect()) {
+                //connect the client.
                 try {
                     client.connect(dialog.getDisplayName(),
                             dialog.getConnectionPassword(),
@@ -124,29 +132,24 @@ public class Main {
                     LOG.log(Level.SEVERE, "Error starting the connection to the game.", e);
                 }
 
+                //enable extensions.
+                extensions.clear();
+                for (ACCLiveTimingExtensionModule module : modules) {
+                    AccClientExtension extension = module.getExtension();
+                    if (extension != null) {
+                        extensions.add(extension);
+                    }
+                }
+
+                //send registration.
                 client.sendRegisterRequest();
 
+                //wait for the client to be closed or for a critical failure that
+                //closes the client.
                 AccBroadcastingClient.ExitState exitstatus = client.waitForFinish();
                 if (exitstatus != AccBroadcastingClient.ExitState.NORMAL) {
                     retryConnection = true;
-                    if (exitstatus == AccBroadcastingClient.ExitState.PORT_UNREACHABLE) {
-                        JOptionPane.showMessageDialog(null,
-                                "Cannot connect to game. The game needs to be on track to connect.",
-                                "Error connecting to game",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                    if (exitstatus == AccBroadcastingClient.ExitState.REFUSED) {
-                        JOptionPane.showMessageDialog(null,
-                                "Connection refused by the game. Wrong password.",
-                                "Error connecting to game",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                    if (exitstatus == AccBroadcastingClient.ExitState.EXCEPTION) {
-                        JOptionPane.showMessageDialog(null,
-                                "Unknown error while connecting to game",
-                                "Error connecting to game",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
+                    showErrorMessage(exitstatus);
                 }
             }
         }
@@ -154,20 +157,35 @@ public class Main {
         LOG.info("Stopping");
     }
 
-    private static void showVis() {
-        String[] a = {"MAIN"};
-        PApplet.runSketch(a, visualisation);
+    private static void showErrorMessage(AccBroadcastingClient.ExitState exitStatus) {
+        if (exitStatus == AccBroadcastingClient.ExitState.PORT_UNREACHABLE) {
+            JOptionPane.showMessageDialog(null,
+                    "Cannot connect to game. The game needs to be on track to connect.",
+                    "Error connecting to game",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        if (exitStatus == AccBroadcastingClient.ExitState.REFUSED) {
+            JOptionPane.showMessageDialog(null,
+                    "Connection refused by the game. Wrong password.",
+                    "Error connecting to game",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        if (exitStatus == AccBroadcastingClient.ExitState.EXCEPTION) {
+            JOptionPane.showMessageDialog(null,
+                    "Unknown error while connecting to game",
+                    "Error connecting to game",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public static List<LPContainer> getExtensionPanels() {
-        return modules.stream()
-                .map(module -> module.getExtensionPanel())
+        return extensions.stream()
+                .map(extension -> extension.getPanel())
                 .filter(panel -> panel != null)
                 .collect(Collectors.toList());
-
     }
-    
-    public static AccBroadcastingClient getClient(){
+
+    public static AccBroadcastingClient getClient() {
         return client;
     }
 
