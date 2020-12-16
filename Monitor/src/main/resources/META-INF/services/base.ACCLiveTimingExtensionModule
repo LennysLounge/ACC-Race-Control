@@ -1,4 +1,0 @@
-base.screen.extensions.livetiming.LiveTimingExtensionModule
-base.screen.extensions.incidents.IncidentExtensionModule
-base.screen.extensions.logging.LoggingExtensionModule
-base.screen.extensions.laptimes.LaptimeExtensionModule
