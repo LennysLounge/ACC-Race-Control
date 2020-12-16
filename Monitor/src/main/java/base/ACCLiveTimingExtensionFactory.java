@@ -12,7 +12,7 @@ import javax.swing.JPanel;
  *
  * @author Leonard
  */
-public interface ACCLiveTimingExtensionModule {
+public interface ACCLiveTimingExtensionFactory {
     /**
      * Returns the name for this extension.
      * @return The name.
@@ -22,7 +22,7 @@ public interface ACCLiveTimingExtensionModule {
      * Gives the client extension.
      * @return the client extension.
      */
-    public AccClientExtension getExtension();
+    public AccClientExtension createExtension();
     /**
      * Gives the configuration dialog panel for this extension. Returns null
      * if this extension does not have a configuration panel.

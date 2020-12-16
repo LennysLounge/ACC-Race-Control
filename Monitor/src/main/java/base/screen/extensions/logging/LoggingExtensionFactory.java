@@ -5,16 +5,16 @@
  */
 package base.screen.extensions.logging;
 
-import base.ACCLiveTimingExtensionModule;
 import base.screen.extensions.AccClientExtension;
 import javax.swing.JPanel;
+import base.ACCLiveTimingExtensionFactory;
 
 /**
  *
  * @author Leonard
  */
-public class LoggingExtensionModule
-        implements ACCLiveTimingExtensionModule {
+public class LoggingExtensionFactory
+        implements ACCLiveTimingExtensionFactory {
 
     @Override
     public String getName() {
@@ -22,7 +22,7 @@ public class LoggingExtensionModule
     }
 
     @Override
-    public AccClientExtension getExtension() {
+    public AccClientExtension createExtension() {
         return new LoggingExtension();
     }
 

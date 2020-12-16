@@ -5,16 +5,16 @@
  */
 package base.extensions.fullcourseyellow;
 
-import base.ACCLiveTimingExtensionModule;
 import base.screen.extensions.AccClientExtension;
 import base.screen.visualisation.gui.LPContainer;
 import javax.swing.JPanel;
+import base.ACCLiveTimingExtensionFactory;
 
 /**
  *
  * @author Leonard
  */
-public class FullCourseYellowExtensionModule implements ACCLiveTimingExtensionModule{
+public class FullCourseYellowExtensionModule implements ACCLiveTimingExtensionFactory{
     
     private FullCourseYellowExtension extension;
     private FullCourseYellowPanel panel;
@@ -30,7 +30,7 @@ public class FullCourseYellowExtensionModule implements ACCLiveTimingExtensionMo
     }
 
     @Override
-    public AccClientExtension getExtension() {
+    public AccClientExtension createExtension() {
         return extension;
     }
 

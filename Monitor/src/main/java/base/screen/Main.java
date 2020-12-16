@@ -17,7 +17,6 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import processing.core.PApplet;
-import base.ACCLiveTimingExtensionModule;
 import base.screen.extensions.AccClientExtension;
 import base.screen.networking.AccBroadcastingClient;
 import base.screen.visualisation.gui.LPContainer;
@@ -26,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import base.ACCLiveTimingExtensionFactory;
 
 /**
  *
@@ -40,7 +40,7 @@ public class Main {
     /**
      * Extension modules.
      */
-    private static List<ACCLiveTimingExtensionModule> modules = new LinkedList<>();
+    private static List<ACCLiveTimingExtensionFactory> modules = new LinkedList<>();
     /**
      * List of client extensions.
      */
@@ -95,14 +95,14 @@ public class Main {
     }
 
     private static void loadModules() {
-        ServiceLoader.load(ACCLiveTimingExtensionModule.class).forEach(module -> {
+        ServiceLoader.load(ACCLiveTimingExtensionFactory.class).forEach(module -> {
             LOG.info("Loading extension " + module.getName());
             modules.add(module);
         });
     }
 
     private static void showConfigurationDialog() {
-        for (ACCLiveTimingExtensionModule module : modules) {
+        for (ACCLiveTimingExtensionFactory module : modules) {
             JPanel configurationPanel = module.getExtensionConfigurationPanel();
             if (configurationPanel != null) {
                 dialog.addTabPanel(configurationPanel);
@@ -134,8 +134,8 @@ public class Main {
 
                 //enable extensions.
                 extensions.clear();
-                for (ACCLiveTimingExtensionModule module : modules) {
-                    AccClientExtension extension = module.getExtension();
+                for (ACCLiveTimingExtensionFactory module : modules) {
+                    AccClientExtension extension = module.createExtension();
                     if (extension != null) {
                         extensions.add(extension);
                     }

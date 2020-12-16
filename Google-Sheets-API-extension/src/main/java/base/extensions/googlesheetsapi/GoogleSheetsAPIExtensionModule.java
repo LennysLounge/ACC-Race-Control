@@ -8,13 +8,13 @@ package base.extensions.googlesheetsapi;
 import base.screen.extensions.AccClientExtension;
 import base.screen.visualisation.gui.LPContainer;
 import javax.swing.JPanel;
-import base.ACCLiveTimingExtensionModule;
+import base.ACCLiveTimingExtensionFactory;
 
 /**
  *
  * @author Leonard
  */
-public class GoogleSheetsAPIExtensionModule implements ACCLiveTimingExtensionModule{
+public class GoogleSheetsAPIExtensionModule implements ACCLiveTimingExtensionFactory{
     
     private GoogleSheetsAPIExtension extension;
     private GoogleSheetsAPIPanel panel;
@@ -32,7 +32,7 @@ public class GoogleSheetsAPIExtensionModule implements ACCLiveTimingExtensionMod
     }
 
     @Override
-    public AccClientExtension getExtension() {
+    public AccClientExtension createExtension() {
         if(configurationPanel.isExtensionEnabled()){
             extension.start(configurationPanel.getSpreadSheetLink());
             return extension;
