@@ -23,6 +23,7 @@ import base.screen.visualisation.gui.LPContainer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -63,7 +64,7 @@ public class Main {
         //start the program
         showVis();
         startConnection();
-        
+
         //stop the program
         visualisation.exitExplicit();
 
@@ -128,6 +129,18 @@ public class Main {
                 AccBroadcastingClient.ExitState exitstatus = client.waitForFinish();
                 if (exitstatus != AccBroadcastingClient.ExitState.NORMAL) {
                     retryConnection = true;
+                    if (exitstatus == AccBroadcastingClient.ExitState.PORT_UNREACHABLE) {
+                        JOptionPane.showMessageDialog(null,
+                                "Cannot connect to game. The game needs to be on track to connect.",
+                                "Error connecting to game",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    if (exitstatus == AccBroadcastingClient.ExitState.EXCEPTION) {
+                        JOptionPane.showMessageDialog(null,
+                                "Unknown error while connecting to game",
+                                "Error connecting to game",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         } while (retryConnection);
