@@ -153,7 +153,7 @@ public class PrimitivAccBroadcastingClient {
      *
      * @return 0 for normal exit, 1 for abnormal exit.
      */
-    public int waitForFinish() {
+    public ExitState waitForFinish() {
         try {
             accListenerThread.join();
         } catch (InterruptedException ex) {
@@ -162,7 +162,7 @@ public class PrimitivAccBroadcastingClient {
         return accListenerThread.getExitState();
     }
 
-    public void stopKill() {
+    public void stopAndKill() {
         LOG.info("interupting listener");
         accListenerThread.interrupt();
     }
@@ -274,6 +274,12 @@ public class PrimitivAccBroadcastingClient {
         }
     }
 
+    public enum ExitState {
+        NORMAL,
+        PORT_UNREACHABLE,
+        EXCEPTION
+    };
+
     private class UdpListener
             extends Thread
             implements AccBroadcastingClientListener {
@@ -288,7 +294,7 @@ public class PrimitivAccBroadcastingClient {
         /**
          * exit state of this thread.
          */
-        private int exitState = 0;
+        private ExitState exitState = ExitState.NORMAL;
         /**
          * flag to indicate that the socket was closed by the user.
          */
@@ -305,10 +311,10 @@ public class PrimitivAccBroadcastingClient {
                 udpListener();
             } catch (Exception e) {
                 LOG.log(Level.SEVERE, "Error in the listener thread", e);
-                exitState = 1;
+                exitState = ExitState.EXCEPTION;
             } catch (StackOverflowError e) {
                 LOG.log(Level.SEVERE, "Overflow in listener thread", e);
-                exitState = 1;
+                exitState = ExitState.EXCEPTION;
             }
             LOG.info("Listener thread done");
         }
@@ -319,8 +325,8 @@ public class PrimitivAccBroadcastingClient {
             forceExit = true;
             socket.close();
         }
-        
-        public int getExitState(){
+
+        public ExitState getExitState() {
             return exitState;
         }
 
@@ -332,17 +338,17 @@ public class PrimitivAccBroadcastingClient {
                     protocol.processMessage(new ByteArrayInputStream(response.getData()));
                     afterPacketReceived(response.getData()[0]);
                 } catch (SocketException e) {
-                    
+
                     if (forceExit) {
                         LOG.info("Socket was closed by user.");
-                    }else{
+                    } else {
                         LOG.log(Level.SEVERE, "Socket closed unexpected.", e);
-                        exitState = 1;
+                        exitState = ExitState.PORT_UNREACHABLE;
                     }
                     return;
                 } catch (IOException e) {
                     LOG.log(Level.SEVERE, "Error while receiving a response", e);
-                    exitState = 1;
+                    exitState = ExitState.EXCEPTION;
                     return;
                 }
             }

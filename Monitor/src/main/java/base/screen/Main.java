@@ -125,8 +125,8 @@ public class Main {
 
                 client.sendRegisterRequest();
 
-                int exitstatus = client.waitForFinish();
-                if (exitstatus == 1) {
+                PrimitivAccBroadcastingClient.ExitState exitstatus = client.waitForFinish();
+                if (exitstatus != PrimitivAccBroadcastingClient.ExitState.NORMAL) {
                     retryConnection = true;
                 }
             }
