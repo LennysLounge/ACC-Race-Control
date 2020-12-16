@@ -25,12 +25,6 @@ public interface ACCLiveTimingExtensionModule {
      */
     public AccClientExtension getExtension();
     /**
-     * Gives the visualisation panel for this extension. Returns null if 
-     * this extension has no visualisation panel.
-     * @return 
-     */
-    public LPContainer getExtensionPanel();
-    /**
      * Gives the configuration dialog panel for this extension. Returns null
      * if this extension does not have a configuration panel.
      * @return 
