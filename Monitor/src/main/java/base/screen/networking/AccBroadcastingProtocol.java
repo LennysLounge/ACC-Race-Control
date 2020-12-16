@@ -36,7 +36,7 @@ import java.util.logging.Logger;
  */
 public class AccBroadcastingProtocol {
 
-    private static Logger LOG = Logger.getLogger(PrimitivAccBroadcastingClient.class.getName());
+    private static Logger LOG = Logger.getLogger(AccBroadcastingClient.class.getName());
 
     public interface OutboundMessageTypes {
 

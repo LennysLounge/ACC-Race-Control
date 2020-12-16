@@ -43,9 +43,9 @@ import java.util.logging.Logger;
  *
  * @author Leonard
  */
-public class PrimitivAccBroadcastingClient {
+public class AccBroadcastingClient {
 
-    private static final Logger LOG = Logger.getLogger(PrimitivAccBroadcastingClient.class.getName());
+    private static final Logger LOG = Logger.getLogger(AccBroadcastingClient.class.getName());
 
     /**
      * Address where the ACC broadcast server is running.
@@ -107,7 +107,7 @@ public class PrimitivAccBroadcastingClient {
     /**
      * Default contructor.
      */
-    public PrimitivAccBroadcastingClient() {
+    public AccBroadcastingClient() {
     }
 
     /**

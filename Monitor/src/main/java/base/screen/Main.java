@@ -18,7 +18,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import processing.core.PApplet;
 import base.ACCLiveTimingExtensionModule;
-import base.screen.networking.PrimitivAccBroadcastingClient;
+import base.screen.networking.AccBroadcastingClient;
 import base.screen.visualisation.gui.LPContainer;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class Main {
     /**
      * Connection client.
      */
-    private static PrimitivAccBroadcastingClient client;
+    private static AccBroadcastingClient client;
     /**
      * Visualisation for this program.
      */
@@ -57,7 +57,7 @@ public class Main {
         setupLogging();
         loadModules();
 
-        client = new PrimitivAccBroadcastingClient();
+        client = new AccBroadcastingClient();
         visualisation = new Visualisation(client);
 
         //start the program
@@ -125,8 +125,8 @@ public class Main {
 
                 client.sendRegisterRequest();
 
-                PrimitivAccBroadcastingClient.ExitState exitstatus = client.waitForFinish();
-                if (exitstatus != PrimitivAccBroadcastingClient.ExitState.NORMAL) {
+                AccBroadcastingClient.ExitState exitstatus = client.waitForFinish();
+                if (exitstatus != AccBroadcastingClient.ExitState.NORMAL) {
                     retryConnection = true;
                 }
             }

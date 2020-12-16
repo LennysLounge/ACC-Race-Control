@@ -6,7 +6,7 @@
 package base.screen.visualisation;
 
 import base.screen.visualisation.components.BasePanel;
-import base.screen.networking.PrimitivAccBroadcastingClient;
+import base.screen.networking.AccBroadcastingClient;
 import java.util.logging.Logger;
 
 /**
@@ -27,7 +27,7 @@ public class Visualisation extends CustomPApplet {
     /**
      * Connection client.
      */
-    private PrimitivAccBroadcastingClient client;
+    private AccBroadcastingClient client;
     /**
      * The base panel to use.
      */
@@ -37,7 +37,7 @@ public class Visualisation extends CustomPApplet {
      * Creates a new instance of this object.
      * @param client The ACC client connection to use.
      */
-    public Visualisation(PrimitivAccBroadcastingClient client) {
+    public Visualisation(AccBroadcastingClient client) {
         this.client = client;
     }
 

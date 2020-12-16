@@ -6,7 +6,7 @@
 package base.screen.visualisation.components;
 
 import base.screen.networking.SessionId;
-import base.screen.networking.PrimitivAccBroadcastingClient;
+import base.screen.networking.AccBroadcastingClient;
 import base.screen.utility.TimeUtils;
 import base.screen.visualisation.LookAndFeel;
 import base.screen.visualisation.gui.LPComponent;
@@ -20,9 +20,9 @@ import static processing.core.PConstants.RIGHT;
  */
 public class HeaderPanel extends LPComponent {
 
-    private final PrimitivAccBroadcastingClient client;
+    private final AccBroadcastingClient client;
 
-    public HeaderPanel(PrimitivAccBroadcastingClient client) {
+    public HeaderPanel(AccBroadcastingClient client) {
         this.client = client;
     }
 

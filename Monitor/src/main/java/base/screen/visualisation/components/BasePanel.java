@@ -6,7 +6,7 @@
 package base.screen.visualisation.components;
 
 import base.screen.Main;
-import base.screen.networking.PrimitivAccBroadcastingClient;
+import base.screen.networking.AccBroadcastingClient;
 import base.screen.visualisation.LookAndFeel;
 import base.screen.visualisation.gui.LPComponent;
 import base.screen.visualisation.gui.LPContainer;
@@ -21,7 +21,7 @@ public class BasePanel extends LPContainer {
     private final LPComponent header;
     private final LPComponent body;
 
-    public BasePanel(PrimitivAccBroadcastingClient client) {
+    public BasePanel(AccBroadcastingClient client) {
         header = new HeaderPanel(client);
         addComponent(header);
 

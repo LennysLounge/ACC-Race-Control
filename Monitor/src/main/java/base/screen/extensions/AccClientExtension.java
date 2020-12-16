@@ -5,7 +5,7 @@
  */
 package base.screen.extensions;
 
-import base.screen.networking.PrimitivAccBroadcastingClient;
+import base.screen.networking.AccBroadcastingClient;
 import base.screen.visualisation.gui.LPContainer;
 
 /**
@@ -16,7 +16,7 @@ public class AccClientExtension {
     /**
      * Base client for this extension.
      */
-    protected PrimitivAccBroadcastingClient client;
+    protected AccBroadcastingClient client;
     /**
      * The panel that is attached to this extension.
      * If null then no panel is attached.
@@ -37,7 +37,7 @@ public class AccClientExtension {
         return panel;
     }
     
-    public void setClient(PrimitivAccBroadcastingClient client){
+    public void setClient(AccBroadcastingClient client){
         this.client = client;
     }
       
