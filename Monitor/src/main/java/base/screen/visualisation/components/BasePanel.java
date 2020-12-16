@@ -26,15 +26,21 @@ public class BasePanel extends LPContainer {
         addComponent(header);
 
         body = new LPTabPanel();
+        addComponent(body);
+
+        updatePanels();
+    }
+
+    public void updateHeader() {
+        header.invalidate();
+    }
+
+    public void updatePanels() {
+        body.removeAllTabs();
         for (LPContainer c : Main.getExtensionPanels()) {
             body.addTab(c);
         }
         body.setTabIndex(0);
-        addComponent(body);
-    }
-    
-    public void updateHeader(){
-        header.invalidate();
     }
 
     @Override

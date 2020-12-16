@@ -40,6 +40,10 @@ public class Visualisation extends CustomPApplet {
     public Visualisation(AccBroadcastingClient client) {
         this.client = client;
     }
+    
+    public void updatePanels(){
+        basePanel.updatePanels();
+    }
 
     @Override
     public void settings() {
@@ -80,7 +84,8 @@ public class Visualisation extends CustomPApplet {
     public void exit(){
         LOG.info("Stopping Visualisation");
         //stop the client connection.
-        //client.sendUnregisterRequest();
+        client.sendUnregisterRequest();
+        
         client.stopAndKill();
     }
     

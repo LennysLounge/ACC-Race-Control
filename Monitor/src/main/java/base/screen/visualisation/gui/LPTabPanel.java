@@ -45,6 +45,10 @@ public class LPTabPanel extends LPContainer {
     public void removeTab(LPContainer tab) {
         tabs.remove(tab);
     }
+    
+    public void removeAllTabs(){
+        tabs.clear();
+    }
 
     @Override
     public void draw() {

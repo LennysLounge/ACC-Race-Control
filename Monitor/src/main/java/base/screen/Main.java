@@ -140,6 +140,7 @@ public class Main {
                         extensions.add(extension);
                     }
                 }
+                visualisation.updatePanels();
 
                 //send registration.
                 client.sendRegisterRequest();
