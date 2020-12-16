@@ -16,6 +16,12 @@ import javax.swing.JPanel;
  */
 public class LaptimeExtensionModule
     implements ACCLiveTimingExtensionModule{
+    
+    private final LapTimeExtension extension;
+    
+    public LaptimeExtensionModule(){
+        this.extension = new LapTimeExtension(false);
+    }
 
     @Override
     public String getName() {
@@ -24,7 +30,7 @@ public class LaptimeExtensionModule
 
     @Override
     public AccClientExtension getExtension() {
-        return new LapTimeExtension(false);
+        return extension;
     }
 
     @Override

@@ -166,6 +166,10 @@ public class Main {
                 .collect(Collectors.toList());
 
     }
+    
+    public static AccBroadcastingClient getClient(){
+        return client;
+    }
 
     public static class UncoughtExceptionHandler
             implements Thread.UncaughtExceptionHandler {

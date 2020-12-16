@@ -5,6 +5,7 @@
  */
 package base.screen.extensions.laptimes;
 
+import base.screen.Main;
 import base.screen.networking.SessionId;
 import base.screen.networking.events.RealtimeCarUpdate;
 import base.screen.networking.SessionChanged;
@@ -75,6 +76,8 @@ public class LapTimeExtension
     private final boolean isLoggingEnabled;
 
     public LapTimeExtension(boolean isLoggingEnabled) {
+        setClient(Main.getClient());
+        
         this.isLoggingEnabled = isLoggingEnabled;
         if (isLoggingEnabled) {
             createFolder();
