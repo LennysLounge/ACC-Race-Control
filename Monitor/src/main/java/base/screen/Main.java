@@ -107,8 +107,8 @@ public class Main {
     public static void startConnection() {
         LOG.info("Starting");
 
-        boolean retryConnection;
-        do {
+        boolean retryConnection = true;
+        while(retryConnection) {
             retryConnection = false;
             showConfigurationDialog();
             if (dialog.exitWithConnect()) {
@@ -143,7 +143,7 @@ public class Main {
                     }
                 }
             }
-        } while (retryConnection);
+        }
 
         LOG.info("Stopping");
     }
