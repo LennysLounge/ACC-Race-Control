@@ -137,7 +137,7 @@ public class LPTable extends LPContainer {
         //Draw model
         int rowLimit = Math.min(model.getRowCount(), visibleRows);
         if (overdrawForLastLine) {
-            rowLimit = Math.min(model.getRowCount()-scrollbar.scroll, visibleRows + 1);
+            rowLimit = Math.min(model.getRowCount() - scrollbar.scroll, visibleRows + 1);
         }
         for (int row = 0; row < rowLimit; row++) {
             float columnOffset = scrollbar.width;
@@ -195,7 +195,7 @@ public class LPTable extends LPContainer {
 
     @Override
     public void mouseScroll(int scrollDir) {
-        scrollbar.scroll += scrollDir;
+        scrollbar.setScroll(scrollbar.getScroll() + scrollDir);
         invalidate();
     }
 
@@ -247,7 +247,7 @@ public class LPTable extends LPContainer {
 
     @Override
     public void onMouseMove(int x, int y) {
-        scrollbar.isMouseOver = false;
+        boolean mouseOverScrollbar = false;
         mouseOverColumn = -1;
         mouseOverRow = -1;
 
@@ -255,7 +255,7 @@ public class LPTable extends LPContainer {
         if (scrollbar.isDragged) {
             int diff = y - scrollbar.dragHomeY;
             int scrollDiff = (int) (diff / scrollbar.elementHeight);
-            scrollbar.scroll = scrollbar.dragHome + scrollDiff;
+            scrollbar.setScroll(scrollbar.dragHome + scrollDiff);
             return;
         }
 
@@ -265,7 +265,7 @@ public class LPTable extends LPContainer {
         float hPivot = scrollbar.isVisible ? scrollbar.width : 0;
         int area = (x > hPivot ? 1 : 0) + (y > vPivot ? 2 : 0);
         if (area == 2) {
-            scrollbar.isMouseOver = true;
+            mouseOverScrollbar = true;
         }
         if (area == 1 || area == 3) {
             float xx = x - hPivot;
@@ -281,6 +281,8 @@ public class LPTable extends LPContainer {
             //find the row the mouse is over.
             mouseOverRow = (y / LookAndFeel.LINE_HEIGHT);
         }
+        
+        scrollbar.setIsMouseOver(mouseOverScrollbar);
     }
 
     @Override
@@ -386,11 +388,33 @@ public class LPTable extends LPContainer {
         /**
          * Amount of stroll this table currently has.
          */
-        public int scroll = 0;
+        private int scroll = 0;
         /**
          * Indicates that the mouse is hovering over the scrollbar.
          */
-        public boolean isMouseOver = false;
+        private boolean isMouseOver = false;
+
+        public void setScroll(int scroll) {
+            if (scroll != this.scroll) {
+                this.scroll = scroll;
+                invalidate();
+            }
+        }
+
+        public int getScroll() {
+            return scroll;
+        }
+
+        public boolean isIsMouseOver() {
+            return isMouseOver;
+        }
+
+        public void setIsMouseOver(boolean isMouseOver) {
+            if (isMouseOver != this.isMouseOver) {
+                this.isMouseOver = isMouseOver;
+                invalidate();
+            }
+        }
     }
 
     @FunctionalInterface
