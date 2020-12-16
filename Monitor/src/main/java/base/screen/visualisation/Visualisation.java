@@ -63,8 +63,9 @@ public class Visualisation extends CustomPApplet {
         int dt = (int) (1000 / frameRate);
         timer += dt;
         if (timer > client.getUpdateInterval() || forceRedraw) {
-            basePanel.invalidate();
+            basePanel.updateHeader();
         }
+        
         super.draw();
     }
 

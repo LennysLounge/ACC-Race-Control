@@ -192,7 +192,13 @@ public class AccBroadcastingClient {
      * @return True when connected.
      */
     public boolean isConnected() {
-        return socket.isConnected() && accListenerThread.isAlive();
+        if(socket != null 
+                && socket.isConnected()
+                && accListenerThread != null
+                && accListenerThread.isAlive()){
+            return true;
+        }
+        return false;
     }
 
     /**

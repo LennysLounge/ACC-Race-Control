@@ -28,30 +28,41 @@ public class HeaderPanel extends LPComponent {
 
     @Override
     public void draw() {
-        applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
-        applet.noStroke();
-        applet.rect(0, 0, getWidth(), getHeight());
-        int y = 0;
+        if (client.isConnected()) {
+            applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
+            applet.noStroke();
+            applet.rect(0, 0, getWidth(), getHeight());
+            int y = 0;
 
-        String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
-        String sessionName = sessionIdToString(client.getSessionId());
-        String conId = "CON-ID: " + client.getModel().getConnectionID();
-        String packetsReceived = "Packets received: " + client.getPacketCount();
-        applet.fill(255);
-        applet.textAlign(LEFT, CENTER);
-        applet.textFont(LookAndFeel.font());
-        applet.text(conId, 10, y + LookAndFeel.LINE_HEIGHT * 0.5f);
-        applet.text(packetsReceived, 200, y + LookAndFeel.LINE_HEIGHT * 0.5f);
-        applet.textAlign(RIGHT, CENTER);
-        applet.text(sessionName, applet.width - 10, y + LookAndFeel.LINE_HEIGHT * 0.5f);
-        applet.text(sessionTimeLeft,
-                applet.width - applet.textWidth(sessionName) - 40,
-                y + LookAndFeel.LINE_HEIGHT / 2f);
+            String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
+            String sessionName = sessionIdToString(client.getSessionId());
+            String conId = "CON-ID: " + client.getModel().getConnectionID();
+            String packetsReceived = "Packets received: " + client.getPacketCount();
+            applet.fill(255);
+            applet.textAlign(LEFT, CENTER);
+            applet.textFont(LookAndFeel.font());
+            applet.text(conId, 10, y + LookAndFeel.LINE_HEIGHT * 0.5f);
+            applet.text(packetsReceived, 200, y + LookAndFeel.LINE_HEIGHT * 0.5f);
+            applet.textAlign(RIGHT, CENTER);
+            applet.text(sessionName, applet.width - 10, y + LookAndFeel.LINE_HEIGHT * 0.5f);
+            applet.text(sessionTimeLeft,
+                    applet.width - applet.textWidth(sessionName) - 40,
+                    y + LookAndFeel.LINE_HEIGHT / 2f);
 
-        applet.fill(LookAndFeel.COLOR_RACE);
-        applet.rect(applet.width - applet.textWidth(sessionName) - 30,
-                y + LookAndFeel.LINE_HEIGHT * 0.1f,
-                10, LookAndFeel.LINE_HEIGHT * 0.8f);
+            applet.fill(LookAndFeel.COLOR_RACE);
+            applet.rect(applet.width - applet.textWidth(sessionName) - 30,
+                    y + LookAndFeel.LINE_HEIGHT * 0.1f,
+                    10, LookAndFeel.LINE_HEIGHT * 0.8f);
+        }
+        else{
+            applet.fill(LookAndFeel.COLOR_RED);
+            applet.noStroke();
+            applet.rect(0, 0, getWidth(), getHeight());
+            applet.textAlign(LEFT, CENTER);
+            applet.textFont(LookAndFeel.font());
+            applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
+            applet.text("Not Connected", 10, LookAndFeel.LINE_HEIGHT * 0.5f);
+        }
     }
 
     private String sessionIdToString(SessionId sessionId) {

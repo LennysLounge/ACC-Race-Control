@@ -33,6 +33,10 @@ public class BasePanel extends LPContainer {
         body = tabs;
         addComponent(body);
     }
+    
+    public void updateHeader(){
+        header.invalidate();
+    }
 
     @Override
     public void onResize(int w, int h) {
