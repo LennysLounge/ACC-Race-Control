@@ -5,6 +5,7 @@
  */
 package base.screen.extensions.incidents;
 
+import base.screen.Main;
 import base.screen.networking.SessionId;
 import base.screen.networking.events.AfterPacketReceived;
 import base.screen.networking.BroadcastingEventEvent;
@@ -18,6 +19,9 @@ import base.screen.networking.data.BroadcastingEvent;
 import base.screen.networking.enums.BroadcastingEventType;
 import base.screen.utility.TimeUtils;
 import base.screen.extensions.incidents.events.Accident;
+import base.screen.networking.AccBroadcastingClient;
+import base.screen.visualisation.gui.LPComponent;
+import base.screen.visualisation.gui.LPContainer;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -30,14 +34,20 @@ import java.util.logging.Logger;
  * @author Leonard
  */
 public class IncidentExtension
-        extends AccClientExtension
-        implements EventListener {
+        implements EventListener, AccClientExtension {
 
     /**
      * This classes logger.
      */
     private static Logger LOG = Logger.getLogger(IncidentExtension.class.getName());
-
+    /**
+     * Reference to the client.
+     */
+    private final AccBroadcastingClient client;
+    /**
+     * The visualisation for this extension.
+     */
+    private final IncidentPanel panel;
     /**
      * Incident counter for the different sessions.
      */
@@ -61,8 +71,14 @@ public class IncidentExtension
     private IncidentTableModel model = new IncidentTableModel();
 
     public IncidentExtension() {
+        this.client = Main.getClient();
         this.panel = new IncidentPanel(this);
         EventBus.register(this);
+    }
+    
+    @Override
+    public LPContainer getPanel(){
+        return panel;
     }
 
     public AccBroadcastingData getModel() {

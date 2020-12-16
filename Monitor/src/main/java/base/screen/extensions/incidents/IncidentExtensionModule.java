@@ -15,14 +15,6 @@ import javax.swing.JPanel;
  */
 public class IncidentExtensionModule
     implements base.ACCLiveTimingExtensionModule{
-    
-    private IncidentExtension extension;
-    private IncidentPanel panel;
-    
-    public IncidentExtensionModule(){
-        extension = new IncidentExtension();
-        panel = new IncidentPanel(extension);
-    }
 
     @Override
     public String getName() {
@@ -31,12 +23,7 @@ public class IncidentExtensionModule
 
     @Override
     public AccClientExtension getExtension() {
-        return extension;
-    }
-
-    @Override
-    public LPContainer getExtensionPanel() {
-        return panel;
+        return new IncidentExtension();
     }
 
     @Override
