@@ -6,7 +6,6 @@
 package base.screen.extensions.incidents;
 
 import base.screen.extensions.AccClientExtension;
-import base.screen.visualisation.gui.LPContainer;
 import javax.swing.JPanel;
 
 /**

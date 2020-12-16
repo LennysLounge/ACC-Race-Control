@@ -7,7 +7,6 @@ package base.screen.extensions.livetiming;
 
 import base.ACCLiveTimingExtensionModule;
 import base.screen.extensions.AccClientExtension;
-import base.screen.visualisation.gui.LPContainer;
 import javax.swing.JPanel;
 
 /**
