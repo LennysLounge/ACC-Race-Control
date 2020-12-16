@@ -19,18 +19,17 @@ import base.screen.visualisation.gui.LPTabPanel;
 public class BasePanel extends LPContainer {
 
     private final LPComponent header;
-    private final LPComponent body;
+    private final LPTabPanel body;
 
     public BasePanel(AccBroadcastingClient client) {
         header = new HeaderPanel(client);
         addComponent(header);
 
-        LPTabPanel tabs = new LPTabPanel();
+        body = new LPTabPanel();
         for (LPContainer c : Main.getExtensionPanels()) {
-            tabs.addTab(c);
+            body.addTab(c);
         }
-        tabs.setTabIndex(0);
-        body = tabs;
+        body.setTabIndex(0);
         addComponent(body);
     }
     
