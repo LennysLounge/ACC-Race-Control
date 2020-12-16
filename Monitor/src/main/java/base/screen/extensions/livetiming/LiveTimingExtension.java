@@ -5,15 +5,18 @@
  */
 package base.screen.extensions.livetiming;
 
+import base.screen.Main;
 import base.screen.networking.events.RealtimeCarUpdate;
 import base.screen.networking.RealtimeUpdate;
 import base.screen.eventbus.Event;
 import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
 import base.screen.extensions.AccClientExtension;
+import base.screen.networking.AccBroadcastingClient;
 import base.screen.networking.data.CarInfo;
 import base.screen.networking.data.RealtimeInfo;
 import base.screen.networking.data.SessionInfo;
+import base.screen.visualisation.gui.LPContainer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,13 +28,20 @@ import java.util.stream.Collectors;
  * @author Leonard
  */
 public class LiveTimingExtension
-        extends AccClientExtension
-        implements EventListener {
+        implements EventListener, AccClientExtension {
 
     /**
      * This classes logger.
      */
     private static Logger LOG = Logger.getLogger(LiveTimingExtension.class.getName());
+    /**
+     * Reference to the client.
+     */
+    private final AccBroadcastingClient client;
+    /**
+     * The visualisation panel
+     */
+    private final LiveTimingPanel panel;
     /**
      * Map from carId to ListEntry.
      */
@@ -42,7 +52,15 @@ public class LiveTimingExtension
     private LiveTimingTableModel model = new LiveTimingTableModel();
 
     public LiveTimingExtension() {
+        this.client = Main.getClient();
+        this.panel = new LiveTimingPanel(this);
+        
         EventBus.register(this);
+    }
+    
+    @Override
+    public LPContainer getPanel(){
+        return panel;
     }
 
     public LiveTimingTableModel getTableModel() {

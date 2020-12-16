@@ -17,14 +17,6 @@ import javax.swing.JPanel;
 public class LiveTimingExtensionModule
         implements ACCLiveTimingExtensionModule {
     
-    private LiveTimingExtension extension;
-    private LiveTimingPanel panel;
-    
-    public LiveTimingExtensionModule(){
-        extension = new LiveTimingExtension();
-        panel = new LiveTimingPanel(extension);
-    }
-
     @Override
     public String getName() {
         return "Live Timing Extension";
@@ -32,12 +24,7 @@ public class LiveTimingExtensionModule
 
     @Override
     public AccClientExtension getExtension() {
-        return extension;
-    }
-
-    @Override
-    public LPContainer getExtensionPanel() {
-        return panel;
+        return new LiveTimingExtension();
     }
 
     @Override
