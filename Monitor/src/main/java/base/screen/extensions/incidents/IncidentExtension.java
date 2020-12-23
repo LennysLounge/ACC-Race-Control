@@ -20,7 +20,6 @@ import base.screen.networking.enums.BroadcastingEventType;
 import base.screen.utility.TimeUtils;
 import base.screen.extensions.incidents.events.Accident;
 import base.screen.networking.AccBroadcastingClient;
-import base.screen.visualisation.gui.LPComponent;
 import base.screen.visualisation.gui.LPContainer;
 import java.util.Collections;
 import java.util.HashMap;
