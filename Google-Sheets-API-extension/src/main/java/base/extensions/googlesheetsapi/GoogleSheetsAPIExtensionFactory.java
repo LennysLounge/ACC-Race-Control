@@ -14,16 +14,12 @@ import base.ACCLiveTimingExtensionFactory;
  *
  * @author Leonard
  */
-public class GoogleSheetsAPIExtensionModule implements ACCLiveTimingExtensionFactory{
+public class GoogleSheetsAPIExtensionFactory implements ACCLiveTimingExtensionFactory{
     
-    private GoogleSheetsAPIExtension extension;
-    private GoogleSheetsAPIPanel panel;
-    private GoogleSheetsAPIConfigurationPanel configurationPanel;
+    private final GoogleSheetsAPIConfigurationPanel configurationPanel;
     
-    public GoogleSheetsAPIExtensionModule(){
+    public GoogleSheetsAPIExtensionFactory(){
         configurationPanel = new GoogleSheetsAPIConfigurationPanel();
-        extension = new GoogleSheetsAPIExtension();
-        panel = new GoogleSheetsAPIPanel(extension);
     }
 
     @Override
@@ -34,16 +30,9 @@ public class GoogleSheetsAPIExtensionModule implements ACCLiveTimingExtensionFac
     @Override
     public AccClientExtension createExtension() {
         if(configurationPanel.isExtensionEnabled()){
+            GoogleSheetsAPIExtension extension = new GoogleSheetsAPIExtension();
             extension.start(configurationPanel.getSpreadSheetLink());
             return extension;
-        }
-        return null;
-    }
-
-    @Override
-    public LPContainer getExtensionPanel() {
-        if(configurationPanel.isExtensionEnabled()){
-            return panel;
         }
         return null;
     }

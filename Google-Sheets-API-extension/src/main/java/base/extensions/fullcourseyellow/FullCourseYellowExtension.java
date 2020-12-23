@@ -8,6 +8,7 @@ package base.extensions.fullcourseyellow;
 import base.extensions.fullcourseyellow.events.FCYStart;
 import base.extensions.fullcourseyellow.events.FCYStop;
 import base.extensions.fullcourseyellow.events.FCYViolation;
+import base.screen.Main;
 import base.screen.networking.events.RealtimeCarUpdate;
 import base.screen.networking.RealtimeUpdate;
 import base.screen.eventbus.Event;
@@ -15,10 +16,12 @@ import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
 import base.screen.extensions.AccClientExtension;
 import base.screen.extensions.logging.LoggingExtension;
+import base.screen.networking.AccBroadcastingClient;
 import base.screen.networking.data.CarInfo;
 import base.screen.networking.data.RealtimeInfo;
 import base.screen.networking.data.SessionInfo;
 import base.screen.utility.TimeUtils;
+import base.screen.visualisation.gui.LPContainer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +33,7 @@ import java.util.stream.Collectors;
  * @author Leonard
  */
 public class FullCourseYellowExtension
-        extends AccClientExtension
-        implements EventListener {
+        implements EventListener, AccClientExtension {
 
     private static final Logger LOG = Logger.getLogger(FullCourseYellowExtension.class.getName());
 
@@ -55,8 +57,14 @@ public class FullCourseYellowExtension
      */
     private final long repeatInterval = 5000;
 
+    private FullCourseYellowPanel panel;
+
+    private AccBroadcastingClient client;
+
     public FullCourseYellowExtension() {
         EventBus.register(this);
+        panel = new FullCourseYellowPanel(this);
+        client = Main.getClient();
     }
 
     @Override
@@ -135,6 +143,11 @@ public class FullCourseYellowExtension
 
     public boolean isFCY() {
         return isFCY;
+    }
+
+    @Override
+    public LPContainer getPanel() {
+        return panel;
     }
 
 }

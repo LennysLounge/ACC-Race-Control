@@ -19,11 +19,13 @@ import base.screen.extensions.AccClientExtension;
 import base.screen.extensions.incidents.IncidentInfo;
 import base.screen.extensions.incidents.events.Accident;
 import base.screen.extensions.logging.LoggingExtension;
+import base.screen.networking.AccBroadcastingClient;
 import base.screen.networking.data.CarInfo;
 import base.screen.networking.data.SessionInfo;
 import base.screen.networking.enums.SessionPhase;
 import base.screen.networking.enums.SessionType;
 import base.screen.utility.TimeUtils;
+import base.screen.visualisation.gui.LPContainer;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -58,8 +60,8 @@ import java.util.stream.Collectors;
  *
  * @author Leonard
  */
-public class GoogleSheetsAPIExtension extends AccClientExtension
-        implements EventListener {
+public class GoogleSheetsAPIExtension
+        implements EventListener, AccClientExtension {
 
     private static final Logger LOG = Logger.getLogger(GoogleSheetsAPIExtension.class.getName());
 
@@ -95,8 +97,14 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
     private boolean isMeasuringGreenFlagOffset = false;
     private long greenFlagOffsetTimestamp = 0;
 
+    private final GoogleSheetsAPIPanel panel;
+
+    private final AccBroadcastingClient client;
+
     public GoogleSheetsAPIExtension() {
         EventBus.register(this);
+        panel = new GoogleSheetsAPIPanel(this);
+        client = Main.getClient();
     }
 
     @Override
@@ -144,9 +152,9 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
              */
         }
     }
-    
-    private String getCarNumberAndLapCount(CarInfo car){
-        return car.getCarNumber() + " [" + (car.getRealtime().getLaps()+1) + "]";
+
+    private String getCarNumberAndLapCount(CarInfo car) {
+        return car.getCarNumber() + " [" + (car.getRealtime().getLaps() + 1) + "]";
     }
 
     private String getTargetSheet(SessionId sessionId) {
@@ -346,6 +354,11 @@ public class GoogleSheetsAPIExtension extends AccClientExtension
         ValueRange response = request.execute();
 
         return response.getValues();
+    }
+
+    @Override
+    public LPContainer getPanel() {
+        return panel;
     }
 
     private class SendIncidentEvent {
