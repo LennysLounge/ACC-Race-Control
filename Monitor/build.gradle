@@ -5,7 +5,7 @@ plugins{
 }
 
 apply from: "${rootDir}/gradle/versioning.gradle"
-def distributionName = "ACCa Livev Timingc Monitord" + project.ext.versionString
+def distributionName = "ACC Live Timing Monitor" + project.ext.versionString
 
 ext.collectableDistDir = new File(projectDir, "src\\dist")
 
