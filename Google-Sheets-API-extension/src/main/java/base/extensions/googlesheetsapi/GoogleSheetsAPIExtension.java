@@ -116,7 +116,7 @@ public class GoogleSheetsAPIExtension
             LoggingExtension.log("Spreasheet target changed to \"" + currentSheetTarget + "\"");
         } else if (e instanceof Accident) {
             IncidentInfo info = ((Accident) e).getInfo();
-            String sessionTime = TimeUtils.asDuration(info.getEarliestTime());
+            String sessionTime = TimeUtils.asDuration(info.getSessionEarliestTime());
             String carNumbers = info.getCars().stream()
                     .map(car -> getCarNumberAndLapCount(car))
                     .collect(Collectors.joining("\n"));

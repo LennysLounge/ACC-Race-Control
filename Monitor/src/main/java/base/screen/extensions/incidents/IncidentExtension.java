@@ -109,7 +109,7 @@ public class IncidentExtension
     public void afterPacketReceived(byte type) {
         if (stagedAccident != null) {
             long now = System.currentTimeMillis();
-            if (now - stagedAccident.getTimestamp() > 1000) {
+            if (now - stagedAccident.getSystemTimestamp() > 1000) {
                 commitAccident(stagedAccident);
                 stagedAccident = null;
             }
@@ -129,7 +129,7 @@ public class IncidentExtension
                     client.getModel().getCar(event.getCarId()),
                     sessionId);
         } else {
-            float timeDif = stagedAccident.getLatestTime() - sessionTime;
+            float timeDif = stagedAccident.getSessionLatestTime() - sessionTime;
             if (timeDif > 1000) {
                 commitAccident(stagedAccident);
                 stagedAccident = new IncidentInfo(sessionTime,
@@ -151,7 +151,8 @@ public class IncidentExtension
     private void commitAccident(IncidentInfo a) {
         List<IncidentInfo> newAccidents = new LinkedList<>();
         newAccidents.addAll(accidents);
-        newAccidents.add(a.withIncidentNumber(getAndIncrementCounter(client.getSessionId())));
+        newAccidents.add(a);
+        //newAccidents.add(a.withIncidentNumber(getAndIncrementCounter(client.getSessionId())));
         accidents = newAccidents;
         model.setAccidents(accidents);
 

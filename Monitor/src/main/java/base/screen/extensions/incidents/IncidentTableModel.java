@@ -91,7 +91,7 @@ public class IncidentTableModel extends TableModel {
             case 0:
                 return String.valueOf(accidents.size() - row - 1);
             case 1:
-                return TimeUtils.asDuration(a.getEarliestTime());
+                return TimeUtils.asDuration(a.getSessionEarliestTime());
             case 2:
                 return a.getCars();
         }
