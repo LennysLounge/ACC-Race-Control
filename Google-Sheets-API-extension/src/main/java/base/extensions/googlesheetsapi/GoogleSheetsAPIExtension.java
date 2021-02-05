@@ -281,32 +281,8 @@ public class GoogleSheetsAPIExtension
     private void sendCarEntry(SendCarConnectedEvent event) {
 
         String sheet = "'entry list'!";
-        String rangeSession = sheet + "B1:C500";
-
-        List<List<Object>> values;
-        try {
-            values = getCells(rangeSession);
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, "Error getting spreadsheet values", e);
-            return;
-        }
-        int emptyLine = values.size() + 1;
-
-        rangeSession = sheet + "B" + emptyLine;
-        String rangeCars = sheet + "D" + emptyLine;
-
-        List<List<Object>> line = new LinkedList<>();
-        line.add(Arrays.asList(event.driverName, event.carNumber));
-        try {
-            updateCells(rangeSession, line);
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, "Error sending spreadsheet values", e);
-        }
-    }
-
-    private void sendGreenFlag(GreenFlagEvent event) {
-        String sheet = currentSheetTarget;
         String range = sheet + "B1:C500";
+
         List<List<Object>> values;
         try {
             values = getCells(range);
@@ -314,21 +290,21 @@ public class GoogleSheetsAPIExtension
             LOG.log(Level.SEVERE, "Error getting spreadsheet values", e);
             return;
         }
+        int emptyLine = values.size() + 1;
 
-        //find row
-        int rowNumber = -1;
-        for (int i = 0; i < values.size(); i++) {
-            for (Object o : values.get(i)) {
-                if (((String) o).equals("Greenflag offset:")) {
-                    rowNumber = i + 1;
-                }
-            }
+        range = sheet + "B" + emptyLine;
+        List<List<Object>> line = new LinkedList<>();
+        line.add(Arrays.asList(event.driverName, event.carNumber));
+        try {
+            updateCells(range, line);
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error sending spreadsheet values", e);
         }
-        if (rowNumber < 0) {
-            LOG.log(Level.SEVERE, "Green flag offset not found.");
-        }
+    }
 
-        range = sheet + "C" + rowNumber + ":C" + rowNumber;
+    private void sendGreenFlag(GreenFlagEvent event) {
+        String sheet = currentSheetTarget;
+        String range = sheet + "C2:C2";
         try {
             updateCells(range, Arrays.asList(Arrays.asList(TimeUtils.asDuration(event.time))));
         } catch (IOException e) {
