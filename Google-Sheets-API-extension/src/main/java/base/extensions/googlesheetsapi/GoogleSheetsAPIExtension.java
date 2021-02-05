@@ -24,6 +24,7 @@ import base.screen.networking.data.CarInfo;
 import base.screen.networking.data.SessionInfo;
 import base.screen.networking.enums.SessionPhase;
 import base.screen.networking.enums.SessionType;
+import base.screen.networking.events.CarConnect;
 import base.screen.utility.TimeUtils;
 import base.screen.visualisation.gui.LPContainer;
 import com.google.api.client.auth.oauth2.Credential;
@@ -150,6 +151,12 @@ public class GoogleSheetsAPIExtension
                     + ", " + String.valueOf(event.getSpeed()) + "km/h";
             queue.add(new SendIncidentEvent(sessionTime, message));
              */
+        } else if (e instanceof CarConnect) {
+            CarConnect event = ((CarConnect) e);
+            queue.add(new SendCarConnectedEvent(
+                    event.getCar().getDriver().getFirstName() + " " + event.getCar().getDriver().getLastName(),
+                    String.valueOf(event.getCar().getCarNumber())
+            ));
         }
     }
 
@@ -236,6 +243,9 @@ public class GoogleSheetsAPIExtension
             if (o instanceof GreenFlagEvent) {
                 sendGreenFlag((GreenFlagEvent) o);
             }
+            if (o instanceof SendCarConnectedEvent) {
+                sendCarEntry((SendCarConnectedEvent) o);
+            }
         }
     }
 
@@ -263,6 +273,32 @@ public class GoogleSheetsAPIExtension
         try {
             updateCells(rangeSession, lineSession);
             updateCells(rangeCars, lineCars);
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error sending spreadsheet values", e);
+        }
+    }
+
+    private void sendCarEntry(SendCarConnectedEvent event) {
+
+        String sheet = "'entry list'!";
+        String rangeSession = sheet + "B1:C500";
+
+        List<List<Object>> values;
+        try {
+            values = getCells(rangeSession);
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error getting spreadsheet values", e);
+            return;
+        }
+        int emptyLine = values.size() + 1;
+
+        rangeSession = sheet + "B" + emptyLine;
+        String rangeCars = sheet + "D" + emptyLine;
+
+        List<List<Object>> line = new LinkedList<>();
+        line.add(Arrays.asList(event.driverName, event.carNumber));
+        try {
+            updateCells(rangeSession, line);
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "Error sending spreadsheet values", e);
         }
@@ -369,6 +405,17 @@ public class GoogleSheetsAPIExtension
         public SendIncidentEvent(String sessionTime, String carsInvolved) {
             this.sessionTime = sessionTime;
             this.carsInvolved = carsInvolved;
+        }
+    }
+
+    private class SendCarConnectedEvent {
+
+        public String driverName;
+        public String carNumber;
+
+        public SendCarConnectedEvent(String driverName, String carNumber) {
+            this.driverName = driverName;
+            this.carNumber = carNumber;
         }
     }
 
