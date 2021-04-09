@@ -39,11 +39,3 @@ run{
     dependsOn installDist
     workingDir new File(new File(buildDir, 'install'), distributionName)    
 }
-
-sourceSets{
-    main{
-        resources{
-            srcDirs = ["../api_credentials", "src/main/resources"]
-        }
-    }
-}

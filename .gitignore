@@ -26,9 +26,11 @@ hs_err_pid*
 .settings
 .project
 fonts
-api_credentials
 Monitor/build
 Google-Sheets-API-extension/build
+
+#ignore api credentials.
+secret_credentials.json
 
 
 
