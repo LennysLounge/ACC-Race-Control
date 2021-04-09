@@ -9,7 +9,6 @@ import base.screen.visualisation.LookAndFeel;
 import java.util.logging.Logger;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.LEFT;
 
 /**
  *

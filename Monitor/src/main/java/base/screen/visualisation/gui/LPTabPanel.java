@@ -45,8 +45,8 @@ public class LPTabPanel extends LPContainer {
     public void removeTab(LPContainer tab) {
         tabs.remove(tab);
     }
-    
-    public void removeAllTabs(){
+
+    public void removeAllTabs() {
         tabs.clear();
     }
 
@@ -86,18 +86,15 @@ public class LPTabPanel extends LPContainer {
         if (y > 0 && y < LookAndFeel.LINE_HEIGHT) {
             float tabSize = applet.width / tabs.size();
             int index = (int) ((x - (x % tabSize)) / tabSize);
-            if(index != mouseOverTab){
-                invalidate();
-            }
-            mouseOverTab = index;
+            setMouseOverTab(index);
         } else {
-            mouseOverTab = -1;
+            setMouseOverTab(-1);
         }
     }
 
     @Override
     public void onMouseLeave() {
-        mouseOverTab = -1;
+        setMouseOverTab(-1);
     }
 
     @Override
@@ -134,6 +131,17 @@ public class LPTabPanel extends LPContainer {
             currentTab.setPosition(0, LookAndFeel.LINE_HEIGHT);
             currentTab.setSize(getWidth(), getHeight() - LookAndFeel.LINE_HEIGHT);
         }
+    }
+
+    private void setMouseOverTab(int index) {
+        if (index != mouseOverTab) {
+            invalidate();
+        }
+        mouseOverTab = index;
+    }
+    
+    public int getTabCount(){
+        return tabs.size();
     }
 
 }
