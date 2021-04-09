@@ -40,7 +40,7 @@ public class BasePanel extends LPContainer {
         for (LPContainer c : Main.getExtensionPanels()) {
             body.addTab(c);
         }
-        body.setTabIndex(0);
+        //body.setTabIndex(0);
     }
 
     @Override

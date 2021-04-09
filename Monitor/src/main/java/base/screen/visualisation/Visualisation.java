@@ -84,9 +84,10 @@ public class Visualisation extends CustomPApplet {
     public void exit(){
         LOG.info("Stopping Visualisation");
         //stop the client connection.
-        client.sendUnregisterRequest();
+        //client.sendUnregisterRequest();
         
-        client.stopAndKill();
+        //client.stopAndKill();
+        super.exit();
     }
     
     public void exitExplicit(){

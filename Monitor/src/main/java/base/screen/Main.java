@@ -71,10 +71,20 @@ public class Main {
         PApplet.runSketch(a, visualisation);
 
         //start the client
-        startConnection();
+        //startConnection();
+        
+        //enable extensions.
+        extensions.clear();
+        for (ACCLiveTimingExtensionFactory module : modules) {
+            AccClientExtension extension = module.createExtension();
+            if (extension != null) {
+                extensions.add(extension);
+            }
+        }
+        visualisation.updatePanels();
 
         //stop the program
-        visualisation.exitExplicit();
+        //visualisation.exitExplicit();
     }
 
     private static void setupLogging() {
