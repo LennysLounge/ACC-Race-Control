@@ -42,7 +42,13 @@ public class LPButton extends LPComponent {
 
     @Override
     public void draw() {
+        applet.fill(LookAndFeel.COLOR_DARK_GRAY);
+        applet.rect(0, 0, getWidth(), getHeight());
         if (mouseOver) {
+            applet.fill(LookAndFeel.TRANSPARENT_WHITE);
+            applet.rect(0, 0, getWidth(), getHeight());
+        }
+        if (clicked) {
             applet.fill(LookAndFeel.TRANSPARENT_WHITE);
             applet.rect(0, 0, getWidth(), getHeight());
         }
@@ -67,11 +73,13 @@ public class LPButton extends LPComponent {
     @Override
     public void onMouseEnter() {
         mouseOver = true;
+        invalidate();
     }
 
     @Override
     public void onMouseLeave() {
         mouseOver = false;
+        invalidate();
     }
 
 }
