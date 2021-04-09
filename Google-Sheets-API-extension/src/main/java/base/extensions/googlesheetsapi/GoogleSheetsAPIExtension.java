@@ -318,7 +318,7 @@ public class GoogleSheetsAPIExtension
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
         //Load client secrets
-        final String CREDENTIAL_PATH = "/credentials.json";
+        final String CREDENTIAL_PATH = "/credentials/secret_credentials.json";
         InputStream in = Main.class.getResourceAsStream(CREDENTIAL_PATH);
         if (in == null) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIAL_PATH);
