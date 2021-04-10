@@ -193,13 +193,13 @@ public class LPTable extends LPContainer {
     }
 
     @Override
-    public void mouseScroll(int scrollDir) {
+    public void onMouseScroll(int scrollDir) {
         scrollbar.setScroll(scrollbar.getScroll() + scrollDir);
         invalidate();
     }
 
     @Override
-    public void mousePressed(int x, int y, int button) {
+    public void onMousePressed(int x, int y, int button) {
         //The table is made of 4 areas.   (0)<Nothing> | (1)<Header
         //                              (2)<Scrollbar> | (3)<rows>
         float vPivot = drawHeader ? LookAndFeel.LINE_HEIGHT : 0;
@@ -240,7 +240,7 @@ public class LPTable extends LPContainer {
     }
 
     @Override
-    public void mouseReleased(int x, int y, int button) {
+    public void onMouseReleased(int x, int y, int button) {
         scrollbar.isDragged = false;
     }
 

@@ -12,7 +12,8 @@ import static processing.core.PConstants.CENTER;
  *
  * @author Leonard
  */
-public class LPButton extends LPComponent {
+public class LPButton
+        extends LPComponent {
 
     /**
      * The text to show on the button.
@@ -52,20 +53,25 @@ public class LPButton extends LPComponent {
             applet.fill(LookAndFeel.TRANSPARENT_WHITE);
             applet.rect(0, 0, getWidth(), getHeight());
         }
+        if(isFocused()){
+            applet.noFill();
+            applet.stroke(0,0,255);
+            applet.rect(0,0,getWidth(), getHeight());
+        }
         applet.fill(255);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, getWidth() / 2f, getHeight() / 2f);
     }
 
     @Override
-    public void mousePressed(int x, int y, int button) {
+    public void onMousePressed(int x, int y, int button) {
         clicked = true;
         invalidate();
         action.run();
     }
 
     @Override
-    public void mouseReleased(int x, int y, int button) {
+    public void onMouseReleased(int x, int y, int button) {
         clicked = false;
         invalidate();
     }

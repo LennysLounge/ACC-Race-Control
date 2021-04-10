@@ -45,7 +45,7 @@ public class LPContainer
     }
 
     @Override
-    public LPComponent mousePressedInternal(int mouseX, int mouseY, int mouseButton) {
+    public LPComponent onMousePressedInternal(int mouseX, int mouseY, int mouseButton) {
         LPComponent clickedComponent = null;
         if (mouseX > getPosX() && mouseX < getPosX() + getWidth()
                 && mouseY > getPosY() && mouseY < getPosY() + getHeight()) {
@@ -54,7 +54,7 @@ public class LPContainer
             //find if child components where clicked
             LPComponent child = null;
             for (LPComponent c : components) {
-                child = c.mousePressedInternal((int) (mouseX - getPosX()),
+                child = c.onMousePressedInternal((int) (mouseX - getPosX()),
                         (int) (mouseY - getPosY()),
                         mouseButton);
                 if (child != null) {
@@ -63,14 +63,14 @@ public class LPContainer
                 }
             }
             //run mouse pressed event for this component.
-            mousePressed((int) (mouseX - getPosX()),
+            onMousePressed((int) (mouseX - getPosX()),
                     (int) (mouseY - getPosY()), mouseButton);
         }
         return clickedComponent;
     }
 
     @Override
-    public LPComponent mouseScrollInternal(int mouseX, int mouseY, int scrolDir) {
+    public LPComponent onMouseScrollInternal(int mouseX, int mouseY, int scrolDir) {
         LPComponent target = null;
         if (mouseX > getPosX() && mouseX < getPosX() + getWidth()
                 && mouseY > getPosY() && mouseY < getPosY() + getHeight()) {
@@ -79,7 +79,7 @@ public class LPContainer
             //find if child components where clicked
             LPComponent child = null;
             for (LPComponent c : components) {
-                child = c.mouseScrollInternal((int) (mouseX - getPosX()),
+                child = c.onMouseScrollInternal((int) (mouseX - getPosX()),
                         (int) (mouseY - getPosY()),
                         scrolDir);
                 if (child != null) {
@@ -88,7 +88,7 @@ public class LPContainer
                 }
             }
             //run mouse pressed event for this component.
-            mouseScroll(scrolDir);
+            onMouseScroll(scrolDir);
         }
         return target;
     }

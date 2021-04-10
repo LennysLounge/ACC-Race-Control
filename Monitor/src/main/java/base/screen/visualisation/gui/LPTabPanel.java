@@ -98,7 +98,7 @@ public class LPTabPanel extends LPContainer {
     }
 
     @Override
-    public void mousePressed(int x, int y, int button) {
+    public void onMousePressed(int x, int y, int button) {
         if (tabs.isEmpty()) {
             return;
         }
