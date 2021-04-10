@@ -6,6 +6,7 @@
 package base.screen.visualisation.gui;
 
 import processing.core.PApplet;
+import processing.event.KeyEvent;
 
 /**
  *
@@ -124,7 +125,7 @@ public class LPComponent {
     /**
      * Set the base PApplet.
      *
-     * @param applet PApplet.
+     * @param a PApplet.
      */
     public static void setApplet(PApplet a) {
         applet = a;
@@ -238,6 +239,9 @@ public class LPComponent {
 
     /**
      * Mouse pressed event.
+     * @param x
+     * @param y
+     * @param button
      */
     public void mousePressed(int x, int y, int button) {
     }
@@ -258,6 +262,9 @@ public class LPComponent {
 
     /**
      * mouse released event.
+     * @param x
+     * @param y
+     * @param button
      */
     public void mouseReleased(int x, int y, int button) {
     }
@@ -335,6 +342,38 @@ public class LPComponent {
                 onMouseLeaveInternal();
             }
         }
+    }
+    
+    /**
+     * Internal method to propagate key presses. Do not call directly.
+     * @param event 
+     */
+    public void onKeyPressedInternal(KeyEvent event){
+        onKeyPressed(event);
+    }
+    
+    /**
+     * Method to listen to key presses. Override this method to create custom
+     * behaviours for key presses.
+     * @param event 
+     */
+    public void onKeyPressed(KeyEvent event){
+    }
+    
+    /**
+     * Internal method to propagate key presses. Do not call directly.
+     * @param event 
+     */
+    public void onKeyReleasedInternal(KeyEvent event){
+        onKeyReleased(event);
+    }
+    
+    /**
+     * Method to listen to key presses. Override this method to create custom
+     * behaviours for key presses.
+     * @param event 
+     */
+    public void onKeyReleased(KeyEvent event){
     }
     
 

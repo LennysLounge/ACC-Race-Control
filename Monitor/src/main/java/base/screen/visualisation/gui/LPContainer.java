@@ -7,6 +7,7 @@ package base.screen.visualisation.gui;
 
 import java.util.LinkedList;
 import java.util.List;
+import processing.event.KeyEvent;
 
 /**
  *
@@ -108,6 +109,22 @@ public class LPContainer
         for (LPComponent c : components) {
                 c.onMouseLeaveInternal();
             }
+    }
+    
+    @Override
+    public void onKeyPressedInternal(KeyEvent event){
+        super.onKeyPressedInternal(event);
+        for(LPComponent c : components){
+            c.onKeyPressedInternal(event);
+        }
+    }
+    
+    @Override
+    public void onKeyReleasedInternal(KeyEvent event){
+        super.onKeyReleasedInternal(event);
+        for(LPComponent c : components){
+            c.onKeyReleasedInternal(event);
+        }
     }
 
 }

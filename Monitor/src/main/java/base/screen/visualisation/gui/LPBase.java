@@ -6,6 +6,7 @@
 package base.screen.visualisation.gui;
 
 import processing.core.PApplet;
+import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 /**
@@ -72,6 +73,7 @@ public class LPBase extends PApplet {
     @Override
     public void mouseWheel(MouseEvent event) {
         base.mouseScrollInternal(mouseX, mouseY, event.getCount());
+        System.out.println("wheel");
     }
 
     @Override
@@ -83,6 +85,16 @@ public class LPBase extends PApplet {
     public void mouseDragged() {
         base.onMouseMoveInternal(mouseX, mouseY);
     }
+    
+    @Override
+    public void keyPressed(KeyEvent event){
+        base.onKeyPressedInternal(event);
+    }
+    
+    public void keyReleased(KeyEvent event){
+        base.onKeyReleasedInternal(event);
+    }
+    
     
 
 

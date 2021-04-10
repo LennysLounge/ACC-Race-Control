@@ -70,8 +70,13 @@ public class Main {
         String[] a = {"MAIN"};
         PApplet.runSketch(a, visualisation);
 
-        //start the client
-        //startConnection();
+        try {
+            //start the client
+            //startConnection();
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         //enable extensions.
         extensions.clear();
