@@ -99,6 +99,7 @@ public class LPTextField
 
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.textAlign(LEFT, CENTER);
+        applet.textFont(LookAndFeel.font());
         applet.text(presentationText, padding, getHeight() / 2f);
 
         if (cursorBlinkOn) {
@@ -117,6 +118,7 @@ public class LPTextField
      */
     private void updatePresentationText() {
         float maximumPresentationTextWidth = getWidth() - 2 * padding;
+        applet.textFont(LookAndFeel.font());
 
         if (cursorPosition < 0) {
             if (presentationTextOffset > 0) {
@@ -162,7 +164,7 @@ public class LPTextField
 
     public void setValue(String text) {
         this.text = text;
-        presentationTextOffset = 10;
+        presentationTextOffset = 0;
         cursorPosition = 0;
         updatePresentationText();
     }
