@@ -66,19 +66,8 @@ public class Main {
         client = new AccBroadcastingClient();
         visualisation = new Visualisation(client);
 
-        //start the visualisation
-        String[] a = {"MAIN"};
-        PApplet.runSketch(a, visualisation);
-
-        try {
-            //start the client
-            //startConnection();
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
         //enable extensions.
+        /*
         extensions.clear();
         for (ACCLiveTimingExtensionFactory module : modules) {
             AccClientExtension extension = module.createExtension();
@@ -86,7 +75,11 @@ public class Main {
                 extensions.add(extension);
             }
         }
-        visualisation.updatePanels();
+        */
+
+        //start the visualisation
+        String[] a = {"MAIN"};
+        PApplet.runSketch(a, visualisation);
 
         //stop the program
         //visualisation.exitExplicit();
@@ -155,7 +148,7 @@ public class Main {
                         extensions.add(extension);
                     }
                 }
-                visualisation.updatePanels();
+                //visualisation.updatePanels();
 
                 //send registration.
                 client.sendRegisterRequest();

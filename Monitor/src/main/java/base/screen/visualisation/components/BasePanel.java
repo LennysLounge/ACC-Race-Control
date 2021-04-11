@@ -11,6 +11,7 @@ import base.screen.visualisation.LookAndFeel;
 import base.screen.visualisation.gui.LPComponent;
 import base.screen.visualisation.gui.LPContainer;
 import base.screen.visualisation.gui.LPTabPanel;
+import java.util.List;
 
 /**
  *
@@ -27,20 +28,14 @@ public class BasePanel extends LPContainer {
 
         body = new LPTabPanel();
         addComponent(body);
-
-        updatePanels();
     }
 
     public void updateHeader() {
         header.invalidate();
     }
 
-    public void updatePanels() {
-        body.removeAllTabs();
-        for (LPContainer c : Main.getExtensionPanels()) {
-            body.addTab(c);
-        }
-        //body.setTabIndex(0);
+    public void addExtensionPanels(List<LPContainer> panels) {
+        panels.forEach(panel -> body.addTab(panel));
         body.setTabIndex(body.getTabCount()-1);
     }
 
