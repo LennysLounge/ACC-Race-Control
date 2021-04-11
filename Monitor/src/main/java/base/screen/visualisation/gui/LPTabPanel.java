@@ -8,7 +8,9 @@ package base.screen.visualisation.gui;
 import base.screen.visualisation.LookAndFeel;
 import java.util.LinkedList;
 import java.util.List;
+import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.HAND;
 
 /**
  *
@@ -80,7 +82,7 @@ public class LPTabPanel extends LPContainer {
     @Override
     public void onMouseMove(int x, int y) {
         if (tabs.isEmpty()) {
-            mouseOverTab = -1;
+            setMouseOverTab(-1);
             return;
         }
         if (y > 0 && y < LookAndFeel.LINE_HEIGHT) {
@@ -136,6 +138,11 @@ public class LPTabPanel extends LPContainer {
     private void setMouseOverTab(int index) {
         if (index != mouseOverTab) {
             invalidate();
+            if(index == -1){
+                applet.cursor(ARROW);
+            }else{
+                applet.cursor(HAND);
+            }
         }
         mouseOverTab = index;
     }
