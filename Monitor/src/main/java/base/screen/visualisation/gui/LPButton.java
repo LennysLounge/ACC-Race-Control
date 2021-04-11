@@ -6,7 +6,9 @@
 package base.screen.visualisation.gui;
 
 import base.screen.visualisation.LookAndFeel;
+import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.HAND;
 
 /**
  *
@@ -80,12 +82,14 @@ public class LPButton
     public void onMouseEnter() {
         mouseOver = true;
         invalidate();
+        applet.cursor(HAND);
     }
 
     @Override
     public void onMouseLeave() {
         mouseOver = false;
         invalidate();
+        applet.cursor(ARROW);
     }
 
 }
