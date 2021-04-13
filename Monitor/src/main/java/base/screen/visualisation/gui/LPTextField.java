@@ -7,6 +7,7 @@ package base.screen.visualisation.gui;
 
 import base.screen.visualisation.LookAndFeel;
 import static base.screen.visualisation.gui.LPComponent.applet;
+import com.fasterxml.jackson.databind.util.ClassUtil;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -79,12 +80,16 @@ public class LPTextField
 
     @Override
     public void draw() {
-        applet.fill(LookAndFeel.COLOR_WHITE);
+        if (isEnabled()) {
+            applet.fill(LookAndFeel.COLOR_WHITE);
+        } else {
+            applet.fill(LookAndFeel.COLOR_GRAY);
+        }
 
         applet.stroke(LookAndFeel.COLOR_BLACK);
         applet.rect(0, 0, getWidth(), getHeight());
 
-        if (isSelectionActive() && isFocused()) {
+        if (isSelectionActive() && isFocused() && isEnabled()) {
             int selectionStartInPresentationText = selectionStartIndex - presentationTextOffset;
             selectionStartInPresentationText = Math.max(0, Math.min(selectionStartInPresentationText, presentationText.length()));
             int startIndex = Math.min(selectionStartInPresentationText, cursorPosition);
@@ -102,7 +107,7 @@ public class LPTextField
         applet.textFont(LookAndFeel.font());
         applet.text(presentationText, padding, getHeight() / 2f);
 
-        if (cursorBlinkOn) {
+        if (cursorBlinkOn && isEnabled()) {
             applet.fill(0);
 
             String preCursorText = presentationText.substring(0, cursorPosition);
@@ -157,7 +162,6 @@ public class LPTextField
         }
         presentationText = text.substring(presentationTextOffset, presentationTextOffset + shortTextLength - 1);
     }
-   
 
     public String getValue() {
         return text;
@@ -172,7 +176,9 @@ public class LPTextField
 
     @Override
     public void onMouseEnter() {
-        applet.cursor(TEXT);
+        if (isEnabled()) {
+            applet.cursor(TEXT);
+        }
     }
 
     @Override
@@ -182,6 +188,9 @@ public class LPTextField
 
     @Override
     public void onMousePressed(int x, int y, int button) {
+        if (!isEnabled()) {
+            return;
+        }
         int closestPosition = 0;
         float closestDiff = getWidth();
         for (int i = 0; i < presentationText.length() + 1; i++) {
@@ -249,6 +258,9 @@ public class LPTextField
     public void onKeyPressed(KeyEvent event) {
         //only handle key input when this is currently in focus.
         if (!isFocused()) {
+            return;
+        }
+        if (!isEnabled()) {
             return;
         }
 

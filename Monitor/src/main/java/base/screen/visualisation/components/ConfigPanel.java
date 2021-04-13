@@ -5,15 +5,18 @@
  */
 package base.screen.visualisation.components;
 
+import base.ACCLiveTimingExtensionFactory;
 import base.screen.eventbus.Event;
 import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
 import base.screen.networking.AccBroadcastingClient;
 import base.screen.networking.events.ConnectionClosed;
 import base.screen.visualisation.LookAndFeel;
+import base.screen.visualisation.Visualisation;
 import base.screen.visualisation.gui.LPButton;
 import base.screen.visualisation.gui.LPContainer;
 import base.screen.visualisation.gui.LPLabel;
+import base.screen.visualisation.gui.LPTabPanel;
 import base.screen.visualisation.gui.LPTextField;
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -51,10 +54,13 @@ public class ConfigPanel
     private final LPTextField updateIntervalTextField = new LPTextField();
     private final LPButton connectButton = new LPButton("Connect");
 
+    private final LPLabel extensionHeading = new LPLabel("Extension Settings:");
+    private final LPTabPanel extensionTabPanel = new LPTabPanel();
+
     public ConfigPanel(AccBroadcastingClient client) {
         setName("Configuration");
         this.client = client;
-        
+
         EventBus.register(this);
 
         initComponents();
@@ -71,6 +77,11 @@ public class ConfigPanel
         if (event.getExitState() != AccBroadcastingClient.ExitState.NORMAL) {
             showErrorMessage(event.getExitState());
         }
+        connectButton.setText("Connect");
+        ipTextField.setEnabled(true);
+        portTextField.setEnabled(true);
+        connectionPWTextField.setEnabled(true);
+        updateIntervalTextField.setEnabled(true);
     }
 
     private void connectButtonPressed() {
@@ -111,8 +122,12 @@ public class ConfigPanel
         }
 
         client.sendRegisterRequest();
-        
+
         connectButton.setText("Disconnect");
+        ipTextField.setEnabled(false);
+        portTextField.setEnabled(false);
+        connectionPWTextField.setEnabled(false);
+        updateIntervalTextField.setEnabled(false);
     }
 
     private static void showErrorMessage(AccBroadcastingClient.ExitState exitStatus) {
@@ -170,6 +185,16 @@ public class ConfigPanel
         connectButton.setSize(400, LookAndFeel.LINE_HEIGHT);
         connectButton.setAction(() -> connectButtonPressed());
         addComponent(connectButton);
+
+        addComponent(extensionHeading);
+        addComponent(extensionTabPanel);
+
+        for (ACCLiveTimingExtensionFactory module : Visualisation.getModules()) {
+            LPContainer configurationPanel = null; //module.getExtensionConfigurationPanel();
+            if (configurationPanel != null) {
+                extensionTabPanel.addTab(configurationPanel);
+            }
+        }
     }
 
     @Override
@@ -190,6 +215,10 @@ public class ConfigPanel
         updateIntervalTextField.setPosition(200, lh * 4);
 
         connectButton.setPosition(0, lh * 5);
+
+        extensionHeading.setPosition(420, 0);
+        extensionTabPanel.setPosition(420, lh);
+        extensionTabPanel.setSize(w - 440, h - lh);
     }
 
 }

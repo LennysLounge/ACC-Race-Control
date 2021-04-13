@@ -62,6 +62,10 @@ public class LPComponent {
      * Vertical mouse position on this component.
      */
     private int mouseY;
+    /**
+     * True if input to this component is enabled.
+     */
+    private boolean isEnabled = true;
 
     /**
      * Creates a new instance.
@@ -228,6 +232,16 @@ public class LPComponent {
      */
     public void onFocusLost() {
     }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
+    
+    
 
     /**
      * Draws this component. Used internaly.

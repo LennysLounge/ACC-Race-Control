@@ -42,6 +42,10 @@ public class LPButton
     public void setAction(Runnable action) {
         this.action = action;
     }
+    
+    public void setText(String text){
+        this.text = text;
+    }
 
     @Override
     public void draw() {
