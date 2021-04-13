@@ -182,19 +182,21 @@ public class ConfigPanel
         updateIntervalTextField.setValue("250");
         addComponent(updateIntervalTextField);
 
-        connectButton.setSize(400, LookAndFeel.LINE_HEIGHT);
+        connectButton.setSize(380, LookAndFeel.LINE_HEIGHT);
         connectButton.setAction(() -> connectButtonPressed());
         addComponent(connectButton);
 
+        extensionHeading.setSize(getWidth()-420, LookAndFeel.LINE_HEIGHT);
         addComponent(extensionHeading);
         addComponent(extensionTabPanel);
 
         for (ACCLiveTimingExtensionFactory module : Visualisation.getModules()) {
-            LPContainer configurationPanel = null; //module.getExtensionConfigurationPanel();
+            LPContainer configurationPanel = module.getExtensionConfigurationPanel();
             if (configurationPanel != null) {
                 extensionTabPanel.addTab(configurationPanel);
             }
         }
+        extensionTabPanel.setTabIndex(0);
     }
 
     @Override
@@ -214,11 +216,12 @@ public class ConfigPanel
         updateIntervalLabel.setPosition(20, lh * 4 + 10);
         updateIntervalTextField.setPosition(200, lh * 4);
 
-        connectButton.setPosition(0, lh * 5);
+        connectButton.setPosition(20, lh * 5);
 
         extensionHeading.setPosition(420, 0);
+        extensionHeading.setSize(w-440, LookAndFeel.LINE_HEIGHT);
         extensionTabPanel.setPosition(420, lh);
-        extensionTabPanel.setSize(w - 440, h - lh);
+        extensionTabPanel.setSize(w-440, h-lh-20);
     }
 
 }

@@ -81,12 +81,12 @@ public class LPTextField
     @Override
     public void draw() {
         if (isEnabled()) {
-            applet.fill(LookAndFeel.COLOR_WHITE);
+            applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         } else {
-            applet.fill(LookAndFeel.COLOR_GRAY);
+            applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
         }
 
-        applet.stroke(LookAndFeel.COLOR_BLACK);
+        applet.stroke(LookAndFeel.COLOR_DARK_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
 
         if (isSelectionActive() && isFocused() && isEnabled()) {
@@ -96,13 +96,13 @@ public class LPTextField
             float startPosition = applet.textWidth(presentationText.substring(0, startIndex));
             int endIndex = Math.max(selectionStartInPresentationText, cursorPosition);
             float endPosition = applet.textWidth(presentationText.substring(0, endIndex));
-            applet.fill(200, 200, 255);
+            applet.fill(0, 0, 150);
             applet.noStroke();
             applet.rect(padding + startPosition, getHeight() * 0.2f, endPosition - startPosition, getHeight() * 0.6f);
 
         }
 
-        applet.fill(LookAndFeel.COLOR_DARK_GRAY);
+        applet.fill(LookAndFeel.COLOR_WHITE);
         applet.textAlign(LEFT, CENTER);
         applet.textFont(LookAndFeel.font());
         applet.text(presentationText, padding, getHeight() / 2f);

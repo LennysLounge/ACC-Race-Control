@@ -63,8 +63,8 @@ public class LPTabPanel extends LPContainer {
         applet.textAlign(CENTER, CENTER);
         applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
         applet.noStroke();
-        applet.rect(0, 0, applet.width, lineHeight);
-        float tabSize = applet.width / tabs.size();
+        applet.rect(0, 0, getWidth(), lineHeight);
+        float tabSize = getWidth() / tabs.size();
         for (int i = 0; i < tabs.size(); i++) {
             if (i == tabIndex) {
                 applet.fill(LookAndFeel.COLOR_MEDIUM_DARK_GRAY);

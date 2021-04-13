@@ -16,6 +16,12 @@ import javax.swing.JPanel;
  */
 public class DebugExtensionFactory
         implements ACCLiveTimingExtensionFactory {
+    
+    private DebugConfigPanel configPanel;
+    
+    public DebugExtensionFactory(){
+        configPanel = new DebugConfigPanel();
+    }
 
     @Override
     public String getName() {
@@ -29,7 +35,7 @@ public class DebugExtensionFactory
 
     @Override
     public LPContainer getExtensionConfigurationPanel() {
-        return null;
+        return configPanel;
     }
 
 }

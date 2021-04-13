@@ -6,8 +6,11 @@
 package base.screen.visualisation.gui;
 
 import base.screen.visualisation.LookAndFeel;
+import static base.screen.visualisation.LookAndFeel.LINE_HEIGHT;
 import static base.screen.visualisation.gui.LPComponent.applet;
+import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.HAND;
 import static processing.core.PConstants.LEFT;
 
 /**
@@ -32,8 +35,7 @@ public class LPLabel
 
     public LPLabel(String text) {
         this.text = text;
-        applet.textFont(LookAndFeel.font());
-        this.setSize(applet.textWidth(text), LookAndFeel.TEXT_SIZE);
+        this.setSize(100,LINE_HEIGHT);
     }
 
     public void setText(String text) {
@@ -45,6 +47,7 @@ public class LPLabel
     public void setHAlign(int hAlign) {
         this.hAlign = hAlign;
     }
+   
 
     @Override
     public void draw() {
