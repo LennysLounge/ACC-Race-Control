@@ -5,7 +5,6 @@
  */
 package base.screen.visualisation.components;
 
-import base.screen.Main;
 import base.screen.networking.AccBroadcastingClient;
 import base.screen.visualisation.LookAndFeel;
 import base.screen.visualisation.gui.LPComponent;
@@ -19,8 +18,9 @@ import java.util.List;
  */
 public class BasePanel extends LPContainer {
 
-    private final LPComponent header;
+    private final HeaderPanel header;
     private final LPTabPanel body;
+    private final ConfigPanel configPanel;
 
     public BasePanel(AccBroadcastingClient client) {
         header = new HeaderPanel(client);
@@ -28,6 +28,10 @@ public class BasePanel extends LPContainer {
 
         body = new LPTabPanel();
         addComponent(body);
+        
+        configPanel = new ConfigPanel(client);
+        body.addTab(configPanel);
+        body.setTabIndex(0);
     }
 
     public void updateHeader() {

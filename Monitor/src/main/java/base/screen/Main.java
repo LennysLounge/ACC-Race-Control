@@ -139,6 +139,7 @@ public class Main {
                 } catch (SocketException e) {
                     LOG.log(Level.SEVERE, "Error starting the connection to the game.", e);
                 }
+                    
 
                 //enable extensions.
                 extensions.clear();

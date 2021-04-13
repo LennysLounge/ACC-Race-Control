@@ -45,6 +45,7 @@ public class LPButton
 
     @Override
     public void draw() {
+        applet.noStroke();
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
         if (mouseOver) {
@@ -54,11 +55,6 @@ public class LPButton
         if (clicked) {
             applet.fill(LookAndFeel.TRANSPARENT_WHITE);
             applet.rect(0, 0, getWidth(), getHeight());
-        }
-        if(isFocused()){
-            applet.noFill();
-            applet.stroke(0,0,255);
-            applet.rect(0,0,getWidth(), getHeight());
         }
         applet.fill(255);
         applet.textAlign(CENTER, CENTER);

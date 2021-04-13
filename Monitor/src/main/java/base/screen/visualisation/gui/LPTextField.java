@@ -157,6 +157,7 @@ public class LPTextField
         }
         presentationText = text.substring(presentationTextOffset, presentationTextOffset + shortTextLength - 1);
     }
+   
 
     public String getValue() {
         return text;
