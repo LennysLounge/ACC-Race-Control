@@ -23,6 +23,7 @@ import base.screen.networking.data.SessionInfo;
 import base.screen.networking.data.TrackInfo;
 import base.screen.networking.enums.SessionPhase;
 import base.screen.networking.enums.SessionType;
+import base.screen.networking.events.ConnectionClosed;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -323,6 +324,7 @@ public class AccBroadcastingClient {
                 LOG.log(Level.SEVERE, "Overflow in listener thread", e);
                 exitState = ExitState.EXCEPTION;
             }
+            EventBus.publish(new ConnectionClosed(exitState));
             LOG.info("Listener thread done");
         }
 

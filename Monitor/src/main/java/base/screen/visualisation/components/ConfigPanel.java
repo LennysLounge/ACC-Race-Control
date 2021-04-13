@@ -5,7 +5,11 @@
  */
 package base.screen.visualisation.components;
 
+import base.screen.eventbus.Event;
+import base.screen.eventbus.EventBus;
+import base.screen.eventbus.EventListener;
 import base.screen.networking.AccBroadcastingClient;
+import base.screen.networking.events.ConnectionClosed;
 import base.screen.visualisation.LookAndFeel;
 import base.screen.visualisation.gui.LPButton;
 import base.screen.visualisation.gui.LPContainer;
@@ -24,7 +28,8 @@ import static processing.core.PConstants.CENTER;
  * @author Leonard
  */
 public class ConfigPanel
-        extends LPContainer {
+        extends LPContainer
+        implements EventListener {
 
     /**
      * This classes logger.
@@ -48,40 +53,24 @@ public class ConfigPanel
 
     public ConfigPanel(AccBroadcastingClient client) {
         setName("Configuration");
-
         this.client = client;
+        
+        EventBus.register(this);
 
         initComponents();
     }
 
-    private void initComponents() {
-        connectionHeading.setSize(400, LookAndFeel.LINE_HEIGHT);
-        connectionHeading.setHAlign(CENTER);
-        addComponent(connectionHeading);
+    @Override
+    public void onEvent(Event e) {
+        if (e instanceof ConnectionClosed) {
+            connectionClosedEvent((ConnectionClosed) e);
+        }
+    }
 
-        addComponent(ipLabel);
-        ipTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        ipTextField.setValue("127.0.0.1");
-        addComponent(ipTextField);
-
-        addComponent(portLabel);
-        portTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        portTextField.setValue("9000");
-        addComponent(portTextField);
-
-        addComponent(connectionPWLabel);
-        connectionPWTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        connectionPWTextField.setValue("asd");
-        addComponent(connectionPWTextField);
-
-        addComponent(updateIntervalLabel);
-        updateIntervalTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        updateIntervalTextField.setValue("250");
-        addComponent(updateIntervalTextField);
-
-        connectButton.setSize(400, LookAndFeel.LINE_HEIGHT);
-        connectButton.setAction(() -> connectButtonPressed());
-        addComponent(connectButton);
+    private void connectionClosedEvent(ConnectionClosed event) {
+        if (event.getExitState() != AccBroadcastingClient.ExitState.NORMAL) {
+            showErrorMessage(event.getExitState());
+        }
     }
 
     private void connectButtonPressed() {
@@ -120,14 +109,10 @@ public class ConfigPanel
         } catch (SocketException e) {
             LOG.log(Level.SEVERE, "Error starting the connection to the game.", e);
         }
-        /*
-        AccBroadcastingClient.ExitState exitstatus = client.waitForFinish();
-        if (exitstatus != AccBroadcastingClient.ExitState.NORMAL) {
-            //retryConnection = true;
-            showErrorMessage(exitstatus);
-        }
-        */
 
+        client.sendRegisterRequest();
+        
+        connectButton.setText("Disconnect");
     }
 
     private static void showErrorMessage(AccBroadcastingClient.ExitState exitStatus) {
@@ -155,6 +140,36 @@ public class ConfigPanel
     public void draw() {
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
+    }
+
+    private void initComponents() {
+        connectionHeading.setSize(400, LookAndFeel.LINE_HEIGHT);
+        connectionHeading.setHAlign(CENTER);
+        addComponent(connectionHeading);
+
+        addComponent(ipLabel);
+        ipTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
+        ipTextField.setValue("127.0.0.1");
+        addComponent(ipTextField);
+
+        addComponent(portLabel);
+        portTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
+        portTextField.setValue("9000");
+        addComponent(portTextField);
+
+        addComponent(connectionPWLabel);
+        connectionPWTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
+        connectionPWTextField.setValue("asd");
+        addComponent(connectionPWTextField);
+
+        addComponent(updateIntervalLabel);
+        updateIntervalTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
+        updateIntervalTextField.setValue("250");
+        addComponent(updateIntervalTextField);
+
+        connectButton.setSize(400, LookAndFeel.LINE_HEIGHT);
+        connectButton.setAction(() -> connectButtonPressed());
+        addComponent(connectButton);
     }
 
     @Override
