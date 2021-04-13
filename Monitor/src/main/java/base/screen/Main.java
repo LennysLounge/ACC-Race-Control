@@ -61,7 +61,7 @@ public class Main {
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
         setupLogging();
-        loadModules();
+        //loadModules();
 
         client = new AccBroadcastingClient();
         visualisation = new Visualisation(client);
@@ -75,8 +75,7 @@ public class Main {
                 extensions.add(extension);
             }
         }
-        */
-
+         */
         //start the visualisation
         String[] a = {"MAIN"};
         PApplet.runSketch(a, visualisation);
@@ -111,10 +110,12 @@ public class Main {
 
     private static void showConfigurationDialog() {
         for (ACCLiveTimingExtensionFactory module : modules) {
+            /*
             JPanel configurationPanel = module.getExtensionConfigurationPanel();
             if (configurationPanel != null) {
                 dialog.addTabPanel(configurationPanel);
             }
+             */
         }
         dialog.setVisible(true);
     }
@@ -139,7 +140,6 @@ public class Main {
                 } catch (SocketException e) {
                     LOG.log(Level.SEVERE, "Error starting the connection to the game.", e);
                 }
-                    
 
                 //enable extensions.
                 extensions.clear();

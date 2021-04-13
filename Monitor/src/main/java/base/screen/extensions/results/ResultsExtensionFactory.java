@@ -7,7 +7,7 @@ package base.screen.extensions.results;
 
 import base.ACCLiveTimingExtensionFactory;
 import base.screen.extensions.AccClientExtension;
-import javax.swing.JPanel;
+import base.screen.visualisation.gui.LPContainer;
 
 /**
  *
@@ -27,7 +27,7 @@ public class ResultsExtensionFactory
     }
 
     @Override
-    public JPanel getExtensionConfigurationPanel() {
+    public LPContainer getExtensionConfigurationPanel() {
         return null;
     }
     

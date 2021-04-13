@@ -13,7 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * The base for the processing visualization.
@@ -127,5 +126,9 @@ public class Visualisation extends CustomPApplet {
             LOG.info("Loading extension " + module.getName());
             modules.add(module);
         });
+    }
+    
+    public static List<ACCLiveTimingExtensionFactory> getModules(){
+        return modules;
     }
 }

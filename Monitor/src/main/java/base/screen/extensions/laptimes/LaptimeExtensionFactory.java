@@ -6,17 +6,15 @@
 package base.screen.extensions.laptimes;
 
 import base.screen.extensions.AccClientExtension;
-import javax.swing.JPanel;
 import base.ACCLiveTimingExtensionFactory;
+import base.screen.visualisation.gui.LPContainer;
 
 /**
  *
  * @author Leonard
  */
 public class LaptimeExtensionFactory
-    implements ACCLiveTimingExtensionFactory{
-    
-
+        implements ACCLiveTimingExtensionFactory {
 
     @Override
     public String getName() {
@@ -27,10 +25,10 @@ public class LaptimeExtensionFactory
     public AccClientExtension createExtension() {
         return new LapTimeExtension(false);
     }
-    
+
     @Override
-    public JPanel getExtensionConfigurationPanel() {
+    public LPContainer getExtensionConfigurationPanel() {
         return null;
     }
-    
+
 }

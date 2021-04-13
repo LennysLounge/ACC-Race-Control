@@ -6,8 +6,8 @@
 package base.screen.extensions.logging;
 
 import base.screen.extensions.AccClientExtension;
-import javax.swing.JPanel;
 import base.ACCLiveTimingExtensionFactory;
+import base.screen.visualisation.gui.LPContainer;
 
 /**
  *
@@ -27,7 +27,7 @@ public class LoggingExtensionFactory
     }
 
     @Override
-    public JPanel getExtensionConfigurationPanel() {
+    public LPContainer getExtensionConfigurationPanel() {
         return null;
     }
 

@@ -7,6 +7,7 @@ package base.screen.extensions.debug;
 
 import base.ACCLiveTimingExtensionFactory;
 import base.screen.extensions.AccClientExtension;
+import base.screen.visualisation.gui.LPContainer;
 import javax.swing.JPanel;
 
 /**
@@ -27,7 +28,7 @@ public class DebugExtensionFactory
     }
 
     @Override
-    public JPanel getExtensionConfigurationPanel() {
+    public LPContainer getExtensionConfigurationPanel() {
         return null;
     }
 
