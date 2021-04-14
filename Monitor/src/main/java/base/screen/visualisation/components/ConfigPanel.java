@@ -9,7 +9,6 @@ import base.ACCLiveTimingExtensionFactory;
 import base.screen.eventbus.Event;
 import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
-import base.screen.extensions.AccClientExtension;
 import base.screen.networking.AccBroadcastingClient;
 import base.screen.networking.events.ConnectionClosed;
 import base.screen.visualisation.LookAndFeel;

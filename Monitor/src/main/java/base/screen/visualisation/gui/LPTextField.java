@@ -39,7 +39,7 @@ public class LPTextField
     /**
      * The text value of this text field.
      */
-    private String text;
+    private String text = "";
     /**
      * True if the cursor is currently visible.
      */
@@ -335,7 +335,7 @@ public class LPTextField
         } else if (event.getKeyCode() == 86 && (event.getModifiers() & KeyEvent.CTRL) > 0) {
             //KeyCode 86 == 'v'
             //past from clipboard
-            String clipboard = getClipBoard();
+            String clipboard = getClipBoard().replaceAll("\n", "");
             text = text.substring(0, presentationTextOffset + cursorPosition)
                     + clipboard
                     + text.substring(presentationTextOffset + cursorPosition, text.length());
