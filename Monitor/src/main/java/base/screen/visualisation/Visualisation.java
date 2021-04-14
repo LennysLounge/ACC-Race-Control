@@ -71,7 +71,7 @@ public class Visualisation extends CustomPApplet {
         //init components.
         basePanel = new BasePanel(client);
         setComponent(basePanel);
-        
+
         /*
         //create extensions
         for (ACCLiveTimingExtensionFactory module : modules) {
@@ -85,7 +85,7 @@ public class Visualisation extends CustomPApplet {
                 .map(extension -> extension.getPanel())
                 .filter(panel -> panel != null)
                 .collect(Collectors.toList()));
-        */
+         */
     }
 
     @Override
@@ -111,13 +111,10 @@ public class Visualisation extends CustomPApplet {
     public void exit() {
         LOG.info("Stopping Visualisation");
         //stop the client connection.
-        //client.sendUnregisterRequest();
-
-        //client.stopAndKill();
-        super.exit();
-    }
-
-    public void exitExplicit() {
+        if (client.isConnected()) {
+            client.sendUnregisterRequest();
+            client.stopAndKill();
+        }
         super.exit();
     }
 
@@ -127,8 +124,8 @@ public class Visualisation extends CustomPApplet {
             modules.add(module);
         });
     }
-    
-    public static List<ACCLiveTimingExtensionFactory> getModules(){
+
+    public static List<ACCLiveTimingExtensionFactory> getModules() {
         return modules;
     }
 }

@@ -144,10 +144,12 @@ public class Main {
                 //enable extensions.
                 extensions.clear();
                 for (ACCLiveTimingExtensionFactory module : modules) {
+                    /*
                     AccClientExtension extension = module.createExtension();
                     if (extension != null) {
                         extensions.add(extension);
                     }
+                     */
                 }
                 //visualisation.updatePanels();
 

@@ -17,4 +17,8 @@ public interface AccClientExtension {
      * @return The attached panel.
      */
     public LPContainer getPanel();
+    /**
+     * Removes all necessary references related to this extension.
+     */
+    public void removeExtension();
 }

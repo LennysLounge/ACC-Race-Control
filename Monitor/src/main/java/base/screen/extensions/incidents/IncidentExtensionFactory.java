@@ -15,19 +15,35 @@ import base.screen.visualisation.gui.LPContainer;
 public class IncidentExtensionFactory
         implements base.ACCLiveTimingExtensionFactory {
 
+    private IncidentExtension extension;
+
     @Override
     public String getName() {
         return "Incident extension";
     }
 
     @Override
-    public AccClientExtension createExtension() {
-        return new IncidentExtension();
+    public void createExtension() {
+        removeExtension();
+        extension = new IncidentExtension();
     }
 
     @Override
     public LPContainer getExtensionConfigurationPanel() {
         return null;
+    }
+
+    @Override
+    public void removeExtension() {
+        if(extension != null){
+            extension.removeExtension();
+            extension = null;
+        }
+    }
+
+    @Override
+    public AccClientExtension getExtension() {
+        return extension;
     }
 
 }

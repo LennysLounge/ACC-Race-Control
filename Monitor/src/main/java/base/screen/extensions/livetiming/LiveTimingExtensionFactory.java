@@ -15,20 +15,36 @@ import base.screen.visualisation.gui.LPContainer;
  */
 public class LiveTimingExtensionFactory
         implements ACCLiveTimingExtensionFactory {
-    
+
+    private AccClientExtension extension;
+
     @Override
     public String getName() {
         return "Live Timing Extension";
     }
 
     @Override
-    public AccClientExtension createExtension() {
-        return new LiveTimingExtension();
+    public void createExtension() {
+        removeExtension();
+        extension = new LiveTimingExtension();
     }
 
     @Override
     public LPContainer getExtensionConfigurationPanel() {
         return null;
+    }
+
+    @Override
+    public void removeExtension() {
+        if (extension != null) {
+            extension.removeExtension();
+            extension = null;
+        }
+    }
+
+    @Override
+    public AccClientExtension getExtension() {
+        return extension;
     }
 
 }

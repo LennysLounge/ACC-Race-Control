@@ -14,7 +14,8 @@ import java.util.List;
  *
  * @author Leonard
  */
-public class LoggingExtension implements AccClientExtension {
+public class LoggingExtension
+        implements AccClientExtension {
 
     /**
      * Table model for the logging extension.
@@ -25,7 +26,7 @@ public class LoggingExtension implements AccClientExtension {
      * List of the log messages.
      */
     private static final List<LogMessage> messages = new LinkedList<>();
-    
+
     private static LPContainer panel;
 
     public LoggingExtension() {
@@ -44,9 +45,13 @@ public class LoggingExtension implements AccClientExtension {
     public static void log(String message) {
         messages.add(new LogMessage(message));
         model.setMessages(messages);
-        if(panel != null){
+        if (panel != null) {
             panel.invalidate();
         }
+    }
+
+    @Override
+    public void removeExtension() {
     }
 
 }

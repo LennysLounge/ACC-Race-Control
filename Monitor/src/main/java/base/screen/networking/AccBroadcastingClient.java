@@ -24,6 +24,7 @@ import base.screen.networking.data.TrackInfo;
 import base.screen.networking.enums.SessionPhase;
 import base.screen.networking.enums.SessionType;
 import base.screen.networking.events.ConnectionClosed;
+import base.screen.networking.events.ConnectionOpened;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -193,10 +194,10 @@ public class AccBroadcastingClient {
      * @return True when connected.
      */
     public boolean isConnected() {
-        if(socket != null 
+        if (socket != null
                 && socket.isConnected()
                 && accListenerThread != null
-                && accListenerThread.isAlive()){
+                && accListenerThread.isAlive()) {
             return true;
         }
         return false;
@@ -314,6 +315,7 @@ public class AccBroadcastingClient {
 
         @Override
         public void run() {
+            EventBus.publish(new ConnectionOpened());
             LOG.info("Starting Listener thread");
             try {
                 udpListener();

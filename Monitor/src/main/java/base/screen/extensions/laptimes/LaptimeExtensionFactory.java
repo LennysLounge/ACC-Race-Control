@@ -15,6 +15,8 @@ import base.screen.visualisation.gui.LPContainer;
  */
 public class LaptimeExtensionFactory
         implements ACCLiveTimingExtensionFactory {
+    
+    private AccClientExtension extension;
 
     @Override
     public String getName() {
@@ -22,13 +24,27 @@ public class LaptimeExtensionFactory
     }
 
     @Override
-    public AccClientExtension createExtension() {
-        return new LapTimeExtension(false);
+    public void createExtension() {
+        removeExtension();
+        extension = new LapTimeExtension(false);
     }
 
     @Override
     public LPContainer getExtensionConfigurationPanel() {
         return null;
+    }
+
+    @Override
+    public void removeExtension() {
+        if(extension != null){
+            extension.removeExtension();
+            extension = null;
+        }
+    }
+
+    @Override
+    public AccClientExtension getExtension() {
+        return extension;
     }
 
 }

@@ -166,4 +166,9 @@ public class IncidentExtension
         return result;
     }
 
+    @Override
+    public void removeExtension() {
+        EventBus.unregister(this);
+    }
+
 }

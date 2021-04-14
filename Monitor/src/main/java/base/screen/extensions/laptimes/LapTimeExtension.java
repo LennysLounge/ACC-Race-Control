@@ -211,4 +211,9 @@ public class LapTimeExtension
         return null;
     }
 
+    @Override
+    public void removeExtension() {
+        EventBus.unregister(this);
+    }
+
 }

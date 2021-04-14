@@ -100,4 +100,9 @@ public class LiveTimingExtension
         return car.getCarId() == client.getModel().getSessionInfo().getFocusedCarIndex();
     }
 
+    @Override
+    public void removeExtension() {
+        EventBus.unregister(this);
+    }
+
 }

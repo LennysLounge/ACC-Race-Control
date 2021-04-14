@@ -19,8 +19,8 @@ import base.screen.visualisation.gui.LPLabel;
 public class DebugConfigPanel
     extends LPContainer{
     
-    private LPCheckBox enabledCheckBox;
-    private LPLabel enabledLabel;
+    private final LPCheckBox enabledCheckBox;
+    private final LPLabel enabledLabel;
     
     public DebugConfigPanel(){
         setName("Debug");
@@ -38,6 +38,10 @@ public class DebugConfigPanel
     public void draw(){
         applet.fill(COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
+    }
+    
+    public boolean isExtensionEnabled(){
+        return enabledCheckBox.isSelected();
     }
     
 }

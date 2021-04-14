@@ -57,5 +57,9 @@ public class LPCheckBox
         applet.rect(0, 0, TEXT_SIZE, TEXT_SIZE);
         applet.strokeWeight(1);
     }
+    
+    public boolean isSelected(){
+        return selected;
+    }
 
 }

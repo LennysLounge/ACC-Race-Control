@@ -8,7 +8,6 @@ package base.screen.extensions.debug;
 import base.ACCLiveTimingExtensionFactory;
 import base.screen.extensions.AccClientExtension;
 import base.screen.visualisation.gui.LPContainer;
-import javax.swing.JPanel;
 
 /**
  *
@@ -16,10 +15,11 @@ import javax.swing.JPanel;
  */
 public class DebugExtensionFactory
         implements ACCLiveTimingExtensionFactory {
-    
-    private DebugConfigPanel configPanel;
-    
-    public DebugExtensionFactory(){
+
+    private final DebugConfigPanel configPanel;
+    private DebugExtension extension;
+
+    public DebugExtensionFactory() {
         configPanel = new DebugConfigPanel();
     }
 
@@ -29,13 +29,29 @@ public class DebugExtensionFactory
     }
 
     @Override
-    public AccClientExtension createExtension() {
-        return new DebugExtension();
+    public void createExtension() {
+        removeExtension();
+        if (configPanel.isExtensionEnabled()) {
+            extension = new DebugExtension();
+        }
     }
 
     @Override
     public LPContainer getExtensionConfigurationPanel() {
         return configPanel;
+    }
+
+    @Override
+    public void removeExtension() {
+        if (extension != null) {
+            extension.removeExtension();
+            extension = null;
+        }
+    }
+
+    @Override
+    public AccClientExtension getExtension() {
+        return extension;
     }
 
 }

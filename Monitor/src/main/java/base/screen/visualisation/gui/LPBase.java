@@ -73,7 +73,6 @@ public class LPBase extends PApplet {
     @Override
     public void mouseWheel(MouseEvent event) {
         base.onMouseScrollInternal(mouseX, mouseY, event.getCount());
-        System.out.println("wheel");
     }
 
     @Override

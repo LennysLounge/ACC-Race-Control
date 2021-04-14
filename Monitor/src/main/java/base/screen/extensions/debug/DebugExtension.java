@@ -24,5 +24,9 @@ public class DebugExtension implements AccClientExtension{
     public LPContainer getPanel() {
         return panel;
     }
+
+    @Override
+    public void removeExtension() {
+    }
     
 }

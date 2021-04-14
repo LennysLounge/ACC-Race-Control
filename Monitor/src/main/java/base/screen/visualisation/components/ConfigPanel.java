@@ -9,6 +9,7 @@ import base.ACCLiveTimingExtensionFactory;
 import base.screen.eventbus.Event;
 import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
+import base.screen.extensions.AccClientExtension;
 import base.screen.networking.AccBroadcastingClient;
 import base.screen.networking.events.ConnectionClosed;
 import base.screen.visualisation.LookAndFeel;
@@ -82,9 +83,14 @@ public class ConfigPanel
         portTextField.setEnabled(true);
         connectionPWTextField.setEnabled(true);
         updateIntervalTextField.setEnabled(true);
+        connectButton.setAction(()->connectButtonPressed());
     }
 
     private void connectButtonPressed() {
+        //Remove all current extension.
+        Visualisation.getModules().stream()
+                .forEach(module -> module.removeExtension());
+
         InetAddress hostAddress;
         try {
             hostAddress = InetAddress.getByName(ipTextField.getValue());
@@ -109,6 +115,10 @@ public class ConfigPanel
             return;
         }
 
+        //Create new extensions.
+        Visualisation.getModules().stream()
+                .forEach(module -> module.createExtension());
+
         try {
             client.connect("ACC Live timing",
                     connectionPWTextField.getValue(),
@@ -128,6 +138,14 @@ public class ConfigPanel
         portTextField.setEnabled(false);
         connectionPWTextField.setEnabled(false);
         updateIntervalTextField.setEnabled(false);
+        connectButton.setAction(()->disconnectButtonPressed());
+    }
+    
+    private void disconnectButtonPressed(){
+        if(client.isConnected()){
+            client.sendUnregisterRequest();
+            client.stopAndKill();
+        }
     }
 
     private static void showErrorMessage(AccBroadcastingClient.ExitState exitStatus) {
@@ -186,7 +204,7 @@ public class ConfigPanel
         connectButton.setAction(() -> connectButtonPressed());
         addComponent(connectButton);
 
-        extensionHeading.setSize(getWidth()-420, LookAndFeel.LINE_HEIGHT);
+        extensionHeading.setSize(getWidth() - 420, LookAndFeel.LINE_HEIGHT);
         addComponent(extensionHeading);
         addComponent(extensionTabPanel);
 
@@ -219,9 +237,9 @@ public class ConfigPanel
         connectButton.setPosition(20, lh * 5);
 
         extensionHeading.setPosition(420, 0);
-        extensionHeading.setSize(w-440, LookAndFeel.LINE_HEIGHT);
+        extensionHeading.setSize(w - 440, LookAndFeel.LINE_HEIGHT);
         extensionTabPanel.setPosition(420, lh);
-        extensionTabPanel.setSize(w-440, h-lh-20);
+        extensionTabPanel.setSize(w - 440, h - lh - 20);
     }
 
 }

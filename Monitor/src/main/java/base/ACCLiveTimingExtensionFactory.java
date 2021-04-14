@@ -22,11 +22,15 @@ public interface ACCLiveTimingExtensionFactory {
     public String getName();
 
     /**
-     * Gives the client extension.
+     * Creates the client extension.
      *
-     * @return the client extension.
      */
-    public AccClientExtension createExtension();
+    public void createExtension();
+    
+    /**
+     * Removes the extension.
+     */
+    public void removeExtension();
 
     /**
      * Gives the configuration dialog panel for this extension. Returns null if
@@ -35,4 +39,10 @@ public interface ACCLiveTimingExtensionFactory {
      * @return
      */
     public LPContainer getExtensionConfigurationPanel();
+    
+    /**
+     * returns the extension.
+     * @return 
+     */
+    public AccClientExtension getExtension();
 }

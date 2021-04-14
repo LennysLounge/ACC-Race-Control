@@ -175,4 +175,9 @@ public class ResultsExtension
         return car.getCarNumber() + " [" + (car.getRealtime().getLaps() + 1) + "]";
     }
 
+    @Override
+    public void removeExtension() {
+        EventBus.unregister(this);
+    }
+
 }
