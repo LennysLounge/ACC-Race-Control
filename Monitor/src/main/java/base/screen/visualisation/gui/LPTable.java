@@ -8,6 +8,7 @@ package base.screen.visualisation.gui;
 import base.screen.visualisation.LookAndFeel;
 import java.util.logging.Logger;
 import processing.core.PApplet;
+import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.CENTER;
 
 /**
@@ -185,8 +186,13 @@ public class LPTable extends LPContainer {
                 applet.fill(LookAndFeel.COLOR_WHITE);
             }
             float padding = scrollbar.width * 0.2f;
-            applet.rect(padding, scrollbar.elementHeight * scrollbar.scroll + headerOffset + padding,
-                    scrollbar.width - padding * 2, scrollbar.elementHeight * visibleRows - padding * 2);
+            if (scrollbar.isDragged) {
+                applet.rect(padding, scrollbar.elementHeight * scrollbar.scroll + headerOffset + padding + scrollbar.smoothScrollDiff,
+                        scrollbar.width - padding * 2, scrollbar.elementHeight * visibleRows - padding * 2);
+            } else {
+                applet.rect(padding, scrollbar.elementHeight * scrollbar.scroll + headerOffset + padding,
+                        scrollbar.width - padding * 2, scrollbar.elementHeight * visibleRows - padding * 2);
+            }
         }
 
         applet.noStroke();
@@ -242,6 +248,7 @@ public class LPTable extends LPContainer {
     @Override
     public void onMouseReleased(int x, int y, int button) {
         scrollbar.isDragged = false;
+        invalidate();
     }
 
     @Override
@@ -254,7 +261,9 @@ public class LPTable extends LPContainer {
         if (scrollbar.isDragged) {
             int diff = y - scrollbar.dragHomeY;
             int scrollDiff = (int) (diff / scrollbar.elementHeight);
+            scrollbar.smoothScrollDiff = (int) (diff % scrollbar.elementHeight);
             scrollbar.setScroll(scrollbar.dragHome + scrollDiff);
+            invalidate();
             return;
         }
 
@@ -280,7 +289,7 @@ public class LPTable extends LPContainer {
             //find the row the mouse is over.
             mouseOverRow = (y / LookAndFeel.LINE_HEIGHT);
         }
-        
+
         scrollbar.setIsMouseOver(mouseOverScrollbar);
     }
 
@@ -289,6 +298,7 @@ public class LPTable extends LPContainer {
         scrollbar.isMouseOver = false;
         mouseOverColumn = -1;
         mouseOverRow = -1;
+        applet.cursor(ARROW);
     }
 
     /**
@@ -388,6 +398,11 @@ public class LPTable extends LPContainer {
          * Amount of stroll this table currently has.
          */
         private int scroll = 0;
+        /**
+         * difference from actual scroll position to the currently dragged
+         * position to enable smooth scrolling by dragging.
+         */
+        private int smoothScrollDiff = 0;
         /**
          * Indicates that the mouse is hovering over the scrollbar.
          */

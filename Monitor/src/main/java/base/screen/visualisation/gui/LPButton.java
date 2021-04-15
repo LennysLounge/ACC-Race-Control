@@ -50,10 +50,10 @@ public class LPButton
     @Override
     public void draw() {
         applet.noStroke();
-        applet.fill(LookAndFeel.COLOR_DARK_GRAY);
+        applet.fill(LookAndFeel.COLOR_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
         if (mouseOver) {
-            applet.fill(LookAndFeel.TRANSPARENT_WHITE);
+            applet.fill(LookAndFeel.COLOR_RED);
             applet.rect(0, 0, getWidth(), getHeight());
         }
         if (clicked) {
