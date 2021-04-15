@@ -30,10 +30,6 @@ public class LPButton
      * Indicates that this button is clicked or not.
      */
     private boolean clicked = false;
-    /**
-     * Indicates that the mouse is over the button.
-     */
-    private boolean mouseOver = false;
 
     public LPButton(String text) {
         this.text = text;
@@ -52,7 +48,7 @@ public class LPButton
         applet.noStroke();
         applet.fill(LookAndFeel.COLOR_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
-        if (mouseOver) {
+        if (isMouseOver()) {
             applet.fill(LookAndFeel.COLOR_RED);
             applet.rect(0, 0, getWidth(), getHeight());
         }
@@ -62,6 +58,7 @@ public class LPButton
         }
         applet.fill(255);
         applet.textAlign(CENTER, CENTER);
+        applet.textFont(LookAndFeel.fontMedium());
         applet.text(text, getWidth() / 2f, getHeight() / 2f);
     }
 
@@ -80,14 +77,12 @@ public class LPButton
 
     @Override
     public void onMouseEnter() {
-        mouseOver = true;
         invalidate();
         applet.cursor(HAND);
     }
 
     @Override
     public void onMouseLeave() {
-        mouseOver = false;
         invalidate();
         applet.cursor(ARROW);
     }

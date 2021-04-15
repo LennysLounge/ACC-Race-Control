@@ -48,8 +48,8 @@ public class LiveTimingTableModel extends TableModel {
     public LPTableColumn[] getColumns() {
         return new LPTableColumn[]{
             new LPTableColumn("P")
-            .setMinWidth(40)
-            .setMaxWidth(40)
+            .setMinWidth(50)
+            .setMaxWidth(50)
             .setCellRenderer(positionRenderer),
             new LPTableColumn("Name")
             .setMaxWidth(240),
@@ -136,6 +136,7 @@ public class LiveTimingTableModel extends TableModel {
         applet.rect(1, 1, width - 2, height - 2);
         applet.fill(fgColor);
         applet.textAlign(CENTER, CENTER);
+        applet.textFont(LookAndFeel.fontMedium());
         applet.text(String.valueOf(t.left),
                 width / 2f, height / 2f);
     };
@@ -157,6 +158,7 @@ public class LiveTimingTableModel extends TableModel {
             applet.textAlign(CENTER, CENTER);
             applet.textSize(12);
             applet.text("P", width / 2f, height / 2f);
+            applet.textFont(LookAndFeel.fontMedium());
             applet.textSize(LookAndFeel.TEXT_SIZE);
         }
     };
@@ -192,6 +194,7 @@ public class LiveTimingTableModel extends TableModel {
         applet.rect(1, 1, width - 2, height - 2);
         applet.fill(frontColor);
         applet.textAlign(CENTER, CENTER);
+        applet.textFont(LookAndFeel.fontMedium());
         applet.text(String.valueOf(t.left), width / 2f, height / 2f);
     };
 
@@ -218,6 +221,7 @@ public class LiveTimingTableModel extends TableModel {
             text = currentLap.getType().name();
         }
         applet.textAlign(CENTER, CENTER);
+        applet.textFont(LookAndFeel.fontRegular());
         applet.text(text, width / 2, height / 2);
     };
 
@@ -242,6 +246,7 @@ public class LiveTimingTableModel extends TableModel {
             }
             text = TimeUtils.asDelta(car.getRealtime().getDelta());
             applet.textAlign(CENTER, CENTER);
+            applet.textFont(LookAndFeel.fontRegular());
             applet.text(text, width / 2, height / 2);
         }
     };

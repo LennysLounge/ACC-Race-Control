@@ -398,7 +398,7 @@ public class LPComponent {
      *
      * @return
      */
-    public boolean isMouseOntop() {
+    public boolean isMouseOver() {
         return isMouseOntop;
     }
 

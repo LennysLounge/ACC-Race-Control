@@ -96,7 +96,7 @@ public class LPContainer
     @Override
     public void onMouseMoveInternal(int x, int y) {
         super.onMouseMoveInternal(x, y);
-        if (isMouseOntop()) {
+        if (isMouseOver()) {
             for (LPComponent c : components) {
                 c.onMouseMoveInternal((int) (x - getPosX()), (int) (y - getPosY()));
             }

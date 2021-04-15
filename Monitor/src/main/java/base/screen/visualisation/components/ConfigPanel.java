@@ -221,16 +221,16 @@ public class ConfigPanel
         int lh = (int) (LookAndFeel.LINE_HEIGHT * 1.2f);
         connectionHeading.setPosition(0, 0);
 
-        ipLabel.setPosition(20, lh * 1 + 10);
+        ipLabel.setPosition(20, lh * 1);
         ipTextField.setPosition(200, lh * 1);
 
-        portLabel.setPosition(20, lh * 2 + 10);
+        portLabel.setPosition(20, lh * 2);
         portTextField.setPosition(200, lh * 2f);
 
-        connectionPWLabel.setPosition(20, lh * 3 + 10);
+        connectionPWLabel.setPosition(20, lh * 3);
         connectionPWTextField.setPosition(200, lh * 3f);
 
-        updateIntervalLabel.setPosition(20, lh * 4 + 10);
+        updateIntervalLabel.setPosition(20, lh * 4);
         updateIntervalTextField.setPosition(200, lh * 4);
 
         connectButton.setPosition(20, lh * 5);

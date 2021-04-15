@@ -5,6 +5,7 @@
  */
 package base.screen.extensions.logging;
 
+import base.screen.visualisation.LookAndFeel;
 import base.screen.visualisation.gui.LPTableColumn;
 import base.screen.visualisation.gui.LPTable;
 import base.screen.visualisation.gui.TableModel;
@@ -36,6 +37,7 @@ public class LoggingTableModel extends TableModel {
         float x = height / 2;
         int tabSize = 140;
         String[] partials = message.split("\t");
+        applet.textFont(LookAndFeel.fontRegular());
         for (String partial : partials) {
             applet.text(partial, x, height / 2f);
             float msgWidth = applet.textWidth(partial);

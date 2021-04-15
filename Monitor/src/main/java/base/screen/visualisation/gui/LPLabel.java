@@ -40,7 +40,7 @@ public class LPLabel
 
     public void setText(String text) {
         this.text = text;
-        applet.textFont(LookAndFeel.font());
+        applet.textFont(LookAndFeel.fontMedium());
         this.setSize(applet.textWidth(text), LookAndFeel.LINE_HEIGHT);
     }
 
@@ -53,11 +53,12 @@ public class LPLabel
     public void draw() {
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.noStroke();
+        //applet.stroke(0);
         applet.rect(0, 0, getWidth(), getHeight());
 
         applet.fill(LookAndFeel.COLOR_WHITE);
         applet.textAlign(hAlign, vAlign);
-        applet.textFont(LookAndFeel.font());
+        applet.textFont(LookAndFeel.fontRegular());
         if (hAlign == LEFT) {
             applet.text(text, 0, getHeight()/2f);
         } else if (hAlign == CENTER) {

@@ -6,8 +6,11 @@
 package base.screen.visualisation.gui;
 
 import base.screen.visualisation.LookAndFeel;
+import static base.screen.visualisation.LookAndFeel.COLOR_DARK_GRAY;
+import static base.screen.visualisation.LookAndFeel.COLOR_DARK_RED;
+import static base.screen.visualisation.LookAndFeel.COLOR_GRAY;
+import static base.screen.visualisation.LookAndFeel.COLOR_RED;
 import static base.screen.visualisation.gui.LPComponent.applet;
-import com.fasterxml.jackson.databind.util.ClassUtil;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -81,12 +84,18 @@ public class LPTextField
     @Override
     public void draw() {
         if (isEnabled()) {
-            applet.fill(LookAndFeel.COLOR_DARK_GRAY);
+            if (isFocused()) {
+                applet.fill(COLOR_RED);
+            } else if (isMouseOver()) {
+                applet.fill(COLOR_DARK_RED);
+            } else {
+                applet.fill(COLOR_GRAY);
+            }
         } else {
-            applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
+            applet.fill(COLOR_DARK_GRAY);
         }
 
-        applet.stroke(LookAndFeel.COLOR_DARK_DARK_GRAY);
+        applet.noStroke();
         applet.rect(0, 0, getWidth(), getHeight());
 
         if (isSelectionActive() && isFocused() && isEnabled()) {
@@ -104,7 +113,7 @@ public class LPTextField
 
         applet.fill(LookAndFeel.COLOR_WHITE);
         applet.textAlign(LEFT, CENTER);
-        applet.textFont(LookAndFeel.font());
+        applet.textFont(LookAndFeel.fontRegular());
         applet.text(presentationText, padding, getHeight() / 2f);
 
         if (cursorBlinkOn && isEnabled()) {
@@ -123,7 +132,7 @@ public class LPTextField
      */
     private void updatePresentationText() {
         float maximumPresentationTextWidth = getWidth() - 2 * padding;
-        applet.textFont(LookAndFeel.font());
+        applet.textFont(LookAndFeel.fontMedium());
 
         if (cursorPosition < 0) {
             if (presentationTextOffset > 0) {
@@ -179,11 +188,13 @@ public class LPTextField
         if (isEnabled()) {
             applet.cursor(TEXT);
         }
+        invalidate();
     }
 
     @Override
     public void onMouseLeave() {
         applet.cursor(ARROW);
+        invalidate();
     }
 
     @Override

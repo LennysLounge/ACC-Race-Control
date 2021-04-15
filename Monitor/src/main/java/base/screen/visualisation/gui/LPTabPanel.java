@@ -6,6 +6,8 @@
 package base.screen.visualisation.gui;
 
 import base.screen.visualisation.LookAndFeel;
+import static base.screen.visualisation.LookAndFeel.COLOR_DARK_GRAY;
+import static base.screen.visualisation.LookAndFeel.COLOR_RED;
 import java.util.LinkedList;
 import java.util.List;
 import static processing.core.PConstants.ARROW;
@@ -66,11 +68,11 @@ public class LPTabPanel extends LPContainer {
         float tabSize = getWidth() / tabs.size();
         for (int i = 0; i < tabs.size(); i++) {
             if (i == tabIndex) {
-                applet.fill(LookAndFeel.COLOR_MEDIUM_DARK_GRAY);
+                applet.fill(COLOR_DARK_GRAY);
                 applet.rect(i * tabSize, 0, tabSize, lineHeight);
             }
             if (i == mouseOverTab) {
-                applet.fill(LookAndFeel.TRANSPARENT_WHITE);
+                applet.fill(COLOR_RED);
                 applet.rect(i * tabSize, 0, tabSize, lineHeight);
             }
             applet.fill(255);

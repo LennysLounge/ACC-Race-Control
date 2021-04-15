@@ -40,26 +40,30 @@ public class HeaderPanel extends LPComponent {
             String packetsReceived = "Packets received: " + client.getPacketCount();
             applet.fill(255);
             applet.textAlign(LEFT, CENTER);
-            applet.textFont(LookAndFeel.font());
+            applet.textFont(LookAndFeel.fontRegular());
             applet.text(conId, 10, y + LookAndFeel.LINE_HEIGHT * 0.5f);
             applet.text(packetsReceived, 200, y + LookAndFeel.LINE_HEIGHT * 0.5f);
             applet.textAlign(RIGHT, CENTER);
+            applet.textSize(LookAndFeel.TEXT_SIZE*0.8f);
+            float sessionNameWidth = applet.textWidth(sessionName);
             applet.text(sessionName, applet.width - 10, y + LookAndFeel.LINE_HEIGHT * 0.5f);
+            applet.textFont(LookAndFeel.fontMedium());
+            applet.textSize(LookAndFeel.TEXT_SIZE);
             applet.text(sessionTimeLeft,
-                    applet.width - applet.textWidth(sessionName) - 40,
+                    applet.width - sessionNameWidth - 27,
                     y + LookAndFeel.LINE_HEIGHT / 2f);
 
             applet.fill(LookAndFeel.COLOR_RACE);
-            applet.rect(applet.width - applet.textWidth(sessionName) - 30,
+            applet.rect(applet.width - sessionNameWidth - 22,
                     y + LookAndFeel.LINE_HEIGHT * 0.1f,
-                    10, LookAndFeel.LINE_HEIGHT * 0.8f);
+                    7, LookAndFeel.LINE_HEIGHT * 0.8f);
         }
         else{
             applet.fill(LookAndFeel.COLOR_RED);
             applet.noStroke();
             applet.rect(0, 0, getWidth(), getHeight());
             applet.textAlign(LEFT, CENTER);
-            applet.textFont(LookAndFeel.font());
+            applet.textFont(LookAndFeel.fontMedium());
             applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
             applet.text("Not Connected", 10, LookAndFeel.LINE_HEIGHT * 0.5f);
         }
