@@ -83,6 +83,7 @@ public class LPTable extends LPContainer {
     @Override
     public void draw() {
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
+        applet.noStroke();
         applet.rect(0, 0, getWidth(), getHeight());
 
         //Calculate how may rows are visible right now.
@@ -228,7 +229,7 @@ public class LPTable extends LPContainer {
                     break;
                 }
             }
-            //find the row the mouse hgs pressed.
+            //find the row the mouse has pressed.
             int row = (y / LookAndFeel.LINE_HEIGHT);
             if (area == 1 && clickableColumnHeaders) {
                 model.onHeaderClicked(column);
@@ -282,7 +283,10 @@ public class LPTable extends LPContainer {
             for (int i = 0; i < columnWidths.length; i++) {
                 accu += columnWidths[i];
                 if (xx < accu) {
-                    mouseOverColumn = i;
+                    if(mouseOverColumn != i){
+                        mouseOverColumn = i;
+                        invalidate();
+                    }
                     break;
                 }
             }

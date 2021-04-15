@@ -84,6 +84,7 @@ public class LiveTimingExtension
 
         model.setEntries(sorted);
         model.setFocusedCarId(sessionInfo.getFocusedCarIndex());
+        model.setSessionBestLap(sessionInfo.getBestSessionLap());
         panel.invalidate();
     }
 

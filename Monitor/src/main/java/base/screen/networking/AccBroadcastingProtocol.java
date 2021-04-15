@@ -29,6 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -348,7 +349,7 @@ public class AccBroadcastingProtocol {
         for (int i = 0; i < splitCount; i++) {
             splits.add(readInt32(in));
         }
-
+        
         boolean isInvalid = readByte(in) > 0;
         boolean isValidForBest = readByte(in) > 0;
 

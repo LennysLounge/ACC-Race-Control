@@ -31,12 +31,13 @@ public class LookAndFeel {
     public static final int COLOR_LIGHT_GRAY = 0xffbcbcbc;
     public static final int COLOR_GRAY = 0xff3c3c3c;
     public static final int COLOR_DARK_GRAY = 0xff202020;
-    public static final int COLOR_MEDIUM_DARK_GRAY = 0xff1e1e1e;
+    public static final int COLOR_MEDIUM_DARK_GRAY = 0xff1a1a1a;
     public static final int COLOR_DARK_DARK_GRAY = 0xff0e0e0e;
     public static final int COLOR_PRACTICE = 0xfff75151;
     public static final int COLOR_QUALIFYING = 0xff5cadff;
     public static final int COLOR_RACE = 0xff79e463;
     public static final int COLOR_YELLOW = 0xffaaaa00;
+    public static final int COLOR_PURPLE = 0xffA256ff;
     public static final int TRANSPARENT_WHITE = 0x14ffffff;
     public static final int TRANSPARENT_RED = 0x96ff0000;
     public static final int TRANSPARENT_BLACK = 0x96000000;

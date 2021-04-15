@@ -5,9 +5,11 @@
  */
 package base.screen.visualisation.gui;
 
+import base.screen.visualisation.LookAndFeel;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
+import processing.core.PFont;
 
 /**
  *
@@ -31,6 +33,10 @@ public class LPTableColumn {
      * Minimum size for this column.
      */
     private float minWidth = 0;
+    /**
+     * The font to use for this Column.
+     */
+    private PFont font = null;
 
     private LPTable.CellRenderer renderer = (
             PApplet applet,
@@ -42,6 +48,11 @@ public class LPTableColumn {
             float height) -> {
         applet.fill(255);
         applet.textAlign(LEFT, CENTER);
+        if (font != null) {
+            applet.textFont(font);
+        } else {
+            applet.textFont(LookAndFeel.fontRegular());
+        }
         applet.text(object.toString(), height / 2, height / 2);
     };
 
@@ -69,6 +80,11 @@ public class LPTableColumn {
         return this;
     }
 
+    public LPTableColumn setFont(PFont font) {
+        this.font = font;
+        return this;
+    }
+
     public String getHeader() {
         return header;
     }
@@ -88,4 +104,9 @@ public class LPTableColumn {
     public LPTable.CellRenderer getRenderer() {
         return renderer;
     }
+
+    public PFont getFont() {
+        return font;
+    }
+
 }

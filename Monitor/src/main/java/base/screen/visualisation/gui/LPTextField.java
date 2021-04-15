@@ -6,9 +6,9 @@
 package base.screen.visualisation.gui;
 
 import base.screen.visualisation.LookAndFeel;
-import static base.screen.visualisation.LookAndFeel.COLOR_DARK_GRAY;
 import static base.screen.visualisation.LookAndFeel.COLOR_DARK_RED;
 import static base.screen.visualisation.LookAndFeel.COLOR_GRAY;
+import static base.screen.visualisation.LookAndFeel.COLOR_MEDIUM_DARK_GRAY;
 import static base.screen.visualisation.LookAndFeel.COLOR_RED;
 import static base.screen.visualisation.gui.LPComponent.applet;
 import java.awt.HeadlessException;
@@ -92,7 +92,7 @@ public class LPTextField
                 applet.fill(COLOR_GRAY);
             }
         } else {
-            applet.fill(COLOR_DARK_GRAY);
+            applet.fill(COLOR_MEDIUM_DARK_GRAY);
         }
 
         applet.noStroke();

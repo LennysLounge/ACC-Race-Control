@@ -53,7 +53,7 @@ public class HeaderPanel extends LPComponent {
                     applet.width - sessionNameWidth - 27,
                     y + LookAndFeel.LINE_HEIGHT / 2f);
 
-            applet.fill(LookAndFeel.COLOR_RACE);
+            applet.fill(0xff359425);
             applet.rect(applet.width - sessionNameWidth - 22,
                     y + LookAndFeel.LINE_HEIGHT * 0.1f,
                     7, LookAndFeel.LINE_HEIGHT * 0.8f);

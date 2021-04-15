@@ -6,6 +6,7 @@
 package base.screen.visualisation.gui;
 
 import static base.screen.visualisation.LookAndFeel.COLOR_DARK_GRAY;
+import static base.screen.visualisation.LookAndFeel.COLOR_RED;
 import static base.screen.visualisation.LookAndFeel.COLOR_WHITE;
 import static base.screen.visualisation.LookAndFeel.TEXT_SIZE;
 import static base.screen.visualisation.gui.LPComponent.applet;
@@ -48,7 +49,7 @@ public class LPCheckBox
     public void draw() {
         applet.stroke(COLOR_WHITE);
         if (selected) {
-            applet.fill(COLOR_WHITE);
+            applet.fill(COLOR_RED);
         } else {
             applet.fill(COLOR_DARK_GRAY);
 
