@@ -351,7 +351,6 @@ public class LiveTimingTableModel extends TableModel {
             }
             text = TimeUtils.asLapTime(currentLap.getLapTimeMS());
         } else if (car.getRealtime().getLocation() == CarLocation.TRACK) {
-            applet.fill(0, 0, 0, 75);
             text = currentLap.getType().name();
         }
         applet.textAlign(CENTER, CENTER);
