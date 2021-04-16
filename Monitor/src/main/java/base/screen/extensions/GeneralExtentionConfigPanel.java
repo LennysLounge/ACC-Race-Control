@@ -87,6 +87,7 @@ public class GeneralExtentionConfigPanel
             loggingCheckBox.setEnabled(false);
             incidentLogCheckBox.setEnabled(false);
         }
+        invalidate();
     }
 
     public static GeneralExtentionConfigPanel getInstance() {
