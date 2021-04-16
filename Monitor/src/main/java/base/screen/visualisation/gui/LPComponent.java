@@ -240,10 +240,18 @@ public class LPComponent {
     }
 
     public void setEnabled(boolean isEnabled) {
-        this.isEnabled = isEnabled;
+        if (this.isEnabled != isEnabled) {
+            this.isEnabled = isEnabled;
+            onEnabled();
+        }
     }
-    
-    
+
+    /**
+     * Event for when a componentis enabled or disabled. Override this event to
+     * be able to react to it.
+     */
+    public void onEnabled() {
+    }
 
     /**
      * Draws this component. Used internaly.

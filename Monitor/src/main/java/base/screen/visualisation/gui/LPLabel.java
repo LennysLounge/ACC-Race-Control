@@ -8,9 +8,7 @@ package base.screen.visualisation.gui;
 import base.screen.visualisation.LookAndFeel;
 import static base.screen.visualisation.LookAndFeel.LINE_HEIGHT;
 import static base.screen.visualisation.gui.LPComponent.applet;
-import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.HAND;
 import static processing.core.PConstants.LEFT;
 
 /**

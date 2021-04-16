@@ -84,6 +84,10 @@ public class ConfigPanel
         connectionPWTextField.setEnabled(true);
         updateIntervalTextField.setEnabled(true);
         connectButton.setAction(()->connectButtonPressed());
+        
+        //enable config dialogs.
+        extensionTabPanel.getTabs().stream()
+                .forEach(tab -> tab.setEnabled(true));
     }
 
     private void connectButtonPressed() {
@@ -139,6 +143,11 @@ public class ConfigPanel
         connectionPWTextField.setEnabled(false);
         updateIntervalTextField.setEnabled(false);
         connectButton.setAction(()->disconnectButtonPressed());
+        
+        //disable all config dialogs.
+        extensionTabPanel.getTabs().stream()
+                .forEach(tab -> tab.setEnabled(false));
+        
     }
     
     private void disconnectButtonPressed(){
