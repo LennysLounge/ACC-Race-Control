@@ -80,6 +80,7 @@ public class LPTabPanel extends LPContainer {
                 applet.rect(i * tabSize, 0, tabSize, lineHeight);
             }
             applet.fill(255);
+            applet.textFont(LookAndFeel.fontMedium());
             applet.text(tabs.get(i).getName(), i * tabSize + tabSize / 2f, lineHeight * 0.5f);
         }
     }
