@@ -9,6 +9,7 @@ import base.ACCLiveTimingExtensionFactory;
 import base.screen.eventbus.Event;
 import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
+import base.screen.extensions.GeneralExtentionConfigPanel;
 import base.screen.networking.AccBroadcastingClient;
 import base.screen.networking.events.ConnectionClosed;
 import base.screen.visualisation.LookAndFeel;
@@ -37,7 +38,7 @@ public class ConfigPanel
     /**
      * This classes logger.
      */
-    private static Logger LOG = Logger.getLogger(ConfigPanel.class.getName());
+    private static final Logger LOG = Logger.getLogger(ConfigPanel.class.getName());
     /**
      * Client for game connection.
      */
@@ -206,7 +207,8 @@ public class ConfigPanel
         extensionHeading.setSize(getWidth() - 420, LookAndFeel.LINE_HEIGHT);
         addComponent(extensionHeading);
         addComponent(extensionTabPanel);
-
+         
+        extensionTabPanel.addTab(GeneralExtentionConfigPanel.getInstance());
         for (ACCLiveTimingExtensionFactory module : Visualisation.getModules()) {
             LPContainer configurationPanel = module.getExtensionConfigurationPanel();
             if (configurationPanel != null) {

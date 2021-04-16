@@ -7,6 +7,7 @@ package base.screen.extensions.livetiming;
 
 import base.screen.extensions.AccClientExtension;
 import base.ACCLiveTimingExtensionFactory;
+import base.screen.extensions.GeneralExtentionConfigPanel;
 import base.screen.visualisation.gui.LPContainer;
 
 /**
@@ -26,7 +27,9 @@ public class LiveTimingExtensionFactory
     @Override
     public void createExtension() {
         removeExtension();
-        extension = new LiveTimingExtension();
+        if (GeneralExtentionConfigPanel.getInstance().isLiveTimingEnabled()) {
+            extension = new LiveTimingExtension();
+        }
     }
 
     @Override

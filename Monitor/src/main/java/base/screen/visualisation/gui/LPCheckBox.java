@@ -6,6 +6,8 @@
 package base.screen.visualisation.gui;
 
 import static base.screen.visualisation.LookAndFeel.COLOR_DARK_GRAY;
+import static base.screen.visualisation.LookAndFeel.COLOR_DARK_RED;
+import static base.screen.visualisation.LookAndFeel.COLOR_LIGHT_GRAY;
 import static base.screen.visualisation.LookAndFeel.COLOR_RED;
 import static base.screen.visualisation.LookAndFeel.COLOR_WHITE;
 import static base.screen.visualisation.LookAndFeel.TEXT_SIZE;
@@ -41,13 +43,17 @@ public class LPCheckBox
 
     @Override
     public void onMousePressed(int x, int y, int button) {
-        selected = !selected;
-        invalidate();
+        if (isEnabled()) {
+            selected = !selected;
+            invalidate();
+        }
     }
 
     @Override
     public void draw() {
+
         applet.stroke(COLOR_WHITE);
+
         if (selected) {
             applet.fill(COLOR_RED);
         } else {
@@ -57,10 +63,21 @@ public class LPCheckBox
         applet.strokeWeight(3);
         applet.rect(0, 0, TEXT_SIZE, TEXT_SIZE);
         applet.strokeWeight(1);
+
+        if (!isEnabled()) {
+            applet.noStroke();
+            applet.fill(0, 0, 0, 150);
+            applet.rect(-1, -1, TEXT_SIZE + 3, TEXT_SIZE + 3);
+        }
     }
-    
-    public boolean isSelected(){
+
+    public boolean isSelected() {
         return selected;
+    }
+
+    public void setSelected(boolean state) {
+        selected = state;
+        invalidate();
     }
 
 }

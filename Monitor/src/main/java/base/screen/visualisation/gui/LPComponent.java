@@ -5,6 +5,7 @@
  */
 package base.screen.visualisation.gui;
 
+import static java.util.Objects.requireNonNull;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 
@@ -200,6 +201,7 @@ public class LPComponent {
      * @param comp the focused component.
      */
     protected static void setFocused(LPComponent comp) {
+        requireNonNull(comp, "comp");
         if (comp == focused) {
             return;
         }

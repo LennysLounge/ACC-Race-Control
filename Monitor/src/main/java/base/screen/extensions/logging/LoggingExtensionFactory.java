@@ -7,6 +7,7 @@ package base.screen.extensions.logging;
 
 import base.screen.extensions.AccClientExtension;
 import base.ACCLiveTimingExtensionFactory;
+import base.screen.extensions.GeneralExtentionConfigPanel;
 import base.screen.visualisation.gui.LPContainer;
 
 /**
@@ -26,7 +27,9 @@ public class LoggingExtensionFactory
     @Override
     public void createExtension() {
         removeExtension();
-        extension = new LoggingExtension();
+        if (GeneralExtentionConfigPanel.getInstance().isLoggingEnabled()) {
+            extension = new LoggingExtension();
+        }
     }
 
     @Override
