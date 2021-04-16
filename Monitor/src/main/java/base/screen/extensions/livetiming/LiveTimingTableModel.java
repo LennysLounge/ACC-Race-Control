@@ -143,6 +143,13 @@ public class LiveTimingTableModel extends TableModel {
         this.entries = entries;
     }
 
+    public CarInfo getEntry(int row) {
+        if (row < entries.size()) {
+            return entries.get(row);
+        }
+        return null;
+    }
+
     public void setFocusedCarId(int carId) {
         focusedCarId = carId;
     }

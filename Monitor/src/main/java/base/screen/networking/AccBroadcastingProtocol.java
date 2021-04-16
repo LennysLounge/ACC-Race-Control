@@ -281,6 +281,26 @@ public class AccBroadcastingProtocol {
         return message.toByteArray();
     }
 
+    public static byte[] buildFocusRequest(int connectionId, Integer carIndex, String cameraSet, String camera) {
+        ByteArrayOutputStream message = new ByteArrayOutputStream();
+        message.write(OutboundMessageTypes.CHANGE_FOCUS);
+        message.write(toByteArray(connectionId, 4), 0, 4);
+        if (carIndex == null) {
+            message.write(0);   //no change of car
+        } else {
+            message.write(1);
+            message.write(toByteArray(carIndex, 2), 0, 2);
+        }
+        if(cameraSet == null || camera == null || cameraSet.isEmpty() || camera.isEmpty()){
+            message.write(0);   //no change of camera
+        }else{
+            message.write(1);
+            writeString(message, cameraSet);
+            writeString(message, camera);
+        }
+        return message.toByteArray();
+    }
+
     public static byte[] buildEntryListRequest(int connectionID) {
         ByteArrayOutputStream message = new ByteArrayOutputStream();
         message.write(OutboundMessageTypes.REQUEST_ENTRY_LIST);
@@ -349,7 +369,7 @@ public class AccBroadcastingProtocol {
         for (int i = 0; i < splitCount; i++) {
             splits.add(readInt32(in));
         }
-        
+
         boolean isInvalid = readByte(in) > 0;
         boolean isValidForBest = readByte(in) > 0;
 

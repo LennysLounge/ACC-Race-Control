@@ -6,6 +6,7 @@
 package base.screen.visualisation.gui;
 
 import base.screen.visualisation.LookAndFeel;
+import java.util.function.BiConsumer;
 import java.util.logging.Logger;
 import processing.core.PApplet;
 import static processing.core.PConstants.ARROW;
@@ -79,6 +80,11 @@ public class LPTable extends LPContainer {
      * component.
      */
     private boolean overdrawForLastLine = false;
+    /**
+     * Action to call when a cell has been clicked.
+     * Parameters are the column and the row that has been clicked.
+     */
+    private BiConsumer<Integer,Integer> cellClickAction = (column, row)->{};
 
     @Override
     public void draw() {
@@ -240,7 +246,8 @@ public class LPTable extends LPContainer {
                     scrolledRow -= 1;
                 }
                 if (scrolledRow < model.getRowCount() && scrolledRow >= 0) {
-                    model.onClick(column, scrolledRow);
+                    //model.onClick(column, scrolledRow);
+                    cellClickAction.accept(column, scrolledRow);
                 }
             }
         }
@@ -324,6 +331,14 @@ public class LPTable extends LPContainer {
 
     public void setOverdrawForLastLine(boolean state) {
         this.overdrawForLastLine = state;
+    }
+    
+    public void setCellClickAction(BiConsumer<Integer, Integer> action){
+        this.cellClickAction = action;
+    }
+    
+    public TableModel getTableModel(){
+        return model;
     }
 
     private float[] calculateColumnWidths(LPTableColumn[] columns, float totalWidth) {

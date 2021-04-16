@@ -265,6 +265,20 @@ public class AccBroadcastingClient {
     }
 
     /**
+     * Send a request to change the currently focused car.
+     *
+     * @param carIndex the car index of the car to focus on.
+     */
+    public void sendChangeFocusRequest(int carIndex) {
+        sendRequest(AccBroadcastingProtocol.buildFocusRequest(
+                model.getConnectionID(),
+                carIndex,
+                model.getSessionInfo().getActiveCameraSet(),
+                model.getSessionInfo().getActiveCamera()
+        ));
+    }
+
+    /**
      * Disconnect from the game.
      */
     public void disconnect() {
