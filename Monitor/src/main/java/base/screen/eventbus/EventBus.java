@@ -13,17 +13,28 @@ import java.util.List;
  * @author Leonard
  */
 public class EventBus {
-    
-    private static List<EventListener> listeners = new LinkedList<>();
-    
-    public static void register(EventListener listener){
-        listeners.add(listener);
+
+    private static final List<EventListener> listeners = new LinkedList<>();
+
+    private final static Object syncObject = new Object();
+
+    public static void register(EventListener listener) {
+        synchronized (syncObject) {
+            listeners.add(listener);
+        }
     }
-    
-    public static void publish(Event e){
-        listeners.forEach(listener->{
-            listener.onEvent(e);
-        });
+
+    public static void unregister(EventListener listener) {
+        synchronized (syncObject) {
+            listeners.remove(listener);
+        }
     }
-    
+
+    public static void publish(Event e) {
+        synchronized (syncObject) {
+            listeners.forEach(listener -> {
+                listener.onEvent(e);
+            });
+        }
+    }
 }

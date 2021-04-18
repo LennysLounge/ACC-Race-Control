@@ -13,7 +13,7 @@ import base.screen.networking.data.BroadcastingEvent;
  * @author Leonard
  */
 public class BroadcastingEventEvent extends Event {
-    
+
     private BroadcastingEvent event;
 
     public BroadcastingEventEvent(BroadcastingEvent event) {
@@ -23,6 +23,5 @@ public class BroadcastingEventEvent extends Event {
     public BroadcastingEvent getEvent() {
         return event;
     }
-    
-    
+
 }

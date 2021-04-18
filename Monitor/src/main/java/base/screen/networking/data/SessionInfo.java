@@ -34,7 +34,6 @@ public class SessionInfo {
     byte rainLevel;
     byte wetness;
     LapInfo bestSessionLap = new LapInfo();
-  
 
     public SessionInfo() {
     }

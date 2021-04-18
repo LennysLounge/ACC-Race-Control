@@ -52,8 +52,8 @@ public class AccBroadcastingData {
     public Map<Integer, CarInfo> getCarsInfo() {
         return Collections.unmodifiableMap(cars);
     }
-    
-    public CarInfo getCar(int carId){
+
+    public CarInfo getCar(int carId) {
         return cars.getOrDefault(carId, new CarInfo());
     }
 

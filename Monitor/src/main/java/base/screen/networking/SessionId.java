@@ -12,14 +12,14 @@ import base.screen.networking.enums.SessionType;
  * @author Leonard
  */
 public class SessionId {
-    
+
     private SessionType type;
-    
+
     private int number;
-    
+
     private int index;
-    
-    public SessionId(SessionType type, int index, int number){
+
+    public SessionId(SessionType type, int index, int number) {
         this.type = type;
         this.index = index;
         this.number = number;
@@ -36,7 +36,5 @@ public class SessionId {
     public int getIndex() {
         return index;
     }
-    
-    
-    
+
 }

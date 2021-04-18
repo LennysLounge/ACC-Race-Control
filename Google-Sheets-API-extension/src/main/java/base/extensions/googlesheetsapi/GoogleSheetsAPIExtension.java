@@ -5,9 +5,6 @@
  */
 package base.extensions.googlesheetsapi;
 
-import base.extensions.fullcourseyellow.events.FCYStart;
-import base.extensions.fullcourseyellow.events.FCYStop;
-import base.extensions.fullcourseyellow.events.FCYViolation;
 import base.screen.Main;
 import base.screen.networking.SessionId;
 import base.screen.networking.SessionChanged;
@@ -85,7 +82,7 @@ public class GoogleSheetsAPIExtension
     /**
      * Event queue.
      */
-    private LinkedBlockingQueue<Object> queue = new LinkedBlockingQueue<>();
+    private final LinkedBlockingQueue<Object> queue = new LinkedBlockingQueue<>();
     /**
      * The current sessionId.
      */
@@ -135,22 +132,6 @@ public class GoogleSheetsAPIExtension
                     isMeasuringGreenFlagOffset = false;
                 }
             }
-        } else if (e instanceof FCYStart) {
-            FCYStart event = ((FCYStart) e);
-            String sessionTime = TimeUtils.asDuration(event.getSessionTime());
-            queue.add(new SendIncidentEvent(sessionTime, "Start FCC"));
-        } else if (e instanceof FCYStop) {
-            FCYStop event = ((FCYStop) e);
-            String sessionTime = TimeUtils.asDuration(event.getSessionTime());
-            queue.add(new SendIncidentEvent(sessionTime, "Stop FCC"));
-        } else if (e instanceof FCYViolation) {
-            /*
-            FCYViolation event = ((FCYViolation) e);
-            String sessionTime = TimeUtils.asDuration(event.getTimeStamp());
-            String message = String.valueOf(event.getCar().getCarNumber())
-                    + ", " + String.valueOf(event.getSpeed()) + "km/h";
-            queue.add(new SendIncidentEvent(sessionTime, message));
-             */
         } else if (e instanceof CarConnect) {
             CarConnect event = ((CarConnect) e);
             queue.add(new SendCarConnectedEvent(
@@ -309,7 +290,6 @@ public class GoogleSheetsAPIExtension
             updateCells(range, Arrays.asList(Arrays.asList(TimeUtils.asDuration(event.time))));
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "Error setting spreadsheet value", e);
-            return;
         }
     }
 
@@ -371,6 +351,11 @@ public class GoogleSheetsAPIExtension
     @Override
     public LPContainer getPanel() {
         return panel;
+    }
+
+    @Override
+    public void removeExtension() {
+        EventBus.unregister(this);
     }
 
     private class SendIncidentEvent {

@@ -10,5 +10,5 @@ package base.screen.eventbus;
  * @author Leonard
  */
 public class Event {
-    
+
 }

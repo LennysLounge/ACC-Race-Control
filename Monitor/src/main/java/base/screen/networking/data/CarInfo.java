@@ -100,8 +100,8 @@ public class CarInfo {
         return new CarInfo(carId, carModelType, teamName, carNumber, cupCatergory,
                 currentDriverIndex, carNationality, drivers, realtime, isConnected);
     }
-    
-    public boolean isConnected(){
+
+    public boolean isConnected() {
         return isConnected;
     }
 }

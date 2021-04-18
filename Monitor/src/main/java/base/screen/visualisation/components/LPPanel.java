@@ -7,36 +7,34 @@ package base.screen.visualisation.components;
 
 import base.screen.visualisation.gui.LPContainer;
 
-
 /**
  *
  * @author Leonard
  */
 public class LPPanel
         extends LPContainer {
-    
+
     private int drawCounter = 0;
-    
+
     public int color = 50;
-    
-    public LPPanel(){
+
+    public LPPanel() {
     }
-    
+
     @Override
-    public void draw(){
+    public void draw() {
         applet.fill(color);
         applet.noStroke();
         applet.rect(0, 0, getWidth(), getHeight());
-        
+
         applet.strokeWeight(1);
         applet.stroke(255);
         applet.noFill();
-        applet.rect(5,5,getWidth()-10, getHeight()-10);
+        applet.rect(5, 5, getWidth() - 10, getHeight() - 10);
     }
-    
+
     @Override
-    public void onResize(int w, int h){
+    public void onResize(int w, int h) {
     }
-   
 
 }

@@ -1,4 +1,3 @@
-
 package base.screen.networking.enums;
 
 /**
@@ -33,8 +32,8 @@ public enum DriverCategory {
                 return ERROR;
         }
     }
-    
-    public int getId(){
+
+    public int getId() {
         return id;
     }
 

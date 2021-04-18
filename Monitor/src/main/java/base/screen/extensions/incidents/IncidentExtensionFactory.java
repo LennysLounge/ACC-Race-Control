@@ -6,14 +6,16 @@
 package base.screen.extensions.incidents;
 
 import base.screen.extensions.AccClientExtension;
-import javax.swing.JPanel;
+import base.screen.visualisation.gui.LPContainer;
 
 /**
  *
  * @author Leonard
  */
 public class IncidentExtensionFactory
-    implements base.ACCLiveTimingExtensionFactory{
+        implements base.ACCLiveTimingExtensionFactory {
+
+    private IncidentExtension extension;
 
     @Override
     public String getName() {
@@ -21,14 +23,27 @@ public class IncidentExtensionFactory
     }
 
     @Override
-    public AccClientExtension createExtension() {
-        return new IncidentExtension();
+    public void createExtension() {
+        removeExtension();
+        extension = new IncidentExtension();
     }
 
     @Override
-    public JPanel getExtensionConfigurationPanel() {
+    public LPContainer getExtensionConfigurationPanel() {
         return null;
     }
-    
-    
+
+    @Override
+    public void removeExtension() {
+        if (extension != null) {
+            extension.removeExtension();
+            extension = null;
+        }
+    }
+
+    @Override
+    public AccClientExtension getExtension() {
+        return extension;
+    }
+
 }

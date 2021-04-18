@@ -6,8 +6,9 @@
 package base.screen.extensions.logging;
 
 import base.screen.extensions.AccClientExtension;
-import javax.swing.JPanel;
 import base.ACCLiveTimingExtensionFactory;
+import base.screen.extensions.GeneralExtentionConfigPanel;
+import base.screen.visualisation.gui.LPContainer;
 
 /**
  *
@@ -16,19 +17,37 @@ import base.ACCLiveTimingExtensionFactory;
 public class LoggingExtensionFactory
         implements ACCLiveTimingExtensionFactory {
 
+    private AccClientExtension extension;
+
     @Override
     public String getName() {
         return "Logging extension";
     }
 
     @Override
-    public AccClientExtension createExtension() {
-        return new LoggingExtension();
+    public void createExtension() {
+        removeExtension();
+        if (GeneralExtentionConfigPanel.getInstance().isLoggingEnabled()) {
+            extension = new LoggingExtension();
+        }
     }
 
     @Override
-    public JPanel getExtensionConfigurationPanel() {
+    public LPContainer getExtensionConfigurationPanel() {
         return null;
+    }
+
+    @Override
+    public void removeExtension() {
+        if (extension != null) {
+            extension.removeExtension();
+            extension = null;
+        }
+    }
+
+    @Override
+    public AccClientExtension getExtension() {
+        return extension;
     }
 
 }

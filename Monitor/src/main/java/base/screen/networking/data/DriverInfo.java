@@ -8,7 +8,6 @@ package base.screen.networking.data;
 import base.screen.networking.enums.DriverCategory;
 import base.screen.networking.enums.Nationality;
 
-
 /**
  *
  * @author Leonard
@@ -20,8 +19,8 @@ public class DriverInfo {
     private String shortName = "";
     private DriverCategory category = DriverCategory.ERROR;
     private Nationality driverNationality;
-    
-    public DriverInfo(){
+
+    public DriverInfo() {
     }
 
     public DriverInfo(String firstName, String lastName, String shortName, DriverCategory category, Nationality driverNationality) {

@@ -5,20 +5,21 @@
  */
 package base.extensions.googlesheetsapi;
 
-import base.screen.extensions.AccClientExtension;
 import base.screen.visualisation.gui.LPContainer;
-import javax.swing.JPanel;
 import base.ACCLiveTimingExtensionFactory;
+import base.screen.extensions.AccClientExtension;
 
 /**
  *
  * @author Leonard
  */
-public class GoogleSheetsAPIExtensionFactory implements ACCLiveTimingExtensionFactory{
-    
+public class GoogleSheetsAPIExtensionFactory
+        implements ACCLiveTimingExtensionFactory {
+
     private final GoogleSheetsAPIConfigurationPanel configurationPanel;
-    
-    public GoogleSheetsAPIExtensionFactory(){
+    private GoogleSheetsAPIExtension extension;
+
+    public GoogleSheetsAPIExtensionFactory() {
         configurationPanel = new GoogleSheetsAPIConfigurationPanel();
     }
 
@@ -28,18 +29,30 @@ public class GoogleSheetsAPIExtensionFactory implements ACCLiveTimingExtensionFa
     }
 
     @Override
-    public AccClientExtension createExtension() {
-        if(configurationPanel.isExtensionEnabled()){
-            GoogleSheetsAPIExtension extension = new GoogleSheetsAPIExtension();
+    public void createExtension() {
+        removeExtension();
+        if (configurationPanel.isExtensionEnabled()) {
+            extension = new GoogleSheetsAPIExtension();
             extension.start(configurationPanel.getSpreadSheetLink());
-            return extension;
         }
-        return null;
     }
 
     @Override
-    public JPanel getExtensionConfigurationPanel() {
+    public LPContainer getExtensionConfigurationPanel() {
         return configurationPanel;
     }
-    
+
+    @Override
+    public void removeExtension() {
+        if (extension != null) {
+            extension.removeExtension();
+            extension = null;
+        }
+    }
+
+    @Override
+    public AccClientExtension getExtension() {
+        return extension;
+    }
+
 }

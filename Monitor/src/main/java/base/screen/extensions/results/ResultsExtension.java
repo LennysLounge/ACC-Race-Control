@@ -66,7 +66,7 @@ public class ResultsExtension
             report.incidents.clear();
             report.broadcastEvents.clear();
             report.greenFlagOffset = 0;
-            
+
         } else if (e instanceof BroadcastingEventEvent) {
             if (((BroadcastingEventEvent) e).getEvent().getType() == BroadcastingEventType.ACCIDENT) {
                 broadcastingEvents.add(((BroadcastingEventEvent) e).getEvent());
@@ -116,13 +116,13 @@ public class ResultsExtension
             FileWriter writer = new FileWriter(currentFilePath);
             writer.write(result);
             writer.close();
-            
+
         } catch (JsonProcessingException ex) {
             Logger.getLogger(ResultsExtension.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ResultsExtension.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         /*
             try {
             FileWriter writer = new FileWriter(currentFilePath);
@@ -168,11 +168,16 @@ public class ResultsExtension
             System.out.println("An error occurred.");
             e.printStackTrace();
             }
-            */
+         */
     }
 
     private String getCarNumberAndLapCount(CarInfo car) {
         return car.getCarNumber() + " [" + (car.getRealtime().getLaps() + 1) + "]";
+    }
+
+    @Override
+    public void removeExtension() {
+        EventBus.unregister(this);
     }
 
 }

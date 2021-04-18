@@ -3,35 +3,42 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package base.screen.extensions.laptimes;
+package base.screen.extensions.debug;
 
-import base.screen.extensions.AccClientExtension;
 import base.ACCLiveTimingExtensionFactory;
+import base.screen.extensions.AccClientExtension;
 import base.screen.visualisation.gui.LPContainer;
 
 /**
  *
  * @author Leonard
  */
-public class LaptimeExtensionFactory
+public class DebugExtensionFactory
         implements ACCLiveTimingExtensionFactory {
 
-    private AccClientExtension extension;
+    private final DebugConfigPanel configPanel;
+    private DebugExtension extension;
+
+    public DebugExtensionFactory() {
+        configPanel = new DebugConfigPanel();
+    }
 
     @Override
     public String getName() {
-        return "Laptime extension";
+        return "Debug";
     }
 
     @Override
     public void createExtension() {
         removeExtension();
-        extension = new LapTimeExtension(false);
+        if (configPanel.isExtensionEnabled()) {
+            extension = new DebugExtension();
+        }
     }
 
     @Override
     public LPContainer getExtensionConfigurationPanel() {
-        return null;
+        return configPanel;
     }
 
     @Override

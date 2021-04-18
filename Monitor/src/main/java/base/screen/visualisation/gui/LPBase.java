@@ -6,6 +6,7 @@
 package base.screen.visualisation.gui;
 
 import processing.core.PApplet;
+import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 /**
@@ -49,7 +50,7 @@ public class LPBase extends PApplet {
 
     @Override
     public void mousePressed() {
-        LPComponent clickedComponent = base.mousePressedInternal(mouseX, mouseY, mouseButton);
+        LPComponent clickedComponent = base.onMousePressedInternal(mouseX, mouseY, mouseButton);
 
         //invalidate current focused component.
         if (LPContainer.getFocused() != null) {
@@ -65,13 +66,13 @@ public class LPBase extends PApplet {
     @Override
     public void mouseReleased() {
         if (mousePressedTarget != null) {
-            mousePressedTarget.mouseReleasedInternal(mouseX, mouseY, mouseButton);
+            mousePressedTarget.onMouseReleasedInternal(mouseX, mouseY, mouseButton);
         }
     }
 
     @Override
     public void mouseWheel(MouseEvent event) {
-        base.mouseScrollInternal(mouseX, mouseY, event.getCount());
+        base.onMouseScrollInternal(mouseX, mouseY, event.getCount());
     }
 
     @Override
@@ -83,7 +84,14 @@ public class LPBase extends PApplet {
     public void mouseDragged() {
         base.onMouseMoveInternal(mouseX, mouseY);
     }
-    
 
+    @Override
+    public void keyPressed(KeyEvent event) {
+        base.onKeyPressedInternal(event);
+    }
+
+    public void keyReleased(KeyEvent event) {
+        base.onKeyReleasedInternal(event);
+    }
 
 }

@@ -23,6 +23,8 @@ import base.screen.networking.data.SessionInfo;
 import base.screen.networking.data.TrackInfo;
 import base.screen.networking.enums.SessionPhase;
 import base.screen.networking.enums.SessionType;
+import base.screen.networking.events.ConnectionClosed;
+import base.screen.networking.events.ConnectionOpened;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -192,10 +194,10 @@ public class AccBroadcastingClient {
      * @return True when connected.
      */
     public boolean isConnected() {
-        if(socket != null 
+        if (socket != null
                 && socket.isConnected()
                 && accListenerThread != null
-                && accListenerThread.isAlive()){
+                && accListenerThread.isAlive()) {
             return true;
         }
         return false;
@@ -263,6 +265,20 @@ public class AccBroadcastingClient {
     }
 
     /**
+     * Send a request to change the currently focused car.
+     *
+     * @param carIndex the car index of the car to focus on.
+     */
+    public void sendChangeFocusRequest(int carIndex) {
+        sendRequest(AccBroadcastingProtocol.buildFocusRequest(
+                model.getConnectionID(),
+                carIndex,
+                model.getSessionInfo().getActiveCameraSet(),
+                model.getSessionInfo().getActiveCamera()
+        ));
+    }
+
+    /**
      * Disconnect from the game.
      */
     public void disconnect() {
@@ -313,6 +329,7 @@ public class AccBroadcastingClient {
 
         @Override
         public void run() {
+            EventBus.publish(new ConnectionOpened());
             LOG.info("Starting Listener thread");
             try {
                 udpListener();
@@ -323,6 +340,7 @@ public class AccBroadcastingClient {
                 LOG.log(Level.SEVERE, "Overflow in listener thread", e);
                 exitState = ExitState.EXCEPTION;
             }
+            EventBus.publish(new ConnectionClosed(exitState));
             LOG.info("Listener thread done");
         }
 

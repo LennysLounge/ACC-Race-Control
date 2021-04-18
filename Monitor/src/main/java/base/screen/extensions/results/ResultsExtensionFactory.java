@@ -7,14 +7,16 @@ package base.screen.extensions.results;
 
 import base.ACCLiveTimingExtensionFactory;
 import base.screen.extensions.AccClientExtension;
-import javax.swing.JPanel;
+import base.screen.visualisation.gui.LPContainer;
 
 /**
  *
  * @author Leonard
  */
-public class ResultsExtensionFactory 
-    implements ACCLiveTimingExtensionFactory{
+public class ResultsExtensionFactory
+        implements ACCLiveTimingExtensionFactory {
+
+    private AccClientExtension extension;
 
     @Override
     public String getName() {
@@ -22,13 +24,27 @@ public class ResultsExtensionFactory
     }
 
     @Override
-    public AccClientExtension createExtension() {
-        return new ResultsExtension();
+    public void createExtension() {
+        removeExtension();
+        extension = new ResultsExtension();
     }
 
     @Override
-    public JPanel getExtensionConfigurationPanel() {
+    public LPContainer getExtensionConfigurationPanel() {
         return null;
     }
-    
+
+    @Override
+    public void removeExtension() {
+        if (extension != null) {
+            extension.removeExtension();
+            extension = null;
+        }
+    }
+
+    @Override
+    public AccClientExtension getExtension() {
+        return extension;
+    }
+
 }

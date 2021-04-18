@@ -6,22 +6,23 @@
 package base.screen.networking.events;
 
 import base.screen.eventbus.Event;
-import base.screen.networking.data.RealtimeInfo;
+import base.screen.networking.AccBroadcastingClient.ExitState;
 
 /**
  *
  * @author Leonard
  */
-public class RealtimeCarUpdate extends Event {
+public class ConnectionClosed
+        extends Event {
 
-    private RealtimeInfo info;
+    private final ExitState exitState;
 
-    public RealtimeCarUpdate(RealtimeInfo info) {
-        this.info = info;
+    public ConnectionClosed(ExitState exitState) {
+        this.exitState = exitState;
     }
 
-    public RealtimeInfo getInfo() {
-        return info;
+    public ExitState getExitState() {
+        return exitState;
     }
 
 }

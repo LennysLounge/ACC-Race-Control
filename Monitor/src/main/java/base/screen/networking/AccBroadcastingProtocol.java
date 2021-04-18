@@ -29,6 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -277,6 +278,26 @@ public class AccBroadcastingProtocol {
         ByteArrayOutputStream message = new ByteArrayOutputStream();
         message.write(OutboundMessageTypes.UNREGISTER_COMMAND_APPLICATION);
         message.write(toByteArray(connectionID, 4), 0, 4);
+        return message.toByteArray();
+    }
+
+    public static byte[] buildFocusRequest(int connectionId, Integer carIndex, String cameraSet, String camera) {
+        ByteArrayOutputStream message = new ByteArrayOutputStream();
+        message.write(OutboundMessageTypes.CHANGE_FOCUS);
+        message.write(toByteArray(connectionId, 4), 0, 4);
+        if (carIndex == null) {
+            message.write(0);   //no change of car
+        } else {
+            message.write(1);
+            message.write(toByteArray(carIndex, 2), 0, 2);
+        }
+        if (cameraSet == null || camera == null || cameraSet.isEmpty() || camera.isEmpty()) {
+            message.write(0);   //no change of camera
+        } else {
+            message.write(1);
+            writeString(message, cameraSet);
+            writeString(message, camera);
+        }
         return message.toByteArray();
     }
 

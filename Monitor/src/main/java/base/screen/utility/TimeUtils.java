@@ -60,7 +60,7 @@ public class TimeUtils {
         if (m > 1) {
             return String.format("%s%02d:%02d.%03d", sign, (int) m, (int) s, (int) ms);
         }
-        return String.format("%s%02d.%03d", sign, (int) s, (int) ms);
+        return String.format("%s%01d.%03d", sign, (int) s, (int) ms);
     }
 
     public static float durationAsMillis(String duration) {

@@ -15,11 +15,11 @@ import java.util.List;
  * @author Leonard
  */
 public class IncidentReport {
-    
+
     public List<BroadcastingEvent> broadcastEvents = new LinkedList<>();
-    
+
     public List<IncidentInfo> incidents = new LinkedList<>();
-    
+
     public long greenFlagOffset = 0;
-    
+
 }

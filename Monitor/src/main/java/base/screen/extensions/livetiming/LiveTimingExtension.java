@@ -54,12 +54,12 @@ public class LiveTimingExtension
     public LiveTimingExtension() {
         this.client = Main.getClient();
         this.panel = new LiveTimingPanel(this);
-        
+
         EventBus.register(this);
     }
-    
+
     @Override
-    public LPContainer getPanel(){
+    public LPContainer getPanel() {
         return panel;
     }
 
@@ -76,6 +76,11 @@ public class LiveTimingExtension
         }
     }
 
+    @Override
+    public void removeExtension() {
+        EventBus.unregister(this);
+    }
+
     public void onRealtimeUpdate(SessionInfo sessionInfo) {
         List<CarInfo> sorted = entires.values().stream()
                 .filter(entry -> entry.isConnected())
@@ -84,6 +89,7 @@ public class LiveTimingExtension
 
         model.setEntries(sorted);
         model.setFocusedCarId(sessionInfo.getFocusedCarIndex());
+        model.setSessionBestLap(sessionInfo.getBestSessionLap());
         panel.invalidate();
     }
 
@@ -94,6 +100,10 @@ public class LiveTimingExtension
 
     private int compareTo(CarInfo c1, CarInfo c2) {
         return (int) Math.signum(c1.getRealtime().getPosition() - c2.getRealtime().getPosition());
+    }
+
+    public void focusOnCar(CarInfo car) {
+        client.sendChangeFocusRequest(car.getCarId());
     }
 
     private boolean isFocused(CarInfo car) {

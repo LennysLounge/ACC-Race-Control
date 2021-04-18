@@ -58,6 +58,7 @@ public class IncidentTableModel extends TableModel {
             applet.rect(x + 1, 1, w - 2, height - 2);
             applet.fill(text_color);
             applet.textAlign(CENTER, CENTER);
+            applet.textFont(LookAndFeel.fontMedium());
             applet.text(String.valueOf(carNumber), x + w / 2, height / 2f);
             x += w;
         }

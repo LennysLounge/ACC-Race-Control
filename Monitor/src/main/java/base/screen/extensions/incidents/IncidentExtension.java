@@ -13,6 +13,7 @@ import base.screen.eventbus.Event;
 import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
 import base.screen.extensions.AccClientExtension;
+import base.screen.extensions.GeneralExtentionConfigPanel;
 import base.screen.extensions.logging.LoggingExtension;
 import base.screen.networking.data.AccBroadcastingData;
 import base.screen.networking.data.BroadcastingEvent;
@@ -74,10 +75,13 @@ public class IncidentExtension
         this.panel = new IncidentPanel(this);
         EventBus.register(this);
     }
-    
+
     @Override
-    public LPContainer getPanel(){
-        return panel;
+    public LPContainer getPanel() {
+        if (GeneralExtentionConfigPanel.getInstance().isIncidentLogEnabled()) {
+            return panel;
+        }
+        return null;
     }
 
     public AccBroadcastingData getModel() {
@@ -164,6 +168,11 @@ public class IncidentExtension
         int result = incidentCounter.getOrDefault(sessionId, 0);
         incidentCounter.put(sessionId, result + 1);
         return result;
+    }
+
+    @Override
+    public void removeExtension() {
+        EventBus.unregister(this);
     }
 
 }
