@@ -26,7 +26,7 @@ public interface ACCLiveTimingExtensionFactory {
      *
      */
     public void createExtension();
-    
+
     /**
      * Removes the extension.
      */
@@ -39,10 +39,11 @@ public interface ACCLiveTimingExtensionFactory {
      * @return
      */
     public LPContainer getExtensionConfigurationPanel();
-    
+
     /**
      * returns the extension.
-     * @return 
+     *
+     * @return
      */
     public AccClientExtension getExtension();
 }

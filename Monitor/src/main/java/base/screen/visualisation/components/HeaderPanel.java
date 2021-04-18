@@ -44,7 +44,7 @@ public class HeaderPanel extends LPComponent {
             applet.text(conId, 10, y + LookAndFeel.LINE_HEIGHT * 0.5f);
             applet.text(packetsReceived, 200, y + LookAndFeel.LINE_HEIGHT * 0.5f);
             applet.textAlign(RIGHT, CENTER);
-            applet.textSize(LookAndFeel.TEXT_SIZE*0.8f);
+            applet.textSize(LookAndFeel.TEXT_SIZE * 0.8f);
             float sessionNameWidth = applet.textWidth(sessionName);
             applet.text(sessionName, applet.width - 10, y + LookAndFeel.LINE_HEIGHT * 0.5f);
             applet.textFont(LookAndFeel.fontMedium());
@@ -57,8 +57,7 @@ public class HeaderPanel extends LPComponent {
             applet.rect(applet.width - sessionNameWidth - 22,
                     y + LookAndFeel.LINE_HEIGHT * 0.1f,
                     7, LookAndFeel.LINE_HEIGHT * 0.8f);
-        }
-        else{
+        } else {
             applet.fill(LookAndFeel.COLOR_RED);
             applet.noStroke();
             applet.rect(0, 0, getWidth(), getHeight());

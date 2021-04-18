@@ -33,7 +33,7 @@ public class LPLabel
 
     public LPLabel(String text) {
         this.text = text;
-        this.setSize(100,LINE_HEIGHT);
+        this.setSize(100, LINE_HEIGHT);
     }
 
     public void setText(String text) {
@@ -45,7 +45,6 @@ public class LPLabel
     public void setHAlign(int hAlign) {
         this.hAlign = hAlign;
     }
-   
 
     @Override
     public void draw() {
@@ -58,9 +57,9 @@ public class LPLabel
         applet.textAlign(hAlign, vAlign);
         applet.textFont(LookAndFeel.fontRegular());
         if (hAlign == LEFT) {
-            applet.text(text, 0, getHeight()/2f);
+            applet.text(text, 0, getHeight() / 2f);
         } else if (hAlign == CENTER) {
-            applet.text(text, getWidth()/2f, getHeight()/2f);
+            applet.text(text, getWidth() / 2f, getHeight() / 2f);
         }
     }
 

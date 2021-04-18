@@ -81,10 +81,11 @@ public class LPTable extends LPContainer {
      */
     private boolean overdrawForLastLine = false;
     /**
-     * Action to call when a cell has been clicked.
-     * Parameters are the column and the row that has been clicked.
+     * Action to call when a cell has been clicked. Parameters are the column
+     * and the row that has been clicked.
      */
-    private BiConsumer<Integer,Integer> cellClickAction = (column, row)->{};
+    private BiConsumer<Integer, Integer> cellClickAction = (column, row) -> {
+    };
 
     @Override
     public void draw() {
@@ -290,7 +291,7 @@ public class LPTable extends LPContainer {
             for (int i = 0; i < columnWidths.length; i++) {
                 accu += columnWidths[i];
                 if (xx < accu) {
-                    if(mouseOverColumn != i){
+                    if (mouseOverColumn != i) {
                         mouseOverColumn = i;
                         invalidate();
                     }
@@ -332,12 +333,12 @@ public class LPTable extends LPContainer {
     public void setOverdrawForLastLine(boolean state) {
         this.overdrawForLastLine = state;
     }
-    
-    public void setCellClickAction(BiConsumer<Integer, Integer> action){
+
+    public void setCellClickAction(BiConsumer<Integer, Integer> action) {
         this.cellClickAction = action;
     }
-    
-    public TableModel getTableModel(){
+
+    public TableModel getTableModel() {
         return model;
     }
 

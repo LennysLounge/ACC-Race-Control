@@ -60,14 +60,14 @@ public class BasePanel
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof ConnectionOpened) {            
+        if (e instanceof ConnectionOpened) {
             Visualisation.getModules().stream()
                     .map(module -> module.getExtension())
                     .filter(extension -> extension != null)
                     .map(extension -> extension.getPanel())
                     .filter(panel -> panel != null)
                     .forEach(panel -> body.addTab(panel));
-            
+
             body.setTabIndex(1);
             invalidate();
         } else if (e instanceof ConnectionClosed) {

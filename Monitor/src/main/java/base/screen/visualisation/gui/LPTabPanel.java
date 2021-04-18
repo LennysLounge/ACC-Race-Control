@@ -42,7 +42,7 @@ public class LPTabPanel extends LPContainer {
 
     public void addTab(LPContainer tab) {
         tabs.add(tab);
-        setTabIndex(tabs.size()-1);
+        setTabIndex(tabs.size() - 1);
     }
 
     public void removeTab(LPContainer tab) {
@@ -52,8 +52,8 @@ public class LPTabPanel extends LPContainer {
     public void removeAllTabs() {
         tabs.clear();
     }
-    
-    public List<LPContainer> getTabs(){
+
+    public List<LPContainer> getTabs() {
         return tabs;
     }
 
@@ -144,16 +144,16 @@ public class LPTabPanel extends LPContainer {
     private void setMouseOverTab(int index) {
         if (index != mouseOverTab) {
             invalidate();
-            if(index == -1){
+            if (index == -1) {
                 applet.cursor(ARROW);
-            }else{
+            } else {
                 applet.cursor(HAND);
             }
         }
         mouseOverTab = index;
     }
-    
-    public int getTabCount(){
+
+    public int getTabCount() {
         return tabs.size();
     }
 

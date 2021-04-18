@@ -61,13 +61,13 @@ public class LookAndFeel {
         }
         FONT_MEDIUM = fontMedium;
         FONT_REGULAR = fontRegular;
-        
+
     }
 
     public static PFont fontMedium() {
         return FONT_MEDIUM;
     }
-    
+
     public static PFont fontRegular() {
         return FONT_REGULAR;
     }

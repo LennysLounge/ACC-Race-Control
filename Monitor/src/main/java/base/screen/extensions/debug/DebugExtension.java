@@ -9,14 +9,15 @@ import base.screen.extensions.AccClientExtension;
 import base.screen.visualisation.gui.LPContainer;
 
 /**
- *  A Basic Extension to test stuff out with.
+ * A Basic Extension to test stuff out with.
+ *
  * @author Leonard
  */
-public class DebugExtension implements AccClientExtension{
-    
+public class DebugExtension implements AccClientExtension {
+
     DebugPanel panel;
-    
-    public DebugExtension(){
+
+    public DebugExtension() {
         this.panel = new DebugPanel();
     }
 
@@ -28,5 +29,5 @@ public class DebugExtension implements AccClientExtension{
     @Override
     public void removeExtension() {
     }
-    
+
 }

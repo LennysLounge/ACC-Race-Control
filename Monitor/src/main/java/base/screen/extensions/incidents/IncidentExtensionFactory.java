@@ -35,7 +35,7 @@ public class IncidentExtensionFactory
 
     @Override
     public void removeExtension() {
-        if(extension != null){
+        if (extension != null) {
             extension.removeExtension();
             extension = null;
         }

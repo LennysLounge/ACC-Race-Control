@@ -15,7 +15,7 @@ import base.screen.visualisation.gui.LPContainer;
  */
 public class LaptimeExtensionFactory
         implements ACCLiveTimingExtensionFactory {
-    
+
     private AccClientExtension extension;
 
     @Override
@@ -36,7 +36,7 @@ public class LaptimeExtensionFactory
 
     @Override
     public void removeExtension() {
-        if(extension != null){
+        if (extension != null) {
             extension.removeExtension();
             extension = null;
         }

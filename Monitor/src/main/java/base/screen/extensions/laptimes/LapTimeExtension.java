@@ -51,7 +51,7 @@ public class LapTimeExtension
      * Reference to the client.
      */
     private AccBroadcastingClient client;
-    
+
     /**
      * Counts the laps for each car
      */
@@ -83,7 +83,7 @@ public class LapTimeExtension
 
     public LapTimeExtension(boolean isLoggingEnabled) {
         this.client = Main.getClient();
-        
+
         this.isLoggingEnabled = isLoggingEnabled;
         if (isLoggingEnabled) {
             createFolder();

@@ -102,27 +102,27 @@ public class LPContainer
             }
         }
     }
-    
+
     @Override
-    public void onMouseLeaveInternal(){
+    public void onMouseLeaveInternal() {
         super.onMouseLeaveInternal();
         for (LPComponent c : components) {
-                c.onMouseLeaveInternal();
-            }
+            c.onMouseLeaveInternal();
+        }
     }
-    
+
     @Override
-    public void onKeyPressedInternal(KeyEvent event){
+    public void onKeyPressedInternal(KeyEvent event) {
         super.onKeyPressedInternal(event);
-        for(LPComponent c : components){
+        for (LPComponent c : components) {
             c.onKeyPressedInternal(event);
         }
     }
-    
+
     @Override
-    public void onKeyReleasedInternal(KeyEvent event){
+    public void onKeyReleasedInternal(KeyEvent event) {
         super.onKeyReleasedInternal(event);
-        for(LPComponent c : components){
+        for (LPComponent c : components) {
             c.onKeyReleasedInternal(event);
         }
     }

@@ -10,6 +10,6 @@ package base.screen.eventbus;
  * @author Leonard
  */
 public interface EventListener {
-    
+
     public void onEvent(Event e);
 }

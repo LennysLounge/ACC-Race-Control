@@ -51,9 +51,9 @@ public class LPCheckBox
 
     @Override
     public void draw() {
-        
+
         applet.fill(COLOR_WHITE);
-        applet.rect(0,0,TEXT_SIZE,TEXT_SIZE);
+        applet.rect(0, 0, TEXT_SIZE, TEXT_SIZE);
 
         if (selected) {
             applet.fill(COLOR_RED);
@@ -61,7 +61,7 @@ public class LPCheckBox
             applet.fill(COLOR_DARK_GRAY);
 
         }
-        applet.rect(3, 3, TEXT_SIZE-6, TEXT_SIZE-6);
+        applet.rect(3, 3, TEXT_SIZE - 6, TEXT_SIZE - 6);
         applet.strokeWeight(1);
 
         if (!isEnabled()) {

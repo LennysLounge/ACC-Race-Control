@@ -83,8 +83,8 @@ public class ConfigPanel
         portTextField.setEnabled(true);
         connectionPWTextField.setEnabled(true);
         updateIntervalTextField.setEnabled(true);
-        connectButton.setAction(()->connectButtonPressed());
-        
+        connectButton.setAction(() -> connectButtonPressed());
+
         //enable config dialogs.
         extensionTabPanel.getTabs().stream()
                 .forEach(tab -> tab.setEnabled(true));
@@ -142,16 +142,16 @@ public class ConfigPanel
         portTextField.setEnabled(false);
         connectionPWTextField.setEnabled(false);
         updateIntervalTextField.setEnabled(false);
-        connectButton.setAction(()->disconnectButtonPressed());
-        
+        connectButton.setAction(() -> disconnectButtonPressed());
+
         //disable all config dialogs.
         extensionTabPanel.getTabs().stream()
                 .forEach(tab -> tab.setEnabled(false));
-        
+
     }
-    
-    private void disconnectButtonPressed(){
-        if(client.isConnected()){
+
+    private void disconnectButtonPressed() {
+        if (client.isConnected()) {
             client.sendUnregisterRequest();
             client.stopAndKill();
         }
@@ -216,7 +216,7 @@ public class ConfigPanel
         extensionHeading.setSize(getWidth() - 420, LookAndFeel.LINE_HEIGHT);
         addComponent(extensionHeading);
         addComponent(extensionTabPanel);
-         
+
         extensionTabPanel.addTab(GeneralExtentionConfigPanel.getInstance());
         for (ACCLiveTimingExtensionFactory module : Visualisation.getModules()) {
             LPContainer configurationPanel = module.getExtensionConfigurationPanel();

@@ -17,31 +17,31 @@ import base.screen.visualisation.gui.LPLabel;
  * @author Leonard
  */
 public class DebugConfigPanel
-    extends LPContainer{
-    
+        extends LPContainer {
+
     private final LPCheckBox enabledCheckBox;
     private final LPLabel enabledLabel;
-    
-    public DebugConfigPanel(){
+
+    public DebugConfigPanel() {
         setName("Debug");
-        
+
         enabledCheckBox = new LPCheckBox();
-        enabledCheckBox.setPosition(20, (LINE_HEIGHT-TEXT_SIZE) / 2);
+        enabledCheckBox.setPosition(20, (LINE_HEIGHT - TEXT_SIZE) / 2);
         addComponent(enabledCheckBox);
         enabledLabel = new LPLabel("Enable");
         enabledLabel.setPosition(60, 0);
         addComponent(enabledLabel);
-        
+
     }
-    
+
     @Override
-    public void draw(){
+    public void draw() {
         applet.fill(COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
     }
-    
-    public boolean isExtensionEnabled(){
+
+    public boolean isExtensionEnabled() {
         return enabledCheckBox.isSelected();
     }
-    
+
 }

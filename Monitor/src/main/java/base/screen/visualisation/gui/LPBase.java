@@ -84,17 +84,14 @@ public class LPBase extends PApplet {
     public void mouseDragged() {
         base.onMouseMoveInternal(mouseX, mouseY);
     }
-    
+
     @Override
-    public void keyPressed(KeyEvent event){
+    public void keyPressed(KeyEvent event) {
         base.onKeyPressedInternal(event);
     }
-    
-    public void keyReleased(KeyEvent event){
+
+    public void keyReleased(KeyEvent event) {
         base.onKeyReleasedInternal(event);
     }
-    
-    
-
 
 }

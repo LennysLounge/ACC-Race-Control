@@ -12,10 +12,11 @@ import java.util.Date;
  * @author Leonard
  */
 public class LogMessage {
+
     private Date timeStamp;
     private String message;
 
-    public LogMessage(String message){
+    public LogMessage(String message) {
         this.message = message;
         this.timeStamp = new Date();
     }

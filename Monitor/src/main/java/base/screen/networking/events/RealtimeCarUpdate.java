@@ -13,6 +13,7 @@ import base.screen.networking.data.RealtimeInfo;
  * @author Leonard
  */
 public class RealtimeCarUpdate extends Event {
+
     private RealtimeInfo info;
 
     public RealtimeCarUpdate(RealtimeInfo info) {
@@ -23,5 +24,4 @@ public class RealtimeCarUpdate extends Event {
         return info;
     }
 
-    
 }

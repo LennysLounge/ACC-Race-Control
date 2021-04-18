@@ -291,9 +291,9 @@ public class AccBroadcastingProtocol {
             message.write(1);
             message.write(toByteArray(carIndex, 2), 0, 2);
         }
-        if(cameraSet == null || camera == null || cameraSet.isEmpty() || camera.isEmpty()){
+        if (cameraSet == null || camera == null || cameraSet.isEmpty() || camera.isEmpty()) {
             message.write(0);   //no change of camera
-        }else{
+        } else {
             message.write(1);
             writeString(message, cameraSet);
             writeString(message, camera);

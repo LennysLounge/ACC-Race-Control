@@ -23,13 +23,13 @@ public class LoggingPanel extends LPContainer {
     public LoggingPanel(LoggingExtension extension) {
         this.extension = extension;
         setName("LOGGING");
-        
+
         table.setTableModel(extension.getTableModel());
         table.setOverdrawForLastLine(true);
         addComponent(table);
     }
-    
-        @Override
+
+    @Override
     public void onResize(int w, int h) {
         table.setPosition(0, 0);
         table.setSize(w, h);

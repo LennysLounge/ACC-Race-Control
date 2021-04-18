@@ -101,8 +101,8 @@ public class LiveTimingExtension
     private int compareTo(CarInfo c1, CarInfo c2) {
         return (int) Math.signum(c1.getRealtime().getPosition() - c2.getRealtime().getPosition());
     }
-    
-    public void focusOnCar(CarInfo car){
+
+    public void focusOnCar(CarInfo car) {
         client.sendChangeFocusRequest(car.getCarId());
     }
 
