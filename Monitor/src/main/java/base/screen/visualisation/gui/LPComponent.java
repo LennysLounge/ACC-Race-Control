@@ -243,6 +243,7 @@ public class LPComponent {
         if (this.isEnabled != isEnabled) {
             this.isEnabled = isEnabled;
             onEnabled();
+            invalidate();
         }
     }
 

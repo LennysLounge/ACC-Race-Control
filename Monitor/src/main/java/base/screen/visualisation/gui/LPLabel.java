@@ -6,6 +6,7 @@
 package base.screen.visualisation.gui;
 
 import base.screen.visualisation.LookAndFeel;
+import static base.screen.visualisation.LookAndFeel.COLOR_GRAY;
 import static base.screen.visualisation.LookAndFeel.LINE_HEIGHT;
 import static base.screen.visualisation.gui.LPComponent.applet;
 import static processing.core.PConstants.CENTER;
@@ -54,6 +55,9 @@ public class LPLabel
         applet.rect(0, 0, getWidth(), getHeight());
 
         applet.fill(LookAndFeel.COLOR_WHITE);
+        if(!isEnabled()){
+           applet.fill(COLOR_GRAY);
+        }
         applet.textAlign(hAlign, vAlign);
         applet.textFont(LookAndFeel.fontRegular());
         if (hAlign == LEFT) {

@@ -16,11 +16,11 @@ import base.screen.extensions.AccClientExtension;
 public class GoogleSheetsAPIExtensionFactory
         implements ACCLiveTimingExtensionFactory {
 
-    private final GoogleSheetsAPIConfigurationPanel configurationPanel;
+    private GoogleSheetsAPIConfigurationPanel configurationPanel;
     private GoogleSheetsAPIExtension extension;
 
     public GoogleSheetsAPIExtensionFactory() {
-        configurationPanel = new GoogleSheetsAPIConfigurationPanel();
+
     }
 
     @Override
@@ -33,12 +33,19 @@ public class GoogleSheetsAPIExtensionFactory
         removeExtension();
         if (configurationPanel.isExtensionEnabled()) {
             extension = new GoogleSheetsAPIExtension();
+            extension.setReplayOffsetCell(configurationPanel.getReplayOffsetCell());
+            extension.setFindEmptyRowRange(configurationPanel.getFindEmptyRowRange());
+            extension.setSessionColumn(configurationPanel.getSessionColumn());
+            extension.setCarInfoColumn(configurationPanel.getCarColumn());
             extension.start(configurationPanel.getSpreadSheetLink());
         }
     }
 
     @Override
     public LPContainer getExtensionConfigurationPanel() {
+        if (configurationPanel == null) {
+            configurationPanel = new GoogleSheetsAPIConfigurationPanel();
+        }
         return configurationPanel;
     }
 

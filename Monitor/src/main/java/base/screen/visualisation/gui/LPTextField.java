@@ -96,7 +96,7 @@ public class LPTextField
         }
 
         applet.noStroke();
-        applet.rect(0, 0, getWidth(), getHeight());
+        applet.rect(0, 2, getWidth(), getHeight()-4);
 
         if (isSelectionActive() && isFocused() && isEnabled()) {
             int selectionStartInPresentationText = selectionStartIndex - presentationTextOffset;
@@ -408,7 +408,7 @@ public class LPTextField
         return "";
     }
 
-    public void setClipboard(String selection) {
+    private void setClipboard(String selection) {
         StringSelection strSel = new StringSelection(selection);
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(strSel, null);
     }

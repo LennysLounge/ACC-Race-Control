@@ -99,6 +99,11 @@ public class GoogleSheetsAPIExtension
 
     private final AccBroadcastingClient client;
 
+    private String findEmptyRowRange = GoogleSheetsAPIConfigurationPanel.FIND_EMPTY_ROW_RANGE;
+    private String replayOffsetCell = GoogleSheetsAPIConfigurationPanel.REPLAY_OFFSET_CELL;
+    private String sessionColumn = GoogleSheetsAPIConfigurationPanel.SESSION_TIME_COLUMN;
+    private String carInfoColumn = GoogleSheetsAPIConfigurationPanel.CAR_INFO_COLUMN;
+
     public GoogleSheetsAPIExtension() {
         EventBus.register(this);
         panel = new GoogleSheetsAPIPanel(this);
@@ -212,6 +217,22 @@ public class GoogleSheetsAPIExtension
         return isMeasuringGreenFlagOffset;
     }
 
+    public void setFindEmptyRowRange(String findEmptyRowRange) {
+        this.findEmptyRowRange = findEmptyRowRange;
+    }
+
+    public void setReplayOffsetCell(String replayOffsetCell) {
+        this.replayOffsetCell = replayOffsetCell;
+    }
+
+    public void setSessionColumn(String sessionColumn) {
+        this.sessionColumn = sessionColumn;
+    }
+
+    public void setCarInfoColumn(String carInfoColumn) {
+        this.carInfoColumn = carInfoColumn;
+    }
+
     private void eventLoop() throws InterruptedException {
         while (running) {
             Object o = queue.take();
@@ -233,7 +254,7 @@ public class GoogleSheetsAPIExtension
     private void sendIncident(SendIncidentEvent event) {
 
         String sheet = currentSheetTarget;
-        String rangeSession = sheet + "B1:D500";
+        String rangeSession = sheet + findEmptyRowRange;
 
         List<List<Object>> values;
         try {
@@ -244,8 +265,8 @@ public class GoogleSheetsAPIExtension
         }
         int emptyLine = values.size() + 1;
 
-        rangeSession = sheet + "B" + emptyLine;
-        String rangeCars = sheet + "D" + emptyLine;
+        rangeSession = sheet + sessionColumn + emptyLine;
+        String rangeCars = sheet + carInfoColumn + emptyLine;
 
         List<List<Object>> lineSession = new LinkedList<>();
         lineSession.add(Arrays.asList(event.sessionTime));
@@ -285,7 +306,7 @@ public class GoogleSheetsAPIExtension
 
     private void sendGreenFlag(GreenFlagEvent event) {
         String sheet = currentSheetTarget;
-        String range = sheet + "C2:C2";
+        String range = sheet + replayOffsetCell;
         try {
             updateCells(range, Arrays.asList(Arrays.asList(TimeUtils.asDuration(event.time))));
         } catch (IOException e) {

@@ -6,12 +6,11 @@
 package base.screen.visualisation.gui;
 
 import static base.screen.visualisation.LookAndFeel.COLOR_DARK_GRAY;
-import static base.screen.visualisation.LookAndFeel.COLOR_DARK_RED;
-import static base.screen.visualisation.LookAndFeel.COLOR_LIGHT_GRAY;
 import static base.screen.visualisation.LookAndFeel.COLOR_RED;
 import static base.screen.visualisation.LookAndFeel.COLOR_WHITE;
 import static base.screen.visualisation.LookAndFeel.TEXT_SIZE;
 import static base.screen.visualisation.gui.LPComponent.applet;
+import java.util.function.Consumer;
 import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.HAND;
 
@@ -26,6 +25,9 @@ public class LPCheckBox
      * True if the check box is checked.
      */
     private boolean selected;
+
+    private Consumer<Boolean> changeAction = (b) -> {
+    };
 
     public LPCheckBox() {
         setSize(TEXT_SIZE, TEXT_SIZE);
@@ -45,6 +47,7 @@ public class LPCheckBox
     public void onMousePressed(int x, int y, int button) {
         if (isEnabled()) {
             selected = !selected;
+            changeAction.accept(selected);
             invalidate();
         }
     }
@@ -76,8 +79,15 @@ public class LPCheckBox
     }
 
     public void setSelected(boolean state) {
-        selected = state;
-        invalidate();
+        if (selected != state) {
+            selected = state;
+            changeAction.accept(selected);
+            invalidate();
+        }
+    }
+
+    public void setChangeAction(Consumer<Boolean> action) {
+        this.changeAction = action;
     }
 
 }

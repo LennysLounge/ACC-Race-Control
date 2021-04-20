@@ -63,6 +63,9 @@ public class LPTabPanel extends LPContainer {
             return;
         }
 
+        applet.fill(COLOR_DARK_GRAY);
+        applet.rect(0, 0, getWidth(), getHeight());
+
         int lineHeight = LookAndFeel.LINE_HEIGHT;
 
         applet.textAlign(CENTER, CENTER);
