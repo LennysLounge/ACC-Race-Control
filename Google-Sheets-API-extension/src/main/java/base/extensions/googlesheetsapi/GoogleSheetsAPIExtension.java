@@ -189,8 +189,10 @@ public class GoogleSheetsAPIExtension
         //Start event loop
         running = true;
         eventLoop = new Thread("Sheet service event loop") {
+            
             @Override
             public void run() {
+                Thread.setDefaultUncaughtExceptionHandler(new Main.UncoughtExceptionHandler());
                 try {
                     eventLoop();
                 } catch (InterruptedException e) {
