@@ -13,6 +13,7 @@ import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
 import base.screen.extensions.AccClientExtension;
 import base.screen.networking.AccBroadcastingClient;
+import base.screen.networking.EntryListUpdate;
 import base.screen.networking.data.CarInfo;
 import base.screen.networking.data.RealtimeInfo;
 import base.screen.networking.data.SessionInfo;
@@ -79,6 +80,8 @@ public class LiveTimingExtension
             if (entries.containsKey(dis.getCar().getCarId())) {
                 entries.remove(dis.getCar().getCarId());
             }
+        }else if(e instanceof EntryListUpdate){
+            entries.clear();
         }
     }
 
@@ -100,8 +103,10 @@ public class LiveTimingExtension
     }
 
     public void onRealtimeCarUpdate(RealtimeInfo info) {
-        CarInfo car = client.getModel().getCarsInfo().getOrDefault(info.getCarId(), new CarInfo());
-        entries.put(car.getCarId(), car);
+        CarInfo car = client.getModel().getCarsInfo().get(info.getCarId());
+        if (car != null) {
+            entries.put(car.getCarId(), car);
+        }
     }
 
     private int compareTo(CarInfo c1, CarInfo c2) {
