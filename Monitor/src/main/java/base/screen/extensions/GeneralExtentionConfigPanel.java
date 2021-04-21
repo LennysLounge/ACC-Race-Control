@@ -78,11 +78,11 @@ public class GeneralExtentionConfigPanel
         velocityMapLabel.setSize(300, LINE_HEIGHT);
         addComponent(velocityMapLabel);
         
-        trackMapCheckBox.setPosition(20, LINE_HEIGHT * 4 + (LINE_HEIGHT - TEXT_SIZE) / 2);
+        trackMapCheckBox.setPosition(20, LINE_HEIGHT * 5 + (LINE_HEIGHT - TEXT_SIZE) / 2);
         trackMapCheckBox.setSelected(false);
         trackMapCheckBox.setEnabled(false);
         addComponent(trackMapCheckBox);
-        trackMapLabel.setPosition(60, LINE_HEIGHT * 4);
+        trackMapLabel.setPosition(60, LINE_HEIGHT * 5);
         trackMapLabel.setSize(300, LINE_HEIGHT);
         addComponent(trackMapLabel);
     }

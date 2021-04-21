@@ -16,6 +16,7 @@ import base.screen.networking.AccBroadcastingClient;
 import base.screen.networking.data.CarInfo;
 import base.screen.networking.data.RealtimeInfo;
 import base.screen.networking.data.SessionInfo;
+import base.screen.networking.events.CarDisconnect;
 import base.screen.visualisation.gui.LPContainer;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +46,7 @@ public class LiveTimingExtension
     /**
      * Map from carId to ListEntry.
      */
-    private final Map<Integer, CarInfo> entires = new HashMap<>();
+    private final Map<Integer, CarInfo> entries = new HashMap<>();
     /**
      * Table model to display the live timing.
      */
@@ -73,6 +74,11 @@ public class LiveTimingExtension
             onRealtimeUpdate(((RealtimeUpdate) e).getSessionInfo());
         } else if (e instanceof RealtimeCarUpdate) {
             onRealtimeCarUpdate(((RealtimeCarUpdate) e).getInfo());
+        } else if (e instanceof CarDisconnect) {
+            CarDisconnect dis = ((CarDisconnect) e);
+            if (entries.containsKey(dis.getCar().getCarId())) {
+                entries.remove(dis.getCar().getCarId());
+            }
         }
     }
 
@@ -82,8 +88,8 @@ public class LiveTimingExtension
     }
 
     public void onRealtimeUpdate(SessionInfo sessionInfo) {
-        List<CarInfo> sorted = entires.values().stream()
-                .filter(entry -> entry.isConnected())
+        List<CarInfo> sorted = entries.values().stream()
+                //.filter(entry -> entry.isConnected())
                 .sorted((e1, e2) -> compareTo(e1, e2))
                 .collect(Collectors.toList());
 
@@ -95,7 +101,7 @@ public class LiveTimingExtension
 
     public void onRealtimeCarUpdate(RealtimeInfo info) {
         CarInfo car = client.getModel().getCarsInfo().getOrDefault(info.getCarId(), new CarInfo());
-        entires.put(car.getCarId(), car);
+        entries.put(car.getCarId(), car);
     }
 
     private int compareTo(CarInfo c1, CarInfo c2) {

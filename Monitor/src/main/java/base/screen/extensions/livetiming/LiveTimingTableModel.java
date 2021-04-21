@@ -25,6 +25,8 @@ import base.screen.visualisation.gui.TableModel;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
@@ -34,6 +36,11 @@ import static processing.core.PConstants.LEFT;
  * @author Leonard
  */
 public class LiveTimingTableModel extends TableModel {
+
+    /**
+     * This class's logger.
+     */
+    private static final Logger LOG = Logger.getLogger(LiveTimingTableModel.class.getName());
 
     /**
      * Ordered list of car entries
@@ -401,8 +408,12 @@ public class LiveTimingTableModel extends TableModel {
         if (sectorIndex < splits.size()) {
             if (splits.get(sectorIndex) != Integer.MAX_VALUE) {
                 text = TimeUtils.asLapTime(splits.get(sectorIndex));
-                if (Objects.equals(splits.get(sectorIndex), sessionBestLap.getSplits().get(sectorIndex))) {
-                    applet.fill(COLOR_PURPLE);
+                try {
+                    if (Objects.equals(splits.get(sectorIndex), sessionBestLap.getSplits().get(sectorIndex))) {
+                        applet.fill(COLOR_PURPLE);
+                    }
+                } catch (Exception e) {
+                    LOG.log(Level.SEVERE,"{}\n, splits.size = "+splits.size()+", sessionBest.splits.size = "+sessionBestLap.getSplits().size(), e);
                 }
             }
         }

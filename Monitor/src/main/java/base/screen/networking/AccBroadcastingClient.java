@@ -31,10 +31,13 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import static java.util.Objects.requireNonNull;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -322,6 +325,22 @@ public class AccBroadcastingClient {
          * flag to indicate that the socket was closed by the user.
          */
         private boolean forceExit = false;
+        /**
+         * Maps a car id to the ammount of missed realtime updates.
+         */
+        private final Map<Integer, Integer> missedRealtimeUpdates = new HashMap<>();
+        /**
+         * Ammount of missed realtime updates before disconnect.
+         */
+        private final int maximumRealtimeMisses = 5;
+        /**
+         * List of cars that have received a realtime update this tick.
+         */
+        private final List<Integer> realtimeUpdatesReceived = new ArrayList<>();
+        /**
+         * List of cars that have recentrly connected.
+         */
+        private final List<Integer> newConnectedCars = new ArrayList<>();
 
         public UdpListener(String name) {
             super(name);
@@ -402,6 +421,10 @@ public class AccBroadcastingClient {
         public void onRealtimeUpdate(SessionInfo sessionInfo) {
             model = model.withSessionInfo(sessionInfo);
 
+            //Check for disconnected cars.
+            checkForMissedRealtimeUpdates();
+
+            //update the current session.
             if (sessionId.getIndex() != sessionInfo.getSessionIndex()) {
                 //fast forward currnet session to result UI
                 while (sessionPhase != SessionPhase.RESULTUI) {
@@ -428,8 +451,34 @@ public class AccBroadcastingClient {
             EventBus.publish(new RealtimeUpdate(sessionInfo));
         }
 
+        private void checkForMissedRealtimeUpdates() {
+            //reset missed updates to 0 for cars that have received on.
+            realtimeUpdatesReceived.forEach(carId -> missedRealtimeUpdates.put(carId, 0));
+
+            //increase misses for cars that did not update
+            model.getCarsInfo().values().stream()
+                    .map(carInfo -> carInfo.getCarId())
+                    .filter(carId -> !realtimeUpdatesReceived.contains(carId))
+                    .forEach(carId -> {
+                        missedRealtimeUpdates.put(carId, missedRealtimeUpdates.getOrDefault(carId, 0) + 1);
+                    });
+
+            realtimeUpdatesReceived.clear();
+
+            //disconnect cars with excess of misses
+            missedRealtimeUpdates.entrySet().stream()
+                    .filter(entry -> entry.getValue() >= maximumRealtimeMisses)
+                    .forEach(entry -> {
+                        onCarDisconnect(model.getCar(entry.getKey()));
+                    });
+        }
+
         @Override
         public void onRealtimeCarUpdate(RealtimeInfo info) {
+            //Update realtime misses to avoid disconnect.
+            realtimeUpdatesReceived.add(info.getCarId());
+
+            //update model
             if (model.getCarsInfo().containsKey(info.getCarId())) {
                 CarInfo car = model.getCarsInfo().get(info.getCarId());
                 car = car.withRealtime(info);
@@ -439,6 +488,7 @@ public class AccBroadcastingClient {
                 cars.put(car.getCarId(), car);
                 model = model.withCars(cars);
             } else {
+                //if the car doesnt exist in the model ask for a new entry list.
                 long now = System.currentTimeMillis();
                 if (now - lastTimeEntryListRequest > 5000) {
                     try {
@@ -455,21 +505,14 @@ public class AccBroadcastingClient {
         public void onEntryListUpdate(List<Integer> carIds) {
             Map<Integer, CarInfo> cars = new HashMap<>();
             cars.putAll(model.getCarsInfo());
-            //disconnect all connected cars that are not in this update.
-            cars.values().stream()
-                    .filter(carInfo -> carInfo.isConnected())
-                    .filter(carInfo -> !carIds.contains(carInfo.getCarId()))
-                    .forEach(carInfo -> {
-                        cars.put(carInfo.getCarId(), carInfo.withConnected(false));
-                        onCarDisconnect(cars.get(carInfo.getCarId()));
-                    });
 
             //add any new carIds.
-            for (int carId : carIds) {
+            carIds.forEach(carId -> {
                 if (!cars.containsKey(carId)) {
                     cars.put(carId, new CarInfo());
+                    newConnectedCars.add(carId);
                 }
-            }
+            });
             model = model.withCars(cars);
             EventBus.publish(new EntryListUpdate(carIds));
         }
@@ -478,24 +521,15 @@ public class AccBroadcastingClient {
         public void onTrackData(TrackInfo info) {
             model = model.withTrackInfo(info);
             EventBus.publish(new TrackData(info));
-
         }
 
         @Override
         public void onEntryListCarUpdate(CarInfo carInfo) {
-            //if there is an update for a car that is disconnected then
-            //we fire the connected event for that car
-            if (getModel().getCarsInfo().containsKey(carInfo.getCarId())) {
-                if (!getModel().getCar(carInfo.getCarId()).isConnected()) {
-                    onCarConnect(carInfo);
-                }
+            //Fire Car connection event if the car is new.
+            if (newConnectedCars.contains(carInfo.getCarId())) {
+                onCarConnect(carInfo);
+                newConnectedCars.remove(Integer.valueOf(carInfo.getCarId()));
             }
-            //add car to the model.
-            Map<Integer, CarInfo> cars = new HashMap<>();
-            cars.putAll(model.getCarsInfo());
-            cars.put(carInfo.getCarId(), carInfo);
-            model = model.withCars(cars);
-
             EventBus.publish(new EntryListCarUpdate(carInfo));
         }
 
@@ -536,6 +570,11 @@ public class AccBroadcastingClient {
         }
 
         private void onCarDisconnect(CarInfo car) {
+            //remove car from the model.
+            Map<Integer, CarInfo> cars = new HashMap<>(model.getCarsInfo());
+            cars.remove(car.getCarId());
+            model = model.withCars(cars);
+
             String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
             LoggingExtension.log("Car disconnected: #" + car.getCarNumber() + "\t" + name);
             LOG.info("Car disconnected: #" + car.getCarNumber() + "\t" + name);
@@ -543,6 +582,11 @@ public class AccBroadcastingClient {
         }
 
         private void onCarConnect(CarInfo car) {
+            //add car to the model.
+            Map<Integer, CarInfo> cars = new HashMap<>(model.getCarsInfo());
+            cars.put(car.getCarId(), car);
+            model = model.withCars(cars);
+
             String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
             LoggingExtension.log("Car connected: #" + car.getCarNumber() + "\t" + name);
             LOG.info("Car connected: #" + car.getCarNumber() + "\t" + name);

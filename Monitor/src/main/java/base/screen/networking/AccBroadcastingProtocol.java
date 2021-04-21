@@ -29,7 +29,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -218,7 +217,7 @@ public class AccBroadcastingProtocol {
         }
         CarInfo carInfo = new CarInfo(carId, carModelType, teamName, raceNumber,
                 cupCatergory, currentDriverIndex, carNationality, drivers,
-                new RealtimeInfo(), true);
+                new RealtimeInfo());
         callback.onEntryListCarUpdate(carInfo);
     }
 
@@ -368,6 +367,9 @@ public class AccBroadcastingProtocol {
         List<Integer> splits = new LinkedList<>();
         for (int i = 0; i < splitCount; i++) {
             splits.add(readInt32(in));
+        }
+        for(int i=splitCount; i<3;i++){
+            splits.add(0);
         }
 
         boolean isInvalid = readByte(in) > 0;
