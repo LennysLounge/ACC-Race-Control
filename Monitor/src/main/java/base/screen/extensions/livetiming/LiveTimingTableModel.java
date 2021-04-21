@@ -408,12 +408,8 @@ public class LiveTimingTableModel extends TableModel {
         if (sectorIndex < splits.size()) {
             if (splits.get(sectorIndex) != Integer.MAX_VALUE) {
                 text = TimeUtils.asLapTime(splits.get(sectorIndex));
-                try {
-                    if (Objects.equals(splits.get(sectorIndex), sessionBestLap.getSplits().get(sectorIndex))) {
-                        applet.fill(COLOR_PURPLE);
-                    }
-                } catch (Exception e) {
-                    LOG.log(Level.SEVERE,"{}\n, splits.size = "+splits.size()+", sessionBest.splits.size = "+sessionBestLap.getSplits().size(), e);
+                if (Objects.equals(splits.get(sectorIndex), sessionBestLap.getSplits().get(sectorIndex))) {
+                    applet.fill(COLOR_PURPLE);
                 }
             }
         }
