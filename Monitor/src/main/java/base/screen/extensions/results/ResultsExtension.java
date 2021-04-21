@@ -121,6 +121,8 @@ public class ResultsExtension
             Logger.getLogger(ResultsExtension.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ResultsExtension.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(Exception e){
+            LOG.log(Level.SEVERE, "Error writing results to file: {}.\ncurrentFilePath:" + currentFilePath, e);
         }
 
         /*
