@@ -53,7 +53,7 @@ public class LapInfo {
         return splits;
     }
 
-    public boolean getIsInvalid() {
+    public boolean isInvalid() {
         return isInvalid;
     }
 

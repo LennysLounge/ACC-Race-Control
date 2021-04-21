@@ -346,7 +346,7 @@ public class LiveTimingTableModel extends TableModel {
         if (car.getRealtime().getLocation() == CarLocation.TRACK
                 && currentLap.getType() == LapType.REGULAR) {
             applet.fill(LookAndFeel.COLOR_WHITE);
-            if (currentLap.getIsInvalid()) {
+            if (currentLap.isInvalid()) {
                 applet.fill(LookAndFeel.COLOR_RED);
             }
             text = TimeUtils.asLapTime(currentLap.getLapTimeMS());
