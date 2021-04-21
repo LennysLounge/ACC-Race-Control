@@ -7,6 +7,7 @@ package base.screen.extensions.velocitymap;
 
 import base.ACCLiveTimingExtensionFactory;
 import base.screen.extensions.AccClientExtension;
+import base.screen.extensions.GeneralExtentionConfigPanel;
 import base.screen.visualisation.gui.LPContainer;
 
 /**
@@ -26,7 +27,9 @@ public class VelocityMapExtensionFactory
     @Override
     public void createExtension() {
         removeExtension();
-        extension = new VelocityMapExtension();
+        if (GeneralExtentionConfigPanel.getInstance().isVelocityMapEnabled()) {
+            extension = new VelocityMapExtension();
+        }
     }
 
     @Override

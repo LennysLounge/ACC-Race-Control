@@ -28,6 +28,9 @@ public class GeneralExtentionConfigPanel
 
     private final LPCheckBox loggingCheckBox = new LPCheckBox();
     private final LPLabel loggingLabel = new LPLabel("Enable logging screen");
+    
+    private final LPCheckBox velocityMapCheckBox = new LPCheckBox();
+    private final LPLabel velocityMapLabel = new LPLabel("Enable velocity map");
 
     private final LPCheckBox trackMapCheckBox = new LPCheckBox();
     private final LPLabel trackMapLabel = new LPLabel("Enable track map");
@@ -67,6 +70,14 @@ public class GeneralExtentionConfigPanel
         loggingLabel.setSize(300, LINE_HEIGHT);
         addComponent(loggingLabel);
 
+        velocityMapCheckBox.setPosition(20, LINE_HEIGHT * 4 + (LINE_HEIGHT - TEXT_SIZE) / 2);
+        velocityMapCheckBox.setSelected(false);
+        velocityMapCheckBox.setEnabled(true);
+        addComponent(velocityMapCheckBox);
+        velocityMapLabel.setPosition(60, LINE_HEIGHT * 4);
+        velocityMapLabel.setSize(300, LINE_HEIGHT);
+        addComponent(velocityMapLabel);
+        
         trackMapCheckBox.setPosition(20, LINE_HEIGHT * 4 + (LINE_HEIGHT - TEXT_SIZE) / 2);
         trackMapCheckBox.setSelected(false);
         trackMapCheckBox.setEnabled(false);
@@ -101,6 +112,10 @@ public class GeneralExtentionConfigPanel
 
     public boolean isLoggingEnabled() {
         return loggingCheckBox.isSelected();
+    }
+    
+    public boolean isVelocityMapEnabled(){
+        return velocityMapCheckBox.isSelected();
     }
 
 }
