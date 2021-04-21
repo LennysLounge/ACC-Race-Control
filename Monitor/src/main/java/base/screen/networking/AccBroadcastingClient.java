@@ -466,15 +466,19 @@ public class AccBroadcastingClient {
             realtimeUpdatesReceived.clear();
 
             //disconnect cars with excess of misses
-            missedRealtimeUpdates.entrySet().stream()
-                    .filter(entry -> entry.getValue() >= maximumRealtimeMisses)
-                    .forEach(entry -> {
-                        onCarDisconnect(model.getCar(entry.getKey()));
-                    });
+            Iterator<Entry<Integer, Integer>> iter = missedRealtimeUpdates.entrySet().iterator();
+            while(iter.hasNext()){
+                Entry<Integer, Integer> entry = iter.next();
+                if(entry.getValue() >= maximumRealtimeMisses){
+                    onCarDisconnect(model.getCar(entry.getKey()));
+                    iter.remove();
+                }
+            }
         }
 
         @Override
-        public void onRealtimeCarUpdate(RealtimeInfo info) {
+        public void onRealtimeCarUpdate(RealtimeInfo info
+        ) {
             //Update realtime misses to avoid disconnect.
             realtimeUpdatesReceived.add(info.getCarId());
 
@@ -487,6 +491,8 @@ public class AccBroadcastingClient {
                 cars.putAll(model.getCarsInfo());
                 cars.put(car.getCarId(), car);
                 model = model.withCars(cars);
+
+                EventBus.publish(new RealtimeCarUpdate(info));
             } else {
                 //if the car doesnt exist in the model ask for a new entry list.
                 long now = System.currentTimeMillis();
@@ -498,11 +504,11 @@ public class AccBroadcastingClient {
                     }
                 }
             }
-            EventBus.publish(new RealtimeCarUpdate(info));
         }
 
         @Override
-        public void onEntryListUpdate(List<Integer> carIds) {
+        public void onEntryListUpdate(List<Integer> carIds
+        ) {
             Map<Integer, CarInfo> cars = new HashMap<>();
             cars.putAll(model.getCarsInfo());
 
@@ -518,13 +524,15 @@ public class AccBroadcastingClient {
         }
 
         @Override
-        public void onTrackData(TrackInfo info) {
+        public void onTrackData(TrackInfo info
+        ) {
             model = model.withTrackInfo(info);
             EventBus.publish(new TrackData(info));
         }
 
         @Override
-        public void onEntryListCarUpdate(CarInfo carInfo) {
+        public void onEntryListCarUpdate(CarInfo carInfo
+        ) {
             //Fire Car connection event if the car is new.
             if (newConnectedCars.contains(carInfo.getCarId())) {
                 onCarConnect(carInfo);
@@ -534,7 +542,8 @@ public class AccBroadcastingClient {
         }
 
         @Override
-        public void onBroadcastingEvent(BroadcastingEvent event) {
+        public void onBroadcastingEvent(BroadcastingEvent event
+        ) {
             List<BroadcastingEvent> events = new LinkedList<>();
             events.addAll(model.getEvents());
             events.add(event);
@@ -545,7 +554,8 @@ public class AccBroadcastingClient {
         }
 
         @Override
-        public void afterPacketReceived(byte type) {
+        public void afterPacketReceived(byte type
+        ) {
             packetCount++;
             EventBus.publish(new AfterPacketReceived(type, packetCount));
         }
