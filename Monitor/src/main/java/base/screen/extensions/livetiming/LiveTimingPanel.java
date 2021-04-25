@@ -62,12 +62,18 @@ public class LiveTimingPanel extends LPContainer {
             if (now - lastTableClick < 500) {
                 //was double click
                 CarInfo car = ((LiveTimingTableModel) table.getTableModel())
-                        .getEntry(row);
+                        .getEntry(row)
+                        .getCarInfo();
                 extension.focusOnCar(car);
             }
         }
         lastTableClickRow = row;
         lastTableClick = System.currentTimeMillis();
+    }
+
+    protected void setTableModel(LiveTimingTableModel model) {
+        table.setTableModel(model);
+        invalidate();
     }
 
 }

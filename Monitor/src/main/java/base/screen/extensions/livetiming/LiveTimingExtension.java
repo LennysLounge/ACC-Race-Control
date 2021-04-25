@@ -14,9 +14,11 @@ import base.screen.eventbus.EventListener;
 import base.screen.extensions.AccClientExtension;
 import base.screen.networking.AccBroadcastingClient;
 import base.screen.networking.EntryListUpdate;
+import base.screen.networking.SessionChanged;
 import base.screen.networking.data.CarInfo;
 import base.screen.networking.data.RealtimeInfo;
 import base.screen.networking.data.SessionInfo;
+import base.screen.networking.enums.SessionType;
 import base.screen.networking.events.CarDisconnect;
 import base.screen.visualisation.gui.LPContainer;
 import java.util.HashMap;
@@ -47,11 +49,15 @@ public class LiveTimingExtension
     /**
      * Map from carId to ListEntry.
      */
-    private final Map<Integer, CarInfo> entries = new HashMap<>();
+    private final Map<Integer, LiveTimingEntry> entries = new HashMap<>();
     /**
      * Table model to display the live timing.
      */
-    private LiveTimingTableModel model = new LiveTimingTableModel();
+    private LiveTimingTableModel model = new QualifyingTableModel();
+    /**
+     * current session type.
+     */
+    private SessionType currentSession = SessionType.PRACTICE;
 
     public LiveTimingExtension() {
         this.client = Main.getClient();
@@ -80,8 +86,19 @@ public class LiveTimingExtension
             if (entries.containsKey(dis.getCar().getCarId())) {
                 entries.remove(dis.getCar().getCarId());
             }
-        }else if(e instanceof EntryListUpdate){
+        } else if (e instanceof EntryListUpdate) {
             entries.clear();
+        } else if (e instanceof SessionChanged) {
+            SessionType newSession = ((SessionChanged) e).getSessionInfo().getSessionType();
+            if (newSession != currentSession) {
+                currentSession = newSession;
+                if (newSession == SessionType.RACE) {
+                    //model = new LiveTimingTableModel();
+                } else {
+                    //model = new QualifyingTableModel();
+                }
+                panel.setTableModel(model);
+            }
         }
     }
 
@@ -91,7 +108,7 @@ public class LiveTimingExtension
     }
 
     public void onRealtimeUpdate(SessionInfo sessionInfo) {
-        List<CarInfo> sorted = entries.values().stream()
+        List<LiveTimingEntry> sorted = entries.values().stream()
                 //.filter(entry -> entry.isConnected())
                 .sorted((e1, e2) -> compareTo(e1, e2))
                 .collect(Collectors.toList());
@@ -105,12 +122,12 @@ public class LiveTimingExtension
     public void onRealtimeCarUpdate(RealtimeInfo info) {
         CarInfo car = client.getModel().getCarsInfo().get(info.getCarId());
         if (car != null) {
-            entries.put(car.getCarId(), car);
+            entries.put(car.getCarId(), new LiveTimingEntry(car));
         }
     }
 
-    private int compareTo(CarInfo c1, CarInfo c2) {
-        return (int) Math.signum(c1.getRealtime().getPosition() - c2.getRealtime().getPosition());
+    private int compareTo(LiveTimingEntry e1, LiveTimingEntry e2) {
+        return (int) Math.signum(e1.getCarInfo().getRealtime().getPosition() - e2.getCarInfo().getRealtime().getPosition());
     }
 
     public void focusOnCar(CarInfo car) {
