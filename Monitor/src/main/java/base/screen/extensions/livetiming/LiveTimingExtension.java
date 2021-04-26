@@ -19,8 +19,8 @@ import base.screen.networking.data.CarInfo;
 import base.screen.networking.data.RealtimeInfo;
 import base.screen.networking.data.SessionInfo;
 import base.screen.networking.data.TrackInfo;
-import base.screen.networking.enums.CarLocation;
 import base.screen.networking.enums.SessionType;
+import static base.screen.networking.enums.SessionType.RACE;
 import base.screen.networking.events.CarDisconnect;
 import base.screen.networking.events.TrackData;
 import base.screen.utility.GapCalculator;
@@ -117,7 +117,6 @@ public class LiveTimingExtension
             trackInfo = ((TrackData) e).getInfo();
             gapCalculator.loadVMapForTrack(trackInfo.getTrackName());
             gapCalculator.setTrackLength(trackInfo.getTrackMeters());
-
         }
     }
 
@@ -151,8 +150,8 @@ public class LiveTimingExtension
         for (int i = 1; i < list.size(); i++) {
             withGaps.add(new LiveTimingEntry(
                     list.get(i).getCarInfo(),
-                    gapCalculator.calculateGapNaive(list.get(i).getCarInfo(), list.get(i-1).getCarInfo()),
-                    gapCalculator.calculateGap(list.get(i).getCarInfo(), list.get(i-1).getCarInfo())
+                    gapCalculator.calculateGapNaive(list.get(i).getCarInfo(), list.get(i - 1).getCarInfo()),
+                    gapCalculator.calculateGap(list.get(i).getCarInfo(), list.get(i - 1).getCarInfo())
             ));
         }
         return withGaps;
@@ -166,7 +165,17 @@ public class LiveTimingExtension
     }
 
     private int compareTo(LiveTimingEntry e1, LiveTimingEntry e2) {
-        return (int) Math.signum(e1.getCarInfo().getRealtime().getPosition() - e2.getCarInfo().getRealtime().getPosition());
+        RealtimeInfo r1 = e1.getCarInfo().getRealtime();
+        RealtimeInfo r2 = e2.getCarInfo().getRealtime();
+        switch (currentSession) {
+            case RACE:
+                float e1RaceDistance = r1.getLaps() + r1.getSplinePosition();
+                float e2RaceDistance = r1.getLaps() + r1.getSplinePosition();
+
+                return (int) Math.signum(e1RaceDistance - e2RaceDistance);
+            default:
+                return (int) Math.signum(r1.getPosition() - r2.getPosition());
+        }
     }
 
     public void focusOnCar(CarInfo car) {
