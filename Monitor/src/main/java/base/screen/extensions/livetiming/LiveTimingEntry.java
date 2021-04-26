@@ -12,14 +12,37 @@ import base.screen.networking.data.CarInfo;
  * @author Leonard
  */
 public class LiveTimingEntry {
+
+    private final CarInfo carInfo;
     
-    private CarInfo carInfo;
-    
-    public LiveTimingEntry(CarInfo carInfo){
+    private float naiveLapTime;
+    private float lapTime;
+
+    public LiveTimingEntry(CarInfo carInfo) {
+        this(carInfo, 0, 0);
+    }
+
+    public LiveTimingEntry(CarInfo carInfo,
+            float naiveLapTime,
+            float lapTime) {
         this.carInfo = carInfo;
+        this.naiveLapTime = naiveLapTime;
+        this.lapTime = lapTime;
     }
 
     public CarInfo getCarInfo() {
         return carInfo;
-    }    
+    }
+
+    public float getNaiveLapTime() {
+        return naiveLapTime;
+    }
+
+    public float getLapTime() {
+        return lapTime;
+    }
+    
+    
+
+
 }

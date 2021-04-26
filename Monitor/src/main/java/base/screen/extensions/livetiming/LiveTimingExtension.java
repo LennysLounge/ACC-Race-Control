@@ -18,10 +18,15 @@ import base.screen.networking.SessionChanged;
 import base.screen.networking.data.CarInfo;
 import base.screen.networking.data.RealtimeInfo;
 import base.screen.networking.data.SessionInfo;
+import base.screen.networking.data.TrackInfo;
+import base.screen.networking.enums.CarLocation;
 import base.screen.networking.enums.SessionType;
 import base.screen.networking.events.CarDisconnect;
+import base.screen.networking.events.TrackData;
+import base.screen.utility.GapCalculator;
 import base.screen.visualisation.gui.LPContainer;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -58,6 +63,14 @@ public class LiveTimingExtension
      * current session type.
      */
     private SessionType currentSession = SessionType.PRACTICE;
+    /**
+     * Current track info.
+     */
+    private TrackInfo trackInfo;
+    /**
+     * Calculator to calculate the live gaps between cars.
+     */
+    private GapCalculator gapCalculator = new GapCalculator();
 
     public LiveTimingExtension() {
         this.client = Main.getClient();
@@ -93,12 +106,18 @@ public class LiveTimingExtension
             if (newSession != currentSession) {
                 currentSession = newSession;
                 if (newSession == SessionType.RACE) {
-                    //model = new LiveTimingTableModel();
+                    model = new RaceTableModel();
                 } else {
-                    //model = new QualifyingTableModel();
+                    model = new RaceTableModel();
                 }
                 panel.setTableModel(model);
             }
+        } else if (e instanceof TrackData) {
+            LOG.info("track data event !!");
+            trackInfo = ((TrackData) e).getInfo();
+            gapCalculator.loadVMapForTrack(trackInfo.getTrackName());
+            gapCalculator.setTrackLength(trackInfo.getTrackMeters());
+
         }
     }
 
@@ -112,11 +131,31 @@ public class LiveTimingExtension
                 //.filter(entry -> entry.isConnected())
                 .sorted((e1, e2) -> compareTo(e1, e2))
                 .collect(Collectors.toList());
+        if (currentSession == SessionType.RACE || true) {
+            sorted = calculateGaps(sorted);
+        }
 
         model.setEntries(sorted);
         model.setFocusedCarId(sessionInfo.getFocusedCarIndex());
         model.setSessionBestLap(sessionInfo.getBestSessionLap());
         panel.invalidate();
+    }
+
+    private List<LiveTimingEntry> calculateGaps(List<LiveTimingEntry> list) {
+        if (list.isEmpty()) {
+            return list;
+        }
+
+        List<LiveTimingEntry> withGaps = new LinkedList<>();
+        withGaps.add(list.get(0));
+        for (int i = 1; i < list.size(); i++) {
+            withGaps.add(new LiveTimingEntry(
+                    list.get(i).getCarInfo(),
+                    gapCalculator.calculateGapNaive(list.get(i).getCarInfo(), list.get(i-1).getCarInfo()),
+                    gapCalculator.calculateGap(list.get(i).getCarInfo(), list.get(i-1).getCarInfo())
+            ));
+        }
+        return withGaps;
     }
 
     public void onRealtimeCarUpdate(RealtimeInfo info) {

@@ -8,7 +8,6 @@ package base.screen.extensions.livetiming;
 import base.screen.networking.data.CarInfo;
 import base.screen.visualisation.gui.LPContainer;
 import base.screen.visualisation.gui.LPTable;
-import java.util.function.BiConsumer;
 import java.util.logging.Logger;
 
 /**
