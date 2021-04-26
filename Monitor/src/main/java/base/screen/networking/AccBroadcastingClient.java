@@ -144,6 +144,9 @@ public class AccBroadcastingClient {
 
         socket = new DatagramSocket();
         socket.connect(this.hostAddress, this.hostPort);
+        
+        model = new AccBroadcastingData();
+        sessionId = new SessionId(SessionType.NONE, -1, 0);
 
         startListernerThread();
     }
