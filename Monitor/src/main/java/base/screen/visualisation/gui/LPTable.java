@@ -166,6 +166,9 @@ public class LPTable extends LPContainer {
             }
             for (int column = 0; column < columns.length; column++) {
                 boolean isMouseOverThisColumn = column == mouseOverColumn;
+                if(row + scrollbar.scroll >= model.getRowCount()){
+                    continue;
+                }
                 applet.translate(columnOffset, rowOffset);
                 columns[column].getRenderer().render(applet,
                         model.getValueAt(column, row + scrollbar.scroll),
@@ -177,8 +180,8 @@ public class LPTable extends LPContainer {
                 applet.translate(-columnOffset, -rowOffset);
                 columnOffset += columnWidths[column];
             }
-
         }
+
         //Draw scrollbar
         if (scrollbar.isVisible) {
             float headerOffset = drawHeader ? rowHeight : 0;
