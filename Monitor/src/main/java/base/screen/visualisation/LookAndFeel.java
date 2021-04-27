@@ -38,6 +38,7 @@ public class LookAndFeel {
     public static final int COLOR_RACE = 0xff79e463;
     public static final int COLOR_YELLOW = 0xffaaaa00;
     public static final int COLOR_PURPLE = 0xffA256ff;
+    public static final int COLOR_ORANGE = 0xfffc8800;
     public static final int TRANSPARENT_WHITE = 0x14ffffff;
     public static final int TRANSPARENT_RED = 0x96ff0000;
     public static final int TRANSPARENT_BLACK = 0x96000000;

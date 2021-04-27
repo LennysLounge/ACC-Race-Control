@@ -3,32 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package base.screen.extensions.livetiming;
+package base.screen.extensions.livetiming.tablemodels;
 
+import base.screen.extensions.livetiming.LiveTimingEntry;
 import base.screen.networking.data.CarInfo;
 import base.screen.networking.data.LapInfo;
 import base.screen.networking.enums.CarLocation;
-import base.screen.networking.enums.DriverCategory;
-import static base.screen.networking.enums.DriverCategory.BRONZE;
-import static base.screen.networking.enums.DriverCategory.GOLD;
-import static base.screen.networking.enums.DriverCategory.PLATINUM;
-import static base.screen.networking.enums.DriverCategory.SILVER;
 import base.screen.networking.enums.LapType;
 import base.screen.utility.TimeUtils;
 import base.screen.visualisation.LookAndFeel;
-import static base.screen.visualisation.LookAndFeel.COLOR_DARK_RED;
 import static base.screen.visualisation.LookAndFeel.COLOR_PURPLE;
 import static base.screen.visualisation.LookAndFeel.COLOR_WHITE;
 import base.screen.visualisation.gui.LPTableColumn;
 import base.screen.visualisation.gui.LPTable;
-import base.screen.visualisation.gui.TableModel;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.LEFT;
 
 /**
  *

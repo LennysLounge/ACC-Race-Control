@@ -63,6 +63,20 @@ public class TimeUtils {
         return String.format("%s%01d.%03d", sign, (int) s, (int) ms);
     }
 
+    public static String asGap(float millis) {
+        String sign = Math.signum(millis) < 0 ? "-" : "+";
+        millis = Math.abs(millis);
+        float ms = millis % 1000;
+        float remaining = (millis - ms) / 1000;
+        float s = remaining % 60;
+        remaining = (remaining - s) / 60;
+        float m = remaining % 60;
+        if (m > 0) {
+            return String.format("%+d:%02d.%d", (int) m, (int) s, (int) Math.floor(ms / 100));
+        }
+        return String.format("%+d.%d", (int) s, (int) Math.floor(ms / 100));
+    }
+
     public static float durationAsMillis(String duration) {
         String[] partial = duration.split(":");
         int h = Integer.valueOf(partial[0]);

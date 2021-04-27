@@ -8,6 +8,7 @@ package base.screen.extensions.livetiming;
 import base.screen.extensions.AccClientExtension;
 import base.ACCLiveTimingExtensionFactory;
 import base.screen.extensions.GeneralExtentionConfigPanel;
+import base.screen.extensions.livetiming.racedistance.RaceDistance;
 import base.screen.visualisation.gui.LPContainer;
 
 /**
@@ -18,6 +19,7 @@ public class LiveTimingExtensionFactory
         implements ACCLiveTimingExtensionFactory {
 
     private AccClientExtension extension;
+    private RaceDistance raceDistance;
 
     @Override
     public String getName() {
@@ -29,6 +31,7 @@ public class LiveTimingExtensionFactory
         removeExtension();
         if (GeneralExtentionConfigPanel.getInstance().isLiveTimingEnabled()) {
             extension = new LiveTimingExtension();
+            raceDistance = new RaceDistance();
         }
     }
 
@@ -42,6 +45,10 @@ public class LiveTimingExtensionFactory
         if (extension != null) {
             extension.removeExtension();
             extension = null;
+        }
+        if(raceDistance != null){
+            raceDistance.remove();
+            raceDistance = null;
         }
     }
 

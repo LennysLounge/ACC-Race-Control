@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package base.screen.extensions.livetiming;
+package base.screen.extensions.livetiming.tablemodels;
 
+import base.screen.extensions.livetiming.LiveTimingEntry;
 import base.screen.networking.data.CarInfo;
 import base.screen.networking.data.LapInfo;
 import base.screen.networking.enums.CarLocation;

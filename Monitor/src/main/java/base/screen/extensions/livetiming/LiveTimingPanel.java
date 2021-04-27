@@ -5,6 +5,7 @@
  */
 package base.screen.extensions.livetiming;
 
+import base.screen.extensions.livetiming.tablemodels.LiveTimingTableModel;
 import base.screen.networking.data.CarInfo;
 import base.screen.visualisation.gui.LPContainer;
 import base.screen.visualisation.gui.LPTable;
