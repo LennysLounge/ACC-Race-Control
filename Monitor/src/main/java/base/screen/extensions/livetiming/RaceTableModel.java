@@ -23,9 +23,8 @@ public class RaceTableModel
             nameColumn,
             pitColumn,
             carNumberColumn,
-            new LPTableColumn("lap time"),
-            new LPTableColumn("naive prediction"),
-            new LPTableColumn("vMap prediction")
+            new LPTableColumn("Interval"),
+            new LPTableColumn("To Leader")
         };
     }
 
@@ -40,13 +39,13 @@ public class RaceTableModel
             case 3:
                 return getEntry(row);
             case 4:
-                return TimeUtils.asLapTime(car.getRealtime().getCurrentLap().getLapTimeMS());
+                return TimeUtils.asDelta(getEntry(row).getGap());
             case 5:
-                //return TimeUtils.asLapTime(getEntry(row).getNaiveLapTime());
-                return TimeUtils.asLapTime(getEntry(row).getNaiveLapTime());
-            case 6:
-                //return TimeUtils.asLapTime(getEntry(row).getLapTime());
-                return TimeUtils.asLapTime(getEntry(row).getLapTime());
+                if (getEntry(row).showLapsBehind()) {
+                    return String.format("+%d Laps", getEntry(row).getLapsBehind());
+                } else {
+                    return TimeUtils.asDelta(getEntry(row).getTotal());
+                }
 
         }
         return "-";

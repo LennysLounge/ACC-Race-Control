@@ -14,35 +14,49 @@ import base.screen.networking.data.CarInfo;
 public class LiveTimingEntry {
 
     private final CarInfo carInfo;
+
+    private float gap;
+
+    private float total;
+
+    private boolean showLapsBehind;
     
-    private float naiveLapTime;
-    private float lapTime;
+    private int lapsBehind;
 
     public LiveTimingEntry(CarInfo carInfo) {
-        this(carInfo, 0, 0);
+        this(carInfo, 0, 0, false, 0);
     }
 
     public LiveTimingEntry(CarInfo carInfo,
-            float naiveLapTime,
-            float lapTime) {
+            float lapTime,
+            float total,
+            boolean isLapBehind,
+            int lapsBehind) {
         this.carInfo = carInfo;
-        this.naiveLapTime = naiveLapTime;
-        this.lapTime = lapTime;
+        this.gap = lapTime;
+        this.total = total;
+        this.showLapsBehind = isLapBehind;
+        this.lapsBehind = lapsBehind;
     }
 
     public CarInfo getCarInfo() {
         return carInfo;
     }
 
-    public float getNaiveLapTime() {
-        return naiveLapTime;
+    public float getGap() {
+        return gap;
     }
 
-    public float getLapTime() {
-        return lapTime;
+    public float getTotal() {
+        return total;
+    }
+
+    public boolean showLapsBehind() {
+        return showLapsBehind;
     }
     
-    
-
+    public int getLapsBehind(){
+        return lapsBehind; 
+   }
 
 }

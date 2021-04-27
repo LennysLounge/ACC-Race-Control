@@ -34,16 +34,25 @@ public class GapCalculator {
      * Velocity map for the current track.
      */
     private List<Float> velocityMap;
+    /**
+     * Predicted lap time.
+     */
+    private float lapTime;
 
     public void loadVMapForTrack(String trackName) {
         try {
             InputStream in = getClass().getResourceAsStream("/velocitymap/" + trackName + ".vMap");
             ObjectInputStream objIn = new ObjectInputStream(in);
             velocityMap = (List<Float>) objIn.readObject();
+            lapTime = calculateLapTime();
         } catch (IOException | ClassNotFoundException | NullPointerException ex) {
             LOG.log(Level.WARNING, trackName + " velocity map not found", ex);
             velocityMap = null;
         }
+    }
+    
+    public float getLapTime(){
+        return lapTime;
     }
 
     public void setTrackLength(int trackLength) {
@@ -148,6 +157,25 @@ public class GapCalculator {
         float trackDistance = trackLength * splineDistance;
         float averageSpeed = (prev.getKMH() + now.getKMH()) / 2f / 3.6f;
         return trackDistance / averageSpeed * 1000;
+    }
+    
+    private float calculateLapTime(){
+        if(velocityMap.isEmpty()){
+            return 0;
+        }
+        
+        float stepSize = 1f / velocityMap.size();
+        float totalTime = 0;
+        float currentPosition = 0;
+        //if there is a checkpoint inbetween the current point and the end
+        //calculate the time to the checkpoint first.
+        while (currentPosition + stepSize < 1) {
+            totalTime += calcTimeBetweenSplinePoints(currentPosition, currentPosition + stepSize);
+            currentPosition += stepSize;
+        }
+        //add time to the end point.
+        totalTime += calcTimeBetweenSplinePoints(currentPosition, 1);
+        return totalTime*1000;
     }
 
 }

@@ -99,8 +99,6 @@ public class LiveTimingExtension
             if (entries.containsKey(dis.getCar().getCarId())) {
                 entries.remove(dis.getCar().getCarId());
             }
-        } else if (e instanceof EntryListUpdate) {
-            entries.clear();
         } else if (e instanceof SessionChanged) {
             SessionType newSession = ((SessionChanged) e).getSessionInfo().getSessionType();
             if (newSession != currentSession) {
@@ -147,11 +145,35 @@ public class LiveTimingExtension
 
         List<LiveTimingEntry> withGaps = new LinkedList<>();
         withGaps.add(list.get(0));
+
+        //total time is the accumulated time behind the leader
+        //if a driver is more than a lap behind then total time will reset 
+        //to zero and count again.
+        float totalTime = 0;
+        RealtimeInfo leader = list.get(0).getCarInfo().getRealtime();
+        int splitLapsBehind = 0;
+
         for (int i = 1; i < list.size(); i++) {
+
+            //calculate gap to car infront and increment total time
+            float gap = gapCalculator.calculateGap(list.get(i).getCarInfo(), list.get(i - 1).getCarInfo());
+            totalTime += gap;
+
+            RealtimeInfo car = list.get(i).getCarInfo().getRealtime();
+            float raceDistanceDiff = (leader.getLaps() + leader.getSplinePosition()) - (car.getLaps() + car.getSplinePosition());
+            int lapsBehind = (int) Math.floor(raceDistanceDiff);
+            boolean showLapDiff = false;
+            if (lapsBehind > splitLapsBehind) {
+                showLapDiff = true;
+                splitLapsBehind = lapsBehind;
+            }
+
             withGaps.add(new LiveTimingEntry(
                     list.get(i).getCarInfo(),
-                    gapCalculator.calculateGapNaive(list.get(i).getCarInfo(), list.get(i - 1).getCarInfo()),
-                    gapCalculator.calculateGap(list.get(i).getCarInfo(), list.get(i - 1).getCarInfo())
+                    gap,
+                    totalTime,
+                    showLapDiff,
+                    lapsBehind
             ));
         }
         return withGaps;
@@ -167,15 +189,7 @@ public class LiveTimingExtension
     private int compareTo(LiveTimingEntry e1, LiveTimingEntry e2) {
         RealtimeInfo r1 = e1.getCarInfo().getRealtime();
         RealtimeInfo r2 = e2.getCarInfo().getRealtime();
-        switch (currentSession) {
-            case RACE:
-                float e1RaceDistance = r1.getLaps() + r1.getSplinePosition();
-                float e2RaceDistance = r1.getLaps() + r1.getSplinePosition();
-
-                return (int) Math.signum(e1RaceDistance - e2RaceDistance);
-            default:
-                return (int) Math.signum(r1.getPosition() - r2.getPosition());
-        }
+        return (int) Math.signum(r1.getPosition() - r2.getPosition());
     }
 
     public void focusOnCar(CarInfo car) {
