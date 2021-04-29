@@ -36,6 +36,10 @@ public class LPTabPanel extends LPContainer {
      * The tab index the mouse is over.
      */
     private int mouseOverTab = -1;
+    /**
+     * Color for the active tab.
+     */
+    private int activeTabColor = COLOR_DARK_GRAY;
 
     public LPTabPanel() {
     }
@@ -56,6 +60,10 @@ public class LPTabPanel extends LPContainer {
     public List<LPContainer> getTabs() {
         return tabs;
     }
+    
+    public void setActiveTabColor(int color){
+        this.activeTabColor = color;
+    }
 
     @Override
     public void draw() {
@@ -72,25 +80,27 @@ public class LPTabPanel extends LPContainer {
         applet.fill(LookAndFeel.COLOR_DARK_DARK_GRAY);
         applet.noStroke();
         applet.rect(0, 0, getWidth(), lineHeight);
-        float tabSize = getWidth() / tabs.size();
-        for (int i = 0; i < tabs.size(); i++) {
-            if (i == tabIndex) {
-                applet.fill(COLOR_DARK_GRAY);
-                applet.rect(i * tabSize, 0, tabSize, lineHeight);
+        if (tabs.size() > 1) {
+            float tabSize = getWidth() / tabs.size();
+            for (int i = 0; i < tabs.size(); i++) {
+                if (i == tabIndex) {
+                    applet.fill(activeTabColor);
+                    applet.rect(i * tabSize, 0, tabSize, lineHeight);
+                }
+                if (i == mouseOverTab) {
+                    applet.fill(COLOR_RED);
+                    applet.rect(i * tabSize, 0, tabSize, lineHeight);
+                }
+                applet.fill(255);
+                applet.textFont(LookAndFeel.fontMedium());
+                applet.text(tabs.get(i).getName(), i * tabSize + tabSize / 2f, lineHeight * 0.5f);
             }
-            if (i == mouseOverTab) {
-                applet.fill(COLOR_RED);
-                applet.rect(i * tabSize, 0, tabSize, lineHeight);
-            }
-            applet.fill(255);
-            applet.textFont(LookAndFeel.fontMedium());
-            applet.text(tabs.get(i).getName(), i * tabSize + tabSize / 2f, lineHeight * 0.5f);
         }
     }
 
     @Override
     public void onMouseMove(int x, int y) {
-        if (tabs.isEmpty()) {
+        if (tabs.size() <= 1) {
             setMouseOverTab(-1);
             return;
         }
@@ -110,7 +120,7 @@ public class LPTabPanel extends LPContainer {
 
     @Override
     public void onMousePressed(int x, int y, int button) {
-        if (tabs.isEmpty()) {
+        if (tabs.size() <= 1) {
             return;
         }
         int lineHeight = LookAndFeel.LINE_HEIGHT;
@@ -130,17 +140,25 @@ public class LPTabPanel extends LPContainer {
             removeComponent(currentTab);
         }
         currentTab = tabs.get(tabIndex);
-        currentTab.setPosition(0, LookAndFeel.LINE_HEIGHT);
-        currentTab.setSize(getWidth(), getHeight() - LookAndFeel.LINE_HEIGHT);
+        resetTabSize();
         addComponent(currentTab);
         invalidate();
     }
 
     @Override
     public void onResize(int w, int h) {
+        resetTabSize();
+    }
+
+    private void resetTabSize() {
         if (currentTab != null) {
-            currentTab.setPosition(0, LookAndFeel.LINE_HEIGHT);
-            currentTab.setSize(getWidth(), getHeight() - LookAndFeel.LINE_HEIGHT);
+            if (tabs.size() > 1) {
+                currentTab.setPosition(0, LookAndFeel.LINE_HEIGHT);
+                currentTab.setSize(getWidth(), getHeight() - LookAndFeel.LINE_HEIGHT);
+            } else {
+                currentTab.setPosition(0, 0);
+                currentTab.setSize(getWidth(), getHeight());
+            }
         }
     }
 

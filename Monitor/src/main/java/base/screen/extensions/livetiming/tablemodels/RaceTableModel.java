@@ -42,9 +42,12 @@ public class RaceTableModel
             .setMaxWidth(150),
             new LPTableColumn("Lap")
             .setCellRenderer(lapTimeRenderer),
-            new LPTableColumn("Last"),
-            new LPTableColumn("Best"),
-            new LPTableColumn("Laps"),
+            new LPTableColumn("Last")
+            .setTextAlign(CENTER),
+            new LPTableColumn("Best")
+            .setTextAlign(CENTER),
+            new LPTableColumn("Laps")
+            .setTextAlign(CENTER),
             new LPTableColumn("")
         };
     }

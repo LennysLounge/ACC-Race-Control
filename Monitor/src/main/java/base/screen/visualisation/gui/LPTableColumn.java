@@ -37,6 +37,8 @@ public class LPTableColumn {
      * The font to use for this Column.
      */
     private PFont font = null;
+    
+    private int textAlign = LEFT;
 
     private LPTable.CellRenderer renderer = (
             PApplet applet,
@@ -47,7 +49,7 @@ public class LPTableColumn {
             float width,
             float height) -> {
         applet.fill(255);
-        applet.textAlign(LEFT, CENTER);
+        applet.textAlign(textAlign, CENTER);
         if (font != null) {
             applet.textFont(font);
         } else {
@@ -84,6 +86,11 @@ public class LPTableColumn {
         this.font = font;
         return this;
     }
+    
+    public LPTableColumn setTextAlign(int textAlign){
+        this.textAlign = textAlign;
+        return this;
+    }
 
     public String getHeader() {
         return header;
@@ -107,6 +114,10 @@ public class LPTableColumn {
 
     public PFont getFont() {
         return font;
+    }
+    
+    public int getTextAlign(){
+        return textAlign;
     }
 
 }

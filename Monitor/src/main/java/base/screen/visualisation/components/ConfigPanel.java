@@ -13,6 +13,7 @@ import base.screen.extensions.GeneralExtentionConfigPanel;
 import base.screen.networking.AccBroadcastingClient;
 import base.screen.networking.events.ConnectionClosed;
 import base.screen.visualisation.LookAndFeel;
+import static base.screen.visualisation.LookAndFeel.COLOR_GRAY;
 import base.screen.visualisation.Visualisation;
 import base.screen.visualisation.gui.LPButton;
 import base.screen.visualisation.gui.LPContainer;
@@ -182,6 +183,9 @@ public class ConfigPanel
     public void draw() {
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
+        applet.stroke(COLOR_GRAY);
+        applet.line(420, 20, 420, getHeight()-40);
+        applet.noStroke();
     }
 
     private void initComponents() {
@@ -215,6 +219,7 @@ public class ConfigPanel
 
         extensionHeading.setSize(getWidth() - 420, LookAndFeel.LINE_HEIGHT);
         addComponent(extensionHeading);
+        extensionTabPanel.setActiveTabColor(COLOR_GRAY);
         addComponent(extensionTabPanel);
 
         extensionTabPanel.addTab(GeneralExtentionConfigPanel.getInstance());
@@ -246,10 +251,10 @@ public class ConfigPanel
 
         connectButton.setPosition(20, lh * 5);
 
-        extensionHeading.setPosition(420, 0);
-        extensionHeading.setSize(w - 440, LookAndFeel.LINE_HEIGHT);
-        extensionTabPanel.setPosition(420, lh);
-        extensionTabPanel.setSize(w - 440, h - lh - 20);
+        extensionHeading.setPosition(440, 0);
+        extensionHeading.setSize(w - 460, LookAndFeel.LINE_HEIGHT);
+        extensionTabPanel.setPosition(440, lh);
+        extensionTabPanel.setSize(w - 460, h - lh - 20);
     }
 
 }
