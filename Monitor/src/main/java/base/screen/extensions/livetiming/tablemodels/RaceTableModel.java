@@ -72,7 +72,7 @@ public class RaceTableModel
             case 9:
                 return String.valueOf(car.getRealtime().getLaps());
             case 10:
-                return "";
+                return String.format("%.3f",car.getRealtime().getLaps() + car.getRealtime().getSplinePosition());
         }
         return "-";
     }

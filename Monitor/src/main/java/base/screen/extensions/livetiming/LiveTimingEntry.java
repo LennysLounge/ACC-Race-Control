@@ -15,8 +15,6 @@ public class LiveTimingEntry {
 
     private final CarInfo carInfo;
 
-    private final float raceDistance;
-
     private float gap;
 
     private float gapToLeader;
@@ -25,19 +23,16 @@ public class LiveTimingEntry {
 
     private int lapsBehind;
 
-    public LiveTimingEntry(CarInfo carInfo,
-            float raceDistance) {
-        this(carInfo, raceDistance, 0, 0, false, 0);
+    public LiveTimingEntry(CarInfo carInfo) {
+        this(carInfo, 0, 0, false, 0);
     }
 
     public LiveTimingEntry(CarInfo carInfo,
-            float raceDistance,
             float lapTime,
             float gapToLeader,
             boolean isLapBehind,
             int lapsBehind) {
         this.carInfo = carInfo;
-        this.raceDistance = raceDistance;
         this.gap = lapTime;
         this.gapToLeader = gapToLeader;
         this.showLapsBehind = isLapBehind;
@@ -62,10 +57,6 @@ public class LiveTimingEntry {
 
     public int getLapsBehind() {
         return lapsBehind;
-    }
-
-    public float getRaceDistance() {
-        return raceDistance;
     }
 
 }

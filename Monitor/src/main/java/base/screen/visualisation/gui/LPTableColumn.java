@@ -9,6 +9,7 @@ import base.screen.visualisation.LookAndFeel;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.RIGHT;
 import processing.core.PFont;
 
 /**
@@ -37,7 +38,7 @@ public class LPTableColumn {
      * The font to use for this Column.
      */
     private PFont font = null;
-    
+
     private int textAlign = LEFT;
 
     private LPTable.CellRenderer renderer = (
@@ -55,7 +56,18 @@ public class LPTableColumn {
         } else {
             applet.textFont(LookAndFeel.fontRegular());
         }
-        applet.text(object.toString(), height / 2, height / 2);
+        switch (textAlign) {
+            case LEFT:
+                applet.text(object.toString(), height / 2, height / 2);
+                break;
+            case CENTER:
+                applet.text(object.toString(), width / 2, height / 2);
+                break;
+            case RIGHT:
+                applet.text(object.toString(), width - height / 2, height / 2);
+                break;
+        }
+
     };
 
     public LPTableColumn(String header) {
@@ -86,8 +98,8 @@ public class LPTableColumn {
         this.font = font;
         return this;
     }
-    
-    public LPTableColumn setTextAlign(int textAlign){
+
+    public LPTableColumn setTextAlign(int textAlign) {
         this.textAlign = textAlign;
         return this;
     }
@@ -115,8 +127,8 @@ public class LPTableColumn {
     public PFont getFont() {
         return font;
     }
-    
-    public int getTextAlign(){
+
+    public int getTextAlign() {
         return textAlign;
     }
 
