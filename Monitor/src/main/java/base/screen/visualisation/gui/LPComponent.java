@@ -242,7 +242,11 @@ public class LPComponent {
     public void setEnabled(boolean isEnabled) {
         if (this.isEnabled != isEnabled) {
             this.isEnabled = isEnabled;
-            onEnabled();
+            if (isEnabled) {
+                onEnabled();
+            }else{
+                onDisabled();
+            }
             invalidate();
         }
     }
@@ -252,6 +256,13 @@ public class LPComponent {
      * be able to react to it.
      */
     public void onEnabled() {
+    }
+
+    /**
+     * Event for when a componentis enabled or disabled. Override this event to
+     * be able to react to it.
+     */
+    public void onDisabled() {
     }
 
     /**

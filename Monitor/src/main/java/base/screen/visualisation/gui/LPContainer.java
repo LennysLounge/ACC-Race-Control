@@ -127,4 +127,12 @@ public class LPContainer
         }
     }
 
+    @Override
+    public void setEnabled(boolean isEnabled) {
+        for (LPComponent c : components) {
+            c.setEnabled(isEnabled);
+        }
+        super.setEnabled(isEnabled);
+    }
+
 }

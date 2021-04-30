@@ -84,14 +84,14 @@ public class GeneralExtentionConfigPanel
         addComponent(trackMapCheckBox);
         trackMapLabel.setPosition(60, LINE_HEIGHT * 5);
         trackMapLabel.setSize(300, LINE_HEIGHT);
+        trackMapLabel.setEnabled(false);
         addComponent(trackMapLabel);
     }
 
     @Override
     public void onEnabled() {
-        liveTimingCheckBox.setEnabled(isEnabled());
-        loggingCheckBox.setEnabled(isEnabled());
-        incidentLogCheckBox.setEnabled(isEnabled());
+        trackMapCheckBox.setEnabled(false);
+        trackMapLabel.setEnabled(false);
         invalidate();
     }
 
