@@ -9,10 +9,6 @@ def distributionName = "ACC Live Timing Monitor" + project.ext.versionString
 
 ext.collectableDistDir = new File(projectDir, "src\\dist")
 
-task testo{
-    print("")
-}
-
 application{
     mainClassName = 'base.screen.Main'
 }
@@ -46,6 +42,10 @@ distributions{
 }
 
 
+
+run{
+    jvmArgs("-splash:bin/loading.gif")
+}
 
 
 //startScripts.enabled = false

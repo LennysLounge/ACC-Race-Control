@@ -16,6 +16,8 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import processing.core.PApplet;
 import base.screen.networking.AccBroadcastingClient;
+import java.awt.SplashScreen;
+import java.util.concurrent.TimeUnit;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -38,9 +40,12 @@ public class Main {
      */
     private static Visualisation visualisation;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
         setupLogging();
+        
+        TimeUnit.SECONDS.sleep(1);
+        
         
         //Set system look and feel.
         try {
