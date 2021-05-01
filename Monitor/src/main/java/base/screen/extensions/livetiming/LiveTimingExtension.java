@@ -143,10 +143,10 @@ public class LiveTimingExtension
 
         //find best sectors.
         List<Integer> sessionBestSectors = new ArrayList<>(Arrays.asList(9999999, 9999999, 9999999));
-        for(LiveTimingEntry entry : sortedEntries){
+        for (LiveTimingEntry entry : sortedEntries) {
             LapInfo bestLap = entry.getCarInfo().getRealtime().getBestSessionLap();
-            for(int i=0; i<bestLap.getSplits().size(); i++){
-                if(bestLap.getSplits().get(i) < sessionBestSectors.get(i)){
+            for (int i = 0; i < bestLap.getSplits().size(); i++) {
+                if (bestLap.getSplits().get(i) < sessionBestSectors.get(i)) {
                     sessionBestSectors.set(i, bestLap.getSplits().get(i));
                 }
             }

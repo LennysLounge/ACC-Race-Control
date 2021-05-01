@@ -144,7 +144,7 @@ public class AccBroadcastingClient {
 
         socket = new DatagramSocket();
         socket.connect(this.hostAddress, this.hostPort);
-        
+
         model = new AccBroadcastingData();
         sessionId = new SessionId(SessionType.NONE, -1, 0);
 
@@ -470,9 +470,9 @@ public class AccBroadcastingClient {
 
             //disconnect cars with excess of misses
             Iterator<Entry<Integer, Integer>> iter = missedRealtimeUpdates.entrySet().iterator();
-            while(iter.hasNext()){
+            while (iter.hasNext()) {
                 Entry<Integer, Integer> entry = iter.next();
-                if(entry.getValue() >= maximumRealtimeMisses){
+                if (entry.getValue() >= maximumRealtimeMisses) {
                     onCarDisconnect(model.getCar(entry.getKey()));
                     iter.remove();
                 }

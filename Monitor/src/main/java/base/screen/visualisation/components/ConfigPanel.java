@@ -184,7 +184,7 @@ public class ConfigPanel
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
         applet.stroke(COLOR_GRAY);
-        applet.line(420, 20, 420, getHeight()-40);
+        applet.line(420, 20, 420, getHeight() - 40);
         applet.noStroke();
     }
 

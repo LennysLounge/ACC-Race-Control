@@ -368,7 +368,7 @@ public class AccBroadcastingProtocol {
         for (int i = 0; i < splitCount; i++) {
             splits.add(readInt32(in));
         }
-        for(int i=splitCount; i<3;i++){
+        for (int i = splitCount; i < 3; i++) {
             splits.add(0);
         }
 

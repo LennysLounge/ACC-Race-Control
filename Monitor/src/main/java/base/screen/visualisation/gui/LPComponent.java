@@ -244,7 +244,7 @@ public class LPComponent {
             this.isEnabled = isEnabled;
             if (isEnabled) {
                 onEnabled();
-            }else{
+            } else {
                 onDisabled();
             }
             invalidate();

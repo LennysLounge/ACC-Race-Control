@@ -55,8 +55,8 @@ public class LPLabel
         applet.rect(0, 0, getWidth(), getHeight());
 
         applet.fill(LookAndFeel.COLOR_WHITE);
-        if(!isEnabled()){
-           applet.fill(COLOR_GRAY);
+        if (!isEnabled()) {
+            applet.fill(COLOR_GRAY);
         }
         applet.textAlign(hAlign, vAlign);
         applet.textFont(LookAndFeel.fontRegular());

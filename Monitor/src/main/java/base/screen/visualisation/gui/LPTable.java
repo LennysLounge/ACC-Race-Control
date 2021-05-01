@@ -166,7 +166,7 @@ public class LPTable extends LPContainer {
             }
             for (int column = 0; column < columns.length; column++) {
                 boolean isMouseOverThisColumn = column == mouseOverColumn;
-                if(row + scrollbar.scroll >= model.getRowCount()){
+                if (row + scrollbar.scroll >= model.getRowCount()) {
                     continue;
                 }
                 applet.translate(columnOffset, rowOffset);

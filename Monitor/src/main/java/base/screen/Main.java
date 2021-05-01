@@ -43,10 +43,9 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
         setupLogging();
-        
+
         TimeUnit.SECONDS.sleep(1);
-        
-        
+
         //Set system look and feel.
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

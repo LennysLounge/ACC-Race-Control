@@ -82,7 +82,7 @@ public class Visualisation extends CustomPApplet {
         //init components.
         basePanel = new BasePanel(client);
         setComponent(basePanel);
-        
+
     }
 
     @Override

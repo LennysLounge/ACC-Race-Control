@@ -55,7 +55,7 @@ public class VelocityMapPanel
         applet.fill(COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
 
-        applet.image(graph, 20, LINE_HEIGHT );
+        applet.image(graph, 20, LINE_HEIGHT);
 
         applet.noFill();
         applet.stroke(255);

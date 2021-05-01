@@ -50,8 +50,8 @@ public class GapCalculator {
             velocityMap = null;
         }
     }
-    
-    public float getLapTime(){
+
+    public float getLapTime() {
         return lapTime;
     }
 
@@ -92,7 +92,7 @@ public class GapCalculator {
         }
         //add time to the end point.
         totalTime += calcTimeBetweenSplinePoints(currentPosition, end);
-        return totalTime*1000;
+        return totalTime * 1000;
     }
 
     /**
@@ -119,7 +119,7 @@ public class GapCalculator {
      */
     private float findVmapVelocityForPosition(float s) {
         int lowerIndex = (int) Math.floor(s * velocityMap.size()) % velocityMap.size();
-        int upperIndex = (lowerIndex+1) % velocityMap.size();
+        int upperIndex = (lowerIndex + 1) % velocityMap.size();
         float t = s * velocityMap.size() % 1;
         float rtn = (velocityMap.get(lowerIndex) * (1 - t) + velocityMap.get(upperIndex) * t) / 3.6f;
         return rtn;
@@ -158,12 +158,12 @@ public class GapCalculator {
         float averageSpeed = (prev.getKMH() + now.getKMH()) / 2f / 3.6f;
         return trackDistance / averageSpeed * 1000;
     }
-    
-    private float calculateLapTime(){
-        if(velocityMap.isEmpty()){
+
+    private float calculateLapTime() {
+        if (velocityMap.isEmpty()) {
             return 0;
         }
-        
+
         float stepSize = 1f / velocityMap.size();
         float totalTime = 0;
         float currentPosition = 0;
@@ -175,7 +175,7 @@ public class GapCalculator {
         }
         //add time to the end point.
         totalTime += calcTimeBetweenSplinePoints(currentPosition, 1);
-        return totalTime*1000;
+        return totalTime * 1000;
     }
 
 }

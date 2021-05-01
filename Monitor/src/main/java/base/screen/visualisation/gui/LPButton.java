@@ -47,14 +47,14 @@ public class LPButton
     public void draw() {
         applet.noStroke();
         applet.fill(LookAndFeel.COLOR_GRAY);
-        applet.rect(0, 2, getWidth(), getHeight()-4);
+        applet.rect(0, 2, getWidth(), getHeight() - 4);
         if (isMouseOver()) {
             applet.fill(LookAndFeel.COLOR_RED);
-            applet.rect(0, 2, getWidth(), getHeight()-4);
+            applet.rect(0, 2, getWidth(), getHeight() - 4);
         }
         if (clicked) {
             applet.fill(LookAndFeel.TRANSPARENT_WHITE);
-            applet.rect(0, 2, getWidth(), getHeight()-4);
+            applet.rect(0, 2, getWidth(), getHeight() - 4);
         }
         applet.fill(255);
         applet.textAlign(CENTER, CENTER);

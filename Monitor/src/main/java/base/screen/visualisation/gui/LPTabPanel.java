@@ -60,8 +60,8 @@ public class LPTabPanel extends LPContainer {
     public List<LPContainer> getTabs() {
         return tabs;
     }
-    
-    public void setActiveTabColor(int color){
+
+    public void setActiveTabColor(int color) {
         this.activeTabColor = color;
     }
 

@@ -46,7 +46,7 @@ public class LiveTimingTableModel
      * The best lap of the session.
      */
     private LapInfo sessionBestLap;
-    
+
     private List<Integer> sessionBestSectors = new LinkedList<>();
 
     private final LPTable.CellRenderer positionRenderer = (
@@ -227,15 +227,13 @@ public class LiveTimingTableModel
     public void setSessionBestLap(LapInfo sessionBestLap) {
         this.sessionBestLap = sessionBestLap;
     }
-    
-    public List<Integer> getSessionBestSectors(){
+
+    public List<Integer> getSessionBestSectors() {
         return sessionBestSectors;
     }
 
     public void setSessionBestSectors(List<Integer> sessionBestSectors) {
         this.sessionBestSectors = sessionBestSectors;
     }
-    
-    
 
 }
