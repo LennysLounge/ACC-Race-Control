@@ -96,7 +96,7 @@ public class LPTextField
         }
 
         applet.noStroke();
-        applet.rect(0, 2, getWidth(), getHeight()-4);
+        applet.rect(0, 2, getWidth(), getHeight() - 4);
 
         if (isSelectionActive() && isFocused() && isEnabled()) {
             int selectionStartInPresentationText = selectionStartIndex - presentationTextOffset;
@@ -111,7 +111,11 @@ public class LPTextField
 
         }
 
-        applet.fill(LookAndFeel.COLOR_WHITE);
+        if (isEnabled()) {
+            applet.fill(LookAndFeel.COLOR_WHITE);
+        } else {
+            applet.fill(LookAndFeel.COLOR_GRAY);
+        }
         applet.textAlign(LEFT, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
         applet.text(presentationText, padding, getHeight() / 2f);
