@@ -30,7 +30,7 @@ Monitor/build
 Google-Sheets-API-extension/build
 
 #ignore api credentials.
-secret_credentials.json
+credentials.json
 
 
 

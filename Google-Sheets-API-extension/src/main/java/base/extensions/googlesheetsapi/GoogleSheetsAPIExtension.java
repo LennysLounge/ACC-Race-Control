@@ -38,6 +38,7 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -321,8 +322,8 @@ public class GoogleSheetsAPIExtension
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
         //Load client secrets
-        final String CREDENTIAL_PATH = "/credentials/secret_credentials.json";
-        InputStream in = Main.class.getResourceAsStream(CREDENTIAL_PATH);
+        final String CREDENTIAL_PATH = "Google Sheets API Key/credentials.json";
+        InputStream in = new FileInputStream(CREDENTIAL_PATH);
         if (in == null) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIAL_PATH);
         }
