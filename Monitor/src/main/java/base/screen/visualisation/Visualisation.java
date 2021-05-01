@@ -82,23 +82,7 @@ public class Visualisation extends CustomPApplet {
         //init components.
         basePanel = new BasePanel(client);
         setComponent(basePanel);
-
         
-
-        /*
-        //create extensions
-        for (ACCLiveTimingExtensionFactory module : modules) {
-            AccClientExtension extension = module.createExtension();
-            if (extension != null) {
-                extensions.add(extension);
-            }
-        }
-        //Add panels to basePanel
-        basePanel.addExtensionPanels(extensions.stream()
-                .map(extension -> extension.getPanel())
-                .filter(panel -> panel != null)
-                .collect(Collectors.toList()));
-         */
     }
 
     @Override
