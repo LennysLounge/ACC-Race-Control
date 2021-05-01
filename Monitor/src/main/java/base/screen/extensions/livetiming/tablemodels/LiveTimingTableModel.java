@@ -41,11 +41,13 @@ public class LiveTimingTableModel
     /**
      * Car id of the focused car.
      */
-    protected int focusedCarId = -1;
+    private int focusedCarId = -1;
     /**
      * The best lap of the session.
      */
-    protected LapInfo sessionBestLap;
+    private LapInfo sessionBestLap;
+    
+    private List<Integer> sessionBestSectors = new LinkedList<>();
 
     private final LPTable.CellRenderer positionRenderer = (
             PApplet applet,
@@ -225,5 +227,15 @@ public class LiveTimingTableModel
     public void setSessionBestLap(LapInfo sessionBestLap) {
         this.sessionBestLap = sessionBestLap;
     }
+    
+    public List<Integer> getSessionBestSectors(){
+        return sessionBestSectors;
+    }
+
+    public void setSessionBestSectors(List<Integer> sessionBestSectors) {
+        this.sessionBestSectors = sessionBestSectors;
+    }
+    
+    
 
 }

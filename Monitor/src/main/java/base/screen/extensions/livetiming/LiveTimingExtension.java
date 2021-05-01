@@ -18,6 +18,7 @@ import base.screen.extensions.AccClientExtension;
 import base.screen.networking.AccBroadcastingClient;
 import base.screen.networking.SessionChanged;
 import base.screen.networking.data.CarInfo;
+import base.screen.networking.data.LapInfo;
 import base.screen.networking.data.RealtimeInfo;
 import base.screen.networking.data.SessionInfo;
 import base.screen.networking.data.TrackInfo;
@@ -26,6 +27,8 @@ import base.screen.networking.events.CarDisconnect;
 import base.screen.networking.events.TrackData;
 import base.screen.utility.GapCalculator;
 import base.screen.visualisation.gui.LPContainer;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -138,9 +141,21 @@ public class LiveTimingExtension
             sortedEntries = calculateGaps(sortedEntries);
         }
 
+        //find best sectors.
+        List<Integer> sessionBestSectors = new ArrayList<>(Arrays.asList(9999999, 9999999, 9999999));
+        for(LiveTimingEntry entry : sortedEntries){
+            LapInfo bestLap = entry.getCarInfo().getRealtime().getBestSessionLap();
+            for(int i=0; i<bestLap.getSplits().size(); i++){
+                if(bestLap.getSplits().get(i) < sessionBestSectors.get(i)){
+                    sessionBestSectors.set(i, bestLap.getSplits().get(i));
+                }
+            }
+        }
+
         model.setEntries(sortedEntries);
         model.setFocusedCarId(sessionInfo.getFocusedCarIndex());
         model.setSessionBestLap(sessionInfo.getBestSessionLap());
+        model.setSessionBestSectors(sessionBestSectors);
         panel.invalidate();
     }
 

@@ -120,7 +120,7 @@ public class QualifyingTableModel
             text = TimeUtils.asLapTime(bestLapTime);
         }
         applet.noStroke();
-        if (bestLapTime == sessionBestLap.getLapTimeMS()) {
+        if (bestLapTime == getSessionBestLap().getLapTimeMS()) {
             applet.fill(COLOR_PURPLE);
         } else {
             applet.fill(COLOR_WHITE);
@@ -142,7 +142,7 @@ public class QualifyingTableModel
         int bestLapTime = car.getRealtime().getBestSessionLap().getLapTimeMS();
         String text = "--";
         if (bestLapTime != Integer.MAX_VALUE) {
-            int sessionBestLapTime = sessionBestLap.getLapTimeMS();
+            int sessionBestLapTime = getSessionBestLap().getLapTimeMS();
             int diff = bestLapTime - sessionBestLapTime;
             if (diff != 0) {
                 text = TimeUtils.asDelta(diff);
@@ -226,7 +226,7 @@ public class QualifyingTableModel
         if (sectorIndex < splits.size()) {
             if (splits.get(sectorIndex) != Integer.MAX_VALUE) {
                 text = TimeUtils.asLapTime(splits.get(sectorIndex));
-                if (Objects.equals(splits.get(sectorIndex), sessionBestLap.getSplits().get(sectorIndex))) {
+                if (Objects.equals(splits.get(sectorIndex), getSessionBestSectors().get(sectorIndex))) {
                     applet.fill(COLOR_PURPLE);
                 }
             }
