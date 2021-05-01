@@ -41,27 +41,31 @@ public class GoogleSheetsAPIExtensionFactory
     public void createExtension() {
         removeExtension();
         if (configurationPanel.isExtensionEnabled()) {
-
-            //Load client secrets
-            final String CREDENTIAL_PATH = "Google Sheets API Key/credentials.json";
-            InputStream in;
             try {
-                in = new FileInputStream(CREDENTIAL_PATH);
-            } catch (FileNotFoundException e) {
-                LOG.log(Level.SEVERE, "Cannot load credentials file: " + CREDENTIAL_PATH, e);
+                GoogleSheetsAPIExtension e = new GoogleSheetsAPIExtension(
+                        new GoogleSheetsService(configurationPanel.getSpreadSheetLink()));
+                e.setReplayOffsetCell(configurationPanel.getReplayOffsetCell());
+                e.setFindEmptyRowRange(configurationPanel.getFindEmptyRowRange());
+                e.setSessionColumn(configurationPanel.getSessionColumn());
+                e.setCarInfoColumn(configurationPanel.getCarColumn());
+                e.start();
+                extension = e;
+            } catch (IllegalArgumentException ex) {
+                LOG.log(Level.SEVERE, "The spreadsheet URL is not valid.", ex);
+                JOptionPane.showMessageDialog(null, "The given spreadsheet link is not valid."
+                        + "\nMake sure you copy the whole URL.",
+                        "Error extracting spreadsheet Id", ERROR_MESSAGE);
+            } catch (RuntimeException ex) {
+                LOG.log(Level.SEVERE, "Error starting the Google Sheets service.", ex.getCause());
+                JOptionPane.showMessageDialog(null, "There was an error starting the Google API service.",
+                        "Error starting API Service", ERROR_MESSAGE);
+            } catch (FileNotFoundException ex) {
+                LOG.log(Level.SEVERE, "Cannot load credentials file: ", ex);
                 JOptionPane.showMessageDialog(null, "There was an error loading the Google API credentials."
                         + "\nThe file could not be found.",
                         "Error loading API credentials", ERROR_MESSAGE);
-                return;
             }
 
-            extension = new GoogleSheetsAPIExtension(
-                    new GoogleSheetsService(configurationPanel.getSpreadSheetLink(), in));
-            extension.setReplayOffsetCell(configurationPanel.getReplayOffsetCell());
-            extension.setFindEmptyRowRange(configurationPanel.getFindEmptyRowRange());
-            extension.setSessionColumn(configurationPanel.getSessionColumn());
-            extension.setCarInfoColumn(configurationPanel.getCarColumn());
-            extension.start();
         }
     }
 

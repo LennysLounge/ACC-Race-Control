@@ -19,6 +19,8 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -49,13 +51,18 @@ public class GoogleSheetsService {
      */
     private String spreadSheetId;
 
-    public GoogleSheetsService(String spreadSheetURL, InputStream credentials)
-            throws IllegalArgumentException, RuntimeException {
+    public GoogleSheetsService(String spreadSheetURL)
+            throws IllegalArgumentException, RuntimeException, FileNotFoundException {
         requireNonNull(spreadSheetURL, "spreadSheetURL");
 
+        //set spreadsheet id
         setSpreadSheetID(spreadSheetURL);
+
+        //Load client secrets
+        final String CREDENTIAL_PATH = "Google Sheets API Key/credentials.json";
+        InputStream in = new FileInputStream(CREDENTIAL_PATH);
         try {
-            sheetService = createSheetsService(credentials);
+            sheetService = createSheetsService(in);
         } catch (IOException | GeneralSecurityException e) {
             throw new RuntimeException("Error while creating sheet service", e);
         }
