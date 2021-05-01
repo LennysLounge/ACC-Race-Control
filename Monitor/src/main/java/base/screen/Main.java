@@ -16,6 +16,8 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import processing.core.PApplet;
 import base.screen.networking.AccBroadcastingClient;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -39,12 +41,21 @@ public class Main {
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
         setupLogging();
-        //loadModules();
+        
+        //Set system look and feel.
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException
+                | InstantiationException
+                | IllegalAccessException
+                | UnsupportedLookAndFeelException ex) {
+            LOG.log(Level.WARNING, "Error setting system look and feel.", ex);
+        }
 
+        //create a client and start visualisation.
         client = new AccBroadcastingClient();
         visualisation = new Visualisation(client);
 
-        //start the visualisation
         String[] a = {"MAIN"};
         PApplet.runSketch(a, visualisation);
     }
