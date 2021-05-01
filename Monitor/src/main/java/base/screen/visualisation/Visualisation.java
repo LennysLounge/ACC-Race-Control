@@ -9,10 +9,17 @@ import base.ACCLiveTimingExtensionFactory;
 import base.screen.extensions.AccClientExtension;
 import base.screen.visualisation.components.BasePanel;
 import base.screen.networking.AccBroadcastingClient;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import processing.core.PGraphics;
+import processing.core.PImage;
 
 /**
  * The base for the processing visualization.
@@ -66,11 +73,17 @@ public class Visualisation extends CustomPApplet {
         LookAndFeel.init(this);
         surface.setResizable(true);
         surface.setTitle("ACC Accident Tracker");
+        PImage i = loadResourceAsPImage("/images/Logo.png");
+        if (i != null) {
+            surface.setIcon(i);
+        }
         frameRate(30);
 
         //init components.
         basePanel = new BasePanel(client);
         setComponent(basePanel);
+
+        
 
         /*
         //create extensions
@@ -127,5 +140,21 @@ public class Visualisation extends CustomPApplet {
 
     public static List<ACCLiveTimingExtensionFactory> getModules() {
         return modules;
+    }
+
+    private PImage loadResourceAsPImage(String resource) {
+        try {
+            BufferedImage bi = ImageIO.read(Visualisation.class.getResourceAsStream(resource));
+            PGraphics g = createGraphics(bi.getWidth(), bi.getHeight());
+            g.beginDraw();
+            Graphics2D g2d = (Graphics2D) g.getNative();
+            g2d.drawImage(bi, 0, 0, bi.getWidth(), bi.getHeight(), null);
+            g.endDraw();
+            PImage b = g.copy();
+            return b;
+        } catch (IOException ex) {
+            return null;
+        }
+
     }
 }
