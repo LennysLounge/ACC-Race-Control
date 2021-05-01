@@ -47,8 +47,7 @@ public class RaceTableModel
             new LPTableColumn("Best")
             .setTextAlign(CENTER),
             new LPTableColumn("Laps")
-            .setTextAlign(CENTER),
-            new LPTableColumn("")
+            .setTextAlign(CENTER)
         };
     }
 
@@ -71,8 +70,6 @@ public class RaceTableModel
                 return TimeUtils.asLapTime(car.getRealtime().getBestSessionLap().getLapTimeMS());
             case 9:
                 return String.valueOf(car.getRealtime().getLaps());
-            case 10:
-                return String.format("%.3f",car.getRealtime().getLaps() + car.getRealtime().getSplinePosition());
         }
         return "-";
     }
