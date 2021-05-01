@@ -90,7 +90,7 @@ public class GoogleSheetsAPIExtension
     public void onEvent(Event e) {
         if (e instanceof SessionChanged) {
             currentSessionId = ((SessionChanged) e).getSessionId();
-            currentSheetTarget = getTargetSheet(currentSessionId);
+            setCurrentTargetSheet(getTargetSheet(currentSessionId));
             LOG.info("Target Sheet changed to \"" + currentSheetTarget + "\"");
             LoggingExtension.log("Spreasheet target changed to \"" + currentSheetTarget + "\"");
         } else if (e instanceof Accident) {
@@ -119,6 +119,9 @@ public class GoogleSheetsAPIExtension
                     event.getCar().getDriver().getFirstName() + " " + event.getCar().getDriver().getLastName(),
                     String.valueOf(event.getCar().getCarNumber())
             ));
+        }
+        if(isGreenFlagOffsetBeeingMeasured()){
+            panel.invalidate();
         }
     }
 
@@ -170,6 +173,7 @@ public class GoogleSheetsAPIExtension
 
     public void setCurrentTargetSheet(String sheet) {
         this.currentSheetTarget = sheet;
+        panel.invalidate();
     }
 
     public long getGreenFlagTimeStamp() {

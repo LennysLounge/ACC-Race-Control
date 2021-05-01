@@ -23,10 +23,10 @@ public class GoogleSheetsAPIPanel extends LPContainer {
 
     private final GoogleSheetsAPIExtension extension;
 
-    private final LPButton setToPractice = new LPButton("Send to \"Practice!\"");
-    private final LPButton setToQuali = new LPButton("Send to \"Qualifying!\"");
-    private final LPButton setToRace1 = new LPButton("Send to \"Race 1!\"");
-    private final LPButton setToRace2 = new LPButton("Send to \"Race 2!\"");
+    private final LPButton setToPractice = new LPButton("Target \"Practice!\"");
+    private final LPButton setToQuali = new LPButton("Target \"Qualifying!\"");
+    private final LPButton setToRace1 = new LPButton("target \"Race 1!\"");
+    private final LPButton setToRace2 = new LPButton("target \"Race 2!\"");
     private final LPButton sendEmptyIncident = new LPButton("Send empty incident");
 
     public GoogleSheetsAPIPanel(GoogleSheetsAPIExtension extension) {
@@ -71,17 +71,15 @@ public class GoogleSheetsAPIPanel extends LPContainer {
         applet.text("Current sheet target: " + extension.getCurrentTargetSheet(),
                 10, LookAndFeel.LINE_HEIGHT * 0.5f);
 
-        applet.text("Is green flag offset measured: "
-                + (extension.isGreenFlagOffsetBeeingMeasured() ? "True" : "False"),
-                350, LookAndFeel.LINE_HEIGHT * 0.5f);
-        String offset = "Offset: ";
+        String offset = "";
         if (extension.isGreenFlagOffsetBeeingMeasured()) {
             long diff = System.currentTimeMillis() - extension.getGreenFlagTimeStamp();
             offset += TimeUtils.asDuration(diff);
         } else {
             offset += "-";
         }
-        applet.text(offset, 350, LookAndFeel.LINE_HEIGHT * 1.5f);
+        applet.text("Replay offset: " + offset,
+                350, LookAndFeel.LINE_HEIGHT * 0.5f);
 
     }
 
