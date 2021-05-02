@@ -1,13 +1,21 @@
-apply plugin: 'java'
-apply plugin: 'jacoco'
-apply plugin: 'application'
+plugins{
+    id 'java'
+    id 'jacoco'
+    id 'application'
+    id 'com.github.hierynomus.license' version '0.15.0'
+}
 
+apply plugin: "com.github.hierynomus.license"
 apply from: "${rootDir}/gradle/versioning.gradle"
 def distributionName = "ACC Live Timing Monitor ACCSS" + project.ext.versionString
 
-
 mainClassName = 'base.screen.Main'
 
+license{
+    header rootProject.file("codequality/HEADER")
+    include "**/*.java"
+    strictCheck true
+}
 
 repositories {
     jcenter()
@@ -35,7 +43,12 @@ distributions{
     }
 }
 
+build{
+    dependsOn tasks.license
+}
+
 run{
     dependsOn installDist
     workingDir new File(new File(buildDir, 'install'), distributionName)    
+    jvmArgs("-splash:bin/loading.gif")
 }

@@ -1,16 +1,15 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (c) 2021 Leonard Schüngel
+ * 
+ * For licensing information see the included license (LICENSE.txt)
  */
+
 package base.extensions.googlesheetsapi;
 
 import base.screen.visualisation.gui.LPContainer;
 import base.ACCLiveTimingExtensionFactory;
 import base.screen.extensions.AccClientExtension;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
