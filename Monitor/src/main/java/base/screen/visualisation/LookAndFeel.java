@@ -21,8 +21,6 @@ public class LookAndFeel {
      */
     private static Logger LOG = Logger.getLogger(LookAndFeel.class.getName());
 
-    private static LookAndFeel instance = null;
-
     public static final int COLOR_RED = 0xffe00000;
     public static final int COLOR_DARK_RED = 0xffb10808;
     public static final int COLOR_GREEN = 0xff00aa59;
