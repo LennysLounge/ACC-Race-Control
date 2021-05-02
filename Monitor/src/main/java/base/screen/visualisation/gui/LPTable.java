@@ -6,6 +6,7 @@
 package base.screen.visualisation.gui;
 
 import base.screen.visualisation.LookAndFeel;
+import static base.screen.visualisation.LookAndFeel.COLOR_MEDIUM_DARK_GRAY;
 import java.util.function.BiConsumer;
 import java.util.logging.Logger;
 import processing.core.PApplet;
@@ -156,8 +157,8 @@ public class LPTable extends LPContainer {
                 isMouseOverThisRow = (row + 1) == mouseOverRow;
             }
             boolean isSelectedRow = model.getSelectedRow() == (row + scrollbar.scroll);
-            if ((row + scrollbar.scroll) % 2 == 0) {
-                applet.fill(0, 0, 0, 25);
+            if ((row + scrollbar.scroll) % 2 == 1) {
+                applet.fill(COLOR_MEDIUM_DARK_GRAY);
                 applet.rect(columnOffset, (int) rowOffset, getWidth() - columnOffset, (int) rowHeight);
             }
             if (isSelectedRow) {
