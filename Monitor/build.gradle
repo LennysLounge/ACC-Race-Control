@@ -7,7 +7,7 @@ plugins{
 
 apply plugin: "com.github.hierynomus.license"
 apply from: "${rootDir}/gradle/versioning.gradle"
-def distributionName = "ACC Live Timing Monitor" + project.ext.versionString
+def distributionName = "ACC Race Control" + project.ext.versionString
 
 ext.collectableDistDir = new File(projectDir, "src\\dist")
 

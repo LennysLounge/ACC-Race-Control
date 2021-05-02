@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ServiceLoader;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import processing.core.PGraphics;
@@ -39,7 +38,7 @@ public class Visualisation extends CustomPApplet {
     /**
      * Connection client.
      */
-    private AccBroadcastingClient client;
+    private final AccBroadcastingClient client;
     /**
      * The base panel to use.
      */
@@ -72,7 +71,7 @@ public class Visualisation extends CustomPApplet {
     public void setup() {
         LookAndFeel.init(this);
         surface.setResizable(true);
-        surface.setTitle("ACC Accident Tracker");
+        surface.setTitle("ACC Race Control");
         PImage i = loadResourceAsPImage("/images/Logo.png");
         if (i != null) {
             surface.setIcon(i);
