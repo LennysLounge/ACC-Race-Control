@@ -63,7 +63,26 @@ To create your own follow these steps.
 3) 13312
 4) Place the credentials file into the `Google Sheets API Key` folder.
 
-And done.
+### Connecting to a spreadsheet
+
+![config](https://user-images.githubusercontent.com/25527438/116941363-d03df200-ac6f-11eb-9879-7c271a6220bc.PNG)
+
+Before connecting the client navigate to the "Google API" tab and enable the Spreadsheet API.  
+Copy the whole URL of the spreadsheet you would like to use into the "Spreadsheet link" text field.  
+If you would like to use our template then feel free to do so.  
+https://docs.google.com/spreadsheets/d/1AM93wWuMfkqVEmOAcOePI7mKKDs0P9aG2tRGzi_QLEA/edit?usp=sharing
+Simply create a copy of the template into your own google drive.
+
+The tool will target different sheets in the Spreadsheet depending on what session the server is in.  
+During Practice and Qualifying any incidents will be sent to the Pracice and Qualifying sheet respectivly.  
+During Race sessions the tool will count the ammount of race sessions.
+The first Race will be sent to "Race 1", the second to "Race 2" and the third to "Race 3" and so on.
+
+If you want to use your own then you can modify the cells where the tool will write the incidents.  
+The tool will first look at the "Find empty row" range for an empty row to write the incident into.
+Then it will write the session time into the session column and the involved cars into that column.
+You can also add the lap count to the car number in brakets. ( 513[13] )
+
 
 
 
