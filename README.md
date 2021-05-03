@@ -57,11 +57,22 @@ Then download the tool, unpack it and start it by running the `Start.bat` file.
 
 The Google Sheets integration is by far the most usefull feature.
 To use it you need to supply your own API Key.  
-To create your own follow these steps.
-1)  asd
-2) asdas
-3) 13312
-4) Place the credentials file into the `Google Sheets API Key` folder.
+To create your own, first follow the steps outlined here to create a Goole Cloud Platform project.  
+https://developers.google.com/workspace/guides/create-project
+
+Then:  
+1) Open your project and navigate to "API's & Services" -> "OAuth consent screen.
+2) Select external and click create.
+3) Add an App name and an email adress and click continue
+4) Click Add or remove scopes.
+5) Add the "See, edit create and delete spreadsheets" scope.
+6) Save and continue through the rest.
+7) Navigate to "Credentials".
+8) Click on "+Create Credentials" -> "OAuth client ID".
+9) Select Application type "Desktop app", give it a nice name and click create.
+10) Download the credentials file and place it into the "Google Sheets API Key" folder.
+
+The Credentials should remain secret but you can pass them around your team without a problem so this only has to be done once.
 
 ### Connecting to a spreadsheet
 
