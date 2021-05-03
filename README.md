@@ -1,5 +1,92 @@
 # ACC live timing
  A live timing app for Assett Corsa Competizione
  
-
 Build with netbeans 12 and Gradle 6.2.2
+
+![ACC_Race_Control_Splash](https://user-images.githubusercontent.com/25527438/116937032-eeecba80-ac68-11eb-8ffa-1c2b009a2e05.png)
+
+## Stewarding made easy
+ACC Race Control is a tool developed by stewards for stewards. Its goal is it to make stewarding as easy and as accessable as possible.
+
+Stewarding a race can be quite difficult.
+With more than 50 cars on track it is almost impossible for a few stewards to be able to look at all cars.
+As sim racer we dont have the luxury of a big control room with 25 cameras all at a different part of the track.
+Luckily ACC Race Control makes this easy.
+
+ACC Race Control uses the ACC Broadcasting API to connect to the game and detect any crashes and displays them.
+It can then send the incident to a Google Spreadsheet where all the stewards can see it.
+
+All the stewards have to do it look at the spreadsheet and wait for new incidents to come in.
+Easy as that.
+
+This tool was developed together with ACCSimSeries on Simracing.gp.
+We use it almost daily to live steward races with more than 40 cars and 6 stewards at the same time.
+To get an idea of how we use it to create our stewarding reports you can have a look at this report from a race with 40 drivers and 2x30minute races.
+
+https://docs.google.com/spreadsheets/d/1SSMe8Vte0beENZtI6sL49uqkfW1_s01DtV1A2Kuew8s/edit?usp=sharing
+
+Without this tool that would certainly not be possible.
+
+
+## What can ACC Race Control do for you?
+
+* Display a live timing screen  with all of the relevant information like lap times, lap delta, gap to the car ahead etc.
+* A detailed list of all events that happen during a race including driver connections, disconnects, lap completed, accidents, session changes etc.
+* A list of crashes with information on when they happened and who was involved.
+* Exporting incidents to a spreadsheet in real time for live or post race stewarding.
+* Controls to change the camera, focused car, HUD pages for easy broadcasting.
+
+## How to use it
+
+First we need to enable the broadcasting API from Assetto Corsa Competizione.
+To do that navigate to  
+`...\documents\Assetto Corsa Competizione\Config\broadcasting.json`  
+and edit its contents.
+Replace the text with:
+```
+}
+    "updListenerPort": 9000,
+    "connectionPassword": "asd",
+    "commandPassword": ""
+}
+```
+and you are good to go.  
+Then download the tool, unpack it and start it by running the `Start.bat` file.
+
+## Google sheets integration
+
+The Google Sheets integration is by far the most usefull feature.
+To use it you need to supply your own API Key.  
+To create your own follow these steps.
+1)  asd
+2) asdas
+3) 13312
+4) Place the credentials file into the `Google Sheets API Key` folder.
+
+And done.
+
+
+
+## Live Timing screen
+![Live timing race](https://user-images.githubusercontent.com/25527438/116937657-dc26b580-ac69-11eb-8815-a1c9cca8b85a.PNG)
+
+The live timing screen will show you lots of usefull information during the race. This includes the current lap, gap to car infront, gap to the leader, last lap, best lap etc.
+
+Double clicking on a car will change the game to focus on that car.
+During qualifying or practice it will also show the sector times for their fastest laps as well as the current delta.
+
+![Live Timing](https://user-images.githubusercontent.com/25527438/116937663-de890f80-ac69-11eb-9efa-046a21aa4d99.PNG)
+
+## Incident screen
+![Incidents](https://user-images.githubusercontent.com/25527438/116937682-e5b01d80-ac69-11eb-8d15-baaa67555194.PNG)
+The incident screen will list all contacts that happen during the race. Each row will show the time in the session the contact happened and what cars are involved in the crash.
+
+## Logging screen
+![Logging](https://user-images.githubusercontent.com/25527438/116937695-eb0d6800-ac69-11eb-88c9-5b6f831fb654.PNG)
+The logging screen will show all events that happen during the race.That includes an event when a driver completes a lap, when an accident happend, when the session changes.
+
+This can become incredibly usefull when you are trying to determine exactly when and in what order something has happened.
+
+
+
+
