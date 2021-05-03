@@ -5,6 +5,7 @@
  */
 package base.screen;
 
+import base.Version;
 import base.screen.visualisation.Visualisation;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,6 +17,10 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import processing.core.PApplet;
 import base.screen.networking.AccBroadcastingClient;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.SplashScreen;
 import java.util.concurrent.TimeUnit;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -43,6 +48,7 @@ public class Main {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
         setupLogging();
         
+        setupSplash();
         TimeUnit.SECONDS.sleep(2);
 
         //Set system look and feel.
@@ -60,6 +66,21 @@ public class Main {
 
         String[] a = {"MAIN"};
         PApplet.runSketch(a, visualisation);
+    }
+
+    private static void setupSplash() {
+        SplashScreen splash = SplashScreen.getSplashScreen();
+        if (splash != null) {
+            Graphics2D g = splash.createGraphics();
+            final String[] comps = {"foo", "bar", "baz"};
+            g.setComposite(AlphaComposite.Clear);
+            g.fillRect(120, 140, 200, 40);
+            g.setPaintMode();
+            g.setColor(Color.WHITE);
+            g.drawString("Created by Leonard Schüngel", 10, 330);
+            g.drawString("Version: " + Version.VERSION, 500, 330);
+            splash.update();
+        }
     }
 
     private static void setupLogging() {

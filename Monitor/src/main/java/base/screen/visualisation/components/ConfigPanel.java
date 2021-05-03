@@ -6,6 +6,7 @@
 package base.screen.visualisation.components;
 
 import base.ACCLiveTimingExtensionFactory;
+import base.Version;
 import base.screen.eventbus.Event;
 import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
@@ -14,6 +15,7 @@ import base.screen.networking.AccBroadcastingClient;
 import base.screen.networking.events.ConnectionClosed;
 import base.screen.visualisation.LookAndFeel;
 import static base.screen.visualisation.LookAndFeel.COLOR_GRAY;
+import static base.screen.visualisation.LookAndFeel.LINE_HEIGHT;
 import base.screen.visualisation.Visualisation;
 import base.screen.visualisation.gui.LPButton;
 import base.screen.visualisation.gui.LPContainer;
@@ -58,6 +60,8 @@ public class ConfigPanel
 
     private final LPLabel extensionHeading = new LPLabel("Extension Settings:");
     private final LPTabPanel extensionTabPanel = new LPTabPanel();
+    
+    private final LPLabel versionLabel = new LPLabel("Version: " + Version.VERSION);
 
     public ConfigPanel(AccBroadcastingClient client) {
         setName("Configuration");
@@ -184,7 +188,7 @@ public class ConfigPanel
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
         applet.stroke(COLOR_GRAY);
-        applet.line(420, 20, 420, getHeight() - 40);
+        applet.line(420, 10, 420, getHeight() - 20);
         applet.noStroke();
     }
 
@@ -230,6 +234,8 @@ public class ConfigPanel
             }
         }
         extensionTabPanel.setTabIndex(0);
+        
+        addComponent(versionLabel);
     }
 
     @Override
@@ -255,6 +261,8 @@ public class ConfigPanel
         extensionHeading.setSize(w - 460, LookAndFeel.LINE_HEIGHT);
         extensionTabPanel.setPosition(440, lh);
         extensionTabPanel.setSize(w - 460, h - lh - 20);
+        
+        versionLabel.setPosition(20, getHeight()-LINE_HEIGHT);
     }
 
 }
