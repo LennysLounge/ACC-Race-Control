@@ -63,6 +63,8 @@ Once you have done that, you need to follow the next steps:
 9. Select Application type "Desktop app", give it a nice name and click create
 10. Download the credentials file and place it into the "Google Sheets API Key" folder
 
+If you have any trouble with creating the API Key feel free to contact me under schuengel.leonard@gmail.com
+
 
 ### Connecting to a spreadsheet
 
