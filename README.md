@@ -12,8 +12,8 @@ Stewarding a live race has it's challenges, especially when you have 50 cars on 
 
 ACC Race Control uses the ACC Broadcasting API to connect to the game and reports any contact between cars, it can then send any incidents to a Google Spreadsheet which allows stewards to monitor and investigate by accessing the spreadsheet. Easy as that. 
 
-This tool was developed together with ACCSimSeries on Simracing.gp. It it used almost daily by around six stewards to monitor to races with more than 40 cars. If you click the link below you can see how we use it to create the stewarding reports, this example is for 2x30 minute races with 40 drivers taking part.
-
+This tool was developed together with ACCSimSeries on Simracing.gp. It it used almost daily by around six stewards to monitor races with more than 40 cars. If you click the link below you can see how we use it to create the stewarding reports, this example is for 2x30 minute races with 40 drivers taking part.  
+**Example steward report:**  
 https://docs.google.com/spreadsheets/d/1SSMe8Vte0beENZtI6sL49uqkfW1_s01DtV1A2Kuew8s/edit?usp=sharing
 
 Without this tool that would not be possible.
@@ -72,8 +72,10 @@ If you have any trouble with creating the API Key feel free to contact me under 
 
 Before attempting to connect the client click the "Google API" tab and select enable the Spreadsheet API.
 Copy the full URL of the spreadsheet which you have created and wish to use, paste into the "Spreadsheet link" text field.
-Please see below a template for the stewards spreadsheet, please feel free to use.
-https://docs.google.com/spreadsheets/d/1AM93wWuMfkqVEmOAcOePI7mKKDs0P9aG2tRGzi_QLEA/edit?usp=sharing You can create a copy of the template to your own Google drive.
+Please see below a template for the stewards spreadsheet, please feel free to use.  
+**Steward report template:**  
+https://docs.google.com/spreadsheets/d/1AM93wWuMfkqVEmOAcOePI7mKKDs0P9aG2tRGzi_QLEA/edit?usp=sharing  
+You can create a copy of the template to your own Google drive.
 
 The tool is designed to target different sheets in the Spreadsheet depending on which session is taking place. During Practice and Qualifying any incidents will be sent to the Practice and Qualifying sheet respectively.
 During the Race session the tool will count the number of race sessions, race one will be sent to "Race 1", the second to "Race 2" and the third to "Race 3" and so on. 
