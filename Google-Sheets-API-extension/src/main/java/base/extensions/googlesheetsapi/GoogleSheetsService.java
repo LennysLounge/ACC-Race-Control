@@ -28,6 +28,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -94,8 +95,23 @@ public class GoogleSheetsService {
                 .setAccessType("offline")
                 .build();
 
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
-        Credential credentials = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+        int port = 8888;
+        int tries = 10;
+        Credential credentials = null;
+        while (credentials == null) {
+            try {
+                LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(port).build();
+                credentials = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+            } catch (IOException e) {
+                tries -= 1;
+                port += 1;
+                if (tries == 0) {
+                    LOG.log(Level.SEVERE, "Port blocked and no more tries left");
+                    throw e;
+                }
+                LOG.log(Level.INFO, "Port blocked, retry with new port :" + port);
+            }
+        }
 
         return new Sheets.Builder(httpTransport, jsonFactory, credentials)
                 .setApplicationName("ACCRaceControl/1.0")
