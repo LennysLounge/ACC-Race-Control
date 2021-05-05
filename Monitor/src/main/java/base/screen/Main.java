@@ -6,6 +6,7 @@
 package base.screen;
 
 import base.Version;
+import base.persistance.PersistantConfig;
 import base.screen.visualisation.Visualisation;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -47,6 +48,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
         setupLogging();
+        PersistantConfig.init();
         
         setupSplash();
         TimeUnit.SECONDS.sleep(2);

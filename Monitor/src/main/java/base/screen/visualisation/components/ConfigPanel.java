@@ -7,6 +7,7 @@ package base.screen.visualisation.components;
 
 import base.ACCLiveTimingExtensionFactory;
 import base.Version;
+import base.persistance.PersistantConfig;
 import base.screen.eventbus.Event;
 import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
@@ -60,7 +61,7 @@ public class ConfigPanel
 
     private final LPLabel extensionHeading = new LPLabel("Extension Settings:");
     private final LPTabPanel extensionTabPanel = new LPTabPanel();
-    
+
     private final LPLabel versionLabel = new LPLabel("Version: " + Version.VERSION);
 
     public ConfigPanel(AccBroadcastingClient client) {
@@ -153,6 +154,11 @@ public class ConfigPanel
         extensionTabPanel.getTabs().stream()
                 .forEach(tab -> tab.setEnabled(false));
 
+        //save config
+        PersistantConfig.setConnectionIP(ipTextField.getValue());
+        PersistantConfig.setConnectionPort(portTextField.getValue());
+        PersistantConfig.setConnectionPassword(connectionPWTextField.getValue());
+        PersistantConfig.setConnectionInterval(updateIntervalTextField.getValue());
     }
 
     private void disconnectButtonPressed() {
@@ -199,22 +205,22 @@ public class ConfigPanel
 
         addComponent(ipLabel);
         ipTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        ipTextField.setValue("127.0.0.1");
+        ipTextField.setValue(PersistantConfig.getConnectionIP());
         addComponent(ipTextField);
 
         addComponent(portLabel);
         portTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        portTextField.setValue("9000");
+        portTextField.setValue(PersistantConfig.getConnectionIPort());
         addComponent(portTextField);
 
         addComponent(connectionPWLabel);
         connectionPWTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        connectionPWTextField.setValue("asd");
+        connectionPWTextField.setValue(PersistantConfig.getConnectionPassword());
         addComponent(connectionPWTextField);
 
         addComponent(updateIntervalLabel);
         updateIntervalTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        updateIntervalTextField.setValue("250");
+        updateIntervalTextField.setValue(PersistantConfig.getConnectionInterval());
         addComponent(updateIntervalTextField);
 
         connectButton.setSize(380, LookAndFeel.LINE_HEIGHT);
@@ -234,7 +240,7 @@ public class ConfigPanel
             }
         }
         extensionTabPanel.setTabIndex(0);
-        
+
         addComponent(versionLabel);
     }
 
@@ -261,8 +267,8 @@ public class ConfigPanel
         extensionHeading.setSize(w - 460, LookAndFeel.LINE_HEIGHT);
         extensionTabPanel.setPosition(440, lh);
         extensionTabPanel.setSize(w - 460, h - lh - 20);
-        
-        versionLabel.setPosition(20, getHeight()-LINE_HEIGHT);
+
+        versionLabel.setPosition(20, getHeight() - LINE_HEIGHT);
     }
 
 }
