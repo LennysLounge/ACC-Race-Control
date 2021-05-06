@@ -76,7 +76,7 @@ public class PersistantConfig {
         setConfig("connectionPort", "9000");
         setConfig("connectionPassword", "asd");
         setConfig("connectionInterval", "250");
-        setConfig("credentialsFile", "nada");
+        setConfig("credentialsFile", "Google Sheets Api Key\\credentials.json");
     }
 
     /**
