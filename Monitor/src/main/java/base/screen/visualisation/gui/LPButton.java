@@ -6,6 +6,9 @@
 package base.screen.visualisation.gui;
 
 import base.screen.visualisation.LookAndFeel;
+import static base.screen.visualisation.LookAndFeel.COLOR_GRAY;
+import static base.screen.visualisation.LookAndFeel.COLOR_MEDIUM_DARK_GRAY;
+import static base.screen.visualisation.LookAndFeel.COLOR_RED;
 import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.HAND;
@@ -45,18 +48,24 @@ public class LPButton
 
     @Override
     public void draw() {
+        if (isEnabled()) {
+            if (isMouseOver()) {
+                applet.fill(COLOR_RED);
+            } else {
+                applet.fill(COLOR_GRAY);
+            }
+        } else {
+            applet.fill(COLOR_MEDIUM_DARK_GRAY);
+        }
+
         applet.noStroke();
-        applet.fill(LookAndFeel.COLOR_GRAY);
         applet.rect(0, 2, getWidth(), getHeight() - 4);
-        if (isMouseOver()) {
-            applet.fill(LookAndFeel.COLOR_RED);
-            applet.rect(0, 2, getWidth(), getHeight() - 4);
+
+        if (isEnabled()) {
+            applet.fill(LookAndFeel.COLOR_WHITE);
+        } else {
+            applet.fill(LookAndFeel.COLOR_GRAY);
         }
-        if (clicked) {
-            applet.fill(LookAndFeel.TRANSPARENT_WHITE);
-            applet.rect(0, 2, getWidth(), getHeight() - 4);
-        }
-        applet.fill(255);
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontMedium());
         applet.text(text, getWidth() / 2f, getHeight() / 2f);
@@ -64,6 +73,9 @@ public class LPButton
 
     @Override
     public void onMousePressed(int x, int y, int button) {
+        if (!isEnabled()) {
+            return;
+        }
         clicked = true;
         invalidate();
         action.run();
@@ -71,18 +83,27 @@ public class LPButton
 
     @Override
     public void onMouseReleased(int x, int y, int button) {
+        if (!isEnabled()) {
+            return;
+        }
         clicked = false;
         invalidate();
     }
 
     @Override
     public void onMouseEnter() {
+        if (!isEnabled()) {
+            return;
+        }
         invalidate();
         applet.cursor(HAND);
     }
 
     @Override
     public void onMouseLeave() {
+        if (!isEnabled()) {
+            return;
+        }
         invalidate();
         applet.cursor(ARROW);
     }

@@ -3,11 +3,11 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-
 package base.extensions.googlesheetsapi;
 
 import base.screen.visualisation.gui.LPContainer;
 import base.ACCLiveTimingExtensionFactory;
+import base.persistance.PersistantConfig;
 import base.screen.extensions.AccClientExtension;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
@@ -40,9 +40,15 @@ public class GoogleSheetsAPIExtensionFactory
     public void createExtension() {
         removeExtension();
         if (configurationPanel.isExtensionEnabled()) {
+            //save the credentals file path
+            PersistantConfig.setCredentialsFile(configurationPanel.getCredentialsPath());
+
+            //create extension.
             try {
                 GoogleSheetsAPIExtension e = new GoogleSheetsAPIExtension(
-                        new GoogleSheetsService(configurationPanel.getSpreadSheetLink()));
+                        new GoogleSheetsService(configurationPanel.getSpreadSheetLink(),
+                                configurationPanel.getCredentialsPath()
+                        ));
                 e.setReplayOffsetCell(configurationPanel.getReplayOffsetCell());
                 e.setFindEmptyRowRange(configurationPanel.getFindEmptyRowRange());
                 e.setSessionColumn(configurationPanel.getSessionColumn());

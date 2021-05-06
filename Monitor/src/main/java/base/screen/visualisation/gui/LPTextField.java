@@ -135,7 +135,7 @@ public class LPTextField
      * position.
      */
     private void updatePresentationText() {
-        float maximumPresentationTextWidth = getWidth() - 2 * padding;
+        float maximumPresentationTextWidth = Math.max(0, getWidth() - 2 * padding);
         applet.textFont(LookAndFeel.fontMedium());
 
         if (cursorPosition < 0) {
@@ -172,6 +172,9 @@ public class LPTextField
             }
             shortText = text.substring(presentationTextOffset, presentationTextOffset + shortTextLength);
             shortTextWidth = applet.textWidth(shortText);
+        }
+        if (presentationTextOffset + shortTextLength == 0) {
+            shortTextLength = 1;
         }
         presentationText = text.substring(presentationTextOffset, presentationTextOffset + shortTextLength - 1);
     }
@@ -378,6 +381,11 @@ public class LPTextField
             setCursorOnAndReschedule();
             invalidate();
         }
+    }
+
+    @Override
+    public void onResize(int w, int h) {
+        updatePresentationText();
     }
 
     private boolean isSelectionActive() {

@@ -5,13 +5,17 @@
  */
 package base.extensions.googlesheetsapi;
 
+import base.persistance.PersistantConfig;
 import static base.screen.visualisation.LookAndFeel.COLOR_DARK_GRAY;
 import static base.screen.visualisation.LookAndFeel.LINE_HEIGHT;
 import static base.screen.visualisation.LookAndFeel.TEXT_SIZE;
+import base.screen.visualisation.gui.LPButton;
 import base.screen.visualisation.gui.LPCheckBox;
 import base.screen.visualisation.gui.LPContainer;
 import base.screen.visualisation.gui.LPLabel;
 import base.screen.visualisation.gui.LPTextField;
+import java.io.File;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -30,6 +34,10 @@ public class GoogleSheetsAPIConfigurationPanel
     private final LPLabel enabledLabel = new LPLabel("Enable");
     private final LPLabel spreadSheetLinkLabel = new LPLabel("Spreadsheet link:");
     private final LPTextField spreadSheetLinkTextField = new LPTextField();
+
+    private final LPLabel credentialsFileLabel = new LPLabel("Credentials:");
+    private final LPTextField credentialsFileTextField = new LPTextField();
+    private final LPButton credentalsSearchButton = new LPButton("Search");
 
     private final LPCheckBox useDefaultCheckBox = new LPCheckBox();
     private final LPLabel useDaufaultLabel = new LPLabel("Use defaults");
@@ -66,53 +74,63 @@ public class GoogleSheetsAPIConfigurationPanel
         spreadSheetLinkTextField.setPosition(20, LINE_HEIGHT * 3);
         addComponent(spreadSheetLinkTextField);
 
-        useDefaultCheckBox.setPosition(20, LINE_HEIGHT * 4 + (LINE_HEIGHT - TEXT_SIZE) / 2f);
+        credentialsFileLabel.setPosition(20, LINE_HEIGHT * 4);
+        addComponent(credentialsFileLabel);
+        credentialsFileTextField.setPosition(20, LINE_HEIGHT * 5);
+        credentialsFileTextField.setSize(200, LINE_HEIGHT);
+        credentialsFileTextField.setValue(PersistantConfig.getCredentialsFile());
+        addComponent(credentialsFileTextField);
+        credentalsSearchButton.setSize(100, LINE_HEIGHT);
+        credentalsSearchButton.setAction(() -> openSearchCredentialsFileDialog());
+        addComponent(credentalsSearchButton);
+
+        useDefaultCheckBox.setPosition(20, LINE_HEIGHT * 6 + (LINE_HEIGHT - TEXT_SIZE) / 2f);
         useDefaultCheckBox.setChangeAction((state) -> updateComponents());
         useDefaultCheckBox.setSelected(true);
         addComponent(useDefaultCheckBox);
-        useDaufaultLabel.setPosition(60, LINE_HEIGHT * 4);
+        useDaufaultLabel.setPosition(60, LINE_HEIGHT * 6);
         addComponent(useDaufaultLabel);
 
-        replayOffsetLabel.setPosition(40, LINE_HEIGHT * 5);
+        replayOffsetLabel.setPosition(40, LINE_HEIGHT * 7);
         replayOffsetLabel.setSize(180, LINE_HEIGHT);
         addComponent(replayOffsetLabel);
         replayOffsetTextField.setSize(100, LINE_HEIGHT);
-        replayOffsetTextField.setPosition(220, LINE_HEIGHT * 5);
+        replayOffsetTextField.setPosition(220, LINE_HEIGHT * 7);
         replayOffsetTextField.setValue(REPLAY_OFFSET_CELL);
         addComponent(replayOffsetTextField);
 
-        findRowRangeLabel.setPosition(40, LINE_HEIGHT * 6);
+        findRowRangeLabel.setPosition(40, LINE_HEIGHT * 8);
         findRowRangeLabel.setSize(240, LINE_HEIGHT);
         addComponent(findRowRangeLabel);
         findRowRangeTextField.setSize(100, LINE_HEIGHT);
-        findRowRangeTextField.setPosition(280, LINE_HEIGHT * 6);
+        findRowRangeTextField.setPosition(280, LINE_HEIGHT * 8);
         findRowRangeTextField.setValue(FIND_EMPTY_ROW_RANGE);
         addComponent(findRowRangeTextField);
 
-        sessionColumnLabel.setPosition(40, LINE_HEIGHT * 7);
+        sessionColumnLabel.setPosition(40, LINE_HEIGHT * 9);
         sessionColumnLabel.setSize(160, LINE_HEIGHT);
         addComponent(sessionColumnLabel);
         sessionColumnTextField.setSize(100, LINE_HEIGHT);
-        sessionColumnTextField.setPosition(200, LINE_HEIGHT * 7);
+        sessionColumnTextField.setPosition(200, LINE_HEIGHT * 9);
         sessionColumnTextField.setValue(SESSION_TIME_COLUMN);
         addComponent(sessionColumnTextField);
 
-        carColumnLabel.setPosition(340, LINE_HEIGHT * 7);
+        carColumnLabel.setPosition(340, LINE_HEIGHT * 9);
         carColumnLabel.setSize(210, LINE_HEIGHT);
         addComponent(carColumnLabel);
         carColumnTextField.setSize(100, LINE_HEIGHT);
-        carColumnTextField.setPosition(550, LINE_HEIGHT * 7);
+        carColumnTextField.setPosition(550, LINE_HEIGHT * 9);
         carColumnTextField.setValue(CAR_INFO_COLUMN);
         addComponent(carColumnTextField);
 
-        addLapToCarLabel.setPosition(40, LINE_HEIGHT * 8);
+        addLapToCarLabel.setPosition(40, LINE_HEIGHT * 10);
         addLapToCarLabel.setSize(220, LINE_HEIGHT);
         addComponent(addLapToCarLabel);
-        addLapToCarCheckBox.setPosition(260, LINE_HEIGHT * 8 + (LINE_HEIGHT - TEXT_SIZE) / 2f);
+        addLapToCarCheckBox.setPosition(260, LINE_HEIGHT * 10 + (LINE_HEIGHT - TEXT_SIZE) / 2f);
         addLapToCarCheckBox.setSelected(true);
         addComponent(addLapToCarCheckBox);
         updateComponents();
-        
+
     }
 
     private void updateComponents() {
@@ -120,10 +138,14 @@ public class GoogleSheetsAPIConfigurationPanel
         boolean state = enabledCheckBox.isSelected();
         spreadSheetLinkLabel.setEnabled(state);
         spreadSheetLinkTextField.setEnabled(state);
-        
+
+        credentialsFileLabel.setEnabled(state);
+        credentialsFileTextField.setEnabled(state);
+        credentalsSearchButton.setEnabled(state);
+
         useDaufaultLabel.setEnabled(state);
         useDefaultCheckBox.setEnabled(state);
-        
+
         if (state) {
             state = !useDefaultCheckBox.isSelected();
         }
@@ -152,6 +174,13 @@ public class GoogleSheetsAPIConfigurationPanel
     @Override
     public void onResize(int w, int h) {
         spreadSheetLinkTextField.setSize(w - 40, LINE_HEIGHT);
+        credentialsFileTextField.setSize(w - 160, LINE_HEIGHT);
+        credentalsSearchButton.setPosition(w - 120, LINE_HEIGHT * 5);
+    }
+
+    @Override
+    public void onEnabled() {
+        updateComponents();
     }
 
     public boolean isExtensionEnabled() {
@@ -160,6 +189,10 @@ public class GoogleSheetsAPIConfigurationPanel
 
     public String getSpreadSheetLink() {
         return spreadSheetLinkTextField.getValue();
+    }
+
+    public String getCredentialsPath() {
+        return credentialsFileTextField.getValue();
     }
 
     public String getFindEmptyRowRange() {
@@ -193,6 +226,23 @@ public class GoogleSheetsAPIConfigurationPanel
 
     private boolean useDefaults() {
         return useDefaultCheckBox.isSelected();
+    }
+
+    private void openSearchCredentialsFileDialog() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+
+        int result = fileChooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            String path = fileChooser.getSelectedFile().getAbsolutePath();
+            String userDir = System.getProperty("user.dir") + "\\";
+            
+            //if the selected path is within our user directory we shorten the path to a relative path based on the user dir.
+            if(path.startsWith(userDir)){
+                path = path.replace(userDir, "");
+            }
+            credentialsFileTextField.setValue(path);
+        }
     }
 
 }

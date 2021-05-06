@@ -76,6 +76,7 @@ public class PersistantConfig {
         setConfig("connectionPort", "9000");
         setConfig("connectionPassword", "asd");
         setConfig("connectionInterval", "250");
+        setConfig("credentialsFile", "nada");
     }
 
     /**
@@ -143,6 +144,14 @@ public class PersistantConfig {
 
     public static String getConnectionInterval() {
         return (String) getConfig("connectionInterval");
+    }
+    
+    public static void setCredentialsFile(String credentialsFile) {
+        setConfig("credentialsFile", credentialsFile);
+    }
+
+    public static String getCredentialsFile() {
+        return (String) getConfig("credentialsFile");
     }
 
 }
