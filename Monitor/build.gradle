@@ -33,14 +33,40 @@ dependencies {
 
 run{
     dependsOn installDist
-    workingDir new File(new File(buildDir, 'install'),distributionName)    
+    workingDir new File(new File(buildDir, 'install'),distributionName + "_SNAPSHOT")    
     jvmArgs("-splash:data/loading.png")
 }
 
 distributions{
     main{
-        distributionBaseName = distributionName
+        distributionBaseName = distributionName + "_SNAPSHOT"
+        contents {
+            into("/Google Sheets API Key"){
+                from "test credentials"
+            }
+        }
     }
 }
 
-startScripts.enabled = false
+task copyLibs(type:Copy){
+    group = "Release"
+    from configurations.runtimeClasspath
+    from jar
+    into "$projectDir/build/release/" + distributionName + "/lib"
+}
+task copyDist(type:Copy){
+    group = "Release"
+    from "$projectDir/src/dist"
+    into "$projectDir/build/release/" + distributionName
+}
+
+task buildRelease(type: Zip){
+    group = "Release"
+    dependsOn copyLibs
+    dependsOn copyDist
+    from "$projectDir/build/release/" + distributionName
+    archiveName distributionName + ".zip"
+    destinationDir(file("$projectDir/build/release/"))
+}
+
+
