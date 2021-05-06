@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package base.extensions.googlesheetsapi;
+package base.screen.extensions.googlesheetsapi;
 
 
 import base.screen.utility.TimeUtils;

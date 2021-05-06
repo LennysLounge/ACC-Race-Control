@@ -3,3 +3,5 @@ base.screen.extensions.incidents.IncidentExtensionFactory
 base.screen.extensions.logging.LoggingExtensionFactory
 base.screen.extensions.laptimes.LaptimeExtensionFactory
 base.screen.extensions.results.ResultsExtensionFactory
+base.screen.extensions.googlesheetsapi.GoogleSheetsAPIExtensionFactory
+

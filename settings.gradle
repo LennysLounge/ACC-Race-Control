@@ -1,4 +1,3 @@
-rootProject.name = 'ACC Live Timing'
+rootProject.name = 'ACC Race Control'
 
 include ":Monitor"
-include ":Google-Sheets-API-extension"
