@@ -2,23 +2,15 @@ plugins{
     id 'java'
     id 'jacoco'
     id 'application'
-    id 'com.github.hierynomus.license' version '0.15.0'
 }
 
-apply plugin: "com.github.hierynomus.license"
 apply from: "${rootDir}/gradle/versioning.gradle"
+apply from: "${rootDir}/gradle/license-header.gradle"
 def distributionName = "ACC Race Control" + project.ext.versionString
 
-ext.collectableDistDir = new File(projectDir, "src\\dist")
-
-license{
-    header rootProject.file("codequality/HEADER")
-    include "**/*.java"
-    //strictCheck true
-}
 
 application{
-    mainClassName = 'base.screen.Main'
+    mainClass = 'base.screen.Main'
 }
 
 repositories {
@@ -38,21 +30,17 @@ dependencies {
     implementation 'com.google.oauth-client:google-oauth-client-jetty:1.30.4'
     implementation 'com.google.api-client:google-api-client:1.30.4'
 }
-build{
-    dependsOn tasks.license
-}
 
 run{
     dependsOn installDist
     workingDir new File(new File(buildDir, 'install'),distributionName)    
-    jvmArgs("-splash:bin/loading.png")
+    jvmArgs("-splash:data/loading.png")
 }
 
 distributions{
     main{
         distributionBaseName = distributionName
-        //distributionBaseName = "ACC Live Timing Monitor" + project.ext.versionString
     }
 }
 
-//startScripts.enabled = false
+startScripts.enabled = false
