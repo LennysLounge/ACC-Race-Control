@@ -14,7 +14,7 @@ mainClassName = 'base.screen.Main'
 license{
     header rootProject.file("codequality/HEADER")
     include "**/*.java"
-    strictCheck true
+    //strictCheck true
 }
 
 repositories {
