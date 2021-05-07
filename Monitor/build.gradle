@@ -42,7 +42,7 @@ distributions{
         distributionBaseName = distributionName + "_SNAPSHOT"
         contents {
             into("/Google Sheets API Key"){
-                from "test credentials"
+                from "credentials"
             }
         }
     }
