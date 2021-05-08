@@ -11,7 +11,10 @@ import base.screen.networking.data.LapInfo;
 import base.screen.networking.enums.CarLocation;
 import base.screen.visualisation.LookAndFeel;
 import static base.screen.visualisation.LookAndFeel.COLOR_DARK_RED;
+import static base.screen.visualisation.LookAndFeel.COLOR_GT4;
+import static base.screen.visualisation.LookAndFeel.COLOR_SUPER_TROFEO;
 import static base.screen.visualisation.LookAndFeel.COLOR_WHITE;
+import static base.screen.visualisation.LookAndFeel.LINE_HEIGHT;
 import base.screen.visualisation.gui.LPTable;
 import base.screen.visualisation.gui.LPTableColumn;
 import base.screen.visualisation.gui.TableModel;
@@ -20,6 +23,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.CLOSE;
 import static processing.core.PConstants.LEFT;
 
 /**
@@ -174,6 +178,30 @@ public class LiveTimingTableModel
         applet.noStroke();
         applet.fill(backColor);
         applet.rect(1, 1, width - 2, height - 2);
+
+        //render GT4 / Cup / Super trofeo corners.
+        CarType type = getCarType(car.getCarModelType());
+        if (type != CarType.GT3) {
+            applet.fill(COLOR_WHITE);
+            applet.beginShape();
+            applet.vertex(width - 1, height - 1);
+            applet.vertex(width - 1, height - LINE_HEIGHT * 0.5f);
+            applet.vertex(width - LINE_HEIGHT * 0.5f, height - 1);
+            applet.endShape(CLOSE);
+            if (type == CarType.ST) {
+                applet.fill(COLOR_SUPER_TROFEO);
+            } else if (type == CarType.CUP) {
+                applet.fill(LookAndFeel.COLOR_PORSCHE_CUP);
+            } else {
+                applet.fill(COLOR_GT4);
+            }
+            applet.beginShape();
+            applet.vertex(width - 1, height - 1);
+            applet.vertex(width - 1, height - LINE_HEIGHT * 0.4f);
+            applet.vertex(width - LINE_HEIGHT * 0.4f, height - 1);
+            applet.endShape(CLOSE);
+        }
+
         applet.fill(frontColor);
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontMedium());
@@ -234,6 +262,36 @@ public class LiveTimingTableModel
 
     public void setSessionBestSectors(List<Integer> sessionBestSectors) {
         this.sessionBestSectors = sessionBestSectors;
+    }
+
+    private CarType getCarType(byte carModelId) {
+        switch (carModelId) {
+            case 9:
+                return CarType.CUP;
+            case 18:
+                return CarType.ST;
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 55:
+            case 56:
+            case 57:
+            case 58:
+            case 59:
+            case 60:
+            case 61:
+                return CarType.GT4;
+            default:
+                return CarType.GT3;
+        }
+    }
+
+    private enum CarType {
+        GT3,
+        GT4,
+        ST,
+        CUP;
     }
 
 }
