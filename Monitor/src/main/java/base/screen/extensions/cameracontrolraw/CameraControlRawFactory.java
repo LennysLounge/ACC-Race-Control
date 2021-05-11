@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package base.screen.extensions.debug;
+package base.screen.extensions.cameracontrolraw;
 
 import base.ACCLiveTimingExtensionFactory;
 import base.screen.extensions.AccClientExtension;
@@ -13,32 +13,23 @@ import base.screen.visualisation.gui.LPContainer;
  *
  * @author Leonard
  */
-public class DebugExtensionFactory
+public class CameraControlRawFactory
         implements ACCLiveTimingExtensionFactory {
 
-    private final DebugConfigPanel configPanel;
-    private DebugExtension extension;
-
-    public DebugExtensionFactory() {
-        configPanel = new DebugConfigPanel();
-    }
+    CameraControlRawExtension extension;
 
     @Override
     public String getName() {
-        return "Debug";
+        return "Camera Controls";
     }
 
     @Override
     public void createExtension() {
         removeExtension();
-        if (configPanel.isExtensionEnabled()) {
-            extension = new DebugExtension();
+        if (true) {
+            extension = new CameraControlRawExtension();
         }
-    }
 
-    @Override
-    public LPContainer getExtensionConfigurationPanel() {
-        return configPanel;
     }
 
     @Override
@@ -50,7 +41,13 @@ public class DebugExtensionFactory
     }
 
     @Override
+    public LPContainer getExtensionConfigurationPanel() {
+        return null;
+    }
+
+    @Override
     public AccClientExtension getExtension() {
         return extension;
     }
+
 }
