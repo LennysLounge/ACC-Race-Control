@@ -380,7 +380,7 @@ public class AccBroadcastingClient {
         private void udpListener() {
             while (true) {
                 try {
-                    DatagramPacket response = new DatagramPacket(new byte[512], 512);
+                    DatagramPacket response = new DatagramPacket(new byte[1024], 1024);
                     socket.receive(response);
                     protocol.processMessage(new ByteArrayInputStream(response.getData()));
                     afterPacketReceived(response.getData()[0]);
