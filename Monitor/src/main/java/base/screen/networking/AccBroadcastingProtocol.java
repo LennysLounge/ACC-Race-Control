@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -314,6 +315,31 @@ public class AccBroadcastingProtocol {
         return message.toByteArray();
     }
 
+    public static byte[] buildHudPageRequest(int connectionID, String page) {
+        ByteArrayOutputStream message = new ByteArrayOutputStream();
+        message.write(OutboundMessageTypes.CHANGE_HUD_PAGE);
+        message.write(toByteArray(connectionID, 4), 0, 4);
+        writeString(message, page);
+        return message.toByteArray();
+    }
+
+    public static byte[] buildInstantReplayRequest(int connectionID,
+            float startSessionTime,
+            float duration,
+            int initialFocusedCarIndex,
+            String initialCameraSet,
+            String initialCamera) {
+        ByteArrayOutputStream message = new ByteArrayOutputStream();
+        message.write(OutboundMessageTypes.INSTANT_REPLAY_REQUEST);
+        message.write(toByteArray(connectionID, 4), 0, 4);
+        message.write(toByteArray(startSessionTime), 0, 4);
+        message.write(toByteArray(duration), 0, 4);
+        message.write(toByteArray(initialFocusedCarIndex, 4), 0, 4);
+        writeString(message, initialCameraSet);
+        writeString(message, initialCamera);
+        return message.toByteArray();
+    }
+
     private static void writeString(ByteArrayOutputStream o, String message) {
         o.write(toByteArray(message.length(), 2), 0, 2);
         o.write(message.getBytes(), 0, message.length());
@@ -326,6 +352,16 @@ public class AccBroadcastingProtocol {
             n = n >> 8;
         }
         return result;
+    }
+
+    private static byte[] toByteArray(float v) {
+        int intBits = Float.floatToIntBits(v);
+        return new byte[]{
+            (byte) (intBits),
+            (byte) (intBits >> 8),
+            (byte) (intBits >> 16),
+            (byte) (intBits >> 24)
+        };
     }
 
     private byte readByte(ByteArrayInputStream in) {

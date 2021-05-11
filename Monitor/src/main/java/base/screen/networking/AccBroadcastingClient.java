@@ -285,6 +285,50 @@ public class AccBroadcastingClient {
     }
 
     /**
+     * Sends a request to change the current camera.
+     *
+     * @param camSet The camera set to change to.
+     * @param cam The specific camera to change to.
+     */
+    public void sendSetCameraRequest(String camSet, String cam) {
+        sendRequest(AccBroadcastingProtocol.buildFocusRequest(
+                model.getConnectionID(),
+                model.getSessionInfo().getFocusedCarIndex(),
+                camSet,
+                cam
+        ));
+    }
+
+    /**
+     * Sends a request to change the current HUD page visible.
+     *
+     * @param page the hud page to change to.
+     */
+    public void sendSetHudPageRequest(String page) {
+        sendRequest(AccBroadcastingProtocol.buildHudPageRequest(
+                model.getConnectionID(),
+                page
+        ));
+    }
+
+    /**
+     * Sends an instant replay request for the specified duration.
+     *
+     * @param seconds the ammont of seconds to replay back to.
+     */
+    public void sendInstantReplayRequest(int seconds) {
+        sendRequest(AccBroadcastingProtocol.buildInstantReplayRequest(
+                model.getConnectionID(),
+                model.getSessionInfo().getSessionTime()-(seconds*1000),
+                seconds*1000,
+                -1,
+                "",
+                ""
+        ));
+
+    }
+
+    /**
      * Disconnect from the game.
      */
     public void disconnect() {
