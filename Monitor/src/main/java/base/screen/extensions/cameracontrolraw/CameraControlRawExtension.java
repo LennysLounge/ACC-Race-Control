@@ -10,6 +10,7 @@ import base.screen.eventbus.Event;
 import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
 import base.screen.extensions.AccClientExtension;
+import base.screen.networking.AccBroadcastingClient;
 import base.screen.networking.RealtimeUpdate;
 import base.screen.networking.data.SessionInfo;
 import base.screen.networking.data.TrackInfo;
@@ -66,9 +67,9 @@ public class CameraControlRawExtension
         Main.getClient().sendSetHudPageRequest(page);
     }
     
-    public void startInstantReplay(int seconds){
+    public void startInstantReplay(float seconds, float duration){
         LOG.info("Starting instant replay for " + seconds + " seconds");
-        Main.getClient().sendInstantReplayRequest(seconds);
+        Main.getClient().sendInstantReplayRequest(seconds, duration);     
     }
 
 }

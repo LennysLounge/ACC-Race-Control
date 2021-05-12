@@ -30,8 +30,10 @@ public class CameraControlRawPanel
     private final LPButton instantReplay60Button = new LPButton("-60s");
     private final LPButton instantReplay30Button = new LPButton("-30s");
     private final LPButton instantReplay15Button = new LPButton("-15s");
-    private final LPLabel instantReplayCustomLabel = new LPLabel("Custom:");
-    private final LPTextField instantReplayCustomTextField = new LPTextField();
+    private final LPLabel instantReplayCustomLabel = new LPLabel("Seconds back:");
+    private final LPTextField instantReplayBackTextField = new LPTextField();
+    private final LPLabel instantReplayDurationLabel = new LPLabel("Duration:");
+    private final LPTextField instantReplayDurationTextField = new LPTextField();
     private final LPButton instantReplayCustomButton = new LPButton("Custom");
 
     private final LPLabel hudPageLabel = new LPLabel("HUD");
@@ -45,27 +47,36 @@ public class CameraControlRawPanel
         addComponent(instantReplayLabel);
         instantReplay60Button.setPosition(20, LINE_HEIGHT);
         instantReplay60Button.setSize(60, LINE_HEIGHT);
-        instantReplay60Button.setAction(() -> extension.startInstantReplay(60));
+        instantReplay60Button.setAction(() -> extension.startInstantReplay(60, 60));
         addComponent(instantReplay60Button);
         instantReplay30Button.setPosition(90, LINE_HEIGHT);
         instantReplay30Button.setSize(60, LINE_HEIGHT);
-        instantReplay30Button.setAction(() -> extension.startInstantReplay(30));
+        instantReplay30Button.setAction(() -> extension.startInstantReplay(30, 30));
         addComponent(instantReplay30Button);
         instantReplay15Button.setPosition(160, LINE_HEIGHT);
         instantReplay15Button.setSize(60, LINE_HEIGHT);
-        instantReplay15Button.setAction(() -> extension.startInstantReplay(15));
+        instantReplay15Button.setAction(() -> extension.startInstantReplay(15, 15));
         addComponent(instantReplay15Button);
         instantReplayCustomLabel.setPosition(230, LINE_HEIGHT);
         addComponent(instantReplayCustomLabel);
-        instantReplayCustomTextField.setPosition(310, LINE_HEIGHT);
-        instantReplayCustomTextField.setSize(70, LINE_HEIGHT);
-        instantReplayCustomTextField.setValue("120");
-        addComponent(instantReplayCustomTextField);
-        instantReplayCustomButton.setPosition(390, LINE_HEIGHT);
+        instantReplayBackTextField.setPosition(370, LINE_HEIGHT);
+        instantReplayBackTextField.setSize(70, LINE_HEIGHT);
+        instantReplayBackTextField.setValue("60");
+        addComponent(instantReplayBackTextField);
+        instantReplayDurationLabel.setPosition(450, LINE_HEIGHT);
+        addComponent(instantReplayDurationLabel);
+        instantReplayDurationTextField.setPosition(540, LINE_HEIGHT);
+        instantReplayDurationTextField.setSize(70, LINE_HEIGHT);
+        instantReplayDurationTextField.setValue("15");
+        addComponent(instantReplayDurationTextField);
+
+        instantReplayCustomButton.setPosition(620, LINE_HEIGHT);
         instantReplayCustomButton.setSize(100, LINE_HEIGHT);
         instantReplayCustomButton.setAction(() -> {
             try {
-                extension.startInstantReplay(Integer.parseInt(instantReplayCustomTextField.getValue()));
+                int seconds = Integer.parseInt(instantReplayBackTextField.getValue());
+                int duration = Integer.parseInt(instantReplayDurationTextField.getValue());
+                extension.startInstantReplay(seconds, duration);
             } catch (Exception e) {
 
             }

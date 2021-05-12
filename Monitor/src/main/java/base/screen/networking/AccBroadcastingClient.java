@@ -312,15 +312,17 @@ public class AccBroadcastingClient {
     }
 
     /**
-     * Sends an instant replay request for the specified duration.
+     * Sends an instant replay request for the specified duration with focus
+     * on the currently focused car and the current camera set and and camera
      *
      * @param seconds the ammont of seconds to replay back to.
+     * @param duration the duration of the replay before returning to normal.
      */
-    public void sendInstantReplayRequest(int seconds) {
+    public void sendInstantReplayRequest(float seconds, float duration ) {
         sendRequest(AccBroadcastingProtocol.buildInstantReplayRequest(
                 model.getConnectionID(),
                 model.getSessionInfo().getSessionTime()-(seconds*1000),
-                seconds*1000,
+                duration*1000,
                 -1,
                 "",
                 ""
