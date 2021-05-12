@@ -1,9 +1,9 @@
 # v1.1.0
 
 * Show the car Class (GT3, GT4, ST, CUP) as a colored triangle in the live timing panel.
-* Added a camera control panel to allow chaning of the camera and hud pages and starting instant replays.
+* Added a camera control panel to allow changing of the camera and hud pages and starting instant replays.
   * Predefined options to start an instant replay from 15s, 30s, or 60s back.
-  * Options to start an instant replay for custom duration and starting point.
+  * Option to start an instant replay for custom duration and starting point.
 * When a replay is playing, the header will now turn blue and show the remaining replay time.
 
 
