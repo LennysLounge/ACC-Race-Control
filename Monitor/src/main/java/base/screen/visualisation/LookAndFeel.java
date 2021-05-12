@@ -27,6 +27,7 @@ public class LookAndFeel {
     public static final int COLOR_YELLOW = 0xffaaaa00;
     public static final int COLOR_PURPLE = 0xffA256ff;
     public static final int COLOR_ORANGE = 0xfffc8800;
+    public static final int COLOR_BLUE = 0xff558ccc;
     public static final int COLOR_GT4 = 0xff2626cc;
     public static final int COLOR_PORSCHE_CUP = 0xff457c45;
     public static final int COLOR_SUPER_TROFEO = 0xffccba00;

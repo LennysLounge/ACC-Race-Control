@@ -24,7 +24,7 @@ public class SessionInfo {
     String activeCameraSet = "";
     String activeCamera = "";
     String currentHudPage = "";
-    boolean isReplayPlaying;
+    boolean replayPlaying;
     float replaySessionTime;
     float replayRemainingTime;
     float timeOfDay;
@@ -40,7 +40,7 @@ public class SessionInfo {
 
     public SessionInfo(int eventIndex, int sessionIndex, SessionType sessionType, SessionPhase phase, float sessionTime,
             float sessionEndTime, int focusedCarIndex, String activeCameraSet, String activeCamera,
-            String currentHudPage, boolean isReplayPlaying, float replaySessionTime, float replayRemainingTime,
+            String currentHudPage, boolean replayPlaying, float replaySessionTime, float replayRemainingTime,
             float timeOfDay, byte ambientTemp, byte trackTemp, byte cloudLevel, byte rainLevel, byte wetness,
             LapInfo bestSessionLap) {
         this.eventIndex = eventIndex;
@@ -53,7 +53,7 @@ public class SessionInfo {
         this.activeCameraSet = activeCameraSet;
         this.activeCamera = activeCamera;
         this.currentHudPage = currentHudPage;
-        this.isReplayPlaying = isReplayPlaying;
+        this.replayPlaying = replayPlaying;
         this.replaySessionTime = replaySessionTime;
         this.replayRemainingTime = replayRemainingTime;
         this.timeOfDay = timeOfDay;
@@ -105,8 +105,8 @@ public class SessionInfo {
         return currentHudPage;
     }
 
-    public boolean getIsReplayPlaying() {
-        return isReplayPlaying;
+    public boolean isReplayPlaying() {
+        return replayPlaying;
     }
 
     public float getReplaySessionTime() {
