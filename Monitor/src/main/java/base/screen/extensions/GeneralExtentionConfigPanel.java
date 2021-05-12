@@ -28,6 +28,9 @@ public class GeneralExtentionConfigPanel
 
     private final LPCheckBox loggingCheckBox = new LPCheckBox();
     private final LPLabel loggingLabel = new LPLabel("Enable logging screen");
+    
+    private final LPCheckBox cameraControlsCheckBox = new LPCheckBox();
+    private final LPLabel cameraControlsLabel = new LPLabel("Enable camera controls");
 
     private final LPCheckBox velocityMapCheckBox = new LPCheckBox();
     private final LPLabel velocityMapLabel = new LPLabel("Enable velocity map");
@@ -69,6 +72,14 @@ public class GeneralExtentionConfigPanel
         loggingLabel.setPosition(60, LINE_HEIGHT * 3);
         loggingLabel.setSize(300, LINE_HEIGHT);
         addComponent(loggingLabel);
+        
+        cameraControlsCheckBox.setPosition(20, LINE_HEIGHT * 4 + (LINE_HEIGHT - TEXT_SIZE) / 2);
+        cameraControlsCheckBox.setSelected(true);
+        cameraControlsCheckBox.setSelected(false);
+        addComponent(cameraControlsCheckBox);
+        cameraControlsLabel.setPosition(60, LINE_HEIGHT * 4);
+        cameraControlsLabel.setSize(300, LINE_HEIGHT);
+        addComponent(cameraControlsLabel);
 
         velocityMapCheckBox.setPosition(20, LINE_HEIGHT * 4 + (LINE_HEIGHT - TEXT_SIZE) / 2);
         velocityMapCheckBox.setSelected(false);
@@ -116,6 +127,10 @@ public class GeneralExtentionConfigPanel
 
     public boolean isVelocityMapEnabled() {
         return velocityMapCheckBox.isSelected();
+    }
+    
+    public boolean isCameraControlsEnabled(){
+        return cameraControlsCheckBox.isSelected();
     }
 
 }

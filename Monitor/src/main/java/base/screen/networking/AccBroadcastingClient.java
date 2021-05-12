@@ -621,7 +621,7 @@ public class AccBroadcastingClient {
                     info.getSessionIndex(), info.getSessionType(), phase,
                     info.getSessionTime(), info.getSessionEndTime(), info.getFocusedCarIndex(),
                     info.getActiveCameraSet(), info.getActiveCamera(), info.getCurrentHudPage(),
-                    info.getIsReplayPlaying(), info.getReplaySessionTime(), info.getReplayRemainingTime(),
+                    info.isReplayPlaying(), info.getReplaySessionTime(), info.getReplayRemainingTime(),
                     info.getTimeOfDay(), info.getAmbientTemp(), info.getTrackTemp(),
                     info.getCloudLevel(), info.getRainLevel(), info.getWetness(),
                     info.getBestSessionLap());

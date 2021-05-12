@@ -7,6 +7,7 @@ package base.screen.extensions.cameracontrolraw;
 
 import base.ACCLiveTimingExtensionFactory;
 import base.screen.extensions.AccClientExtension;
+import base.screen.extensions.GeneralExtentionConfigPanel;
 import base.screen.visualisation.gui.LPContainer;
 
 /**
@@ -26,7 +27,7 @@ public class CameraControlRawFactory
     @Override
     public void createExtension() {
         removeExtension();
-        if (true) {
+        if (GeneralExtentionConfigPanel.getInstance().isCameraControlsEnabled()) {
             extension = new CameraControlRawExtension();
         }
 
