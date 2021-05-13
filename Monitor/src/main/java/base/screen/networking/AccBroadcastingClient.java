@@ -328,7 +328,6 @@ public class AccBroadcastingClient {
                 "",
                 ""
         ));
-
     }
 
     /**
@@ -473,6 +472,11 @@ public class AccBroadcastingClient {
 
             //Check for disconnected cars.
             checkForMissedRealtimeCarUpdates();
+            
+            //initialise sessionId.
+            if(!sessionId.isValid()){
+                initSessionId(sessionInfo);
+            }
 
             //update the current session.
             if (sessionId.getIndex() != sessionInfo.getSessionIndex()) {
@@ -525,6 +529,20 @@ public class AccBroadcastingClient {
                 }
             }
         }
+        
+        private void initSessionId(SessionInfo sessionInfo){
+            SessionType type = sessionInfo.getSessionType();
+            int sessionIndex = sessionInfo.getSessionIndex();
+            int sessionNumber = sessionCounter.getOrDefault(type, -1) + 1;
+            sessionCounter.put(type, sessionNumber);
+            
+            SessionId newSessionId = new SessionId(type, sessionIndex, sessionNumber);
+            onSessionChanged(newSessionId, sessionInfo);
+            sessionId = newSessionId;
+            
+            sessionPhase = SessionPhase.NONE;
+        }
+       
 
         @Override
         public void onRealtimeCarUpdate(RealtimeInfo info) {
