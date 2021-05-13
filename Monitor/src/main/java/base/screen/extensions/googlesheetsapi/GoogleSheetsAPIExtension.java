@@ -7,7 +7,6 @@ package base.screen.extensions.googlesheetsapi;
 
 import base.screen.Main;
 import base.screen.networking.SessionId;
-import base.screen.networking.SessionChanged;
 import base.screen.networking.events.SessionPhaseChanged;
 import base.screen.eventbus.Event;
 import base.screen.eventbus.EventBus;
@@ -22,6 +21,7 @@ import base.screen.networking.data.SessionInfo;
 import base.screen.networking.enums.SessionPhase;
 import base.screen.networking.enums.SessionType;
 import base.screen.networking.events.CarConnect;
+import base.screen.networking.events.SessionChanged;
 import base.screen.utility.TimeUtils;
 import base.screen.visualisation.gui.LPContainer;
 import java.io.IOException;

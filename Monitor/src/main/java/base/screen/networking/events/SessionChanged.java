@@ -3,10 +3,10 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package base.screen.networking;
+package base.screen.networking.events;
 
-import base.screen.networking.SessionId;
 import base.screen.eventbus.Event;
+import base.screen.networking.SessionId;
 import base.screen.networking.data.SessionInfo;
 
 /**
@@ -15,8 +15,8 @@ import base.screen.networking.data.SessionInfo;
  */
 public class SessionChanged extends Event {
 
-    private SessionId sessionId;
-    private SessionInfo sessionInfo;
+    private final SessionId sessionId;
+    private final SessionInfo sessionInfo;
 
     public SessionChanged(SessionId sessionId, SessionInfo sessionInfo) {
         this.sessionId = sessionId;

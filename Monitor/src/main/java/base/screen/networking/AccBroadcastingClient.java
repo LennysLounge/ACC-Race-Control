@@ -5,6 +5,7 @@
  */
 package base.screen.networking;
 
+import base.screen.networking.events.SessionChanged;
 import base.screen.networking.events.AfterPacketReceived;
 import base.screen.networking.events.CarConnect;
 import base.screen.networking.events.CarDisconnect;
@@ -471,7 +472,7 @@ public class AccBroadcastingClient {
             model = model.withSessionInfo(sessionInfo);
 
             //Check for disconnected cars.
-            checkForMissedRealtimeUpdates();
+            checkForMissedRealtimeCarUpdates();
 
             //update the current session.
             if (sessionId.getIndex() != sessionInfo.getSessionIndex()) {
@@ -500,7 +501,7 @@ public class AccBroadcastingClient {
             EventBus.publish(new RealtimeUpdate(sessionInfo));
         }
 
-        private void checkForMissedRealtimeUpdates() {
+        private void checkForMissedRealtimeCarUpdates() {
             //reset missed updates to 0 for cars that have received on.
             realtimeUpdatesReceived.forEach(carId -> missedRealtimeUpdates.put(carId, 0));
 
