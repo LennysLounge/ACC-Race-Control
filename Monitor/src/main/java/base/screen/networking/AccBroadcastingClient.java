@@ -312,17 +312,17 @@ public class AccBroadcastingClient {
     }
 
     /**
-     * Sends an instant replay request for the specified duration with focus
-     * on the currently focused car and the current camera set and and camera
+     * Sends an instant replay request for the specified duration with focus on
+     * the currently focused car and the current camera set and and camera
      *
      * @param seconds the ammont of seconds to replay back to.
      * @param duration the duration of the replay before returning to normal.
      */
-    public void sendInstantReplayRequest(float seconds, float duration ) {
+    public void sendInstantReplayRequest(float seconds, float duration) {
         sendRequest(AccBroadcastingProtocol.buildInstantReplayRequest(
                 model.getConnectionID(),
-                model.getSessionInfo().getSessionTime()-(seconds*1000),
-                duration*1000,
+                model.getSessionInfo().getSessionTime() - (seconds * 1000),
+                duration * 1000,
                 -1,
                 "",
                 ""
@@ -526,8 +526,7 @@ public class AccBroadcastingClient {
         }
 
         @Override
-        public void onRealtimeCarUpdate(RealtimeInfo info
-        ) {
+        public void onRealtimeCarUpdate(RealtimeInfo info) {
             //Update realtime misses to avoid disconnect.
             realtimeUpdatesReceived.add(info.getCarId());
 
@@ -556,8 +555,7 @@ public class AccBroadcastingClient {
         }
 
         @Override
-        public void onEntryListUpdate(List<Integer> carIds
-        ) {
+        public void onEntryListUpdate(List<Integer> carIds) {
             Map<Integer, CarInfo> cars = new HashMap<>();
             cars.putAll(model.getCarsInfo());
 
@@ -573,15 +571,13 @@ public class AccBroadcastingClient {
         }
 
         @Override
-        public void onTrackData(TrackInfo info
-        ) {
+        public void onTrackData(TrackInfo info) {
             model = model.withTrackInfo(info);
             EventBus.publish(new TrackData(info));
         }
 
         @Override
-        public void onEntryListCarUpdate(CarInfo carInfo
-        ) {
+        public void onEntryListCarUpdate(CarInfo carInfo) {
             //Fire Car connection event if the car is new.
             if (newConnectedCars.contains(carInfo.getCarId())) {
                 onCarConnect(carInfo);
@@ -591,20 +587,17 @@ public class AccBroadcastingClient {
         }
 
         @Override
-        public void onBroadcastingEvent(BroadcastingEvent event
-        ) {
+        public void onBroadcastingEvent(BroadcastingEvent event) {
             List<BroadcastingEvent> events = new LinkedList<>();
             events.addAll(model.getEvents());
             events.add(event);
 
             model = model.withEvents(events);
             EventBus.publish(new BroadcastingEventEvent(event));
-
         }
 
         @Override
-        public void afterPacketReceived(byte type
-        ) {
+        public void afterPacketReceived(byte type) {
             packetCount++;
             EventBus.publish(new AfterPacketReceived(type, packetCount));
         }

@@ -115,7 +115,6 @@ public class LiveTimingExtension
                 panel.setTableModel(model);
             }
         } else if (e instanceof TrackData) {
-            LOG.info("track data event !!");
             trackInfo = ((TrackData) e).getInfo();
             gapCalculator.loadVMapForTrack(trackInfo.getTrackName());
             gapCalculator.setTrackLength(trackInfo.getTrackMeters());

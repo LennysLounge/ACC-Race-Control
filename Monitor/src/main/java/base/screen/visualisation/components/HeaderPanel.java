@@ -55,6 +55,9 @@ public class HeaderPanel extends LPComponent {
             if(client.getModel().getSessionInfo().isReplayPlaying()){
                 applet.text("Replay time remaining: " + TimeUtils.asDuration(client.getModel().getSessionInfo().getReplayRemainingTime()),
                         500, LINE_HEIGHT*0.5f);
+                
+                applet.text("Session Time: " + TimeUtils.asDuration(client.getModel().getSessionInfo().getReplaySessionTime()),
+                        850, LINE_HEIGHT*0.5f);
             }
             
             applet.textAlign(RIGHT, CENTER);

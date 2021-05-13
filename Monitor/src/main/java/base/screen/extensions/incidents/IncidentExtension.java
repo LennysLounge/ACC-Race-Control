@@ -39,7 +39,7 @@ public class IncidentExtension
     /**
      * This classes logger.
      */
-    private static Logger LOG = Logger.getLogger(IncidentExtension.class.getName());
+    private static final Logger LOG = Logger.getLogger(IncidentExtension.class.getName());
     /**
      * Reference to the client.
      */
@@ -51,7 +51,7 @@ public class IncidentExtension
     /**
      * Incident counter for the different sessions.
      */
-    private static Map<SessionId, Integer> incidentCounter = new HashMap<>();
+    private final static Map<SessionId, Integer> incidentCounter = new HashMap<>();
 
     /**
      * Last accident that is waiting to be commited.
@@ -68,7 +68,7 @@ public class IncidentExtension
     /**
      * Table model for the incident panel table.
      */
-    private IncidentTableModel model = new IncidentTableModel();
+    private final IncidentTableModel model = new IncidentTableModel();
 
     public IncidentExtension() {
         this.client = Main.getClient();
