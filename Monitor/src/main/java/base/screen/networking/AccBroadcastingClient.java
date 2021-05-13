@@ -492,7 +492,7 @@ public class AccBroadcastingClient {
                 sessionCounter.put(type, sessionNumber);
 
                 SessionId newSessionId = new SessionId(type, sessionIndex, sessionNumber);
-                onSessionChanged(newSessionId, sessionInfo);
+                onSessionChanged(newSessionId, sessionInfo, false);
                 sessionId = newSessionId;
 
                 sessionPhase = SessionPhase.NONE;
@@ -537,7 +537,7 @@ public class AccBroadcastingClient {
             sessionCounter.put(type, sessionNumber);
             
             SessionId newSessionId = new SessionId(type, sessionIndex, sessionNumber);
-            onSessionChanged(newSessionId, sessionInfo);
+            onSessionChanged(newSessionId, sessionInfo, true);
             sessionId = newSessionId;
             
             sessionPhase = SessionPhase.NONE;
@@ -621,9 +621,9 @@ public class AccBroadcastingClient {
             EventBus.publish(new AfterPacketReceived(type, packetCount));
         }
 
-        private void onSessionChanged(SessionId newId, SessionInfo info) {
+        private void onSessionChanged(SessionId newId, SessionInfo info, boolean init) {
             LOG.info("session changed to " + newId.getType().name() + " Index:" + newId.getIndex() + " sessionCount:" + newId.getNumber());
-            EventBus.publish(new SessionChanged(newId, info));
+            EventBus.publish(new SessionChanged(newId, info, init));
         }
 
         private void onSessionPhaseChaged(SessionPhase phase, SessionInfo info) {

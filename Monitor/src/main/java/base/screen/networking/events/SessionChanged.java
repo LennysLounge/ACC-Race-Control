@@ -17,10 +17,14 @@ public class SessionChanged extends Event {
 
     private final SessionId sessionId;
     private final SessionInfo sessionInfo;
+    private final boolean initialisation;
 
-    public SessionChanged(SessionId sessionId, SessionInfo sessionInfo) {
+    public SessionChanged(SessionId sessionId,
+            SessionInfo sessionInfo,
+            boolean initialisation) {
         this.sessionId = sessionId;
         this.sessionInfo = sessionInfo;
+        this.initialisation = initialisation;
     }
 
     public SessionId getSessionId() {
@@ -29,6 +33,10 @@ public class SessionChanged extends Event {
 
     public SessionInfo getSessionInfo() {
         return sessionInfo;
+    }
+    
+    public boolean isInitialisation(){
+        return initialisation;
     }
 
 }
