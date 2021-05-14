@@ -5,6 +5,7 @@
   * Predefined options to start an instant replay from 15s, 30s, or 60s back.
   * Option to start an instant replay for custom duration and starting point.
 * When a replay is playing, the header will now turn blue and show the remaining replay time.
+* Added the aproximate replay time for an incident in the incident panel.
 
 
 ### v1.0.1
