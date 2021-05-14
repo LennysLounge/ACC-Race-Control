@@ -20,6 +20,7 @@ import base.screen.networking.data.BroadcastingEvent;
 import base.screen.networking.enums.BroadcastingEventType;
 import base.screen.utility.TimeUtils;
 import base.screen.extensions.incidents.events.Accident;
+import base.screen.extensions.replayoffset.ReplayOffsetExtension;
 import base.screen.networking.AccBroadcastingClient;
 import base.screen.visualisation.gui.LPContainer;
 import java.util.Collections;
@@ -121,12 +122,13 @@ public class IncidentExtension
     }
 
     public void onAccident(BroadcastingEvent event) {
+        float sessionTime = client.getModel().getSessionInfo().getSessionTime();
         String logMessage = "Accident: #" + client.getModel().getCar(event.getCarId()).getCarNumber()
-                + "\t" + TimeUtils.asDuration(client.getModel().getSessionInfo().getSessionTime());
+                + "\t" + TimeUtils.asDuration(sessionTime)
+                + "\t" + TimeUtils.asDuration(ReplayOffsetExtension.getReplayTimeFromConnectionTime(event.getTimeMs()));
         LoggingExtension.log(logMessage);
         LOG.info(logMessage);
 
-        float sessionTime = client.getModel().getSessionInfo().getSessionTime();
         SessionId sessionId = client.getSessionId();
         if (stagedAccident == null) {
             stagedAccident = new IncidentInfo(sessionTime,

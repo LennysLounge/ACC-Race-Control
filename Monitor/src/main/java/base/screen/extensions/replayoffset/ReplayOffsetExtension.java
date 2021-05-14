@@ -106,6 +106,7 @@ public class ReplayOffsetExtension
             if (!event.isInitialisation()) {
                 replayStartTime = System.currentTimeMillis();
                 LOG.info("Setting replayStartTime based on session change time to: " + replayStartTime);
+                EventBus.publish(new ReplayStart());
             }
         } else if (e instanceof BroadcastingEventEvent) {
             BroadcastingEvent event = ((BroadcastingEventEvent) e).getEvent();
@@ -118,6 +119,7 @@ public class ReplayOffsetExtension
                 if (gameConnectionTime > latestSessionChange) {
                     replayStartTime = gameConnectionTime;
                     LOG.info("Setting replayStartTime based on game connection time to: " + gameConnectionTime);
+                    EventBus.publish(new ReplayStart());
                 }
 
             }
@@ -184,6 +186,9 @@ public class ReplayOffsetExtension
      * started when the user is aware of it.
      */
     public static void findSessionChange() {
+        if (isReplayTimeKnown()) {
+            return;
+        }
 
     }
 }

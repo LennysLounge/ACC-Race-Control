@@ -5,9 +5,12 @@
  */
 package base.screen.extensions.debug;
 
+import base.screen.Main;
 import base.screen.visualisation.LookAndFeel;
+import static base.screen.visualisation.LookAndFeel.LINE_HEIGHT;
 import base.screen.visualisation.gui.LPButton;
 import base.screen.visualisation.gui.LPContainer;
+import base.screen.visualisation.gui.LPLabel;
 import base.screen.visualisation.gui.LPTextField;
 
 /**
@@ -17,18 +20,32 @@ import base.screen.visualisation.gui.LPTextField;
 public class DebugPanel
         extends LPContainer {
 
-    LPButton button = new LPButton("Button");
+    LPButton button = new LPButton("Find replay time");
     LPTextField textField = new LPTextField();
+    LPLabel label = new LPLabel("Replay time known: false");
+
+    boolean isReplayKnown = false;
 
     public DebugPanel() {
         setName("Debug");
 
         button.setSize(200, LookAndFeel.LINE_HEIGHT);
-        button.setPosition(20, 20);
+        button.setPosition(20, 0);
+        button.setAction(() -> {
+            /*
+            Main.getClient().sendInstantReplayRequest(
+                    Main.getClient().getModel().getSessionInfo().getSessionTime() / 1000,
+                    10
+            );
+             */
+        });
         addComponent(button);
 
+        label.setPosition(20, LINE_HEIGHT);
+        addComponent(label);
+
         textField.setSize(300, LookAndFeel.LINE_HEIGHT);
-        textField.setPosition(20, 100);
+        textField.setPosition(20, LINE_HEIGHT * 2);
         textField.setValue("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
         addComponent(textField);
 
@@ -38,6 +55,11 @@ public class DebugPanel
     public void draw() {
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
+    }
+
+    public void setReplayTimeKnown() {
+        label.setText("Replay time known: true");
+        button.setEnabled(false);
     }
 
 }

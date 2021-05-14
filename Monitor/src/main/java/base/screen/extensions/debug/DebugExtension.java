@@ -5,7 +5,11 @@
  */
 package base.screen.extensions.debug;
 
+import base.screen.eventbus.Event;
+import base.screen.eventbus.EventBus;
+import base.screen.eventbus.EventListener;
 import base.screen.extensions.AccClientExtension;
+import base.screen.extensions.replayoffset.ReplayStart;
 import base.screen.visualisation.gui.LPContainer;
 
 /**
@@ -13,12 +17,14 @@ import base.screen.visualisation.gui.LPContainer;
  *
  * @author Leonard
  */
-public class DebugExtension implements AccClientExtension {
+public class DebugExtension
+        implements AccClientExtension, EventListener {
 
     DebugPanel panel;
 
     public DebugExtension() {
         this.panel = new DebugPanel();
+        EventBus.register(this);
     }
 
     @Override
@@ -28,6 +34,13 @@ public class DebugExtension implements AccClientExtension {
 
     @Override
     public void removeExtension() {
+    }
+
+    @Override
+    public void onEvent(Event e) {
+        if (e instanceof ReplayStart) {
+            panel.setReplayTimeKnown();
+        }
     }
 
 }
