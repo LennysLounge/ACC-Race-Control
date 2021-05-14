@@ -5,9 +5,11 @@
  */
 package base.screen.visualisation.components;
 
+import base.screen.extensions.replayoffset.ReplayOffsetExtension;
 import base.screen.networking.SessionId;
 import base.screen.networking.AccBroadcastingClient;
 import base.screen.utility.TimeUtils;
+import base.screen.visualisation.LookAndFeel;
 import static base.screen.visualisation.LookAndFeel.COLOR_BLUE;
 import static base.screen.visualisation.LookAndFeel.COLOR_DARK_DARK_GRAY;
 import static base.screen.visualisation.LookAndFeel.COLOR_RED;
@@ -36,9 +38,13 @@ public class HeaderPanel extends LPComponent {
     public void draw() {
         if (client.isConnected()) {
             applet.fill(COLOR_DARK_DARK_GRAY);
-            if(client.getModel().getSessionInfo().isReplayPlaying()){
+            if (client.getModel().getSessionInfo().isReplayPlaying()) {
                 applet.fill(COLOR_BLUE);
             }
+            if (ReplayOffsetExtension.isSearching()) {
+                applet.fill(LookAndFeel.COLOR_GREEN);
+            }
+
             applet.noStroke();
             applet.rect(0, 0, getWidth(), getHeight());
             int y = 0;
@@ -52,14 +58,19 @@ public class HeaderPanel extends LPComponent {
             applet.textFont(fontRegular());
             applet.text(conId, 10, y + LINE_HEIGHT * 0.5f);
             applet.text(packetsReceived, 200, y + LINE_HEIGHT * 0.5f);
-            if(client.getModel().getSessionInfo().isReplayPlaying()){
-                applet.text("Replay time remaining: " + TimeUtils.asDuration(client.getModel().getSessionInfo().getReplayRemainingTime()),
-                        500, LINE_HEIGHT*0.5f);
-                
-                applet.text("Session Time: " + TimeUtils.asDuration(client.getModel().getSessionInfo().getReplaySessionTime()),
-                        850, LINE_HEIGHT*0.5f);
+            if (client.getModel().getSessionInfo().isReplayPlaying()) {
+                if (!ReplayOffsetExtension.isSearching()) {
+                    applet.text("Replay time remaining: " + TimeUtils.asDuration(client.getModel().getSessionInfo().getReplayRemainingTime()),
+                            500, LINE_HEIGHT * 0.5f);
+
+                    applet.text("Session Time: " + TimeUtils.asDuration(client.getModel().getSessionInfo().getReplaySessionTime()),
+                            850, LINE_HEIGHT * 0.5f);
+                }
             }
-            
+            if (ReplayOffsetExtension.isSearching()) {
+                applet.text("Searching for replay time, please wait", 500, LINE_HEIGHT * 0.5f);
+            }
+
             applet.textAlign(RIGHT, CENTER);
             applet.textSize(TEXT_SIZE * 0.8f);
             float sessionNameWidth = applet.textWidth(sessionName);

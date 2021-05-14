@@ -11,7 +11,9 @@ import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
 import base.screen.extensions.AccClientExtension;
 import base.screen.networking.BroadcastingEventEvent;
+import base.screen.networking.RealtimeUpdate;
 import base.screen.networking.data.BroadcastingEvent;
+import base.screen.networking.data.SessionInfo;
 import base.screen.networking.events.SessionChanged;
 import base.screen.visualisation.gui.LPContainer;
 import java.util.logging.Logger;
@@ -71,6 +73,10 @@ public class ReplayOffsetExtension
      * This classes logger.
      */
     private static final Logger LOG = Logger.getLogger(ReplayOffsetExtension.class.getName());
+    /**
+     * Current instance of this extension.
+     */
+    private static ReplayOffsetExtension instance;
 
     /**
      * The timestamp of when the replay starts.
@@ -84,10 +90,43 @@ public class ReplayOffsetExtension
      * The replay seams to be offset from the time calculated here by roughly
      * this ammount.
      */
-    private static int magicOffset = -6000;
+    private final static int MAGIC_OFFSET = -6000;
+    /**
+     * Flag that incidates that the extension is currently searching for the
+     * replay start time.
+     */
+    private boolean isInSearchMode = false;
+    /**
+     * The delay for the replay.
+     */
+    private int replayDelay = 0;
+    /**
+     * Maximum allowed delay for the replay start. After this amount of time the
+     * replay is declared to never start.
+     */
+    private final int ALLOWED_REPLAY_DELAY = 1000;
+    /**
+     * True indicates that we have to wait for the replay to finish.
+     */
+    private boolean waitForReplayToFinish = false;
+    /**
+     * The step in the search process.
+     */
+    private int searchStep = 0;
+    /**
+     * Step size for the search.
+     */
+    private int searchStepSize = 1000;
+
+    private long lowerBound = 0;
+    private long upperBound = 0;
 
     public ReplayOffsetExtension() {
         EventBus.register(this);
+        replayStartTime = 0;
+        gameConnectionTime = 0;
+        isInSearchMode = false;
+        instance = this;
     }
 
     @Override
@@ -97,6 +136,8 @@ public class ReplayOffsetExtension
 
     @Override
     public void removeExtension() {
+        EventBus.unregister(this);
+        instance = null;
     }
 
     @Override
@@ -123,6 +164,28 @@ public class ReplayOffsetExtension
                 }
 
             }
+        } else if (e instanceof RealtimeUpdate) {
+            SessionInfo info = ((RealtimeUpdate) e).getSessionInfo();
+            if (isInSearchMode) {
+
+                if (info.isReplayPlaying()) {
+                    waitForReplayToFinish = true;
+                } else {
+                    replayDelay += Main.getClient().getUpdateInterval();
+                    if (replayDelay > ALLOWED_REPLAY_DELAY) {
+                        searchStep(true);
+                    }
+                }
+
+                if (waitForReplayToFinish) {
+                    if (!info.isReplayPlaying()) {
+                        searchStep(false);
+                        waitForReplayToFinish = false;
+                    }
+                }
+            }
+        } else if (e instanceof ReplayStart) {
+            searchStep = 0;
         }
     }
 
@@ -141,7 +204,7 @@ public class ReplayOffsetExtension
         long now = System.currentTimeMillis();
         long sessionOffset = (now - replayStartTime)
                 - (int) Main.getClient().getModel().getSessionInfo().getSessionTime();
-        return sessionTime + (int) sessionOffset + magicOffset;
+        return sessionTime + (int) sessionOffset + MAGIC_OFFSET;
     }
 
     /**
@@ -166,7 +229,7 @@ public class ReplayOffsetExtension
                 - (int) Main.getClient().getModel().getSessionInfo().getSessionTime();
         long sessionOffset = (now - replayStartTime)
                 - (int) Main.getClient().getModel().getSessionInfo().getSessionTime();
-        return (int) (requestTimeStamp - sessionStartTimeStamp + sessionOffset) + magicOffset;
+        return (int) (requestTimeStamp - sessionStartTimeStamp + sessionOffset) + MAGIC_OFFSET;
     }
 
     /**
@@ -189,6 +252,62 @@ public class ReplayOffsetExtension
         if (isReplayTimeKnown()) {
             return;
         }
+        instance.searchStepSize = 300000;
+        instance.searchStep = 1;
+        instance.upperBound = System.currentTimeMillis() + instance.searchStepSize;
+        instance.lowerBound = instance.upperBound - instance.searchStepSize;
+        instance.searchStep(false);
+    }
 
+    public static boolean isSearching() {
+        return instance.searchStep != 0;
+    }
+
+    private void searchStep(boolean replayMissed) {
+        isInSearchMode = false;
+        if (searchStep == 1) {
+            if (!replayMissed) {
+                //replay was played so we move the bounds and try playing a replay.
+                upperBound -= searchStepSize;
+                lowerBound = upperBound - searchStepSize;
+                playReplayAtTimeStamp(lowerBound);
+            } else {
+                //replay was missed so we now know the bounds and move onto the 
+                //next step
+                searchStep = 2;
+                playReplayAtTimeStamp(lowerBound / 2 + upperBound / 2);
+            }
+        } else if (searchStep == 2) {
+            long middle = lowerBound / 2 + upperBound / 2;
+            //adjust bounds based on if the replay was missed.
+            if (replayMissed) {
+                lowerBound = middle;
+            } else {
+                upperBound = middle;
+            }
+
+            if ((upperBound - lowerBound) < 1000) {
+                searchStep = 3;
+            } else {
+                middle = lowerBound / 2 + upperBound / 2;
+                playReplayAtTimeStamp(middle);
+            }
+        }
+        if (searchStep == 3) {
+            long middle = lowerBound / 2 + upperBound / 2;
+            replayStartTime = middle;
+            LOG.info("Setting replay time based on search algorithm to: " + middle);
+            EventBus.publish(new ReplayStart());
+            searchStep = 0;
+        }
+    }
+
+    private void playReplayAtTimeStamp(long timestamp) {
+        replayDelay = 0;
+        isInSearchMode = true;
+
+        long now = System.currentTimeMillis();
+        int secondsBack = ((int) (now - timestamp)) / 1000;
+        Main.getClient().sendInstantReplayRequest(secondsBack, 1);
     }
 }
