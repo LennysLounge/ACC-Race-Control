@@ -63,10 +63,6 @@ public class IncidentExtension
      */
     private List<IncidentInfo> accidents = new LinkedList<>();
     /**
-     * Timestamp for when the race session started.
-     */
-    private long raceStartTimestamp;
-    /**
      * Table model for the incident panel table.
      */
     private final IncidentTableModel model = new IncidentTableModel();

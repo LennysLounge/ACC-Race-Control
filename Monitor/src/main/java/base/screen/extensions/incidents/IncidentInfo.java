@@ -5,6 +5,7 @@
  */
 package base.screen.extensions.incidents;
 
+import base.screen.extensions.replayoffset.ReplayOffsetExtension;
 import base.screen.networking.SessionId;
 import base.screen.networking.data.CarInfo;
 import java.util.Arrays;
@@ -29,6 +30,10 @@ public class IncidentInfo {
      * time of the latest accident event.
      */
     private final float sessionLatestTime;
+    /**
+     * The rough replay time for this incident.
+     */
+    private final int replayTime;
     /**
      * List of cars involved by carID.
      */
@@ -57,6 +62,11 @@ public class IncidentInfo {
         this.cars = cars;
         this.systemTimestamp = timestamp;
         this.sessionID = sessionID;
+        if (ReplayOffsetExtension.isReplayTimeKnown()) {
+            this.replayTime = ReplayOffsetExtension.getReplayTimeFromSessionTime((int) earliestTime);
+        } else {
+            this.replayTime = 0;
+        }
     }
 
     public IncidentInfo addCar(float time, CarInfo car, long timestamp) {
@@ -88,6 +98,10 @@ public class IncidentInfo {
 
     public SessionId getSessionID() {
         return sessionID;
+    }
+
+    public int getReplayTime() {
+        return replayTime;
     }
 
 }

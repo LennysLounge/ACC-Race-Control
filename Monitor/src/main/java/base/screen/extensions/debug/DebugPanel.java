@@ -6,6 +6,7 @@
 package base.screen.extensions.debug;
 
 import base.screen.Main;
+import base.screen.extensions.replayoffset.ReplayOffsetExtension;
 import base.screen.visualisation.LookAndFeel;
 import static base.screen.visualisation.LookAndFeel.LINE_HEIGHT;
 import base.screen.visualisation.gui.LPButton;
@@ -32,6 +33,7 @@ public class DebugPanel
         button.setSize(200, LookAndFeel.LINE_HEIGHT);
         button.setPosition(20, 0);
         button.setAction(() -> {
+            ReplayOffsetExtension.findSessionChange();
             /*
             Main.getClient().sendInstantReplayRequest(
                     Main.getClient().getModel().getSessionInfo().getSessionTime() / 1000,
@@ -59,7 +61,7 @@ public class DebugPanel
 
     public void setReplayTimeKnown() {
         label.setText("Replay time known: true");
-        button.setEnabled(false);
+        //button.setEnabled(false);
     }
 
 }
