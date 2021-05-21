@@ -12,6 +12,11 @@ import static base.persistance.PersistantConfig.CONNECTION_INTERVAL;
 import static base.persistance.PersistantConfig.CONNECTION_IP;
 import static base.persistance.PersistantConfig.CONNECTION_PASSWORD;
 import static base.persistance.PersistantConfig.CONNECTION_PORT;
+import static base.persistance.PersistantConfig.EXTENSION_CAMERA_CONTROL_ENABLED;
+import static base.persistance.PersistantConfig.EXTENSION_INCIDENTS_ENABLED;
+import static base.persistance.PersistantConfig.EXTENSION_LIVE_TIMING_ENABLED;
+import static base.persistance.PersistantConfig.EXTENSION_LOGGING_ENABLED;
+import static base.persistance.PersistantConfig.setConfig;
 import base.screen.eventbus.Event;
 import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
@@ -163,6 +168,11 @@ public class ConfigPanel
         PersistantConfig.setConfig(CONNECTION_PORT, portTextField.getValue());
         PersistantConfig.setConfig(CONNECTION_PASSWORD, connectionPWTextField.getValue());
         PersistantConfig.setConfig(CONNECTION_INTERVAL, updateIntervalTextField.getValue());
+
+        setConfig(EXTENSION_CAMERA_CONTROL_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isCameraControlsEnabled()));
+        setConfig(EXTENSION_INCIDENTS_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isIncidentLogEnabled()));
+        setConfig(EXTENSION_LIVE_TIMING_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isLiveTimingEnabled()));
+        setConfig(EXTENSION_LOGGING_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isLoggingEnabled()));
     }
 
     private void disconnectButtonPressed() {

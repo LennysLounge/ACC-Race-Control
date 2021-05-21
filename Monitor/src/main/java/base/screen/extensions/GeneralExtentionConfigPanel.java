@@ -5,6 +5,11 @@
  */
 package base.screen.extensions;
 
+import base.persistance.PersistantConfig;
+import static base.persistance.PersistantConfig.EXTENSION_CAMERA_CONTROL_ENABLED;
+import static base.persistance.PersistantConfig.EXTENSION_INCIDENTS_ENABLED;
+import static base.persistance.PersistantConfig.EXTENSION_LIVE_TIMING_ENABLED;
+import static base.persistance.PersistantConfig.EXTENSION_LOGGING_ENABLED;
 import static base.screen.visualisation.LookAndFeel.LINE_HEIGHT;
 import static base.screen.visualisation.LookAndFeel.TEXT_SIZE;
 import base.screen.visualisation.gui.LPCheckBox;
@@ -53,29 +58,28 @@ public class GeneralExtentionConfigPanel
         addComponent(headingLabel);
 
         liveTimingCheckBox.setPosition(20, LINE_HEIGHT + (LINE_HEIGHT - TEXT_SIZE) / 2);
-        liveTimingCheckBox.setSelected(true);
+        liveTimingCheckBox.setSelected(PersistantConfig.getConfigBoolean(EXTENSION_LIVE_TIMING_ENABLED));
         addComponent(liveTimingCheckBox);
         liveTimingLabel.setPosition(60, LINE_HEIGHT);
         liveTimingLabel.setSize(300, LINE_HEIGHT);
         addComponent(liveTimingLabel);
 
         incidentLogCheckBox.setPosition(20, LINE_HEIGHT * 2 + (LINE_HEIGHT - TEXT_SIZE) / 2);
-        incidentLogCheckBox.setSelected(true);
+        incidentLogCheckBox.setSelected(PersistantConfig.getConfigBoolean(EXTENSION_INCIDENTS_ENABLED));
         addComponent(incidentLogCheckBox);
         incidentLogLabel.setPosition(60, LINE_HEIGHT * 2);
         incidentLogLabel.setSize(300, LINE_HEIGHT);
         addComponent(incidentLogLabel);
 
         loggingCheckBox.setPosition(20, LINE_HEIGHT * 3 + (LINE_HEIGHT - TEXT_SIZE) / 2);
-        loggingCheckBox.setSelected(true);
+        loggingCheckBox.setSelected(PersistantConfig.getConfigBoolean(EXTENSION_LOGGING_ENABLED));
         addComponent(loggingCheckBox);
         loggingLabel.setPosition(60, LINE_HEIGHT * 3);
         loggingLabel.setSize(300, LINE_HEIGHT);
         addComponent(loggingLabel);
         
         cameraControlsCheckBox.setPosition(20, LINE_HEIGHT * 4 + (LINE_HEIGHT - TEXT_SIZE) / 2);
-        cameraControlsCheckBox.setSelected(true);
-        cameraControlsCheckBox.setSelected(false);
+        cameraControlsCheckBox.setSelected(PersistantConfig.getConfigBoolean(EXTENSION_CAMERA_CONTROL_ENABLED));
         addComponent(cameraControlsCheckBox);
         cameraControlsLabel.setPosition(60, LINE_HEIGHT * 4);
         cameraControlsLabel.setSize(300, LINE_HEIGHT);

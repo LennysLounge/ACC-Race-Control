@@ -41,12 +41,24 @@ public class PersistantConfig {
      * Map that hodls the current config.
      */
     private static Map<String, String> config = new HashMap<>();
-
+    /**
+     * Connection settings.
+     */
     public static String CONNECTION_IP = "connectionIp";
     public static String CONNECTION_PORT = "connectionPort";
     public static String CONNECTION_PASSWORD = "connectionPassword";
     public static String CONNECTION_INTERVAL = "connectionInterval";
+    /**
+     * Path to credentials file.
+     */
     public static String CREDENTIALS_FILE_PATH = "credentialsFile";
+    /**
+     * general extension enabled.
+     */
+    public static String EXTENSION_LIVE_TIMING_ENABLED = "extensionLiveTimingEnabled";
+    public static String EXTENSION_INCIDENTS_ENABLED = "extensionIncidentEnabled";
+    public static String EXTENSION_LOGGING_ENABLED = "extensionLoggingEnabled";
+    public static String EXTENSION_CAMERA_CONTROL_ENABLED = "extensionCameraControlEnabled";
 
     /**
      * non instantiable.
@@ -83,6 +95,10 @@ public class PersistantConfig {
         setConfig(CONNECTION_PASSWORD, "asd");
         setConfig(CONNECTION_INTERVAL, "250");
         setConfig(CREDENTIALS_FILE_PATH, "Google Sheets Api Key\\credentials.json");
+        setConfig(EXTENSION_CAMERA_CONTROL_ENABLED, String.valueOf(true));
+        setConfig(EXTENSION_INCIDENTS_ENABLED, String.valueOf(true));
+        setConfig(EXTENSION_LIVE_TIMING_ENABLED, String.valueOf(true));
+        setConfig(EXTENSION_LOGGING_ENABLED, String.valueOf(true));
     }
 
     /**
@@ -104,6 +120,15 @@ public class PersistantConfig {
      */
     public static String getConfig(String key) {
         return config.get(key);
+    }
+
+    public static boolean getConfigBoolean(String key) {
+        try {
+            return Boolean.valueOf(getConfig(key));
+        } catch (Exception e) {
+
+        }
+        return false;
     }
 
     private static void saveConfig() {
