@@ -6,6 +6,7 @@
   * Option to start an instant replay for custom duration and starting point.
 * When a replay is playing, the header will now turn blue and show the remaining replay time.
 * Added the aproximate replay time for an incident in the incident panel.
+* Enabled extensions are now remembered when closing the program.
 
 
 ### v1.0.1
