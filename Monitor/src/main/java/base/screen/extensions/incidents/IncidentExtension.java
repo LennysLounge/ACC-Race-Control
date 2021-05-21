@@ -51,11 +51,6 @@ public class IncidentExtension
      */
     private final IncidentPanel panel;
     /**
-     * Incident counter for the different sessions.
-     */
-    private final static Map<SessionId, Integer> incidentCounter = new HashMap<>();
-
-    /**
      * Last accident that is waiting to be commited.
      */
     private IncidentInfo stagedAccident = null;
@@ -166,18 +161,11 @@ public class IncidentExtension
         List<IncidentInfo> newAccidents = new LinkedList<>();
         newAccidents.addAll(accidents);
         newAccidents.add(a);
-        //newAccidents.add(a.withIncidentNumber(getAndIncrementCounter(client.getSessionId())));
         accidents = newAccidents;
         model.setAccidents(accidents);
 
         EventBus.publish(new Accident(a));
         panel.invalidate();
-    }
-
-    private int getAndIncrementCounter(SessionId sessionId) {
-        int result = incidentCounter.getOrDefault(sessionId, 0);
-        incidentCounter.put(sessionId, result + 1);
-        return result;
     }
 
     @Override
@@ -204,7 +192,6 @@ public class IncidentExtension
                     ReplayOffsetExtension.getReplayTimeFromSessionTime((int) stagedAccident.getSessionEarliestTime())
             );
         }
-
     }
 
 }
