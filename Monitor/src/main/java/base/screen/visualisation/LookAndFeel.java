@@ -19,7 +19,7 @@ public class LookAndFeel {
     /**
      * This classes logger.
      */
-    private static Logger LOG = Logger.getLogger(LookAndFeel.class.getName());
+    private static final Logger LOG = Logger.getLogger(LookAndFeel.class.getName());
 
     public static final int COLOR_RED = 0xffe00000;
     public static final int COLOR_DARK_RED = 0xffb10808;
