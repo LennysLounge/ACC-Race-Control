@@ -41,6 +41,7 @@ public class LPLabel
         this.text = text;
         applet.textFont(LookAndFeel.fontMedium());
         this.setSize(applet.textWidth(text), LookAndFeel.LINE_HEIGHT);
+        invalidate();
     }
 
     public void setHAlign(int hAlign) {

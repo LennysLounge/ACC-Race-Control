@@ -67,6 +67,10 @@ public class LPComponent {
      * True if input to this component is enabled.
      */
     private boolean isEnabled = true;
+    /**
+     * True if the component is currently visible and should be drawn.
+     */
+    private boolean visible = true;
 
     /**
      * Creates a new instance.
@@ -266,10 +270,24 @@ public class LPComponent {
     }
 
     /**
+     * Sets the visibility status for this component.
+     *
+     * @param visible True if the component should be drawn.
+     */
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+        invalidate();
+    }
+    
+    public boolean isVisible(){
+        return visible;
+    }
+
+    /**
      * Draws this component. Used internaly.
      */
     protected void drawInternal() {
-        if (isInvalid) {
+        if (isInvalid && visible) {
             draw();
             isInvalid = false;
         }
