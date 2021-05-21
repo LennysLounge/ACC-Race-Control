@@ -5,7 +5,6 @@
  */
 package base.screen.extensions.incidents;
 
-import base.screen.extensions.replayoffset.ReplayOffsetExtension;
 import base.screen.networking.data.CarInfo;
 import base.screen.utility.TimeUtils;
 import base.screen.visualisation.LookAndFeel;
@@ -112,9 +111,9 @@ public class IncidentTableModel extends TableModel {
             if (type != CarType.GT3) {
                 applet.fill(COLOR_WHITE);
                 applet.beginShape();
-                applet.vertex(width - 1, height - 1);
-                applet.vertex(width - 1, height - LINE_HEIGHT * 0.5f);
-                applet.vertex(width - LINE_HEIGHT * 0.5f, height - 1);
+                applet.vertex(x + w - 1, height - 1);
+                applet.vertex(x + w - 1, height - LINE_HEIGHT * 0.5f);
+                applet.vertex(x + w - LINE_HEIGHT * 0.5f, height - 1);
                 applet.endShape(CLOSE);
                 if (type == CarType.ST) {
                     applet.fill(COLOR_SUPER_TROFEO);
@@ -124,9 +123,9 @@ public class IncidentTableModel extends TableModel {
                     applet.fill(COLOR_GT4);
                 }
                 applet.beginShape();
-                applet.vertex(width - 1, height - 1);
-                applet.vertex(width - 1, height - LINE_HEIGHT * 0.4f);
-                applet.vertex(width - LINE_HEIGHT * 0.4f, height - 1);
+                applet.vertex(x + w - 1, height - 1);
+                applet.vertex(x + w - 1, height - LINE_HEIGHT * 0.4f);
+                applet.vertex(x + w - LINE_HEIGHT * 0.4f, height - 1);
                 applet.endShape(CLOSE);
             }
 

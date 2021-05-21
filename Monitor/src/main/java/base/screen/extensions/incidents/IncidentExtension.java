@@ -114,7 +114,8 @@ public class IncidentExtension
             }
         } else if (e instanceof ReplayStart) {
             replayTimeKnown = true;
-            panel.setReplayOffset(1234);
+            panel.setReplayOffsetKnown();
+            updateAccidentsWithReplayTime();
         }
     }
 
@@ -182,6 +183,26 @@ public class IncidentExtension
     @Override
     public void removeExtension() {
         EventBus.unregister(this);
+    }
+
+    private void updateAccidentsWithReplayTime() {
+        LOG.info("Updating replay times for accidents.");
+        List<IncidentInfo> newAccidents = new LinkedList<>();
+        for (IncidentInfo incident : accidents) {
+            newAccidents.add(incident.withReplayTime(
+                    ReplayOffsetExtension.getReplayTimeFromSessionTime((int) incident.getSessionEarliestTime())
+            ));
+        }
+        accidents = newAccidents;
+        model.setAccidents(accidents);
+        panel.invalidate();
+
+        if (stagedAccident != null) {
+            stagedAccident = stagedAccident.withReplayTime(
+                    ReplayOffsetExtension.getReplayTimeFromSessionTime((int) stagedAccident.getSessionEarliestTime())
+            );
+        }
+
     }
 
 }

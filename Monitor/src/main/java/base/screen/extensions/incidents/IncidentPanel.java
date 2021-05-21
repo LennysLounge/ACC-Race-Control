@@ -62,7 +62,7 @@ public class IncidentPanel extends LPContainer {
         table.setSize(w, h - y);
     }
 
-    public void setReplayOffset(int offset) {
+    public void setReplayOffsetKnown() {
         findReplayOffsetButton.setVisible(false);
         replayOffsetLabel.setVisible(false);
         showFirstLine = false;

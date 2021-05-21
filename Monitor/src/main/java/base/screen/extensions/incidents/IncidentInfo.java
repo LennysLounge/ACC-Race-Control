@@ -47,26 +47,38 @@ public class IncidentInfo {
      */
     private final SessionId sessionID;
 
-    public IncidentInfo(float time, CarInfo car, SessionId sessionID) {
-        this(time, time, Arrays.asList(car), System.currentTimeMillis(), sessionID);
+    public IncidentInfo(float time, CarInfo car, SessionId sessionId) {
+        this(time,
+                time,
+                Arrays.asList(car),
+                System.currentTimeMillis(),
+                sessionId,
+                ReplayOffsetExtension.isReplayTimeKnown() ? ReplayOffsetExtension.getReplayTimeFromSessionTime((int) time) : 0
+        );
     }
 
     public IncidentInfo(float time, SessionId sessionId) {
-        this(time, time, new LinkedList<CarInfo>(), System.currentTimeMillis(), sessionId);
+        this(time,
+                time,
+                new LinkedList<CarInfo>(),
+                System.currentTimeMillis(),
+                sessionId,
+                ReplayOffsetExtension.isReplayTimeKnown() ? ReplayOffsetExtension.getReplayTimeFromSessionTime((int) time) : 0
+        );
     }
 
-    private IncidentInfo(float earliestTime, float latestTime, List<CarInfo> cars,
-            long timestamp, SessionId sessionID) {
+    private IncidentInfo(float earliestTime,
+            float latestTime,
+            List<CarInfo> cars,
+            long timestamp,
+            SessionId sessionID,
+            int replayTime) {
         this.sessionEarliestTime = earliestTime;
         this.sessionLatestTime = latestTime;
         this.cars = cars;
         this.systemTimestamp = timestamp;
         this.sessionID = sessionID;
-        if (ReplayOffsetExtension.isReplayTimeKnown()) {
-            this.replayTime = ReplayOffsetExtension.getReplayTimeFromSessionTime((int) earliestTime);
-        } else {
-            this.replayTime = 0;
-        }
+        this.replayTime = replayTime;
     }
 
     public IncidentInfo addCar(float time, CarInfo car, long timestamp) {
@@ -77,7 +89,17 @@ public class IncidentInfo {
                 time,
                 c,
                 timestamp,
-                sessionID);
+                sessionID,
+                replayTime);
+    }
+
+    public IncidentInfo withReplayTime(int replayTime) {
+        return new IncidentInfo(sessionEarliestTime,
+                sessionLatestTime,
+                cars,
+                systemTimestamp,
+                sessionID,
+                replayTime);
     }
 
     public float getSessionEarliestTime() {
