@@ -8,6 +8,9 @@
 * Added the aproximate replay time for an incident in the incident panel.
 * Enabled extensions are now remembered when closing the program.
 
+Bug fixes:
+* The entry list will no longer write duplicate entries into the spreadsheet. 
+
 
 ### v1.0.1
 
