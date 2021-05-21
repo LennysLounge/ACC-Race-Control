@@ -84,7 +84,7 @@ public class GoogleSheetsAPIExtension
     /**
      * List of recently connected cars to be send to the entry list.
      */
-    private List<CarInfo> carConnections = new LinkedList<>();
+    private final List<CarInfo> carConnections = new LinkedList<>();
 
     public GoogleSheetsAPIExtension(GoogleSheetsService service) {
         EventBus.register(this);
@@ -100,6 +100,14 @@ public class GoogleSheetsAPIExtension
             setCurrentTargetSheet(getTargetSheet(currentSessionId));
             LOG.info("Target Sheet changed to \"" + currentSheetTarget + "\"");
             LoggingExtension.log("Spreasheet target changed to \"" + currentSheetTarget + "\"");
+
+            //start replay offset measuring
+            if (!((SessionChanged) e).isInitialisation()) {
+                if (currentSessionId.getType() == SessionType.RACE) {
+                    isMeasuringGreenFlagOffset = true;
+                    greenFlagOffsetTimestamp = System.currentTimeMillis();
+                }
+            }
         } else if (e instanceof Accident) {
             IncidentInfo info = ((Accident) e).getInfo();
             String sessionTime = TimeUtils.asDuration(info.getSessionEarliestTime());
@@ -110,15 +118,12 @@ public class GoogleSheetsAPIExtension
             LOG.info("accident received: " + carNumbers);
         } else if (e instanceof SessionPhaseChanged) {
             SessionInfo info = ((SessionPhaseChanged) e).getSessionInfo();
-            if (info.getSessionType() == SessionType.RACE) {
-                if (info.getPhase() == SessionPhase.STARTING) {
-                    isMeasuringGreenFlagOffset = true;
-                    greenFlagOffsetTimestamp = System.currentTimeMillis();
-                } else if (info.getPhase() == SessionPhase.SESSION && isMeasuringGreenFlagOffset) {
-                    long diff = System.currentTimeMillis() - greenFlagOffsetTimestamp;
-                    queue.add(new GreenFlagEvent((int) diff));
-                    isMeasuringGreenFlagOffset = false;
-                }
+            if (info.getSessionType() == SessionType.RACE
+                    && info.getPhase() == SessionPhase.SESSION
+                    && isMeasuringGreenFlagOffset) {
+                long diff = System.currentTimeMillis() - greenFlagOffsetTimestamp;
+                queue.add(new GreenFlagEvent((int) diff));
+                isMeasuringGreenFlagOffset = false;
             }
         } else if (e instanceof CarConnect) {
             carConnections.add(((CarConnect) e).getCar());
@@ -128,6 +133,7 @@ public class GoogleSheetsAPIExtension
                 carConnections.clear();
             }
         }
+
         if (isGreenFlagOffsetBeeingMeasured()) {
             panel.invalidate();
         }
@@ -317,6 +323,7 @@ public class GoogleSheetsAPIExtension
     @Override
     public void removeExtension() {
         EventBus.unregister(this);
+
     }
 
     private class SendIncidentEvent {
