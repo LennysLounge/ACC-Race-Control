@@ -84,7 +84,7 @@ public class HeaderPanel extends LPComponent {
             applet.fill(0xff359425);
             applet.rect(applet.width - sessionNameWidth - 22,
                     y + LINE_HEIGHT * 0.1f,
-                    7, LINE_HEIGHT * 0.8f);
+                    LINE_HEIGHT * 0.175f, LINE_HEIGHT * 0.8f);
         } else {
             applet.fill(COLOR_RED);
             applet.noStroke();

@@ -15,6 +15,7 @@ import static base.screen.visualisation.LookAndFeel.COLOR_GT4;
 import static base.screen.visualisation.LookAndFeel.COLOR_SUPER_TROFEO;
 import static base.screen.visualisation.LookAndFeel.COLOR_WHITE;
 import static base.screen.visualisation.LookAndFeel.LINE_HEIGHT;
+import static base.screen.visualisation.LookAndFeel.TEXT_SIZE;
 import base.screen.visualisation.gui.LPTable;
 import base.screen.visualisation.gui.LPTableColumn;
 import base.screen.visualisation.gui.TableModel;
@@ -82,8 +83,8 @@ public class LiveTimingTableModel
      * Column shows the position number.
      */
     protected final LPTableColumn positionColumn = new LPTableColumn("P")
-            .setMinWidth(50)
-            .setMaxWidth(50)
+            .setMinWidth(LINE_HEIGHT * 1.2f)
+            .setMaxWidth(LINE_HEIGHT * 1.2f)
             .setCellRenderer(positionRenderer);
 
     private final LPTable.CellRenderer nameRenderer = (
@@ -112,7 +113,7 @@ public class LiveTimingTableModel
     };
 
     protected final LPTableColumn nameColumn = new LPTableColumn("Name")
-            .setMaxWidth(240)
+            .setMaxWidth(LINE_HEIGHT * 6f)
             .setGrowthRate(3)
             .setCellRenderer(nameRenderer);
 
@@ -136,7 +137,7 @@ public class LiveTimingTableModel
             applet.rect(1, 1, width - 2, height - 2);
             applet.fill(0);
             applet.textAlign(CENTER, CENTER);
-            applet.textSize(12);
+            applet.textSize(TEXT_SIZE * 0.6f);
             applet.text("P", width / 2f, height / 2f);
             applet.textFont(LookAndFeel.fontMedium());
             applet.textSize(LookAndFeel.TEXT_SIZE);
@@ -144,8 +145,8 @@ public class LiveTimingTableModel
     };
 
     protected final LPTableColumn pitColumn = new LPTableColumn("")
-            .setMaxWidth(16)
-            .setMinWidth(16)
+            .setMaxWidth(LINE_HEIGHT * 0.4f)
+            .setMinWidth(LINE_HEIGHT * 0.4f)
             .setCellRenderer(pitRenderer);
 
     private final LPTable.CellRenderer carNumberRenderer = (
@@ -209,8 +210,8 @@ public class LiveTimingTableModel
     };
 
     protected final LPTableColumn carNumberColumn = new LPTableColumn("#")
-            .setMinWidth(60)
-            .setMaxWidth(60)
+            .setMinWidth(LINE_HEIGHT * 1.5f)
+            .setMaxWidth(LINE_HEIGHT * 1.5f)
             .setCellRenderer(carNumberRenderer);
 
     @Override
