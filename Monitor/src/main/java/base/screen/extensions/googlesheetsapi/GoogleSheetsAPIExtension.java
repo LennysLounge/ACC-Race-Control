@@ -16,6 +16,7 @@ import base.screen.extensions.incidents.IncidentInfo;
 import base.screen.extensions.incidents.events.Accident;
 import base.screen.extensions.logging.LoggingExtension;
 import base.screen.networking.AccBroadcastingClient;
+import base.screen.networking.RealtimeUpdate;
 import base.screen.networking.data.CarInfo;
 import base.screen.networking.data.SessionInfo;
 import base.screen.networking.enums.SessionPhase;
@@ -26,8 +27,10 @@ import base.screen.utility.TimeUtils;
 import base.screen.visualisation.gui.LPContainer;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -78,6 +81,10 @@ public class GoogleSheetsAPIExtension
     private String replayOffsetCell = GoogleSheetsAPIConfigurationPanel.REPLAY_OFFSET_CELL;
     private String sessionColumn = GoogleSheetsAPIConfigurationPanel.SESSION_TIME_COLUMN;
     private String carInfoColumn = GoogleSheetsAPIConfigurationPanel.CAR_INFO_COLUMN;
+    /**
+     * List of recently connected cars to be send to the entry list.
+     */
+    private List<CarInfo> carConnections = new LinkedList<>();
 
     public GoogleSheetsAPIExtension(GoogleSheetsService service) {
         EventBus.register(this);
@@ -114,13 +121,14 @@ public class GoogleSheetsAPIExtension
                 }
             }
         } else if (e instanceof CarConnect) {
-            CarConnect event = ((CarConnect) e);
-            queue.add(new SendCarConnectedEvent(
-                    event.getCar().getDriver().getFirstName() + " " + event.getCar().getDriver().getLastName(),
-                    String.valueOf(event.getCar().getCarNumber())
-            ));
+            carConnections.add(((CarConnect) e).getCar());
+        } else if (e instanceof RealtimeUpdate) {
+            if (!carConnections.isEmpty()) {
+                queue.add(new SendCarConnectedEvent(carConnections));
+                carConnections.clear();
+            }
         }
-        if(isGreenFlagOffsetBeeingMeasured()){
+        if (isGreenFlagOffsetBeeingMeasured()) {
             panel.invalidate();
         }
     }
@@ -213,7 +221,7 @@ public class GoogleSheetsAPIExtension
                 sendGreenFlag((GreenFlagEvent) o);
             }
             if (o instanceof SendCarConnectedEvent) {
-                sendCarEntry((SendCarConnectedEvent) o);
+                sendCarEntries((SendCarConnectedEvent) o);
             }
         }
     }
@@ -247,7 +255,7 @@ public class GoogleSheetsAPIExtension
         }
     }
 
-    private void sendCarEntry(SendCarConnectedEvent event) {
+    private void sendCarEntries(SendCarConnectedEvent event) {
 
         String sheet = "'entry list'!";
         String range = sheet + "B1:C500";
@@ -259,13 +267,33 @@ public class GoogleSheetsAPIExtension
             LOG.log(Level.SEVERE, "Error getting spreadsheet values", e);
             return;
         }
-        int emptyLine = values.size() + 1;
+        Map<String, CarInfo> leftToAdd = new HashMap<>();
+        for (CarInfo car : event.carsConnected) {
+            String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
+            leftToAdd.put(name, car);
+        }
 
-        range = sheet + "B" + emptyLine;
-        List<List<Object>> line = new LinkedList<>();
-        line.add(Arrays.asList(event.driverName, event.carNumber));
+        //update previous entries
+        for (int i = 0; i < values.size(); i++) {
+            List<Object> row = values.get(i);
+            if (!row.isEmpty()) {
+                String name = (String) row.get(0);
+                //search new car connections for this entry
+                if (leftToAdd.containsKey(name)) {
+                    row = Arrays.asList(name, leftToAdd.get(name).getCarNumber());
+                    leftToAdd.remove(name);
+                }
+            }
+            values.set(i, row);
+        }
+
+        //add remaining entries
+        for (String key : leftToAdd.keySet()) {
+            values.add(Arrays.asList(key, leftToAdd.get(key).getCarNumber()));
+        }
+
         try {
-            sheetService.updateCells(range, line);
+            sheetService.updateCells(range, values);
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "Error sending spreadsheet values", e);
         }
@@ -304,12 +332,10 @@ public class GoogleSheetsAPIExtension
 
     private class SendCarConnectedEvent {
 
-        public String driverName;
-        public String carNumber;
+        public final List<CarInfo> carsConnected;
 
-        public SendCarConnectedEvent(String driverName, String carNumber) {
-            this.driverName = driverName;
-            this.carNumber = carNumber;
+        public SendCarConnectedEvent(List<CarInfo> carsConnected) {
+            this.carsConnected = new LinkedList<>(carsConnected);
         }
     }
 
