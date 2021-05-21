@@ -40,7 +40,13 @@ public class PersistantConfig {
     /**
      * Map that hodls the current config.
      */
-    private static Map<String, Object> config = new HashMap<>();
+    private static Map<String, String> config = new HashMap<>();
+
+    public static String CONNECTION_IP = "connectionIp";
+    public static String CONNECTION_PORT = "connectionPort";
+    public static String CONNECTION_PASSWORD = "connectionPassword";
+    public static String CONNECTION_INTERVAL = "connectionInterval";
+    public static String CREDENTIALS_FILE_PATH = "credentialsFile";
 
     /**
      * non instantiable.
@@ -59,7 +65,7 @@ public class PersistantConfig {
         try {
             InputStream in = new FileInputStream(FILE_NAME);
             ObjectInputStream objIn = new ObjectInputStream(in);
-            config = (Map<String, Object>) objIn.readObject();
+            config = (Map<String, String>) objIn.readObject();
         } catch (IOException | ClassNotFoundException | NullPointerException ex) {
             LOG.info("Persistant conig not found, creating new.");
             createDefaults();
@@ -72,11 +78,11 @@ public class PersistantConfig {
      * Creats the default values for the config.
      */
     private static void createDefaults() {
-        setConfig("connectionIp", "127.0.0.1");
-        setConfig("connectionPort", "9000");
-        setConfig("connectionPassword", "asd");
-        setConfig("connectionInterval", "250");
-        setConfig("credentialsFile", "Google Sheets Api Key\\credentials.json");
+        setConfig(CONNECTION_IP, "127.0.0.1");
+        setConfig(CONNECTION_PORT, "9000");
+        setConfig(CONNECTION_PASSWORD, "asd");
+        setConfig(CONNECTION_INTERVAL, "250");
+        setConfig(CREDENTIALS_FILE_PATH, "Google Sheets Api Key\\credentials.json");
     }
 
     /**
@@ -85,7 +91,7 @@ public class PersistantConfig {
      * @param key The key for the config.
      * @param value The value of the config.
      */
-    private static void setConfig(String key, Object value) {
+    public static void setConfig(String key, String value) {
         config.put(key, value);
         saveConfig();
     }
@@ -96,7 +102,7 @@ public class PersistantConfig {
      * @param key The key of the config.
      * @return The value of the config.
      */
-    private static Object getConfig(String key) {
+    public static String getConfig(String key) {
         return config.get(key);
     }
 
@@ -113,45 +119,4 @@ public class PersistantConfig {
             Logger.getLogger(VelocityMapExtension.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public static void setConnectionIP(String connectionIp) {
-        setConfig("connectionIp", connectionIp);
-    }
-
-    public static String getConnectionIP() {
-        return (String) getConfig("connectionIp");
-    }
-
-    public static void setConnectionPort(String connectionPort) {
-        setConfig("connectionPort", connectionPort);
-    }
-
-    public static String getConnectionIPort() {
-        return (String) getConfig("connectionPort");
-    }
-
-    public static void setConnectionPassword(String connectionPassword) {
-        setConfig("connectionPassword", connectionPassword);
-    }
-
-    public static String getConnectionPassword() {
-        return (String) getConfig("connectionPassword");
-    }
-
-    public static void setConnectionInterval(String connectionInterval) {
-        setConfig("connectionInterval", connectionInterval);
-    }
-
-    public static String getConnectionInterval() {
-        return (String) getConfig("connectionInterval");
-    }
-    
-    public static void setCredentialsFile(String credentialsFile) {
-        setConfig("credentialsFile", credentialsFile);
-    }
-
-    public static String getCredentialsFile() {
-        return (String) getConfig("credentialsFile");
-    }
-
 }

@@ -6,6 +6,7 @@
 package base.screen.extensions.googlesheetsapi;
 
 import base.persistance.PersistantConfig;
+import static base.persistance.PersistantConfig.CREDENTIALS_FILE_PATH;
 import static base.screen.visualisation.LookAndFeel.COLOR_DARK_GRAY;
 import static base.screen.visualisation.LookAndFeel.LINE_HEIGHT;
 import static base.screen.visualisation.LookAndFeel.TEXT_SIZE;
@@ -78,7 +79,7 @@ public class GoogleSheetsAPIConfigurationPanel
         addComponent(credentialsFileLabel);
         credentialsFileTextField.setPosition(20, LINE_HEIGHT * 5);
         credentialsFileTextField.setSize(200, LINE_HEIGHT);
-        credentialsFileTextField.setValue(PersistantConfig.getCredentialsFile());
+        credentialsFileTextField.setValue(PersistantConfig.getConfig(CREDENTIALS_FILE_PATH));
         addComponent(credentialsFileTextField);
         credentalsSearchButton.setSize(100, LINE_HEIGHT);
         credentalsSearchButton.setAction(() -> openSearchCredentialsFileDialog());
