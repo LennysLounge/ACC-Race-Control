@@ -244,6 +244,15 @@ public class ReplayOffsetExtension
     }
 
     /**
+     * Returns true if a search for the replay time is needed.
+     *
+     * @return True if a search for replay time is needed.
+     */
+    public static boolean requireSearch() {
+        return replayStartTime == 0 && gameConnectionTime != 0;
+    }
+
+    /**
      * When this method is called it begins the process of finding the correct
      * offset for the replay. This process may take a while and should only be
      * started when the user is aware of it.

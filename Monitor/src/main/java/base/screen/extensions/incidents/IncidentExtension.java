@@ -21,6 +21,7 @@ import base.screen.networking.enums.BroadcastingEventType;
 import base.screen.utility.TimeUtils;
 import base.screen.extensions.incidents.events.Accident;
 import base.screen.extensions.replayoffset.ReplayOffsetExtension;
+import base.screen.extensions.replayoffset.ReplayStart;
 import base.screen.networking.AccBroadcastingClient;
 import base.screen.visualisation.gui.LPContainer;
 import java.util.Collections;
@@ -66,6 +67,10 @@ public class IncidentExtension
      * Table model for the incident panel table.
      */
     private final IncidentTableModel model = new IncidentTableModel();
+    /**
+     * Flag indicates that the replay offset is known.
+     */
+    private boolean replayTimeKnown = false;
 
     public IncidentExtension() {
         this.client = Main.getClient();
@@ -99,11 +104,17 @@ public class IncidentExtension
     public void onEvent(Event e) {
         if (e instanceof AfterPacketReceived) {
             afterPacketReceived(((AfterPacketReceived) e).getType());
+            if (!replayTimeKnown && ReplayOffsetExtension.requireSearch()) {
+                panel.enableSearchButton();
+            }
         } else if (e instanceof BroadcastingEventEvent) {
             BroadcastingEvent event = ((BroadcastingEventEvent) e).getEvent();
             if (event.getType() == BroadcastingEventType.ACCIDENT) {
                 onAccident(event);
             }
+        } else if (e instanceof ReplayStart) {
+            replayTimeKnown = true;
+            panel.setReplayOffset(1234);
         }
     }
 
