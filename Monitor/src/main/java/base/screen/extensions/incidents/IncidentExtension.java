@@ -186,12 +186,14 @@ public class IncidentExtension
     }
 
     private void updateAccidentsWithReplayTime() {
-        LOG.info("Updating replay times for accidents.");
+        SessionId currentSessionId = Main.getClient().getSessionId();
         List<IncidentInfo> newAccidents = new LinkedList<>();
         for (IncidentInfo incident : accidents) {
-            newAccidents.add(incident.withReplayTime(
-                    ReplayOffsetExtension.getReplayTimeFromSessionTime((int) incident.getSessionEarliestTime())
-            ));
+            if (incident.getSessionID().equals(currentSessionId)) {
+                newAccidents.add(incident.withReplayTime(
+                        ReplayOffsetExtension.getReplayTimeFromSessionTime((int) incident.getSessionEarliestTime())
+                ));
+            }
         }
         accidents = newAccidents;
         model.setAccidents(accidents);
