@@ -10,6 +10,7 @@
 
 Bug fixes:
 * The entry list will no longer write duplicate entries into the spreadsheet. 
+* Dont calculate the green flag offset in the google Sheets Extension if we join the session while the race is already active.
 
 
 ### v1.0.1
