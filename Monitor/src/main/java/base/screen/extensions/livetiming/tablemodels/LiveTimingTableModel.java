@@ -11,7 +11,11 @@ import base.screen.networking.data.LapInfo;
 import base.screen.networking.enums.CarLocation;
 import base.screen.visualisation.LookAndFeel;
 import static base.screen.visualisation.LookAndFeel.COLOR_DARK_RED;
+import static base.screen.visualisation.LookAndFeel.COLOR_GT4;
+import static base.screen.visualisation.LookAndFeel.COLOR_SUPER_TROFEO;
 import static base.screen.visualisation.LookAndFeel.COLOR_WHITE;
+import static base.screen.visualisation.LookAndFeel.LINE_HEIGHT;
+import static base.screen.visualisation.LookAndFeel.TEXT_SIZE;
 import base.screen.visualisation.gui.LPTable;
 import base.screen.visualisation.gui.LPTableColumn;
 import base.screen.visualisation.gui.TableModel;
@@ -20,6 +24,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.CLOSE;
 import static processing.core.PConstants.LEFT;
 
 /**
@@ -78,8 +83,8 @@ public class LiveTimingTableModel
      * Column shows the position number.
      */
     protected final LPTableColumn positionColumn = new LPTableColumn("P")
-            .setMinWidth(50)
-            .setMaxWidth(50)
+            .setMinWidth(LINE_HEIGHT * 1.2f)
+            .setMaxWidth(LINE_HEIGHT * 1.2f)
             .setCellRenderer(positionRenderer);
 
     private final LPTable.CellRenderer nameRenderer = (
@@ -108,7 +113,7 @@ public class LiveTimingTableModel
     };
 
     protected final LPTableColumn nameColumn = new LPTableColumn("Name")
-            .setMaxWidth(240)
+            .setMaxWidth(LINE_HEIGHT * 6f)
             .setGrowthRate(3)
             .setCellRenderer(nameRenderer);
 
@@ -132,7 +137,7 @@ public class LiveTimingTableModel
             applet.rect(1, 1, width - 2, height - 2);
             applet.fill(0);
             applet.textAlign(CENTER, CENTER);
-            applet.textSize(12);
+            applet.textSize(TEXT_SIZE * 0.6f);
             applet.text("P", width / 2f, height / 2f);
             applet.textFont(LookAndFeel.fontMedium());
             applet.textSize(LookAndFeel.TEXT_SIZE);
@@ -140,8 +145,8 @@ public class LiveTimingTableModel
     };
 
     protected final LPTableColumn pitColumn = new LPTableColumn("")
-            .setMaxWidth(16)
-            .setMinWidth(16)
+            .setMaxWidth(LINE_HEIGHT * 0.4f)
+            .setMinWidth(LINE_HEIGHT * 0.4f)
             .setCellRenderer(pitRenderer);
 
     private final LPTable.CellRenderer carNumberRenderer = (
@@ -174,6 +179,30 @@ public class LiveTimingTableModel
         applet.noStroke();
         applet.fill(backColor);
         applet.rect(1, 1, width - 2, height - 2);
+
+        //render GT4 / Cup / Super trofeo corners.
+        CarType type = getCarType(car.getCarModelType());
+        if (type != CarType.GT3) {
+            applet.fill(COLOR_WHITE);
+            applet.beginShape();
+            applet.vertex(width - 1, height - 1);
+            applet.vertex(width - 1, height - LINE_HEIGHT * 0.5f);
+            applet.vertex(width - LINE_HEIGHT * 0.5f, height - 1);
+            applet.endShape(CLOSE);
+            if (type == CarType.ST) {
+                applet.fill(COLOR_SUPER_TROFEO);
+            } else if (type == CarType.CUP) {
+                applet.fill(LookAndFeel.COLOR_PORSCHE_CUP);
+            } else {
+                applet.fill(COLOR_GT4);
+            }
+            applet.beginShape();
+            applet.vertex(width - 1, height - 1);
+            applet.vertex(width - 1, height - LINE_HEIGHT * 0.4f);
+            applet.vertex(width - LINE_HEIGHT * 0.4f, height - 1);
+            applet.endShape(CLOSE);
+        }
+
         applet.fill(frontColor);
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontMedium());
@@ -181,8 +210,8 @@ public class LiveTimingTableModel
     };
 
     protected final LPTableColumn carNumberColumn = new LPTableColumn("#")
-            .setMinWidth(60)
-            .setMaxWidth(60)
+            .setMinWidth(LINE_HEIGHT * 1.5f)
+            .setMaxWidth(LINE_HEIGHT * 1.5f)
             .setCellRenderer(carNumberRenderer);
 
     @Override
@@ -234,6 +263,36 @@ public class LiveTimingTableModel
 
     public void setSessionBestSectors(List<Integer> sessionBestSectors) {
         this.sessionBestSectors = sessionBestSectors;
+    }
+
+    private CarType getCarType(byte carModelId) {
+        switch (carModelId) {
+            case 9:
+                return CarType.CUP;
+            case 18:
+                return CarType.ST;
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 55:
+            case 56:
+            case 57:
+            case 58:
+            case 59:
+            case 60:
+            case 61:
+                return CarType.GT4;
+            default:
+                return CarType.GT3;
+        }
+    }
+
+    private enum CarType {
+        GT3,
+        GT4,
+        ST,
+        CUP;
     }
 
 }

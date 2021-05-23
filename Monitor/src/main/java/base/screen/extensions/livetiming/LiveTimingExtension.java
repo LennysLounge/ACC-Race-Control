@@ -16,7 +16,7 @@ import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
 import base.screen.extensions.AccClientExtension;
 import base.screen.networking.AccBroadcastingClient;
-import base.screen.networking.SessionChanged;
+import base.screen.networking.events.SessionChanged;
 import base.screen.networking.data.CarInfo;
 import base.screen.networking.data.LapInfo;
 import base.screen.networking.data.RealtimeInfo;
@@ -115,7 +115,6 @@ public class LiveTimingExtension
                 panel.setTableModel(model);
             }
         } else if (e instanceof TrackData) {
-            LOG.info("track data event !!");
             trackInfo = ((TrackData) e).getInfo();
             gapCalculator.loadVMapForTrack(trackInfo.getTrackName());
             gapCalculator.setTrackLength(trackInfo.getTrackMeters());

@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package base.screen.extensions.debug;
+package base.screen.extensions.replayoffset;
 
 import base.ACCLiveTimingExtensionFactory;
 import base.screen.extensions.AccClientExtension;
@@ -13,32 +13,28 @@ import base.screen.visualisation.gui.LPContainer;
  *
  * @author Leonard
  */
-public class DebugExtensionFactory
+public class ReplayOffsetExtensionFactory
         implements ACCLiveTimingExtensionFactory {
 
-    private final DebugConfigPanel configPanel;
-    private DebugExtension extension;
+    private static ReplayOffsetExtension extension;
 
-    public DebugExtensionFactory() {
-        configPanel = new DebugConfigPanel();
+    public ReplayOffsetExtensionFactory() {
     }
 
     @Override
     public String getName() {
-        return "Debug";
+        return "Replay Offset";
     }
 
     @Override
     public void createExtension() {
         removeExtension();
-        if (configPanel.isExtensionEnabled()) {
-            extension = new DebugExtension();
-        }
+        extension = new ReplayOffsetExtension();
     }
 
     @Override
     public LPContainer getExtensionConfigurationPanel() {
-        return configPanel;
+        return null;
     }
 
     @Override
@@ -53,4 +49,5 @@ public class DebugExtensionFactory
     public AccClientExtension getExtension() {
         return extension;
     }
+
 }

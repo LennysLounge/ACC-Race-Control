@@ -8,6 +8,7 @@ package base.screen.extensions.googlesheetsapi;
 import base.screen.visualisation.gui.LPContainer;
 import base.ACCLiveTimingExtensionFactory;
 import base.persistance.PersistantConfig;
+import static base.persistance.PersistantConfig.CREDENTIALS_FILE_PATH;
 import base.screen.extensions.AccClientExtension;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
@@ -41,7 +42,7 @@ public class GoogleSheetsAPIExtensionFactory
         removeExtension();
         if (configurationPanel.isExtensionEnabled()) {
             //save the credentals file path
-            PersistantConfig.setCredentialsFile(configurationPanel.getCredentialsPath());
+            PersistantConfig.setConfig(CREDENTIALS_FILE_PATH, configurationPanel.getCredentialsPath());
 
             //create extension.
             try {

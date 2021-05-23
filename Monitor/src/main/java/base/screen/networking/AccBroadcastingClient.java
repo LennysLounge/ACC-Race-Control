@@ -5,6 +5,7 @@
  */
 package base.screen.networking;
 
+import base.screen.networking.events.SessionChanged;
 import base.screen.networking.events.AfterPacketReceived;
 import base.screen.networking.events.CarConnect;
 import base.screen.networking.events.CarDisconnect;
@@ -285,6 +286,51 @@ public class AccBroadcastingClient {
     }
 
     /**
+     * Sends a request to change the current camera.
+     *
+     * @param camSet The camera set to change to.
+     * @param cam The specific camera to change to.
+     */
+    public void sendSetCameraRequest(String camSet, String cam) {
+        sendRequest(AccBroadcastingProtocol.buildFocusRequest(
+                model.getConnectionID(),
+                model.getSessionInfo().getFocusedCarIndex(),
+                camSet,
+                cam
+        ));
+    }
+
+    /**
+     * Sends a request to change the current HUD page visible.
+     *
+     * @param page the hud page to change to.
+     */
+    public void sendSetHudPageRequest(String page) {
+        sendRequest(AccBroadcastingProtocol.buildHudPageRequest(
+                model.getConnectionID(),
+                page
+        ));
+    }
+
+    /**
+     * Sends an instant replay request for the specified duration with focus on
+     * the currently focused car and the current camera set and and camera
+     *
+     * @param seconds the ammont of seconds to replay back to.
+     * @param duration the duration of the replay before returning to normal.
+     */
+    public void sendInstantReplayRequest(float seconds, float duration) {
+        sendRequest(AccBroadcastingProtocol.buildInstantReplayRequest(
+                model.getConnectionID(),
+                model.getSessionInfo().getSessionTime() - (seconds * 1000),
+                duration * 1000,
+                -1,
+                "",
+                ""
+        ));
+    }
+
+    /**
      * Disconnect from the game.
      */
     public void disconnect() {
@@ -380,7 +426,7 @@ public class AccBroadcastingClient {
         private void udpListener() {
             while (true) {
                 try {
-                    DatagramPacket response = new DatagramPacket(new byte[512], 512);
+                    DatagramPacket response = new DatagramPacket(new byte[1024], 1024);
                     socket.receive(response);
                     protocol.processMessage(new ByteArrayInputStream(response.getData()));
                     afterPacketReceived(response.getData()[0]);
@@ -425,7 +471,12 @@ public class AccBroadcastingClient {
             model = model.withSessionInfo(sessionInfo);
 
             //Check for disconnected cars.
-            checkForMissedRealtimeUpdates();
+            checkForMissedRealtimeCarUpdates();
+            
+            //initialise sessionId.
+            if(!sessionId.isValid()){
+                initSessionId(sessionInfo);
+            }
 
             //update the current session.
             if (sessionId.getIndex() != sessionInfo.getSessionIndex()) {
@@ -441,7 +492,7 @@ public class AccBroadcastingClient {
                 sessionCounter.put(type, sessionNumber);
 
                 SessionId newSessionId = new SessionId(type, sessionIndex, sessionNumber);
-                onSessionChanged(newSessionId, sessionInfo);
+                onSessionChanged(newSessionId, sessionInfo, false);
                 sessionId = newSessionId;
 
                 sessionPhase = SessionPhase.NONE;
@@ -454,7 +505,7 @@ public class AccBroadcastingClient {
             EventBus.publish(new RealtimeUpdate(sessionInfo));
         }
 
-        private void checkForMissedRealtimeUpdates() {
+        private void checkForMissedRealtimeCarUpdates() {
             //reset missed updates to 0 for cars that have received on.
             realtimeUpdatesReceived.forEach(carId -> missedRealtimeUpdates.put(carId, 0));
 
@@ -478,10 +529,23 @@ public class AccBroadcastingClient {
                 }
             }
         }
+        
+        private void initSessionId(SessionInfo sessionInfo){
+            SessionType type = sessionInfo.getSessionType();
+            int sessionIndex = sessionInfo.getSessionIndex();
+            int sessionNumber = sessionCounter.getOrDefault(type, -1) + 1;
+            sessionCounter.put(type, sessionNumber);
+            
+            SessionId newSessionId = new SessionId(type, sessionIndex, sessionNumber);
+            onSessionChanged(newSessionId, sessionInfo, true);
+            sessionId = newSessionId;
+            
+            sessionPhase = SessionPhase.NONE;
+        }
+       
 
         @Override
-        public void onRealtimeCarUpdate(RealtimeInfo info
-        ) {
+        public void onRealtimeCarUpdate(RealtimeInfo info) {
             //Update realtime misses to avoid disconnect.
             realtimeUpdatesReceived.add(info.getCarId());
 
@@ -510,8 +574,7 @@ public class AccBroadcastingClient {
         }
 
         @Override
-        public void onEntryListUpdate(List<Integer> carIds
-        ) {
+        public void onEntryListUpdate(List<Integer> carIds) {
             Map<Integer, CarInfo> cars = new HashMap<>();
             cars.putAll(model.getCarsInfo());
 
@@ -527,15 +590,13 @@ public class AccBroadcastingClient {
         }
 
         @Override
-        public void onTrackData(TrackInfo info
-        ) {
+        public void onTrackData(TrackInfo info) {
             model = model.withTrackInfo(info);
             EventBus.publish(new TrackData(info));
         }
 
         @Override
-        public void onEntryListCarUpdate(CarInfo carInfo
-        ) {
+        public void onEntryListCarUpdate(CarInfo carInfo) {
             //Fire Car connection event if the car is new.
             if (newConnectedCars.contains(carInfo.getCarId())) {
                 onCarConnect(carInfo);
@@ -545,27 +606,24 @@ public class AccBroadcastingClient {
         }
 
         @Override
-        public void onBroadcastingEvent(BroadcastingEvent event
-        ) {
+        public void onBroadcastingEvent(BroadcastingEvent event) {
             List<BroadcastingEvent> events = new LinkedList<>();
             events.addAll(model.getEvents());
             events.add(event);
 
             model = model.withEvents(events);
             EventBus.publish(new BroadcastingEventEvent(event));
-
         }
 
         @Override
-        public void afterPacketReceived(byte type
-        ) {
+        public void afterPacketReceived(byte type) {
             packetCount++;
             EventBus.publish(new AfterPacketReceived(type, packetCount));
         }
 
-        private void onSessionChanged(SessionId newId, SessionInfo info) {
+        private void onSessionChanged(SessionId newId, SessionInfo info, boolean init) {
             LOG.info("session changed to " + newId.getType().name() + " Index:" + newId.getIndex() + " sessionCount:" + newId.getNumber());
-            EventBus.publish(new SessionChanged(newId, info));
+            EventBus.publish(new SessionChanged(newId, info, init));
         }
 
         private void onSessionPhaseChaged(SessionPhase phase, SessionInfo info) {
@@ -575,7 +633,7 @@ public class AccBroadcastingClient {
                     info.getSessionIndex(), info.getSessionType(), phase,
                     info.getSessionTime(), info.getSessionEndTime(), info.getFocusedCarIndex(),
                     info.getActiveCameraSet(), info.getActiveCamera(), info.getCurrentHudPage(),
-                    info.getIsReplayPlaying(), info.getReplaySessionTime(), info.getReplayRemainingTime(),
+                    info.isReplayPlaying(), info.getReplaySessionTime(), info.getReplayRemainingTime(),
                     info.getTimeOfDay(), info.getAmbientTemp(), info.getTrackTemp(),
                     info.getCloudLevel(), info.getRainLevel(), info.getWetness(),
                     info.getBestSessionLap());

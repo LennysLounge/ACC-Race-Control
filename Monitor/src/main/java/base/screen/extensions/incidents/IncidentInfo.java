@@ -5,6 +5,7 @@
  */
 package base.screen.extensions.incidents;
 
+import base.screen.extensions.replayoffset.ReplayOffsetExtension;
 import base.screen.networking.SessionId;
 import base.screen.networking.data.CarInfo;
 import java.util.Arrays;
@@ -30,6 +31,10 @@ public class IncidentInfo {
      */
     private final float sessionLatestTime;
     /**
+     * The rough replay time for this incident.
+     */
+    private final int replayTime;
+    /**
      * List of cars involved by carID.
      */
     private final List<CarInfo> cars;
@@ -42,21 +47,38 @@ public class IncidentInfo {
      */
     private final SessionId sessionID;
 
-    public IncidentInfo(float time, CarInfo car, SessionId sessionID) {
-        this(time, time, Arrays.asList(car), System.currentTimeMillis(), sessionID);
+    public IncidentInfo(float time, CarInfo car, SessionId sessionId) {
+        this(time,
+                time,
+                Arrays.asList(car),
+                System.currentTimeMillis(),
+                sessionId,
+                ReplayOffsetExtension.isReplayTimeKnown() ? ReplayOffsetExtension.getReplayTimeFromSessionTime((int) time) : 0
+        );
     }
 
     public IncidentInfo(float time, SessionId sessionId) {
-        this(time, time, new LinkedList<CarInfo>(), System.currentTimeMillis(), sessionId);
+        this(time,
+                time,
+                new LinkedList<CarInfo>(),
+                System.currentTimeMillis(),
+                sessionId,
+                ReplayOffsetExtension.isReplayTimeKnown() ? ReplayOffsetExtension.getReplayTimeFromSessionTime((int) time) : 0
+        );
     }
 
-    private IncidentInfo(float earliestTime, float latestTime, List<CarInfo> cars,
-            long timestamp, SessionId sessionID) {
+    private IncidentInfo(float earliestTime,
+            float latestTime,
+            List<CarInfo> cars,
+            long timestamp,
+            SessionId sessionID,
+            int replayTime) {
         this.sessionEarliestTime = earliestTime;
         this.sessionLatestTime = latestTime;
         this.cars = cars;
         this.systemTimestamp = timestamp;
         this.sessionID = sessionID;
+        this.replayTime = replayTime;
     }
 
     public IncidentInfo addCar(float time, CarInfo car, long timestamp) {
@@ -67,7 +89,17 @@ public class IncidentInfo {
                 time,
                 c,
                 timestamp,
-                sessionID);
+                sessionID,
+                replayTime);
+    }
+
+    public IncidentInfo withReplayTime(int replayTime) {
+        return new IncidentInfo(sessionEarliestTime,
+                sessionLatestTime,
+                cars,
+                systemTimestamp,
+                sessionID,
+                replayTime);
     }
 
     public float getSessionEarliestTime() {
@@ -88,6 +120,10 @@ public class IncidentInfo {
 
     public SessionId getSessionID() {
         return sessionID;
+    }
+
+    public int getReplayTime() {
+        return replayTime;
     }
 
 }

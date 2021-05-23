@@ -8,6 +8,15 @@ package base.screen.visualisation.components;
 import base.ACCLiveTimingExtensionFactory;
 import base.Version;
 import base.persistance.PersistantConfig;
+import static base.persistance.PersistantConfig.CONNECTION_INTERVAL;
+import static base.persistance.PersistantConfig.CONNECTION_IP;
+import static base.persistance.PersistantConfig.CONNECTION_PASSWORD;
+import static base.persistance.PersistantConfig.CONNECTION_PORT;
+import static base.persistance.PersistantConfig.EXTENSION_CAMERA_CONTROL_ENABLED;
+import static base.persistance.PersistantConfig.EXTENSION_INCIDENTS_ENABLED;
+import static base.persistance.PersistantConfig.EXTENSION_LIVE_TIMING_ENABLED;
+import static base.persistance.PersistantConfig.EXTENSION_LOGGING_ENABLED;
+import static base.persistance.PersistantConfig.setConfig;
 import base.screen.eventbus.Event;
 import base.screen.eventbus.EventBus;
 import base.screen.eventbus.EventListener;
@@ -155,10 +164,15 @@ public class ConfigPanel
                 .forEach(tab -> tab.setEnabled(false));
 
         //save config
-        PersistantConfig.setConnectionIP(ipTextField.getValue());
-        PersistantConfig.setConnectionPort(portTextField.getValue());
-        PersistantConfig.setConnectionPassword(connectionPWTextField.getValue());
-        PersistantConfig.setConnectionInterval(updateIntervalTextField.getValue());
+        PersistantConfig.setConfig(CONNECTION_IP, ipTextField.getValue());
+        PersistantConfig.setConfig(CONNECTION_PORT, portTextField.getValue());
+        PersistantConfig.setConfig(CONNECTION_PASSWORD, connectionPWTextField.getValue());
+        PersistantConfig.setConfig(CONNECTION_INTERVAL, updateIntervalTextField.getValue());
+
+        setConfig(EXTENSION_CAMERA_CONTROL_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isCameraControlsEnabled()));
+        setConfig(EXTENSION_INCIDENTS_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isIncidentLogEnabled()));
+        setConfig(EXTENSION_LIVE_TIMING_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isLiveTimingEnabled()));
+        setConfig(EXTENSION_LOGGING_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isLoggingEnabled()));
     }
 
     private void disconnectButtonPressed() {
@@ -205,22 +219,22 @@ public class ConfigPanel
 
         addComponent(ipLabel);
         ipTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        ipTextField.setValue(PersistantConfig.getConnectionIP());
+        ipTextField.setValue(PersistantConfig.getConfig(CONNECTION_IP));
         addComponent(ipTextField);
 
         addComponent(portLabel);
         portTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        portTextField.setValue(PersistantConfig.getConnectionIPort());
+        portTextField.setValue(PersistantConfig.getConfig(CONNECTION_PORT));
         addComponent(portTextField);
 
         addComponent(connectionPWLabel);
         connectionPWTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        connectionPWTextField.setValue(PersistantConfig.getConnectionPassword());
+        connectionPWTextField.setValue(PersistantConfig.getConfig(CONNECTION_PASSWORD));
         addComponent(connectionPWTextField);
 
         addComponent(updateIntervalLabel);
         updateIntervalTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        updateIntervalTextField.setValue(PersistantConfig.getConnectionInterval());
+        updateIntervalTextField.setValue(PersistantConfig.getConfig(CONNECTION_INTERVAL));
         addComponent(updateIntervalTextField);
 
         connectButton.setSize(380, LookAndFeel.LINE_HEIGHT);

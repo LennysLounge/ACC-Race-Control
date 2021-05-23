@@ -5,9 +5,12 @@
  */
 package base.screen.extensions.incidents;
 
-import base.screen.visualisation.LookAndFeel;
+import base.screen.extensions.replayoffset.ReplayOffsetExtension;
+import base.screen.utility.TimeUtils;
+import static base.screen.visualisation.LookAndFeel.LINE_HEIGHT;
 import base.screen.visualisation.gui.LPButton;
 import base.screen.visualisation.gui.LPContainer;
+import base.screen.visualisation.gui.LPLabel;
 import base.screen.visualisation.gui.LPTable;
 
 /**
@@ -22,13 +25,15 @@ public class IncidentPanel extends LPContainer {
      */
     private final LPTable table = new LPTable();
     /**
-     * Button to send an empty accident.
+     * Label shows the current replay time.
      */
-    private final LPButton sendEmptyActionButton = new LPButton("Send empty incident");
+    private final LPLabel replayOffsetLabel = new LPLabel("Searching for replay offset...");
     /**
-     * Indicates it the sendEmptyActionButton is visible.
+     * Button to search for the replay time.
      */
-    private final boolean showSendActionButton = false;
+    private final LPButton findReplayOffsetButton = new LPButton("Find replay offset");
+
+    private boolean showFirstLine = true;
 
     public IncidentPanel(IncidentExtension extension) {
         this.extension = extension;
@@ -37,18 +42,37 @@ public class IncidentPanel extends LPContainer {
         table.setOverdrawForLastLine(true);
         table.setTableModel(extension.getTableModel());
         addComponent(table);
+        replayOffsetLabel.setPosition(20, 0);
+        replayOffsetLabel.setSize(280, LINE_HEIGHT);
+        addComponent(replayOffsetLabel);
+        findReplayOffsetButton.setPosition(400, 0);
+        findReplayOffsetButton.setSize(200, LINE_HEIGHT);
+        findReplayOffsetButton.setVisible(false);
+        addComponent(findReplayOffsetButton);
+        findReplayOffsetButton.setAction(() -> {
+            ReplayOffsetExtension.findSessionChange();
+            findReplayOffsetButton.setEnabled(false);
+        });
     }
 
     @Override
     public void onResize(int w, int h) {
-        float height = LookAndFeel.LINE_HEIGHT;
-        if (!showSendActionButton) {
-            height = 0;
-        }
-        sendEmptyActionButton.setPosition(height * 0.1f, height * 0.1f);
-        sendEmptyActionButton.setSize(300, height * 0.8f);
-        table.setPosition(0, height);
-        table.setSize(w, h - height);
+        int y = (showFirstLine) ? LINE_HEIGHT : 0;
+        table.setPosition(0, y);
+        table.setSize(w, h - y);
     }
 
+    public void setReplayOffsetKnown() {
+        findReplayOffsetButton.setVisible(false);
+        replayOffsetLabel.setVisible(false);
+        showFirstLine = false;
+        onResize((int) getWidth(), (int) getHeight());
+        invalidate();
+    }
+
+    public void enableSearchButton() {
+        findReplayOffsetButton.setVisible(true);
+        replayOffsetLabel.setText("Replay offset is unknown, search required.");
+        invalidate();
+    }
 }

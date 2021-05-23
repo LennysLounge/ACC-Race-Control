@@ -4,4 +4,6 @@ base.screen.extensions.logging.LoggingExtensionFactory
 base.screen.extensions.laptimes.LaptimeExtensionFactory
 base.screen.extensions.results.ResultsExtensionFactory
 base.screen.extensions.googlesheetsapi.GoogleSheetsAPIExtensionFactory
+base.screen.extensions.cameracontrolraw.CameraControlRawFactory
+base.screen.extensions.replayoffset.ReplayOffsetExtensionFactory
 

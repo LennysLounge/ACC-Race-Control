@@ -20,6 +20,8 @@ import base.screen.networking.data.BroadcastingEvent;
 import base.screen.networking.enums.BroadcastingEventType;
 import base.screen.utility.TimeUtils;
 import base.screen.extensions.incidents.events.Accident;
+import base.screen.extensions.replayoffset.ReplayOffsetExtension;
+import base.screen.extensions.replayoffset.ReplayStart;
 import base.screen.networking.AccBroadcastingClient;
 import base.screen.visualisation.gui.LPContainer;
 import java.util.Collections;
@@ -39,7 +41,7 @@ public class IncidentExtension
     /**
      * This classes logger.
      */
-    private static Logger LOG = Logger.getLogger(IncidentExtension.class.getName());
+    private static final Logger LOG = Logger.getLogger(IncidentExtension.class.getName());
     /**
      * Reference to the client.
      */
@@ -49,11 +51,6 @@ public class IncidentExtension
      */
     private final IncidentPanel panel;
     /**
-     * Incident counter for the different sessions.
-     */
-    private static Map<SessionId, Integer> incidentCounter = new HashMap<>();
-
-    /**
      * Last accident that is waiting to be commited.
      */
     private IncidentInfo stagedAccident = null;
@@ -62,13 +59,13 @@ public class IncidentExtension
      */
     private List<IncidentInfo> accidents = new LinkedList<>();
     /**
-     * Timestamp for when the race session started.
-     */
-    private long raceStartTimestamp;
-    /**
      * Table model for the incident panel table.
      */
-    private IncidentTableModel model = new IncidentTableModel();
+    private final IncidentTableModel model = new IncidentTableModel();
+    /**
+     * Flag indicates that the replay offset is known.
+     */
+    private boolean replayTimeKnown = false;
 
     public IncidentExtension() {
         this.client = Main.getClient();
@@ -102,11 +99,18 @@ public class IncidentExtension
     public void onEvent(Event e) {
         if (e instanceof AfterPacketReceived) {
             afterPacketReceived(((AfterPacketReceived) e).getType());
+            if (!replayTimeKnown && ReplayOffsetExtension.requireSearch()) {
+                panel.enableSearchButton();
+            }
         } else if (e instanceof BroadcastingEventEvent) {
             BroadcastingEvent event = ((BroadcastingEventEvent) e).getEvent();
             if (event.getType() == BroadcastingEventType.ACCIDENT) {
                 onAccident(event);
             }
+        } else if (e instanceof ReplayStart) {
+            replayTimeKnown = true;
+            panel.setReplayOffsetKnown();
+            updateAccidentsWithReplayTime();
         }
     }
 
@@ -121,12 +125,13 @@ public class IncidentExtension
     }
 
     public void onAccident(BroadcastingEvent event) {
+        float sessionTime = client.getModel().getSessionInfo().getSessionTime();
         String logMessage = "Accident: #" + client.getModel().getCar(event.getCarId()).getCarNumber()
-                + "\t" + TimeUtils.asDuration(client.getModel().getSessionInfo().getSessionTime());
+                + "\t" + TimeUtils.asDuration(sessionTime)
+                + "\t" + TimeUtils.asDuration(ReplayOffsetExtension.getReplayTimeFromConnectionTime(event.getTimeMs()));
         LoggingExtension.log(logMessage);
         LOG.info(logMessage);
 
-        float sessionTime = client.getModel().getSessionInfo().getSessionTime();
         SessionId sessionId = client.getSessionId();
         if (stagedAccident == null) {
             stagedAccident = new IncidentInfo(sessionTime,
@@ -156,7 +161,6 @@ public class IncidentExtension
         List<IncidentInfo> newAccidents = new LinkedList<>();
         newAccidents.addAll(accidents);
         newAccidents.add(a);
-        //newAccidents.add(a.withIncidentNumber(getAndIncrementCounter(client.getSessionId())));
         accidents = newAccidents;
         model.setAccidents(accidents);
 
@@ -164,15 +168,30 @@ public class IncidentExtension
         panel.invalidate();
     }
 
-    private int getAndIncrementCounter(SessionId sessionId) {
-        int result = incidentCounter.getOrDefault(sessionId, 0);
-        incidentCounter.put(sessionId, result + 1);
-        return result;
-    }
-
     @Override
     public void removeExtension() {
         EventBus.unregister(this);
+    }
+
+    private void updateAccidentsWithReplayTime() {
+        SessionId currentSessionId = Main.getClient().getSessionId();
+        List<IncidentInfo> newAccidents = new LinkedList<>();
+        for (IncidentInfo incident : accidents) {
+            if (incident.getSessionID().equals(currentSessionId)) {
+                newAccidents.add(incident.withReplayTime(
+                        ReplayOffsetExtension.getReplayTimeFromSessionTime((int) incident.getSessionEarliestTime())
+                ));
+            }
+        }
+        accidents = newAccidents;
+        model.setAccidents(accidents);
+        panel.invalidate();
+
+        if (stagedAccident != null) {
+            stagedAccident = stagedAccident.withReplayTime(
+                    ReplayOffsetExtension.getReplayTimeFromSessionTime((int) stagedAccident.getSessionEarliestTime())
+            );
+        }
     }
 
 }
