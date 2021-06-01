@@ -10,7 +10,7 @@ def distributionName = "ACC Race Control" + project.ext.versionString
 
 
 application{
-    mainClass = 'base.screen.Main'
+    mainClass = 'racecontrol.Main'
 }
 
 repositories {
