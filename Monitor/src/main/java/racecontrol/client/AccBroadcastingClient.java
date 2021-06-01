@@ -50,6 +50,7 @@ import racecontrol.client.events.EntryListUpdate;
 import racecontrol.client.events.RealtimeUpdate;
 import racecontrol.client.extension.AccBroadcastingClientExtensionModule;
 import racecontrol.client.extension.AccClientExtension;
+import racecontrol.visualisation.gui.LPContainer;
 
 /**
  * A basic connection to the broadcasting interface from Assetto Corsa
@@ -262,6 +263,24 @@ public class AccBroadcastingClient {
 
     public Collection<AccClientExtension> getExtensions() {
         return extensions.values();
+    }
+
+    public Collection<LPContainer> getExtensionPanels() {
+        List<LPContainer> panels = new LinkedList<>();
+        for (AccBroadcastingClientExtensionModule module : extensionModules) {
+            if (!module.isEnabled()) {
+                continue;
+            }
+            for (AccClientExtension extension : extensions.values()) {
+                if (module.getExtensionClass().isInstance(extension)) {
+                    LPContainer p = extension.getPanel();
+                    if (p != null) {
+                        panels.add(p);
+                    }
+                }
+            }
+        }
+        return panels;
     }
 
     /**

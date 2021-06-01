@@ -61,9 +61,7 @@ public class BasePanel
     @Override
     public void onEvent(Event e) {
         if (e instanceof ConnectionOpened) {
-            client.getExtensions().stream()
-                    .map(extension -> extension.getPanel())
-                    .filter(panel -> panel != null)
+            client.getExtensionPanels().stream()
                     .forEach(panel -> body.addTab(panel));
 
             body.setTabIndex(1);
