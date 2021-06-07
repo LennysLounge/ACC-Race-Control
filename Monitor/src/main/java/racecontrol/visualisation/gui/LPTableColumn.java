@@ -11,6 +11,7 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
 import processing.core.PFont;
+import racecontrol.visualisation.gui.LPTable.RenderContext;
 
 /**
  *
@@ -21,7 +22,7 @@ public class LPTableColumn {
     /**
      * Header for this column.
      */
-    private String header;
+    private final String header;
     /**
      * Growthrate describes how fast it grows into the available space.
      */
@@ -38,17 +39,23 @@ public class LPTableColumn {
      * The font to use for this Column.
      */
     private PFont font = null;
-
+    /**
+     * Text align inside this column.
+     */
     private int textAlign = LEFT;
+    /**
+     * priority for this column. Columns with lower priority will get disabled
+     * first.
+     */
+    private int priority = 0;
+    /**
+     * True if the column is visible.
+     */
+    private boolean visible = true;
 
     private LPTable.CellRenderer renderer = (
             PApplet applet,
-            Object object,
-            boolean isSelected,
-            boolean isMouseOverRow,
-            boolean isMouseOverColumn,
-            float width,
-            float height) -> {
+            RenderContext context) -> {
         applet.fill(255);
         applet.textAlign(textAlign, CENTER);
         if (font != null) {
@@ -58,13 +65,13 @@ public class LPTableColumn {
         }
         switch (textAlign) {
             case LEFT:
-                applet.text(object.toString(), height / 2, height / 2);
+                applet.text(context.object.toString(), context.height / 2, context.height / 2);
                 break;
             case CENTER:
-                applet.text(object.toString(), width / 2, height / 2);
+                applet.text(context.object.toString(), context.width / 2, context.height / 2);
                 break;
             case RIGHT:
-                applet.text(object.toString(), width - height / 2, height / 2);
+                applet.text(context.object.toString(), context.width - context.height / 2, context.height / 2);
                 break;
         }
 
@@ -104,6 +111,16 @@ public class LPTableColumn {
         return this;
     }
 
+    public LPTableColumn setPriority(int priority) {
+        this.priority = priority;
+        return this;
+    }
+
+    public LPTableColumn setVisible(boolean visible) {
+        this.visible = visible;
+        return this;
+    }
+
     public String getHeader() {
         return header;
     }
@@ -130,6 +147,14 @@ public class LPTableColumn {
 
     public int getTextAlign() {
         return textAlign;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public boolean isVisible() {
+        return visible;
     }
 
 }

@@ -25,7 +25,6 @@ import racecontrol.client.events.ConnectionClosed;
 import racecontrol.visualisation.LookAndFeel;
 import static racecontrol.visualisation.LookAndFeel.COLOR_GRAY;
 import static racecontrol.visualisation.LookAndFeel.LINE_HEIGHT;
-import racecontrol.visualisation.Visualisation;
 import racecontrol.visualisation.gui.LPButton;
 import racecontrol.visualisation.gui.LPContainer;
 import racecontrol.visualisation.gui.LPLabel;
@@ -38,7 +37,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import static processing.core.PConstants.CENTER;
-import racecontrol.client.extension.AccBroadcastingClientExtensionModule;
+import static racecontrol.persistance.PersistantConfig.EXTENSION_BROADCSATING_ENABLED;
 
 /**
  *
@@ -165,6 +164,7 @@ public class ConfigPanel
         setConfig(EXTENSION_INCIDENTS_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isIncidentLogEnabled()));
         setConfig(EXTENSION_LIVE_TIMING_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isLiveTimingEnabled()));
         setConfig(EXTENSION_LOGGING_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isLoggingEnabled()));
+        setConfig(EXTENSION_BROADCSATING_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isBroadcastingEnabled()));
     }
 
     private void disconnectButtonPressed() {

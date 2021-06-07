@@ -40,7 +40,7 @@ public class CameraControlRawPanel
     private final LPLabel cameraLabel = new LPLabel("Camera");
 
     public CameraControlRawPanel(CameraControlRawExtension extension) {
-        setName("Camera");
+        setName("CAMERA");
         this.extension = extension;
 
         instantReplayLabel.setPosition(20, 0);

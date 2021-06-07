@@ -73,14 +73,9 @@ public class IncidentTableModel extends TableModel {
 
     private final LPTable.CellRenderer carsRenderer = (
             PApplet applet,
-            Object object,
-            boolean isSelected,
-            boolean isMouseOverRow,
-            boolean isMouseOverColumn,
-            float width,
-            float height) -> {
+            LPTable.RenderContext context) -> {
         //Draw car numbres
-        List<CarInfo> cars = (List<CarInfo>) object;
+        List<CarInfo> cars = (List<CarInfo>) context.object;
         float x = 0;
         for (CarInfo car : cars) {
             String carNumber = String.valueOf(car.getCarNumber());
@@ -104,16 +99,16 @@ public class IncidentTableModel extends TableModel {
 
             float w = LookAndFeel.LINE_HEIGHT * 1.25f;
             applet.fill(background_color);
-            applet.rect(x + 1, 1, w - 2, height - 2);
+            applet.rect(x + 1, 1, w - 2, context.height - 2);
 
             //render GT4 / Cup / Super trofeo corners.
             CarType type = getCarType(car.getCarModelType());
             if (type != CarType.GT3) {
                 applet.fill(COLOR_WHITE);
                 applet.beginShape();
-                applet.vertex(x + w - 1, height - 1);
-                applet.vertex(x + w - 1, height - LINE_HEIGHT * 0.5f);
-                applet.vertex(x + w - LINE_HEIGHT * 0.5f, height - 1);
+                applet.vertex(x + w - 1, context.height - 1);
+                applet.vertex(x + w - 1, context.height - LINE_HEIGHT * 0.5f);
+                applet.vertex(x + w - LINE_HEIGHT * 0.5f, context.height - 1);
                 applet.endShape(CLOSE);
                 if (type == CarType.ST) {
                     applet.fill(COLOR_SUPER_TROFEO);
@@ -123,16 +118,16 @@ public class IncidentTableModel extends TableModel {
                     applet.fill(COLOR_GT4);
                 }
                 applet.beginShape();
-                applet.vertex(x + w - 1, height - 1);
-                applet.vertex(x + w - 1, height - LINE_HEIGHT * 0.4f);
-                applet.vertex(x + w - LINE_HEIGHT * 0.4f, height - 1);
+                applet.vertex(x + w - 1, context.height - 1);
+                applet.vertex(x + w - 1, context.height - LINE_HEIGHT * 0.4f);
+                applet.vertex(x + w - LINE_HEIGHT * 0.4f, context.height - 1);
                 applet.endShape(CLOSE);
             }
 
             applet.fill(text_color);
             applet.textAlign(CENTER, CENTER);
             applet.textFont(LookAndFeel.fontMedium());
-            applet.text(String.valueOf(carNumber), x + w / 2, height / 2f);
+            applet.text(String.valueOf(carNumber), x + w / 2, context.height / 2f);
             x += w;
         }
     };

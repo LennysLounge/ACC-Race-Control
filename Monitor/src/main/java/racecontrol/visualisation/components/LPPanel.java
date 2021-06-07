@@ -14,8 +14,6 @@ import racecontrol.visualisation.gui.LPContainer;
 public class LPPanel
         extends LPContainer {
 
-    private int drawCounter = 0;
-
     public int color = 50;
 
     public LPPanel() {

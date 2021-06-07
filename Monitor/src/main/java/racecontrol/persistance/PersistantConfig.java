@@ -59,6 +59,7 @@ public class PersistantConfig {
     public static String EXTENSION_INCIDENTS_ENABLED = "extensionIncidentEnabled";
     public static String EXTENSION_LOGGING_ENABLED = "extensionLoggingEnabled";
     public static String EXTENSION_CAMERA_CONTROL_ENABLED = "extensionCameraControlEnabled";
+    public static String EXTENSION_BROADCSATING_ENABLED = "extensionBroadcastingEnabled";
 
     /**
      * non instantiable.
@@ -95,10 +96,11 @@ public class PersistantConfig {
         setConfig(CONNECTION_PASSWORD, "asd");
         setConfig(CONNECTION_INTERVAL, "250");
         setConfig(CREDENTIALS_FILE_PATH, "Google Sheets Api Key\\credentials.json");
-        setConfig(EXTENSION_CAMERA_CONTROL_ENABLED, String.valueOf(true));
+        setConfig(EXTENSION_CAMERA_CONTROL_ENABLED, String.valueOf(false));
         setConfig(EXTENSION_INCIDENTS_ENABLED, String.valueOf(true));
         setConfig(EXTENSION_LIVE_TIMING_ENABLED, String.valueOf(true));
         setConfig(EXTENSION_LOGGING_ENABLED, String.valueOf(true));
+        setConfig(EXTENSION_BROADCSATING_ENABLED, String.valueOf(false));
     }
 
     /**

@@ -3,32 +3,42 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.cameracontrolraw;
+package racecontrol.extensions.broadcasting;
 
-import racecontrol.eventbus.Event;
-import racecontrol.client.extension.AccClientExtension;
-import racecontrol.client.events.RealtimeUpdate;
-import racecontrol.client.data.SessionInfo;
-import racecontrol.client.data.TrackInfo;
-import racecontrol.client.events.TrackData;
-import racecontrol.visualisation.gui.LPContainer;
 import java.util.logging.Logger;
 import racecontrol.client.AccBroadcastingClient;
+import racecontrol.client.data.SessionInfo;
+import racecontrol.client.data.TrackInfo;
+import racecontrol.client.events.RealtimeUpdate;
+import racecontrol.client.events.TrackData;
+import racecontrol.client.extension.AccClientExtension;
+import racecontrol.eventbus.Event;
+import racecontrol.extensions.livetiming.LiveTimingExtension;
+import racecontrol.visualisation.gui.LPContainer;
 
 /**
  *
  * @author Leonard
  */
-public class CameraControlRawExtension
+public class BroadcastingExtension
         extends AccClientExtension {
 
-    private final static Logger LOG = Logger.getLogger(CameraControlRawExtension.class.getName());
+    public static final Logger LOG = Logger.getLogger(BroadcastingExtension.class.getName());
+    /**
+     * Panel.
+     */
+    private final BroadcastingPanel panel;
+    /**
+     * Reference to the live timing extension.
+     */
+    private final LiveTimingExtension liveTimingExtension;
 
-    private final CameraControlRawPanel panel;
-
-    public CameraControlRawExtension(AccBroadcastingClient client) {
+    public BroadcastingExtension(AccBroadcastingClient client) {
         super(client);
-        panel = new CameraControlRawPanel(this);
+
+        liveTimingExtension = client.getOrCreateExtension(LiveTimingExtension.class);
+
+        this.panel = new BroadcastingPanel(this, liveTimingExtension.getPanel());
     }
 
     @Override
@@ -41,22 +51,22 @@ public class CameraControlRawExtension
         if (e instanceof TrackData) {
             TrackInfo info = ((TrackData) e).getInfo();
             panel.setCameraSets(info.getCameraSets());
-            panel.setHUDPages(info.getHudPages());
         } else if (e instanceof RealtimeUpdate) {
             SessionInfo info = ((RealtimeUpdate) e).getSessionInfo();
             panel.setActiveCameraSet(info.getActiveCameraSet(), info.getActiveCamera());
             panel.setActiveHudPage(info.getCurrentHudPage());
         }
-    }
 
-    public void setCameraSet(String camSet, String cam) {
-        LOG.info("Setting camera to " + camSet + " " + cam);
-        getClient().sendSetCameraRequest(camSet, cam);
     }
 
     public void setHudPage(String page) {
         LOG.info("Setting HUD page to " + page);
         getClient().sendSetHudPageRequest(page);
+    }
+
+    public void setCameraSet(String camSet, String cam) {
+        LOG.info("Setting camera to " + camSet + " " + cam);
+        getClient().sendSetCameraRequest(camSet, cam);
     }
 
     public void startInstantReplay(float seconds, float duration) {

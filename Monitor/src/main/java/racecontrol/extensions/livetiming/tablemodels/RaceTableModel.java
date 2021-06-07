@@ -19,6 +19,7 @@ import racecontrol.visualisation.gui.LPTableColumn;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
+import racecontrol.visualisation.gui.LPTable.RenderContext;
 
 /**
  *
@@ -36,17 +37,25 @@ public class RaceTableModel
             carNumberColumn,
             new LPTableColumn("Gap")
             .setCellRenderer(gapRenderer)
+            .setMinWidth(100)
             .setMaxWidth(150),
             new LPTableColumn("To Leader")
+            .setMinWidth(100)
+            .setPriority(-1)
             .setCellRenderer(gapToLeaderRenderer)
             .setMaxWidth(150),
             new LPTableColumn("Lap")
+            .setMinWidth(100)
+            .setPriority(-1)
             .setCellRenderer(lapTimeRenderer),
             new LPTableColumn("Last")
+            .setMinWidth(100)
             .setTextAlign(CENTER),
             new LPTableColumn("Best")
+            .setMinWidth(100)
             .setTextAlign(CENTER),
             new LPTableColumn("Laps")
+            .setMinWidth(70)
             .setTextAlign(CENTER)
         };
     }
@@ -76,13 +85,8 @@ public class RaceTableModel
 
     private final LPTable.CellRenderer gapRenderer = (
             PApplet applet,
-            Object object,
-            boolean isSelected,
-            boolean isMouseOverRow,
-            boolean isMouseOverColumn,
-            float width,
-            float height) -> {
-        LiveTimingEntry entry = ((LiveTimingEntry) object);
+            RenderContext context) -> {
+        LiveTimingEntry entry = ((LiveTimingEntry) context.object);
         String gap = TimeUtils.asGap(entry.getGap());
         if (entry.getCarInfo().getRealtime().getPosition() == 1
                 && entry.getGap() == 0) {
@@ -95,18 +99,13 @@ public class RaceTableModel
         } else {
             applet.fill(COLOR_WHITE);
         }
-        applet.text(gap, width - 20, height / 2);
+        applet.text(gap, context.width - 20, context.height / 2);
     };
 
     private final LPTable.CellRenderer gapToLeaderRenderer = (
             PApplet applet,
-            Object object,
-            boolean isSelected,
-            boolean isMouseOverRow,
-            boolean isMouseOverColumn,
-            float width,
-            float height) -> {
-        LiveTimingEntry entry = ((LiveTimingEntry) object);
+            RenderContext context) -> {
+        LiveTimingEntry entry = ((LiveTimingEntry) context.object);
 
         String text = "--";
         if (entry.showLapsBehind()) {
@@ -122,18 +121,13 @@ public class RaceTableModel
         applet.textAlign(RIGHT, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
         applet.fill(COLOR_WHITE);
-        applet.text(text, width - 20, height / 2);
+        applet.text(text, context.width - 20, context.height / 2);
     };
 
     private final LPTable.CellRenderer lapTimeRenderer = (
             PApplet applet,
-            Object object,
-            boolean isSelected,
-            boolean isMouseOverRow,
-            boolean isMouseOverColumn,
-            float width,
-            float height) -> {
-        CarInfo car = ((LiveTimingEntry) object).getCarInfo();
+            RenderContext context) -> {
+        CarInfo car = ((LiveTimingEntry) context.object).getCarInfo();
         LapInfo currentLap = car.getRealtime().getCurrentLap();
         String text = "--";
         applet.fill(COLOR_WHITE);
@@ -149,7 +143,7 @@ public class RaceTableModel
         }
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
-        applet.text(text, width / 2, height / 2);
+        applet.text(text, context.width / 2, context.height / 2);
     };
 
 }

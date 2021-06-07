@@ -1,3 +1,10 @@
+# v1.2.0
+
+* Add a broadcasting panel for easier control of the game for live broadcasts.
+* Code refactoring.
+
+
+
 # v1.1.0
 
 * Show the car Class (GT3, GT4, ST, CUP) as a colored triangle in the live timing panel.

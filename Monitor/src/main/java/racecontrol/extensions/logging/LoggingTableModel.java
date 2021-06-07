@@ -25,21 +25,16 @@ public class LoggingTableModel extends TableModel {
 
     private final LPTable.CellRenderer messageRenderer = (
             PApplet applet,
-            Object object,
-            boolean isSelected,
-            boolean isMouseOverRow,
-            boolean isMouseOverColumn,
-            float width,
-            float height) -> {
-        String message = (String) object;
+            LPTable.RenderContext context) -> {
+        String message = (String) context.object;
         applet.fill(255);
         applet.textAlign(LEFT, CENTER);
-        float x = height / 2;
+        float x = context.height / 2;
         int tabSize = 140;
         String[] partials = message.split("\t");
         applet.textFont(LookAndFeel.fontRegular());
         for (String partial : partials) {
-            applet.text(partial, x, height / 2f);
+            applet.text(partial, x, context.height / 2f);
             float msgWidth = applet.textWidth(partial);
             x += (msgWidth - (msgWidth % tabSize) + tabSize);
         }

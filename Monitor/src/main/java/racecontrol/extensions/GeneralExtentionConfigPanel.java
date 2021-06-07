@@ -6,6 +6,7 @@
 package racecontrol.extensions;
 
 import racecontrol.persistance.PersistantConfig;
+import static racecontrol.persistance.PersistantConfig.EXTENSION_BROADCSATING_ENABLED;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_CAMERA_CONTROL_ENABLED;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_INCIDENTS_ENABLED;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_LIVE_TIMING_ENABLED;
@@ -42,6 +43,9 @@ public class GeneralExtentionConfigPanel
 
     private final LPCheckBox trackMapCheckBox = new LPCheckBox();
     private final LPLabel trackMapLabel = new LPLabel("Enable track map");
+    
+    private final LPCheckBox broadcastingCheckBox = new LPCheckBox();
+    private final LPLabel broadcastingLabel = new LPLabel("Enable Broadcasting control");
 
     /**
      * Singleton instance of this class.
@@ -84,6 +88,13 @@ public class GeneralExtentionConfigPanel
         cameraControlsLabel.setPosition(60, LINE_HEIGHT * 4);
         cameraControlsLabel.setSize(300, LINE_HEIGHT);
         addComponent(cameraControlsLabel);
+        
+        broadcastingCheckBox.setPosition(20, LINE_HEIGHT * 5 + (LINE_HEIGHT - TEXT_SIZE) / 2);
+        broadcastingCheckBox.setSelected(PersistantConfig.getConfigBoolean(EXTENSION_BROADCSATING_ENABLED));
+        addComponent(broadcastingCheckBox);
+        broadcastingLabel.setPosition(60, LINE_HEIGHT * 5);
+        broadcastingLabel.setSize(300, LINE_HEIGHT);
+        addComponent(broadcastingLabel);
 
         velocityMapCheckBox.setPosition(20, LINE_HEIGHT * 4 + (LINE_HEIGHT - TEXT_SIZE) / 2);
         velocityMapCheckBox.setSelected(false);
@@ -101,6 +112,8 @@ public class GeneralExtentionConfigPanel
         trackMapLabel.setSize(300, LINE_HEIGHT);
         trackMapLabel.setEnabled(false);
         //addComponent(trackMapLabel);
+        
+        
     }
 
     @Override
@@ -135,6 +148,10 @@ public class GeneralExtentionConfigPanel
     
     public boolean isCameraControlsEnabled(){
         return cameraControlsCheckBox.isSelected();
+    }
+    
+    public boolean isBroadcastingEnabled(){
+        return broadcastingCheckBox.isSelected();
     }
 
 }

@@ -6,4 +6,5 @@ racecontrol.extensions.results.ResultsExtensionModule
 racecontrol.extensions.googlesheetsapi.GoogleSheetsAPIExtensionModule
 racecontrol.extensions.cameracontrolraw.CameraControlRawModule
 racecontrol.extensions.replayoffset.ReplayOffsetExtensionModule
+racecontrol.extensions.broadcasting.BroadcastingModule
 

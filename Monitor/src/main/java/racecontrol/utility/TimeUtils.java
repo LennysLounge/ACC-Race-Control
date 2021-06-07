@@ -44,7 +44,7 @@ public class TimeUtils {
         float m = remaining % 60;
         remaining = (remaining - m) / 60;
         float h = remaining % 60;
-        return String.format("%02d:%02d.%03d", (int) m, (int) s, (int) ms);
+        return String.format("%2d:%02d.%03d", (int) m, (int) s, (int) ms);
     }
 
     public static String asDelta(float millis) {
@@ -83,6 +83,13 @@ public class TimeUtils {
         int m = Integer.valueOf(partial[1]);
         int s = Integer.valueOf(partial[2]);
         return (((h * 60) + m) * 60 + s) * 1000;
+    }
+
+    public static String asSeconds(float millis) {
+        float ms = millis % 1000;
+        float remaining = (millis - ms) / 1000;
+        float s = remaining % 60;
+        return String.format("%2d.%03d", (int) s, (int) ms);
     }
 
 }
