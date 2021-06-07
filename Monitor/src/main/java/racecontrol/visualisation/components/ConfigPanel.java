@@ -73,7 +73,7 @@ public class ConfigPanel
     private final LPLabel versionLabel = new LPLabel("Version: " + Version.VERSION);
 
     public ConfigPanel(AccBroadcastingClient client) {
-        setName("Configuration");
+        setName("CONFIGURATION");
         this.client = client;
 
         EventBus.register(this);

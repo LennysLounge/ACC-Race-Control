@@ -21,20 +21,26 @@ import racecontrol.visualisation.gui.LPComponent;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
+import racecontrol.client.events.ConnectionOpened;
+import racecontrol.eventbus.Event;
+import racecontrol.eventbus.EventBus;
+import racecontrol.eventbus.EventListener;
 
 /**
  *
  * @author Leonard
  */
-public class HeaderPanel extends LPComponent {
+public class HeaderPanel
+        extends LPComponent
+        implements EventListener {
 
     private final AccBroadcastingClient client;
 
-    private final ReplayOffsetExtension replayOffsetExtension;
+    private ReplayOffsetExtension replayOffsetExtension;
 
     public HeaderPanel(AccBroadcastingClient client) {
         this.client = client;
-        replayOffsetExtension = client.getOrCreateExtension(ReplayOffsetExtension.class);
+        EventBus.register(this);
     }
 
     @Override
@@ -44,8 +50,10 @@ public class HeaderPanel extends LPComponent {
             if (client.getModel().getSessionInfo().isReplayPlaying()) {
                 applet.fill(COLOR_BLUE);
             }
-            if (replayOffsetExtension.isSearching()) {
-                applet.fill(LookAndFeel.COLOR_GREEN);
+            if (replayOffsetExtension != null) {
+                if (replayOffsetExtension.isSearching()) {
+                    applet.fill(LookAndFeel.COLOR_GREEN);
+                }
             }
 
             applet.noStroke();
@@ -70,8 +78,10 @@ public class HeaderPanel extends LPComponent {
                             850, LINE_HEIGHT * 0.5f);
                 }
             }
-            if (replayOffsetExtension.isSearching()) {
-                applet.text("Searching for replay time, please wait", 500, LINE_HEIGHT * 0.5f);
+            if (replayOffsetExtension != null) {
+                if (replayOffsetExtension.isSearching()) {
+                    applet.text("Searching for replay time, please wait", 500, LINE_HEIGHT * 0.5f);
+                }
             }
 
             applet.textAlign(RIGHT, CENTER);
@@ -116,6 +126,13 @@ public class HeaderPanel extends LPComponent {
                 break;
         }
         return result;
+    }
+
+    @Override
+    public void onEvent(Event e) {
+        if (e instanceof ConnectionOpened) {
+            replayOffsetExtension = client.getOrCreateExtension(ReplayOffsetExtension.class);
+        }
     }
 
 }

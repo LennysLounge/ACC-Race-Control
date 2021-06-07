@@ -122,6 +122,7 @@ public class ReplayOffsetExtension
         replayStartTime = 0;
         gameConnectionTime = 0;
         isInSearchMode = false;
+        LOG.info("replay extension created");
     }
 
     @Override
