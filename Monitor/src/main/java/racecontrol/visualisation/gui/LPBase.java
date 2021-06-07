@@ -89,7 +89,8 @@ public class LPBase extends PApplet {
     public void keyPressed(KeyEvent event) {
         base.onKeyPressedInternal(event);
     }
-
+    
+    @Override
     public void keyReleased(KeyEvent event) {
         base.onKeyReleasedInternal(event);
     }

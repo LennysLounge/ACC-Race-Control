@@ -3,6 +3,9 @@
 * Add a broadcasting panel for easier control of the game for live broadcasts.
 * Code refactoring.
 
+Bug fixes:
+* Pressing Escape will no longer exit the application.
+
 
 
 # v1.1.0

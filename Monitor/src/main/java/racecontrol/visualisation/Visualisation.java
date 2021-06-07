@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import processing.event.KeyEvent;
 
 /**
  * The base for the processing visualization.
@@ -82,7 +83,7 @@ public class Visualisation extends CustomPApplet {
     }
 
     @Override
-    public void keyPressed() {
+    public void keyPressed(KeyEvent event) {
         if (key == ESC) {
             key = 0;
         }
