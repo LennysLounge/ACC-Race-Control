@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import racecontrol.extensions.livetiming.tablemodels.LiveTimingTableModel;
 import static racecontrol.visualisation.LookAndFeel.LINE_HEIGHT;
 import racecontrol.visualisation.gui.LPButton;
 import racecontrol.visualisation.gui.LPContainer;
@@ -262,6 +261,7 @@ public class BroadcastingPanel
             if (cameraButtonsRef.get(activeCameraSet).containsKey(activeCamera)) {
                 cameraButtonsRef.get(activeCameraSet).get(activeCamera).setEnabled(false);
                 cameraExtraLable.setText("");
+                cameraExtraLable.setSize(200, LINE_HEIGHT);
             } else {
                 cameraExtraLable.setText(activeCameraSet + " - " + activeCamera);
             }
