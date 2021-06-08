@@ -5,8 +5,8 @@
  */
 package racecontrol.visualisation;
 
+import java.awt.Font;
 import java.util.logging.Logger;
-import processing.core.PFont;
 import racecontrol.visualisation.gui.LPBase;
 
 /**
@@ -27,5 +27,20 @@ public class CustomPApplet extends LPBase {
 
     public void forceRedraw() {
         forceRedraw = true;
+    }
+
+    @Override
+    public void textSize(float size) {
+        Font b = (Font)LookAndFeel.fontMedium().getNative();
+        super.textSize(size);
+        Font a = (Font)LookAndFeel.fontMedium().getNative();
+        
+        //Sometimes changing the text size will change the font
+        //if this happens we reload the fonts
+        if(!a.equals(b)){
+            LookAndFeel.init(this);
+            LOG.warning("Font lost while changing text size!");
+            textSize(size);
+        }
     }
 }
