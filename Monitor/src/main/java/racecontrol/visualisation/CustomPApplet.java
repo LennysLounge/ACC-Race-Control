@@ -37,7 +37,7 @@ public class CustomPApplet extends LPBase {
         
         //Sometimes changing the text size will change the font
         //if this happens we reload the fonts
-        if(!a.equals(b)){
+        if(!a.getName().equals(b.getName())){
             LookAndFeel.init(this);
             LOG.warning("Font lost while changing text size!");
             textSize(size);
