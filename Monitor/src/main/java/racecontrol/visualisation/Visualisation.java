@@ -40,10 +40,13 @@ public class Visualisation extends CustomPApplet {
      */
     private BasePanel basePanel;
 
+    private Hotkeys hotkey;
+
     /**
      * Creates a new instance of this object.
      */
     public Visualisation() {
+        this.hotkey = new Hotkeys();
     }
 
     @Override
@@ -64,6 +67,8 @@ public class Visualisation extends CustomPApplet {
 
         //create the connection client.
         this.client = new AccBroadcastingClient();
+
+        hotkey.setClient(client);
 
         //init components.
         basePanel = new BasePanel(client);
@@ -87,6 +92,7 @@ public class Visualisation extends CustomPApplet {
         if (key == ESC) {
             key = 0;
         }
+        hotkey.handleHotkeys(event);
         super.keyPressed(event);
     }
 
@@ -114,6 +120,5 @@ public class Visualisation extends CustomPApplet {
         } catch (IOException ex) {
             return null;
         }
-
     }
 }

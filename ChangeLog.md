@@ -3,6 +3,14 @@
 * Add a broadcasting panel for easier control of the game for live broadcasts.
 * You can now start an instant replay for an incident either 20s, 10s, or 5s before the contact happened by clicking on the corresponding button in the incident panel.
 * You can now change the focused car by clicking on the car number in the incident panel.
+* Add Hot-key to change the camera and hud similar to the ingame Hot-keys.
+  * `1` select Cockpit camera
+  * `2` select Bonnet camera
+  * `3` select Chase camera
+  * `F1` cycle car cameras
+  * `F2` cycle hud
+  * `F3` cycle TV cameras
+  * `F6` cycle onboard cameras
 * Code refactoring.
 
 Bug fixes:
