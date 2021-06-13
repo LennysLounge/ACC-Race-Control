@@ -5,7 +5,6 @@
  */
 package racecontrol.extensions.incidents;
 
-import racecontrol.extensions.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.data.CarInfo;
 import java.util.Arrays;
@@ -20,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class IncidentInfo {
 
-    private static Logger LOG = Logger.getLogger(IncidentInfo.class.getName());
+    private static final Logger LOG = Logger.getLogger(IncidentInfo.class.getName());
 
     /**
      * time of the earliest accident event.

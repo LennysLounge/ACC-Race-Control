@@ -332,6 +332,9 @@ public class AccBroadcastingClient {
      * @param carIndex the car index of the car to focus on.
      */
     public void sendChangeFocusRequest(int carIndex) {
+        if (!model.getCarsInfo().containsKey(carIndex)) {
+            return;
+        }
         sendRequest(AccBroadcastingProtocol.buildFocusRequest(
                 model.getConnectionID(),
                 carIndex,
@@ -374,10 +377,36 @@ public class AccBroadcastingClient {
      * @param seconds the ammont of seconds to replay back to.
      * @param duration the duration of the replay before returning to normal.
      */
-    public void sendInstantReplayRequest(float seconds, float duration) {
+    public void sendInstantReplayRequestSimple(float seconds, float duration) {
         sendRequest(AccBroadcastingProtocol.buildInstantReplayRequest(
                 model.getConnectionID(),
                 model.getSessionInfo().getSessionTime() - (seconds * 1000),
+                duration * 1000,
+                -1,
+                "",
+                ""
+        ));
+    }
+
+    /**
+     * Sends an instant replay request for the specified duration with focus on
+     * the currently focused car and the current camera set and and camera
+     *
+     * @param sessionTime the time in the session to replay back to.
+     * @param duration the duration of the replay before returning to normal.
+     * @param carIndex the car to focus on in the replay
+     * @param initialCameraSet the camera set to use.
+     * @param initialCamera the camera to use.
+     */
+    public void sendInstantReplayRequestWithCamera(float sessionTime,
+            float duration,
+            int carIndex,
+            String initialCameraSet,
+            String initialCamera) {
+        accListenerThread.setReplayCamera(carIndex, initialCameraSet, initialCamera);
+        sendRequest(AccBroadcastingProtocol.buildInstantReplayRequest(
+                model.getConnectionID(),
+                sessionTime,
                 duration * 1000,
                 -1,
                 "",
@@ -484,6 +513,27 @@ public class AccBroadcastingClient {
          * List of cars that have recentrly connected.
          */
         private final List<Integer> newConnectedCars = new ArrayList<>();
+        /**
+         * True means that the client is supposed to switch camera as soon as a
+         * replay starts.
+         */
+        private boolean switchCameraForReplay = false;
+        /**
+         * Car to focus on when starting a replay.
+         */
+        private int replayCarId;
+        /**
+         * Camera set to use when starting a replay.
+         */
+        private String replayCameraSet;
+        /**
+         * Camera to use when starting a replay.
+         */
+        private String replayCamera;
+        /**
+         * If true the cameras will be reset when a replay is finished.
+         */
+        private boolean resetCameraWhenReplayIsDone = false;
 
         public UdpListener(String name) {
             super(name);
@@ -596,6 +646,25 @@ public class AccBroadcastingClient {
                 sessionPhase = SessionPhase.getNext(sessionPhase);
                 onSessionPhaseChaged(sessionPhase, sessionInfo);
             }
+            //Set cameras when starting a replay.
+            if (sessionInfo.isReplayPlaying() && switchCameraForReplay) {
+                if (replayCarId != -1) {
+                    sendChangeFocusRequest(replayCarId);
+                }
+                if (replayCameraSet != "" && replayCamera != "") {
+                    sendSetCameraRequest(replayCameraSet, replayCamera);
+                }
+                switchCameraForReplay = false;
+                resetCameraWhenReplayIsDone = true;
+            }
+            //set cameras when a replay is done.
+            if (!sessionInfo.isReplayPlaying() && resetCameraWhenReplayIsDone) {
+                sendSetCameraRequest(
+                        model.getSessionInfo().getActiveCameraSet(),
+                        model.getSessionInfo().getActiveCamera());
+                resetCameraWhenReplayIsDone = false;
+            }
+
             EventBus.publish(new RealtimeUpdate(sessionInfo));
         }
 
@@ -753,6 +822,20 @@ public class AccBroadcastingClient {
             String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
             LOG.info("Car connected: #" + car.getCarNumber() + "\t" + name);
             EventBus.publish(new CarConnect(car));
+        }
+
+        /**
+         * Sets the camera options to use for a replay.
+         *
+         * @param carId the car to focus on.
+         * @param cameraSet the camera set to use.
+         * @param camera the camera to use.
+         */
+        public void setReplayCamera(int carId, String cameraSet, String camera) {
+            switchCameraForReplay = true;
+            replayCarId = carId;
+            replayCameraSet = cameraSet;
+            replayCamera = camera;
         }
     }
 }

@@ -74,7 +74,11 @@ public class LPTableColumn {
                 applet.text(context.object.toString(), context.width - context.height / 2, context.height / 2);
                 break;
         }
+    };
 
+    public static final LPTable.CellRenderer nullRenderer = (
+            PApplet applet,
+            RenderContext context) -> {
     };
 
     public LPTableColumn(String header) {

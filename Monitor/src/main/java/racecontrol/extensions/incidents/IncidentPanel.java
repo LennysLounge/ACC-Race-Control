@@ -5,8 +5,7 @@
  */
 package racecontrol.extensions.incidents;
 
-import racecontrol.extensions.replayoffset.ReplayOffsetExtension;
-import racecontrol.utility.TimeUtils;
+import processing.event.KeyEvent;
 import static racecontrol.visualisation.LookAndFeel.LINE_HEIGHT;
 import racecontrol.visualisation.gui.LPButton;
 import racecontrol.visualisation.gui.LPContainer;
@@ -60,6 +59,13 @@ public class IncidentPanel extends LPContainer {
         int y = (showFirstLine) ? LINE_HEIGHT : 0;
         table.setPosition(0, y);
         table.setSize(w, h - y);
+    }
+    
+    @Override
+    public void onKeyPressed(KeyEvent event) {
+        if(event.getKey() == 'k'){
+            extension.createDummyIncident();
+        }
     }
 
     public void setReplayOffsetKnown() {

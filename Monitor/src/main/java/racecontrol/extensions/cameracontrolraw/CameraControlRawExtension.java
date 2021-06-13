@@ -61,7 +61,7 @@ public class CameraControlRawExtension
 
     public void startInstantReplay(float seconds, float duration) {
         LOG.info("Starting instant replay for " + seconds + " seconds");
-        getClient().sendInstantReplayRequest(seconds, duration);
+        getClient().sendInstantReplayRequestSimple(seconds, duration);
     }
 
 }

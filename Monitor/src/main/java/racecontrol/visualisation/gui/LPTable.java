@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import processing.core.PApplet;
 import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.CENTER;
+import static racecontrol.visualisation.LookAndFeel.LINE_HEIGHT;
 
 /**
  *
@@ -87,6 +88,9 @@ public class LPTable extends LPContainer {
      */
     private BiConsumer<Integer, Integer> cellClickAction = (column, row) -> {
     };
+
+    private float mouseX;
+    private float mouseY;
 
     @Override
     public void draw() {
@@ -184,14 +188,26 @@ public class LPTable extends LPContainer {
 
                 boolean isMouseOverThisColumn = column == mouseOverColumn;
                 applet.translate(columnOffset, rowOffset);
-                columns[column].getRenderer().render(applet,
-                        new RenderContext(model.getValueAt(column, row + scrollbar.scroll),
+                CellRenderer renderer = columns[column].getRenderer();
+                Object value = model.getValueAt(column, row + scrollbar.scroll);
+                if (value == null) {
+                    renderer = LPTableColumn.nullRenderer;
+                }
+                renderer.render(applet,
+                        new RenderContext(value,
                                 isSelectedRow,
                                 isMouseOverThisRow,
                                 isMouseOverThisColumn,
                                 row % 2 == 0,
                                 columnWidths[column],
-                                rowHeight)
+                                rowHeight,
+                                getWidth() - scrollbar.width,
+                                getHeight(),
+                                columnOffset - scrollbar.width,
+                                rowOffset,
+                                mouseX - columnOffset,
+                                mouseY - rowOffset
+                        )
                 );
                 applet.translate(-columnOffset, -rowOffset);
                 columnOffset += columnWidths[column];
@@ -247,11 +263,12 @@ public class LPTable extends LPContainer {
             float xx = x - hPivot;
             //Find the column the mouse has pressed.
             int column = -1;
-            float accu = 0;
+            float columnX = hPivot;
             for (int i = 0; i < columnWidths.length; i++) {
-                accu += columnWidths[i];
-                if (xx < accu) {
+                columnX += columnWidths[i];
+                if (columnX > x) {
                     column = i;
+                    columnX -= columnWidths[i];
                     break;
                 }
             }
@@ -266,7 +283,7 @@ public class LPTable extends LPContainer {
                     scrolledRow -= 1;
                 }
                 if (scrolledRow < model.getRowCount() && scrolledRow >= 0) {
-                    //model.onClick(column, scrolledRow);
+                    model.onClick(column, scrolledRow, (int) (mouseX - columnX), (int) (mouseY - scrolledRow * LINE_HEIGHT - vPivot));
                     cellClickAction.accept(column, scrolledRow);
                 }
             }
@@ -281,6 +298,8 @@ public class LPTable extends LPContainer {
 
     @Override
     public void onMouseMove(int x, int y) {
+        this.mouseX = x;
+        this.mouseY = y;
         boolean mouseOverScrollbar = false;
         mouseOverColumn = -1;
         mouseOverRow = -1;
@@ -513,6 +532,12 @@ public class LPTable extends LPContainer {
         public final boolean isOdd;
         public final float width;
         public final float height;
+        public final float tableWidth;
+        public final float tableHeight;
+        public final float tablePosX;
+        public final float tablePosY;
+        public final float mouseX;
+        public final float mouseY;
 
         public RenderContext(Object object,
                 boolean isSelected,
@@ -520,7 +545,13 @@ public class LPTable extends LPContainer {
                 boolean isMouseOverColumn,
                 boolean isOdd,
                 float width,
-                float height) {
+                float height,
+                float tableWidth,
+                float tableHeight,
+                float tablePosX,
+                float tablePosY,
+                float mouseX,
+                float mouseY) {
             this.object = object;
             this.isSelected = isSelected;
             this.isMouseOverRow = isMouseOverRow;
@@ -528,6 +559,12 @@ public class LPTable extends LPContainer {
             this.isOdd = isOdd;
             this.width = width;
             this.height = height;
+            this.tableWidth = tableWidth;
+            this.tableHeight = tableHeight;
+            this.tablePosX = tablePosX;
+            this.tablePosY = tablePosY;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
         }
     }
 }

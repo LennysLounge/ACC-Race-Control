@@ -87,7 +87,7 @@ public class Visualisation extends CustomPApplet {
         if (key == ESC) {
             key = 0;
         }
-        super.keyPressed();
+        super.keyPressed(event);
     }
 
     @Override

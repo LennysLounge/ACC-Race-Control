@@ -308,6 +308,6 @@ public class ReplayOffsetExtension
 
         long now = System.currentTimeMillis();
         int secondsBack = ((int) (now - timestamp)) / 1000;
-        getClient().sendInstantReplayRequest(secondsBack, 1);
+        getClient().sendInstantReplayRequestSimple(secondsBack, 1);
     }
 }

@@ -49,7 +49,7 @@ public abstract class TableModel {
      * @param column the column that has been clicekd
      * @param row the row that has been clicked.
      */
-    public void onClick(int column, int row) {
+    public void onClick(int column, int row, int mouseX, int mouseY) {
     }
 
     /**
