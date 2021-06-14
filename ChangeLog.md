@@ -16,6 +16,7 @@
 Bug fixes:
 * Pressing Escape will no longer exit the application.
 * Put meassures in place to prevent a bug where the font changes when it should not.
+* Fix an error where the selection in a text box was shifted from where it should be.
 
 
 
