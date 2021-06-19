@@ -55,9 +55,15 @@ public class CarInfo {
     }
 
     public DriverInfo getDriver() {
-        if (drivers.size() > currentDriverIndex) {
+        //read driver from the realtime info
+        if (realtime != null
+                && drivers.size() > realtime.getDriverIndex()) {
+            return drivers.get(realtime.getDriverIndex());
+        } //if realtime is not available we use the current Driver Index.
+        else if (drivers.size() > currentDriverIndex) {
             return drivers.get(currentDriverIndex);
-        } else {
+        } //else we return an empty driver.
+        else {
             return new DriverInfo();
         }
     }
