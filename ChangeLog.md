@@ -20,6 +20,7 @@ Bug fixes:
 * Put meassures in place to prevent a bug where the font changes when it should not.
 * Fix an error where the selection in a text box was shifted from where it should be.
 * In multi driver events the live timing will now display the correct driver currently driving.
+* Remove the start exe because it was causing problems with windows defender. Use the `Start.bat` instead.
 
 
 
