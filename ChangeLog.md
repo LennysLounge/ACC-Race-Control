@@ -11,6 +11,8 @@
   * `F2` cycle hud
   * `F3` cycle TV cameras
   * `F6` cycle onboard cameras
+  * `Shift + Left` or `Shift + Right` set focus to car infront/behind based on track position
+  * `Shift + Up` or `Shift + Down` set focus to car infront/behind based on race position
 * Code refactoring.
 
 Bug fixes:
