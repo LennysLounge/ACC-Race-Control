@@ -39,7 +39,7 @@ run{
 
 distributions{
     main{
-        distributionBaseName = distributionName + "_SNAPSHOT"
+        distributionBaseName = distributionName
         contents {
             into("/Google Sheets API Key"){
                 from "credentials"
