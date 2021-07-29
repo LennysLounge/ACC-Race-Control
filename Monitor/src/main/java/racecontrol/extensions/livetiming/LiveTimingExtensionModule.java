@@ -7,7 +7,7 @@ package racecontrol.extensions.livetiming;
 
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.extension.AccClientExtension;
-import racecontrol.extensions.GeneralExtentionConfigPanel;
+import racecontrol.visualisation.components.GeneralExtentionConfigPanel;
 import racecontrol.visualisation.gui.LPContainer;
 import racecontrol.client.extension.AccBroadcastingClientExtensionModule;
 

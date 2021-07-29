@@ -62,6 +62,7 @@ public class GoogleSheetsAPIConfigurationPanel
         setName("Google API");
 
         headingLabel.setPosition(20, 0);
+        headingLabel.setSize(250, LINE_HEIGHT);
         addComponent(headingLabel);
 
         enabledCheckBox.setPosition(20, LINE_HEIGHT + (LINE_HEIGHT - TEXT_SIZE) / 2f);
@@ -71,11 +72,13 @@ public class GoogleSheetsAPIConfigurationPanel
         addComponent(enabledLabel);
 
         spreadSheetLinkLabel.setPosition(20, LINE_HEIGHT * 2);
+        spreadSheetLinkLabel.setSize(200, LINE_HEIGHT);
         addComponent(spreadSheetLinkLabel);
         spreadSheetLinkTextField.setPosition(20, LINE_HEIGHT * 3);
         addComponent(spreadSheetLinkTextField);
 
         credentialsFileLabel.setPosition(20, LINE_HEIGHT * 4);
+        credentialsFileLabel.setSize(150, LINE_HEIGHT);
         addComponent(credentialsFileLabel);
         credentialsFileTextField.setPosition(20, LINE_HEIGHT * 5);
         credentialsFileTextField.setSize(200, LINE_HEIGHT);

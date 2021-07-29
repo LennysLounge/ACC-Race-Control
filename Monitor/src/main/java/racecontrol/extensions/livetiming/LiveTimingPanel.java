@@ -44,7 +44,6 @@ public class LiveTimingPanel extends LPContainer {
         setName("LIVE TIMING");
 
         table.setTableModel(extension.getTableModel());
-        table.setOverdrawForLastLine(true);
         table.setCellClickAction((c, r) -> onCellClickAction(c, r));
         addComponent(table);
     }

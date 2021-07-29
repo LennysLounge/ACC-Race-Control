@@ -19,7 +19,6 @@ import static racecontrol.persistance.PersistantConfig.setConfig;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
-import racecontrol.extensions.GeneralExtentionConfigPanel;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.events.ConnectionClosed;
 import racecontrol.visualisation.LookAndFeel;

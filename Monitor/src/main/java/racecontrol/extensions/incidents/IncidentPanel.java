@@ -38,7 +38,6 @@ public class IncidentPanel extends LPContainer {
         this.extension = extension;
         setName("INCIDENTS");
 
-        table.setOverdrawForLastLine(true);
         table.setTableModel(extension.getTableModel());
         addComponent(table);
         replayOffsetLabel.setPosition(20, 0);

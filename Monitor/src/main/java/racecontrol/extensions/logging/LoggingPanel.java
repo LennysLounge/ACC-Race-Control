@@ -25,7 +25,6 @@ public class LoggingPanel extends LPContainer {
         setName("LOGGING");
 
         table.setTableModel(extension.getTableModel());
-        table.setOverdrawForLastLine(true);
         addComponent(table);
     }
 

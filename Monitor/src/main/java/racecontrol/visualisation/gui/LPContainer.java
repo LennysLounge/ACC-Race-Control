@@ -39,7 +39,9 @@ public class LPContainer
 
         for (LPComponent c : components) {
             applet.translate(c.getPosX(), c.getPosY());
+            applet.clip(0, 0, c.getWidth(), c.getHeight());
             c.drawInternal();
+            applet.noClip();
             applet.translate(-c.getPosX(), -c.getPosY());
         }
     }

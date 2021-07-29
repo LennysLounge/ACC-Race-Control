@@ -128,7 +128,7 @@ public class BroadcastingPanel
 
     @Override
     public void onResize(int w, int h) {
-        int tableHeight = (int) Math.max(2, Math.floor(h / LINE_HEIGHT) - 7);
+        float tableHeight = Math.max(2f, h * 1f / LINE_HEIGHT - 7);
         liveTimingPanel.setPosition(0, 0);
         liveTimingPanel.setSize(w, tableHeight * LINE_HEIGHT);
 
@@ -172,7 +172,7 @@ public class BroadcastingPanel
 
     }
 
-    private void positionInstantReplayElements(int X, int y) {
+    private void positionInstantReplayElements(int X, float y) {
         int x = X;
         instantReplay60Button.setPosition(x, y * LINE_HEIGHT);
         x += instantReplay60Button.getWidth() + 4;

@@ -78,11 +78,6 @@ public class LPTable extends LPContainer {
      */
     private boolean clickableColumnHeaders = false;
     /**
-     * Indicates that the last line will be drawn over the edge of this
-     * component.
-     */
-    private boolean overdrawForLastLine = false;
-    /**
      * Action to call when a cell has been clicked. Parameters are the column
      * and the row that has been clicked.
      */
@@ -151,16 +146,14 @@ public class LPTable extends LPContainer {
         }
 
         //Draw model
-        int rowLimit = Math.min(model.getRowCount(), visibleRows);
-        if (overdrawForLastLine) {
-            int v = (int) Math.ceil(getHeight() / LookAndFeel.LINE_HEIGHT);
-            if (drawHeader) {
-                v -= 1;
-            }
-            //we want to draw an extra line if the height of the table is not
-            //devisible by the line height. To do this we round up.
-            rowLimit = Math.min(model.getRowCount() - scrollbar.scroll, v);
+        int v = (int) Math.ceil(getHeight() / LookAndFeel.LINE_HEIGHT);
+        if (drawHeader) {
+            v -= 1;
         }
+        //we want to draw an extra line if the height of the table is not
+        //devisible by the line height. To do this we round up.
+        int rowLimit = Math.min(model.getRowCount() - scrollbar.scroll, v);
+        
         for (int row = 0; row < rowLimit; row++) {
             float columnOffset = scrollbar.width;
             float rowOffset = row * rowHeight;
@@ -366,10 +359,6 @@ public class LPTable extends LPContainer {
 
     public void setClickableHeader(boolean state) {
         this.clickableColumnHeaders = state;
-    }
-
-    public void setOverdrawForLastLine(boolean state) {
-        this.overdrawForLastLine = state;
     }
 
     public void setCellClickAction(BiConsumer<Integer, Integer> action) {

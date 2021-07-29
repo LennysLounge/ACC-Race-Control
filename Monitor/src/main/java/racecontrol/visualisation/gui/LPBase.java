@@ -37,7 +37,9 @@ public class LPBase extends PApplet {
         }
 
         translate(base.getPosX(), base.getPosY());
+        clip(0, 0, base.getWidth(), base.getHeight());
         base.drawInternal();
+        noClip();
         translate(-base.getPosX(), -base.getPosY());
 
     }
