@@ -1,3 +1,8 @@
+# v1.2.1
+
+Bug fixes:
+* Prevent an error where clicking in certain spots would freeze Race Control.
+
 # v1.2.0
 
 * Add a broadcasting panel for easier control of the game for live broadcasts.
