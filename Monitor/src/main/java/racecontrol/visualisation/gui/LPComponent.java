@@ -309,8 +309,8 @@ public class LPComponent {
      */
     protected LPComponent onMousePressedInternal(int mouseX, int mouseY, int mouseButton) {
         LPComponent clickedComponent = null;
-        if (mouseX > posX && mouseX < posX + width
-                && mouseY > posY && mouseY < posY + height) {
+        if (mouseX >= posX && mouseX < posX + width
+                && mouseY >= posY && mouseY < posY + height) {
             clickedComponent = this;
 
             //run mouse pressed event for this component.

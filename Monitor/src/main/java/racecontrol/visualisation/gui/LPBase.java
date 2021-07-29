@@ -56,9 +56,9 @@ public class LPBase extends PApplet {
         if (LPContainer.getFocused() != null) {
             LPContainer.getFocused().invalidate();
         }
-        LPComponent.setFocused(clickedComponent);
         mousePressedTarget = clickedComponent;
         if (clickedComponent != null) {
+            LPComponent.setFocused(clickedComponent);
             clickedComponent.invalidate();
         }
     }
@@ -89,7 +89,7 @@ public class LPBase extends PApplet {
     public void keyPressed(KeyEvent event) {
         base.onKeyPressedInternal(event);
     }
-    
+
     @Override
     public void keyReleased(KeyEvent event) {
         base.onKeyReleasedInternal(event);

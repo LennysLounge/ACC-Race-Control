@@ -47,8 +47,8 @@ public class LPContainer
     @Override
     public LPComponent onMousePressedInternal(int mouseX, int mouseY, int mouseButton) {
         LPComponent clickedComponent = null;
-        if (mouseX > getPosX() && mouseX < getPosX() + getWidth()
-                && mouseY > getPosY() && mouseY < getPosY() + getHeight()) {
+        if (mouseX >= getPosX() && mouseX < getPosX() + getWidth()
+                && mouseY >= getPosY() && mouseY < getPosY() + getHeight()) {
             clickedComponent = this;
 
             //find if child components where clicked
