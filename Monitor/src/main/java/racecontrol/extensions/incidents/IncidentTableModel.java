@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CLOSE;
+import racecontrol.extensions.incidents.IncidentEntry.Divider;
 import static racecontrol.visualisation.LookAndFeel.COLOR_DARK_RED;
 import static racecontrol.visualisation.LookAndFeel.COLOR_GRAY;
 import static racecontrol.visualisation.LookAndFeel.COLOR_PRACTICE;
@@ -160,6 +161,10 @@ public class IncidentTableModel extends TableModel {
             }
         }
         if (entry == null) {
+            return;
+        }
+
+        if (entry.getDividerType() != Divider.NONE) {
             return;
         }
 
