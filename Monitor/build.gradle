@@ -33,7 +33,7 @@ dependencies {
 
 run{
     dependsOn installDist
-    workingDir new File(new File(buildDir, 'install'),distributionName + "_SNAPSHOT")    
+    workingDir new File(new File(buildDir, 'install'),distributionName)    
     jvmArgs("-splash:data/loading.png")
 }
 
