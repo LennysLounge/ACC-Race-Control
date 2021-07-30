@@ -42,14 +42,14 @@ import static racecontrol.persistance.PersistantConfig.EXTENSION_BROADCSATING_EN
  *
  * @author Leonard
  */
-public class ConfigPanel
+public class SettingsPanel
         extends LPContainer
         implements EventListener {
 
     /**
      * This classes logger.
      */
-    private static final Logger LOG = Logger.getLogger(ConfigPanel.class.getName());
+    private static final Logger LOG = Logger.getLogger(SettingsPanel.class.getName());
     /**
      * Client for game connection.
      */
@@ -71,7 +71,7 @@ public class ConfigPanel
 
     private final LPLabel versionLabel = new LPLabel("Version: " + Version.VERSION);
 
-    public ConfigPanel(AccBroadcastingClient client) {
+    public SettingsPanel(AccBroadcastingClient client) {
         setName("CONFIGURATION");
         this.client = client;
 
@@ -104,6 +104,7 @@ public class ConfigPanel
     }
 
     private void connectButtonPressed() {
+        LOG.info("Connect button pressed");
         InetAddress hostAddress;
         try {
             hostAddress = InetAddress.getByName(ipTextField.getValue());

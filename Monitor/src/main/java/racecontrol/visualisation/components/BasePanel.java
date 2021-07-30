@@ -24,23 +24,30 @@ public class BasePanel
         implements EventListener {
 
     private final HeaderPanel header;
-    private final LPTabPanel body;
-    private final ConfigPanel configPanel;
+    private final LPTabPanel tabs;
+    private final SettingsPanel settingsPanel;
 
     private final AccBroadcastingClient client;
+    
+    private boolean showSettings = true;
 
     public BasePanel(AccBroadcastingClient client) {
         this.client = client;
         EventBus.register(this);
-        header = new HeaderPanel(client);
+        header = new HeaderPanel(client, this);
         addComponent(header);
 
-        body = new LPTabPanel();
-        addComponent(body);
+        tabs = new LPTabPanel();
+        addComponent(tabs);
 
-        configPanel = new ConfigPanel(client);
-        body.addTab(configPanel);
-        body.setTabIndex(0);
+        settingsPanel = new SettingsPanel(client);
+        addComponent(settingsPanel);
+        updateComponents();
+    }
+    
+    public void updateComponents(){
+        tabs.setVisible(!showSettings);
+        settingsPanel.setVisible(showSettings);
     }
 
     public void updateHeader() {
@@ -53,8 +60,11 @@ public class BasePanel
         header.setSize(w, headerSize);
         header.setPosition(0, 0);
 
-        body.setSize(w, h - headerSize);
-        body.setPosition(0, headerSize);
+        tabs.setSize(w, h - headerSize);
+        tabs.setPosition(0, headerSize);
+        
+        settingsPanel.setSize(w, h - headerSize);
+        settingsPanel.setPosition(0, headerSize);
         invalidate();
     }
 
@@ -62,16 +72,23 @@ public class BasePanel
     public void onEvent(Event e) {
         if (e instanceof ConnectionOpened) {
             client.getExtensionPanels().stream()
-                    .forEach(panel -> body.addTab(panel));
+                    .forEach(panel -> tabs.addTab(panel));
 
-            body.setTabIndex(1);
+            tabs.setTabIndex(1);
+            showSettings = false;
+            updateComponents();
             invalidate();
         } else if (e instanceof ConnectionClosed) {
-            body.removeAllTabs();
-            body.addTab(configPanel);
-            body.setTabIndex(0);
+            tabs.removeAllTabs();
+            showSettings = true;
+            updateComponents();
             invalidate();
         }
+    }
+    
+    public void toggleSettings(){
+        showSettings = !showSettings;
+        updateComponents();
     }
 
 }

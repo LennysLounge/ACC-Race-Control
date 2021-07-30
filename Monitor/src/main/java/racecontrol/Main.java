@@ -36,10 +36,6 @@ public class Main {
      * This classes logger.
      */
     private static Logger LOG = Logger.getLogger(Main.class.getName());
-    /**
-     * Connection client.
-     */
-    private static AccBroadcastingClient client;
 
     public static void main(String[] args) throws InterruptedException {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());

@@ -33,6 +33,8 @@ public class LPButton
      * Indicates that this button is clicked or not.
      */
     private boolean clicked = false;
+    
+    private int backgroundColor = COLOR_GRAY;
 
     public LPButton(String text) {
         this.text = text;
@@ -52,7 +54,7 @@ public class LPButton
             if (isMouseOver()) {
                 applet.fill(COLOR_RED);
             } else {
-                applet.fill(COLOR_GRAY);
+                applet.fill(backgroundColor);
             }
         } else {
             applet.fill(COLOR_MEDIUM_DARK_GRAY);
@@ -106,6 +108,11 @@ public class LPButton
         }
         invalidate();
         applet.cursor(ARROW);
+    }
+    
+    public void setBackgroundColor(int color){
+        backgroundColor = color;
+        invalidate();
     }
 
 }

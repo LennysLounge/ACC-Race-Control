@@ -17,43 +17,74 @@ import static racecontrol.visualisation.LookAndFeel.LINE_HEIGHT;
 import static racecontrol.visualisation.LookAndFeel.TEXT_SIZE;
 import static racecontrol.visualisation.LookAndFeel.fontMedium;
 import static racecontrol.visualisation.LookAndFeel.fontRegular;
-import racecontrol.visualisation.gui.LPComponent;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
+import racecontrol.client.events.ConnectionClosed;
 import racecontrol.client.events.ConnectionOpened;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.visualisation.gui.LPButton;
+import racecontrol.visualisation.gui.LPContainer;
 
 /**
  *
  * @author Leonard
  */
 public class HeaderPanel
-        extends LPComponent
+        extends LPContainer
         implements EventListener {
 
     private final AccBroadcastingClient client;
 
     private ReplayOffsetExtension replayOffsetExtension;
+    /**
+     * Button for opening the settings.
+     */
+    private final LPButton settingsButton = new LPButton("Settings");
+    /**
+     * Reference to the base panel.
+     */
+    private final BasePanel basePanel;
 
-    public HeaderPanel(AccBroadcastingClient client) {
+    private int buttonColor = COLOR_DARK_DARK_GRAY;
+
+    private boolean settingsVisible = false;
+
+    public HeaderPanel(AccBroadcastingClient client, BasePanel basePanel) {
         this.client = client;
+        this.basePanel = basePanel;
         EventBus.register(this);
+
+        settingsButton.setPosition((int) (LINE_HEIGHT * 0.1f), (int) (LINE_HEIGHT * 0.05f));
+        settingsButton.setSize(TEXT_SIZE * 6, (int) (LINE_HEIGHT * 0.9f));
+        settingsButton.setVisible(false);
+        settingsButton.setAction(() -> {
+            basePanel.toggleSettings();
+            settingsVisible = !settingsVisible;
+            settingsButton.setText(settingsVisible ? "Close" : "Settings");
+        });
+        settingsButton.setBackgroundColor(buttonColor);
+        addComponent(settingsButton);
     }
 
     @Override
     public void draw() {
         if (client.isConnected()) {
-            applet.fill(COLOR_DARK_DARK_GRAY);
+            int backgroundColor = COLOR_DARK_DARK_GRAY;
             if (client.getModel().getSessionInfo().isReplayPlaying()) {
-                applet.fill(COLOR_BLUE);
+                backgroundColor = COLOR_BLUE;
             }
             if (replayOffsetExtension != null) {
                 if (replayOffsetExtension.isSearching()) {
-                    applet.fill(LookAndFeel.COLOR_GREEN);
+                    backgroundColor = LookAndFeel.COLOR_GREEN;
                 }
+            }
+            applet.fill(backgroundColor);
+            if (buttonColor != backgroundColor) {
+                buttonColor = backgroundColor;
+                settingsButton.setBackgroundColor(buttonColor);
             }
 
             applet.noStroke();
@@ -62,13 +93,11 @@ public class HeaderPanel
 
             String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
             String sessionName = sessionIdToString(client.getSessionId());
-            String conId = "CON-ID: " + client.getModel().getConnectionID();
             String packetsReceived = "Packets received: " + client.getPacketCount();
             applet.fill(255);
             applet.textAlign(LEFT, CENTER);
             applet.textFont(fontRegular());
-            applet.text(conId, 10, y + LINE_HEIGHT * 0.5f);
-            applet.text(packetsReceived, 200, y + LINE_HEIGHT * 0.5f);
+            applet.text(packetsReceived, 140, y + LINE_HEIGHT * 0.5f);
             if (client.getModel().getSessionInfo().isReplayPlaying()) {
                 if (!replayOffsetExtension.isSearching()) {
                     applet.text("Replay time remaining: " + TimeUtils.asDuration(client.getModel().getSessionInfo().getReplayRemainingTime()),
@@ -131,8 +160,12 @@ public class HeaderPanel
     @Override
     public void onEvent(Event e) {
         if (e instanceof ConnectionOpened) {
+            settingsButton.setVisible(true);
             replayOffsetExtension = client.getOrCreateExtension(ReplayOffsetExtension.class);
+        } else if (e instanceof ConnectionClosed) {
+            settingsButton.setVisible(false);
+            settingsVisible = false;
+            settingsButton.setText(settingsVisible ? "Close" : "Settings");
         }
     }
-
 }

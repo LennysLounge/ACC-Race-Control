@@ -78,8 +78,8 @@ public class LiveTimingTableModel
      * Column shows the position number.
      */
     protected final LPTableColumn positionColumn = new LPTableColumn("P")
-            .setMinWidth(LINE_HEIGHT * 1.2f)
-            .setMaxWidth(LINE_HEIGHT * 1.2f)
+            .setMinWidth((int)(LINE_HEIGHT * 1.2f))
+            .setMaxWidth((int)(LINE_HEIGHT * 1.2f))
             .setPriority(1000)
             .setCellRenderer(positionRenderer);
     
@@ -133,8 +133,8 @@ public class LiveTimingTableModel
     };
     
     protected final LPTableColumn pitColumn = new LPTableColumn("")
-            .setMaxWidth(LINE_HEIGHT * 0.4f)
-            .setMinWidth(LINE_HEIGHT * 0.4f)
+            .setMaxWidth((int)(LINE_HEIGHT * 0.4f))
+            .setMinWidth((int)(LINE_HEIGHT * 0.4f))
             .setPriority(1000)
             .setCellRenderer(pitRenderer);
     
