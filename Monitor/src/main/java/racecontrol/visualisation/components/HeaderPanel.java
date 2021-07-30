@@ -37,24 +37,25 @@ public class HeaderPanel
         implements EventListener {
 
     private final AccBroadcastingClient client;
-
+    /**
+     * Reference to the replay offset extension.
+     */
     private ReplayOffsetExtension replayOffsetExtension;
     /**
      * Button for opening the settings.
      */
     private final LPButton settingsButton = new LPButton("Settings");
     /**
-     * Reference to the base panel.
+     * Background color for the button.
      */
-    private final BasePanel basePanel;
-
     private int buttonColor = COLOR_DARK_DARK_GRAY;
-
+    /**
+     * Tracks the visibility of the setting panel in BasePanel.
+     */
     private boolean settingsVisible = false;
 
     public HeaderPanel(AccBroadcastingClient client, BasePanel basePanel) {
         this.client = client;
-        this.basePanel = basePanel;
         EventBus.register(this);
 
         settingsButton.setPosition((int) (LINE_HEIGHT * 0.1f), (int) (LINE_HEIGHT * 0.05f));
