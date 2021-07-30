@@ -35,6 +35,10 @@ public class LPContainer
 
     @Override
     public void drawInternal() {
+        if(!isVisible()){
+            return;
+        }
+        
         super.drawInternal();
 
         for (LPComponent c : components) {
@@ -48,6 +52,9 @@ public class LPContainer
 
     @Override
     public LPComponent onMousePressedInternal(int mouseX, int mouseY, int mouseButton) {
+        if(!isVisible()){
+            return null;
+        }
         LPComponent clickedComponent = null;
         if (mouseX >= getPosX() && mouseX < getPosX() + getWidth()
                 && mouseY >= getPosY() && mouseY < getPosY() + getHeight()) {
@@ -73,6 +80,9 @@ public class LPContainer
 
     @Override
     public LPComponent onMouseScrollInternal(int mouseX, int mouseY, int scrolDir) {
+        if(!isVisible()){
+            return null;
+        }
         LPComponent target = null;
         if (mouseX > getPosX() && mouseX < getPosX() + getWidth()
                 && mouseY > getPosY() && mouseY < getPosY() + getHeight()) {
@@ -97,6 +107,9 @@ public class LPContainer
 
     @Override
     public void onMouseMoveInternal(int x, int y) {
+        if(!isVisible()){
+            return;
+        }
         super.onMouseMoveInternal(x, y);
         if (isMouseOver()) {
             for (LPComponent c : components) {
@@ -107,6 +120,9 @@ public class LPContainer
 
     @Override
     public void onMouseLeaveInternal() {
+        if(!isVisible()){
+            return;
+        }
         super.onMouseLeaveInternal();
         for (LPComponent c : components) {
             c.onMouseLeaveInternal();
@@ -115,6 +131,9 @@ public class LPContainer
 
     @Override
     public void onKeyPressedInternal(KeyEvent event) {
+        if(!isVisible()){
+            return;
+        }
         super.onKeyPressedInternal(event);
         for (LPComponent c : components) {
             c.onKeyPressedInternal(event);
@@ -123,6 +142,9 @@ public class LPContainer
 
     @Override
     public void onKeyReleasedInternal(KeyEvent event) {
+        if(!isVisible()){
+            return;
+        }
         super.onKeyReleasedInternal(event);
         for (LPComponent c : components) {
             c.onKeyReleasedInternal(event);

@@ -308,6 +308,9 @@ public class LPComponent {
      * @return Returns the top most component that was pressed.
      */
     protected LPComponent onMousePressedInternal(int mouseX, int mouseY, int mouseButton) {
+        if(!isVisible()){
+            return null;
+        }
         LPComponent clickedComponent = null;
         if (mouseX >= posX && mouseX < posX + width
                 && mouseY >= posY && mouseY < posY + height) {
@@ -338,6 +341,9 @@ public class LPComponent {
      * @param mouseButton which mouse button was pressed.
      */
     public void onMouseReleasedInternal(int mouseX, int mouseY, int mouseButton) {
+        if(!isVisible()){
+            return;
+        }
         onMouseReleased(mouseX, mouseY, mouseButton);
         if (parent != null) {
             parent.onMouseReleasedInternal(mouseX, mouseY, mouseButton);
@@ -363,6 +369,9 @@ public class LPComponent {
      * @param scrolDir direction of the scroll.
      */
     public LPComponent onMouseScrollInternal(int mouseX, int mouseY, int scrolDir) {
+        if(!isVisible()){
+            return null;
+        }
         LPComponent target = null;
         if (mouseX > posX && mouseX < posX + width
                 && mouseY > posY && mouseY < posY + height) {
@@ -446,6 +455,9 @@ public class LPComponent {
      * Mouse enter event. Used internally, do not call directly.
      */
     public void onMouseEnterInternal() {
+        if(!isVisible()){
+            return;
+        }
         onMouseEnter();
     }
 
@@ -453,6 +465,9 @@ public class LPComponent {
      * Mouse leave event. Used internally, do not call directly.
      */
     public void onMouseLeaveInternal() {
+        if(!isVisible()){
+            return;
+        }
         onMouseLeave();
     }
 
@@ -463,6 +478,9 @@ public class LPComponent {
      * @param y the current y position for the mouse.
      */
     public void onMouseMoveInternal(int x, int y) {
+        if(!isVisible()){
+            return;
+        }
         if (x > posX && x < posX + width
                 && y > posY && y < posY + height) {
             if (!isMouseOntop) {
@@ -486,6 +504,9 @@ public class LPComponent {
      * @param event The key event
      */
     public void onKeyPressedInternal(KeyEvent event) {
+        if(!isVisible()){
+            return;
+        }
         onKeyPressed(event);
     }
 
@@ -503,6 +524,9 @@ public class LPComponent {
      * @param event the key event.
      */
     public void onKeyReleasedInternal(KeyEvent event) {
+        if(!isVisible()){
+            return;
+        }
         onKeyReleased(event);
     }
 
