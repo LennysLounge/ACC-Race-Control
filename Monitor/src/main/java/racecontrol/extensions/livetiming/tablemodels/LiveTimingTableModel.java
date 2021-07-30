@@ -104,8 +104,8 @@ public class LiveTimingTableModel
     };
     
     protected final LPTableColumn nameColumn = new LPTableColumn("Name")
-            .setMaxWidth(LINE_HEIGHT * 6f)
-            .setMinWidth(LINE_HEIGHT * 6f)
+            .setMaxWidth(LINE_HEIGHT * 5f)
+            .setMinWidth(LINE_HEIGHT * 5f)
             .setGrowthRate(3)
             .setPriority(1000)
             .setCellRenderer(nameRenderer);

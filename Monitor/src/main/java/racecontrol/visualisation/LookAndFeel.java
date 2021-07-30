@@ -44,8 +44,8 @@ public class LookAndFeel {
     public static final int TRANSPARENT_WHITE = 0x14ffffff;
     public static final int TRANSPARENT_RED = 0x96ff0000;
     public static final int TRANSPARENT_BLACK = 0x96000000;
-    public static final int TEXT_SIZE = 20;
-    public static final int LINE_HEIGHT = 40;
+    public static final int TEXT_SIZE = 19;
+    public static final int LINE_HEIGHT = 38;
     public static final float FONT_BASELINE_OFFSET = 0.16f;
 
     private static PFont FONT_MEDIUM;
