@@ -141,7 +141,7 @@ public class IncidentExtension
     public void onAccident(BroadcastingEvent event) {
         float sessionTime = getClient().getModel().getSessionInfo().getSessionTime();
         String logMessage = "Accident: #" + getClient().getModel().getCar(event.getCarId()).getCarNumber()
-                + "\t" + TimeUtils.asDuration(sessionTime)
+                + "\t\t" + TimeUtils.asDuration(sessionTime)
                 + "\t" + TimeUtils.asDuration(replayOffsetExtension.getReplayTimeFromConnectionTime(event.getTimeMs()));
         UILogger.log(logMessage);
         LOG.info(logMessage);

@@ -50,6 +50,7 @@ import racecontrol.client.events.EntryListUpdate;
 import racecontrol.client.events.RealtimeUpdate;
 import racecontrol.client.extension.AccBroadcastingClientExtensionModule;
 import racecontrol.client.extension.AccClientExtension;
+import racecontrol.logging.UILogger;
 import racecontrol.visualisation.gui.LPContainer;
 
 /**
@@ -542,6 +543,7 @@ public class AccBroadcastingClient {
         @Override
         public void run() {
             EventBus.publish(new ConnectionOpened());
+            UILogger.log("Connection opened");
             LOG.info("Starting Listener thread");
             try {
                 udpListener();
@@ -553,6 +555,7 @@ public class AccBroadcastingClient {
                 exitState = ExitState.EXCEPTION;
             }
             EventBus.publish(new ConnectionClosed(exitState));
+            UILogger.log("Connection closed");
             LOG.info("Listener thread done");
         }
 
@@ -810,6 +813,7 @@ public class AccBroadcastingClient {
 
             String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
             LOG.info("Car disconnected: #" + car.getCarNumber() + "\t" + name);
+            UILogger.log("Car disconnected: #" + car.getCarNumber() + "\t" + name);
             EventBus.publish(new CarDisconnect(car));
         }
 
@@ -821,6 +825,7 @@ public class AccBroadcastingClient {
 
             String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
             LOG.info("Car connected: #" + car.getCarNumber() + "\t" + name);
+            UILogger.log("Car connected: #" + car.getCarNumber() + "\t" + name);
             EventBus.publish(new CarConnect(car));
         }
 
