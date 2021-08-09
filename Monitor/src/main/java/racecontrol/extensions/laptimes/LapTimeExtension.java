@@ -8,11 +8,8 @@ package racecontrol.extensions.laptimes;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.events.RealtimeCarUpdate;
 import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 import racecontrol.client.extension.AccClientExtension;
 import racecontrol.extensions.incidents.IncidentExtension;
-import racecontrol.extensions.logging.LoggingExtension;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.LapInfo;
@@ -34,6 +31,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import racecontrol.logging.UILogger;
 
 /**
  *
@@ -74,10 +72,6 @@ public class LapTimeExtension
      * Is the logging for this extension enabled.
      */
     private final boolean isLoggingEnabled;
-    /**
-     * Reference to the logging extension.
-     */
-    private final LoggingExtension loggingExtension;
 
     public LapTimeExtension(AccBroadcastingClient client, boolean isLoggingEnabled) {
         super(client);
@@ -85,7 +79,6 @@ public class LapTimeExtension
         if (isLoggingEnabled) {
             createFolder();
         }
-        loggingExtension = client.getOrCreateExtension(LoggingExtension.class);
     }
 
     private void createFolder() {
@@ -159,7 +152,7 @@ public class LapTimeExtension
             message += "[Outlap]";
         }
 
-        loggingExtension.log(message);
+        UILogger.log(message);
         LOG.info(message);
     }
 

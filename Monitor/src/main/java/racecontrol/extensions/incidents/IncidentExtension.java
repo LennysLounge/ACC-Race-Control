@@ -12,7 +12,6 @@ import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.client.extension.AccClientExtension;
 import racecontrol.visualisation.components.GeneralExtentionConfigPanel;
-import racecontrol.extensions.logging.LoggingExtension;
 import racecontrol.client.data.AccBroadcastingData;
 import racecontrol.client.data.BroadcastingEvent;
 import racecontrol.client.data.enums.BroadcastingEventType;
@@ -28,6 +27,7 @@ import java.util.logging.Logger;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.events.RealtimeUpdate;
 import racecontrol.client.events.SessionChanged;
+import racecontrol.logging.UILogger;
 
 /**
  *
@@ -61,10 +61,6 @@ public class IncidentExtension
      */
     private boolean replayTimeKnown = false;
     /**
-     * Reference to the logging extension.
-     */
-    private final LoggingExtension loggingExtension;
-    /**
      * Reference to the replay offset extension
      */
     private final ReplayOffsetExtension replayOffsetExtension;
@@ -73,7 +69,6 @@ public class IncidentExtension
         super(client);
         this.model = new IncidentTableModel(this);
         this.panel = new IncidentPanel(this);
-        loggingExtension = client.getOrCreateExtension(LoggingExtension.class);
         replayOffsetExtension = client.getOrCreateExtension(ReplayOffsetExtension.class);
 
     }
@@ -148,7 +143,7 @@ public class IncidentExtension
         String logMessage = "Accident: #" + getClient().getModel().getCar(event.getCarId()).getCarNumber()
                 + "\t" + TimeUtils.asDuration(sessionTime)
                 + "\t" + TimeUtils.asDuration(replayOffsetExtension.getReplayTimeFromConnectionTime(event.getTimeMs()));
-        loggingExtension.log(logMessage);
+        UILogger.log(logMessage);
         LOG.info(logMessage);
 
         SessionId sessionId = getClient().getSessionId();

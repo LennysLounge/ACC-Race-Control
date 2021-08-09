@@ -10,7 +10,6 @@ import static racecontrol.persistance.PersistantConfig.EXTENSION_BROADCSATING_EN
 import static racecontrol.persistance.PersistantConfig.EXTENSION_CAMERA_CONTROL_ENABLED;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_INCIDENTS_ENABLED;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_LIVE_TIMING_ENABLED;
-import static racecontrol.persistance.PersistantConfig.EXTENSION_LOGGING_ENABLED;
 import static racecontrol.visualisation.LookAndFeel.LINE_HEIGHT;
 import static racecontrol.visualisation.LookAndFeel.TEXT_SIZE;
 import racecontrol.visualisation.gui.LPCheckBox;
@@ -31,9 +30,6 @@ public class GeneralExtentionConfigPanel
 
     private final LPCheckBox incidentLogCheckBox = new LPCheckBox();
     private final LPLabel incidentLogLabel = new LPLabel("Enable incidents screen");
-
-    private final LPCheckBox loggingCheckBox = new LPCheckBox();
-    private final LPLabel loggingLabel = new LPLabel("Enable logging screen");
     
     private final LPCheckBox cameraControlsCheckBox = new LPCheckBox();
     private final LPLabel cameraControlsLabel = new LPLabel("Enable camera controls");
@@ -74,13 +70,6 @@ public class GeneralExtentionConfigPanel
         incidentLogLabel.setPosition(60, LINE_HEIGHT * 2);
         incidentLogLabel.setSize(300, LINE_HEIGHT);
         addComponent(incidentLogLabel);
-
-        loggingCheckBox.setPosition(20, LINE_HEIGHT * 3 + (LINE_HEIGHT - TEXT_SIZE) / 2);
-        loggingCheckBox.setSelected(PersistantConfig.getConfigBoolean(EXTENSION_LOGGING_ENABLED));
-        addComponent(loggingCheckBox);
-        loggingLabel.setPosition(60, LINE_HEIGHT * 3);
-        loggingLabel.setSize(300, LINE_HEIGHT);
-        addComponent(loggingLabel);
         
         cameraControlsCheckBox.setPosition(20, LINE_HEIGHT * 4 + (LINE_HEIGHT - TEXT_SIZE) / 2);
         cameraControlsCheckBox.setSelected(PersistantConfig.getConfigBoolean(EXTENSION_CAMERA_CONTROL_ENABLED));
@@ -136,10 +125,6 @@ public class GeneralExtentionConfigPanel
 
     public boolean isIncidentLogEnabled() {
         return incidentLogCheckBox.isSelected();
-    }
-
-    public boolean isLoggingEnabled() {
-        return loggingCheckBox.isSelected();
     }
 
     public boolean isVelocityMapEnabled() {

@@ -57,7 +57,6 @@ public class PersistantConfig {
      */
     public static String EXTENSION_LIVE_TIMING_ENABLED = "extensionLiveTimingEnabled";
     public static String EXTENSION_INCIDENTS_ENABLED = "extensionIncidentEnabled";
-    public static String EXTENSION_LOGGING_ENABLED = "extensionLoggingEnabled";
     public static String EXTENSION_CAMERA_CONTROL_ENABLED = "extensionCameraControlEnabled";
     public static String EXTENSION_BROADCSATING_ENABLED = "extensionBroadcastingEnabled";
 
@@ -99,7 +98,6 @@ public class PersistantConfig {
         setConfig(EXTENSION_CAMERA_CONTROL_ENABLED, String.valueOf(false));
         setConfig(EXTENSION_INCIDENTS_ENABLED, String.valueOf(true));
         setConfig(EXTENSION_LIVE_TIMING_ENABLED, String.valueOf(true));
-        setConfig(EXTENSION_LOGGING_ENABLED, String.valueOf(true));
         setConfig(EXTENSION_BROADCSATING_ENABLED, String.valueOf(false));
     }
 

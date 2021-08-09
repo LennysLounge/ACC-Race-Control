@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.logging;
+package racecontrol.logging;
 
 import racecontrol.visualisation.LookAndFeel;
 import racecontrol.visualisation.gui.LPTableColumn;
@@ -73,6 +73,10 @@ public class LoggingTableModel extends TableModel {
 
     public void setMessages(List<LogMessage> messages) {
         this.messages = messages;
+    }
+
+    public void addMessage(LogMessage message) {
+        messages.add(message);
     }
 
 }

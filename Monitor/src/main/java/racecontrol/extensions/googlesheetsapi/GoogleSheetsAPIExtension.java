@@ -9,12 +9,9 @@ import racecontrol.Main;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.events.SessionPhaseChanged;
 import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 import racecontrol.client.extension.AccClientExtension;
 import racecontrol.extensions.incidents.IncidentInfo;
 import racecontrol.extensions.incidents.events.Accident;
-import racecontrol.extensions.logging.LoggingExtension;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.events.RealtimeUpdate;
 import racecontrol.client.data.CarInfo;
@@ -35,6 +32,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import racecontrol.logging.UILogger;
 
 /**
  *
@@ -83,17 +81,12 @@ public class GoogleSheetsAPIExtension
      * List of recently connected cars to be send to the entry list.
      */
     private final List<CarInfo> carConnections = new LinkedList<>();
-    /**
-     * Reference to the logging extension.
-     */
-    private final LoggingExtension loggingExtension;
 
     public GoogleSheetsAPIExtension(AccBroadcastingClient client,
             GoogleSheetsService service) {
         super(client);
         panel = new GoogleSheetsAPIPanel(this);
         this.sheetService = service;
-        loggingExtension = client.getOrCreateExtension(LoggingExtension.class);
     }
 
     @Override
@@ -102,7 +95,7 @@ public class GoogleSheetsAPIExtension
             currentSessionId = ((SessionChanged) e).getSessionId();
             setCurrentTargetSheet(getTargetSheet(currentSessionId));
             LOG.info("Target Sheet changed to \"" + currentSheetTarget + "\"");
-            loggingExtension.log("Spreasheet target changed to \"" + currentSheetTarget + "\"");
+            UILogger.log("Spreasheet target changed to \"" + currentSheetTarget + "\"");
 
             //start replay offset measuring
             if (!((SessionChanged) e).isInitialisation()) {

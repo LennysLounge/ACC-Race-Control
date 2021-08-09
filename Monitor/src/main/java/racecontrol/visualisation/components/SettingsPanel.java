@@ -14,7 +14,6 @@ import static racecontrol.persistance.PersistantConfig.CONNECTION_PORT;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_CAMERA_CONTROL_ENABLED;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_INCIDENTS_ENABLED;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_LIVE_TIMING_ENABLED;
-import static racecontrol.persistance.PersistantConfig.EXTENSION_LOGGING_ENABLED;
 import static racecontrol.persistance.PersistantConfig.setConfig;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
@@ -36,6 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import static processing.core.PConstants.CENTER;
+import racecontrol.logging.LoggingPanel;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_BROADCSATING_ENABLED;
 
 /**
@@ -70,6 +70,8 @@ public class SettingsPanel
     private final LPTabPanel extensionTabPanel = new LPTabPanel();
 
     private final LPLabel versionLabel = new LPLabel("Version: " + Version.VERSION);
+
+    private final LoggingPanel loggingPanel = new LoggingPanel();
 
     public SettingsPanel(AccBroadcastingClient client) {
         setName("CONFIGURATION");
@@ -163,7 +165,6 @@ public class SettingsPanel
         setConfig(EXTENSION_CAMERA_CONTROL_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isCameraControlsEnabled()));
         setConfig(EXTENSION_INCIDENTS_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isIncidentLogEnabled()));
         setConfig(EXTENSION_LIVE_TIMING_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isLiveTimingEnabled()));
-        setConfig(EXTENSION_LOGGING_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isLoggingEnabled()));
         setConfig(EXTENSION_BROADCSATING_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isBroadcastingEnabled()));
     }
 
@@ -174,7 +175,7 @@ public class SettingsPanel
         }
     }
 
-    private static void showErrorMessage(AccBroadcastingClient.ExitState exitStatus) {
+    private void showErrorMessage(AccBroadcastingClient.ExitState exitStatus) {
         if (exitStatus == AccBroadcastingClient.ExitState.PORT_UNREACHABLE) {
             JOptionPane.showMessageDialog(null,
                     "Cannot connect to game. The game needs to be on track to connect.",
@@ -243,6 +244,7 @@ public class SettingsPanel
                 .map(extensionModule -> extensionModule.getExtensionConfigurationPanel())
                 .filter(panel -> panel != null)
                 .forEach(configPanel -> extensionTabPanel.addTab(configPanel));
+        extensionTabPanel.addTab(loggingPanel);
         extensionTabPanel.setTabIndex(0);
 
         addComponent(versionLabel);
