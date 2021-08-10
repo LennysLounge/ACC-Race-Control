@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.livetiming;
+package racecontrol.extensions.broadcasting.timing;
 
 import racecontrol.client.data.CarInfo;
 

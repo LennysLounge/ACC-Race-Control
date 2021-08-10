@@ -3,11 +3,11 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.livetiming;
+package racecontrol.extensions.broadcasting.timing;
 
-import racecontrol.extensions.livetiming.tablemodels.RaceTableModel;
-import racecontrol.extensions.livetiming.tablemodels.LiveTimingTableModel;
-import racecontrol.extensions.livetiming.tablemodels.QualifyingTableModel;
+import racecontrol.extensions.broadcasting.timing.tablemodels.RaceTableModel;
+import racecontrol.extensions.broadcasting.timing.tablemodels.LiveTimingTableModel;
+import racecontrol.extensions.broadcasting.timing.tablemodels.QualifyingTableModel;
 import racecontrol.client.events.RealtimeCarUpdate;
 import racecontrol.client.events.RealtimeUpdate;
 import racecontrol.eventbus.Event;

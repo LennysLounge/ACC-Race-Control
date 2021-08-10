@@ -5,6 +5,7 @@
  */
 package racecontrol.extensions.broadcasting;
 
+import racecontrol.extensions.broadcasting.timing.LiveTimingExtension;
 import java.util.logging.Logger;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.SessionInfo;
@@ -13,7 +14,6 @@ import racecontrol.client.events.RealtimeUpdate;
 import racecontrol.client.events.TrackData;
 import racecontrol.client.extension.AccClientExtension;
 import racecontrol.eventbus.Event;
-import racecontrol.extensions.livetiming.LiveTimingExtension;
 import racecontrol.visualisation.gui.LPContainer;
 
 /**

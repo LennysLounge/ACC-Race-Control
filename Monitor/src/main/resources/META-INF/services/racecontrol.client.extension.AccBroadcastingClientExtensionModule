@@ -1,9 +1,10 @@
-racecontrol.extensions.livetiming.LiveTimingExtensionModule
+racecontrol.extensions.broadcasting.timing.LiveTimingExtensionModule
+racecontrol.extensions.broadcasting.BroadcastingModule
 racecontrol.extensions.incidents.IncidentExtensionModule
 racecontrol.extensions.laptimes.LaptimeExtensionModule
 racecontrol.extensions.results.ResultsExtensionModule
 racecontrol.extensions.googlesheetsapi.GoogleSheetsAPIExtensionModule
 racecontrol.extensions.cameracontrolraw.CameraControlRawModule
 racecontrol.extensions.replayoffset.ReplayOffsetExtensionModule
-racecontrol.extensions.broadcasting.BroadcastingModule
+
 

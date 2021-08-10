@@ -3,9 +3,9 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.livetiming;
+package racecontrol.extensions.broadcasting.timing;
 
-import racecontrol.extensions.livetiming.tablemodels.LiveTimingTableModel;
+import racecontrol.extensions.broadcasting.timing.tablemodels.LiveTimingTableModel;
 import racecontrol.client.data.CarInfo;
 import racecontrol.visualisation.gui.LPContainer;
 import racecontrol.visualisation.gui.LPTable;

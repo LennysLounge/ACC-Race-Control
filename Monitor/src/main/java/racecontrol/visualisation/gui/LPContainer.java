@@ -26,6 +26,10 @@ public class LPContainer
     public void removeComponent(LPComponent c) {
         components.remove(c);
     }
+    
+    public List<LPComponent> getComponents(){
+        return components;
+    }
 
     @Override
     public void invalidate() {

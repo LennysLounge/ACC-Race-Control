@@ -54,6 +54,8 @@ public class BroadcastingPanel
     private final LPLabel instantReplayDurationLabel = new LPLabel("seconds.");
     private final LPButton instantReplayCustomButton = new LPButton("Go");
 
+    private final LPCollapsablePanel collapsablePanel = new LPCollapsablePanel("Broadcasting control");
+
     public BroadcastingPanel(BroadcastingExtension extension,
             LPContainer liveTimingPanel) {
         this.extension = extension;
@@ -63,12 +65,17 @@ public class BroadcastingPanel
 
         addComponent(liveTimingPanel);
 
+        collapsablePanel.setAction(() -> {
+            onResize((int) getWidth(), (int) getHeight());
+        });
+        addComponent(collapsablePanel);
+
         hudLabel.setSize(200, LINE_HEIGHT);
-        addComponent(hudLabel);
+        collapsablePanel.addComponent(hudLabel);
         cameraLable.setSize(100, LINE_HEIGHT);
-        addComponent(cameraLable);
+        collapsablePanel.addComponent(cameraLable);
         cameraExtraLable.setSize(200, LINE_HEIGHT);
-        addComponent(cameraExtraLable);
+        collapsablePanel.addComponent(cameraExtraLable);
         //addComponent(replayLabel);
 
         addHUDButton("Basic", "Basic HUD");
@@ -89,30 +96,31 @@ public class BroadcastingPanel
         addCarCameraButton("Passenger", "Onboard", "Onboard2");
         //addCarCameraButton("Chase", "Drivable", "Chase");
         //addCarCameraButton("Far Chase", "Drivable", "FarChase");
+        
 
         instantReplayLabel.setSize(200, LINE_HEIGHT);
-        addComponent(instantReplayLabel);
+        collapsablePanel.addComponent(instantReplayLabel);
 
         instantReplay60Button.setSize(60, LINE_HEIGHT);
         instantReplay60Button.setAction(() -> extension.startInstantReplay(60, 60));
-        addComponent(instantReplay60Button);
+        collapsablePanel.addComponent(instantReplay60Button);
         instantReplay30Button.setSize(60, LINE_HEIGHT);
         instantReplay30Button.setAction(() -> extension.startInstantReplay(30, 30));
-        addComponent(instantReplay30Button);
+        collapsablePanel.addComponent(instantReplay30Button);
         instantReplay15Button.setSize(60, LINE_HEIGHT);
         instantReplay15Button.setAction(() -> extension.startInstantReplay(15, 15));
-        addComponent(instantReplay15Button);
+        collapsablePanel.addComponent(instantReplay15Button);
 
         instantReplayBackTextField.setSize(60, LINE_HEIGHT);
         instantReplayBackTextField.setValue("60");
-        addComponent(instantReplayBackTextField);
+        collapsablePanel.addComponent(instantReplayBackTextField);
         instantReplayCustomLabel.setSize(160, LINE_HEIGHT);
-        addComponent(instantReplayCustomLabel);
+        collapsablePanel.addComponent(instantReplayCustomLabel);
         instantReplayDurationTextField.setSize(60, LINE_HEIGHT);
         instantReplayDurationTextField.setValue("15");
-        addComponent(instantReplayDurationTextField);
+        collapsablePanel.addComponent(instantReplayDurationTextField);
         instantReplayDurationLabel.setSize(90, LINE_HEIGHT);
-        addComponent(instantReplayDurationLabel);
+        collapsablePanel.addComponent(instantReplayDurationLabel);
         instantReplayCustomButton.setSize(78, LINE_HEIGHT);
         instantReplayCustomButton.setAction(() -> {
             try {
@@ -123,56 +131,65 @@ public class BroadcastingPanel
 
             }
         });
-        addComponent(instantReplayCustomButton);
+        collapsablePanel.addComponent(instantReplayCustomButton);
+         
     }
 
     @Override
     public void onResize(int w, int h) {
-        float tableHeight = Math.max(2f, h * 1f / LINE_HEIGHT - 7);
-        liveTimingPanel.setPosition(0, 0);
-        liveTimingPanel.setSize(w, tableHeight * LINE_HEIGHT);
+        int broadcastingHight = LINE_HEIGHT;
+        if (!collapsablePanel.isCollapsed()) {
+            broadcastingHight = (int) (LINE_HEIGHT * 7.5f);
+        }
 
-        hudLabel.setPosition(20, LINE_HEIGHT * tableHeight);
-        cameraLable.setPosition(210, LINE_HEIGHT * tableHeight);
-        cameraExtraLable.setPosition(210 + cameraLable.getWidth(), LINE_HEIGHT * tableHeight);
+        int tableHeight = Math.max(LINE_HEIGHT * 2, h - broadcastingHight);
+        liveTimingPanel.setPosition(0, 0);
+        liveTimingPanel.setSize(w, tableHeight);
+
+        collapsablePanel.setSize(w, h - tableHeight);
+        collapsablePanel.setPosition(0, tableHeight);
+
+        hudLabel.setPosition(20, LINE_HEIGHT);
+        cameraLable.setPosition(210, LINE_HEIGHT);
+        cameraExtraLable.setPosition(210 + cameraLable.getWidth(), LINE_HEIGHT);
 
         int x = 20;
-        int y = 1;
+        int y = 2;
         for (LPButton button : hudButtons.values()) {
-            button.setPosition(x, (tableHeight + y) * LINE_HEIGHT);
+            button.setPosition(x, LINE_HEIGHT * y);
             y++;
         }
 
         x = 210;
-        y = 1;
+        y = 2;
         for (LPButton button : tvCameraButtons) {
-            button.setPosition(x, (tableHeight + y) * LINE_HEIGHT);
+            button.setPosition(x, LINE_HEIGHT * y);
             y++;
         }
 
         x = 364;
-        y = 1;
+        y = 2;
         for (LPButton button : carCameraButtons) {
-            button.setPosition(x, (tableHeight + y) * LINE_HEIGHT);
+            button.setPosition(x, LINE_HEIGHT * y);
             y++;
-            if (y > 3) {
-                y = 1;
+            if (y > 4) {
+                y = 2;
                 x += button.getWidth() + 4;
             }
         }
+        
 
         if ((x + 516) > w) {
-            positionInstantReplayElements(210, tableHeight + 4);
+            positionInstantReplayElements(210, 5);
             instantReplayLabel.setVisible(false);
         } else {
             instantReplayLabel.setVisible(true);
-            instantReplayLabel.setPosition(x + 36, tableHeight * LINE_HEIGHT);
-            positionInstantReplayElements(x + 36, tableHeight + 1);
+            instantReplayLabel.setPosition(x + 36, LINE_HEIGHT);
+            positionInstantReplayElements(x + 36, 2);
         }
-
     }
 
-    private void positionInstantReplayElements(int X, float y) {
+    private int positionInstantReplayElements(int X, float y) {
         int x = X;
         instantReplay60Button.setPosition(x, y * LINE_HEIGHT);
         x += instantReplay60Button.getWidth() + 4;
@@ -190,6 +207,8 @@ public class BroadcastingPanel
         instantReplayDurationLabel.setPosition(x, (y + 1) * LINE_HEIGHT);
         x += instantReplayDurationLabel.getWidth();
         instantReplayCustomButton.setPosition(x, (y + 1) * LINE_HEIGHT);
+        x += instantReplayCustomButton.getWidth();
+        return x;
     }
 
     public void setCameraSets(Map<String, List<String>> sets) {
@@ -213,7 +232,7 @@ public class BroadcastingPanel
                 LPButton b = new LPButtonCustom(name);
                 b.setAction(() -> extension.setCameraSet(camSet, sets.get(camSet).get(0)));
                 b.setSize(150, LINE_HEIGHT);
-                addComponent(b);
+                collapsablePanel.addComponent(b);
                 for (String camera : sets.get(camSet)) {
                     cameraButtonsRef.get(camSet).put(camera, b);
                 }
@@ -227,14 +246,14 @@ public class BroadcastingPanel
         button.setAction(() -> extension.setHudPage(page));
         button.setSize(150, LINE_HEIGHT);
         hudButtons.put(page, button);
-        addComponent(button);
+        collapsablePanel.addComponent(button);
     }
 
     private void addCarCameraButton(String name, String camSet, String camera) {
         LPButton b = new LPButtonCustom(name);
         b.setAction(() -> extension.setCameraSet(camSet, camera));
         b.setSize(150, LINE_HEIGHT);
-        addComponent(b);
+        collapsablePanel.addComponent(b);
         if (!cameraButtonsRef.containsKey(camSet)) {
             cameraButtonsRef.put(camSet, new HashMap<>());
         }

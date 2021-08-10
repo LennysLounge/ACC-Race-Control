@@ -3,11 +3,10 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.livetiming;
+package racecontrol.extensions.broadcasting.timing;
 
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.extension.AccClientExtension;
-import racecontrol.visualisation.components.GeneralExtentionConfigPanel;
 import racecontrol.visualisation.gui.LPContainer;
 import racecontrol.client.extension.AccBroadcastingClientExtensionModule;
 
@@ -20,7 +19,7 @@ public class LiveTimingExtensionModule
 
     @Override
     public boolean isEnabled() {
-        return GeneralExtentionConfigPanel.getInstance().isLiveTimingEnabled();
+        return false;
     }
 
     @Override

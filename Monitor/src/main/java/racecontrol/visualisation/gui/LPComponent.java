@@ -180,6 +180,13 @@ public class LPComponent {
     public void invalidate() {
         isInvalid = true;
     }
+    
+    /**
+     * Invalidates the parent of this component.
+     */
+    public void invalidateParent(){
+        parent.invalidate();
+    }
 
     /**
      * Returns if the component is invalid.
