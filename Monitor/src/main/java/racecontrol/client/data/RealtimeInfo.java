@@ -17,9 +17,9 @@ public class RealtimeInfo {
     int driverIndex;
     byte driverCount;
     byte gear;
-    float posX;
-    float posY;
     float yaw;
+    float pitch;
+    float roll;
     CarLocation location = CarLocation.NONE;
     int kmh;
     int position;
@@ -35,16 +35,16 @@ public class RealtimeInfo {
     public RealtimeInfo() {
     }
 
-    public RealtimeInfo(int carId, int driverIndex, byte driverCount, byte gear, float posX, float posY, float yaw,
+    public RealtimeInfo(int carId, int driverIndex, byte driverCount, byte gear, float yaw, float pitch, float roll,
             CarLocation location, int kmh, int position, int cupPosition, int trackPosition, float splinePosition, int laps,
             int delta, LapInfo bestSessionLap, LapInfo lasLap, LapInfo currentLap) {
         this.carId = carId;
         this.driverIndex = driverIndex;
         this.driverCount = driverCount;
         this.gear = gear;
-        this.posX = posX;
-        this.posY = posY;
         this.yaw = yaw;
+        this.pitch = pitch;
+        this.roll = roll;
         this.location = location;
         this.kmh = kmh;
         this.position = position;
@@ -74,16 +74,16 @@ public class RealtimeInfo {
         return gear;
     }
 
-    public float getPosX() {
-        return posX;
-    }
-
-    public float getPosY() {
-        return posY;
-    }
-
     public float getYaw() {
         return yaw;
+    }
+
+    public float getPitch() {
+        return pitch;
+    }
+
+    public float getRoll() {
+        return roll;
     }
 
     public CarLocation getLocation() {

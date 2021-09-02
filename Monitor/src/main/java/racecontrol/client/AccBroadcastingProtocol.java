@@ -155,9 +155,9 @@ public class AccBroadcastingProtocol {
         int driverIndex = readUInt16(in);
         byte driverCount = readByte(in);
         byte gear = readByte(in);
-        float posX = readFloat(in);
-        float posY = readFloat(in);
-        float yaw = readFloat(in);
+        float yaw = readFloat(in);  // falsely documented as posX
+        float pitch = readFloat(in);// falsely documented as posY
+        float roll = readFloat(in);  // falsely documented as yaw
         CarLocation location = CarLocation.fromId(readByte(in));
         int kmh = readUInt16(in);
         int position = readUInt16(in);
@@ -169,8 +169,8 @@ public class AccBroadcastingProtocol {
         LapInfo bestSessionLap = readLap(in);
         LapInfo lasLap = readLap(in);
         LapInfo currentLap = readLap(in);
-
-        RealtimeInfo info = new RealtimeInfo(carId, driverIndex, driverCount, gear, posX, posY, yaw,
+        
+        RealtimeInfo info = new RealtimeInfo(carId, driverIndex, driverCount, gear, yaw, pitch, roll,
                 location, kmh, position, cupPosition, trackPosition, splinePosition, laps, delta,
                 bestSessionLap, lasLap, currentLap);
         callback.onRealtimeCarUpdate(info);
@@ -381,6 +381,12 @@ public class AccBroadcastingProtocol {
         byte[] int32 = new byte[4];
         in.read(int32, 0, 4);
         return ByteBuffer.wrap(int32).order(ByteOrder.LITTLE_ENDIAN).getFloat();
+    }
+    
+    private float readFloat_BIG(ByteArrayInputStream in) {
+        byte[] int32 = new byte[4];
+        in.read(int32, 0, 4);
+        return ByteBuffer.wrap(int32).order(ByteOrder.BIG_ENDIAN).getFloat();
     }
 
     private LapInfo readLap(ByteArrayInputStream in) {
