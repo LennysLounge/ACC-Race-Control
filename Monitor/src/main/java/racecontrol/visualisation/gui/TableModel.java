@@ -5,6 +5,8 @@
  */
 package racecontrol.visualisation.gui;
 
+import racecontrol.visualisation.LookAndFeel;
+
 /**
  *
  * @author Leonard
@@ -33,6 +35,15 @@ public abstract class TableModel {
      * @return The object at that cell.
      */
     public abstract Object getValueAt(int column, int row);
+    
+    /**
+     * Returns the height of the row.
+     * @param rowIndex the index for which to get the height.
+     * @return the hight of the row.
+     */
+    public float getRowHeight(int rowIndex){
+        return LookAndFeel.LINE_HEIGHT;
+    }
 
     /**
      * Returns the currently selected row.
@@ -48,6 +59,8 @@ public abstract class TableModel {
      *
      * @param column the column that has been clicekd
      * @param row the row that has been clicked.
+     * @param mouseX the mouse x position inside the cell.
+     * @param mouseY the mouse y position inside the cell.
      */
     public void onClick(int column, int row, int mouseX, int mouseY) {
     }

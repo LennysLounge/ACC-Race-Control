@@ -6,12 +6,13 @@
 package racecontrol.visualisation.gui;
 
 import racecontrol.visualisation.LookAndFeel;
-import static racecontrol.visualisation.LookAndFeel.COLOR_MEDIUM_DARK_GRAY;
 import java.util.function.BiConsumer;
 import java.util.logging.Logger;
+import javax.swing.text.Utilities;
 import processing.core.PApplet;
 import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.CENTER;
+import static racecontrol.visualisation.LookAndFeel.COLOR_MEDIUM_DARK_GRAY;
 import static racecontrol.visualisation.LookAndFeel.LINE_HEIGHT;
 
 /**
@@ -46,6 +47,27 @@ public class LPTable extends LPContainer {
      */
     private TableModel model = defaultTableModel;
     /**
+     * height of the table model.
+     */
+    private float modelHeight = 0;
+    /**
+     * Visible area height.
+     */
+    private float visibleHeight = 0;
+    /**
+     * Lowest visible index in the table.
+     */
+    private int lowerVisibleIndex = 0;
+    /**
+     * highest visible index in the table.
+     */
+    private int upperVisibleIndex = 0;
+    /**
+     * offset for how far the lowest visible row is visible.
+     */
+    private float lowerVisibleRowYOffset = 0;
+
+    /**
      * Indicates that the header should be drawn.
      */
     private boolean drawHeader = true;
@@ -66,11 +88,7 @@ public class LPTable extends LPContainer {
      */
     private int mouseOverRow = -1;
     /**
-     * The columns in the model.
-     */
-    private LPTableColumn[] columns = new LPTableColumn[0];
-    /**
-     * The column widths.
+     * The calculated widths of the columns.
      */
     private float[] columnWidths = new float[0];
     /**
@@ -93,41 +111,18 @@ public class LPTable extends LPContainer {
         applet.noStroke();
         applet.rect(0, 0, getWidth(), getHeight());
 
-        //Calculate how may rows are visible right now.
-        visibleRows = (int) (getHeight() / LookAndFeel.LINE_HEIGHT);
-        if (drawHeader) {
-            visibleRows -= 1;
-        }
+        calculateVisibleArea();
 
-        //Calculate if the scrollbar should be visible.
-        scrollbar.isVisible = model.getRowCount() > visibleRows;
-
-        //limit the scroll to the possible area
-        int maxScroll = Math.max(0, model.getRowCount() - visibleRows);
-        scrollbar.scroll = Math.min(maxScroll, Math.max(0, scrollbar.scroll));
-
-        //set size of the scrollbar.
-        scrollbar.height = getHeight();
-        if (drawHeader) {
-            scrollbar.height -= LookAndFeel.LINE_HEIGHT;
-        }
-        scrollbar.elementHeight = scrollbar.height / model.getRowCount();
-        scrollbar.width = 15;
-        if (!scrollbar.isVisible) {
-            scrollbar.width = 0;
-        }
-
-        //Update the columns from the model
-        columns = model.getColumns();
-        columnWidths = calculateColumnWidths(columns, getWidth() - scrollbar.width);
-
-        float rowHeight = LookAndFeel.LINE_HEIGHT;
+        LPTableColumn[] columns = model.getColumns();
 
         //Draw header
         if (drawHeader) {
-            float columnOffset = scrollbar.width;
+            float columnOffset = 0;
+            if (scrollbar.isVisible) {
+                columnOffset = scrollbar.width;
+            }
             applet.fill(LookAndFeel.COLOR_MEDIUM_DARK_GRAY);
-            applet.rect(columnOffset, 0, getWidth() - columnOffset, rowHeight);
+            applet.rect(columnOffset, 0, getWidth() - columnOffset, LINE_HEIGHT);
             for (int i = 0; i < columns.length; i++) {
                 if (!columns[i].isVisible()) {
                     continue;
@@ -136,80 +131,17 @@ public class LPTable extends LPContainer {
                         && mouseOverColumn == i
                         && mouseOverRow == 0) {
                     applet.fill(LookAndFeel.TRANSPARENT_WHITE);
-                    applet.rect(columnOffset, 0, columnWidths[i], rowHeight);
+                    applet.rect(columnOffset, 0, columnWidths[i], LINE_HEIGHT);
                 }
                 applet.textAlign(CENTER, CENTER);
                 applet.fill(LookAndFeel.COLOR_WHITE);
-                applet.text(columns[i].getHeader(), columnOffset + columnWidths[i] / 2f, rowHeight / 2f);
+                applet.text(columns[i].getHeader(), columnOffset + columnWidths[i] / 2f, LINE_HEIGHT / 2f);
                 columnOffset += columnWidths[i];
             }
         }
-
-        //Draw model
-        int v = (int) Math.ceil(getHeight() / LookAndFeel.LINE_HEIGHT);
-        if (drawHeader) {
-            v -= 1;
-        }
-        //we want to draw an extra line if the height of the table is not
-        //devisible by the line height. To do this we round up.
-        int rowLimit = Math.min(model.getRowCount() - scrollbar.scroll, v);
-        
-        for (int row = 0; row < rowLimit; row++) {
-            float columnOffset = scrollbar.width;
-            float rowOffset = row * rowHeight;
-            boolean isMouseOverThisRow = row == mouseOverRow;
-            if (drawHeader) {
-                rowOffset += rowHeight;
-                isMouseOverThisRow = (row + 1) == mouseOverRow;
-            }
-            boolean isSelectedRow = model.getSelectedRow() == (row + scrollbar.scroll);
-            if ((row + scrollbar.scroll) % 2 == 1) {
-                applet.fill(COLOR_MEDIUM_DARK_GRAY);
-                applet.rect(columnOffset, (int) rowOffset, getWidth() - columnOffset, (int) rowHeight);
-            }
-            if (isSelectedRow) {
-                applet.fill(LookAndFeel.TRANSPARENT_WHITE);
-                applet.rect(columnOffset, (int) rowOffset, getWidth() - columnOffset, (int) rowHeight);
-            }
-            for (int column = 0; column < columns.length; column++) {
-                if (!columns[column].isVisible()) {
-                    continue;
-                }
-                if (row + scrollbar.scroll >= model.getRowCount()) {
-                    continue;
-                }
-
-                boolean isMouseOverThisColumn = column == mouseOverColumn;
-                applet.translate(columnOffset, rowOffset);
-                CellRenderer renderer = columns[column].getRenderer();
-                Object value = model.getValueAt(column, row + scrollbar.scroll);
-                if (value == null) {
-                    renderer = LPTableColumn.nullRenderer;
-                }
-                renderer.render(applet,
-                        new RenderContext(value,
-                                isSelectedRow,
-                                isMouseOverThisRow,
-                                isMouseOverThisColumn,
-                                row % 2 == 0,
-                                columnWidths[column],
-                                rowHeight,
-                                getWidth() - scrollbar.width,
-                                getHeight(),
-                                columnOffset - scrollbar.width,
-                                rowOffset,
-                                mouseX - columnOffset,
-                                mouseY - rowOffset
-                        )
-                );
-                applet.translate(-columnOffset, -rowOffset);
-                columnOffset += columnWidths[column];
-            }
-        }
-
-        //Draw scrollbar
+        //draw scrollbar
         if (scrollbar.isVisible) {
-            float headerOffset = drawHeader ? rowHeight : 0;
+            float headerOffset = drawHeader ? LINE_HEIGHT : 0;
 
             applet.fill(LookAndFeel.COLOR_MEDIUM_DARK_GRAY);
             applet.rect(0, 0, scrollbar.width, getHeight());
@@ -222,21 +154,73 @@ public class LPTable extends LPContainer {
                 applet.fill(LookAndFeel.COLOR_WHITE);
             }
             float padding = scrollbar.width * 0.2f;
-            if (scrollbar.isDragged) {
-                applet.rect(padding, scrollbar.elementHeight * scrollbar.scroll + headerOffset + padding + scrollbar.smoothScrollDiff,
-                        scrollbar.width - padding * 2, scrollbar.elementHeight * visibleRows - padding * 2);
-            } else {
-                applet.rect(padding, scrollbar.elementHeight * scrollbar.scroll + headerOffset + padding,
-                        scrollbar.width - padding * 2, scrollbar.elementHeight * visibleRows - padding * 2);
-            }
+            float scrollbarHeight = (visibleHeight / modelHeight) * (getHeight() - headerOffset);
+            float scrollbarPosition = (scrollbar.scroll / modelHeight) * (getHeight() - headerOffset) + headerOffset;
+            applet.rect(padding, scrollbarPosition, scrollbar.width - padding * 2, scrollbarHeight);
         }
 
-        applet.noStroke();
+        //draw model
+        float clipHeight = drawHeader ? LINE_HEIGHT : 0;
+        float clipWidth = scrollbar.isVisible ? scrollbar.width : 0;
+        applet.clip(clipWidth, clipHeight, getWidth() - clipWidth, getHeight() - clipHeight);
+        float heightOffset = lowerVisibleRowYOffset + clipHeight;
+        for (int row = lowerVisibleIndex; row <= upperVisibleIndex; row++) {
+            if(row > model.getRowCount()){
+                break;
+            }
+            
+            boolean isMouseOverThisRow = row == mouseOverRow;
+            float rowHeight = model.getRowHeight(row);
+            if (row % 2 == 0) {
+                applet.fill(COLOR_MEDIUM_DARK_GRAY);
+                applet.rect(clipWidth, heightOffset, getWidth() - clipWidth, rowHeight);
+            }
+
+            boolean isSelectedRow = model.getSelectedRow() == row;
+            if (isSelectedRow) {
+                applet.fill(LookAndFeel.TRANSPARENT_WHITE);
+                applet.rect(clipWidth, (int) heightOffset, getWidth() - clipWidth, (int) rowHeight);
+            }
+            float widthOffset = clipWidth;
+            for (int column = 0; column < columns.length; column++) {
+                if (!columns[column].isVisible()) {
+                    continue;
+                }
+                Object value = model.getValueAt(column, row);
+                if (value == null) {
+                    continue;
+                }
+
+                boolean isMouseOverThisColumn = column == mouseOverColumn;
+                applet.translate(widthOffset, heightOffset);
+                columns[column].getRenderer().render(applet,
+                        new RenderContext(value,
+                                row,
+                                column,
+                                isSelectedRow,
+                                isMouseOverThisRow,
+                                isMouseOverThisColumn,
+                                row % 2 == 0,
+                                columnWidths[column],
+                                rowHeight,
+                                getWidth() - scrollbar.width,
+                                getHeight(),
+                                widthOffset - scrollbar.width,
+                                heightOffset,
+                                mouseX - widthOffset,
+                                mouseY - heightOffset
+                        )
+                );
+                applet.translate(-widthOffset, -heightOffset);
+                widthOffset += columnWidths[column];
+            }
+            heightOffset += rowHeight;
+        }
     }
 
     @Override
     public void onMouseScroll(int scrollDir) {
-        scrollbar.setScroll(scrollbar.getScroll() + scrollDir);
+        scrollbar.setScroll(scrollbar.scroll + scrollDir * LINE_HEIGHT);
         invalidate();
     }
 
@@ -253,7 +237,6 @@ public class LPTable extends LPContainer {
             scrollbar.dragHome = scrollbar.scroll;
         }
         if (area == 1 || area == 3) {
-            float xx = x - hPivot;
             //Find the column the mouse has pressed.
             int column = -1;
             float columnX = hPivot;
@@ -265,19 +248,25 @@ public class LPTable extends LPContainer {
                     break;
                 }
             }
-            //find the row the mouse has pressed.
-            int row = (y / LookAndFeel.LINE_HEIGHT);
+            
             if (area == 1 && clickableColumnHeaders) {
                 model.onHeaderClicked(column);
-            }
-            if (area == 3) {
-                int scrolledRow = row + scrollbar.scroll;
-                if (drawHeader) {
-                    scrolledRow -= 1;
+            }            
+            if (area == 3) {            
+                int clickedIndex = -1;
+                float rowY = vPivot + lowerVisibleRowYOffset;
+                for(int i=lowerVisibleIndex; i<=upperVisibleIndex; i++){
+                    rowY += model.getRowHeight(i);
+                    if(rowY > y){
+                        clickedIndex = i;
+                        rowY -= model.getRowHeight(i);
+                        break;
+                    }
                 }
-                if (scrolledRow < model.getRowCount() && scrolledRow >= 0) {
-                    model.onClick(column, scrolledRow, (int) (mouseX - columnX), (int) (mouseY - scrolledRow * LINE_HEIGHT - vPivot));
-                    cellClickAction.accept(column, scrolledRow);
+                
+                if (clickedIndex != -1) {
+                    model.onClick(column, clickedIndex, (int) (mouseX - columnX), (int) (mouseY - rowY));
+                    cellClickAction.accept(column, clickedIndex);
                 }
             }
         }
@@ -300,8 +289,7 @@ public class LPTable extends LPContainer {
         //Dragging the scrollbar has priority over the other features.
         if (scrollbar.isDragged) {
             int diff = y - scrollbar.dragHomeY;
-            int scrollDiff = (int) (diff / scrollbar.elementHeight);
-            scrollbar.smoothScrollDiff = (int) (diff % scrollbar.elementHeight);
+            float scrollDiff = (diff/visibleHeight) * modelHeight;
             scrollbar.setScroll(scrollbar.dragHome + scrollDiff);
             invalidate();
             return;
@@ -316,23 +304,31 @@ public class LPTable extends LPContainer {
             mouseOverScrollbar = true;
         }
         if (area == 1 || area == 3) {
-            float xx = x - hPivot;
             //Find the column the mouse is over.
-            float accu = 0;
+            float columnX = hPivot;
             for (int i = 0; i < columnWidths.length; i++) {
-                accu += columnWidths[i];
-                if (xx < accu) {
-                    if (mouseOverColumn != i) {
+                columnX += columnWidths[i];
+                if (x < columnX) {
+                    if( i != mouseOverColumn){
                         mouseOverColumn = i;
                         invalidate();
                     }
                     break;
                 }
-            }
+            }        
             //find the row the mouse is over.
-            mouseOverRow = (y / LookAndFeel.LINE_HEIGHT);
+            float rowY = vPivot + lowerVisibleRowYOffset;
+            for(int i=lowerVisibleIndex; i<=upperVisibleIndex; i++){
+                rowY += model.getRowHeight(i);
+                if(rowY > y){
+                    if(i != mouseOverRow){
+                        mouseOverRow = i;
+                        invalidate();
+                    }
+                    break;
+                }
+            }  
         }
-
         scrollbar.setIsMouseOver(mouseOverScrollbar);
     }
 
@@ -342,6 +338,59 @@ public class LPTable extends LPContainer {
         mouseOverColumn = -1;
         mouseOverRow = -1;
         applet.cursor(ARROW);
+    }
+
+    private void calculateVisibleArea() {
+
+        modelHeight = 0;
+        for (int i = 0; i < model.getRowCount(); i++) {
+            modelHeight += model.getRowHeight(i);
+        }
+
+        visibleHeight = getHeight();
+        //if a header row is drawn the visible area is smaller
+        if (drawHeader) {
+            visibleHeight = Math.max(0, getHeight() - LINE_HEIGHT);
+        }
+
+        //enable the scrollbar if model is taller than visible area
+        scrollbar.isVisible = visibleHeight < modelHeight;
+
+        //calculate column widths
+        columnWidths = calculateColumnWidths(model.getColumns(),
+                getWidth() - ((scrollbar.isVisible) ? scrollbar.width : 0));
+
+        //limit the maximum scroll
+        if (scrollbar.scroll + visibleHeight > modelHeight) {
+            scrollbar.scroll = modelHeight - visibleHeight;
+        }
+        if (scrollbar.scroll < 0) {
+            scrollbar.scroll = 0;
+        }
+
+        float height = 0;
+        int i = 0;
+        //find lower visible index;
+        for (; i < model.getRowCount(); i++) {
+            height += model.getRowHeight(i);
+            if (height > scrollbar.scroll) {
+                lowerVisibleIndex = i;
+                upperVisibleIndex = i;
+                break;
+            }
+        }
+        
+        lowerVisibleRowYOffset = -model.getRowHeight(i) + (height - scrollbar.scroll);
+        i++;
+        //find upper visible index
+        for (; i < model.getRowCount(); i++) {
+            upperVisibleIndex = i;
+            height += model.getRowHeight(i);
+            if (height > scrollbar.scroll + visibleHeight) {
+                upperVisibleIndex = i;
+                break;
+            }
+        }
     }
 
     /**
@@ -468,11 +517,11 @@ public class LPTable extends LPContainer {
         /**
          * The scroll position from where the dragging starts.
          */
-        public int dragHome = 0;
+        public float dragHome = 0;
         /**
          * Amount of stroll this table currently has.
          */
-        private int scroll = 0;
+        private float scroll = 0;
         /**
          * difference from actual scroll position to the currently dragged
          * position to enable smooth scrolling by dragging.
@@ -483,14 +532,14 @@ public class LPTable extends LPContainer {
          */
         private boolean isMouseOver = false;
 
-        public void setScroll(int scroll) {
+        public void setScroll(float scroll) {
             if (scroll != this.scroll) {
                 this.scroll = scroll;
                 invalidate();
             }
         }
 
-        public int getScroll() {
+        public float getScroll() {
             return scroll;
         }
 
@@ -515,6 +564,8 @@ public class LPTable extends LPContainer {
     public class RenderContext {
 
         public final Object object;
+        public final int rowIndex;
+        public final int columnIndex;
         public final boolean isSelected;
         public final boolean isMouseOverRow;
         public final boolean isMouseOverColumn;
@@ -529,6 +580,8 @@ public class LPTable extends LPContainer {
         public final float mouseY;
 
         public RenderContext(Object object,
+                int rowIndex,
+                int columnIndex,
                 boolean isSelected,
                 boolean isMouseOverRow,
                 boolean isMouseOverColumn,
@@ -542,6 +595,8 @@ public class LPTable extends LPContainer {
                 float mouseX,
                 float mouseY) {
             this.object = object;
+            this.rowIndex = rowIndex;
+            this.columnIndex = columnIndex;
             this.isSelected = isSelected;
             this.isMouseOverRow = isMouseOverRow;
             this.isMouseOverColumn = isMouseOverColumn;
