@@ -164,7 +164,7 @@ public class LPTable extends LPContainer {
         float clipWidth = scrollbar.isVisible ? scrollbar.width : 0;
         applet.clip(clipWidth, clipHeight, getWidth() - clipWidth, getHeight() - clipHeight);
         float heightOffset = lowerVisibleRowYOffset + clipHeight;
-        for (int row = lowerVisibleIndex; row <= upperVisibleIndex; row++) {
+        for (int row = lowerVisibleIndex; row < upperVisibleIndex; row++) {
             if(row > model.getRowCount()){
                 break;
             }
@@ -367,29 +367,22 @@ public class LPTable extends LPContainer {
         if (scrollbar.scroll < 0) {
             scrollbar.scroll = 0;
         }
-
-        float height = 0;
-        int i = 0;
-        //find lower visible index;
-        for (; i < model.getRowCount(); i++) {
-            height += model.getRowHeight(i);
-            if (height > scrollbar.scroll) {
-                lowerVisibleIndex = i;
-                upperVisibleIndex = i;
-                break;
-            }
-        }
         
-        lowerVisibleRowYOffset = -model.getRowHeight(i) + (height - scrollbar.scroll);
-        i++;
-        //find upper visible index
-        for (; i < model.getRowCount(); i++) {
+        //find lower and upper limits
+        lowerVisibleIndex = 0;
+        lowerVisibleRowYOffset = -scrollbar.scroll;
+        upperVisibleIndex = 0;
+        float height = 0;
+        for(int i=0; i<model.getRowCount(); i++){
+            if(height <= scrollbar.scroll){
+                lowerVisibleIndex = i;
+                lowerVisibleRowYOffset = -(scrollbar.scroll - height);
+            }
             upperVisibleIndex = i;
-            height += model.getRowHeight(i);
-            if (height > scrollbar.scroll + visibleHeight) {
-                upperVisibleIndex = i;
+            if(height > scrollbar.scroll + visibleHeight){
                 break;
             }
+            height += model.getRowHeight(i);  
         }
     }
 
