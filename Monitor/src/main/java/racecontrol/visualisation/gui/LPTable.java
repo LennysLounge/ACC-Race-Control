@@ -373,7 +373,7 @@ public class LPTable extends LPContainer {
         lowerVisibleRowYOffset = -scrollbar.scroll;
         upperVisibleIndex = 0;
         float height = 0;
-        for(int i=0; i<model.getRowCount(); i++){
+        for(int i=0; i<=model.getRowCount(); i++){
             if(height <= scrollbar.scroll){
                 lowerVisibleIndex = i;
                 lowerVisibleRowYOffset = -(scrollbar.scroll - height);
