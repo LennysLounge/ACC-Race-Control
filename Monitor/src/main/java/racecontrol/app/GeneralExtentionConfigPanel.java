@@ -3,7 +3,7 @@
  *
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.app.components;
+package racecontrol.app;
 
 import racecontrol.persistance.PersistantConfig;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_BROADCSATING_ENABLED;

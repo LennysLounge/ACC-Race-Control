@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.app.components;
+package racecontrol.app;
 
 import racecontrol.extensions.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.data.SessionId;

@@ -49,7 +49,7 @@ public class LiveTimingPanel extends LPContainer {
     }
 
     @Override
-    public void onResize(int w, int h) {
+    public void onResize(float w, float h) {
         table.setPosition(0, 0);
         table.setSize(w, h);
     }

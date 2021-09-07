@@ -84,7 +84,7 @@ public class GoogleSheetsAPIPanel extends LPContainer {
     }
 
     @Override
-    public void onResize(int w, int h) {
+    public void onResize(float w, float h) {
         setToPractice.setPosition(10, 40);
         setToQuali.setPosition(10, 80);
         setToRace1.setPosition(10, 120);

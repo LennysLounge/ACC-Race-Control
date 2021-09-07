@@ -69,8 +69,8 @@ public class VelocityMapPanel
     }
 
     @Override
-    public void onResize(int w, int h) {
-        PGraphics g = applet.createGraphics(w - 40, h - LINE_HEIGHT - 20);
+    public void onResize(float w, float h) {
+        PGraphics g = applet.createGraphics((int)w - 40, (int)h - LINE_HEIGHT - 20);
         g.fill(0);
         g.beginDraw();
         g.background(0);

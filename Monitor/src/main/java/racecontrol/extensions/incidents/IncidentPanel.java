@@ -54,7 +54,7 @@ public class IncidentPanel extends LPContainer {
     }
 
     @Override
-    public void onResize(int w, int h) {
+    public void onResize(float w, float h) {
         int y = (showFirstLine) ? LINE_HEIGHT : 0;
         table.setPosition(0, y);
         table.setSize(w, h - y);

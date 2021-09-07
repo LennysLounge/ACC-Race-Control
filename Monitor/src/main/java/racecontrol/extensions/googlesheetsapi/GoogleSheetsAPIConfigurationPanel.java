@@ -176,7 +176,7 @@ public class GoogleSheetsAPIConfigurationPanel
     }
 
     @Override
-    public void onResize(int w, int h) {
+    public void onResize(float w, float h) {
         spreadSheetLinkTextField.setSize(w - 40, LINE_HEIGHT);
         credentialsFileTextField.setSize(w - 160, LINE_HEIGHT);
         credentalsSearchButton.setPosition(w - 120, LINE_HEIGHT * 5);

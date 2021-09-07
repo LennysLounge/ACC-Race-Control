@@ -6,7 +6,7 @@
 package racecontrol;
 
 import racecontrol.hotkey.Hotkeys;
-import racecontrol.app.components.BasePanel;
+import racecontrol.app.BasePanel;
 import racecontrol.client.AccBroadcastingClient;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

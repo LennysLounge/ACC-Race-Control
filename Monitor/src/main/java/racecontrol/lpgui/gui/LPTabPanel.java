@@ -146,7 +146,7 @@ public class LPTabPanel extends LPContainer {
     }
 
     @Override
-    public void onResize(int w, int h) {
+    public void onResize(float w, float h) {
         resetTabSize();
     }
 

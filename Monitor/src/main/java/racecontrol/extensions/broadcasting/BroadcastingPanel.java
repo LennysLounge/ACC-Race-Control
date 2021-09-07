@@ -137,13 +137,13 @@ public class BroadcastingPanel
     }
 
     @Override
-    public void onResize(int w, int h) {
+    public void onResize(float w, float h) {
         int broadcastingHight = LINE_HEIGHT;
         if (!collapsablePanel.isCollapsed()) {
             broadcastingHight = (int) (LINE_HEIGHT * 7.5f);
         }
 
-        int tableHeight = Math.max(LINE_HEIGHT * 2, h - broadcastingHight);
+        float tableHeight = Math.max(LINE_HEIGHT * 2, h - broadcastingHight);
         liveTimingPanel.setPosition(0, 0);
         liveTimingPanel.setSize(w, tableHeight);
 

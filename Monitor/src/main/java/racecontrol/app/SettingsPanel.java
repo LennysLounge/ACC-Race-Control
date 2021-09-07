@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.app.components;
+package racecontrol.app;
 
 import racecontrol.Version;
 import racecontrol.persistance.PersistantConfig;
@@ -251,7 +251,7 @@ public class SettingsPanel
     }
 
     @Override
-    public void onResize(int w, int h) {
+    public void onResize(float w, float h) {
         int lh = (int) (LookAndFeel.LINE_HEIGHT * 1.2f);
         connectionHeading.setPosition(0, 0);
 
