@@ -3,9 +3,9 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation.gui;
+package racecontrol.lpgui.gui;
 
-import racecontrol.visualisation.LookAndFeel;
+import racecontrol.LookAndFeel;
 
 /**
  *

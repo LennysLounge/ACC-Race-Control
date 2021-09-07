@@ -25,7 +25,7 @@ import racecontrol.client.data.enums.SessionType;
 import racecontrol.client.events.CarDisconnect;
 import racecontrol.client.events.TrackData;
 import racecontrol.utility.GapCalculator;
-import racecontrol.visualisation.gui.LPContainer;
+import racecontrol.lpgui.gui.LPContainer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;

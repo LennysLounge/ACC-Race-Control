@@ -6,7 +6,7 @@
 package racecontrol.client.extension;
 
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.visualisation.gui.LPContainer;
+import racecontrol.lpgui.gui.LPContainer;
 
 /**
  *

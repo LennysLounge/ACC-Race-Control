@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation.components;
+package racecontrol.app.components;
 
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
@@ -11,9 +11,9 @@ import racecontrol.eventbus.EventListener;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.events.ConnectionClosed;
 import racecontrol.client.events.ConnectionOpened;
-import racecontrol.visualisation.LookAndFeel;
-import racecontrol.visualisation.gui.LPContainer;
-import racecontrol.visualisation.gui.LPTabPanel;
+import racecontrol.LookAndFeel;
+import racecontrol.lpgui.gui.LPContainer;
+import racecontrol.lpgui.gui.LPTabPanel;
 
 /**
  *

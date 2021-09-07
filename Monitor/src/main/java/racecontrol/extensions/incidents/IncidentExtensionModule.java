@@ -8,7 +8,7 @@ package racecontrol.extensions.incidents;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.extension.AccBroadcastingClientExtensionModule;
 import racecontrol.client.extension.AccClientExtension;
-import racecontrol.visualisation.gui.LPContainer;
+import racecontrol.lpgui.gui.LPContainer;
 
 /**
  *

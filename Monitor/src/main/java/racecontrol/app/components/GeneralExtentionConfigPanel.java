@@ -3,18 +3,18 @@
  *
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation.components;
+package racecontrol.app.components;
 
 import racecontrol.persistance.PersistantConfig;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_BROADCSATING_ENABLED;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_CAMERA_CONTROL_ENABLED;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_INCIDENTS_ENABLED;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_LIVE_TIMING_ENABLED;
-import static racecontrol.visualisation.LookAndFeel.LINE_HEIGHT;
-import static racecontrol.visualisation.LookAndFeel.TEXT_SIZE;
-import racecontrol.visualisation.gui.LPCheckBox;
-import racecontrol.visualisation.gui.LPContainer;
-import racecontrol.visualisation.gui.LPLabel;
+import static racecontrol.LookAndFeel.LINE_HEIGHT;
+import static racecontrol.LookAndFeel.TEXT_SIZE;
+import racecontrol.lpgui.gui.LPCheckBox;
+import racecontrol.lpgui.gui.LPContainer;
+import racecontrol.lpgui.gui.LPLabel;
 
 /**
  *

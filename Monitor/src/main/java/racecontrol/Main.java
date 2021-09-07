@@ -5,9 +5,7 @@
  */
 package racecontrol;
 
-import racecontrol.Version;
 import racecontrol.persistance.PersistantConfig;
-import racecontrol.visualisation.Visualisation;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
@@ -17,7 +15,6 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import processing.core.PApplet;
-import racecontrol.client.AccBroadcastingClient;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -35,7 +32,7 @@ public class Main {
     /**
      * This classes logger.
      */
-    private static Logger LOG = Logger.getLogger(Main.class.getName());
+    private static final Logger LOG = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws InterruptedException {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
@@ -56,14 +53,13 @@ public class Main {
         }
         //start visualisation.
         String[] a = {"MAIN"};
-        PApplet.runSketch(a, new Visualisation());
+        PApplet.runSketch(a, new RaceControlApplet());
     }
 
     private static void setupSplash() {
         SplashScreen splash = SplashScreen.getSplashScreen();
         if (splash != null) {
             Graphics2D g = splash.createGraphics();
-            final String[] comps = {"foo", "bar", "baz"};
             g.setComposite(AlphaComposite.Clear);
             g.fillRect(120, 140, 200, 40);
             g.setPaintMode();

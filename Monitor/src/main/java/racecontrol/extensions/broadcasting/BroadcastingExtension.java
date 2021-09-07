@@ -14,7 +14,7 @@ import racecontrol.client.events.RealtimeUpdate;
 import racecontrol.client.events.TrackData;
 import racecontrol.client.extension.AccClientExtension;
 import racecontrol.eventbus.Event;
-import racecontrol.visualisation.gui.LPContainer;
+import racecontrol.lpgui.gui.LPContainer;
 
 /**
  *

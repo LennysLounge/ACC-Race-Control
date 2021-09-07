@@ -20,7 +20,7 @@ import racecontrol.client.data.enums.SessionPhase;
 import racecontrol.client.data.enums.SessionType;
 import racecontrol.client.events.SessionChanged;
 import racecontrol.client.events.SessionPhaseChanged;
-import racecontrol.visualisation.gui.LPContainer;
+import racecontrol.lpgui.gui.LPContainer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;

@@ -3,20 +3,20 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation.components;
+package racecontrol.app.components;
 
 import racecontrol.extensions.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.utility.TimeUtils;
-import racecontrol.visualisation.LookAndFeel;
-import static racecontrol.visualisation.LookAndFeel.COLOR_BLUE;
-import static racecontrol.visualisation.LookAndFeel.COLOR_DARK_DARK_GRAY;
-import static racecontrol.visualisation.LookAndFeel.COLOR_RED;
-import static racecontrol.visualisation.LookAndFeel.LINE_HEIGHT;
-import static racecontrol.visualisation.LookAndFeel.TEXT_SIZE;
-import static racecontrol.visualisation.LookAndFeel.fontMedium;
-import static racecontrol.visualisation.LookAndFeel.fontRegular;
+import racecontrol.LookAndFeel;
+import static racecontrol.LookAndFeel.COLOR_BLUE;
+import static racecontrol.LookAndFeel.COLOR_DARK_DARK_GRAY;
+import static racecontrol.LookAndFeel.COLOR_RED;
+import static racecontrol.LookAndFeel.LINE_HEIGHT;
+import static racecontrol.LookAndFeel.TEXT_SIZE;
+import static racecontrol.LookAndFeel.fontMedium;
+import static racecontrol.LookAndFeel.fontRegular;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
@@ -25,8 +25,8 @@ import racecontrol.client.events.ConnectionOpened;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
-import racecontrol.visualisation.gui.LPButton;
-import racecontrol.visualisation.gui.LPContainer;
+import racecontrol.lpgui.gui.LPButton;
+import racecontrol.lpgui.gui.LPContainer;
 
 /**
  *

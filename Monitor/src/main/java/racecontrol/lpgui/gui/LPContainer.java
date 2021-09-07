@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation.gui;
+package racecontrol.lpgui.gui;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -7,8 +7,8 @@ package racecontrol.extensions.broadcasting.timing;
 
 import racecontrol.extensions.broadcasting.timing.tablemodels.LiveTimingTableModel;
 import racecontrol.client.data.CarInfo;
-import racecontrol.visualisation.gui.LPContainer;
-import racecontrol.visualisation.gui.LPTable;
+import racecontrol.lpgui.gui.LPContainer;
+import racecontrol.lpgui.gui.LPTable;
 import java.util.logging.Logger;
 
 /**

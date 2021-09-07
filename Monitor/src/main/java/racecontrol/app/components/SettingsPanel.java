@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation.components;
+package racecontrol.app.components;
 
 import racecontrol.Version;
 import racecontrol.persistance.PersistantConfig;
@@ -20,14 +20,14 @@ import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.events.ConnectionClosed;
-import racecontrol.visualisation.LookAndFeel;
-import static racecontrol.visualisation.LookAndFeel.COLOR_GRAY;
-import static racecontrol.visualisation.LookAndFeel.LINE_HEIGHT;
-import racecontrol.visualisation.gui.LPButton;
-import racecontrol.visualisation.gui.LPContainer;
-import racecontrol.visualisation.gui.LPLabel;
-import racecontrol.visualisation.gui.LPTabPanel;
-import racecontrol.visualisation.gui.LPTextField;
+import racecontrol.LookAndFeel;
+import static racecontrol.LookAndFeel.COLOR_GRAY;
+import static racecontrol.LookAndFeel.LINE_HEIGHT;
+import racecontrol.lpgui.gui.LPButton;
+import racecontrol.lpgui.gui.LPContainer;
+import racecontrol.lpgui.gui.LPLabel;
+import racecontrol.lpgui.gui.LPTabPanel;
+import racecontrol.lpgui.gui.LPTextField;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;

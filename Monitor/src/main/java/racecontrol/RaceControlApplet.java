@@ -3,9 +3,10 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation;
+package racecontrol;
 
-import racecontrol.visualisation.components.BasePanel;
+import racecontrol.hotkey.Hotkeys;
+import racecontrol.app.components.BasePanel;
 import racecontrol.client.AccBroadcastingClient;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -21,16 +22,16 @@ import processing.event.KeyEvent;
  *
  * @author Leonard
  */
-public class Visualisation extends CustomPApplet {
+public class RaceControlApplet extends CustomPApplet {
 
     /**
      * This classes logger.
      */
-    private static final Logger LOG = Logger.getLogger(Visualisation.class.getName());
+    private static final Logger LOG = Logger.getLogger(RaceControlApplet.class.getName());
     /**
      * Timer since the last draw.
      */
-    private int timer = 0;
+    private int frameTimer = 0;
     /**
      * Connection client.
      */
@@ -39,14 +40,15 @@ public class Visualisation extends CustomPApplet {
      * The base panel to use.
      */
     private BasePanel basePanel;
-
+    /**
+     * The manager for hotkey actions.
+     */
     private Hotkeys hotkey;
 
     /**
      * Creates a new instance of this object.
      */
-    public Visualisation() {
-        this.hotkey = new Hotkeys();
+    public RaceControlApplet() {
     }
 
     @Override
@@ -66,9 +68,9 @@ public class Visualisation extends CustomPApplet {
         frameRate(30);
 
         //create the connection client.
-        this.client = new AccBroadcastingClient();
-
-        hotkey.setClient(client);
+        this.client = AccBroadcastingClient.getClient();
+        
+        this.hotkey = new Hotkeys();
 
         //init components.
         basePanel = new BasePanel(client);
@@ -79,8 +81,8 @@ public class Visualisation extends CustomPApplet {
     @Override
     public void draw() {
         int dt = (int) (1000 / frameRate);
-        timer += dt;
-        if (timer > client.getUpdateInterval() || forceRedraw) {
+        frameTimer += dt;
+        if (frameTimer > client.getUpdateInterval()) {
             basePanel.updateHeader();
         }
 
@@ -109,7 +111,7 @@ public class Visualisation extends CustomPApplet {
 
     private PImage loadResourceAsPImage(String resource) {
         try {
-            BufferedImage bi = ImageIO.read(Visualisation.class.getResourceAsStream(resource));
+            BufferedImage bi = ImageIO.read(RaceControlApplet.class.getResourceAsStream(resource));
             PGraphics g = createGraphics(bi.getWidth(), bi.getHeight());
             g.beginDraw();
             Graphics2D g2d = (Graphics2D) g.getNative();

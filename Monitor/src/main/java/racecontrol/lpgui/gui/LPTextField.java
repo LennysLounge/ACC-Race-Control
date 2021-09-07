@@ -3,14 +3,14 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation.gui;
+package racecontrol.lpgui.gui;
 
-import racecontrol.visualisation.LookAndFeel;
-import static racecontrol.visualisation.LookAndFeel.COLOR_DARK_RED;
-import static racecontrol.visualisation.LookAndFeel.COLOR_GRAY;
-import static racecontrol.visualisation.LookAndFeel.COLOR_MEDIUM_DARK_GRAY;
-import static racecontrol.visualisation.LookAndFeel.COLOR_RED;
-import static racecontrol.visualisation.gui.LPComponent.applet;
+import racecontrol.LookAndFeel;
+import static racecontrol.LookAndFeel.COLOR_DARK_RED;
+import static racecontrol.LookAndFeel.COLOR_GRAY;
+import static racecontrol.LookAndFeel.COLOR_MEDIUM_DARK_GRAY;
+import static racecontrol.LookAndFeel.COLOR_RED;
+import static racecontrol.lpgui.gui.LPComponent.applet;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;

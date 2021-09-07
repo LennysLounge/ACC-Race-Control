@@ -5,17 +5,18 @@
  */
 package racecontrol.extensions.broadcasting;
 
+import racecontrol.lpgui.gui.LPCollapsablePanel;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import static racecontrol.visualisation.LookAndFeel.LINE_HEIGHT;
-import racecontrol.visualisation.gui.LPButton;
-import racecontrol.visualisation.gui.LPContainer;
-import racecontrol.visualisation.gui.LPLabel;
-import racecontrol.visualisation.gui.LPTextField;
+import static racecontrol.LookAndFeel.LINE_HEIGHT;
+import racecontrol.lpgui.gui.LPButton;
+import racecontrol.lpgui.gui.LPContainer;
+import racecontrol.lpgui.gui.LPLabel;
+import racecontrol.lpgui.gui.LPTextField;
 
 /**
  *

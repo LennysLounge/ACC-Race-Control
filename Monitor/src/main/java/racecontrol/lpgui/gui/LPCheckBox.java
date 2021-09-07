@@ -3,13 +3,13 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation.gui;
+package racecontrol.lpgui.gui;
 
-import static racecontrol.visualisation.LookAndFeel.COLOR_DARK_GRAY;
-import static racecontrol.visualisation.LookAndFeel.COLOR_RED;
-import static racecontrol.visualisation.LookAndFeel.COLOR_WHITE;
-import static racecontrol.visualisation.LookAndFeel.TEXT_SIZE;
-import static racecontrol.visualisation.gui.LPComponent.applet;
+import static racecontrol.LookAndFeel.COLOR_DARK_GRAY;
+import static racecontrol.LookAndFeel.COLOR_RED;
+import static racecontrol.LookAndFeel.COLOR_WHITE;
+import static racecontrol.LookAndFeel.TEXT_SIZE;
+import static racecontrol.lpgui.gui.LPComponent.applet;
 import java.util.function.Consumer;
 import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.HAND;

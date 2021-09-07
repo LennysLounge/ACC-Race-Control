@@ -51,7 +51,7 @@ import racecontrol.client.events.RealtimeUpdate;
 import racecontrol.client.extension.AccBroadcastingClientExtensionModule;
 import racecontrol.client.extension.AccClientExtension;
 import racecontrol.logging.UILogger;
-import racecontrol.visualisation.gui.LPContainer;
+import racecontrol.lpgui.gui.LPContainer;
 
 /**
  * A basic connection to the broadcasting interface from Assetto Corsa
@@ -60,9 +60,14 @@ import racecontrol.visualisation.gui.LPContainer;
  * @author Leonard
  */
 public class AccBroadcastingClient {
-
+    /**
+     * This class's logger.
+     */
     private static final Logger LOG = Logger.getLogger(AccBroadcastingClient.class.getName());
-
+    /**
+     * Singelton instance.
+     */
+    private static AccBroadcastingClient instance;
     /**
      * Address where the ACC broadcast server is running.
      */
@@ -132,12 +137,20 @@ public class AccBroadcastingClient {
      * created.
      */
     private final List<Class> circularDependencyPrevention = new LinkedList<>();
-
-    /**
-     * Default contructor.
-     */
-    public AccBroadcastingClient() {
+    
+    private AccBroadcastingClient() {
         loadModules();
+    }
+    
+    /**
+     * Creates and gets a singleton instance of this class.
+     * @return the singelton instance of this class.
+     */
+    public static AccBroadcastingClient getClient(){
+        if(instance == null){
+            instance = new AccBroadcastingClient();
+        }
+        return instance;
     }
 
     /**

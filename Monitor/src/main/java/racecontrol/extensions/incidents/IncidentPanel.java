@@ -6,11 +6,11 @@
 package racecontrol.extensions.incidents;
 
 import processing.event.KeyEvent;
-import static racecontrol.visualisation.LookAndFeel.LINE_HEIGHT;
-import racecontrol.visualisation.gui.LPButton;
-import racecontrol.visualisation.gui.LPContainer;
-import racecontrol.visualisation.gui.LPLabel;
-import racecontrol.visualisation.gui.LPTable;
+import static racecontrol.LookAndFeel.LINE_HEIGHT;
+import racecontrol.lpgui.gui.LPButton;
+import racecontrol.lpgui.gui.LPContainer;
+import racecontrol.lpgui.gui.LPLabel;
+import racecontrol.lpgui.gui.LPTable;
 
 /**
  *

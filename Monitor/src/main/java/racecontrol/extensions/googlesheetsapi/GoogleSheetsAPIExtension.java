@@ -21,7 +21,7 @@ import racecontrol.client.data.enums.SessionType;
 import racecontrol.client.events.CarConnect;
 import racecontrol.client.events.SessionChanged;
 import racecontrol.utility.TimeUtils;
-import racecontrol.visualisation.gui.LPContainer;
+import racecontrol.lpgui.gui.LPContainer;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;

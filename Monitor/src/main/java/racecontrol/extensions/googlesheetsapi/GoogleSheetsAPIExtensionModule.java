@@ -5,7 +5,7 @@
  */
 package racecontrol.extensions.googlesheetsapi;
 
-import racecontrol.visualisation.gui.LPContainer;
+import racecontrol.lpgui.gui.LPContainer;
 import racecontrol.persistance.PersistantConfig;
 import static racecontrol.persistance.PersistantConfig.CREDENTIALS_FILE_PATH;
 import racecontrol.client.extension.AccClientExtension;

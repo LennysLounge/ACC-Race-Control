@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation.gui;
+package racecontrol.lpgui.gui;
 
 import static java.util.Objects.requireNonNull;
 import processing.core.PApplet;

@@ -7,9 +7,9 @@ package racecontrol.extensions.googlesheetsapi;
 
 
 import racecontrol.utility.TimeUtils;
-import racecontrol.visualisation.LookAndFeel;
-import racecontrol.visualisation.gui.LPButton;
-import racecontrol.visualisation.gui.LPContainer;
+import racecontrol.LookAndFeel;
+import racecontrol.lpgui.gui.LPButton;
+import racecontrol.lpgui.gui.LPContainer;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 

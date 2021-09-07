@@ -5,10 +5,10 @@
  */
 package racecontrol.logging;
 
-import racecontrol.visualisation.LookAndFeel;
-import racecontrol.visualisation.gui.LPTableColumn;
-import racecontrol.visualisation.gui.LPTable;
-import racecontrol.visualisation.gui.TableModel;
+import racecontrol.LookAndFeel;
+import racecontrol.lpgui.gui.LPTableColumn;
+import racecontrol.lpgui.gui.LPTable;
+import racecontrol.lpgui.gui.TableModel;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;

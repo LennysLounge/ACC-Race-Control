@@ -3,15 +3,15 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation.gui;
+package racecontrol.lpgui.gui;
 
-import racecontrol.visualisation.LookAndFeel;
+import racecontrol.LookAndFeel;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
 import processing.core.PFont;
-import racecontrol.visualisation.gui.LPTable.RenderContext;
+import racecontrol.lpgui.gui.LPTable.RenderContext;
 
 /**
  *

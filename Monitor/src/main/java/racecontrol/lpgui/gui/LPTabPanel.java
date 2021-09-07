@@ -3,11 +3,11 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation.gui;
+package racecontrol.lpgui.gui;
 
-import racecontrol.visualisation.LookAndFeel;
-import static racecontrol.visualisation.LookAndFeel.COLOR_DARK_GRAY;
-import static racecontrol.visualisation.LookAndFeel.COLOR_RED;
+import racecontrol.LookAndFeel;
+import static racecontrol.LookAndFeel.COLOR_DARK_GRAY;
+import static racecontrol.LookAndFeel.COLOR_RED;
 import java.util.LinkedList;
 import java.util.List;
 import static processing.core.PConstants.ARROW;

@@ -11,17 +11,17 @@ import racecontrol.client.data.LapInfo;
 import racecontrol.client.data.enums.CarLocation;
 import racecontrol.client.data.enums.LapType;
 import racecontrol.utility.TimeUtils;
-import racecontrol.visualisation.LookAndFeel;
-import static racecontrol.visualisation.LookAndFeel.COLOR_PURPLE;
-import static racecontrol.visualisation.LookAndFeel.COLOR_WHITE;
-import racecontrol.visualisation.gui.LPTableColumn;
-import racecontrol.visualisation.gui.LPTable;
+import racecontrol.LookAndFeel;
+import static racecontrol.LookAndFeel.COLOR_PURPLE;
+import static racecontrol.LookAndFeel.COLOR_WHITE;
+import racecontrol.lpgui.gui.LPTableColumn;
+import racecontrol.lpgui.gui.LPTable;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import racecontrol.visualisation.gui.LPTable.RenderContext;
+import racecontrol.lpgui.gui.LPTable.RenderContext;
 
 /**
  *

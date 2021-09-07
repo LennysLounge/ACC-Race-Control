@@ -5,8 +5,8 @@
  */
 package racecontrol.logging;
 
-import racecontrol.visualisation.gui.LPContainer;
-import racecontrol.visualisation.gui.LPTable;
+import racecontrol.lpgui.gui.LPContainer;
+import racecontrol.lpgui.gui.LPTable;
 
 /**
  *

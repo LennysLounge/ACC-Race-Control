@@ -6,10 +6,10 @@
 package racecontrol.extensions.broadcasting;
 
 import static processing.core.PConstants.CENTER;
-import racecontrol.visualisation.LookAndFeel;
-import static racecontrol.visualisation.LookAndFeel.COLOR_GRAY;
-import static racecontrol.visualisation.LookAndFeel.COLOR_RED;
-import racecontrol.visualisation.gui.LPButton;
+import racecontrol.LookAndFeel;
+import static racecontrol.LookAndFeel.COLOR_GRAY;
+import static racecontrol.LookAndFeel.COLOR_RED;
+import racecontrol.lpgui.gui.LPButton;
 
 /**
  *

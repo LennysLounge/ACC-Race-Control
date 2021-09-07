@@ -7,14 +7,14 @@ package racecontrol.extensions.googlesheetsapi;
 
 import racecontrol.persistance.PersistantConfig;
 import static racecontrol.persistance.PersistantConfig.CREDENTIALS_FILE_PATH;
-import static racecontrol.visualisation.LookAndFeel.COLOR_DARK_GRAY;
-import static racecontrol.visualisation.LookAndFeel.LINE_HEIGHT;
-import static racecontrol.visualisation.LookAndFeel.TEXT_SIZE;
-import racecontrol.visualisation.gui.LPButton;
-import racecontrol.visualisation.gui.LPCheckBox;
-import racecontrol.visualisation.gui.LPContainer;
-import racecontrol.visualisation.gui.LPLabel;
-import racecontrol.visualisation.gui.LPTextField;
+import static racecontrol.LookAndFeel.COLOR_DARK_GRAY;
+import static racecontrol.LookAndFeel.LINE_HEIGHT;
+import static racecontrol.LookAndFeel.TEXT_SIZE;
+import racecontrol.lpgui.gui.LPButton;
+import racecontrol.lpgui.gui.LPCheckBox;
+import racecontrol.lpgui.gui.LPContainer;
+import racecontrol.lpgui.gui.LPLabel;
+import racecontrol.lpgui.gui.LPTextField;
 import java.io.File;
 import javax.swing.JFileChooser;
 

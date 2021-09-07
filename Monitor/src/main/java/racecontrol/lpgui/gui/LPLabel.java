@@ -3,12 +3,12 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation.gui;
+package racecontrol.lpgui.gui;
 
-import racecontrol.visualisation.LookAndFeel;
-import static racecontrol.visualisation.LookAndFeel.COLOR_GRAY;
-import static racecontrol.visualisation.LookAndFeel.LINE_HEIGHT;
-import static racecontrol.visualisation.gui.LPComponent.applet;
+import racecontrol.LookAndFeel;
+import static racecontrol.LookAndFeel.COLOR_GRAY;
+import static racecontrol.LookAndFeel.LINE_HEIGHT;
+import static racecontrol.lpgui.gui.LPComponent.applet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 

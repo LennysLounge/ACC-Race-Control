@@ -3,17 +3,17 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation.gui;
+package racecontrol.lpgui.gui;
 
-import racecontrol.visualisation.LookAndFeel;
+import racecontrol.LookAndFeel;
 import java.util.function.BiConsumer;
 import java.util.logging.Logger;
 import javax.swing.text.Utilities;
 import processing.core.PApplet;
 import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.CENTER;
-import static racecontrol.visualisation.LookAndFeel.COLOR_MEDIUM_DARK_GRAY;
-import static racecontrol.visualisation.LookAndFeel.LINE_HEIGHT;
+import static racecontrol.LookAndFeel.COLOR_MEDIUM_DARK_GRAY;
+import static racecontrol.LookAndFeel.LINE_HEIGHT;
 
 /**
  *

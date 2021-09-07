@@ -11,15 +11,15 @@ import racecontrol.client.data.LapInfo;
 import racecontrol.client.data.enums.CarLocation;
 import racecontrol.client.data.enums.LapType;
 import racecontrol.utility.TimeUtils;
-import racecontrol.visualisation.LookAndFeel;
-import static racecontrol.visualisation.LookAndFeel.COLOR_ORANGE;
-import static racecontrol.visualisation.LookAndFeel.COLOR_WHITE;
-import racecontrol.visualisation.gui.LPTable;
-import racecontrol.visualisation.gui.LPTableColumn;
+import racecontrol.LookAndFeel;
+import static racecontrol.LookAndFeel.COLOR_ORANGE;
+import static racecontrol.LookAndFeel.COLOR_WHITE;
+import racecontrol.lpgui.gui.LPTable;
+import racecontrol.lpgui.gui.LPTableColumn;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
-import racecontrol.visualisation.gui.LPTable.RenderContext;
+import racecontrol.lpgui.gui.LPTable.RenderContext;
 
 /**
  *

@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation;
+package racecontrol.hotkey;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,20 +33,19 @@ public class Hotkeys {
     public static final int KEY_UP = 38;
     public static final int KEY_DOWN = 40;
 
-    private AccBroadcastingClient client;
+    /**
+     * The acc game client connection.
+     */
+    private final AccBroadcastingClient client;
 
     public Hotkeys() {
-    }
-
-    public void setClient(AccBroadcastingClient client) {
-        this.client = client;
+        client = AccBroadcastingClient.getClient();
     }
 
     public void handleHotkeys(KeyEvent event) {
         if (client == null) {
             return;
         }
-
         switch (event.getKeyCode()) {
             case KEY_1:
                 client.sendSetCameraRequest("Drivable", "Cockpit");

@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.visualisation;
+package racecontrol;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
