@@ -8,7 +8,7 @@ package racecontrol.app.logging;
 import racecontrol.LookAndFeel;
 import racecontrol.lpgui.gui.LPTableColumn;
 import racecontrol.lpgui.gui.LPTable;
-import racecontrol.lpgui.gui.TableModel;
+import racecontrol.lpgui.gui.LPTableModel;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
@@ -22,7 +22,7 @@ import static processing.core.PConstants.LEFT;
  *
  * @author Leonard
  */
-public class LoggingTableModel extends TableModel {
+public class LoggingTableModel extends LPTableModel {
 
     private final LPTable.CellRenderer messageRenderer = (
             PApplet applet,

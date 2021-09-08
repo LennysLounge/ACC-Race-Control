@@ -11,7 +11,7 @@ import racecontrol.LookAndFeel;
  *
  * @author Leonard
  */
-public abstract class TableModel {
+public abstract class LPTableModel {
 
     /**
      * Returns the number of rows in this table model.

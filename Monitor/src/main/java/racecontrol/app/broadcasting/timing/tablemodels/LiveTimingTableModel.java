@@ -18,7 +18,7 @@ import static racecontrol.LookAndFeel.LINE_HEIGHT;
 import static racecontrol.LookAndFeel.TEXT_SIZE;
 import racecontrol.lpgui.gui.LPTable;
 import racecontrol.lpgui.gui.LPTableColumn;
-import racecontrol.lpgui.gui.TableModel;
+import racecontrol.lpgui.gui.LPTableModel;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -32,7 +32,7 @@ import static processing.core.PConstants.LEFT;
  * @author Leonard
  */
 public class LiveTimingTableModel
-        extends TableModel {
+        extends LPTableModel {
 
     /**
      * This class's logger.

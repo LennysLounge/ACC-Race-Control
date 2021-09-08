@@ -16,7 +16,7 @@ import static racecontrol.LookAndFeel.COLOR_WHITE;
 import static racecontrol.LookAndFeel.LINE_HEIGHT;
 import racecontrol.lpgui.gui.LPTableColumn;
 import racecontrol.lpgui.gui.LPTable;
-import racecontrol.lpgui.gui.TableModel;
+import racecontrol.lpgui.gui.LPTableModel;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -36,7 +36,7 @@ import static racecontrol.LookAndFeel.COLOR_RED;
  *
  * @author Leonard
  */
-public class IncidentTableModel extends TableModel {
+public class IncidentTableModel extends LPTableModel {
 
     /**
      * This class's logger.

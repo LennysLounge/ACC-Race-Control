@@ -26,7 +26,7 @@ public class LPTable extends LPContainer {
     /**
      * Default implementation of the table model. Does nothing.
      */
-    public static final TableModel defaultTableModel = new TableModel() {
+    public static final LPTableModel defaultTableModel = new LPTableModel() {
         @Override
         public int getRowCount() {
             return 0;
@@ -45,7 +45,7 @@ public class LPTable extends LPContainer {
     /**
      * The table model for this table.
      */
-    private TableModel model = defaultTableModel;
+    private LPTableModel model = defaultTableModel;
     /**
      * height of the table model.
      */
@@ -388,7 +388,7 @@ public class LPTable extends LPContainer {
      *
      * @param model The new table model.
      */
-    public void setTableModel(TableModel model) {
+    public void setTableModel(LPTableModel model) {
         this.model = model;
     }
 
@@ -404,7 +404,7 @@ public class LPTable extends LPContainer {
         this.cellClickAction = action;
     }
 
-    public TableModel getTableModel() {
+    public LPTableModel getTableModel() {
         return model;
     }
 
