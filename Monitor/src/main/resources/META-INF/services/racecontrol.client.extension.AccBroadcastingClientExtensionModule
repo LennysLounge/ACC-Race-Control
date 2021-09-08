@@ -1,5 +1,3 @@
-racecontrol.extensions.broadcasting.timing.LiveTimingExtensionModule
-racecontrol.extensions.broadcasting.BroadcastingModule
 racecontrol.extensions.incidents.IncidentExtensionModule
 racecontrol.extensions.laptimes.LaptimeExtensionModule
 racecontrol.extensions.results.ResultsExtensionModule

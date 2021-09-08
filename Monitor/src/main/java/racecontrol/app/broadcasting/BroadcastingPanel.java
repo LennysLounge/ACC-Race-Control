@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.broadcasting;
+package racecontrol.app.broadcasting;
 
 import racecontrol.lpgui.gui.LPCollapsablePanel;
 import java.util.HashMap;
@@ -30,7 +30,7 @@ public class BroadcastingPanel
     /**
      * Extension.
      */
-    private final BroadcastingExtension extension;
+    private final BroadcastingController extension;
     /**
      * The panel of the live timing extension.
      */
@@ -57,7 +57,7 @@ public class BroadcastingPanel
 
     private final LPCollapsablePanel collapsablePanel = new LPCollapsablePanel("Broadcasting control");
 
-    public BroadcastingPanel(BroadcastingExtension extension,
+    public BroadcastingPanel(BroadcastingController extension,
             LPContainer liveTimingPanel) {
         this.extension = extension;
         this.liveTimingPanel = liveTimingPanel;

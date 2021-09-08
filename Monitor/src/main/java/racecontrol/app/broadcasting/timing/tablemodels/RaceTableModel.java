@@ -3,9 +3,9 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.broadcasting.timing.tablemodels;
+package racecontrol.app.broadcasting.timing.tablemodels;
 
-import racecontrol.extensions.broadcasting.timing.LiveTimingEntry;
+import racecontrol.app.broadcasting.timing.LiveTimingEntry;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.LapInfo;
 import racecontrol.client.data.enums.CarLocation;

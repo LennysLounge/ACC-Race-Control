@@ -3,9 +3,9 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.broadcasting.timing;
+package racecontrol.app.broadcasting.timing;
 
-import racecontrol.extensions.broadcasting.timing.tablemodels.LiveTimingTableModel;
+import racecontrol.app.broadcasting.timing.tablemodels.LiveTimingTableModel;
 import racecontrol.client.data.CarInfo;
 import racecontrol.lpgui.gui.LPContainer;
 import racecontrol.lpgui.gui.LPTable;
@@ -25,7 +25,7 @@ public class LiveTimingPanel extends LPContainer {
     /**
      * Reference to the extension this panel is representing.
      */
-    private final LiveTimingExtension extension;
+    private final LiveTimingController extension;
     /**
      * The table that display the live timing.
      */
@@ -39,7 +39,7 @@ public class LiveTimingPanel extends LPContainer {
      */
     private int lastTableClickRow = -1;
 
-    public LiveTimingPanel(LiveTimingExtension extension) {
+    public LiveTimingPanel(LiveTimingController extension) {
         this.extension = extension;
         setName("LIVE TIMING");
 

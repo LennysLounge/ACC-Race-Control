@@ -5,6 +5,7 @@
  */
 package racecontrol.app;
 
+import racecontrol.app.broadcasting.BroadcastingController;
 import racecontrol.app.logging.LoggingPanel;
 import racecontrol.client.events.ConnectionClosed;
 import racecontrol.client.events.ConnectionOpened;
@@ -33,6 +34,10 @@ public class AppController
      * Logging panel.
      */
     private final LoggingPanel loggingPanel;
+    /**
+     * Broadcasting controller.
+     */
+    private final BroadcastingController broadcastingController;
 
     public AppController() {
         EventBus.register(this);
@@ -40,9 +45,16 @@ public class AppController
         appPanel = new AppPanel();
         settingsPanel = new SettingsPanel();
         loggingPanel = new LoggingPanel();
+        broadcastingController = new BroadcastingController();
         
         appPanel.getMenu().addMenuItem(new Menu.MenuItem("Menu", () -> {
             appPanel.getMenu().toggleCollapse();
+            appPanel.updateComponents();
+            appPanel.invalidate();
+        }));
+        
+        appPanel.getMenu().addMenuItem(new Menu.MenuItem("Live Timing", () -> {
+            appPanel.setActivePage(broadcastingController.getPanel());
             appPanel.updateComponents();
             appPanel.invalidate();
         }));

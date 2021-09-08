@@ -3,11 +3,11 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.broadcasting.timing;
+package racecontrol.app.broadcasting.timing;
 
-import racecontrol.extensions.broadcasting.timing.tablemodels.RaceTableModel;
-import racecontrol.extensions.broadcasting.timing.tablemodels.LiveTimingTableModel;
-import racecontrol.extensions.broadcasting.timing.tablemodels.QualifyingTableModel;
+import racecontrol.app.broadcasting.timing.tablemodels.RaceTableModel;
+import racecontrol.app.broadcasting.timing.tablemodels.LiveTimingTableModel;
+import racecontrol.app.broadcasting.timing.tablemodels.QualifyingTableModel;
 import racecontrol.client.events.RealtimeCarUpdate;
 import racecontrol.client.events.RealtimeUpdate;
 import racecontrol.eventbus.Event;
@@ -39,13 +39,17 @@ import java.util.stream.Collectors;
  *
  * @author Leonard
  */
-public class LiveTimingExtension
-        extends AccClientExtension {
+public class LiveTimingController
+        implements EventListener {
 
     /**
      * This classes logger.
      */
-    private static Logger LOG = Logger.getLogger(LiveTimingExtension.class.getName());
+    private static Logger LOG = Logger.getLogger(LiveTimingController.class.getName());
+    /**
+     * Reference to the connection client.
+     */
+    private final AccBroadcastingClient client;
     /**
      * The visualisation panel
      */
@@ -71,12 +75,12 @@ public class LiveTimingExtension
      */
     private final GapCalculator gapCalculator = new GapCalculator();
 
-    public LiveTimingExtension(AccBroadcastingClient client) {
-        super(client);
+    public LiveTimingController() {
+        EventBus.register(this);
+        client = AccBroadcastingClient.getClient();
         this.panel = new LiveTimingPanel(this);
     }
 
-    @Override
     public LPContainer getPanel() {
         return panel;
     }
@@ -184,7 +188,7 @@ public class LiveTimingExtension
 
     public void onRealtimeCarUpdate(RealtimeCarUpdate event) {
         RealtimeInfo info = event.getInfo();
-        CarInfo car = getClient().getModel().getCarsInfo().get(info.getCarId());
+        CarInfo car = client.getModel().getCarsInfo().get(info.getCarId());
         if (car != null) {
             entries.put(car.getCarId(), new LiveTimingEntry(car));
         }
@@ -203,11 +207,11 @@ public class LiveTimingExtension
     }
 
     public void focusOnCar(CarInfo car) {
-        getClient().sendChangeFocusRequest(car.getCarId());
+        client.sendChangeFocusRequest(car.getCarId());
     }
 
     private boolean isFocused(CarInfo car) {
-        return car.getCarId() == getClient().getModel().getSessionInfo().getFocusedCarIndex();
+        return car.getCarId() == client.getModel().getSessionInfo().getFocusedCarIndex();
     }
 
 }

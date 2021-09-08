@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.broadcasting;
+package racecontrol.app.broadcasting;
 
 import static processing.core.PConstants.CENTER;
 import racecontrol.LookAndFeel;
