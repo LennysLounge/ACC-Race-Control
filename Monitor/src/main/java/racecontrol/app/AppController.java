@@ -7,6 +7,7 @@ package racecontrol.app;
 
 import racecontrol.app.broadcasting.BroadcastingController;
 import racecontrol.app.logging.LoggingPanel;
+import racecontrol.app.racecontrol.RaceControlController;
 import racecontrol.client.events.ConnectionClosed;
 import racecontrol.client.events.ConnectionOpened;
 import racecontrol.client.events.RealtimeUpdate;
@@ -38,6 +39,8 @@ public class AppController
      * Broadcasting controller.
      */
     private final BroadcastingController broadcastingController;
+    
+    private final RaceControlController raceControlController;
 
     public AppController() {
         EventBus.register(this);
@@ -46,6 +49,7 @@ public class AppController
         settingsPanel = new SettingsPanel();
         loggingPanel = new LoggingPanel();
         broadcastingController = new BroadcastingController();
+        raceControlController = new RaceControlController();
 
         appPanel.getMenu().addMenuItem(new Menu.MenuItem("Menu", () -> {
             appPanel.getMenu().toggleCollapse();
@@ -55,6 +59,13 @@ public class AppController
 
         appPanel.getMenu().addMenuItem(new Menu.MenuItem("Live Timing", () -> {
             appPanel.setActivePage(broadcastingController.getPanel());
+            appPanel.updateComponents();
+            appPanel.invalidate();
+        }));
+        
+        appPanel.getMenu().addMenuItem(new Menu.MenuItem("Race Control", () -> {
+            System.out.println("hi");
+            appPanel.setActivePage(raceControlController.getPanel());
             appPanel.updateComponents();
             appPanel.invalidate();
         }));
