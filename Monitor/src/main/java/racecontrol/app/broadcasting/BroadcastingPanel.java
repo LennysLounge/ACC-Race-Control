@@ -71,7 +71,7 @@ public class BroadcastingPanel
         });
         addComponent(collapsablePanel);
 
-        hudLabel.setSize(200, LINE_HEIGHT);
+        hudLabel.setSize(150, LINE_HEIGHT);
         collapsablePanel.addComponent(hudLabel);
         cameraLable.setSize(100, LINE_HEIGHT);
         collapsablePanel.addComponent(cameraLable);
@@ -213,6 +213,12 @@ public class BroadcastingPanel
     }
 
     public void setCameraSets(Map<String, List<String>> sets) {
+        //remove all old buttons
+        for(LPButton b : tvCameraButtons){
+            collapsablePanel.removeComponent(b);
+        }
+        tvCameraButtons.clear();
+        //add new tv cameras.
         for (String camSet : sets.keySet()) {
             if (!cameraButtonsRef.containsKey(camSet)) {
                 cameraButtonsRef.put(camSet, new LinkedHashMap<>());
@@ -240,6 +246,7 @@ public class BroadcastingPanel
                 tvCameraButtons.add(b);
             }
         }
+        onResize(getWidth(), getHeight());
     }
 
     private void addHUDButton(String name, String page) {

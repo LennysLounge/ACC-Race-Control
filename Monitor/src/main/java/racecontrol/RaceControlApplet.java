@@ -10,6 +10,8 @@ import racecontrol.client.AccBroadcastingClient;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import processing.core.PGraphics;
@@ -28,6 +30,10 @@ public class RaceControlApplet extends CustomPApplet {
      * This classes logger.
      */
     private static final Logger LOG = Logger.getLogger(RaceControlApplet.class.getName());
+    /**
+     * Tasks that are to be executed on the animation thread later.
+     */
+    private static final List<Runnable> runLater = new LinkedList<>();
     /**
      * Connection client.
      */
@@ -65,17 +71,22 @@ public class RaceControlApplet extends CustomPApplet {
 
         //create the connection client.
         this.client = AccBroadcastingClient.getClient();
-        
+
         this.hotkey = new Hotkeys();
-        
+
         appControler = new AppController();
         setComponent(appControler.getGUIComponent());
     }
 
     @Override
     public void draw() {
-        
+
         super.draw();
+        
+        for(Runnable task: runLater){
+            task.run();
+        }
+        runLater.clear();
     }
 
     @Override
@@ -111,5 +122,9 @@ public class RaceControlApplet extends CustomPApplet {
         } catch (IOException ex) {
             return null;
         }
+    }
+
+    public static void runLater(Runnable task) {
+        runLater.add(task);
     }
 }

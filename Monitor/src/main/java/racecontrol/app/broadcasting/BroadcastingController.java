@@ -7,6 +7,7 @@ package racecontrol.app.broadcasting;
 
 import racecontrol.app.broadcasting.timing.LiveTimingController;
 import java.util.logging.Logger;
+import racecontrol.RaceControlApplet;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.data.TrackInfo;
@@ -54,7 +55,9 @@ public class BroadcastingController
     public void onEvent(Event e) {
         if (e instanceof TrackData) {
             TrackInfo info = ((TrackData) e).getInfo();
-            panel.setCameraSets(info.getCameraSets());
+            RaceControlApplet.runLater(() -> {
+                panel.setCameraSets(info.getCameraSets());
+            });
         } else if (e instanceof RealtimeUpdate) {
             SessionInfo info = ((RealtimeUpdate) e).getSessionInfo();
             panel.setActiveCameraSet(info.getActiveCameraSet(), info.getActiveCamera());

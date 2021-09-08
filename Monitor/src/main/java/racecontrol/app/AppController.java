@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2021 Leonard Schüngel
- * 
+ *
  * For licensing information see the included license (LICENSE.txt)
  */
 package racecontrol.app;
@@ -19,8 +19,8 @@ import racecontrol.lpgui.gui.LPComponent;
  *
  * @author Leonard
  */
-public class AppController 
-    implements EventListener{
+public class AppController
+        implements EventListener {
 
     /**
      * The GUI component.
@@ -41,18 +41,18 @@ public class AppController
 
     public AppController() {
         EventBus.register(this);
-        
+
         appPanel = new AppPanel();
         settingsPanel = new SettingsPanel();
         loggingPanel = new LoggingPanel();
         broadcastingController = new BroadcastingController();
-        
+
         appPanel.getMenu().addMenuItem(new Menu.MenuItem("Menu", () -> {
             appPanel.getMenu().toggleCollapse();
             appPanel.updateComponents();
             appPanel.invalidate();
         }));
-        
+
         appPanel.getMenu().addMenuItem(new Menu.MenuItem("Live Timing", () -> {
             appPanel.setActivePage(broadcastingController.getPanel());
             appPanel.updateComponents();
@@ -72,7 +72,7 @@ public class AppController
         });
         appPanel.getMenu().addMenuItem(settingsMenuItem);
         appPanel.getMenu().setVisible(false);
-        
+
         appPanel.setActivePage(settingsPanel);
         appPanel.getMenu().setSelectedMenuItem(settingsMenuItem);
     }
@@ -83,20 +83,21 @@ public class AppController
 
     @Override
     public void onEvent(Event e) {
-        if(e instanceof RealtimeUpdate){
+        if (e instanceof RealtimeUpdate) {
             appPanel.getHeader().invalidate();
-        }
-        else if(e instanceof ConnectionOpened){
+        } else if (e instanceof ConnectionOpened) {
             appPanel.getMenu().setVisible(true);
+            appPanel.setActivePage(broadcastingController.getPanel());
+            appPanel.getMenu().setSelectedMenuIndex(1);
             appPanel.updateComponents();
             appPanel.invalidate();
-        }
-        else if(e instanceof ConnectionClosed){
+        } else if (e instanceof ConnectionClosed) {
             appPanel.getMenu().setVisible(false);
             appPanel.setActivePage(settingsPanel);
             appPanel.updateComponents();
             appPanel.invalidate();
         }
     }
+
 
 }
