@@ -6,7 +6,6 @@
 package racecontrol;
 
 import racecontrol.hotkey.Hotkeys;
-import racecontrol.app.BasePanel;
 import racecontrol.client.AccBroadcastingClient;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -16,6 +15,7 @@ import javax.imageio.ImageIO;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.event.KeyEvent;
+import racecontrol.app.AppController;
 
 /**
  * The base for the processing visualization.
@@ -29,21 +29,17 @@ public class RaceControlApplet extends CustomPApplet {
      */
     private static final Logger LOG = Logger.getLogger(RaceControlApplet.class.getName());
     /**
-     * Timer since the last draw.
-     */
-    private int frameTimer = 0;
-    /**
      * Connection client.
      */
     private AccBroadcastingClient client;
     /**
-     * The base panel to use.
-     */
-    private BasePanel basePanel;
-    /**
      * The manager for hotkey actions.
      */
     private Hotkeys hotkey;
+    /**
+     * Controler for the base layer of the app.
+     */
+    private AppController appControler;
 
     /**
      * Creates a new instance of this object.
@@ -71,21 +67,14 @@ public class RaceControlApplet extends CustomPApplet {
         this.client = AccBroadcastingClient.getClient();
         
         this.hotkey = new Hotkeys();
-
-        //init components.
-        basePanel = new BasePanel(client);
-        setComponent(basePanel);
-
+        
+        appControler = new AppController();
+        setComponent(appControler.getGUIComponent());
     }
 
     @Override
     public void draw() {
-        int dt = (int) (1000 / frameRate);
-        frameTimer += dt;
-        if (frameTimer > client.getUpdateInterval()) {
-            basePanel.updateHeader();
-        }
-
+        
         super.draw();
     }
 

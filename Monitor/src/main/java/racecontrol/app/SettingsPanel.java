@@ -73,9 +73,9 @@ public class SettingsPanel
 
     private final LoggingPanel loggingPanel = new LoggingPanel();
 
-    public SettingsPanel(AccBroadcastingClient client) {
+    public SettingsPanel() {
         setName("CONFIGURATION");
-        this.client = client;
+        this.client = AccBroadcastingClient.getClient();
 
         EventBus.register(this);
 
