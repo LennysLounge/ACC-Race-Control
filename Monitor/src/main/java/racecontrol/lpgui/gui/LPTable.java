@@ -76,10 +76,6 @@ public class LPTable extends LPContainer {
      */
     private final Scrollbar scrollbar = new Scrollbar();
     /**
-     * Amount of table rows visible.
-     */
-    private int visibleRows = 0;
-    /**
      * The column the mouse is over. -1 if the mouse is not over any column.
      */
     private int mouseOverColumn = -1;
@@ -123,6 +119,8 @@ public class LPTable extends LPContainer {
             }
             applet.fill(LookAndFeel.COLOR_MEDIUM_DARK_GRAY);
             applet.rect(columnOffset, 0, getWidth() - columnOffset, LINE_HEIGHT);
+            applet.textAlign(CENTER, CENTER);
+            applet.textFont(LookAndFeel.fontMedium());
             for (int i = 0; i < columns.length; i++) {
                 if (!columns[i].isVisible()) {
                     continue;
@@ -133,7 +131,6 @@ public class LPTable extends LPContainer {
                     applet.fill(LookAndFeel.TRANSPARENT_WHITE);
                     applet.rect(columnOffset, 0, columnWidths[i], LINE_HEIGHT);
                 }
-                applet.textAlign(CENTER, CENTER);
                 applet.fill(LookAndFeel.COLOR_WHITE);
                 applet.text(columns[i].getHeader(), columnOffset + columnWidths[i] / 2f, LINE_HEIGHT / 2f);
                 columnOffset += columnWidths[i];
