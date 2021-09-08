@@ -3,8 +3,11 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.logging;
+package racecontrol.app.logging;
 
+import racecontrol.logging.LogMessage;
+import racecontrol.logging.LoggerListener;
+import racecontrol.logging.UILogger;
 import racecontrol.lpgui.gui.LPContainer;
 import racecontrol.lpgui.gui.LPTable;
 

@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.logging;
+package racecontrol.app.logging;
 
 import racecontrol.LookAndFeel;
 import racecontrol.lpgui.gui.LPTableColumn;
@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 import processing.core.PApplet;
+import racecontrol.logging.LogMessage;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 

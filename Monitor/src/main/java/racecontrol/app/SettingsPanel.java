@@ -35,7 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import static processing.core.PConstants.CENTER;
-import racecontrol.logging.LoggingPanel;
+import racecontrol.app.logging.LoggingPanel;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_BROADCSATING_ENABLED;
 
 /**
@@ -70,8 +70,6 @@ public class SettingsPanel
     private final LPTabPanel extensionTabPanel = new LPTabPanel();
 
     private final LPLabel versionLabel = new LPLabel("Version: " + Version.VERSION);
-
-    private final LoggingPanel loggingPanel = new LoggingPanel();
 
     public SettingsPanel() {
         setName("CONFIGURATION");
@@ -244,7 +242,6 @@ public class SettingsPanel
                 .map(extensionModule -> extensionModule.getExtensionConfigurationPanel())
                 .filter(panel -> panel != null)
                 .forEach(configPanel -> extensionTabPanel.addTab(configPanel));
-        extensionTabPanel.addTab(loggingPanel);
         extensionTabPanel.setTabIndex(0);
 
         addComponent(versionLabel);

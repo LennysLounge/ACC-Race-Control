@@ -5,6 +5,7 @@
  */
 package racecontrol.app;
 
+import racecontrol.app.logging.LoggingPanel;
 import racecontrol.client.events.ConnectionClosed;
 import racecontrol.client.events.ConnectionOpened;
 import racecontrol.client.events.RealtimeUpdate;
@@ -24,25 +25,30 @@ public class AppController
      * The GUI component.
      */
     private final AppPanel appPanel;
-    
+    /**
+     * Settings panel.
+     */
     private final SettingsPanel settingsPanel;
+    /**
+     * Logging panel.
+     */
+    private final LoggingPanel loggingPanel;
 
     public AppController() {
         EventBus.register(this);
         
         appPanel = new AppPanel();
         settingsPanel = new SettingsPanel();
+        loggingPanel = new LoggingPanel();
         
-        LPComponent TestPanel = new testPanel();
-
         appPanel.getMenu().addMenuItem(new Menu.MenuItem("Menu", () -> {
             appPanel.getMenu().toggleCollapse();
             appPanel.updateComponents();
             appPanel.invalidate();
         }));
 
-        appPanel.getMenu().addMenuItem(new Menu.MenuItem("Test", () -> {
-            appPanel.setActivePage(TestPanel);
+        appPanel.getMenu().addMenuItem(new Menu.MenuItem("Log", () -> {
+            appPanel.setActivePage(loggingPanel);
             appPanel.updateComponents();
             appPanel.invalidate();
         }));
