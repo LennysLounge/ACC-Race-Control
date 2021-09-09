@@ -9,7 +9,7 @@ import racecontrol.client.AccBroadcastingClient;
 import racecontrol.eventbus.EventBus;
 import racecontrol.client.extension.AccClientExtension;
 import racecontrol.eventbus.Event;
-import racecontrol.extensions.replayoffset.ReplayStart;
+import racecontrol.client.extension.replayoffset.ReplayStartKnownEvent;
 import racecontrol.lpgui.gui.LPContainer;
 
 /**
@@ -35,7 +35,7 @@ public class DebugExtension
     
     @Override
     public void onEvent(Event e) {
-        if (e instanceof ReplayStart) {
+        if (e instanceof ReplayStartKnownEvent) {
             panel.setReplayTimeKnown();
         }
     }

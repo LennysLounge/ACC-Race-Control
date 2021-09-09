@@ -3,18 +3,16 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.replayoffset;
+package racecontrol.client.extension.replayoffset;
 
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
-import racecontrol.client.extension.AccClientExtension;
 import racecontrol.client.events.BroadcastingEventEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.data.BroadcastingEvent;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.events.SessionChangedEvent;
-import racecontrol.lpgui.gui.LPContainer;
 import java.util.logging.Logger;
 import racecontrol.client.AccBroadcastingClient;
 
@@ -25,7 +23,7 @@ import racecontrol.client.AccBroadcastingClient;
  * @author Leonard
  */
 public class ReplayOffsetExtension
-        extends AccClientExtension {
+    implements EventListener{
 
     /**
      * Explaination of how this works:
@@ -70,9 +68,17 @@ public class ReplayOffsetExtension
      * started. Save that t as the replay start time.
      */
     /**
+     * Singelton instance.
+     */
+    private static ReplayOffsetExtension instance;
+    /**
      * This classes logger.
      */
     private static final Logger LOG = Logger.getLogger(ReplayOffsetExtension.class.getName());
+    /**
+     * Reference to the connection client.
+     */
+    private final AccBroadcastingClient client;
 
     /**
      * The timestamp of when the replay starts.
@@ -116,18 +122,21 @@ public class ReplayOffsetExtension
 
     private long lowerBound = 0;
     private long upperBound = 0;
+    
+    public static ReplayOffsetExtension getInstance(){
+        if(instance == null){
+            instance = new ReplayOffsetExtension();
+        }
+        return instance;
+    }
 
-    public ReplayOffsetExtension(AccBroadcastingClient client) {
-        super(client);
+    private ReplayOffsetExtension() {
+        EventBus.register(this);
+        client =  AccBroadcastingClient.getClient();
         replayStartTime = 0;
         gameConnectionTime = 0;
         isInSearchMode = false;
         LOG.info("replay extension created");
-    }
-
-    @Override
-    public LPContainer getPanel() {
-        return null;
     }
 
     @Override
@@ -137,7 +146,7 @@ public class ReplayOffsetExtension
             if (!event.isInitialisation()) {
                 replayStartTime = System.currentTimeMillis();
                 LOG.info("Setting replayStartTime based on session change time to: " + replayStartTime);
-                EventBus.publish(new ReplayStart());
+                EventBus.publish(new ReplayStartKnownEvent());
             }
         } else if (e instanceof BroadcastingEventEvent) {
             BroadcastingEvent event = ((BroadcastingEventEvent) e).getEvent();
@@ -145,12 +154,12 @@ public class ReplayOffsetExtension
             if (replayStartTime == 0) {
                 long now = System.currentTimeMillis();
                 gameConnectionTime = now - event.getTimeMs();
-                long latestSessionChange = now - (int) getClient().getModel().getSessionInfo().getSessionTime();
+                long latestSessionChange = now - (int) client.getModel().getSessionInfo().getSessionTime();
 
                 if (gameConnectionTime > latestSessionChange) {
                     replayStartTime = gameConnectionTime;
                     LOG.info("Setting replayStartTime based on game connection time to: " + gameConnectionTime);
-                    EventBus.publish(new ReplayStart());
+                    EventBus.publish(new ReplayStartKnownEvent());
                 }
 
             }
@@ -161,7 +170,7 @@ public class ReplayOffsetExtension
                 if (info.isReplayPlaying()) {
                     waitForReplayToFinish = true;
                 } else {
-                    replayDelay += getClient().getUpdateInterval();
+                    replayDelay += client.getUpdateInterval();
                     if (replayDelay > ALLOWED_REPLAY_DELAY) {
                         searchStep(true);
                     }
@@ -174,7 +183,7 @@ public class ReplayOffsetExtension
                     }
                 }
             }
-        } else if (e instanceof ReplayStart) {
+        } else if (e instanceof ReplayStartKnownEvent) {
             searchStep = 0;
         }
     }
@@ -194,7 +203,7 @@ public class ReplayOffsetExtension
 
         long now = System.currentTimeMillis();
         long sessionOffset = (now - replayStartTime)
-                - (int) getClient().getModel().getSessionInfo().getSessionTime();
+                - (int) client.getModel().getSessionInfo().getSessionTime();
         return sessionTime + (int) sessionOffset + MAGIC_OFFSET;
     }
 
@@ -217,9 +226,9 @@ public class ReplayOffsetExtension
         long now = System.currentTimeMillis();
         long requestTimeStamp = timeSinceConnection + gameConnectionTime;
         long sessionStartTimeStamp = now
-                - (int) getClient().getModel().getSessionInfo().getSessionTime();
+                - (int) client.getModel().getSessionInfo().getSessionTime();
         long sessionOffset = (now - replayStartTime)
-                - (int) getClient().getModel().getSessionInfo().getSessionTime();
+                - (int) client.getModel().getSessionInfo().getSessionTime();
         return (int) (requestTimeStamp - sessionStartTimeStamp + sessionOffset) + MAGIC_OFFSET;
     }
 
@@ -297,7 +306,7 @@ public class ReplayOffsetExtension
             long middle = lowerBound / 2 + upperBound / 2;
             replayStartTime = middle;
             LOG.info("Setting replay time based on search algorithm to: " + middle);
-            EventBus.publish(new ReplayStart());
+            EventBus.publish(new ReplayStartKnownEvent());
             searchStep = 0;
         }
     }
@@ -308,6 +317,6 @@ public class ReplayOffsetExtension
 
         long now = System.currentTimeMillis();
         int secondsBack = ((int) (now - timestamp)) / 1000;
-        getClient().sendInstantReplayRequestSimple(secondsBack, 1);
+        client.sendInstantReplayRequestSimple(secondsBack, 1);
     }
 }

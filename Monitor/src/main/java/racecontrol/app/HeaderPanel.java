@@ -5,7 +5,7 @@
  */
 package racecontrol.app;
 
-import racecontrol.extensions.replayoffset.ReplayOffsetExtension;
+import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.utility.TimeUtils;
@@ -20,11 +20,7 @@ import static racecontrol.LookAndFeel.fontRegular;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
-import racecontrol.client.events.ConnectionClosedEvent;
-import racecontrol.client.events.ConnectionOpenedEvent;
-import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 import racecontrol.lpgui.gui.LPContainer;
 
 /**
@@ -32,18 +28,17 @@ import racecontrol.lpgui.gui.LPContainer;
  * @author Leonard
  */
 public class HeaderPanel
-        extends LPContainer
-        implements EventListener {
+        extends LPContainer {
 
     private final AccBroadcastingClient client;
     /**
      * Reference to the replay offset extension.
      */
-    private ReplayOffsetExtension replayOffsetExtension;
+    private final ReplayOffsetExtension replayOffsetExtension;
 
     public HeaderPanel() {
-        EventBus.register(this);
         this.client = AccBroadcastingClient.getClient();
+        replayOffsetExtension = ReplayOffsetExtension.getInstance();
     }
 
     @Override
@@ -127,12 +122,5 @@ public class HeaderPanel
                 break;
         }
         return result;
-    }
-
-    @Override
-    public void onEvent(Event e) {
-        if (e instanceof ConnectionOpenedEvent) {
-            replayOffsetExtension = client.getOrCreateExtension(ReplayOffsetExtension.class);
-        }
     }
 }

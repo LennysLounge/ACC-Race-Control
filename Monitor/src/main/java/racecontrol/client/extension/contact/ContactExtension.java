@@ -13,7 +13,7 @@ import racecontrol.eventbus.EventBus;
 import racecontrol.client.data.BroadcastingEvent;
 import racecontrol.client.data.enums.BroadcastingEventType;
 import racecontrol.utility.TimeUtils;
-import racecontrol.extensions.replayoffset.ReplayOffsetExtension;
+import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.AccBroadcastingClient;
 import java.util.logging.Logger;
 import racecontrol.eventbus.EventListener;
@@ -58,7 +58,7 @@ public class ContactExtension
     private ContactExtension() {
         EventBus.register(this);
         client = AccBroadcastingClient.getClient();
-        replayOffsetExtension = client.getOrCreateExtension(ReplayOffsetExtension.class);
+        replayOffsetExtension = ReplayOffsetExtension.getInstance();
     }
 
     @Override

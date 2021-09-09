@@ -51,6 +51,7 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.extension.AccBroadcastingClientExtensionModule;
 import racecontrol.client.extension.AccClientExtension;
 import racecontrol.client.extension.contact.ContactExtension;
+import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.logging.UILogger;
 import racecontrol.lpgui.gui.LPContainer;
 
@@ -146,6 +147,7 @@ public class AccBroadcastingClient {
 
     public void initialise() {
         //instanciate extensions
+        ReplayOffsetExtension.getInstance();
         ContactExtension.getInstance();
     }
 

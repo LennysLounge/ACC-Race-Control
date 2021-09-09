@@ -6,7 +6,7 @@
 package racecontrol.extensions.debug;
 
 import racecontrol.Main;
-import racecontrol.extensions.replayoffset.ReplayOffsetExtension;
+import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.LookAndFeel;
 import static racecontrol.LookAndFeel.LINE_HEIGHT;
 import racecontrol.lpgui.gui.LPButton;
