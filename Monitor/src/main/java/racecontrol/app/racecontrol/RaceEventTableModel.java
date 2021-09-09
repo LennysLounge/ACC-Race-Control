@@ -10,6 +10,7 @@ import java.util.List;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
+import static racecontrol.LookAndFeel.COLOR_GRAY;
 import static racecontrol.LookAndFeel.COLOR_RED;
 import static racecontrol.LookAndFeel.COLOR_WHITE;
 import static racecontrol.LookAndFeel.TEXT_SIZE;
@@ -50,11 +51,11 @@ public class RaceEventTableModel
             new LPTableColumn("Replay")
             .setMinWidth(TEXT_SIZE * 5)
             .setMaxWidth(TEXT_SIZE * 5)
-            .setCellRenderer(replayButtonRenderer),
+            .setCellRenderer(LPTableColumn.nullRenderer),
             new LPTableColumn("Time")
             .setMinWidth(TEXT_SIZE * 5)
             .setMaxWidth(TEXT_SIZE * 5)
-            .setCellRenderer(replayTimeRenderer),
+            .setCellRenderer(LPTableColumn.nullRenderer),
             new LPTableColumn("")
             .setCellRenderer(LPTableColumn.nullRenderer)
         };
@@ -92,9 +93,7 @@ public class RaceEventTableModel
             PApplet applet,
             RenderContext context) -> {
         RaceEventEntry entry = (RaceEventEntry) context.object;
-        applet.fill(COLOR_WHITE);
-        applet.textAlign(LEFT, CENTER);
-        //applet.text(entry.getTypeDescriptor(), context.height / 2f, context.height / 2f);
+        entry.getInfoRenderer().render(applet, context);
     };
 
     private final LPTable.CellRenderer replayButtonRenderer = (
@@ -102,11 +101,15 @@ public class RaceEventTableModel
             RenderContext context) -> {
         RaceEventEntry entry = (RaceEventEntry) context.object;
         if (entry.isHasReplay()) {
-            applet.fill(COLOR_RED);
+            if (context.isMouseOverColumn) {
+                applet.fill(COLOR_RED);
+            } else {
+                applet.fill(COLOR_GRAY);
+            }
             applet.rect(2, 2, context.width - 4, context.height - 4);
             applet.fill(COLOR_WHITE);
-            applet.textAlign(LEFT, CENTER);
-            applet.text("Replay", context.height / 2f, context.height / 2f);
+            applet.textAlign(CENTER, CENTER);
+            applet.text("Replay", context.width / 2f, context.height / 2f);
         }
     };
 

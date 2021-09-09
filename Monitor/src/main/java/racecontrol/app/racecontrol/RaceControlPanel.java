@@ -5,6 +5,7 @@
  */
 package racecontrol.app.racecontrol;
 
+import processing.event.KeyEvent;
 import racecontrol.lpgui.gui.LPContainer;
 import racecontrol.lpgui.gui.LPTable;
 
@@ -16,6 +17,8 @@ public class RaceControlPanel
         extends LPContainer {
     
     private final LPTable table;
+    
+    private Runnable action = ()->{};
     
     public RaceControlPanel(){
         table = new LPTable();
@@ -30,6 +33,17 @@ public class RaceControlPanel
     
     public LPTable getTable(){
         return table;
+    }
+    
+    @Override
+    public void onKeyPressed(KeyEvent event) {
+        if(event.getKey() == 'k'){
+            action.run();
+        }
+    }
+    
+    public void setKeyEvent(Runnable action){
+        this.action = action;
     }
 
 }

@@ -64,7 +64,6 @@ public class AppController
         }));
         
         appPanel.getMenu().addMenuItem(new Menu.MenuItem("Race Control", () -> {
-            System.out.println("hi");
             appPanel.setActivePage(raceControlController.getPanel());
             appPanel.updateComponents();
             appPanel.invalidate();

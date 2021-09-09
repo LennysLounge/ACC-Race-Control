@@ -17,9 +17,8 @@ public class SimpleEventEntry
     
     public SimpleEventEntry(float sessionTime,
             String typeDescriptor,
-            boolean hasReplay,
-            float replayTime){
-        super(sessionTime, typeDescriptor, hasReplay, replayTime); 
+            boolean hasReplay){
+        super(sessionTime, typeDescriptor, hasReplay); 
     }
 
     @Override

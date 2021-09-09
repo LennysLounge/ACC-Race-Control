@@ -6,7 +6,11 @@
 package racecontrol.app.racecontrol;
 
 import java.util.stream.Collectors;
+import racecontrol.app.racecontrol.entries.ContactEventEntry;
 import racecontrol.app.racecontrol.entries.SimpleEventEntry;
+import racecontrol.client.AccBroadcastingClient;
+import static racecontrol.client.AccBroadcastingClient.getClient;
+import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.events.SessionChanged;
 import racecontrol.eventbus.Event;
@@ -32,6 +36,10 @@ public class RaceControlController
         tableModel = new RaceEventTableModel();
 
         panel.getTable().setTableModel(tableModel);
+        
+        panel.setKeyEvent(()->{
+            createDummyContactEvent();
+        });
 
     }
 
@@ -63,19 +71,45 @@ public class RaceControlController
                 break;
         }
         text += event.isInitialisation() ? " joined." : " started";
-        tableModel.addEntry(new SimpleEventEntry(info.getSessionTime(),
-                text, false, 0));
+        tableModel.addEntry(new SimpleEventEntry(info.getSessionTime(), text, false));
         panel.getTable().invalidate();
     }
 
     private void addContactEntry(Accident event) {
         IncidentInfo info = event.getInfo();
-        String text = "Contact with " + info.getCars().stream()
-                .map(i -> ("#" + i.getCarNumber()))
-                .collect(Collectors.joining(", "));
-        tableModel.addEntry(new SimpleEventEntry(info.getSessionEarliestTime(),
-                text, true, info.getReplayTime()));
+        tableModel.addEntry(new ContactEventEntry(info.getSessionEarliestTime(),
+                "Contact", true, info));
         panel.getTable().invalidate();
+    }
+    
+    private void createDummyContactEvent(){
+        AccBroadcastingClient client = AccBroadcastingClient.getClient();
+        int nCars = (int) Math.floor(Math.random() * Math.min(6, client.getModel().getCarsInfo().size()) + 1);
+        float sessionTime = client.getModel().getSessionInfo().getSessionTime();
+        IncidentInfo incident = new IncidentInfo(
+                sessionTime,
+                0,
+                client.getSessionId());
+        for (int i = 0; i < nCars; i++) {
+            incident = incident.addCar(
+                    sessionTime,
+                    getRandomCar(),
+                    0);
+        }
+        Accident event = new Accident(incident);
+        addContactEntry(event);
+    }
+    
+    private CarInfo getRandomCar() {
+        AccBroadcastingClient client = AccBroadcastingClient.getClient();
+        int r = (int) Math.floor(Math.random() * client.getModel().getCarsInfo().size());
+        int i = 0;
+        for (CarInfo car : getClient().getModel().getCarsInfo().values()) {
+            if (i++ == r) {
+                return car;
+            }
+        }
+        return null;
     }
 
 }

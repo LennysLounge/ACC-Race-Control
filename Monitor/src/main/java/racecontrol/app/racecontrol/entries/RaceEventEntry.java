@@ -6,7 +6,6 @@
 package racecontrol.app.racecontrol.entries;
 
 import racecontrol.lpgui.gui.LPTable;
-import racecontrol.lpgui.gui.LPTableModel;
 
 /**
  *
@@ -21,12 +20,11 @@ public abstract class RaceEventEntry {
     
     public RaceEventEntry(float sessionTime,
             String typeDescriptor,
-            boolean hasReplay,
-            float replayTime){
+            boolean hasReplay){
         this.sessionTime = sessionTime;
         this.typeDescriptor = typeDescriptor;
         this.hasReplay = hasReplay;
-        this.replayTime = replayTime;
+        this.replayTime = 0;
     }
     /**
      * Sets the replay time for this event.
