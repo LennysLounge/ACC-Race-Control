@@ -30,6 +30,16 @@ public class RaceEventTableModel
 
     private final List<RaceEventEntry> entries = new LinkedList<>();
 
+    @FunctionalInterface
+    public interface ClickAction {
+        void onClick(RaceEventEntry entry, int mouseX, int mouseY);
+    }
+
+    private ClickAction replayButtonClicked = (RaceEventEntry entry, int mouseX, int mouseY) -> {
+    };
+    private ClickAction infoColumnClicked = (RaceEventEntry entry, int mouseX, int mouseY) -> {
+    };
+
     @Override
     public int getRowCount() {
         return entries.size();
@@ -66,8 +76,27 @@ public class RaceEventTableModel
         return entries.get(row);
     }
 
+    @Override
+    public void onClick(int column, int row, int mouseX, int mouseY) {
+        if(column == 2){
+            //info column clicked.
+            infoColumnClicked.onClick(entries.get(row), mouseX, mouseY);
+        }
+        else if(column == 3){
+            replayButtonClicked.onClick(entries.get(row), mouseX, mouseY);
+        }
+    }
+
     public void addEntry(RaceEventEntry entry) {
         entries.add(entry);
+    }
+
+    public void setReplayClickAction(ClickAction action) {
+        this.replayButtonClicked = action;
+    }
+    
+    public void setInfoColumnAction(ClickAction action) {
+        this.infoColumnClicked = action;
     }
 
     private final LPTable.CellRenderer sessionTimeRenderer = (

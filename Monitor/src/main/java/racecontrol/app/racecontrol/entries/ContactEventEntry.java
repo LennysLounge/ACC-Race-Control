@@ -6,6 +6,7 @@
 package racecontrol.app.racecontrol.entries;
 
 import java.util.List;
+import java.util.logging.Logger;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CLOSE;
@@ -28,8 +29,17 @@ import racecontrol.lpgui.gui.LPTable;
 public class ContactEventEntry
         extends RaceEventEntry {
 
+    /**
+     * This class's logger.
+     */
+    private static final Logger LOG = Logger.getLogger(ContactEventEntry.class.getName());
+    /**
+     * The incident this entry represents.
+     */
     private final IncidentInfo incident;
-
+    /**
+     * Reference to the connection client.
+     */
     private final AccBroadcastingClient client;
 
     public ContactEventEntry(float sessionTime,
@@ -41,11 +51,14 @@ public class ContactEventEntry
         this.incident = incident;
     }
 
+    /**
+     * Renderer that renders the info column.
+     */
     LPTable.CellRenderer carInfoRenderer = (
             PApplet applet,
             LPTable.RenderContext context) -> {
         //Draw car numbres
-        ContactEventEntry entry = (ContactEventEntry)context.object;
+        ContactEventEntry entry = (ContactEventEntry) context.object;
         List<CarInfo> cars = entry.incident.getCars();
         float x = 0;
         for (CarInfo car : cars) {
@@ -124,17 +137,26 @@ public class ContactEventEntry
         }
     };
 
-    private boolean isCarConnected(int carId) {
-        return client.getModel().getCarsInfo().keySet().contains(carId);
-    }
-
     @Override
     public LPTable.CellRenderer getInfoRenderer() {
         return carInfoRenderer;
     }
 
-    public IncidentInfo getIncidentInfo() {
-        return incident;
+    /**
+     * Triggers the action for when the info cell was clicked.
+     * @param x the x position of the mouse when clicked.
+     * @param y the y position of the mouse when clicked.
+     */
+    public void onInfoClicked(int x, int y) {
+        //Car column clicked
+        int index = (int) (x / (LINE_HEIGHT * 1.25f));
+        if (index < incident.getCars().size()) {
+            client.sendChangeFocusRequest(incident.getCars().get(index).getCarId());
+        }
+    }
+
+    private boolean isCarConnected(int carId) {
+        return client.getModel().getCarsInfo().keySet().contains(carId);
     }
 
     private CarType getCarType(byte carModelId) {

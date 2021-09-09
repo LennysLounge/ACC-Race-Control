@@ -5,8 +5,9 @@
  */
 package racecontrol.app.racecontrol;
 
-import java.util.stream.Collectors;
+import java.util.logging.Logger;
 import racecontrol.app.racecontrol.entries.ContactEventEntry;
+import racecontrol.app.racecontrol.entries.RaceEventEntry;
 import racecontrol.app.racecontrol.entries.SimpleEventEntry;
 import racecontrol.client.AccBroadcastingClient;
 import static racecontrol.client.AccBroadcastingClient.getClient;
@@ -26,6 +27,8 @@ import racecontrol.extensions.incidents.events.Accident;
 public class RaceControlController
         implements EventListener {
 
+    private static final Logger LOG = Logger.getLogger(RaceControlController.class.getName());
+
     private final RaceControlPanel panel;
 
     private final RaceEventTableModel tableModel;
@@ -35,9 +38,14 @@ public class RaceControlController
         panel = new RaceControlPanel();
         tableModel = new RaceEventTableModel();
 
+        tableModel.setInfoColumnAction(infoClickAction);
+        tableModel.setReplayClickAction((RaceEventEntry entry, int mouseX, int mouseY) -> {
+            LOG.info("Replay area clicked");
+        });
+
         panel.getTable().setTableModel(tableModel);
-        
-        panel.setKeyEvent(()->{
+
+        panel.setKeyEvent(() -> {
             createDummyContactEvent();
         });
 
@@ -55,6 +63,13 @@ public class RaceControlController
             addContactEntry((Accident) e);
         }
     }
+
+    private final RaceEventTableModel.ClickAction infoClickAction
+            = (RaceEventEntry entry, int mouseX, int mouseY) -> {
+                if (entry instanceof ContactEventEntry) {
+                    ((ContactEventEntry) entry).onInfoClicked(mouseX, mouseY);
+                }
+            };
 
     private void addSessionChangeEntry(SessionChanged event) {
         SessionInfo info = event.getSessionInfo();
@@ -81,8 +96,8 @@ public class RaceControlController
                 "Contact", true, info));
         panel.getTable().invalidate();
     }
-    
-    private void createDummyContactEvent(){
+
+    private void createDummyContactEvent() {
         AccBroadcastingClient client = AccBroadcastingClient.getClient();
         int nCars = (int) Math.floor(Math.random() * Math.min(6, client.getModel().getCarsInfo().size()) + 1);
         float sessionTime = client.getModel().getSessionInfo().getSessionTime();
@@ -99,7 +114,7 @@ public class RaceControlController
         Accident event = new Accident(incident);
         addContactEntry(event);
     }
-    
+
     private CarInfo getRandomCar() {
         AccBroadcastingClient client = AccBroadcastingClient.getClient();
         int r = (int) Math.floor(Math.random() * client.getModel().getCarsInfo().size());
