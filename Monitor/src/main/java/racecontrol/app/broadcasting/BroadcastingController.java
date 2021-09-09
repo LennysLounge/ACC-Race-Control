@@ -11,8 +11,8 @@ import racecontrol.RaceControlApplet;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.data.TrackInfo;
-import racecontrol.client.events.RealtimeUpdate;
-import racecontrol.client.events.TrackData;
+import racecontrol.client.events.RealtimeUpdateEvent;
+import racecontrol.client.events.TrackDataEvent;
 import racecontrol.client.extension.AccClientExtension;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
@@ -53,13 +53,13 @@ public class BroadcastingController
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof TrackData) {
-            TrackInfo info = ((TrackData) e).getInfo();
+        if (e instanceof TrackDataEvent) {
+            TrackInfo info = ((TrackDataEvent) e).getInfo();
             RaceControlApplet.runLater(() -> {
                 panel.setCameraSets(info.getCameraSets());
             });
-        } else if (e instanceof RealtimeUpdate) {
-            SessionInfo info = ((RealtimeUpdate) e).getSessionInfo();
+        } else if (e instanceof RealtimeUpdateEvent) {
+            SessionInfo info = ((RealtimeUpdateEvent) e).getSessionInfo();
             panel.setActiveCameraSet(info.getActiveCameraSet(), info.getActiveCamera());
             panel.setActiveHudPage(info.getCurrentHudPage());
         }

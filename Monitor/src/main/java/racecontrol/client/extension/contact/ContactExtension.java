@@ -6,7 +6,7 @@
 package racecontrol.client.extension.contact;
 
 import racecontrol.client.data.SessionId;
-import racecontrol.client.events.AfterPacketReceived;
+import racecontrol.client.events.AfterPacketReceivedEvent;
 import racecontrol.client.events.BroadcastingEventEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
@@ -61,8 +61,8 @@ public class ContactExtension
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof AfterPacketReceived) {
-            afterPacketReceived(((AfterPacketReceived) e).getType());
+        if (e instanceof AfterPacketReceivedEvent) {
+            afterPacketReceived(((AfterPacketReceivedEvent) e).getType());
         } else if (e instanceof BroadcastingEventEvent) {
             BroadcastingEvent event = ((BroadcastingEventEvent) e).getEvent();
             if (event.getType() == BroadcastingEventType.ACCIDENT) {

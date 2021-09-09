@@ -12,11 +12,11 @@ import racecontrol.client.data.SessionInfo;
  *
  * @author Leonard
  */
-public class RealtimeUpdate extends Event {
+public class RealtimeUpdateEvent extends Event {
 
     private SessionInfo sessionInfo;
 
-    public RealtimeUpdate(SessionInfo sessionInfo) {
+    public RealtimeUpdateEvent(SessionInfo sessionInfo) {
         this.sessionInfo = sessionInfo;
     }
 

@@ -11,7 +11,7 @@ import racecontrol.eventbus.EventListener;
 import racecontrol.client.data.RealtimeInfo;
 import static racecontrol.client.data.enums.CarLocation.TRACK;
 import static racecontrol.client.data.enums.LapType.REGULAR;
-import racecontrol.client.events.RealtimeCarUpdate;
+import racecontrol.client.events.RealtimeCarUpdateEvent;
 import static racecontrol.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.LookAndFeel.LINE_HEIGHT;
 import racecontrol.lpgui.gui.LPButton;

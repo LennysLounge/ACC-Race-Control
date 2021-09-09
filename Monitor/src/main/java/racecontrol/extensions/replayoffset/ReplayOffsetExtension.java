@@ -10,10 +10,10 @@ import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.extension.AccClientExtension;
 import racecontrol.client.events.BroadcastingEventEvent;
-import racecontrol.client.events.RealtimeUpdate;
+import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.data.BroadcastingEvent;
 import racecontrol.client.data.SessionInfo;
-import racecontrol.client.events.SessionChanged;
+import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.lpgui.gui.LPContainer;
 import java.util.logging.Logger;
 import racecontrol.client.AccBroadcastingClient;
@@ -132,8 +132,8 @@ public class ReplayOffsetExtension
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof SessionChanged) {
-            SessionChanged event = (SessionChanged) e;
+        if (e instanceof SessionChangedEvent) {
+            SessionChangedEvent event = (SessionChangedEvent) e;
             if (!event.isInitialisation()) {
                 replayStartTime = System.currentTimeMillis();
                 LOG.info("Setting replayStartTime based on session change time to: " + replayStartTime);
@@ -154,8 +154,8 @@ public class ReplayOffsetExtension
                 }
 
             }
-        } else if (e instanceof RealtimeUpdate) {
-            SessionInfo info = ((RealtimeUpdate) e).getSessionInfo();
+        } else if (e instanceof RealtimeUpdateEvent) {
+            SessionInfo info = ((RealtimeUpdateEvent) e).getSessionInfo();
             if (isInSearchMode) {
 
                 if (info.isReplayPlaying()) {

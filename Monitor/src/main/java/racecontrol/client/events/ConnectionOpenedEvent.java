@@ -11,7 +11,7 @@ import racecontrol.eventbus.Event;
  *
  * @author Leonard
  */
-public class ConnectionOpened
+public class ConnectionOpenedEvent
         extends Event {
 
 }

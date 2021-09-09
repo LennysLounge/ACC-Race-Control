@@ -6,7 +6,7 @@
 package racecontrol.extensions.laptimes;
 
 import racecontrol.client.data.SessionId;
-import racecontrol.client.events.RealtimeCarUpdate;
+import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.client.extension.AccClientExtension;
 import racecontrol.client.extension.contact.ContactExtension;
@@ -15,7 +15,7 @@ import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.LapInfo;
 import racecontrol.client.data.RealtimeInfo;
 import racecontrol.client.data.enums.LapType;
-import racecontrol.client.events.SessionChanged;
+import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.utility.TimeUtils;
 import racecontrol.lpgui.gui.LPContainer;
 import java.io.File;
@@ -94,10 +94,10 @@ public class LapTimeExtension
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof RealtimeCarUpdate) {
-            onRealtimeCarUpdate(((RealtimeCarUpdate) e).getInfo());
-        } else if (e instanceof SessionChanged) {
-            onSessionChanged(((SessionChanged) e).getSessionId());
+        if (e instanceof RealtimeCarUpdateEvent) {
+            onRealtimeCarUpdate(((RealtimeCarUpdateEvent) e).getInfo());
+        } else if (e instanceof SessionChangedEvent) {
+            onSessionChanged(((SessionChangedEvent) e).getSessionId());
         }
 
     }

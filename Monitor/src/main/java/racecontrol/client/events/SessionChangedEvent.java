@@ -13,13 +13,13 @@ import racecontrol.client.data.SessionInfo;
  *
  * @author Leonard
  */
-public class SessionChanged extends Event {
+public class SessionChangedEvent extends Event {
 
     private final SessionId sessionId;
     private final SessionInfo sessionInfo;
     private final boolean initialisation;
 
-    public SessionChanged(SessionId sessionId,
+    public SessionChangedEvent(SessionId sessionId,
             SessionInfo sessionInfo,
             boolean initialisation) {
         this.sessionId = sessionId;

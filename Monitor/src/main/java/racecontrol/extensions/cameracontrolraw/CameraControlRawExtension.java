@@ -7,10 +7,10 @@ package racecontrol.extensions.cameracontrolraw;
 
 import racecontrol.eventbus.Event;
 import racecontrol.client.extension.AccClientExtension;
-import racecontrol.client.events.RealtimeUpdate;
+import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.data.TrackInfo;
-import racecontrol.client.events.TrackData;
+import racecontrol.client.events.TrackDataEvent;
 import racecontrol.lpgui.gui.LPContainer;
 import java.util.logging.Logger;
 import racecontrol.client.AccBroadcastingClient;
@@ -38,12 +38,12 @@ public class CameraControlRawExtension
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof TrackData) {
-            TrackInfo info = ((TrackData) e).getInfo();
+        if (e instanceof TrackDataEvent) {
+            TrackInfo info = ((TrackDataEvent) e).getInfo();
             panel.setCameraSets(info.getCameraSets());
             panel.setHUDPages(info.getHudPages());
-        } else if (e instanceof RealtimeUpdate) {
-            SessionInfo info = ((RealtimeUpdate) e).getSessionInfo();
+        } else if (e instanceof RealtimeUpdateEvent) {
+            SessionInfo info = ((RealtimeUpdateEvent) e).getSessionInfo();
             panel.setActiveCameraSet(info.getActiveCameraSet(), info.getActiveCamera());
             panel.setActiveHudPage(info.getCurrentHudPage());
         }

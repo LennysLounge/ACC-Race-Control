@@ -12,11 +12,11 @@ import racecontrol.client.data.SessionInfo;
  *
  * @author Leonard
  */
-public class SessionPhaseChanged extends Event {
+public class SessionPhaseChangedEvent extends Event {
 
     private SessionInfo sessionInfo;
 
-    public SessionPhaseChanged(SessionInfo sessionInfo) {
+    public SessionPhaseChangedEvent(SessionInfo sessionInfo) {
         this.sessionInfo = sessionInfo;
     }
 

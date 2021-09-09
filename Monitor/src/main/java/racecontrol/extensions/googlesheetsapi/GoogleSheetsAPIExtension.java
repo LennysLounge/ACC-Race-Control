@@ -7,19 +7,19 @@ package racecontrol.extensions.googlesheetsapi;
 
 import racecontrol.Main;
 import racecontrol.client.data.SessionId;
-import racecontrol.client.events.SessionPhaseChanged;
+import racecontrol.client.events.SessionPhaseChangedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.client.extension.AccClientExtension;
 import racecontrol.client.extension.contact.ContactInfo;
 import racecontrol.client.extension.contact.ContactEvent;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.events.RealtimeUpdate;
+import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.data.enums.SessionPhase;
 import racecontrol.client.data.enums.SessionType;
-import racecontrol.client.events.CarConnect;
-import racecontrol.client.events.SessionChanged;
+import racecontrol.client.events.CarConnectedEvent;
+import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.utility.TimeUtils;
 import racecontrol.lpgui.gui.LPContainer;
 import java.io.IOException;
@@ -91,14 +91,14 @@ public class GoogleSheetsAPIExtension
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof SessionChanged) {
-            currentSessionId = ((SessionChanged) e).getSessionId();
+        if (e instanceof SessionChangedEvent) {
+            currentSessionId = ((SessionChangedEvent) e).getSessionId();
             setCurrentTargetSheet(getTargetSheet(currentSessionId));
             LOG.info("Target Sheet changed to \"" + currentSheetTarget + "\"");
             UILogger.log("Spreasheet target changed to \"" + currentSheetTarget + "\"");
 
             //start replay offset measuring
-            if (!((SessionChanged) e).isInitialisation()) {
+            if (!((SessionChangedEvent) e).isInitialisation()) {
                 if (currentSessionId.getType() == SessionType.RACE) {
                     isMeasuringGreenFlagOffset = true;
                     greenFlagOffsetTimestamp = System.currentTimeMillis();
@@ -112,8 +112,8 @@ public class GoogleSheetsAPIExtension
                     .collect(Collectors.joining("\n"));
             queue.add(new SendIncidentEvent(sessionTime, carNumbers));
             LOG.info("accident received: " + carNumbers);
-        } else if (e instanceof SessionPhaseChanged) {
-            SessionInfo info = ((SessionPhaseChanged) e).getSessionInfo();
+        } else if (e instanceof SessionPhaseChangedEvent) {
+            SessionInfo info = ((SessionPhaseChangedEvent) e).getSessionInfo();
             if (info.getSessionType() == SessionType.RACE
                     && info.getPhase() == SessionPhase.SESSION
                     && isMeasuringGreenFlagOffset) {
@@ -121,9 +121,9 @@ public class GoogleSheetsAPIExtension
                 queue.add(new GreenFlagEvent((int) diff));
                 isMeasuringGreenFlagOffset = false;
             }
-        } else if (e instanceof CarConnect) {
-            carConnections.add(((CarConnect) e).getCar());
-        } else if (e instanceof RealtimeUpdate) {
+        } else if (e instanceof CarConnectedEvent) {
+            carConnections.add(((CarConnectedEvent) e).getCar());
+        } else if (e instanceof RealtimeUpdateEvent) {
             if (!carConnections.isEmpty()) {
                 queue.add(new SendCarConnectedEvent(carConnections));
                 carConnections.clear();

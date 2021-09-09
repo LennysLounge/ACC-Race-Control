@@ -11,12 +11,12 @@ import racecontrol.eventbus.Event;
  *
  * @author Leonard
  */
-public class AfterPacketReceived extends Event {
+public class AfterPacketReceivedEvent extends Event {
 
     private byte type;
     private int packageCount;
 
-    public AfterPacketReceived(byte type, int packageCount) {
+    public AfterPacketReceivedEvent(byte type, int packageCount) {
         this.type = type;
         this.packageCount = packageCount;
     }

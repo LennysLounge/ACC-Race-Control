@@ -11,14 +11,14 @@ import racecontrol.eventbus.Event;
  *
  * @author Leonard
  */
-public class RegistrationResult extends Event {
+public class RegistrationResultEvent extends Event {
 
     private final int connectionId;
     private final boolean success;
     private final boolean readOnly;
     private final String message;
 
-    public RegistrationResult(int connectionId,
+    public RegistrationResultEvent(int connectionId,
             boolean success,
             boolean readOnly,
             String message) {

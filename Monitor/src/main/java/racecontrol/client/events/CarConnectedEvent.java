@@ -12,11 +12,11 @@ import racecontrol.client.data.CarInfo;
  *
  * @author Leonard
  */
-public class CarDisconnect extends Event {
+public class CarConnectedEvent extends Event {
 
     private CarInfo car;
 
-    public CarDisconnect(CarInfo car) {
+    public CarConnectedEvent(CarInfo car) {
         this.car = car;
     }
 

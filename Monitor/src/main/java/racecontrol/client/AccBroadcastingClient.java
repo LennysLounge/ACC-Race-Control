@@ -6,15 +6,15 @@
 package racecontrol.client;
 
 import racecontrol.client.data.SessionId;
-import racecontrol.client.events.SessionChanged;
-import racecontrol.client.events.AfterPacketReceived;
-import racecontrol.client.events.CarConnect;
-import racecontrol.client.events.CarDisconnect;
-import racecontrol.client.events.EntryListCarUpdate;
-import racecontrol.client.events.RealtimeCarUpdate;
-import racecontrol.client.events.RegistrationResult;
-import racecontrol.client.events.SessionPhaseChanged;
-import racecontrol.client.events.TrackData;
+import racecontrol.client.events.SessionChangedEvent;
+import racecontrol.client.events.AfterPacketReceivedEvent;
+import racecontrol.client.events.CarConnectedEvent;
+import racecontrol.client.events.CarDisconnectedEvent;
+import racecontrol.client.events.EntryListCarUpdateEvent;
+import racecontrol.client.events.RealtimeCarUpdateEvent;
+import racecontrol.client.events.RegistrationResultEvent;
+import racecontrol.client.events.SessionPhaseChangedEvent;
+import racecontrol.client.events.TrackDataEvent;
 import racecontrol.eventbus.EventBus;
 import racecontrol.client.data.AccBroadcastingData;
 import racecontrol.client.data.BroadcastingEvent;
@@ -24,8 +24,8 @@ import racecontrol.client.data.SessionInfo;
 import racecontrol.client.data.TrackInfo;
 import racecontrol.client.data.enums.SessionPhase;
 import racecontrol.client.data.enums.SessionType;
-import racecontrol.client.events.ConnectionClosed;
-import racecontrol.client.events.ConnectionOpened;
+import racecontrol.client.events.ConnectionClosedEvent;
+import racecontrol.client.events.ConnectionOpenedEvent;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -46,8 +46,8 @@ import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import racecontrol.client.events.BroadcastingEventEvent;
-import racecontrol.client.events.EntryListUpdate;
-import racecontrol.client.events.RealtimeUpdate;
+import racecontrol.client.events.EntryListUpdateEvent;
+import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.extension.AccBroadcastingClientExtensionModule;
 import racecontrol.client.extension.AccClientExtension;
 import racecontrol.client.extension.contact.ContactExtension;
@@ -563,7 +563,7 @@ public class AccBroadcastingClient {
 
         @Override
         public void run() {
-            EventBus.publish(new ConnectionOpened());
+            EventBus.publish(new ConnectionOpenedEvent());
             UILogger.log("Connection opened");
             LOG.info("Starting Listener thread");
             try {
@@ -575,7 +575,7 @@ public class AccBroadcastingClient {
                 LOG.log(Level.SEVERE, "Overflow in listener thread", e);
                 exitState = ExitState.EXCEPTION;
             }
-            EventBus.publish(new ConnectionClosed(exitState));
+            EventBus.publish(new ConnectionClosedEvent(exitState));
             UILogger.log("Connection closed");
             LOG.info("Listener thread done");
         }
@@ -631,7 +631,7 @@ public class AccBroadcastingClient {
                 LOG.log(Level.SEVERE, "Error while sending entrylist and trackdata request", e);
             }
 
-            EventBus.publish(new RegistrationResult(connectionID, success, readOnly, message));
+            EventBus.publish(new RegistrationResultEvent(connectionID, success, readOnly, message));
         }
 
         @Override
@@ -689,7 +689,7 @@ public class AccBroadcastingClient {
                 resetCameraWhenReplayIsDone = false;
             }
 
-            EventBus.publish(new RealtimeUpdate(sessionInfo));
+            EventBus.publish(new RealtimeUpdateEvent(sessionInfo));
         }
 
         private void checkForMissedRealtimeCarUpdates() {
@@ -745,7 +745,7 @@ public class AccBroadcastingClient {
                 cars.put(car.getCarId(), car);
                 model = model.withCars(cars);
 
-                EventBus.publish(new RealtimeCarUpdate(info));
+                EventBus.publish(new RealtimeCarUpdateEvent(info));
             } else {
                 //if the car doesnt exist in the model ask for a new entry list.
                 long now = System.currentTimeMillis();
@@ -772,13 +772,13 @@ public class AccBroadcastingClient {
                 }
             });
             model = model.withCars(cars);
-            EventBus.publish(new EntryListUpdate(carIds));
+            EventBus.publish(new EntryListUpdateEvent(carIds));
         }
 
         @Override
         public void onTrackData(TrackInfo info) {
             model = model.withTrackInfo(info);
-            EventBus.publish(new TrackData(info));
+            EventBus.publish(new TrackDataEvent(info));
         }
 
         @Override
@@ -788,7 +788,7 @@ public class AccBroadcastingClient {
                 onCarConnect(carInfo);
                 newConnectedCars.remove(Integer.valueOf(carInfo.getCarId()));
             }
-            EventBus.publish(new EntryListCarUpdate(carInfo));
+            EventBus.publish(new EntryListCarUpdateEvent(carInfo));
         }
 
         @Override
@@ -804,12 +804,12 @@ public class AccBroadcastingClient {
         @Override
         public void afterPacketReceived(byte type) {
             packetCount++;
-            EventBus.publish(new AfterPacketReceived(type, packetCount));
+            EventBus.publish(new AfterPacketReceivedEvent(type, packetCount));
         }
 
         private void onSessionChanged(SessionId newId, SessionInfo info, boolean init) {
             LOG.info("session changed to " + newId.getType().name() + " Index:" + newId.getIndex() + " sessionCount:" + newId.getNumber());
-            EventBus.publish(new SessionChanged(newId, info, init));
+            EventBus.publish(new SessionChangedEvent(newId, info, init));
         }
 
         private void onSessionPhaseChaged(SessionPhase phase, SessionInfo info) {
@@ -823,7 +823,7 @@ public class AccBroadcastingClient {
                     info.getTimeOfDay(), info.getAmbientTemp(), info.getTrackTemp(),
                     info.getCloudLevel(), info.getRainLevel(), info.getWetness(),
                     info.getBestSessionLap());
-            EventBus.publish(new SessionPhaseChanged(correctedSessionInfo));
+            EventBus.publish(new SessionPhaseChangedEvent(correctedSessionInfo));
         }
 
         private void onCarDisconnect(CarInfo car) {
@@ -835,7 +835,7 @@ public class AccBroadcastingClient {
             String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
             LOG.info("Car disconnected: #" + car.getCarNumber() + "\t" + name);
             UILogger.log("Car disconnected: #" + car.getCarNumber() + "\t" + name);
-            EventBus.publish(new CarDisconnect(car));
+            EventBus.publish(new CarDisconnectedEvent(car));
         }
 
         private void onCarConnect(CarInfo car) {
@@ -847,7 +847,7 @@ public class AccBroadcastingClient {
             String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
             LOG.info("Car connected: #" + car.getCarNumber() + "\t" + name);
             UILogger.log("Car connected: #" + car.getCarNumber() + "\t" + name);
-            EventBus.publish(new CarConnect(car));
+            EventBus.publish(new CarConnectedEvent(car));
         }
 
         /**

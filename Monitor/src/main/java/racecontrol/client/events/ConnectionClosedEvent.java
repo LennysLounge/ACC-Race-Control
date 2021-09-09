@@ -12,12 +12,12 @@ import racecontrol.client.AccBroadcastingClient.ExitState;
  *
  * @author Leonard
  */
-public class ConnectionClosed
+public class ConnectionClosedEvent
         extends Event {
 
     private final ExitState exitState;
 
-    public ConnectionClosed(ExitState exitState) {
+    public ConnectionClosedEvent(ExitState exitState) {
         this.exitState = exitState;
     }
 

@@ -8,22 +8,22 @@ package racecontrol.app.broadcasting.timing;
 import racecontrol.app.broadcasting.timing.tablemodels.RaceTableModel;
 import racecontrol.app.broadcasting.timing.tablemodels.LiveTimingTableModel;
 import racecontrol.app.broadcasting.timing.tablemodels.QualifyingTableModel;
-import racecontrol.client.events.RealtimeCarUpdate;
-import racecontrol.client.events.RealtimeUpdate;
+import racecontrol.client.events.RealtimeCarUpdateEvent;
+import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.extension.AccClientExtension;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.events.SessionChanged;
+import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.LapInfo;
 import racecontrol.client.data.RealtimeInfo;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.data.TrackInfo;
 import racecontrol.client.data.enums.SessionType;
-import racecontrol.client.events.CarDisconnect;
-import racecontrol.client.events.TrackData;
+import racecontrol.client.events.CarDisconnectedEvent;
+import racecontrol.client.events.TrackDataEvent;
 import racecontrol.utility.GapCalculator;
 import racecontrol.lpgui.gui.LPContainer;
 import java.util.ArrayList;
@@ -91,17 +91,17 @@ public class LiveTimingController
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof RealtimeUpdate) {
-            onRealtimeUpdate(((RealtimeUpdate) e).getSessionInfo());
-        } else if (e instanceof RealtimeCarUpdate) {
-            onRealtimeCarUpdate((RealtimeCarUpdate) e);
-        } else if (e instanceof CarDisconnect) {
-            CarDisconnect dis = ((CarDisconnect) e);
+        if (e instanceof RealtimeUpdateEvent) {
+            onRealtimeUpdate(((RealtimeUpdateEvent) e).getSessionInfo());
+        } else if (e instanceof RealtimeCarUpdateEvent) {
+            onRealtimeCarUpdate((RealtimeCarUpdateEvent) e);
+        } else if (e instanceof CarDisconnectedEvent) {
+            CarDisconnectedEvent dis = ((CarDisconnectedEvent) e);
             if (entries.containsKey(dis.getCar().getCarId())) {
                 entries.remove(dis.getCar().getCarId());
             }
-        } else if (e instanceof SessionChanged) {
-            SessionType newSession = ((SessionChanged) e).getSessionInfo().getSessionType();
+        } else if (e instanceof SessionChangedEvent) {
+            SessionType newSession = ((SessionChangedEvent) e).getSessionInfo().getSessionType();
             if (newSession != currentSession) {
                 currentSession = newSession;
                 if (newSession == SessionType.RACE) {
@@ -111,8 +111,8 @@ public class LiveTimingController
                 }
                 panel.setTableModel(model);
             }
-        } else if (e instanceof TrackData) {
-            trackInfo = ((TrackData) e).getInfo();
+        } else if (e instanceof TrackDataEvent) {
+            trackInfo = ((TrackDataEvent) e).getInfo();
             gapCalculator.loadVMapForTrack(trackInfo.getTrackName());
             gapCalculator.setTrackLength(trackInfo.getTrackMeters());
         }
@@ -186,7 +186,7 @@ public class LiveTimingController
         return withGaps;
     }
 
-    public void onRealtimeCarUpdate(RealtimeCarUpdate event) {
+    public void onRealtimeCarUpdate(RealtimeCarUpdateEvent event) {
         RealtimeInfo info = event.getInfo();
         CarInfo car = client.getModel().getCarsInfo().get(info.getCarId());
         if (car != null) {

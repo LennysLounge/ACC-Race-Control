@@ -18,8 +18,8 @@ import racecontrol.client.data.SessionInfo;
 import racecontrol.client.data.enums.BroadcastingEventType;
 import racecontrol.client.data.enums.SessionPhase;
 import racecontrol.client.data.enums.SessionType;
-import racecontrol.client.events.SessionChanged;
-import racecontrol.client.events.SessionPhaseChanged;
+import racecontrol.client.events.SessionChangedEvent;
+import racecontrol.client.events.SessionPhaseChangedEvent;
 import racecontrol.lpgui.gui.LPContainer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,8 +60,8 @@ public class ResultsExtension
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof SessionChanged) {
-            createNewFile(((SessionChanged) e).getSessionId());
+        if (e instanceof SessionChangedEvent) {
+            createNewFile(((SessionChangedEvent) e).getSessionId());
             broadcastingEvents.clear();
             incidents.clear();
             report.incidents.clear();
@@ -78,8 +78,8 @@ public class ResultsExtension
             incidents.add((ContactEvent) e);
             report.incidents.add(((ContactEvent) e).getInfo());
             writeStateToFile();
-        } else if (e instanceof SessionPhaseChanged) {
-            SessionInfo info = ((SessionPhaseChanged) e).getSessionInfo();
+        } else if (e instanceof SessionPhaseChangedEvent) {
+            SessionInfo info = ((SessionPhaseChangedEvent) e).getSessionInfo();
             if (info.getSessionType() == SessionType.RACE) {
                 if (info.getPhase() == SessionPhase.STARTING) {
                     isMeasuringGreenFlagOffset = true;

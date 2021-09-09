@@ -12,11 +12,11 @@ import java.util.List;
  *
  * @author Leonard
  */
-public class EntryListUpdate extends Event {
+public class EntryListUpdateEvent extends Event {
 
     private List<Integer> carIds;
 
-    public EntryListUpdate(List<Integer> carIds) {
+    public EntryListUpdateEvent(List<Integer> carIds) {
         this.carIds = carIds;
     }
 

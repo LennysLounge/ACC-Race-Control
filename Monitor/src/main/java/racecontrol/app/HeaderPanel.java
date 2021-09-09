@@ -20,8 +20,8 @@ import static racecontrol.LookAndFeel.fontRegular;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
-import racecontrol.client.events.ConnectionClosed;
-import racecontrol.client.events.ConnectionOpened;
+import racecontrol.client.events.ConnectionClosedEvent;
+import racecontrol.client.events.ConnectionOpenedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
@@ -131,7 +131,7 @@ public class HeaderPanel
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof ConnectionOpened) {
+        if (e instanceof ConnectionOpenedEvent) {
             replayOffsetExtension = client.getOrCreateExtension(ReplayOffsetExtension.class);
         }
     }

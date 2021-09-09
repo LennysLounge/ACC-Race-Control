@@ -13,8 +13,8 @@ import racecontrol.client.data.RealtimeInfo;
 import racecontrol.client.data.TrackInfo;
 import static racecontrol.client.data.enums.CarLocation.TRACK;
 import static racecontrol.client.data.enums.LapType.REGULAR;
-import racecontrol.client.events.RealtimeCarUpdate;
-import racecontrol.client.events.TrackData;
+import racecontrol.client.events.RealtimeCarUpdateEvent;
+import racecontrol.client.events.TrackDataEvent;
 import racecontrol.lpgui.gui.LPContainer;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -58,12 +58,12 @@ public class VelocityMapExtension
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof TrackData) {
-            TrackInfo info = ((TrackData) e).getInfo();
+        if (e instanceof TrackDataEvent) {
+            TrackInfo info = ((TrackDataEvent) e).getInfo();
             panel.setTrackName(info.getTrackName());
             trackName = info.getTrackName();
-        } else if (e instanceof RealtimeCarUpdate) {
-            RealtimeInfo info = ((RealtimeCarUpdate) e).getInfo();
+        } else if (e instanceof RealtimeCarUpdateEvent) {
+            RealtimeInfo info = ((RealtimeCarUpdateEvent) e).getInfo();
             if (info.getCurrentLap().getType() == REGULAR
                     && info.getLocation() == TRACK
                     && info.getKMH() > 10

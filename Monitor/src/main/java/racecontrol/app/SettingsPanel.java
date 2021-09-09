@@ -19,7 +19,7 @@ import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.events.ConnectionClosed;
+import racecontrol.client.events.ConnectionClosedEvent;
 import racecontrol.LookAndFeel;
 import static racecontrol.LookAndFeel.COLOR_GRAY;
 import static racecontrol.LookAndFeel.LINE_HEIGHT;
@@ -82,12 +82,12 @@ public class SettingsPanel
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof ConnectionClosed) {
-            connectionClosedEvent((ConnectionClosed) e);
+        if (e instanceof ConnectionClosedEvent) {
+            connectionClosedEvent((ConnectionClosedEvent) e);
         }
     }
 
-    private void connectionClosedEvent(ConnectionClosed event) {
+    private void connectionClosedEvent(ConnectionClosedEvent event) {
         if (event.getExitState() != AccBroadcastingClient.ExitState.NORMAL) {
             showErrorMessage(event.getExitState());
         }

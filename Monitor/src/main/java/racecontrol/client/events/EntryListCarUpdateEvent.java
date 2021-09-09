@@ -12,16 +12,16 @@ import racecontrol.client.data.CarInfo;
  *
  * @author Leonard
  */
-public class CarConnect extends Event {
+public class EntryListCarUpdateEvent extends Event {
 
-    private CarInfo car;
+    private CarInfo info;
 
-    public CarConnect(CarInfo car) {
-        this.car = car;
+    public EntryListCarUpdateEvent(CarInfo info) {
+        this.info = info;
     }
 
-    public CarInfo getCar() {
-        return car;
+    public CarInfo getSessionInfo() {
+        return info;
     }
 
 }

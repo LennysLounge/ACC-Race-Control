@@ -13,7 +13,7 @@ import racecontrol.client.AccBroadcastingClient;
 import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.SessionInfo;
-import racecontrol.client.events.SessionChanged;
+import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
@@ -57,8 +57,8 @@ public class RaceControlController
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof SessionChanged) {
-            addSessionChangeEntry((SessionChanged) e);
+        if (e instanceof SessionChangedEvent) {
+            addSessionChangeEntry((SessionChangedEvent) e);
         } else if (e instanceof ContactEvent) {
             addContactEntry((ContactEvent) e);
         }
@@ -71,7 +71,7 @@ public class RaceControlController
                 }
             };
 
-    private void addSessionChangeEntry(SessionChanged event) {
+    private void addSessionChangeEntry(SessionChangedEvent event) {
         SessionInfo info = event.getSessionInfo();
         String text = "";
         switch (info.getSessionType()) {

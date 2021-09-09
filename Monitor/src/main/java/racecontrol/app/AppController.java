@@ -8,9 +8,9 @@ package racecontrol.app;
 import racecontrol.app.broadcasting.BroadcastingController;
 import racecontrol.app.logging.LoggingPanel;
 import racecontrol.app.racecontrol.RaceControlController;
-import racecontrol.client.events.ConnectionClosed;
-import racecontrol.client.events.ConnectionOpened;
-import racecontrol.client.events.RealtimeUpdate;
+import racecontrol.client.events.ConnectionClosedEvent;
+import racecontrol.client.events.ConnectionOpenedEvent;
+import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
@@ -93,15 +93,15 @@ public class AppController
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof RealtimeUpdate) {
+        if (e instanceof RealtimeUpdateEvent) {
             appPanel.getHeader().invalidate();
-        } else if (e instanceof ConnectionOpened) {
+        } else if (e instanceof ConnectionOpenedEvent) {
             appPanel.getMenu().setVisible(true);
             appPanel.setActivePage(broadcastingController.getPanel());
             appPanel.getMenu().setSelectedMenuIndex(1);
             appPanel.updateComponents();
             appPanel.invalidate();
-        } else if (e instanceof ConnectionClosed) {
+        } else if (e instanceof ConnectionClosedEvent) {
             appPanel.getMenu().setVisible(false);
             appPanel.setActivePage(settingsPanel);
             appPanel.updateComponents();

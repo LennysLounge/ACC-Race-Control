@@ -12,11 +12,11 @@ import racecontrol.client.data.RealtimeInfo;
  *
  * @author Leonard
  */
-public class RealtimeCarUpdate extends Event {
+public class RealtimeCarUpdateEvent extends Event {
 
     private RealtimeInfo info;
 
-    public RealtimeCarUpdate(RealtimeInfo info) {
+    public RealtimeCarUpdateEvent(RealtimeInfo info) {
         this.info = info;
     }
 
