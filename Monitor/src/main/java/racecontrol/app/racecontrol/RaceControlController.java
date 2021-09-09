@@ -17,8 +17,8 @@ import racecontrol.client.events.SessionChanged;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
-import racecontrol.extensions.incidents.IncidentInfo;
-import racecontrol.extensions.incidents.events.Accident;
+import racecontrol.client.extension.contact.ContactInfo;
+import racecontrol.client.extension.contact.ContactEvent;
 
 /**
  *
@@ -59,8 +59,8 @@ public class RaceControlController
     public void onEvent(Event e) {
         if (e instanceof SessionChanged) {
             addSessionChangeEntry((SessionChanged) e);
-        } else if (e instanceof Accident) {
-            addContactEntry((Accident) e);
+        } else if (e instanceof ContactEvent) {
+            addContactEntry((ContactEvent) e);
         }
     }
 
@@ -90,8 +90,8 @@ public class RaceControlController
         panel.getTable().invalidate();
     }
 
-    private void addContactEntry(Accident event) {
-        IncidentInfo info = event.getInfo();
+    private void addContactEntry(ContactEvent event) {
+        ContactInfo info = event.getInfo();
         tableModel.addEntry(new ContactEventEntry(info.getSessionEarliestTime(),
                 "Contact", true, info));
         panel.getTable().invalidate();
@@ -101,7 +101,7 @@ public class RaceControlController
         AccBroadcastingClient client = AccBroadcastingClient.getClient();
         int nCars = (int) Math.floor(Math.random() * Math.min(6, client.getModel().getCarsInfo().size()) + 1);
         float sessionTime = client.getModel().getSessionInfo().getSessionTime();
-        IncidentInfo incident = new IncidentInfo(
+        ContactInfo incident = new ContactInfo(
                 sessionTime,
                 0,
                 client.getSessionId());
@@ -111,7 +111,7 @@ public class RaceControlController
                     getRandomCar(),
                     0);
         }
-        Accident event = new Accident(incident);
+        ContactEvent event = new ContactEvent(incident);
         addContactEntry(event);
     }
 

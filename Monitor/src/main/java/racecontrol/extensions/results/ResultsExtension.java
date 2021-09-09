@@ -9,7 +9,7 @@ import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.extension.AccClientExtension;
-import racecontrol.extensions.incidents.events.Accident;
+import racecontrol.client.extension.contact.ContactEvent;
 import racecontrol.client.events.BroadcastingEventEvent;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.data.BroadcastingEvent;
@@ -46,7 +46,7 @@ public class ResultsExtension
     private String currentFilePath = null;
 
     private List<BroadcastingEvent> broadcastingEvents = new LinkedList<>();
-    private List<Accident> incidents = new LinkedList<>();
+    private List<ContactEvent> incidents = new LinkedList<>();
 
     private boolean isMeasuringGreenFlagOffset = false;
     private long greenFlagOffsetTimestamp = 0;
@@ -74,9 +74,9 @@ public class ResultsExtension
                 report.broadcastEvents.add(((BroadcastingEventEvent) e).getEvent());
                 writeStateToFile();
             }
-        } else if (e instanceof Accident) {
-            incidents.add((Accident) e);
-            report.incidents.add(((Accident) e).getInfo());
+        } else if (e instanceof ContactEvent) {
+            incidents.add((ContactEvent) e);
+            report.incidents.add(((ContactEvent) e).getInfo());
             writeStateToFile();
         } else if (e instanceof SessionPhaseChanged) {
             SessionInfo info = ((SessionPhaseChanged) e).getSessionInfo();

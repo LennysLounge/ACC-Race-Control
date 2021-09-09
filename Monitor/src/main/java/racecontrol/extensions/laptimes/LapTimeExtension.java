@@ -9,7 +9,7 @@ import racecontrol.client.data.SessionId;
 import racecontrol.client.events.RealtimeCarUpdate;
 import racecontrol.eventbus.Event;
 import racecontrol.client.extension.AccClientExtension;
-import racecontrol.extensions.incidents.IncidentExtension;
+import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.LapInfo;
@@ -43,7 +43,7 @@ public class LapTimeExtension
     /**
      * This classes logger.
      */
-    private static final Logger LOG = Logger.getLogger(IncidentExtension.class.getName());
+    private static final Logger LOG = Logger.getLogger(ContactExtension.class.getName());
     /**
      * Counts the laps for each car
      */

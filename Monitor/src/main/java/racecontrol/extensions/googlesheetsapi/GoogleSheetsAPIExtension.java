@@ -10,8 +10,8 @@ import racecontrol.client.data.SessionId;
 import racecontrol.client.events.SessionPhaseChanged;
 import racecontrol.eventbus.Event;
 import racecontrol.client.extension.AccClientExtension;
-import racecontrol.extensions.incidents.IncidentInfo;
-import racecontrol.extensions.incidents.events.Accident;
+import racecontrol.client.extension.contact.ContactInfo;
+import racecontrol.client.extension.contact.ContactEvent;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.events.RealtimeUpdate;
 import racecontrol.client.data.CarInfo;
@@ -104,8 +104,8 @@ public class GoogleSheetsAPIExtension
                     greenFlagOffsetTimestamp = System.currentTimeMillis();
                 }
             }
-        } else if (e instanceof Accident) {
-            IncidentInfo info = ((Accident) e).getInfo();
+        } else if (e instanceof ContactEvent) {
+            ContactInfo info = ((ContactEvent) e).getInfo();
             String sessionTime = TimeUtils.asDuration(info.getSessionEarliestTime());
             String carNumbers = info.getCars().stream()
                     .map(car -> getCarNumberAndLapCount(car))

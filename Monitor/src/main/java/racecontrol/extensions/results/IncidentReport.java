@@ -5,7 +5,7 @@
  */
 package racecontrol.extensions.results;
 
-import racecontrol.extensions.incidents.IncidentInfo;
+import racecontrol.client.extension.contact.ContactInfo;
 import racecontrol.client.data.BroadcastingEvent;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class IncidentReport {
 
     public List<BroadcastingEvent> broadcastEvents = new LinkedList<>();
 
-    public List<IncidentInfo> incidents = new LinkedList<>();
+    public List<ContactInfo> incidents = new LinkedList<>();
 
     public long greenFlagOffset = 0;
 

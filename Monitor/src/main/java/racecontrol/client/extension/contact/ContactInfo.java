@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.incidents;
+package racecontrol.client.extension.contact;
 
 import racecontrol.client.data.SessionId;
 import racecontrol.client.data.CarInfo;
@@ -17,9 +17,9 @@ import java.util.logging.Logger;
  *
  * @author Leonard
  */
-public class IncidentInfo {
+public class ContactInfo {
 
-    private static final Logger LOG = Logger.getLogger(IncidentInfo.class.getName());
+    private static final Logger LOG = Logger.getLogger(ContactInfo.class.getName());
 
     /**
      * time of the earliest accident event.
@@ -46,7 +46,7 @@ public class IncidentInfo {
      */
     private final SessionId sessionID;
 
-    public IncidentInfo(float time, int replayTime, CarInfo car, SessionId sessionId) {
+    public ContactInfo(float time, int replayTime, CarInfo car, SessionId sessionId) {
         this(time,
                 time,
                 Arrays.asList(car),
@@ -56,7 +56,7 @@ public class IncidentInfo {
         );
     }
 
-    public IncidentInfo(float time, int replayTime, SessionId sessionId) {
+    public ContactInfo(float time, int replayTime, SessionId sessionId) {
         this(time,
                 time,
                 new LinkedList<CarInfo>(),
@@ -66,7 +66,7 @@ public class IncidentInfo {
         );
     }
 
-    private IncidentInfo(float earliestTime,
+    private ContactInfo(float earliestTime,
             float latestTime,
             List<CarInfo> cars,
             long timestamp,
@@ -80,11 +80,11 @@ public class IncidentInfo {
         this.replayTime = replayTime;
     }
 
-    public IncidentInfo addCar(float time, CarInfo car, long timestamp) {
+    public ContactInfo addCar(float time, CarInfo car, long timestamp) {
         List<CarInfo> c = new LinkedList<>();
         c.addAll(cars);
         c.add(car);
-        return new IncidentInfo(sessionEarliestTime,
+        return new ContactInfo(sessionEarliestTime,
                 time,
                 c,
                 timestamp,
@@ -92,8 +92,8 @@ public class IncidentInfo {
                 replayTime);
     }
 
-    public IncidentInfo withReplayTime(int replayTime) {
-        return new IncidentInfo(sessionEarliestTime,
+    public ContactInfo withReplayTime(int replayTime) {
+        return new ContactInfo(sessionEarliestTime,
                 sessionLatestTime,
                 cars,
                 systemTimestamp,

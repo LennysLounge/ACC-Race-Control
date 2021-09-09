@@ -1,4 +1,3 @@
-racecontrol.extensions.incidents.IncidentExtensionModule
 racecontrol.extensions.laptimes.LaptimeExtensionModule
 racecontrol.extensions.results.ResultsExtensionModule
 racecontrol.extensions.googlesheetsapi.GoogleSheetsAPIExtensionModule

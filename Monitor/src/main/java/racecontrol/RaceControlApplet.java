@@ -70,9 +70,10 @@ public class RaceControlApplet extends CustomPApplet {
         frameRate(30);
 
         //create the connection client.
-        this.client = AccBroadcastingClient.getClient();
+        client = AccBroadcastingClient.getClient();
+        client.initialise();
 
-        this.hotkey = new Hotkeys();
+        hotkey = new Hotkeys();
 
         appControler = new AppController();
         setComponent(appControler.getGUIComponent());

@@ -19,7 +19,7 @@ import static racecontrol.LookAndFeel.COLOR_WHITE;
 import static racecontrol.LookAndFeel.LINE_HEIGHT;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.CarInfo;
-import racecontrol.extensions.incidents.IncidentInfo;
+import racecontrol.client.extension.contact.ContactInfo;
 import racecontrol.lpgui.gui.LPTable;
 
 /**
@@ -36,7 +36,7 @@ public class ContactEventEntry
     /**
      * The incident this entry represents.
      */
-    private final IncidentInfo incident;
+    private final ContactInfo incident;
     /**
      * Reference to the connection client.
      */
@@ -45,7 +45,7 @@ public class ContactEventEntry
     public ContactEventEntry(float sessionTime,
             String typeDesciptor,
             boolean hasReplay,
-            IncidentInfo incident) {
+            ContactInfo incident) {
         super(sessionTime, typeDesciptor, hasReplay);
         client = AccBroadcastingClient.getClient();
         this.incident = incident;

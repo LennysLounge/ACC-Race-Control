@@ -50,6 +50,7 @@ import racecontrol.client.events.EntryListUpdate;
 import racecontrol.client.events.RealtimeUpdate;
 import racecontrol.client.extension.AccBroadcastingClientExtensionModule;
 import racecontrol.client.extension.AccClientExtension;
+import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.logging.UILogger;
 import racecontrol.lpgui.gui.LPContainer;
 
@@ -60,6 +61,7 @@ import racecontrol.lpgui.gui.LPContainer;
  * @author Leonard
  */
 public class AccBroadcastingClient {
+
     /**
      * This class's logger.
      */
@@ -137,17 +139,23 @@ public class AccBroadcastingClient {
      * created.
      */
     private final List<Class> circularDependencyPrevention = new LinkedList<>();
-    
+
     private AccBroadcastingClient() {
         loadModules();
     }
-    
+
+    public void initialise() {
+        //instanciate extensions
+        ContactExtension.getInstance();
+    }
+
     /**
      * Creates and gets a singleton instance of this class.
+     *
      * @return the singelton instance of this class.
      */
-    public static AccBroadcastingClient getClient(){
-        if(instance == null){
+    public static AccBroadcastingClient getClient() {
+        if (instance == null) {
             instance = new AccBroadcastingClient();
         }
         return instance;
