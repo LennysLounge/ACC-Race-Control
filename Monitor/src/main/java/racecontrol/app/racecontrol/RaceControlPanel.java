@@ -46,12 +46,12 @@ public class RaceControlPanel
         findReplayOffsetButton.setVisible(false);
         findReplayOffsetButton.setSize(200, LINE_HEIGHT);
         findReplayOffsetButton.setPosition(600, 0);
-        //addComponent(findReplayOffsetButton);
+        addComponent(findReplayOffsetButton);
         findReplayOffsetLabel = new LPLabel("The replay time is currently not know. Click here to find it.");
         findReplayOffsetLabel.setVisible(false);
         findReplayOffsetLabel.setSize(600, LINE_HEIGHT);
         findReplayOffsetLabel.setPosition(20, 0);
-        //addComponent(findReplayOffsetLabel);
+        addComponent(findReplayOffsetLabel);
 
         eventListLabel = new LPLabel("Event list:");
         eventListLabel.setSize(200, LINE_HEIGHT);
@@ -81,18 +81,20 @@ public class RaceControlPanel
 
     @Override
     public void onResize(float w, float h) {
+        float heightOffset = showFindReplayButton ? LINE_HEIGHT : 0;
+
         float buttonWidth = Math.min(400, w / 2);
         float buttonHeight = LINE_HEIGHT * 1.5f;
         float buttonPadding = LINE_HEIGHT * 0.1f;
 
         googleSheetsButton.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
-        googleSheetsButton.setPosition(buttonPadding * 2, buttonPadding * 2);
+        googleSheetsButton.setPosition(buttonPadding * 2, heightOffset + buttonPadding * 2);
         placeHolder1.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
-        placeHolder1.setPosition(buttonWidth + buttonPadding, buttonPadding * 2);
+        placeHolder1.setPosition(buttonWidth + buttonPadding, heightOffset + buttonPadding * 2);
         placeHolder2.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
-        placeHolder2.setPosition(buttonPadding * 2, buttonHeight + buttonPadding);
+        placeHolder2.setPosition(buttonPadding * 2, heightOffset + buttonHeight + buttonPadding);
         placeHolder3.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
-        placeHolder3.setPosition(buttonWidth + buttonPadding, buttonHeight + buttonPadding);
+        placeHolder3.setPosition(buttonWidth + buttonPadding, heightOffset + buttonHeight + buttonPadding);
 
         float headerHeight = buttonHeight + LINE_HEIGHT;
         eventListLabel.setPosition(20, headerHeight - LINE_HEIGHT);
@@ -119,7 +121,6 @@ public class RaceControlPanel
         if (showFindReplayButton == state) {
             return;
         }
-
         findReplayOffsetButton.setVisible(state);
         findReplayOffsetButton.setEnabled(state);
         findReplayOffsetLabel.setVisible(state);
@@ -131,8 +132,8 @@ public class RaceControlPanel
     public LPButton getSeachReplayButton() {
         return findReplayOffsetButton;
     }
-    
-    public LPButton googleSheetsModuleButton(){
+
+    public LPButton googleSheetsModuleButton() {
         return googleSheetsButton;
     }
 
