@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Leonard Sch?ngel
+ * Copyright (c) 2021 Leonard Schüngel
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
@@ -15,6 +15,7 @@ import static racecontrol.LookAndFeel.COLOR_RED;
 import static racecontrol.LookAndFeel.COLOR_WHITE;
 import static racecontrol.LookAndFeel.TEXT_SIZE;
 import racecontrol.app.racecontrol.entries.RaceEventEntry;
+import racecontrol.client.data.SessionId;
 import racecontrol.lpgui.gui.LPTable;
 import racecontrol.lpgui.gui.LPTable.RenderContext;
 import racecontrol.lpgui.gui.LPTableColumn;
@@ -32,6 +33,7 @@ public class RaceEventTableModel
 
     @FunctionalInterface
     public interface ClickAction {
+
         void onClick(RaceEventEntry entry, int mouseX, int mouseY);
     }
 
@@ -39,6 +41,8 @@ public class RaceEventTableModel
     };
     private ClickAction infoColumnClicked = (RaceEventEntry entry, int mouseX, int mouseY) -> {
     };
+
+    private SessionId activeSessionId;
 
     @Override
     public int getRowCount() {
@@ -61,11 +65,11 @@ public class RaceEventTableModel
             new LPTableColumn("Replay")
             .setMinWidth(TEXT_SIZE * 5)
             .setMaxWidth(TEXT_SIZE * 5)
-            .setCellRenderer(LPTableColumn.nullRenderer),
+            .setCellRenderer(replayButtonRenderer),
             new LPTableColumn("Time")
             .setMinWidth(TEXT_SIZE * 5)
             .setMaxWidth(TEXT_SIZE * 5)
-            .setCellRenderer(LPTableColumn.nullRenderer),
+            .setCellRenderer(replayTimeRenderer),
             new LPTableColumn("")
             .setCellRenderer(LPTableColumn.nullRenderer)
         };
@@ -78,23 +82,34 @@ public class RaceEventTableModel
 
     @Override
     public void onClick(int column, int row, int mouseX, int mouseY) {
-        if(column == 2){
+        if (column == 2) {
             //info column clicked.
             infoColumnClicked.onClick(entries.get(row), mouseX, mouseY);
-        }
-        else if(column == 3){
+        } else if (column == 3) {
             replayButtonClicked.onClick(entries.get(row), mouseX, mouseY);
         }
+    }
+
+    public void setSessionId(SessionId sessionId) {
+        this.activeSessionId = sessionId;
+
     }
 
     public void addEntry(RaceEventEntry entry) {
         entries.add(entry);
     }
 
+    public RaceEventEntry getEntry(int index) {
+        if (index < entries.size()) {
+            return entries.get(index);
+        }
+        return null;
+    }
+
     public void setReplayClickAction(ClickAction action) {
         this.replayButtonClicked = action;
     }
-    
+
     public void setInfoColumnAction(ClickAction action) {
         this.infoColumnClicked = action;
     }
@@ -129,8 +144,15 @@ public class RaceEventTableModel
             PApplet applet,
             RenderContext context) -> {
         RaceEventEntry entry = (RaceEventEntry) context.object;
-        if (entry.isHasReplay()) {
-            if (context.isMouseOverColumn) {
+        if (entry.isHasReplay() && entry.getSessionId() == activeSessionId) {
+            if (entry.getReplayTime() == -1) {
+                applet.fill(COLOR_WHITE);
+                applet.textAlign(LEFT, CENTER);
+                applet.text("Replay time not known", context.height / 2f, context.height / 2f);
+                return;
+            }
+
+            if (context.isMouseOverColumn && context.isMouseOverRow) {
                 applet.fill(COLOR_RED);
             } else {
                 applet.fill(COLOR_GRAY);
@@ -146,8 +168,11 @@ public class RaceEventTableModel
             PApplet applet,
             RenderContext context) -> {
         RaceEventEntry entry = (RaceEventEntry) context.object;
-        if (entry.isHasReplay()) {
-            String time = TimeUtils.asDuration(entry.getSessionTime());
+        if (entry.isHasReplay() && entry.getSessionId() == activeSessionId) {
+            if (entry.getReplayTime() == -1) {
+                return;
+            }
+            String time = TimeUtils.asDuration(entry.getReplayTime());
             applet.fill(COLOR_WHITE);
             applet.textAlign(CENTER, CENTER);
             applet.text(time, context.width / 2f, context.height / 2f);

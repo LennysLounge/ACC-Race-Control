@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Leonard Sch?ngel
+ * Copyright (c) 2021 Leonard Schüngel
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
@@ -19,6 +19,7 @@ import static racecontrol.LookAndFeel.COLOR_WHITE;
 import static racecontrol.LookAndFeel.LINE_HEIGHT;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.CarInfo;
+import racecontrol.client.data.SessionId;
 import racecontrol.client.extension.contact.ContactInfo;
 import racecontrol.lpgui.gui.LPTable;
 
@@ -42,13 +43,16 @@ public class ContactEventEntry
      */
     private final AccBroadcastingClient client;
 
-    public ContactEventEntry(float sessionTime,
+    public ContactEventEntry(
+            SessionId sessionId,
+            float sessionTime,
             String typeDesciptor,
             boolean hasReplay,
             ContactInfo incident) {
-        super(sessionTime, typeDesciptor, hasReplay);
+        super(sessionId, sessionTime, typeDesciptor, hasReplay);
         client = AccBroadcastingClient.getClient();
         this.incident = incident;
+        setReplayTime(incident.getReplayTime());
     }
 
     /**

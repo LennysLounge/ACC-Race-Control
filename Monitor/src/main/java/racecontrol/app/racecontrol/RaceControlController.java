@@ -6,6 +6,7 @@
 package racecontrol.app.racecontrol;
 
 import java.util.logging.Logger;
+import racecontrol.RaceControlApplet;
 import racecontrol.app.racecontrol.entries.ContactEventEntry;
 import racecontrol.app.racecontrol.entries.RaceEventEntry;
 import racecontrol.app.racecontrol.entries.SimpleEventEntry;
@@ -19,6 +20,9 @@ import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.extension.contact.ContactInfo;
 import racecontrol.client.extension.contact.ContactEvent;
+import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
+import racecontrol.client.extension.replayoffset.ReplayStartKnownEvent;
+import racecontrol.client.extension.replayoffset.ReplayStartRequiresSearchEvent;
 
 /**
  *
@@ -29,24 +33,44 @@ public class RaceControlController
 
     private static final Logger LOG = Logger.getLogger(RaceControlController.class.getName());
 
+    private final AccBroadcastingClient client;
+
     private final RaceControlPanel panel;
 
     private final RaceEventTableModel tableModel;
 
+    private final ReplayOffsetExtension replayOffsetExtension;
+
     public RaceControlController() {
         EventBus.register(this);
+        client = AccBroadcastingClient.getClient();
         panel = new RaceControlPanel();
         tableModel = new RaceEventTableModel();
+        replayOffsetExtension = ReplayOffsetExtension.getInstance();
 
         tableModel.setInfoColumnAction(infoClickAction);
         tableModel.setReplayClickAction((RaceEventEntry entry, int mouseX, int mouseY) -> {
-            LOG.info("Replay area clicked");
+            if (entry.isHasReplay() && entry.getReplayTime() != -1) {
+                LOG.info("Starting instant replay for incident");
+                client.sendInstantReplayRequestWithCamera(
+                        entry.getSessionTime() - 10000,
+                        10,
+                        getClient().getModel().getSessionInfo().getFocusedCarIndex(),
+                        getClient().getModel().getSessionInfo().getActiveCameraSet(),
+                        getClient().getModel().getSessionInfo().getActiveCamera()
+                );
+            }
         });
 
         panel.getTable().setTableModel(tableModel);
 
         panel.setKeyEvent(() -> {
             createDummyContactEvent();
+        });
+
+        panel.getSeachReplayButton().setAction(() -> {
+            replayOffsetExtension.findSessionChange();
+            panel.getSeachReplayButton().setEnabled(false);
         });
 
     }
@@ -57,8 +81,18 @@ public class RaceControlController
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof SessionChangedEvent) {
+        if (e instanceof ReplayStartRequiresSearchEvent) {
+            RaceControlApplet.runLater(() -> {
+                panel.setShowReplayButton(true);
+            });
+        } else if (e instanceof ReplayStartKnownEvent) {
+            RaceControlApplet.runLater(() -> {
+                panel.setShowReplayButton(false);
+            });
+            updateReplayTimes();
+        } else if (e instanceof SessionChangedEvent) {
             addSessionChangeEntry((SessionChangedEvent) e);
+            tableModel.setSessionId(((SessionChangedEvent) e).getSessionId());
         } else if (e instanceof ContactEvent) {
             addContactEntry((ContactEvent) e);
         }
@@ -70,6 +104,10 @@ public class RaceControlController
                     ((ContactEventEntry) entry).onInfoClicked(mouseX, mouseY);
                 }
             };
+
+    public void startAccidentReplay(ContactInfo incident, int seconds) {
+
+    }
 
     private void addSessionChangeEntry(SessionChangedEvent event) {
         SessionInfo info = event.getSessionInfo();
@@ -86,19 +124,18 @@ public class RaceControlController
                 break;
         }
         text += event.isInitialisation() ? " joined." : " started";
-        tableModel.addEntry(new SimpleEventEntry(info.getSessionTime(), text, false));
+        tableModel.addEntry(new SimpleEventEntry(client.getSessionId(), info.getSessionTime(), text, false));
         panel.getTable().invalidate();
     }
 
     private void addContactEntry(ContactEvent event) {
         ContactInfo info = event.getInfo();
-        tableModel.addEntry(new ContactEventEntry(info.getSessionEarliestTime(),
+        tableModel.addEntry(new ContactEventEntry(client.getSessionId(), info.getSessionEarliestTime(),
                 "Contact", true, info));
         panel.getTable().invalidate();
     }
 
     private void createDummyContactEvent() {
-        AccBroadcastingClient client = AccBroadcastingClient.getClient();
         int nCars = (int) Math.floor(Math.random() * Math.min(6, client.getModel().getCarsInfo().size()) + 1);
         float sessionTime = client.getModel().getSessionInfo().getSessionTime();
         ContactInfo incident = new ContactInfo(
@@ -116,7 +153,6 @@ public class RaceControlController
     }
 
     private CarInfo getRandomCar() {
-        AccBroadcastingClient client = AccBroadcastingClient.getClient();
         int r = (int) Math.floor(Math.random() * client.getModel().getCarsInfo().size());
         int i = 0;
         for (CarInfo car : getClient().getModel().getCarsInfo().values()) {
@@ -125,6 +161,15 @@ public class RaceControlController
             }
         }
         return null;
+    }
+
+    private void updateReplayTimes() {
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            RaceEventEntry entry = tableModel.getEntry(i);
+            if (entry.isHasReplay() && entry.getReplayTime() == -1) {
+                entry.setReplayTime(replayOffsetExtension.getReplayTimeFromSessionTime((int) entry.getSessionTime()));
+            }
+        }
     }
 
 }

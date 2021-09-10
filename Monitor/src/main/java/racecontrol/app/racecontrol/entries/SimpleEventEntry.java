@@ -1,10 +1,11 @@
 /*
- * Copyright (c) 2021 Leonard Sch?ngel
+ * Copyright (c) 2021 Leonard Schüngel
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
 package racecontrol.app.racecontrol.entries;
 
+import racecontrol.client.data.SessionId;
 import racecontrol.lpgui.gui.LPTable;
 import racecontrol.lpgui.gui.LPTableColumn;
 
@@ -14,11 +15,13 @@ import racecontrol.lpgui.gui.LPTableColumn;
  */
 public class SimpleEventEntry
         extends RaceEventEntry {
-    
-    public SimpleEventEntry(float sessionTime,
+
+    public SimpleEventEntry(
+            SessionId sessionId,
+            float sessionTime,
             String typeDescriptor,
-            boolean hasReplay){
-        super(sessionTime, typeDescriptor, hasReplay); 
+            boolean hasReplay) {
+        super(sessionId, sessionTime, typeDescriptor, hasReplay);
     }
 
     @Override

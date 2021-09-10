@@ -15,6 +15,7 @@ import racecontrol.client.data.SessionInfo;
 import racecontrol.client.events.SessionChangedEvent;
 import java.util.logging.Logger;
 import racecontrol.client.AccBroadcastingClient;
+import racecontrol.client.events.ConnectionOpenedEvent;
 
 /**
  * Calculates the replay start time and provides methods to find the replay time
@@ -136,12 +137,17 @@ public class ReplayOffsetExtension
         replayStartTime = 0;
         gameConnectionTime = 0;
         isInSearchMode = false;
-        LOG.info("replay extension created");
     }
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof SessionChangedEvent) {
+        if(e instanceof ConnectionOpenedEvent){
+            //reset state
+            replayStartTime = 0;
+            gameConnectionTime = 0;
+            isInSearchMode = false;
+        }
+        else if (e instanceof SessionChangedEvent) {
             SessionChangedEvent event = (SessionChangedEvent) e;
             if (!event.isInitialisation()) {
                 replayStartTime = System.currentTimeMillis();
@@ -160,8 +166,9 @@ public class ReplayOffsetExtension
                     replayStartTime = gameConnectionTime;
                     LOG.info("Setting replayStartTime based on game connection time to: " + gameConnectionTime);
                     EventBus.publish(new ReplayStartKnownEvent());
+                }else{
+                    EventBus.publish(new ReplayStartRequiresSearchEvent());
                 }
-
             }
         } else if (e instanceof RealtimeUpdateEvent) {
             SessionInfo info = ((RealtimeUpdateEvent) e).getSessionInfo();
