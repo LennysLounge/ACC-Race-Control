@@ -1,5 +1,10 @@
 # v1.3.0
 
+* Removed the tabs and replaced them with a side menu.
+  * The live timing and broadcasting controls are now in the "Live Timing" section.
+  * The incident overview is now in the "Race Control" section.
+  * The application log is now in the "Log" section.
+
 
 
 # v1.2.1
