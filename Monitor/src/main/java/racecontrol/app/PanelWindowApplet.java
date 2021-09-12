@@ -54,12 +54,6 @@ public class PanelWindowApplet
 
         setComponent(panel);
     }
-    
-    @Override
-    public void draw(){
-        LOG.info("Child draw");
-        super.draw();
-    }
 
     private PImage loadResourceAsPImage(String resource) {
         try {
