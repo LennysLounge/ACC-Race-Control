@@ -8,6 +8,7 @@ package racecontrol.app.racecontrol;
 import java.util.logging.Logger;
 import racecontrol.RaceControlApplet;
 import racecontrol.app.AppController;
+import racecontrol.app.PanelWindowApplet;
 import racecontrol.app.racecontrol.entries.ContactEventEntry;
 import racecontrol.app.racecontrol.entries.RaceEventEntry;
 import racecontrol.app.racecontrol.entries.SimpleEventEntry;
@@ -42,10 +43,14 @@ public class RaceControlController
     private final RaceEventTableModel tableModel;
 
     private final ReplayOffsetExtension replayOffsetExtension;
-    
+
     private final AppController appController;
-    
+
     private final GoogleSheetsAPIConfigurationController googleSheetsConfigController;
+    /**
+     * Indicates that the google sheets config window is open.
+     */
+    private boolean googleSheetsConfigClosed = true;
 
     public RaceControlController() {
         EventBus.register(this);
@@ -68,10 +73,8 @@ public class RaceControlController
             replayOffsetExtension.findSessionChange();
             panel.getSeachReplayButton().setEnabled(false);
         });
-        
-        panel.googleSheetsButton.setAction(()->{
-            appController.launchNewWindow(googleSheetsConfigController);
-        });
+
+        panel.googleSheetsButton.setAction(() -> openGoogleSheetsConfig());
     }
 
     public RaceControlPanel getPanel() {
@@ -141,6 +144,20 @@ public class RaceControlController
         tableModel.addEntry(new ContactEventEntry(client.getSessionId(), info.getSessionEarliestTime(),
                 "Contact", true, info));
         panel.getTable().invalidate();
+    }
+
+    private void openGoogleSheetsConfig() {
+        if (googleSheetsConfigClosed) {
+            appController.launchNewWindow(
+                    googleSheetsConfigController,
+                    false,
+                    () -> {
+                        googleSheetsConfigClosed = true;
+                        panel.googleSheetsButton.setEnabled(true);
+                    });
+            googleSheetsConfigClosed = false;
+            panel.googleSheetsButton.setEnabled(false);
+        }
     }
 
     private void createDummyContactEvent() {

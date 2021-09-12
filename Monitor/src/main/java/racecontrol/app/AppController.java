@@ -52,10 +52,6 @@ public class AppController
     private RaceControlController raceControlController;
 
     private boolean initialised;
-    /**
-     * List of currently open windows.
-     */
-    private List<PanelWindowApplet> activeWindows = new LinkedList<>();
 
     public static AppController getInstance() {
         if (instance == null) {
@@ -139,26 +135,13 @@ public class AppController
         }
     }
 
-    public void launchNewWindow(PanelController controller) {
-        activeWindows.add(new PanelWindowApplet(controller.getPanel()));
-        
-        /*
-        Thread t = new Thread("Panel window thread") {
-            @Override
-            public void run() {
-                // set exception handler
-                Thread.setDefaultUncaughtExceptionHandler(new Main.UncoughtExceptionHandler());
-
-                //start visualisation.
-                PanelWindowApplet window = new PanelWindowApplet(this, controller.getPanel());
-                activeWindows.add(window);
-                
-                String[] a = {"hm"};
-                PApplet.runSketch(a, window);
-            }
-        };
-        t.start();
-*/
+    public PanelWindowApplet launchNewWindow(
+            PanelController controller,
+            boolean resizeable,
+            Runnable closeAction) {
+        PanelWindowApplet applet = new PanelWindowApplet(controller.getPanel(), resizeable);
+        applet.setCloseAction(closeAction);
+        return applet;
     }
 
 }

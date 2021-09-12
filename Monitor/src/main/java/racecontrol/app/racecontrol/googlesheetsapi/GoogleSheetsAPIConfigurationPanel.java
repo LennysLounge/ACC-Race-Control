@@ -134,8 +134,10 @@ public class GoogleSheetsAPIConfigurationPanel
         addLapToCarCheckBox.setPosition(260, LINE_HEIGHT * 10 + (LINE_HEIGHT - TEXT_SIZE) / 2f);
         addLapToCarCheckBox.setSelected(true);
         addComponent(addLapToCarCheckBox);
+        
+        setSize(660, 440);
+        
         updateComponents();
-
     }
 
     private void updateComponents() {
