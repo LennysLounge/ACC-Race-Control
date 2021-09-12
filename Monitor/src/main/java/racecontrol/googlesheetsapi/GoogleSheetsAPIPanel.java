@@ -32,7 +32,7 @@ public class GoogleSheetsAPIPanel extends LPContainer {
 
     public GoogleSheetsAPIPanel(GoogleSheetsAPIController extension) {
         this.extension = extension;
-        setName("Sheets API");
+        setName("Overview");
 
         setToPractice.setSize(200, LookAndFeel.LINE_HEIGHT);
         setToPractice.setAction(() -> {

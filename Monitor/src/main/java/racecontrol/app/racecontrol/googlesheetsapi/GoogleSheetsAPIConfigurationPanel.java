@@ -31,7 +31,6 @@ import static racecontrol.googlesheetsapi.GoogleSheetsConfiguration.SESSION_TIME
 public class GoogleSheetsAPIConfigurationPanel
         extends LPContainer {
 
-    private final LPLabel headingLabel = new LPLabel("Google Spreadsheet API");
     private final LPLabel spreadSheetLinkLabel = new LPLabel("Spreadsheet link:");
     protected final LPTextField spreadSheetLinkTextField = new LPTextField();
 
@@ -62,22 +61,18 @@ public class GoogleSheetsAPIConfigurationPanel
     protected boolean allowInput = true;
 
     public GoogleSheetsAPIConfigurationPanel() {
-        setName("Google Sheets API");
+        setName("Settings");
 
-        headingLabel.setPosition(20, 0);
-        headingLabel.setSize(250, LINE_HEIGHT);
-        addComponent(headingLabel);
-
-        spreadSheetLinkLabel.setPosition(20, LINE_HEIGHT * 1);
+        spreadSheetLinkLabel.setPosition(20, LINE_HEIGHT * 0);
         spreadSheetLinkLabel.setSize(200, LINE_HEIGHT);
         addComponent(spreadSheetLinkLabel);
-        spreadSheetLinkTextField.setPosition(20, LINE_HEIGHT * 2);
+        spreadSheetLinkTextField.setPosition(20, LINE_HEIGHT * 1);
         addComponent(spreadSheetLinkTextField);
 
-        credentialsFileLabel.setPosition(20, LINE_HEIGHT * 3);
+        credentialsFileLabel.setPosition(20, LINE_HEIGHT * 2);
         credentialsFileLabel.setSize(150, LINE_HEIGHT);
         addComponent(credentialsFileLabel);
-        credentialsFileTextField.setPosition(20, LINE_HEIGHT * 4);
+        credentialsFileTextField.setPosition(20, LINE_HEIGHT * 3);
         credentialsFileTextField.setSize(200, LINE_HEIGHT);
         credentialsFileTextField.setValue(PersistantConfig.getConfig(CREDENTIALS_FILE_PATH));
         addComponent(credentialsFileTextField);
@@ -85,57 +80,57 @@ public class GoogleSheetsAPIConfigurationPanel
         credentalsSearchButton.setAction(() -> openSearchCredentialsFileDialog());
         addComponent(credentalsSearchButton);
 
-        useDefaultCheckBox.setPosition(20, LINE_HEIGHT * 5 + (LINE_HEIGHT - TEXT_SIZE) / 2f);
+        useDefaultCheckBox.setPosition(20, LINE_HEIGHT * 4 + (LINE_HEIGHT - TEXT_SIZE) / 2f);
         useDefaultCheckBox.setChangeAction((state) -> {
             setDefaults();
             updateComponents();
         });
         useDefaultCheckBox.setSelected(true);
         addComponent(useDefaultCheckBox);
-        useDaufaultLabel.setPosition(60, LINE_HEIGHT * 5);
+        useDaufaultLabel.setPosition(60, LINE_HEIGHT * 4);
         addComponent(useDaufaultLabel);
 
-        replayOffsetLabel.setPosition(40, LINE_HEIGHT * 6);
+        replayOffsetLabel.setPosition(40, LINE_HEIGHT * 5);
         replayOffsetLabel.setSize(180, LINE_HEIGHT);
         addComponent(replayOffsetLabel);
         replayOffsetTextField.setSize(100, LINE_HEIGHT);
-        replayOffsetTextField.setPosition(220, LINE_HEIGHT * 6);
+        replayOffsetTextField.setPosition(220, LINE_HEIGHT * 5);
         replayOffsetTextField.setValue(REPLAY_OFFSET_CELL);
         addComponent(replayOffsetTextField);
 
-        findRowRangeLabel.setPosition(40, LINE_HEIGHT * 7);
+        findRowRangeLabel.setPosition(40, LINE_HEIGHT * 6);
         findRowRangeLabel.setSize(240, LINE_HEIGHT);
         addComponent(findRowRangeLabel);
         findRowRangeTextField.setSize(100, LINE_HEIGHT);
-        findRowRangeTextField.setPosition(280, LINE_HEIGHT * 7);
+        findRowRangeTextField.setPosition(280, LINE_HEIGHT * 6);
         findRowRangeTextField.setValue(FIND_EMPTY_ROW_RANGE);
         addComponent(findRowRangeTextField);
 
-        sessionColumnLabel.setPosition(40, LINE_HEIGHT * 8);
+        sessionColumnLabel.setPosition(40, LINE_HEIGHT * 7);
         sessionColumnLabel.setSize(160, LINE_HEIGHT);
         addComponent(sessionColumnLabel);
         sessionColumnTextField.setSize(100, LINE_HEIGHT);
-        sessionColumnTextField.setPosition(200, LINE_HEIGHT * 8);
+        sessionColumnTextField.setPosition(200, LINE_HEIGHT * 7);
         sessionColumnTextField.setValue(SESSION_TIME_COLUMN);
         addComponent(sessionColumnTextField);
 
-        carColumnLabel.setPosition(340, LINE_HEIGHT * 8);
+        carColumnLabel.setPosition(340, LINE_HEIGHT * 7);
         carColumnLabel.setSize(210, LINE_HEIGHT);
         addComponent(carColumnLabel);
         carColumnTextField.setSize(100, LINE_HEIGHT);
-        carColumnTextField.setPosition(550, LINE_HEIGHT * 8);
+        carColumnTextField.setPosition(550, LINE_HEIGHT * 7);
         carColumnTextField.setValue(CAR_INFO_COLUMN);
         addComponent(carColumnTextField);
 
-        addLapToCarLabel.setPosition(40, LINE_HEIGHT * 9);
+        addLapToCarLabel.setPosition(40, LINE_HEIGHT * 8);
         addLapToCarLabel.setSize(220, LINE_HEIGHT);
         addComponent(addLapToCarLabel);
-        addLapToCarCheckBox.setPosition(260, LINE_HEIGHT * 9 + (LINE_HEIGHT - TEXT_SIZE) / 2f);
+        addLapToCarCheckBox.setPosition(260, LINE_HEIGHT * 8 + (LINE_HEIGHT - TEXT_SIZE) / 2f);
         addLapToCarCheckBox.setSelected(true);
         addComponent(addLapToCarCheckBox);
 
         connectButton.setSize(200, LINE_HEIGHT);
-        connectButton.setPosition(40, LINE_HEIGHT * 10);
+        connectButton.setPosition(40, LINE_HEIGHT * 9);
         addComponent(connectButton);
 
         setSize(660, 460);

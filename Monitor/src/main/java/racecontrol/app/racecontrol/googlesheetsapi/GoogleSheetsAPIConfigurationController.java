@@ -10,6 +10,7 @@ import racecontrol.app.PanelController;
 import racecontrol.googlesheetsapi.GoogleSheetsAPIController;
 import racecontrol.googlesheetsapi.GoogleSheetsConfiguration;
 import racecontrol.lpgui.gui.LPComponent;
+import racecontrol.lpgui.gui.LPTabPanel;
 
 /**
  *
@@ -22,6 +23,8 @@ public class GoogleSheetsAPIConfigurationController
      * This class's logger.
      */
     private static final Logger LOG = Logger.getLogger(GoogleSheetsAPIConfigurationController.class.getName());
+    
+    private final LPTabPanel tabPanel = new LPTabPanel();
 
     private final GoogleSheetsAPIConfigurationPanel panel;
 
@@ -31,11 +34,15 @@ public class GoogleSheetsAPIConfigurationController
         panel = new GoogleSheetsAPIConfigurationPanel();
         panel.connectButton.setAction(() -> connectButton());
         sheetsAPI = GoogleSheetsAPIController.getInstance();
+        
+        tabPanel.addTab(panel);
+        tabPanel.setSize(660, 460);
+        tabPanel.setName("Google Sheets API");
     }
 
     @Override
     public LPComponent getPanel() {
-        return panel;
+        return tabPanel;
     }
 
     private void connectButton() {
@@ -49,10 +56,12 @@ public class GoogleSheetsAPIConfigurationController
                     panel.sessionColumnTextField.getValue(),
                     panel.carColumnTextField.getValue()
             ));
+            tabPanel.addTab(sheetsAPI.getPanel());
             panel.allowInput = false;
         } else {
             //disable spreadsheet service.
             sheetsAPI.stop();
+            tabPanel.removeTab(sheetsAPI.getPanel());
             panel.allowInput = true;
         }
         panel.updateComponents();
