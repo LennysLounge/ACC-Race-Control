@@ -5,6 +5,10 @@
  */
 package racecontrol.app;
 
+import java.util.LinkedList;
+import java.util.List;
+import processing.core.PApplet;
+import racecontrol.Main;
 import racecontrol.app.broadcasting.BroadcastingController;
 import racecontrol.app.logging.LoggingPanel;
 import racecontrol.app.racecontrol.RaceControlController;
@@ -22,6 +26,7 @@ import racecontrol.lpgui.gui.LPComponent;
  */
 public class AppController
         implements EventListener {
+
     /**
      * Singelton instance.
      */
@@ -30,30 +35,44 @@ public class AppController
     /**
      * The GUI component.
      */
-    private final AppPanel appPanel;
+    private AppPanel appPanel;
     /**
      * Settings panel.
      */
-    private final SettingsPanel settingsPanel;
+    private SettingsPanel settingsPanel;
     /**
      * Logging panel.
      */
-    private final LoggingPanel loggingPanel;
+    private LoggingPanel loggingPanel;
     /**
      * Broadcasting controller.
      */
-    private final BroadcastingController broadcastingController;
-    
-    private final RaceControlController raceControlController;
-    
-    public static AppController getInstance(){
-        if(instance == null){
+    private BroadcastingController broadcastingController;
+
+    private RaceControlController raceControlController;
+
+    private boolean initialised;
+    /**
+     * List of currently open windows.
+     */
+    private List<PanelWindowApplet> activeWindows = new LinkedList<>();
+
+    public static AppController getInstance() {
+        if (instance == null) {
             instance = new AppController();
         }
         return instance;
     }
 
     private AppController() {
+    }
+
+    public void initialise() {
+        if (initialised) {
+            return;
+        }
+        initialised = true;
+
         EventBus.register(this);
 
         appPanel = new AppPanel();
@@ -73,7 +92,7 @@ public class AppController
             appPanel.updateComponents();
             appPanel.invalidate();
         }));
-        
+
         appPanel.getMenu().addMenuItem(new Menu.MenuItem("Race Control", () -> {
             appPanel.setActivePage(raceControlController.getPanel());
             appPanel.updateComponents();
@@ -120,5 +139,26 @@ public class AppController
         }
     }
 
+    public void launchNewWindow(PanelController controller) {
+        activeWindows.add(new PanelWindowApplet(controller.getPanel()));
+        
+        /*
+        Thread t = new Thread("Panel window thread") {
+            @Override
+            public void run() {
+                // set exception handler
+                Thread.setDefaultUncaughtExceptionHandler(new Main.UncoughtExceptionHandler());
+
+                //start visualisation.
+                PanelWindowApplet window = new PanelWindowApplet(this, controller.getPanel());
+                activeWindows.add(window);
+                
+                String[] a = {"hm"};
+                PApplet.runSketch(a, window);
+            }
+        };
+        t.start();
+*/
+    }
 
 }

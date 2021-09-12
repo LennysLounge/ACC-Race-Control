@@ -18,6 +18,7 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.event.KeyEvent;
 import racecontrol.app.AppController;
+import racecontrol.lpgui.gui.LPComponent;
 
 /**
  * The base for the processing visualization.
@@ -78,6 +79,7 @@ public class RaceControlApplet extends CustomPApplet {
         hotkey = new Hotkeys();
 
         appControler = AppController.getInstance();
+        appControler.initialise();
         setComponent(appControler.getGUIComponent());
     }
 

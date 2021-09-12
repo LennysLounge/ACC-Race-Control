@@ -7,9 +7,11 @@ package racecontrol.app.racecontrol;
 
 import java.util.logging.Logger;
 import racecontrol.RaceControlApplet;
+import racecontrol.app.AppController;
 import racecontrol.app.racecontrol.entries.ContactEventEntry;
 import racecontrol.app.racecontrol.entries.RaceEventEntry;
 import racecontrol.app.racecontrol.entries.SimpleEventEntry;
+import racecontrol.app.racecontrol.googlesheetsapi.GoogleSheetsAPIConfigurationController;
 import racecontrol.client.AccBroadcastingClient;
 import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.data.CarInfo;
@@ -40,6 +42,10 @@ public class RaceControlController
     private final RaceEventTableModel tableModel;
 
     private final ReplayOffsetExtension replayOffsetExtension;
+    
+    private final AppController appController;
+    
+    private final GoogleSheetsAPIConfigurationController googleSheetsConfigController;
 
     public RaceControlController() {
         EventBus.register(this);
@@ -47,23 +53,13 @@ public class RaceControlController
         panel = new RaceControlPanel();
         tableModel = new RaceEventTableModel();
         replayOffsetExtension = ReplayOffsetExtension.getInstance();
+        appController = AppController.getInstance();
+        googleSheetsConfigController = new GoogleSheetsAPIConfigurationController();
 
         tableModel.setInfoColumnAction(infoClickAction);
-        tableModel.setReplayClickAction((RaceEventEntry entry, int mouseX, int mouseY) -> {
-            if (entry.isHasReplay() && entry.getReplayTime() != -1) {
-                LOG.info("Starting instant replay for incident");
-                client.sendInstantReplayRequestWithCamera(
-                        entry.getSessionTime() - 10000,
-                        10,
-                        getClient().getModel().getSessionInfo().getFocusedCarIndex(),
-                        getClient().getModel().getSessionInfo().getActiveCameraSet(),
-                        getClient().getModel().getSessionInfo().getActiveCamera()
-                );
-            }
-        });
+        tableModel.setReplayClickAction((RaceEventEntry entry, int mouseX, int mouseY) -> replayClickAction(entry));
 
         panel.getTable().setTableModel(tableModel);
-
         panel.setKeyEvent(() -> {
             createDummyContactEvent();
         });
@@ -72,7 +68,10 @@ public class RaceControlController
             replayOffsetExtension.findSessionChange();
             panel.getSeachReplayButton().setEnabled(false);
         });
-
+        
+        panel.googleSheetsButton.setAction(()->{
+            appController.launchNewWindow(googleSheetsConfigController);
+        });
     }
 
     public RaceControlPanel getPanel() {
@@ -105,8 +104,17 @@ public class RaceControlController
                 }
             };
 
-    public void startAccidentReplay(ContactInfo incident, int seconds) {
-
+    private void replayClickAction(RaceEventEntry entry) {
+        if (entry.isHasReplay() && entry.getReplayTime() != -1) {
+            LOG.info("Starting instant replay for incident");
+            client.sendInstantReplayRequestWithCamera(
+                    entry.getSessionTime() - 10000,
+                    10,
+                    getClient().getModel().getSessionInfo().getFocusedCarIndex(),
+                    getClient().getModel().getSessionInfo().getActiveCameraSet(),
+                    getClient().getModel().getSessionInfo().getActiveCamera()
+            );
+        }
     }
 
     private void addSessionChangeEntry(SessionChangedEvent event) {
