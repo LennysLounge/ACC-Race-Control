@@ -5,6 +5,7 @@
  */
 package racecontrol.extensions.debug;
 
+import processing.core.PApplet;
 import static racecontrol.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.LookAndFeel.LINE_HEIGHT;
 import static racecontrol.LookAndFeel.TEXT_SIZE;
@@ -35,7 +36,7 @@ public class DebugConfigPanel
     }
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         applet.fill(COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
     }

@@ -10,7 +10,6 @@ import static racecontrol.LookAndFeel.COLOR_DARK_RED;
 import static racecontrol.LookAndFeel.COLOR_GRAY;
 import static racecontrol.LookAndFeel.COLOR_MEDIUM_DARK_GRAY;
 import static racecontrol.LookAndFeel.COLOR_RED;
-import static racecontrol.lpgui.gui.LPComponent.applet;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -26,6 +25,7 @@ import static java.awt.event.KeyEvent.VK_RIGHT;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import processing.core.PApplet;
 import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
@@ -82,7 +82,7 @@ public class LPTextField
     private boolean isMouseDown;
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         if (isEnabled()) {
             if (isFocused()) {
                 applet.fill(COLOR_RED);
@@ -97,9 +97,9 @@ public class LPTextField
 
         applet.noStroke();
         applet.rect(0, 2, getWidth(), getHeight() - 4);
-        
+
         applet.textFont(LookAndFeel.fontRegular());
-        
+
         if (isSelectionActive() && isFocused() && isEnabled()) {
             int selectionStartInPresentationText = selectionStartIndex - presentationTextOffset;
             selectionStartInPresentationText = Math.max(0, Math.min(selectionStartInPresentationText, presentationText.length()));
@@ -137,7 +137,7 @@ public class LPTextField
      */
     private void updatePresentationText() {
         float maximumPresentationTextWidth = Math.max(0, getWidth() - 2 * padding);
-        applet.textFont(LookAndFeel.fontMedium());
+        getApplet().textFont(LookAndFeel.fontMedium());
 
         if (cursorPosition < 0) {
             if (presentationTextOffset > 0) {
@@ -154,12 +154,12 @@ public class LPTextField
             //would fit into the text field.
             //if not we need to move the offset over.
             String newText = text.substring(presentationTextOffset, presentationTextOffset + cursorPosition);
-            float textWidth = applet.textWidth(newText);
+            float textWidth = getApplet().textWidth(newText);
             while (textWidth > maximumPresentationTextWidth) {
                 presentationTextOffset += 1;
                 cursorPosition -= 1;
                 newText = text.substring(presentationTextOffset, presentationTextOffset + cursorPosition);
-                textWidth = applet.textWidth(newText);
+                textWidth = getApplet().textWidth(newText);
             }
         }
 
@@ -172,7 +172,7 @@ public class LPTextField
                 break;
             }
             shortText = text.substring(presentationTextOffset, presentationTextOffset + shortTextLength);
-            shortTextWidth = applet.textWidth(shortText);
+            shortTextWidth = getApplet().textWidth(shortText);
         }
         if (presentationTextOffset + shortTextLength == 0) {
             shortTextLength = 1;
@@ -194,14 +194,14 @@ public class LPTextField
     @Override
     public void onMouseEnter() {
         if (isEnabled()) {
-            applet.cursor(TEXT);
+            getApplet().cursor(TEXT);
         }
         invalidate();
     }
 
     @Override
     public void onMouseLeave() {
-        applet.cursor(ARROW);
+        getApplet().cursor(ARROW);
         invalidate();
     }
 
@@ -213,7 +213,7 @@ public class LPTextField
         int closestPosition = 0;
         float closestDiff = getWidth();
         for (int i = 0; i < presentationText.length() + 1; i++) {
-            float gapXPos = padding + applet.textWidth(presentationText.substring(0, i));
+            float gapXPos = padding + getApplet().textWidth(presentationText.substring(0, i));
             float diff = Math.abs(gapXPos - x);
             if (Math.abs(gapXPos - x) < closestDiff) {
                 closestDiff = Math.abs(gapXPos - x);
@@ -246,7 +246,7 @@ public class LPTextField
                 int closestPosition = 0;
                 float closestDiff = getWidth();
                 for (int i = 0; i < presentationText.length() + 1; i++) {
-                    float gapXPos = padding + applet.textWidth(presentationText.substring(0, i));
+                    float gapXPos = padding + getApplet().textWidth(presentationText.substring(0, i));
                     float diff = Math.abs(gapXPos - x);
                     if (Math.abs(gapXPos - x) < closestDiff) {
                         closestDiff = Math.abs(gapXPos - x);

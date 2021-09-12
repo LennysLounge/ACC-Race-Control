@@ -5,6 +5,7 @@
  */
 package racecontrol.lpgui.gui;
 
+import processing.core.PApplet;
 import racecontrol.LookAndFeel;
 import static racecontrol.LookAndFeel.COLOR_GRAY;
 import static racecontrol.LookAndFeel.COLOR_MEDIUM_DARK_GRAY;
@@ -49,7 +50,7 @@ public class LPButton
     }
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         if (isEnabled()) {
             if (isMouseOver()) {
                 applet.fill(COLOR_RED);
@@ -98,7 +99,7 @@ public class LPButton
             return;
         }
         invalidate();
-        applet.cursor(HAND);
+        getApplet().cursor(HAND);
     }
 
     @Override
@@ -107,7 +108,7 @@ public class LPButton
             return;
         }
         invalidate();
-        applet.cursor(ARROW);
+        getApplet().cursor(ARROW);
     }
     
     public void setBackgroundColor(int color){

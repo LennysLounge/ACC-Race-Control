@@ -7,6 +7,7 @@ package racecontrol.lpgui.gui;
 
 import java.util.LinkedList;
 import java.util.List;
+import processing.core.PApplet;
 import processing.event.KeyEvent;
 
 /**
@@ -26,8 +27,8 @@ public class LPContainer
     public void removeComponent(LPComponent c) {
         components.remove(c);
     }
-    
-    public List<LPComponent> getComponents(){
+
+    public List<LPComponent> getComponents() {
         return components;
     }
 
@@ -38,17 +39,17 @@ public class LPContainer
     }
 
     @Override
-    public void drawInternal() {
-        if(!isVisible()){
+    public void drawInternal(PApplet applet) {
+        if (!isVisible()) {
             return;
         }
-        
-        super.drawInternal();
+
+        super.drawInternal(applet);
 
         for (LPComponent c : components) {
             applet.translate(c.getPosX(), c.getPosY());
             applet.clip(0, 0, c.getWidth(), c.getHeight());
-            c.drawInternal();
+            c.drawInternal(applet);
             applet.noClip();
             applet.translate(-c.getPosX(), -c.getPosY());
         }
@@ -56,7 +57,7 @@ public class LPContainer
 
     @Override
     public LPComponent onMousePressedInternal(int mouseX, int mouseY, int mouseButton) {
-        if(!isVisible()){
+        if (!isVisible()) {
             return null;
         }
         LPComponent clickedComponent = null;
@@ -84,7 +85,7 @@ public class LPContainer
 
     @Override
     public LPComponent onMouseScrollInternal(int mouseX, int mouseY, int scrolDir) {
-        if(!isVisible()){
+        if (!isVisible()) {
             return null;
         }
         LPComponent target = null;
@@ -111,7 +112,7 @@ public class LPContainer
 
     @Override
     public void onMouseMoveInternal(int x, int y) {
-        if(!isVisible()){
+        if (!isVisible()) {
             return;
         }
         super.onMouseMoveInternal(x, y);
@@ -124,7 +125,7 @@ public class LPContainer
 
     @Override
     public void onMouseLeaveInternal() {
-        if(!isVisible()){
+        if (!isVisible()) {
             return;
         }
         super.onMouseLeaveInternal();
@@ -135,7 +136,7 @@ public class LPContainer
 
     @Override
     public void onKeyPressedInternal(KeyEvent event) {
-        if(!isVisible()){
+        if (!isVisible()) {
             return;
         }
         super.onKeyPressedInternal(event);
@@ -146,7 +147,7 @@ public class LPContainer
 
     @Override
     public void onKeyReleasedInternal(KeyEvent event) {
-        if(!isVisible()){
+        if (!isVisible()) {
             return;
         }
         super.onKeyReleasedInternal(event);

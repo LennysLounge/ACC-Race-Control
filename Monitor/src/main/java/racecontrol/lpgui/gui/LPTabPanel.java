@@ -10,6 +10,7 @@ import static racecontrol.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.LookAndFeel.COLOR_RED;
 import java.util.LinkedList;
 import java.util.List;
+import processing.core.PApplet;
 import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.HAND;
@@ -66,7 +67,7 @@ public class LPTabPanel extends LPContainer {
     }
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         if (tabs.isEmpty()) {
             return;
         }
@@ -166,9 +167,9 @@ public class LPTabPanel extends LPContainer {
         if (index != mouseOverTab) {
             invalidate();
             if (index == -1) {
-                applet.cursor(ARROW);
+                getApplet().cursor(ARROW);
             } else {
-                applet.cursor(HAND);
+                getApplet().cursor(HAND);
             }
         }
         mouseOverTab = index;

@@ -5,6 +5,7 @@
  */
 package racecontrol.app.racecontrol;
 
+import processing.core.PApplet;
 import processing.event.KeyEvent;
 import static racecontrol.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.LookAndFeel.LINE_HEIGHT;
@@ -28,10 +29,10 @@ public class RaceControlPanel
     private final LPLabel subModuleLabel;
     private final LPLabel eventListLabel;
 
-    private final LPButton googleSheetsButton;
-    private final LPButton placeHolder1;
-    private final LPButton placeHolder2;
-    private final LPButton placeHolder3;
+    protected final LPButton googleSheetsButton;
+    protected final LPButton placeHolder1;
+    protected final LPButton placeHolder2;
+    protected final LPButton placeHolder3;
 
     private boolean showFindReplayButton = false;
 
@@ -74,7 +75,7 @@ public class RaceControlPanel
     }
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         applet.fill(COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
     }

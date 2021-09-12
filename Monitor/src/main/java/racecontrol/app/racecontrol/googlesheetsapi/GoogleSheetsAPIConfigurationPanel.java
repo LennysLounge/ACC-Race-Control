@@ -17,6 +17,7 @@ import racecontrol.lpgui.gui.LPLabel;
 import racecontrol.lpgui.gui.LPTextField;
 import java.io.File;
 import javax.swing.JFileChooser;
+import processing.core.PApplet;
 
 /**
  *
@@ -170,7 +171,7 @@ public class GoogleSheetsAPIConfigurationPanel
     }
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         applet.fill(COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
     }

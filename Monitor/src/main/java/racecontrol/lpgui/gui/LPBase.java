@@ -21,12 +21,10 @@ public class LPBase extends PApplet {
     private LPComponent base;
 
     public LPBase() {
-        LPComponent.setApplet(this);
     }
 
     public void setComponent(LPComponent c) {
         base = c;
-        c.setApplet(this);
         c.setParent(null);
     }
 
@@ -38,7 +36,7 @@ public class LPBase extends PApplet {
 
         translate(base.getPosX(), base.getPosY());
         clip(0, 0, base.getWidth(), base.getHeight());
-        base.drawInternal();
+        base.drawInternal(this);
         noClip();
         translate(-base.getPosX(), -base.getPosY());
 

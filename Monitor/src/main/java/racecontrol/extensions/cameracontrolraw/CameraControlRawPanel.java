@@ -14,6 +14,7 @@ import racecontrol.lpgui.gui.LPTextField;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import processing.core.PApplet;
 
 /**
  *
@@ -90,7 +91,7 @@ public class CameraControlRawPanel
     }
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         applet.fill(COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
     }

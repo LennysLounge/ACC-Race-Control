@@ -6,6 +6,7 @@
 package racecontrol.googlesheetsapi;
 
 
+import processing.core.PApplet;
 import racecontrol.utility.TimeUtils;
 import racecontrol.LookAndFeel;
 import racecontrol.lpgui.gui.LPButton;
@@ -63,7 +64,7 @@ public class GoogleSheetsAPIPanel extends LPContainer {
     }
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
         applet.fill(255);

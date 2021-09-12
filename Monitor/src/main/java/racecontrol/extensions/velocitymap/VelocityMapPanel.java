@@ -5,13 +5,6 @@
  */
 package racecontrol.extensions.velocitymap;
 
-import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
-import racecontrol.client.data.RealtimeInfo;
-import static racecontrol.client.data.enums.CarLocation.TRACK;
-import static racecontrol.client.data.enums.LapType.REGULAR;
-import racecontrol.client.events.RealtimeCarUpdateEvent;
 import static racecontrol.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.LookAndFeel.LINE_HEIGHT;
 import racecontrol.lpgui.gui.LPButton;
@@ -19,6 +12,7 @@ import racecontrol.lpgui.gui.LPContainer;
 import racecontrol.lpgui.gui.LPLabel;
 import java.util.ArrayList;
 import java.util.List;
+import processing.core.PApplet;
 import processing.core.PGraphics;
 
 /**
@@ -51,7 +45,7 @@ public class VelocityMapPanel
     }
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         applet.fill(COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
 
@@ -70,7 +64,7 @@ public class VelocityMapPanel
 
     @Override
     public void onResize(float w, float h) {
-        PGraphics g = applet.createGraphics((int)w - 40, (int)h - LINE_HEIGHT - 20);
+        PGraphics g = getApplet().createGraphics((int)w - 40, (int)h - LINE_HEIGHT - 20);
         g.fill(0);
         g.beginDraw();
         g.background(0);

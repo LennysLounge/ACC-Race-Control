@@ -8,6 +8,7 @@ package racecontrol.app;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import racecontrol.LookAndFeel;
@@ -62,7 +63,7 @@ public class Menu
     }
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         applet.fill(COLOR_DARK_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
 

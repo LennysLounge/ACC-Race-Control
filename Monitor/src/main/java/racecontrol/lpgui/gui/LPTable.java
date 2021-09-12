@@ -8,7 +8,6 @@ package racecontrol.lpgui.gui;
 import racecontrol.LookAndFeel;
 import java.util.function.BiConsumer;
 import java.util.logging.Logger;
-import javax.swing.text.Utilities;
 import processing.core.PApplet;
 import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.CENTER;
@@ -102,7 +101,7 @@ public class LPTable extends LPContainer {
     private float mouseY;
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.noStroke();
         applet.rect(0, 0, getWidth(), getHeight());
@@ -334,7 +333,7 @@ public class LPTable extends LPContainer {
         scrollbar.isMouseOver = false;
         mouseOverColumn = -1;
         mouseOverRow = -1;
-        applet.cursor(ARROW);
+        getApplet().cursor(ARROW);
     }
 
     private void calculateVisibleArea() {

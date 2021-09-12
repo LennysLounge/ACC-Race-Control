@@ -5,6 +5,7 @@
  */
 package racecontrol.app.broadcasting;
 
+import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import racecontrol.LookAndFeel;
 import static racecontrol.LookAndFeel.COLOR_GRAY;
@@ -26,7 +27,7 @@ public class LPButtonCustom
     }
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         if (isEnabled()) {
             if (isMouseOver()) {
                 applet.fill(COLOR_RED);

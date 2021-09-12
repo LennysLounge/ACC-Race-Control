@@ -34,8 +34,8 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import racecontrol.app.logging.LoggingPanel;
 import static racecontrol.persistance.PersistantConfig.EXTENSION_BROADCSATING_ENABLED;
 
 /**
@@ -195,7 +195,7 @@ public class SettingsPanel
     }
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
         applet.stroke(COLOR_GRAY);

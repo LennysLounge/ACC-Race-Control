@@ -5,10 +5,10 @@
  */
 package racecontrol.lpgui.gui;
 
+import processing.core.PApplet;
 import racecontrol.LookAndFeel;
 import static racecontrol.LookAndFeel.COLOR_GRAY;
 import static racecontrol.LookAndFeel.LINE_HEIGHT;
-import static racecontrol.lpgui.gui.LPComponent.applet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 
@@ -39,8 +39,8 @@ public class LPLabel
 
     public void setText(String text) {
         this.text = text;
-        applet.textFont(LookAndFeel.fontMedium());
-        this.setSize(applet.textWidth(text), LookAndFeel.LINE_HEIGHT);
+        getApplet().textFont(LookAndFeel.fontMedium());
+        this.setSize(getApplet().textWidth(text), LookAndFeel.LINE_HEIGHT);
         invalidate();
     }
 
@@ -49,7 +49,7 @@ public class LPLabel
     }
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.noStroke();
         //applet.stroke(0);

@@ -5,8 +5,7 @@
  */
 package racecontrol.extensions.debug;
 
-import racecontrol.Main;
-import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
+import processing.core.PApplet;
 import racecontrol.LookAndFeel;
 import static racecontrol.LookAndFeel.LINE_HEIGHT;
 import racecontrol.lpgui.gui.LPButton;
@@ -54,7 +53,7 @@ public class DebugPanel
     }
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
     }

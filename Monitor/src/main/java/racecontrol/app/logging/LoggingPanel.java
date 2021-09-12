@@ -38,11 +38,6 @@ public class LoggingPanel
     }
 
     @Override
-    public void drawInternal() {
-        super.drawInternal();
-    }
-
-    @Override
     public void onResize(float w, float h) {
         table.setPosition(0, 0);
         table.setSize(w, h);

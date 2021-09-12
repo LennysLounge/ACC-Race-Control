@@ -20,9 +20,9 @@ public class LPComponent {
      */
     private static LPComponent focused;
     /**
-     * Reference to the PApplet.
+     * Static Reference to the PApplet.
      */
-    protected static PApplet applet;
+    private static PApplet applet;
     /**
      * horizontal position in the applet.
      */
@@ -145,6 +145,14 @@ public class LPComponent {
      */
     public static void setApplet(PApplet a) {
         applet = a;
+    }
+    
+    /**
+     * Returns the base applet.
+     * @return the base applet.
+     */
+    public static PApplet getApplet(){
+        return applet;
     }
 
     /**
@@ -291,19 +299,21 @@ public class LPComponent {
     }
 
     /**
-     * Draws this component. Used internaly.
+     * Draws this component.Used internaly.
+     * @param applet the target applet.
      */
-    protected void drawInternal() {
+    protected void drawInternal(PApplet applet) {
         if (isInvalid && visible) {
-            draw();
+            draw(applet);
             isInvalid = false;
         }
     }
 
     /**
      * Override this method to draw this component.
+     * @param applet the target applet.
      */
-    public void draw() {
+    public void draw(PApplet applet) {
     }
 
     /**

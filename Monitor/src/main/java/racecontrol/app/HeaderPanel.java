@@ -5,6 +5,7 @@
  */
 package racecontrol.app;
 
+import processing.core.PApplet;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.AccBroadcastingClient;
@@ -20,7 +21,6 @@ import static racecontrol.LookAndFeel.fontRegular;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
-import racecontrol.eventbus.EventBus;
 import racecontrol.lpgui.gui.LPContainer;
 
 /**
@@ -42,7 +42,7 @@ public class HeaderPanel
     }
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
         if (client.isConnected()) {
             int backgroundColor = COLOR_DARK_DARK_GRAY;
             if (client.getModel().getSessionInfo().isReplayPlaying()) {

@@ -9,8 +9,8 @@ import static racecontrol.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.LookAndFeel.COLOR_RED;
 import static racecontrol.LookAndFeel.COLOR_WHITE;
 import static racecontrol.LookAndFeel.TEXT_SIZE;
-import static racecontrol.lpgui.gui.LPComponent.applet;
 import java.util.function.Consumer;
+import processing.core.PApplet;
 import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.HAND;
 
@@ -35,12 +35,12 @@ public class LPCheckBox
 
     @Override
     public void onMouseEnter() {
-        applet.cursor(HAND);
+        getApplet().cursor(HAND);
     }
 
     @Override
     public void onMouseLeave() {
-        applet.cursor(ARROW);
+        getApplet().cursor(ARROW);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class LPCheckBox
     }
 
     @Override
-    public void draw() {
+    public void draw(PApplet applet) {
 
         applet.fill(COLOR_WHITE);
         applet.rect(0, 0, TEXT_SIZE, TEXT_SIZE);

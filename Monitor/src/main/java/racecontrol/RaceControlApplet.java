@@ -68,6 +68,8 @@ public class RaceControlApplet extends CustomPApplet {
             surface.setIcon(i);
         }
         frameRate(30);
+        
+        LPComponent.setApplet(this);
 
         //create the connection client.
         client = AccBroadcastingClient.getClient();
