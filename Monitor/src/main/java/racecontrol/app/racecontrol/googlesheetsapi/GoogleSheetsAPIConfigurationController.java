@@ -29,8 +29,7 @@ public class GoogleSheetsAPIConfigurationController
 
     public GoogleSheetsAPIConfigurationController() {
         panel = new GoogleSheetsAPIConfigurationPanel();
-        panel.enabledCheckBox.setChangeAction((state) -> enableCheckBoxChanged());
-
+        panel.connectButton.setAction(() -> connectButton());
         sheetsAPI = GoogleSheetsAPIController.getInstance();
     }
 
@@ -39,9 +38,8 @@ public class GoogleSheetsAPIConfigurationController
         return panel;
     }
 
-    private void enableCheckBoxChanged() {
-        panel.updateComponents();
-        if (panel.enabledCheckBox.isSelected()) {
+    private void connectButton() {
+        if (!sheetsAPI.isRunning()) {
             //enable spreadsheet service.
             sheetsAPI.start(new GoogleSheetsConfiguration(
                     panel.spreadSheetLinkTextField.getValue(),
@@ -51,9 +49,14 @@ public class GoogleSheetsAPIConfigurationController
                     panel.sessionColumnTextField.getValue(),
                     panel.carColumnTextField.getValue()
             ));
+            panel.allowInput = false;
         } else {
             //disable spreadsheet service.
             sheetsAPI.stop();
+            panel.allowInput = true;
         }
+        panel.updateComponents();
+        panel.invalidate();
     }
+
 }

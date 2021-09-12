@@ -258,6 +258,10 @@ public class GoogleSheetsAPIController
     public boolean isGreenFlagOffsetBeeingMeasured() {
         return isMeasuringGreenFlagOffset;
     }
+    
+    public boolean isRunning(){
+        return running;
+    }
 
     private void eventLoop() throws InterruptedException {
         while (running) {

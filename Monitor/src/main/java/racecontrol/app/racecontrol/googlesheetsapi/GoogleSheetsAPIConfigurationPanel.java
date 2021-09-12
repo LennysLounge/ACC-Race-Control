@@ -18,6 +18,7 @@ import racecontrol.lpgui.gui.LPTextField;
 import java.io.File;
 import javax.swing.JFileChooser;
 import processing.core.PApplet;
+import racecontrol.googlesheetsapi.GoogleSheetsConfiguration;
 import static racecontrol.googlesheetsapi.GoogleSheetsConfiguration.CAR_INFO_COLUMN;
 import static racecontrol.googlesheetsapi.GoogleSheetsConfiguration.FIND_EMPTY_ROW_RANGE;
 import static racecontrol.googlesheetsapi.GoogleSheetsConfiguration.REPLAY_OFFSET_CELL;
@@ -31,8 +32,6 @@ public class GoogleSheetsAPIConfigurationPanel
         extends LPContainer {
 
     private final LPLabel headingLabel = new LPLabel("Google Spreadsheet API");
-    protected final LPCheckBox enabledCheckBox = new LPCheckBox();
-    private final LPLabel enabledLabel = new LPLabel("Enable");
     private final LPLabel spreadSheetLinkLabel = new LPLabel("Spreadsheet link:");
     protected final LPTextField spreadSheetLinkTextField = new LPTextField();
 
@@ -58,6 +57,10 @@ public class GoogleSheetsAPIConfigurationPanel
     private final LPLabel addLapToCarLabel = new LPLabel("Add Lap to car number:");
     private final LPCheckBox addLapToCarCheckBox = new LPCheckBox();
 
+    protected final LPButton connectButton = new LPButton("Connect");
+
+    protected boolean allowInput = true;
+
     public GoogleSheetsAPIConfigurationPanel() {
         setName("Google Sheets API");
 
@@ -65,21 +68,16 @@ public class GoogleSheetsAPIConfigurationPanel
         headingLabel.setSize(250, LINE_HEIGHT);
         addComponent(headingLabel);
 
-        enabledCheckBox.setPosition(20, LINE_HEIGHT + (LINE_HEIGHT - TEXT_SIZE) / 2f);
-        addComponent(enabledCheckBox);
-        enabledLabel.setPosition(60, LINE_HEIGHT);
-        addComponent(enabledLabel);
-
-        spreadSheetLinkLabel.setPosition(20, LINE_HEIGHT * 2);
+        spreadSheetLinkLabel.setPosition(20, LINE_HEIGHT * 1);
         spreadSheetLinkLabel.setSize(200, LINE_HEIGHT);
         addComponent(spreadSheetLinkLabel);
-        spreadSheetLinkTextField.setPosition(20, LINE_HEIGHT * 3);
+        spreadSheetLinkTextField.setPosition(20, LINE_HEIGHT * 2);
         addComponent(spreadSheetLinkTextField);
 
-        credentialsFileLabel.setPosition(20, LINE_HEIGHT * 4);
+        credentialsFileLabel.setPosition(20, LINE_HEIGHT * 3);
         credentialsFileLabel.setSize(150, LINE_HEIGHT);
         addComponent(credentialsFileLabel);
-        credentialsFileTextField.setPosition(20, LINE_HEIGHT * 5);
+        credentialsFileTextField.setPosition(20, LINE_HEIGHT * 4);
         credentialsFileTextField.setSize(200, LINE_HEIGHT);
         credentialsFileTextField.setValue(PersistantConfig.getConfig(CREDENTIALS_FILE_PATH));
         addComponent(credentialsFileTextField);
@@ -87,88 +85,105 @@ public class GoogleSheetsAPIConfigurationPanel
         credentalsSearchButton.setAction(() -> openSearchCredentialsFileDialog());
         addComponent(credentalsSearchButton);
 
-        useDefaultCheckBox.setPosition(20, LINE_HEIGHT * 6 + (LINE_HEIGHT - TEXT_SIZE) / 2f);
-        useDefaultCheckBox.setChangeAction((state) -> updateComponents());
+        useDefaultCheckBox.setPosition(20, LINE_HEIGHT * 5 + (LINE_HEIGHT - TEXT_SIZE) / 2f);
+        useDefaultCheckBox.setChangeAction((state) -> {
+            setDefaults();
+            updateComponents();
+        });
         useDefaultCheckBox.setSelected(true);
         addComponent(useDefaultCheckBox);
-        useDaufaultLabel.setPosition(60, LINE_HEIGHT * 6);
+        useDaufaultLabel.setPosition(60, LINE_HEIGHT * 5);
         addComponent(useDaufaultLabel);
 
-        replayOffsetLabel.setPosition(40, LINE_HEIGHT * 7);
+        replayOffsetLabel.setPosition(40, LINE_HEIGHT * 6);
         replayOffsetLabel.setSize(180, LINE_HEIGHT);
         addComponent(replayOffsetLabel);
         replayOffsetTextField.setSize(100, LINE_HEIGHT);
-        replayOffsetTextField.setPosition(220, LINE_HEIGHT * 7);
+        replayOffsetTextField.setPosition(220, LINE_HEIGHT * 6);
         replayOffsetTextField.setValue(REPLAY_OFFSET_CELL);
         addComponent(replayOffsetTextField);
 
-        findRowRangeLabel.setPosition(40, LINE_HEIGHT * 8);
+        findRowRangeLabel.setPosition(40, LINE_HEIGHT * 7);
         findRowRangeLabel.setSize(240, LINE_HEIGHT);
         addComponent(findRowRangeLabel);
         findRowRangeTextField.setSize(100, LINE_HEIGHT);
-        findRowRangeTextField.setPosition(280, LINE_HEIGHT * 8);
+        findRowRangeTextField.setPosition(280, LINE_HEIGHT * 7);
         findRowRangeTextField.setValue(FIND_EMPTY_ROW_RANGE);
         addComponent(findRowRangeTextField);
 
-        sessionColumnLabel.setPosition(40, LINE_HEIGHT * 9);
+        sessionColumnLabel.setPosition(40, LINE_HEIGHT * 8);
         sessionColumnLabel.setSize(160, LINE_HEIGHT);
         addComponent(sessionColumnLabel);
         sessionColumnTextField.setSize(100, LINE_HEIGHT);
-        sessionColumnTextField.setPosition(200, LINE_HEIGHT * 9);
+        sessionColumnTextField.setPosition(200, LINE_HEIGHT * 8);
         sessionColumnTextField.setValue(SESSION_TIME_COLUMN);
         addComponent(sessionColumnTextField);
 
-        carColumnLabel.setPosition(340, LINE_HEIGHT * 9);
+        carColumnLabel.setPosition(340, LINE_HEIGHT * 8);
         carColumnLabel.setSize(210, LINE_HEIGHT);
         addComponent(carColumnLabel);
         carColumnTextField.setSize(100, LINE_HEIGHT);
-        carColumnTextField.setPosition(550, LINE_HEIGHT * 9);
+        carColumnTextField.setPosition(550, LINE_HEIGHT * 8);
         carColumnTextField.setValue(CAR_INFO_COLUMN);
         addComponent(carColumnTextField);
 
-        addLapToCarLabel.setPosition(40, LINE_HEIGHT * 10);
+        addLapToCarLabel.setPosition(40, LINE_HEIGHT * 9);
         addLapToCarLabel.setSize(220, LINE_HEIGHT);
         addComponent(addLapToCarLabel);
-        addLapToCarCheckBox.setPosition(260, LINE_HEIGHT * 10 + (LINE_HEIGHT - TEXT_SIZE) / 2f);
+        addLapToCarCheckBox.setPosition(260, LINE_HEIGHT * 9 + (LINE_HEIGHT - TEXT_SIZE) / 2f);
         addLapToCarCheckBox.setSelected(true);
         addComponent(addLapToCarCheckBox);
-        
-        setSize(660, 440);
-        
+
+        connectButton.setSize(200, LINE_HEIGHT);
+        connectButton.setPosition(40, LINE_HEIGHT * 10);
+        addComponent(connectButton);
+
+        setSize(660, 460);
         updateComponents();
     }
 
     public void updateComponents() {
 
-        boolean state = enabledCheckBox.isSelected();
-        
-        spreadSheetLinkLabel.setEnabled(!state);
-        spreadSheetLinkTextField.setEnabled(!state);
+        boolean state = allowInput;
+        spreadSheetLinkLabel.setEnabled(state);
+        spreadSheetLinkTextField.setEnabled(state);
 
-        credentialsFileLabel.setEnabled(!state);
-        credentialsFileTextField.setEnabled(!state);
-        credentalsSearchButton.setEnabled(!state);
+        credentialsFileLabel.setEnabled(state);
+        credentialsFileTextField.setEnabled(state);
+        credentalsSearchButton.setEnabled(state);
 
-        useDaufaultLabel.setEnabled(!state);
-        useDefaultCheckBox.setEnabled(!state);
+        useDaufaultLabel.setEnabled(state);
+        useDefaultCheckBox.setEnabled(state);
 
-        if (!state) {
-            state = useDefaultCheckBox.isSelected();
+        if (allowInput) {
+            state = !useDefaultCheckBox.isSelected();
         }
-        replayOffsetLabel.setEnabled(!state);
-        replayOffsetTextField.setEnabled(!state);
+        replayOffsetLabel.setEnabled(state);
+        replayOffsetTextField.setEnabled(state);
 
-        findRowRangeLabel.setEnabled(!state);
-        findRowRangeTextField.setEnabled(!state);
+        findRowRangeLabel.setEnabled(state);
+        findRowRangeTextField.setEnabled(state);
 
-        sessionColumnLabel.setEnabled(!state);
-        sessionColumnTextField.setEnabled(!state);
+        sessionColumnLabel.setEnabled(state);
+        sessionColumnTextField.setEnabled(state);
 
-        carColumnLabel.setEnabled(!state);
-        carColumnTextField.setEnabled(!state);
+        carColumnLabel.setEnabled(state);
+        carColumnTextField.setEnabled(state);
 
-        addLapToCarLabel.setEnabled(!state);
-        addLapToCarCheckBox.setEnabled(!state);
+        addLapToCarLabel.setEnabled(state);
+        addLapToCarCheckBox.setEnabled(state);
+
+        connectButton.setText(allowInput ? "Connect" : "Disconnect");
+    }
+
+    private void setDefaults() {
+        if (useDefaultCheckBox.isSelected()) {
+            replayOffsetTextField.setValue(GoogleSheetsConfiguration.REPLAY_OFFSET_CELL);
+            findRowRangeTextField.setValue(GoogleSheetsConfiguration.FIND_EMPTY_ROW_RANGE);
+            sessionColumnTextField.setValue(GoogleSheetsConfiguration.SESSION_TIME_COLUMN);
+            carColumnTextField.setValue(GoogleSheetsConfiguration.CAR_INFO_COLUMN);
+        }
+
     }
 
     @Override
@@ -187,10 +202,6 @@ public class GoogleSheetsAPIConfigurationPanel
     @Override
     public void onEnabled() {
         updateComponents();
-    }
-
-    public boolean isExtensionEnabled() {
-        return enabledCheckBox.isSelected();
     }
 
     public String getSpreadSheetLink() {
@@ -242,9 +253,9 @@ public class GoogleSheetsAPIConfigurationPanel
         if (result == JFileChooser.APPROVE_OPTION) {
             String path = fileChooser.getSelectedFile().getAbsolutePath();
             String userDir = System.getProperty("user.dir") + "\\";
-            
+
             //if the selected path is within our user directory we shorten the path to a relative path based on the user dir.
-            if(path.startsWith(userDir)){
+            if (path.startsWith(userDir)) {
                 path = path.replace(userDir, "");
             }
             credentialsFileTextField.setValue(path);
