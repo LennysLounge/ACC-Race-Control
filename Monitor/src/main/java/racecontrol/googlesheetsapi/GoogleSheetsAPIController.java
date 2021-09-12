@@ -5,6 +5,7 @@
  */
 package racecontrol.googlesheetsapi;
 
+import java.io.FileNotFoundException;
 import racecontrol.app.racecontrol.googlesheetsapi.GoogleSheetsAPIConfigurationPanel;
 import racecontrol.Main;
 import racecontrol.client.data.SessionId;
@@ -32,6 +33,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
 
@@ -41,6 +45,11 @@ import racecontrol.logging.UILogger;
  */
 public class GoogleSheetsAPIController
         implements EventListener {
+
+    /**
+     * Singelton instance.
+     */
+    private static GoogleSheetsAPIController instance;
 
     /**
      * This class's logger.
@@ -53,7 +62,11 @@ public class GoogleSheetsAPIController
     /**
      * The Sheet service for the spreadsheet api.
      */
-    private final GoogleSheetsService sheetService;
+    private GoogleSheetsService sheetService;
+    /**
+     * The configuration to connect to a spreadsheet.
+     */
+    private GoogleSheetsConfiguration configuration;
     /**
      * Indicates that the eventLoop is running.
      */
@@ -79,30 +92,31 @@ public class GoogleSheetsAPIController
     private long greenFlagOffsetTimestamp = 0;
 
     private final GoogleSheetsAPIPanel panel;
-
-    private String findEmptyRowRange = GoogleSheetsAPIConfigurationPanel.FIND_EMPTY_ROW_RANGE;
-    private String replayOffsetCell = GoogleSheetsAPIConfigurationPanel.REPLAY_OFFSET_CELL;
-    private String sessionColumn = GoogleSheetsAPIConfigurationPanel.SESSION_TIME_COLUMN;
-    private String carInfoColumn = GoogleSheetsAPIConfigurationPanel.CAR_INFO_COLUMN;
     /**
      * List of recently connected cars to be send to the entry list.
      */
     private final List<CarInfo> carConnections = new LinkedList<>();
 
-    public GoogleSheetsAPIController(GoogleSheetsService service) {
+    public static GoogleSheetsAPIController getInstance() {
+        if (instance == null) {
+            instance = new GoogleSheetsAPIController();
+        }
+        return instance;
+    }
+
+    private GoogleSheetsAPIController() {
+        EventBus.register(this);
         client = AccBroadcastingClient.getClient();
         panel = new GoogleSheetsAPIPanel(this);
-        this.sheetService = service;
     }
 
     @Override
     public void onEvent(Event e) {
+        if (!running) {
+            return;
+        }
         if (e instanceof SessionChangedEvent) {
-            currentSessionId = ((SessionChangedEvent) e).getSessionId();
-            setCurrentTargetSheet(getTargetSheet(currentSessionId));
-            LOG.info("Target Sheet changed to \"" + currentSheetTarget + "\"");
-            UILogger.log("Spreasheet target changed to \"" + currentSheetTarget + "\"");
-
+            onSessionChanged(((SessionChangedEvent) e).getSessionId());
             //start replay offset measuring
             if (!((SessionChangedEvent) e).isInitialisation()) {
                 if (currentSessionId.getType() == SessionType.RACE) {
@@ -128,8 +142,11 @@ public class GoogleSheetsAPIController
                 isMeasuringGreenFlagOffset = false;
             }
         } else if (e instanceof CarConnectedEvent) {
+            // add car connection to a collection to send as a batch with
+            // the next realtime update
             carConnections.add(((CarConnectedEvent) e).getCar());
         } else if (e instanceof RealtimeUpdateEvent) {
+            // send car connections as a batch
             if (!carConnections.isEmpty()) {
                 queue.add(new SendCarConnectedEvent(carConnections));
                 carConnections.clear();
@@ -139,6 +156,13 @@ public class GoogleSheetsAPIController
         if (isGreenFlagOffsetBeeingMeasured()) {
             panel.invalidate();
         }
+    }
+
+    private void onSessionChanged(SessionId sessionId) {
+        currentSessionId = sessionId;
+        setCurrentTargetSheet(getTargetSheet(currentSessionId));
+        LOG.info("Target Sheet changed to \"" + currentSheetTarget + "\"");
+        UILogger.log("Spreasheet target changed to \"" + currentSheetTarget + "\"");
     }
 
     private String getCarNumberAndLapCount(CarInfo car) {
@@ -166,8 +190,32 @@ public class GoogleSheetsAPIController
         );
     }
 
-    public void start() {
+    public void start(GoogleSheetsConfiguration configuration) {
+        this.configuration = configuration;
+
+        try {
+            sheetService = new GoogleSheetsService(configuration.getSpreadsheetLink(), configuration.getCredentialsPath());
+        } catch (IllegalArgumentException ex) {
+            LOG.log(Level.SEVERE, "The spreadsheet URL is not valid.", ex);
+            JOptionPane.showMessageDialog(null, "The given spreadsheet link is not valid."
+                    + "\nMake sure you copy the whole URL.",
+                    "Error extracting spreadsheet Id", ERROR_MESSAGE);
+            return;
+        } catch (RuntimeException ex) {
+            LOG.log(Level.SEVERE, "Error starting the Google Sheets service.", ex.getCause());
+            JOptionPane.showMessageDialog(null, "There was an error starting the Google API service.",
+                    "Error starting API Service", ERROR_MESSAGE);
+            return;
+        } catch (FileNotFoundException ex) {
+            LOG.log(Level.SEVERE, "Cannot load credentials file: ", ex);
+            JOptionPane.showMessageDialog(null, "There was an error loading the Google API credentials."
+                    + "\nThe file could not be found.",
+                    "Error loading API credentials", ERROR_MESSAGE);
+            return;
+        }
+
         //Start event loop
+        LOG.info("Starting Google sheets service event loop");
         running = true;
         eventLoop = new Thread("Sheet service event loop") {
             @Override
@@ -181,6 +229,17 @@ public class GoogleSheetsAPIController
             }
         };
         eventLoop.start();
+
+        //set session.
+        onSessionChanged(client.getSessionId());
+        queue.add(new SendCarConnectedEvent(new LinkedList<>(client.getModel().getCarsInfo().values())));
+    }
+
+    public void stop() {
+        if (running) {
+            LOG.info("Stopping google sheets service");
+            queue.add(new QuitEvent());
+        }
     }
 
     public String getCurrentTargetSheet() {
@@ -200,27 +259,12 @@ public class GoogleSheetsAPIController
         return isMeasuringGreenFlagOffset;
     }
 
-    public void setFindEmptyRowRange(String findEmptyRowRange) {
-        this.findEmptyRowRange = findEmptyRowRange;
-    }
-
-    public void setReplayOffsetCell(String replayOffsetCell) {
-        this.replayOffsetCell = replayOffsetCell;
-    }
-
-    public void setSessionColumn(String sessionColumn) {
-        this.sessionColumn = sessionColumn;
-    }
-
-    public void setCarInfoColumn(String carInfoColumn) {
-        this.carInfoColumn = carInfoColumn;
-    }
-
     private void eventLoop() throws InterruptedException {
         while (running) {
             Object o = queue.take();
             if (o instanceof QuitEvent) {
                 running = false;
+                queue.clear();
             }
             if (o instanceof SendIncidentEvent) {
                 sendIncident((SendIncidentEvent) o);
@@ -237,7 +281,7 @@ public class GoogleSheetsAPIController
     private void sendIncident(SendIncidentEvent event) {
 
         String sheet = currentSheetTarget;
-        String rangeSession = sheet + findEmptyRowRange;
+        String rangeSession = sheet + configuration.getFindEmptyRowRange();
 
         List<List<Object>> values;
         try {
@@ -248,8 +292,8 @@ public class GoogleSheetsAPIController
         }
         int emptyLine = values.size() + 1;
 
-        rangeSession = sheet + sessionColumn + emptyLine;
-        String rangeCars = sheet + carInfoColumn + emptyLine;
+        rangeSession = sheet + configuration.getSessionTimeColumn() + emptyLine;
+        String rangeCars = sheet + configuration.getCarInfoColumn() + emptyLine;
 
         List<List<Object>> lineSession = new LinkedList<>();
         lineSession.add(Arrays.asList(event.sessionTime));
@@ -309,14 +353,14 @@ public class GoogleSheetsAPIController
 
     private void sendGreenFlag(GreenFlagEvent event) {
         String sheet = currentSheetTarget;
-        String range = sheet + replayOffsetCell;
+        String range = sheet + configuration.getReplayOffsetCell();
         try {
             sheetService.updateCells(range, Arrays.asList(Arrays.asList(TimeUtils.asDuration(event.time))));
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "Error setting spreadsheet value", e);
         }
     }
-    
+
     public LPContainer getPanel() {
         return panel;
     }
