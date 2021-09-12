@@ -3,13 +3,13 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.googlesheetsapi;
+package racecontrol.googlesheetsapi;
 
+import racecontrol.app.racecontrol.googlesheetsapi.GoogleSheetsAPIConfigurationPanel;
 import racecontrol.Main;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.events.SessionPhaseChangedEvent;
 import racecontrol.eventbus.Event;
-import racecontrol.client.extension.AccClientExtension;
 import racecontrol.client.extension.contact.ContactInfo;
 import racecontrol.client.extension.contact.ContactEvent;
 import racecontrol.client.AccBroadcastingClient;
@@ -32,17 +32,24 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
 
 /**
  *
  * @author Leonard
  */
-public class GoogleSheetsAPIExtension
-        extends AccClientExtension {
+public class GoogleSheetsAPIController
+        implements EventListener {
 
-    private static final Logger LOG = Logger.getLogger(GoogleSheetsAPIExtension.class.getName());
-
+    /**
+     * This class's logger.
+     */
+    private static final Logger LOG = Logger.getLogger(GoogleSheetsAPIController.class.getName());
+    /**
+     * Reference to the game connection client.
+     */
+    private final AccBroadcastingClient client;
     /**
      * The Sheet service for the spreadsheet api.
      */
@@ -82,9 +89,8 @@ public class GoogleSheetsAPIExtension
      */
     private final List<CarInfo> carConnections = new LinkedList<>();
 
-    public GoogleSheetsAPIExtension(AccBroadcastingClient client,
-            GoogleSheetsService service) {
-        super(client);
+    public GoogleSheetsAPIController(GoogleSheetsService service) {
+        client = AccBroadcastingClient.getClient();
         panel = new GoogleSheetsAPIPanel(this);
         this.sheetService = service;
     }
@@ -155,7 +161,7 @@ public class GoogleSheetsAPIExtension
 
     public void sendEmptyIncident() {
         queue.add(new SendIncidentEvent(
-                TimeUtils.asDuration(getClient().getModel().getSessionInfo().getSessionTime()),
+                TimeUtils.asDuration(client.getModel().getSessionInfo().getSessionTime()),
                 "empty")
         );
     }
@@ -310,8 +316,7 @@ public class GoogleSheetsAPIExtension
             LOG.log(Level.SEVERE, "Error setting spreadsheet value", e);
         }
     }
-
-    @Override
+    
     public LPContainer getPanel() {
         return panel;
     }

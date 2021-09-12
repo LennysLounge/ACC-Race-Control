@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.googlesheetsapi;
+package racecontrol.googlesheetsapi;
 
 
 import racecontrol.utility.TimeUtils;
@@ -21,7 +21,7 @@ import static processing.core.PConstants.LEFT;
  */
 public class GoogleSheetsAPIPanel extends LPContainer {
 
-    private final GoogleSheetsAPIExtension extension;
+    private final GoogleSheetsAPIController extension;
 
     private final LPButton setToPractice = new LPButton("Target \"Practice!\"");
     private final LPButton setToQuali = new LPButton("Target \"Qualifying!\"");
@@ -29,7 +29,7 @@ public class GoogleSheetsAPIPanel extends LPContainer {
     private final LPButton setToRace2 = new LPButton("target \"Race 2!\"");
     private final LPButton sendEmptyIncident = new LPButton("Send empty incident");
 
-    public GoogleSheetsAPIPanel(GoogleSheetsAPIExtension extension) {
+    public GoogleSheetsAPIPanel(GoogleSheetsAPIController extension) {
         this.extension = extension;
         setName("Sheets API");
 

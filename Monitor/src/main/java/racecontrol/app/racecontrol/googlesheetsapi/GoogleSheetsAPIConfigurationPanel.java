@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.googlesheetsapi;
+package racecontrol.app.racecontrol.googlesheetsapi;
 
 import racecontrol.persistance.PersistantConfig;
 import static racecontrol.persistance.PersistantConfig.CREDENTIALS_FILE_PATH;
