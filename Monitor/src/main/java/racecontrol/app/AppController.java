@@ -22,6 +22,10 @@ import racecontrol.lpgui.gui.LPComponent;
  */
 public class AppController
         implements EventListener {
+    /**
+     * Singelton instance.
+     */
+    private static AppController instance;
 
     /**
      * The GUI component.
@@ -41,8 +45,15 @@ public class AppController
     private final BroadcastingController broadcastingController;
     
     private final RaceControlController raceControlController;
+    
+    public static AppController getInstance(){
+        if(instance == null){
+            instance = new AppController();
+        }
+        return instance;
+    }
 
-    public AppController() {
+    private AppController() {
         EventBus.register(this);
 
         appPanel = new AppPanel();
@@ -81,7 +92,7 @@ public class AppController
             appPanel.invalidate();
         });
         appPanel.getMenu().addMenuItem(settingsMenuItem);
-        appPanel.getMenu().setVisible(false);
+        appPanel.getMenu().setVisible(true);
 
         appPanel.setActivePage(settingsPanel);
         appPanel.getMenu().setSelectedMenuItem(settingsMenuItem);

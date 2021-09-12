@@ -75,7 +75,7 @@ public class RaceControlApplet extends CustomPApplet {
 
         hotkey = new Hotkeys();
 
-        appControler = new AppController();
+        appControler = AppController.getInstance();
         setComponent(appControler.getGUIComponent());
     }
 
