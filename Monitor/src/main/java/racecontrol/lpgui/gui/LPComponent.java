@@ -22,7 +22,11 @@ public class LPComponent {
     /**
      * Static Reference to the PApplet.
      */
-    private static PApplet applet;
+    private static PApplet staticApplet;
+    /**
+     * The base applet.
+     */
+    private PApplet baseApplet;
     /**
      * horizontal position in the applet.
      */
@@ -143,16 +147,34 @@ public class LPComponent {
      *
      * @param a PApplet.
      */
-    public static void setApplet(PApplet a) {
-        applet = a;
+    public static void setStaticApplet(PApplet a) {
+        staticApplet = a;
     }
-    
+
     /**
-     * Returns the base applet.
-     * @return the base applet.
+     * Sets the base applet for this component.
+     *
+     * @param applet PApplet.
      */
-    public static PApplet getApplet(){
-        return applet;
+    public void setBaseApplet(PApplet applet) {
+        baseApplet = applet;
+    }
+
+    /**
+     * Returns the applet for this component. If the applet cannot be found it
+     * defaults to the base applet.
+     *
+     * @return the applet.
+     */
+    public PApplet getApplet() {
+        if (parent == null) {
+            if (baseApplet == null) {
+                return staticApplet;
+            }else{
+                return baseApplet;
+            }
+        }
+        return parent.getApplet();
     }
 
     /**
@@ -188,11 +210,11 @@ public class LPComponent {
     public void invalidate() {
         isInvalid = true;
     }
-    
+
     /**
      * Invalidates the parent of this component.
      */
-    public void invalidateParent(){
+    public void invalidateParent() {
         parent.invalidate();
     }
 
@@ -293,13 +315,14 @@ public class LPComponent {
         this.visible = visible;
         invalidate();
     }
-    
-    public boolean isVisible(){
+
+    public boolean isVisible() {
         return visible;
     }
 
     /**
      * Draws this component.Used internaly.
+     *
      * @param applet the target applet.
      */
     protected void drawInternal(PApplet applet) {
@@ -311,6 +334,7 @@ public class LPComponent {
 
     /**
      * Override this method to draw this component.
+     *
      * @param applet the target applet.
      */
     public void draw(PApplet applet) {
@@ -325,7 +349,7 @@ public class LPComponent {
      * @return Returns the top most component that was pressed.
      */
     protected LPComponent onMousePressedInternal(int mouseX, int mouseY, int mouseButton) {
-        if(!isVisible()){
+        if (!isVisible()) {
             return null;
         }
         LPComponent clickedComponent = null;
@@ -358,7 +382,7 @@ public class LPComponent {
      * @param mouseButton which mouse button was pressed.
      */
     public void onMouseReleasedInternal(int mouseX, int mouseY, int mouseButton) {
-        if(!isVisible()){
+        if (!isVisible()) {
             return;
         }
         onMouseReleased(mouseX, mouseY, mouseButton);
@@ -386,7 +410,7 @@ public class LPComponent {
      * @param scrolDir direction of the scroll.
      */
     public LPComponent onMouseScrollInternal(int mouseX, int mouseY, int scrolDir) {
-        if(!isVisible()){
+        if (!isVisible()) {
             return null;
         }
         LPComponent target = null;
@@ -472,7 +496,7 @@ public class LPComponent {
      * Mouse enter event. Used internally, do not call directly.
      */
     public void onMouseEnterInternal() {
-        if(!isVisible()){
+        if (!isVisible()) {
             return;
         }
         onMouseEnter();
@@ -482,7 +506,7 @@ public class LPComponent {
      * Mouse leave event. Used internally, do not call directly.
      */
     public void onMouseLeaveInternal() {
-        if(!isVisible()){
+        if (!isVisible()) {
             return;
         }
         onMouseLeave();
@@ -495,7 +519,7 @@ public class LPComponent {
      * @param y the current y position for the mouse.
      */
     public void onMouseMoveInternal(int x, int y) {
-        if(!isVisible()){
+        if (!isVisible()) {
             return;
         }
         if (x > posX && x < posX + width
@@ -521,7 +545,7 @@ public class LPComponent {
      * @param event The key event
      */
     public void onKeyPressedInternal(KeyEvent event) {
-        if(!isVisible()){
+        if (!isVisible()) {
             return;
         }
         onKeyPressed(event);
@@ -541,7 +565,7 @@ public class LPComponent {
      * @param event the key event.
      */
     public void onKeyReleasedInternal(KeyEvent event) {
-        if(!isVisible()){
+        if (!isVisible()) {
             return;
         }
         onKeyReleased(event);

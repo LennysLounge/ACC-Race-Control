@@ -26,6 +26,7 @@ public class LPBase extends PApplet {
     public void setComponent(LPComponent c) {
         base = c;
         c.setParent(null);
+        c.setBaseApplet(this);
     }
 
     @Override
