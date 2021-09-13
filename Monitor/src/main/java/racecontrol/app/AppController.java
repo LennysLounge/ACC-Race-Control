@@ -5,10 +5,7 @@
  */
 package racecontrol.app;
 
-import java.util.LinkedList;
-import java.util.List;
-import processing.core.PApplet;
-import racecontrol.Main;
+import racecontrol.app.test.TestPanel;
 import racecontrol.app.broadcasting.BroadcastingController;
 import racecontrol.app.logging.LoggingPanel;
 import racecontrol.app.racecontrol.RaceControlController;
@@ -48,6 +45,8 @@ public class AppController
      * Broadcasting controller.
      */
     private BroadcastingController broadcastingController;
+    
+    private TestPanel testPanel;
 
     private RaceControlController raceControlController;
 
@@ -76,6 +75,7 @@ public class AppController
         loggingPanel = new LoggingPanel();
         broadcastingController = new BroadcastingController();
         raceControlController = new RaceControlController();
+        testPanel = new TestPanel();
 
         appPanel.getMenu().addMenuItem(new Menu.MenuItem("Menu", () -> {
             appPanel.getMenu().toggleCollapse();
@@ -97,6 +97,12 @@ public class AppController
 
         appPanel.getMenu().addMenuItem(new Menu.MenuItem("Log", () -> {
             appPanel.setActivePage(loggingPanel);
+            appPanel.updateComponents();
+            appPanel.invalidate();
+        }));
+        
+        appPanel.getMenu().addMenuItem(new Menu.MenuItem("Debug", () -> {
+            appPanel.setActivePage(testPanel);
             appPanel.updateComponents();
             appPanel.invalidate();
         }));
@@ -144,4 +150,11 @@ public class AppController
         return applet;
     }
 
+    public void addStatusPanel(LPComponent statusPanel) {
+        appPanel.addStatusPanel(statusPanel);
+    }
+
+    public void removeStatusPanel(LPComponent statusPanel) {
+        appPanel.removeStatusPanel(statusPanel);
+    }
 }

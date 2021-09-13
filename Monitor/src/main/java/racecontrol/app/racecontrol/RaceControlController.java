@@ -8,7 +8,6 @@ package racecontrol.app.racecontrol;
 import java.util.logging.Logger;
 import racecontrol.RaceControlApplet;
 import racecontrol.app.AppController;
-import racecontrol.app.PanelWindowApplet;
 import racecontrol.app.racecontrol.entries.ContactEventEntry;
 import racecontrol.app.racecontrol.entries.RaceEventEntry;
 import racecontrol.app.racecontrol.entries.SimpleEventEntry;
