@@ -7,7 +7,6 @@ package racecontrol.extensions.cameracontrolraw;
 
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.extension.AccClientExtension;
-import racecontrol.app.GeneralExtentionConfigPanel;
 import racecontrol.lpgui.gui.LPContainer;
 import racecontrol.client.extension.AccBroadcastingClientExtensionModule;
 
@@ -20,7 +19,7 @@ public class CameraControlRawModule
 
     @Override
     public boolean isEnabled() {
-        return GeneralExtentionConfigPanel.getInstance().isCameraControlsEnabled();
+        return true;
     }
 
     @Override

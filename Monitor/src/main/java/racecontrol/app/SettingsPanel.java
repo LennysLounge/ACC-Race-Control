@@ -66,8 +66,6 @@ public class SettingsPanel
     private final LPTextField updateIntervalTextField = new LPTextField();
     private final LPButton connectButton = new LPButton("Connect");
 
-    private final LPLabel extensionHeading = new LPLabel("Extension Settings:");
-    private final LPTabPanel extensionTabPanel = new LPTabPanel();
 
     private final LPLabel versionLabel = new LPLabel("Version: " + Version.VERSION);
 
@@ -97,10 +95,6 @@ public class SettingsPanel
         connectionPWTextField.setEnabled(true);
         updateIntervalTextField.setEnabled(true);
         connectButton.setAction(() -> connectButtonPressed());
-
-        //enable config dialogs.
-        extensionTabPanel.getTabs().stream()
-                .forEach(tab -> tab.setEnabled(true));
     }
 
     private void connectButtonPressed() {
@@ -150,20 +144,11 @@ public class SettingsPanel
         updateIntervalTextField.setEnabled(false);
         connectButton.setAction(() -> disconnectButtonPressed());
 
-        //disable all config dialogs.
-        extensionTabPanel.getTabs().stream()
-                .forEach(tab -> tab.setEnabled(false));
-
         //save config
         PersistantConfig.setConfig(CONNECTION_IP, ipTextField.getValue());
         PersistantConfig.setConfig(CONNECTION_PORT, portTextField.getValue());
         PersistantConfig.setConfig(CONNECTION_PASSWORD, connectionPWTextField.getValue());
         PersistantConfig.setConfig(CONNECTION_INTERVAL, updateIntervalTextField.getValue());
-
-        setConfig(EXTENSION_CAMERA_CONTROL_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isCameraControlsEnabled()));
-        setConfig(EXTENSION_INCIDENTS_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isIncidentLogEnabled()));
-        setConfig(EXTENSION_LIVE_TIMING_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isLiveTimingEnabled()));
-        setConfig(EXTENSION_BROADCSATING_ENABLED, String.valueOf(GeneralExtentionConfigPanel.getInstance().isBroadcastingEnabled()));
     }
 
     private void disconnectButtonPressed() {
@@ -232,18 +217,6 @@ public class SettingsPanel
         connectButton.setAction(() -> connectButtonPressed());
         addComponent(connectButton);
 
-        extensionHeading.setSize(getWidth() - 420, LookAndFeel.LINE_HEIGHT);
-        addComponent(extensionHeading);
-        extensionTabPanel.setActiveTabColor(COLOR_GRAY);
-        addComponent(extensionTabPanel);
-
-        extensionTabPanel.addTab(GeneralExtentionConfigPanel.getInstance());
-        client.getExtensionModules().stream()
-                .map(extensionModule -> extensionModule.getExtensionConfigurationPanel())
-                .filter(panel -> panel != null)
-                .forEach(configPanel -> extensionTabPanel.addTab(configPanel));
-        extensionTabPanel.setTabIndex(0);
-
         addComponent(versionLabel);
     }
 
@@ -265,11 +238,6 @@ public class SettingsPanel
         updateIntervalTextField.setPosition(200, lh * 4);
 
         connectButton.setPosition(20, lh * 5);
-
-        extensionHeading.setPosition(440, 0);
-        extensionHeading.setSize(w - 460, LookAndFeel.LINE_HEIGHT);
-        extensionTabPanel.setPosition(440, lh);
-        extensionTabPanel.setSize(w - 460, h - lh - 20);
 
         versionLabel.setPosition(20, getHeight() - LINE_HEIGHT);
     }
