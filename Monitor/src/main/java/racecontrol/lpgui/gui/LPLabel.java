@@ -34,7 +34,8 @@ public class LPLabel
 
     public LPLabel(String text) {
         this.text = text;
-        this.setSize(100, LINE_HEIGHT);
+        getApplet().textFont(LookAndFeel.fontMedium());
+        this.setSize(getApplet().textWidth(text), LookAndFeel.LINE_HEIGHT);
     }
 
     public void setText(String text) {
