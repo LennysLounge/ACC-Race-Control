@@ -36,7 +36,7 @@ public class TestPanel extends LPContainer {
         });
         addComponent(addStatusPanel);
         
-        LPButton removeStatusPanel = new LPButton("Add status panel");
+        LPButton removeStatusPanel = new LPButton("Remove status panel");
         removeStatusPanel.setSize(200, LINE_HEIGHT);
         removeStatusPanel.setPosition(240, 0);
         removeStatusPanel.setAction(()->{
