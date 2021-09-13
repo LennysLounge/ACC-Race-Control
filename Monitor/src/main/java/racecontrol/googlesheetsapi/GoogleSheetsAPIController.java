@@ -325,8 +325,10 @@ public class GoogleSheetsAPIController
         }
         Map<String, CarInfo> leftToAdd = new HashMap<>();
         for (CarInfo car : event.carsConnected) {
-            String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
-            leftToAdd.put(name, car);
+            String drivers = car.getDrivers().stream()
+                    .map(driver -> driver.getFirstName() + " " + driver.getLastName())
+                    .collect(Collectors.joining("\n"));
+            leftToAdd.put(drivers, car);
         }
 
         //update previous entries
