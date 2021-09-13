@@ -129,7 +129,6 @@ public class AppController
         if (e instanceof RealtimeUpdateEvent) {
             appPanel.getHeader().invalidate();
         } else if (e instanceof ConnectionOpenedEvent) {
-            appPanel.getMenu().setVisible(true);
             appPanel.setActivePage(broadcastingController.getPanel());
             appPanel.getMenu().setSelectedMenuIndex(1);
             appPanel.updateComponents();
@@ -137,7 +136,6 @@ public class AppController
         } else if (e instanceof ConnectionClosedEvent) {
             ConnectionClosedEvent event = (ConnectionClosedEvent) e;
             if (event.getExitState() == AccBroadcastingClient.ExitState.NORMAL) {
-                appPanel.getMenu().setVisible(false);
                 appPanel.setActivePage(settingsPanel);
                 appPanel.updateComponents();
                 appPanel.invalidate();
