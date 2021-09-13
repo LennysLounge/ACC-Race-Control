@@ -521,7 +521,7 @@ public class AccBroadcastingClient {
         /**
          * exit state of this thread.
          */
-        private ExitState exitState = ExitState.NORMAL;
+        private ExitState exitState = ExitState.NONE;
         /**
          * flag to indicate that the socket was closed by the user.
          */

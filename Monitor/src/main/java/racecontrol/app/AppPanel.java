@@ -84,10 +84,12 @@ public class AppPanel
     }
 
     public void addStatusPanel(LPComponent statusPanel) {
-        statusPanels.add(statusPanel);
-        addComponent(statusPanel);
-        updateComponents();
-        invalidate();
+        if (!statusPanels.contains(statusPanel)) {
+            statusPanels.add(statusPanel);
+            addComponent(statusPanel);
+            updateComponents();
+            invalidate();
+        }
     }
 
     public void removeStatusPanel(LPComponent statusPanel) {
