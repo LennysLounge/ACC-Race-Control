@@ -40,7 +40,7 @@ public class ConnectionTimeoutStatusPanel
         applet.fill(COLOR_ORANGE);
         applet.rect(0, 0, getWidth(), getHeight());
         applet.fill(COLOR_DARK_GRAY);
-        applet.textFont(LookAndFeel.fontRegular());
+        applet.textFont(LookAndFeel.fontMedium());
         applet.textAlign(LEFT, CENTER);
         applet.text("Connection timed out, the game client stopped sending data.", 10, getHeight() / 2f);
     }

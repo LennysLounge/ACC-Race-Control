@@ -259,7 +259,8 @@ public class AccBroadcastingClient {
         if (socket != null
                 && socket.isConnected()
                 && accListenerThread != null
-                && accListenerThread.isAlive()) {
+                && accListenerThread.isAlive()
+                && accListenerThread.getExitState() == ExitState.NONE) {
             return true;
         }
         return false;
@@ -498,6 +499,7 @@ public class AccBroadcastingClient {
     }
 
     public enum ExitState {
+        NONE,
         NORMAL,
         REFUSED,
         PORT_UNREACHABLE,

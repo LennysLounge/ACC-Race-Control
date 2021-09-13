@@ -140,10 +140,10 @@ public class AppController
             if (event.getExitState() == AccBroadcastingClient.ExitState.NORMAL) {
                 appPanel.setActivePage(settingsPanel);
                 appPanel.updateComponents();
-                appPanel.invalidate();
             } else if (event.getExitState() == AccBroadcastingClient.ExitState.TIMEOUT) {
                 addStatusPanel(new ConnectionTimeoutStatusPanel());
             }
+            appPanel.invalidate();
         }
     }
 
