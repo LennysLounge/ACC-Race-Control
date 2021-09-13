@@ -25,7 +25,7 @@ public class AppPanel
     /**
      * Menu to select the visible page.
      */
-    private final Menu menu;
+    protected final Menu menu;
     /**
      * Currently active page.
      */
@@ -69,10 +69,6 @@ public class AppPanel
             activePage.setSize(getWidth() - menuWidth, getHeight() - headerHeight);
             activePage.setPosition(menuWidth, headerHeight);
         }
-    }
-
-    public Menu getMenu() {
-        return menu;
     }
 
     public HeaderPanel getHeader() {

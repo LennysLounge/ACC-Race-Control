@@ -5,6 +5,7 @@
  */
 package racecontrol.app;
 
+import racecontrol.app.Menu.MenuItem;
 import racecontrol.app.test.TestPanel;
 import racecontrol.app.broadcasting.BroadcastingController;
 import racecontrol.app.logging.LoggingPanel;
@@ -78,46 +79,47 @@ public class AppController
         raceControlController = new RaceControlController();
         testPanel = new TestPanel();
 
-        appPanel.getMenu().addMenuItem(new Menu.MenuItem("Menu", () -> {
-            appPanel.getMenu().toggleCollapse();
+        appPanel.menu.addMenuItem(new MenuItem("Menu", (MenuItem prevItem) -> {
+            appPanel.menu.setSelectedMenuItem(prevItem);
+            appPanel.menu.toggleCollapse();
             appPanel.updateComponents();
             appPanel.invalidate();
         }));
 
-        appPanel.getMenu().addMenuItem(new Menu.MenuItem("Live Timing", () -> {
+        appPanel.menu.addMenuItem(new MenuItem("Live Timing", () -> {
             appPanel.setActivePage(broadcastingController.getPanel());
             appPanel.updateComponents();
             appPanel.invalidate();
         }));
 
-        appPanel.getMenu().addMenuItem(new Menu.MenuItem("Race Control", () -> {
+        appPanel.menu.addMenuItem(new MenuItem("Race Control", () -> {
             appPanel.setActivePage(raceControlController.getPanel());
             appPanel.updateComponents();
             appPanel.invalidate();
         }));
 
-        appPanel.getMenu().addMenuItem(new Menu.MenuItem("Log", () -> {
+        appPanel.menu.addMenuItem(new MenuItem("Log", () -> {
             appPanel.setActivePage(loggingPanel);
             appPanel.updateComponents();
             appPanel.invalidate();
         }));
 
-        appPanel.getMenu().addMenuItem(new Menu.MenuItem("Debug", () -> {
+        appPanel.menu.addMenuItem(new MenuItem("Debug", () -> {
             appPanel.setActivePage(testPanel);
             appPanel.updateComponents();
             appPanel.invalidate();
         }));
 
-        Menu.MenuItem settingsMenuItem = new Menu.MenuItem("Settings", () -> {
+        Menu.MenuItem settingsMenuItem = new MenuItem("Settings", () -> {
             appPanel.setActivePage(settingsPanel);
             appPanel.updateComponents();
             appPanel.invalidate();
         });
-        appPanel.getMenu().addMenuItem(settingsMenuItem);
-        appPanel.getMenu().setVisible(true);
+        appPanel.menu.addMenuItem(settingsMenuItem);
+        appPanel.menu.setVisible(true);
 
         appPanel.setActivePage(settingsPanel);
-        appPanel.getMenu().setSelectedMenuItem(settingsMenuItem);
+        appPanel.menu.setSelectedMenuItem(settingsMenuItem);
     }
 
     public LPComponent getGUIComponent() {
@@ -130,7 +132,7 @@ public class AppController
             appPanel.getHeader().invalidate();
         } else if (e instanceof ConnectionOpenedEvent) {
             appPanel.setActivePage(broadcastingController.getPanel());
-            appPanel.getMenu().setSelectedMenuIndex(1);
+            appPanel.menu.setSelectedMenuIndex(1);
             appPanel.updateComponents();
             appPanel.invalidate();
         } else if (e instanceof ConnectionClosedEvent) {

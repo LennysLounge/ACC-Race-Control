@@ -7,6 +7,7 @@ package racecontrol.app;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
@@ -113,8 +114,9 @@ public class Menu
     public void onMousePressed(int x, int y, int button) {
         int itemIndex = (int) (y / itemSize);
         if (itemIndex < items.size()) {
-            items.get(itemIndex).triggerAction();
+            int oldIndex = selectedIndex;
             selectedIndex = itemIndex;
+            items.get(itemIndex).triggerAction(items.get(oldIndex));
         }
     }
 
@@ -183,9 +185,13 @@ public class Menu
         /**
          * Click action.
          */
-        private final Runnable action;
+        private final Consumer<MenuItem> action;
 
         public MenuItem(String title, Runnable action) {
+            this(title, (MenuItem item) -> action.run());
+        }
+
+        public MenuItem(String title, Consumer<MenuItem> action) {
             this.title = title;
             this.action = action;
         }
@@ -194,8 +200,8 @@ public class Menu
             return title;
         }
 
-        public void triggerAction() {
-            action.run();
+        public void triggerAction(MenuItem prev) {
+            action.accept(prev);
         }
     }
 
