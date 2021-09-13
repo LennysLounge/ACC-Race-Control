@@ -170,7 +170,7 @@ public class LPComponent {
         if (parent == null) {
             if (baseApplet == null) {
                 return staticApplet;
-            }else{
+            } else {
                 return baseApplet;
             }
         }
@@ -499,6 +499,7 @@ public class LPComponent {
         if (!isVisible()) {
             return;
         }
+        isMouseOntop = true;
         onMouseEnter();
     }
 
@@ -509,6 +510,7 @@ public class LPComponent {
         if (!isVisible()) {
             return;
         }
+        isMouseOntop = false;
         onMouseLeave();
     }
 
@@ -525,7 +527,6 @@ public class LPComponent {
         if (x > posX && x < posX + width
                 && y > posY && y < posY + height) {
             if (!isMouseOntop) {
-                isMouseOntop = true;
                 onMouseEnterInternal();
             }
             mouseX = x;
@@ -533,7 +534,6 @@ public class LPComponent {
             onMouseMove((int) (x - posX), (int) (y - posY));
         } else {
             if (isMouseOntop) {
-                isMouseOntop = false;
                 onMouseLeaveInternal();
             }
         }
