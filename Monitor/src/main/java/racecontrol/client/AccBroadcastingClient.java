@@ -32,6 +32,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -192,6 +193,7 @@ public class AccBroadcastingClient {
 
         //create socket
         socket = new DatagramSocket();
+        socket.setSoTimeout(10000);
         socket.connect(this.hostAddress, this.hostPort);
 
         //create new data model and sessionId
@@ -499,7 +501,8 @@ public class AccBroadcastingClient {
         NORMAL,
         REFUSED,
         PORT_UNREACHABLE,
-        EXCEPTION
+        EXCEPTION,
+        TIMEOUT
     };
 
     private class UdpListener
@@ -600,6 +603,10 @@ public class AccBroadcastingClient {
                     socket.receive(response);
                     protocol.processMessage(new ByteArrayInputStream(response.getData()));
                     afterPacketReceived(response.getData()[0]);
+                } catch (SocketTimeoutException e) {
+                    LOG.log(Level.WARNING, "Socket timed out.", e);
+                    exitState = ExitState.TIMEOUT;
+                    return;
                 } catch (SocketException e) {
                     if (forceExit) {
                         LOG.info("Socket was closed by user.");

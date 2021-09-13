@@ -9,6 +9,7 @@ import racecontrol.app.test.TestPanel;
 import racecontrol.app.broadcasting.BroadcastingController;
 import racecontrol.app.logging.LoggingPanel;
 import racecontrol.app.racecontrol.RaceControlController;
+import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.events.ConnectionClosedEvent;
 import racecontrol.client.events.ConnectionOpenedEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
@@ -45,7 +46,7 @@ public class AppController
      * Broadcasting controller.
      */
     private BroadcastingController broadcastingController;
-    
+
     private TestPanel testPanel;
 
     private RaceControlController raceControlController;
@@ -100,7 +101,7 @@ public class AppController
             appPanel.updateComponents();
             appPanel.invalidate();
         }));
-        
+
         appPanel.getMenu().addMenuItem(new Menu.MenuItem("Debug", () -> {
             appPanel.setActivePage(testPanel);
             appPanel.updateComponents();
@@ -134,10 +135,15 @@ public class AppController
             appPanel.updateComponents();
             appPanel.invalidate();
         } else if (e instanceof ConnectionClosedEvent) {
-            appPanel.getMenu().setVisible(false);
-            appPanel.setActivePage(settingsPanel);
-            appPanel.updateComponents();
-            appPanel.invalidate();
+            ConnectionClosedEvent event = (ConnectionClosedEvent) e;
+            if (event.getExitState() == AccBroadcastingClient.ExitState.NORMAL) {
+                appPanel.getMenu().setVisible(false);
+                appPanel.setActivePage(settingsPanel);
+                appPanel.updateComponents();
+                appPanel.invalidate();
+            } else if (event.getExitState() == AccBroadcastingClient.ExitState.TIMEOUT) {
+                addStatusPanel(new ConnectionTimeoutStatusPanel());
+            }
         }
     }
 
