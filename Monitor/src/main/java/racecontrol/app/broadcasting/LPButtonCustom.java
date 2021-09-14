@@ -43,7 +43,7 @@ public class LPButtonCustom
         
         applet.fill(LookAndFeel.COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
-        applet.textFont(LookAndFeel.fontMedium());
+        applet.textFont(LookAndFeel.fontRegular());
         applet.text(text, getWidth() / 2f, getHeight() / 2f);
     }
 

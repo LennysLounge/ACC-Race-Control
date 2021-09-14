@@ -9,8 +9,8 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import racecontrol.LookAndFeel;
-import static racecontrol.LookAndFeel.COLOR_DARK_DARK_GRAY;
 import static racecontrol.LookAndFeel.COLOR_DARK_GRAY;
+import static racecontrol.LookAndFeel.COLOR_MEDIUM_DARK_GRAY;
 import static racecontrol.LookAndFeel.COLOR_RED;
 import static racecontrol.LookAndFeel.LINE_HEIGHT;
 import static racecontrol.LookAndFeel.TEXT_SIZE;
@@ -68,7 +68,7 @@ public class LPCollapsablePanel
 
     @Override
     public void draw(PApplet applet) {
-        applet.fill(COLOR_DARK_DARK_GRAY);
+        applet.fill(COLOR_MEDIUM_DARK_GRAY);
         applet.rect(0, 0, getWidth(), LINE_HEIGHT);
 
         if (mouseOverCollapseButton) {

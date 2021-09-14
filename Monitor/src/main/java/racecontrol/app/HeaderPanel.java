@@ -21,6 +21,7 @@ import static racecontrol.LookAndFeel.fontRegular;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
+import static racecontrol.LookAndFeel.COLOR_WHITE;
 import racecontrol.lpgui.gui.LPContainer;
 
 /**
@@ -100,7 +101,7 @@ public class HeaderPanel
             applet.rect(0, 0, getWidth(), getHeight());
             applet.textAlign(LEFT, CENTER);
             applet.textFont(fontMedium());
-            applet.fill(COLOR_DARK_DARK_GRAY);
+            applet.fill(COLOR_WHITE);
             applet.text("Not Connected", 10, LINE_HEIGHT * 0.5f);
         }
     }
