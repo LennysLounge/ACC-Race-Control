@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
+import processing.core.PImage;
 import racecontrol.LookAndFeel;
 import static racecontrol.LookAndFeel.COLOR_DARK_DARK_GRAY;
 import static racecontrol.LookAndFeel.COLOR_DARK_RED;
@@ -80,12 +81,18 @@ public class Menu
             }
 
             //draw icon
-            applet.noFill();
-            applet.stroke(COLOR_WHITE);
-            applet.strokeWeight(3);
-            applet.rect(itemSize * 0.2f, itemSize * (i + 0.2f), itemSize * 0.6f, itemSize * 0.6f);
-            applet.strokeWeight(1);
-            applet.noStroke();
+            if (item.getIcon() != null) {
+                applet.fill(255);
+                item.getIcon().resize((int) (itemSize * 0.7f), (int) (itemSize * 0.7f));
+                applet.image(item.getIcon(), itemSize * 0.15f, itemSize * (i + 0.15f));
+            } else {
+                applet.noFill();
+                applet.stroke(COLOR_WHITE);
+                applet.strokeWeight(3);
+                applet.rect(itemSize * 0.2f, itemSize * (i + 0.2f), itemSize * 0.6f, itemSize * 0.6f);
+                applet.strokeWeight(1);
+                applet.noStroke();
+            }
 
             if (!collapsed) {
                 //draw text
@@ -181,18 +188,23 @@ public class Menu
         /**
          * Icon of the menu item.
          */
-        //private Image icon;
+        private PImage icon;
         /**
          * Click action.
          */
         private final Consumer<MenuItem> action;
 
-        public MenuItem(String title, Runnable action) {
-            this(title, (MenuItem item) -> action.run());
+        public MenuItem(String title,
+                PImage icon,
+                Runnable action) {
+            this(title, icon, (MenuItem item) -> action.run());
         }
 
-        public MenuItem(String title, Consumer<MenuItem> action) {
+        public MenuItem(String title,
+                PImage icon,
+                Consumer<MenuItem> action) {
             this.title = title;
+            this.icon = icon;
             this.action = action;
         }
 
@@ -202,6 +214,10 @@ public class Menu
 
         public void triggerAction(MenuItem prev) {
             action.accept(prev);
+        }
+
+        public PImage getIcon() {
+            return icon;
         }
     }
 

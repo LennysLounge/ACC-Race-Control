@@ -150,6 +150,14 @@ public class LPComponent {
     public static void setStaticApplet(PApplet a) {
         staticApplet = a;
     }
+    
+    /**
+     * Returns the static applet.
+     * @return PApplet
+     */
+    public static PApplet getStaticApplet(){
+        return staticApplet;
+    }
 
     /**
      * Sets the base applet for this component.
