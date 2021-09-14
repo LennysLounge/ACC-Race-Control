@@ -125,53 +125,6 @@ public class ResultsExtension
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error writing results to file: {}.\ncurrentFilePath:" + currentFilePath, e);
         }
-
-        /*
-            try {
-            FileWriter writer = new FileWriter(currentFilePath);
-
-            writer.write("{\n");
-            writer.write("\t\"approximateReplayOffset\":" + greenFlagOffset + ",\n");
-            writer.write("\t\"raw\": [\n");
-            for (BroadcastingEvent event : broadcastingEvents) {
-            writer.write("\t\t{\n");
-            writer.write("\t\t\t\"sessionTimeMS\": " + event.getTimeMs() + ",\n");
-            writer.write("\t\t\t\"carId\": " + event.getCarId() + ",\n");
-            writer.write("\t\t\t\"message\": \"" + event.getMessage() + "\"\n");
-            writer.write("\t\t},\n");
-            }
-            writer.write("\t],\n");
-            writer.write("\t\"incidents\": [\n");
-            for (Accident accident : incidents) {
-            writer.write("\t\t{\n");
-            IncidentInfo info = accident.getInfo();
-            
-            writer.write("\t\t\t\"sessionTimeMS\":" + ((int) accident.getInfo().getEarliestTime()) + ",\n");
-            writer.write("\t\t\t\"carsInvolved\": [\n");
-            for (CarInfo car : info.getCars()) {
-            writer.write("\t\t\t\t{\n");
-            writer.write("\t\t\t\t\t\"carId\": " + car.getCarId() + ",\n");
-            writer.write("\t\t\t\t\t\"carNumber\": " + car.getCarNumber() + ",\n");
-            writer.write("\t\t\t\t\t\"driver\": \""
-            + car.getDriver().getFirstName() + " " + car.getDriver().getLastName()
-            + "\",\n");
-            writer.write("\t\t\t\t\t\"lap\": " + car.getRealtime().getLaps() + "\n");
-            writer.write("\t\t\t\t},\n");
-            }
-            writer.write("\t\t\t]\n");
-            
-            writer.write("\t\t},\n");
-            }
-            writer.write("\t],\n");
-            writer.write("}\t");
-
-            writer.close();
-            
-            } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-            }
-         */
     }
 
     private String getCarNumberAndLapCount(CarInfo car) {

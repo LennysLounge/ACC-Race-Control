@@ -5,7 +5,17 @@
  */
 package racecontrol.app.racecontrol;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import racecontrol.RaceControlApplet;
 import racecontrol.app.AppController;
 import racecontrol.app.racecontrol.entries.ContactEventEntry;
@@ -25,6 +35,8 @@ import racecontrol.client.extension.contact.ContactEvent;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.extension.replayoffset.ReplayStartKnownEvent;
 import racecontrol.client.extension.replayoffset.ReplayStartRequiresSearchEvent;
+import racecontrol.extensions.results.ResultsExtension;
+import racecontrol.utility.TimeUtils;
 
 /**
  *
@@ -74,6 +86,7 @@ public class RaceControlController
         });
 
         panel.googleSheetsButton.setAction(() -> openGoogleSheetsConfig());
+        panel.exportButton.setAction(() -> exportEventList());
     }
 
     public RaceControlPanel getPanel() {
@@ -156,6 +169,73 @@ public class RaceControlController
                     });
             googleSheetsConfigClosed = false;
             panel.googleSheetsButton.setEnabled(false);
+        }
+    }
+
+    private void exportEventList() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Export event list");
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter jsonFilter = new FileNameExtensionFilter("Json file (.json)", ".json");
+        FileNameExtensionFilter csvFilter = new FileNameExtensionFilter("Comma seperated value (.csv)", ".csv");
+        fileChooser.setFileFilter(jsonFilter);
+        fileChooser.setFileFilter(csvFilter);
+
+        int userSelection = fileChooser.showSaveDialog(null);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            // translate event list to event recrods.
+            List<EventRecord> records = new ArrayList<>();
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                RaceEventEntry e = tableModel.getEntry(i);
+                records.add(new EventRecord(e.getSessionTime(),
+                        e.getTypeDescriptor(),
+                        e.getInfo(),
+                        e.getReplayTime()));
+            }
+
+            //Save file
+            LOG.info("Saving event list to " + fileChooser.getSelectedFile().getAbsolutePath());
+            if (fileChooser.getFileFilter() == jsonFilter) {
+                saveEventListAsJson(fileChooser.getSelectedFile(), records);
+            } else if (fileChooser.getFileFilter() == csvFilter) {
+                saveEventListAsCSV(fileChooser.getSelectedFile(), records);
+            }
+        }
+    }
+
+    private void saveEventListAsJson(File f, List<EventRecord> records) {
+        File file = new File(f.getAbsoluteFile() + ".json");
+        LOG.info("saving as json to " + file.getAbsolutePath());
+        try ( FileWriter writer = new FileWriter(file)) {
+            String result = new ObjectMapper().writeValueAsString(records);
+            writer.write(result);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(ResultsExtension.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ResultsExtension.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Error writing results to file: {}.\ncurrentFilePath:" + file.getAbsolutePath(), e);
+        }
+    }
+
+    private void saveEventListAsCSV(File f, List<EventRecord> records) {
+        File file = new File(f.getAbsoluteFile() + ".csv");
+        LOG.info("saving as csv to " + file.getAbsolutePath());
+        try ( FileWriter writer = new FileWriter(file)) {
+            for (EventRecord record : records) {
+                writer.write(TimeUtils.asDuration(record.getSessionTime()));
+                writer.write(",");
+                writer.write(record.getTypeDesciptor());
+                writer.write(",");
+                writer.write(record.getInfo());
+                writer.write(",");
+                writer.write(TimeUtils.asDuration(record.getReplayTime()));
+                writer.write("\n");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ResultsExtension.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Error writing results to file: {}.\ncurrentFilePath:" + file.getAbsolutePath(), e);
         }
     }
 

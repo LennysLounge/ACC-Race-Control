@@ -29,4 +29,10 @@ public class SimpleEventEntry
         return LPTableColumn.nullRenderer;
     }
 
+    @Override
+    public String getInfo() {
+        return "";
+    }
+    
+
 }

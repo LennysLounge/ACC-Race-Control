@@ -48,6 +48,12 @@ public abstract class RaceEventEntry {
      */
     public abstract LPTable.CellRenderer getInfoRenderer();
     
+    /**
+     * Returns info about this event as a string.
+     * @return the info.
+     */
+    public abstract String getInfo();
+    
     public SessionId getSessionId(){
         return sessionId;
     }

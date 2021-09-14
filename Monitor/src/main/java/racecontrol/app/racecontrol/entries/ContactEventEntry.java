@@ -7,6 +7,7 @@ package racecontrol.app.racecontrol.entries;
 
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CLOSE;
@@ -148,6 +149,7 @@ public class ContactEventEntry
 
     /**
      * Triggers the action for when the info cell was clicked.
+     *
      * @param x the x position of the mouse when clicked.
      * @param y the y position of the mouse when clicked.
      */
@@ -185,6 +187,13 @@ public class ContactEventEntry
                 return CarType.GT3;
 
         }
+    }
+
+    @Override
+    public String getInfo() {
+        return incident.getCars().stream()
+                .map(car -> "#" + car.getCarNumber())
+                .collect(Collectors.joining(", "));
     }
 
     private enum CarType {
