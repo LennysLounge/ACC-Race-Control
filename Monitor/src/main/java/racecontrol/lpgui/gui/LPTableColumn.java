@@ -42,7 +42,7 @@ public class LPTableColumn {
     /**
      * Text align inside this column.
      */
-    private int textAlign = LEFT;
+    private int textAlign = CENTER;
     /**
      * priority for this column. Columns with lower priority will get disabled
      * first.

@@ -77,19 +77,19 @@ public class Menu
             }
             if (i == selectedIndex) {
                 applet.fill(COLOR_RED);
-                applet.rect(0, itemSize * i, getWidth(), itemSize);
+                applet.rect(0, itemSize * i, itemSize * 0.1f, itemSize);
             }
 
             //draw icon
             if (item.getIcon() != null) {
-                applet.fill(255);
-                item.getIcon().resize((int) (itemSize * 0.7f), (int) (itemSize * 0.7f));
-                applet.image(item.getIcon(), itemSize * 0.15f, itemSize * (i + 0.15f));
+                applet.tint((i == selectedIndex || i == mouseOverItemIndex) ? 255 : 100);
+                item.getIcon().resize((int) (itemSize * 0.6f), (int) (itemSize * 0.6f));
+                applet.image(item.getIcon(), itemSize * 0.3f, itemSize * (i + 0.2f));
             } else {
                 applet.noFill();
                 applet.stroke(COLOR_WHITE);
                 applet.strokeWeight(3);
-                applet.rect(itemSize * 0.2f, itemSize * (i + 0.2f), itemSize * 0.6f, itemSize * 0.6f);
+                applet.rect(itemSize * 0.3f, itemSize * (i + 0.2f), itemSize * 0.6f, itemSize * 0.6f);
                 applet.strokeWeight(1);
                 applet.noStroke();
             }
@@ -97,10 +97,10 @@ public class Menu
             if (!collapsed) {
                 //draw text
                 applet.textAlign(LEFT, CENTER);
-                applet.fill(COLOR_WHITE);
-                applet.textFont(LookAndFeel.fontMedium());
+                applet.fill((i == selectedIndex || i == mouseOverItemIndex) ? COLOR_WHITE : 100);
+                applet.textFont(LookAndFeel.fontRegular());
                 applet.noStroke();
-                applet.text(item.getTitle(), itemSize, itemSize * (i + 0.5f));
+                applet.text(item.getTitle(), itemSize + 10, itemSize * (i + 0.5f));
             }
             i++;
         }
@@ -111,7 +111,7 @@ public class Menu
         expandedHeight = h;
         expandedWidth = w;
         if (collapsed) {
-            super.setSize(itemSize, h);
+            super.setSize(itemSize * 1.2f, h);
         } else {
             super.setSize(w, h);
         }

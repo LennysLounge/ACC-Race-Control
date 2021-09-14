@@ -5,6 +5,8 @@
  */
 package racecontrol.app.logging;
 
+import processing.core.PApplet;
+import static racecontrol.LookAndFeel.COLOR_DARK_GRAY;
 import racecontrol.logging.LogMessage;
 import racecontrol.logging.LoggerListener;
 import racecontrol.logging.UILogger;
@@ -38,9 +40,15 @@ public class LoggingPanel
     }
 
     @Override
+    public void draw(PApplet applet) {
+        applet.fill(COLOR_DARK_GRAY);
+        applet.rect(0, 0, getWidth(), getHeight());
+    }
+
+    @Override
     public void onResize(float w, float h) {
-        table.setPosition(0, 0);
-        table.setSize(w, h);
+        table.setPosition(10, 0);
+        table.setSize(w - 10, h);
     }
 
     @Override

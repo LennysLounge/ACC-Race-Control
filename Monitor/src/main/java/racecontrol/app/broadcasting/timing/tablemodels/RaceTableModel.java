@@ -38,12 +38,14 @@ public class RaceTableModel
             new LPTableColumn("Gap")
             .setCellRenderer(gapRenderer)
             .setMinWidth(100)
-            .setMaxWidth(150),
+            .setMaxWidth(150)
+            .setTextAlign(RIGHT),
             new LPTableColumn("To Leader")
             .setMinWidth(100)
             .setPriority(-1)
             .setCellRenderer(gapToLeaderRenderer)
-            .setMaxWidth(150),
+            .setMaxWidth(150)
+            .setTextAlign(RIGHT),
             new LPTableColumn("Lap")
             .setMinWidth(100)
             .setPriority(-1)
@@ -112,7 +114,7 @@ public class RaceTableModel
             text = String.format("+%d Laps", entry.getLapsBehind());
         } else {
             if (entry.getGapToLeader() == 0) {
-                text = "Leader";
+                text = "--";
             } else {
                 text = TimeUtils.asGap(entry.getGapToLeader());
             }

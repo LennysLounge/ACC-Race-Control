@@ -77,7 +77,7 @@ public class LiveTimingTableModel
     /**
      * Column shows the position number.
      */
-    protected final LPTableColumn positionColumn = new LPTableColumn("P")
+    protected final LPTableColumn positionColumn = new LPTableColumn("Pos")
             .setMinWidth((int)(LINE_HEIGHT * 1.2f))
             .setMaxWidth((int)(LINE_HEIGHT * 1.2f))
             .setPriority(1000)

@@ -87,7 +87,7 @@ public class AppController
         testPanel = new TestPanel();
 
         appPanel.menu.addMenuItem(new MenuItem("Menu",
-                null,
+                loadResourceAsPImage("/images/RC_Menu_Symbol.png"),
                 (MenuItem prevItem) -> {
                     appPanel.menu.setSelectedMenuItem(prevItem);
                     appPanel.menu.toggleCollapse();
@@ -96,7 +96,7 @@ public class AppController
                 }));
 
         appPanel.menu.addMenuItem(new MenuItem("Live Timing",
-                loadResourceAsPImage("/images/menuItem_LiveTiming.png"),
+                loadResourceAsPImage("/images/RC_Menu_LiveTiming.png"),
                 () -> {
                     appPanel.setActivePage(broadcastingController.getPanel());
                     appPanel.updateComponents();
@@ -110,17 +110,40 @@ public class AppController
                     appPanel.updateComponents();
                     appPanel.invalidate();
                 }));
-
-        appPanel.menu.addMenuItem(new MenuItem("Log",
+        /*
+        appPanel.menu.addMenuItem(new MenuItem("Broadcast",
                 loadResourceAsPImage("/images/RC_Menu_Broadcast.png"),
                 () -> {
                     appPanel.setActivePage(loggingPanel);
                     appPanel.updateComponents();
                     appPanel.invalidate();
                 }));
-
-        appPanel.menu.addMenuItem(new MenuItem("Debug",
+        appPanel.menu.addMenuItem(new MenuItem("Autopilot",
                 loadResourceAsPImage("/images/RC_Menu_AutoBroadcast.png"),
+                () -> {
+                    appPanel.setActivePage(loggingPanel);
+                    appPanel.updateComponents();
+                    appPanel.invalidate();
+                }));
+         */
+        appPanel.menu.addMenuItem(new MenuItem("Log",
+                loadResourceAsPImage("/images/RC_Menu_LOG.png"),
+                () -> {
+                    appPanel.setActivePage(loggingPanel);
+                    appPanel.updateComponents();
+                    appPanel.invalidate();
+                }));
+        /*
+        appPanel.menu.addMenuItem(new MenuItem("Trackmap",
+                loadResourceAsPImage("/images/RC_Menu_TrackMap.png"),
+                () -> {
+                    appPanel.setActivePage(testPanel);
+                    appPanel.updateComponents();
+                    appPanel.invalidate();
+                }));
+         */
+        appPanel.menu.addMenuItem(new MenuItem("Debug",
+                loadResourceAsPImage("/images/RC_Menu_Debugging.png"),
                 () -> {
                     appPanel.setActivePage(testPanel);
                     appPanel.updateComponents();
@@ -128,7 +151,7 @@ public class AppController
                 }));
 
         Menu.MenuItem settingsMenuItem = new MenuItem("Settings",
-                loadResourceAsPImage("/images/RC_Menu_TrackMap.png"),
+                loadResourceAsPImage("/images/RC_Menu_Settings.png"),
                 () -> {
                     appPanel.setActivePage(settingsPanel);
                     appPanel.updateComponents();

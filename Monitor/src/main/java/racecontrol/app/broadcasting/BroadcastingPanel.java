@@ -12,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import processing.core.PApplet;
+import static racecontrol.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.LookAndFeel.LINE_HEIGHT;
 import racecontrol.lpgui.gui.LPButton;
 import racecontrol.lpgui.gui.LPContainer;
@@ -97,7 +99,6 @@ public class BroadcastingPanel
         addCarCameraButton("Passenger", "Onboard", "Onboard2");
         //addCarCameraButton("Chase", "Drivable", "Chase");
         //addCarCameraButton("Far Chase", "Drivable", "FarChase");
-        
 
         instantReplayLabel.setSize(200, LINE_HEIGHT);
         collapsablePanel.addComponent(instantReplayLabel);
@@ -133,7 +134,13 @@ public class BroadcastingPanel
             }
         });
         collapsablePanel.addComponent(instantReplayCustomButton);
-         
+
+    }
+
+    @Override
+    public void draw(PApplet applet) {
+        applet.fill(COLOR_DARK_GRAY);
+        applet.rect(0, 0, getWidth(), getHeight());
     }
 
     @Override
@@ -144,8 +151,8 @@ public class BroadcastingPanel
         }
 
         float tableHeight = Math.max(LINE_HEIGHT * 2, h - broadcastingHight);
-        liveTimingPanel.setPosition(0, 0);
-        liveTimingPanel.setSize(w, tableHeight);
+        liveTimingPanel.setPosition(10, 0);
+        liveTimingPanel.setSize(w - 10, tableHeight);
 
         collapsablePanel.setSize(w, h - tableHeight);
         collapsablePanel.setPosition(0, tableHeight);
@@ -178,7 +185,6 @@ public class BroadcastingPanel
                 x += button.getWidth() + 4;
             }
         }
-        
 
         if ((x + 516) > w) {
             positionInstantReplayElements(210, 5);
@@ -214,7 +220,7 @@ public class BroadcastingPanel
 
     public void setCameraSets(Map<String, List<String>> sets) {
         //remove all old buttons
-        for(LPButton b : tvCameraButtons){
+        for (LPButton b : tvCameraButtons) {
             collapsablePanel.removeComponent(b);
         }
         tvCameraButtons.clear();
