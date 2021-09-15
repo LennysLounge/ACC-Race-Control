@@ -156,7 +156,7 @@ public class RaceControlController
                 break;
         }
         text += event.isInitialisation() ? " joined." : " started";
-        tableModel.addEntry(new SimpleEventEntry(client.getSessionId(), info.getSessionTime(), text, false));
+        tableModel.addEntry(new SimpleEventEntry(event.getSessionId(), info.getSessionTime(), text, false));
         panel.getTable().invalidate();
     }
 

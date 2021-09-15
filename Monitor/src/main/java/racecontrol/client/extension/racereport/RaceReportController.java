@@ -255,8 +255,8 @@ public class RaceReportController
             for (EventRecord r : records) {
                 if (r.getSessionId() == sId) {
                     writer.write("Time: " + TimeUtils.asDuration(r.getSessionTime()));
-                    writer.write(String.format("%-30s", r.getTypeDesciptor()));
-                    writer.write(String.format("%-20s", r.getInfo()));
+                    writer.write(String.format(" %-30s", r.getTypeDesciptor()));
+                    writer.write(String.format(" %-20s", r.getInfo()));
                     writer.write("Replay: " + TimeUtils.asDuration(r.getReplayTime()));
                     writer.write("\n");
                 }
@@ -282,33 +282,21 @@ public class RaceReportController
 
                 for (int i = startLap; i <= endLap; i++) {
                     // sort records for each lap
-                    final int lap = i;
-                    sortedRecords = sessions.get(sId).values().stream()
-                            .sorted((DriverRecord dr1, DriverRecord dr2) -> {
-                                if (dr1.getLaps().containsKey(lap)
-                                        && dr2.getLaps().containsKey(lap)) {
-                                    return (int) Math.signum(dr1.getLaps().get(lap).getDeltaToLeader()
-                                            - dr2.getLaps().get(lap).getDeltaToLeader());
-                                } else {
-                                    if (dr1.getLaps().containsKey(lap)) {
-                                        return -1;
-                                    }
-                                    if (dr2.getLaps().containsKey(lap)) {
-                                        return 1;
-                                    }
-                                    return 0;
-                                }
-                            })
-                            .collect(Collectors.toList());
-
-                    writer.write("\nLap " + lap + "\n");
+                    sortedRecords = sortDriverRecordsForLap(sortedRecords, i);
+                    writer.write("\nLap " + i + "\n");
                     for (DriverRecord dr : sortedRecords) {
                         writer.write("#" + dr.getCarNumber() + "\t");
-                        if (dr.getLaps().containsKey(lap)) {
+                        // write delta to leader
+                        if (dr.getLaps().containsKey(i)) {
                             writer.write(String.format("%10s",
-                                    TimeUtils.asDelta(dr.getLaps().get(lap).getDeltaToLeader())));
+                                    TimeUtils.asDelta(dr.getLaps().get(i).getDeltaToLeader())));
                         } else {
-                            writer.write("--");
+                            // if driver has not completed this lap
+                            // write delta from last lap that was completed
+                            writer.write(String.format("(Lap %d) %10s",
+                                    dr.getLapCount(),
+                                    TimeUtils.asDelta(dr.getLaps().get(dr.getLapCount()).getDeltaToLeader()))
+                            );
                         }
                         writer.write("\n");
                     }
@@ -322,4 +310,33 @@ public class RaceReportController
         }
     }
 
+    private List<DriverRecord> sortDriverRecordsForLap(List<DriverRecord> records, int lap) {
+        List<DriverRecord> result = new ArrayList<>();
+        int lapCount = lap;
+        while (lapCount > 0 && result.size() != records.size()) {
+            //sort records for lap
+            final int constLapCount = lapCount;
+            records.stream()
+                    .filter(dr -> dr.getLapCount() >= constLapCount)
+                    .filter(dr -> !result.contains(dr))
+                    .sorted((dr1, dr2) -> compareDriverRecordAtLap(dr1, dr2, constLapCount))
+                    .forEach(dr -> result.add(dr));
+            lapCount--;
+        }
+        return result;
+    }
+
+    private int compareDriverRecordAtLap(DriverRecord dr1, DriverRecord dr2, int lap) {
+        if (dr1.getLaps().containsKey(lap) && dr2.getLaps().containsKey(lap)) {
+            return (int) Math.signum(dr1.getLaps().get(lap).getDeltaToLeader()
+                    - dr2.getLaps().get(lap).getDeltaToLeader());
+        }
+        if (dr1.getLaps().containsKey(lap)) {
+            return 1;
+        }
+        if (dr2.getLaps().containsKey(lap)) {
+            return -1;
+        }
+        return 0;
+    }
 }
