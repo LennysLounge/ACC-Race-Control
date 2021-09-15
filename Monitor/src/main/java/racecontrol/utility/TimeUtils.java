@@ -57,7 +57,7 @@ public class TimeUtils {
         float m = remaining % 60;
         remaining = (remaining - m) / 60;
         float h = remaining % 60;
-        if (m > 1) {
+        if (m >= 1) {
             return String.format("%s%01d:%02d.%03d", sign, (int) m, (int) s, (int) ms);
         }
         return String.format("%s%01d.%03d", sign, (int) s, (int) ms);
