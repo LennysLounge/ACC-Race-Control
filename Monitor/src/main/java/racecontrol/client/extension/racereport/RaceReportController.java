@@ -5,17 +5,31 @@
  */
 package racecontrol.client.extension.racereport;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import racecontrol.app.racecontrol.RaceControlController;
+import racecontrol.app.racecontrol.entries.RaceEventEntry;
 import racecontrol.client.data.SessionId;
+import racecontrol.client.data.enums.SessionType;
 import static racecontrol.client.data.enums.SessionType.RACE;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.extensions.laptimes.LapCompletedEvent;
+import racecontrol.extensions.results.ResultsExtension;
 import racecontrol.utility.TimeUtils;
 
 /**
@@ -33,6 +47,10 @@ public class RaceReportController
      * This class's logger.
      */
     private static final Logger LOG = Logger.getLogger(RaceReportController.class.getName());
+    /**
+     * Reference to the race control component.
+     */
+    private final RaceControlController raceControlController;
     /**
      * maps sessionId to a session. Session maps a carId to a driver Record.
      */
@@ -56,6 +74,7 @@ public class RaceReportController
 
     private RaceReportController() {
         EventBus.register(this);
+        raceControlController = RaceControlController.getInstance();
     }
 
     @Override
@@ -70,6 +89,7 @@ public class RaceReportController
     }
 
     private void onLapCompleted(LapCompletedEvent e) {
+        // add a driver record if one does not exist.
         if (!sessions.get(sessionId).containsKey(e.getCar().getCarId())) {
             String driverName = e.getCar().getDrivers().stream()
                     .map(driverInfo -> driverInfo.getFirstName() + " " + driverInfo.getLastName())
@@ -101,17 +121,205 @@ public class RaceReportController
             deltaToLeader = now - leaderOffset.get(lapCount);
         }
 
-        dr.getLaps().add(new LapRecord(e.getLapTime(), deltaToLeader));
+        dr.getLaps().put(dr.getLapCount(), new LapRecord(e.getLapTime(), deltaToLeader));
         LOG.info("Lap recorded for #" + e.getCar().getCarNumber()
                 + "\ttime: " + TimeUtils.asLapTime(e.getLapTime())
                 + "\toffset: " + TimeUtils.asDelta(deltaToLeader));
     }
-    
+
     /**
      * Saves a race report to disk.
      */
-    public void saveRaceReport(){
-        
+    public void saveRaceReport() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Export race report");
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter jsonFilter = new FileNameExtensionFilter("Json file (.json)", ".json");
+        FileNameExtensionFilter csvFilter = new FileNameExtensionFilter("Comma seperated value (.csv)", ".csv");
+        FileNameExtensionFilter txtFilter = new FileNameExtensionFilter("Human readable (.txt)", ".txt");
+        //fileChooser.setFileFilter(jsonFilter);
+        //fileChooser.setFileFilter(csvFilter);
+        fileChooser.setFileFilter(txtFilter);
+
+        int userSelection = fileChooser.showSaveDialog(null);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            // translate event list to event recrods.
+            List<EventRecord> records = new ArrayList<>();
+            for (RaceEventEntry entry : raceControlController.getRaceEvents()) {
+                records.add(new EventRecord(entry.getSessionTime(),
+                        entry.getTypeDescriptor(),
+                        entry.getInfo(),
+                        entry.getReplayTime(),
+                        entry.getSessionId()));
+            }
+
+            //Save file
+            LOG.info("Saving event list to " + fileChooser.getSelectedFile().getAbsolutePath());
+            if (fileChooser.getFileFilter() == jsonFilter) {
+                saveReportAsJson(fileChooser.getSelectedFile(), records);
+            } else if (fileChooser.getFileFilter() == csvFilter) {
+                saveReportAsCSV(fileChooser.getSelectedFile(), records);
+            } else if (fileChooser.getFileFilter() == txtFilter) {
+                saveReportAsTXT(fileChooser.getSelectedFile(), records);
+            }
+        }
+    }
+
+    private void saveReportAsJson(File f, List<EventRecord> records) {
+        File file = new File(f.getAbsoluteFile() + ".json");
+        LOG.info("saving as json to " + file.getAbsolutePath());
+        try ( FileWriter writer = new FileWriter(file)) {
+            String result = new ObjectMapper().writeValueAsString(records);
+            writer.write(result);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(ResultsExtension.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ResultsExtension.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Error writing results to file: {}.\ncurrentFilePath:" + file.getAbsolutePath(), e);
+        }
+    }
+
+    private void saveReportAsCSV(File f, List<EventRecord> records) {
+        File file = new File(f.getAbsoluteFile() + ".csv");
+        LOG.info("saving as csv to " + file.getAbsolutePath());
+        try ( FileWriter writer = new FileWriter(file)) {
+            for (EventRecord record : records) {
+                writer.write(TimeUtils.asDuration(record.getSessionTime()));
+                writer.write(",");
+                writer.write(record.getTypeDesciptor());
+                writer.write(",");
+                writer.write(record.getInfo());
+                writer.write(",");
+                writer.write(TimeUtils.asDuration(record.getReplayTime()));
+                writer.write("\n");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ResultsExtension.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Error writing results to file: {}.\ncurrentFilePath:" + file.getAbsolutePath(), e);
+        }
+    }
+
+    private void saveReportAsTXT(File f, List<EventRecord> records) {
+        f.mkdirs();
+        Map<SessionType, Integer> typeCount = new HashMap<>();
+        typeCount.put(SessionType.PRACTICE, 1);
+        typeCount.put(SessionType.QUALIFYING, 1);
+        typeCount.put(SessionType.RACE, 1);
+        for (SessionId sId : sessions.keySet()) {
+            String fileName = sId.getType().name()
+                    + typeCount.get(sId.getType())
+                    + ".txt";
+            typeCount.put(sId.getType(), typeCount.get(sId.getType()) + 1);
+
+            File outfile = new File(f.getAbsolutePath() + "/" + fileName);
+            saveReportAsTXT_2(outfile, records, sId);
+        }
+    }
+
+    private void saveReportAsTXT_2(File outfile, List<EventRecord> records, SessionId sId) {
+        try ( FileWriter writer = new FileWriter(outfile)) {
+            // write entry list
+            writer.write("- Entry List -\n");
+            for (DriverRecord dr : sessions.get(sId).values()) {
+                writer.write("#" + dr.getCarNumber()
+                        + "\t" + dr.getDriverName() + "\n");
+            }
+
+            // write positions and laps
+            writer.write("\n- Session Results -\n");
+            // sort records by their finishing delta and their lap count.
+            List<DriverRecord> sortedRecords = sessions.get(sId).values().stream()
+                    .sorted((DriverRecord dr1, DriverRecord dr2) -> {
+                        if (dr1.getLapCount() == dr2.getLapCount()) {
+                            return (int) Math.signum(dr1.getLaps().get(dr1.getLapCount()).getDeltaToLeader()
+                                    - dr2.getLaps().get(dr2.getLapCount()).getDeltaToLeader());
+                        } else {
+                            return -(dr1.getLapCount() - dr2.getLapCount());
+                        }
+                    })
+                    .collect(Collectors.toList());
+
+            for (int i = 0; i < sortedRecords.size(); i++) {
+                DriverRecord dr = sortedRecords.get(i);
+                writer.write(String.format("P%2d  ", i));
+                writer.write(String.format("%4s", "#" + dr.getCarNumber()));
+                writer.write(String.format("\tLaps: %3d", dr.getLapCount()));
+                writer.write("\tLaps: ()");
+                writer.write("\n");
+            }
+
+            // write race events
+            writer.write("\n- Session Events -\n");
+            for (EventRecord r : records) {
+                if (r.getSessionId() == sId) {
+                    writer.write("Time: " + TimeUtils.asDuration(r.getSessionTime()));
+                    writer.write(String.format("%-30s", r.getTypeDesciptor()));
+                    writer.write(String.format("%-20s", r.getInfo()));
+                    writer.write("Replay: " + TimeUtils.asDuration(r.getReplayTime()));
+                    writer.write("\n");
+                }
+            }
+
+            if (sId.getType() == RACE) {
+                // write lap charts.
+                writer.write("\n- Lap Chart -\n");
+                //find lowest lap to start chart at.
+                int startLap = 10000000;
+                int endLap = 0;
+
+                for (DriverRecord dr : sortedRecords) {
+                    for (Integer lapNr : dr.getLaps().keySet()) {
+                        if (lapNr < startLap) {
+                            startLap = lapNr;
+                        }
+                    }
+                    if (dr.getLapCount() > endLap) {
+                        endLap = dr.getLapCount();
+                    }
+                }
+
+                for (int i = startLap; i <= endLap; i++) {
+                    // sort records for each lap
+                    final int lap = i;
+                    sortedRecords = sessions.get(sId).values().stream()
+                            .sorted((DriverRecord dr1, DriverRecord dr2) -> {
+                                if (dr1.getLaps().containsKey(lap)
+                                        && dr2.getLaps().containsKey(lap)) {
+                                    return (int) Math.signum(dr1.getLaps().get(lap).getDeltaToLeader()
+                                            - dr2.getLaps().get(lap).getDeltaToLeader());
+                                } else {
+                                    if (dr1.getLaps().containsKey(lap)) {
+                                        return -1;
+                                    }
+                                    if (dr2.getLaps().containsKey(lap)) {
+                                        return 1;
+                                    }
+                                    return 0;
+                                }
+                            })
+                            .collect(Collectors.toList());
+
+                    writer.write("\nLap " + lap + "\n");
+                    for (DriverRecord dr : sortedRecords) {
+                        writer.write("#" + dr.getCarNumber() + "\t");
+                        if (dr.getLaps().containsKey(lap)) {
+                            writer.write(String.format("%10s",
+                                    TimeUtils.asDelta(dr.getLaps().get(lap).getDeltaToLeader())));
+                        } else {
+                            writer.write("--");
+                        }
+                        writer.write("\n");
+                    }
+                }
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(ResultsExtension.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Error writing results to file: {}.\ncurrentFilePath:" + outfile.getAbsolutePath(), e);
+        }
     }
 
 }

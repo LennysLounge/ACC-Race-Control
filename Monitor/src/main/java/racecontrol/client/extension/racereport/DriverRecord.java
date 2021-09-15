@@ -5,8 +5,8 @@
  */
 package racecontrol.client.extension.racereport;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -16,7 +16,7 @@ public class DriverRecord {
 
     private final String driverName;
     private final String carNumber;
-    private final List<LapRecord> laps = new ArrayList<>();
+    private final Map<Integer, LapRecord> laps = new HashMap<>();
     private int position;
     private int lapCount;
 
@@ -51,7 +51,7 @@ public class DriverRecord {
         return carNumber;
     }
 
-    public List<LapRecord> getLaps() {
+    public Map<Integer, LapRecord> getLaps() {
         return laps;
     }
 

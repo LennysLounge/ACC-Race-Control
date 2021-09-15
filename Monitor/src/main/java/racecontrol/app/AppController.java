@@ -83,7 +83,8 @@ public class AppController
         settingsPanel = new SettingsPanel();
         loggingPanel = new LoggingPanel();
         broadcastingController = new BroadcastingController();
-        raceControlController = new RaceControlController();
+        raceControlController = RaceControlController.getInstance();
+        raceControlController.initialise();
         testPanel = new TestPanel();
 
         appPanel.menu.addMenuItem(new MenuItem("Menu",
