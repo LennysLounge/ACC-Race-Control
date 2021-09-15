@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import racecontrol.eventbus.EventBus;
 import racecontrol.logging.UILogger;
 
 /**
@@ -99,7 +100,6 @@ public class LapTimeExtension
         } else if (e instanceof SessionChangedEvent) {
             onSessionChanged(((SessionChangedEvent) e).getSessionId());
         }
-
     }
 
     public void onRealtimeCarUpdate(RealtimeInfo info) {
@@ -154,6 +154,8 @@ public class LapTimeExtension
 
         UILogger.log(message);
         LOG.info(message);
+        
+        EventBus.publish(new LapCompletedEvent(car, lap.getLapTimeMS()));
     }
 
     private void printLapToFile() {
