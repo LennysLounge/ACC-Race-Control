@@ -168,17 +168,7 @@ public class RaceControlController
     }
 
     private void openGoogleSheetsConfig() {
-        if (googleSheetsConfigClosed) {
-            appController.launchNewWindow(
-                    googleSheetsConfigController,
-                    false,
-                    () -> {
-                        googleSheetsConfigClosed = true;
-                        panel.googleSheetsButton.setEnabled(true);
-                    });
-            googleSheetsConfigClosed = false;
-            panel.googleSheetsButton.setEnabled(false);
-        }
+        appController.launchNewWindow(googleSheetsConfigController.getPanel(), false);
     }
 
     private void exportEventList() {

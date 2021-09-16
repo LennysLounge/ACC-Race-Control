@@ -6,7 +6,6 @@
 package racecontrol.app.racecontrol.googlesheetsapi;
 
 import java.util.logging.Logger;
-import racecontrol.app.PanelController;
 import racecontrol.googlesheetsapi.GoogleSheetsAPIController;
 import racecontrol.googlesheetsapi.GoogleSheetsConfiguration;
 import racecontrol.lpgui.gui.LPComponent;
@@ -16,8 +15,7 @@ import racecontrol.lpgui.gui.LPTabPanel;
  *
  * @author Leonard
  */
-public class GoogleSheetsAPIConfigurationController
-        implements PanelController {
+public class GoogleSheetsAPIConfigurationController {
 
     /**
      * This class's logger.
@@ -40,7 +38,6 @@ public class GoogleSheetsAPIConfigurationController
         tabPanel.setName("Google Sheets API");
     }
 
-    @Override
     public LPComponent getPanel() {
         return tabPanel;
     }

@@ -9,6 +9,8 @@ import com.jogamp.nativewindow.WindowClosingProtocol.WindowClosingMode;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import processing.core.PApplet;
@@ -37,12 +39,12 @@ public class PanelWindowApplet
     /**
      * Action to be performed when closing this window.
      */
-    private Runnable closeAction = ()->{};
+    private List<Runnable> closeActions = new LinkedList<>();
     /**
      * Resizable.
      */
     private final boolean resizeable;
-    
+
     public PanelWindowApplet(LPComponent panel, boolean resizeable) {
         super();
         this.panel = panel;
@@ -66,7 +68,7 @@ public class PanelWindowApplet
         frameRate(30);
 
         setComponent(panel);
-        
+
         //set the correct closing mode.
         if (getGraphics().isGL()) {
             final com.jogamp.newt.Window w = (com.jogamp.newt.Window) getSurface().getNative();
@@ -87,15 +89,18 @@ public class PanelWindowApplet
      */
     @Override
     public void exitActual() {
-        closeAction.run();
+        for (Runnable closeAction : closeActions) {
+            closeAction.run();
+        }
     }
-    
+
     /**
-     * Sets the closing action for this window.
+     * Adds a closing action for this window.
+     *
      * @param closeAction the closing action.
      */
-    public void setCloseAction(Runnable closeAction){
-        this.closeAction = closeAction;
+    public void addCloseAction(Runnable closeAction) {
+        this.closeActions.add(closeAction);
     }
 
     private PImage loadResourceAsPImage(String resource) {

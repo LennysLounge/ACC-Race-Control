@@ -8,6 +8,8 @@ package racecontrol.app;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -60,6 +62,10 @@ public class AppController
     private RaceControlController raceControlController;
 
     private boolean initialised;
+    /**
+     * Map of components to their window applet.
+     */
+    private final Map<LPComponent, PanelWindowApplet> windowPanels = new HashMap<>();
 
     public static AppController getInstance() {
         if (instance == null) {
@@ -190,13 +196,24 @@ public class AppController
         }
     }
 
-    public PanelWindowApplet launchNewWindow(
-            PanelController controller,
-            boolean resizeable,
-            Runnable closeAction) {
-        PanelWindowApplet applet = new PanelWindowApplet(controller.getPanel(), resizeable);
-        applet.setCloseAction(closeAction);
-        return applet;
+    /**
+     * Creates a new window for a panel. Does not create a new window if the
+     * panel already is assigned to a window.
+     *
+     * @param panel The panel to create a window for.
+     * @param resizeable Is that panel resizable.
+     * @return The applet for that panel.
+     */
+    public PanelWindowApplet launchNewWindow(LPComponent panel, boolean resizeable) {
+        // only create a window if that panel doesnt already have one.
+        if (!windowPanels.containsKey(panel)) {
+            PanelWindowApplet applet = new PanelWindowApplet(panel, resizeable);
+            applet.addCloseAction(() -> {
+                windowPanels.remove(panel);
+            });
+            windowPanels.put(panel, applet);
+        }
+        return windowPanels.get(panel);
     }
 
     public void addStatusPanel(LPComponent statusPanel) {
