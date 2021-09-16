@@ -6,9 +6,9 @@
 package racecontrol.app.racecontrol.googlesheetsapi;
 
 import java.util.logging.Logger;
+import racecontrol.app.AppController;
 import racecontrol.googlesheetsapi.GoogleSheetsAPIController;
 import racecontrol.googlesheetsapi.GoogleSheetsConfiguration;
-import racecontrol.lpgui.gui.LPComponent;
 import racecontrol.lpgui.gui.LPTabPanel;
 
 /**
@@ -21,7 +21,11 @@ public class GoogleSheetsAPIConfigurationController {
      * This class's logger.
      */
     private static final Logger LOG = Logger.getLogger(GoogleSheetsAPIConfigurationController.class.getName());
-    
+    /**
+     * Reference to the app controller.
+     */
+    private final AppController appController;
+
     private final LPTabPanel tabPanel = new LPTabPanel();
 
     private final GoogleSheetsAPIConfigurationPanel panel;
@@ -29,17 +33,14 @@ public class GoogleSheetsAPIConfigurationController {
     private final GoogleSheetsAPIController sheetsAPI;
 
     public GoogleSheetsAPIConfigurationController() {
+        appController = AppController.getInstance();
         panel = new GoogleSheetsAPIConfigurationPanel();
         panel.connectButton.setAction(() -> connectButton());
         sheetsAPI = GoogleSheetsAPIController.getInstance();
-        
+
         tabPanel.addTab(panel);
         tabPanel.setSize(660, 460);
         tabPanel.setName("Google Sheets API");
-    }
-
-    public LPComponent getPanel() {
-        return tabPanel;
     }
 
     private void connectButton() {
@@ -63,6 +64,10 @@ public class GoogleSheetsAPIConfigurationController {
         }
         panel.updateComponents();
         panel.invalidate();
+    }
+
+    public void openSettingsPanel() {
+        appController.launchNewWindow(tabPanel, false);
     }
 
 }

@@ -94,8 +94,9 @@ public class RaceControlController
             panel.getSeachReplayButton().setEnabled(false);
         });
 
-        panel.googleSheetsButton.setAction(() -> openGoogleSheetsConfig());
+        
         panel.exportButton.setAction(() -> exportEventList());
+        panel.googleSheetsButton.setAction(() -> googleSheetsConfigController.openSettingsPanel());
         panel.virtualSafetyCarButton.setAction(() -> virtualSafetyCarController.openSettingsPanel());
     }
 
@@ -166,10 +167,6 @@ public class RaceControlController
         tableModel.addEntry(new ContactEventEntry(client.getSessionId(), info.getSessionEarliestTime(),
                 "Contact", true, info));
         panel.getTable().invalidate();
-    }
-
-    private void openGoogleSheetsConfig() {
-        appController.launchNewWindow(googleSheetsConfigController.getPanel(), false);
     }
 
     private void exportEventList() {
