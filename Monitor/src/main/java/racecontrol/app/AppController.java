@@ -212,6 +212,8 @@ public class AppController
                 windowPanels.remove(panel);
             });
             windowPanels.put(panel, applet);
+        }else{
+            windowPanels.get(panel).grabFocus();
         }
         return windowPanels.get(panel);
     }

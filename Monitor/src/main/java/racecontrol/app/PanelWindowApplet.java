@@ -39,7 +39,7 @@ public class PanelWindowApplet
     /**
      * Action to be performed when closing this window.
      */
-    private List<Runnable> closeActions = new LinkedList<>();
+    private final List<Runnable> closeActions = new LinkedList<>();
     /**
      * Resizable.
      */
@@ -116,5 +116,13 @@ public class PanelWindowApplet
         } catch (IOException ex) {
             return null;
         }
+    }
+
+    /**
+     * Moves this window on top and grabs the focus.
+     */
+    public void grabFocus() {
+        surface.setAlwaysOnTop(true);
+        surface.setAlwaysOnTop(false);
     }
 }
