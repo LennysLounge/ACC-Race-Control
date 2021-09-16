@@ -14,6 +14,7 @@ import racecontrol.app.racecontrol.entries.ContactEventEntry;
 import racecontrol.app.racecontrol.entries.RaceEventEntry;
 import racecontrol.app.racecontrol.entries.SimpleEventEntry;
 import racecontrol.app.racecontrol.googlesheetsapi.GoogleSheetsAPIConfigurationController;
+import racecontrol.app.racecontrol.virtualsafetycar.VirtualSafetyCarController;
 import racecontrol.client.AccBroadcastingClient;
 import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.data.CarInfo;
@@ -56,10 +57,8 @@ public class RaceControlController
     private AppController appController;
 
     private GoogleSheetsAPIConfigurationController googleSheetsConfigController;
-    /**
-     * Indicates that the google sheets config window is open.
-     */
-    private boolean googleSheetsConfigClosed = true;
+
+    private VirtualSafetyCarController virtualSafetyCarController;
 
     public static RaceControlController getInstance() {
         if (instance == null) {
@@ -79,6 +78,7 @@ public class RaceControlController
         replayOffsetExtension = ReplayOffsetExtension.getInstance();
         appController = AppController.getInstance();
         googleSheetsConfigController = new GoogleSheetsAPIConfigurationController();
+        virtualSafetyCarController = new VirtualSafetyCarController();
         raceReportController = RaceReportController.getInstance();
 
         tableModel.setInfoColumnAction(infoClickAction);
@@ -96,6 +96,7 @@ public class RaceControlController
 
         panel.googleSheetsButton.setAction(() -> openGoogleSheetsConfig());
         panel.exportButton.setAction(() -> exportEventList());
+        panel.virtualSafetyCarButton.setAction(() -> virtualSafetyCarController.openSettingsPanel());
     }
 
     public RaceControlPanel getPanel() {

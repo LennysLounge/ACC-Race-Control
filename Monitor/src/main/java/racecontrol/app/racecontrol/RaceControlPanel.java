@@ -31,7 +31,7 @@ public class RaceControlPanel
 
     protected final LPButton exportButton;
     protected final LPButton googleSheetsButton;
-    protected final LPButton placeHolder1;
+    protected final LPButton virtualSafetyCarButton;
     protected final LPButton placeHolder2;
     protected final LPButton placeHolder3;
 
@@ -63,14 +63,13 @@ public class RaceControlPanel
         subModuleLabel.setSize(200, LINE_HEIGHT);
         subModuleLabel.setPosition(20, 0);
         //addComponent(subModuleLabel);
-        
-        
+
         exportButton = new LPButton("Export event list");
         addComponent(exportButton);
         googleSheetsButton = new LPButton("Google Sheets API");
         addComponent(googleSheetsButton);
-        placeHolder1 = new LPButton("placeHolder1");
-        //addComponent(placeHolder1);
+        virtualSafetyCarButton = new LPButton("Virtual safety car");
+        addComponent(virtualSafetyCarButton);
         placeHolder2 = new LPButton("placeHolder2");
         //addComponent(placeHolder2);
         placeHolder3 = new LPButton("placeHolder3");
@@ -91,17 +90,17 @@ public class RaceControlPanel
         float buttonWidth = Math.min(400, w / 2);
         float buttonHeight = LINE_HEIGHT * 1.5f;
         float buttonPadding = LINE_HEIGHT * 0.1f;
-        
+
         exportButton.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
         exportButton.setPosition(buttonPadding * 2, heightOffset + buttonPadding * 2);
         googleSheetsButton.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
         googleSheetsButton.setPosition(buttonWidth + buttonPadding, heightOffset + buttonPadding * 2);
+        virtualSafetyCarButton.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
+        virtualSafetyCarButton.setPosition(buttonPadding * 2, heightOffset + buttonHeight + buttonPadding);
         placeHolder2.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
-        placeHolder2.setPosition(buttonPadding * 2, heightOffset + buttonHeight + buttonPadding);
-        placeHolder3.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
-        placeHolder3.setPosition(buttonWidth + buttonPadding, heightOffset + buttonHeight + buttonPadding);
+        placeHolder2.setPosition(buttonWidth + buttonPadding, heightOffset + buttonHeight + buttonPadding);
 
-        float headerHeight = buttonHeight + LINE_HEIGHT;
+        float headerHeight = buttonHeight * 2 + LINE_HEIGHT;
         eventListLabel.setPosition(20, headerHeight - LINE_HEIGHT);
         table.setSize(w, h - headerHeight);
         table.setPosition(0, headerHeight);
