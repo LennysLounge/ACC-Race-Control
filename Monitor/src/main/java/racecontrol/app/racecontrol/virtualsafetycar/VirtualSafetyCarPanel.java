@@ -11,6 +11,7 @@ import static racecontrol.LookAndFeel.LINE_HEIGHT;
 import racecontrol.lpgui.gui.LPButton;
 import racecontrol.lpgui.gui.LPContainer;
 import racecontrol.lpgui.gui.LPLabel;
+import racecontrol.lpgui.gui.LPNumberTextField;
 import racecontrol.lpgui.gui.LPTextField;
 
 /**
@@ -20,18 +21,18 @@ import racecontrol.lpgui.gui.LPTextField;
 public class VirtualSafetyCarPanel
         extends LPContainer {
 
-    protected final LPTextField targetSpeedTextField = new LPTextField();
+    protected final LPNumberTextField targetSpeedTextField = new LPNumberTextField();
     private final LPLabel targetSpeedLabel = new LPLabel("Speed limit:");
     private final LPLabel targetSpeedUnitLabel = new LPLabel("km/h");
 
     private final LPLabel speedToleranceLabel = new LPLabel("Speed tolerance:");
-    protected final LPTextField speedToleranceTextField = new LPTextField();
+    protected final LPNumberTextField speedToleranceTextField = new LPNumberTextField();
     private final LPLabel speedToleranceUnitLabel = new LPLabel("km/h");
     //private final LPLabel speedToleranceInfoLabel1 = new LPLabel("Minimum speed a car needs to be above");
     //private final LPLabel speedToleranceInfoLabel2 = new LPLabel("the target speed to raise an incident");
 
     private final LPLabel timeToleranceLabel = new LPLabel("Time tolerance:");
-    protected final LPTextField timeToleranceTextField = new LPTextField();
+    protected final LPNumberTextField timeToleranceTextField = new LPNumberTextField();
     private final LPLabel timeToleranceUnitLabel = new LPLabel("seconds");
     //private final LPLabel timeToleranceInfoLabel1 = new LPLabel("Minimum time a car needs to be above the");
     //private final LPLabel timeToleranceInfoLabel2 = new LPLabel("target speed to raise an incident.");
@@ -47,7 +48,7 @@ public class VirtualSafetyCarPanel
         addComponent(targetSpeedLabel);
         targetSpeedTextField.setPosition(180, LINE_HEIGHT * 0.5f);
         targetSpeedTextField.setSize(70, LINE_HEIGHT);
-        targetSpeedTextField.setValue("50");
+        targetSpeedTextField.setValue(50);
         addComponent(targetSpeedTextField);
         targetSpeedUnitLabel.setPosition(260, LINE_HEIGHT * 0.5f);
         addComponent(targetSpeedUnitLabel);
@@ -56,7 +57,7 @@ public class VirtualSafetyCarPanel
         addComponent(speedToleranceLabel);
         speedToleranceTextField.setPosition(180, LINE_HEIGHT * 2);
         speedToleranceTextField.setSize(70, LINE_HEIGHT);
-        speedToleranceTextField.setValue("5");
+        speedToleranceTextField.setValue(5);
         addComponent(speedToleranceTextField);
         speedToleranceUnitLabel.setPosition(260, LINE_HEIGHT * 2);
         addComponent(speedToleranceUnitLabel);
@@ -71,7 +72,7 @@ public class VirtualSafetyCarPanel
         addComponent(timeToleranceLabel);
         timeToleranceTextField.setPosition(180, LINE_HEIGHT * 3);
         timeToleranceTextField.setSize(70, LINE_HEIGHT);
-        timeToleranceTextField.setValue("1");
+        timeToleranceTextField.setValue(1);
         addComponent(timeToleranceTextField);
         timeToleranceUnitLabel.setPosition(260, LINE_HEIGHT * 3);
         addComponent(timeToleranceUnitLabel);

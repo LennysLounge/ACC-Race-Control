@@ -405,7 +405,7 @@ public class LPTextField
         selectionStartIndex = cursorPosition + presentationTextOffset;
     }
 
-    public String getClipBoard() {
+    private String getClipBoard() {
         try {
             return (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
         } catch (HeadlessException e) {

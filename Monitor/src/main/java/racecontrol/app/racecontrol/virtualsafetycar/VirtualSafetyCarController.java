@@ -16,6 +16,7 @@ import racecontrol.eventbus.EventListener;
  */
 public class VirtualSafetyCarController
         implements EventListener {
+
     /**
      * Settings panel.
      */
@@ -32,6 +33,18 @@ public class VirtualSafetyCarController
      * Indicates that the virtual safety car is on.
      */
     private boolean vscOn = false;
+    /**
+     * Speed limit for the vsc.
+     */
+    private int speedLimit = 0;
+    /**
+     * Speed tolerance for the vsc.
+     */
+    private int speedTolerance = 0;
+    /**
+     * Time tolerance for the vsc.
+     */
+    private int timeTolerance = 0;
 
     public VirtualSafetyCarController() {
         EventBus.register(this);
@@ -45,7 +58,10 @@ public class VirtualSafetyCarController
 
     @Override
     public void onEvent(Event e) {
-        return;
+        if (vscOn) {
+            statusPanel.invalidate();
+
+        }
     }
 
     public void startVSC() {
@@ -71,8 +87,8 @@ public class VirtualSafetyCarController
         panel.updateComponents();
         panel.invalidate();
     }
-    
-    public void openSettingsPanel(){
+
+    public void openSettingsPanel() {
         appController.launchNewWindow(panel, false);
     }
 
