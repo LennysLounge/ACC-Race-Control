@@ -26,12 +26,11 @@ public class VSCStatusPanel
     /**
      * Timestamp for when this panel was created
      */
-    private final long vscStart;
+    private long vscStart = 0;
 
     protected final LPButton settingsButton = new LPButton("Settings");
 
     public VSCStatusPanel() {
-        vscStart = System.currentTimeMillis();
         settingsButton.setSize(100, LINE_HEIGHT);
         addComponent(settingsButton);
     }
@@ -53,6 +52,10 @@ public class VSCStatusPanel
     @Override
     public void onResize(float w, float h) {
         settingsButton.setPosition(w - 110, 0);
+    }
+    
+    public void setVSCStart(){
+        vscStart = System.currentTimeMillis();
     }
 
 }
