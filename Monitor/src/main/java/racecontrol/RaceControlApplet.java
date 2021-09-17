@@ -10,6 +10,7 @@ import racecontrol.client.AccBroadcastingClient;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -88,7 +89,8 @@ public class RaceControlApplet extends CustomPApplet {
 
         super.draw();
         
-        for(Runnable task: runLater){
+        List<Runnable> tasks = new ArrayList<>(runLater);
+        for(Runnable task: tasks){
             task.run();
         }
         runLater.clear();
