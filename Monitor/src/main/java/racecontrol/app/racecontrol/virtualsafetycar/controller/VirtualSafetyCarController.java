@@ -178,7 +178,7 @@ public class VirtualSafetyCarController
         UILogger.log(logText);
         //publish all current violations.
         clearAndCommitViolations();
-        EventBus.publish(new VSCEndEvent());
+        EventBus.publish(new VSCEndEvent(sessionId, client.getModel().getSessionInfo().getSessionTime()));
     }
 
     public boolean isActive() {

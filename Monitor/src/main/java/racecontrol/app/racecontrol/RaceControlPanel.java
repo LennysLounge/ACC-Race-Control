@@ -51,7 +51,6 @@ public class RaceControlPanel
         addComponent(findReplayOffsetButton);
         findReplayOffsetLabel = new LPLabel("The replay time is currently not know. Click here to find it.");
         findReplayOffsetLabel.setVisible(false);
-        findReplayOffsetLabel.setSize(600, LINE_HEIGHT);
         findReplayOffsetLabel.setPosition(20, 0);
         addComponent(findReplayOffsetLabel);
 
@@ -100,7 +99,7 @@ public class RaceControlPanel
         placeHolder2.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
         placeHolder2.setPosition(buttonWidth + buttonPadding, heightOffset + buttonHeight + buttonPadding);
 
-        float headerHeight = buttonHeight * 2 + LINE_HEIGHT;
+        float headerHeight = heightOffset + buttonHeight * 2 + LINE_HEIGHT;
         eventListLabel.setPosition(20, headerHeight - LINE_HEIGHT);
         table.setSize(w, h - headerHeight);
         table.setPosition(0, headerHeight);

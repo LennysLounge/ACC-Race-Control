@@ -13,8 +13,12 @@ import racecontrol.app.AppController;
 import racecontrol.app.racecontrol.entries.ContactEventEntry;
 import racecontrol.app.racecontrol.entries.RaceEventEntry;
 import racecontrol.app.racecontrol.entries.SimpleEventEntry;
+import racecontrol.app.racecontrol.entries.VSCViolationEventEntry;
 import racecontrol.app.racecontrol.googlesheetsapi.GoogleSheetsAPIConfigurationController;
 import racecontrol.app.racecontrol.virtualsafetycar.VirtualSafetyCarConfigController;
+import racecontrol.app.racecontrol.virtualsafetycar.controller.VSCEndEvent;
+import racecontrol.app.racecontrol.virtualsafetycar.controller.VSCStartEvent;
+import racecontrol.app.racecontrol.virtualsafetycar.controller.VSCViolationEvent;
 import racecontrol.client.AccBroadcastingClient;
 import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.data.CarInfo;
@@ -94,7 +98,6 @@ public class RaceControlController
             panel.getSeachReplayButton().setEnabled(false);
         });
 
-        
         panel.exportButton.setAction(() -> exportEventList());
         panel.googleSheetsButton.setAction(() -> googleSheetsConfigController.openSettingsPanel());
         panel.virtualSafetyCarButton.setAction(() -> virtualSafetyCarController.openSettingsPanel());
@@ -120,6 +123,12 @@ public class RaceControlController
             tableModel.setSessionId(((SessionChangedEvent) e).getSessionId());
         } else if (e instanceof ContactEvent) {
             addContactEntry((ContactEvent) e);
+        } else if (e instanceof VSCStartEvent) {
+            onVSCStart((VSCStartEvent) e);
+        } else if (e instanceof VSCEndEvent) {
+            onVSCEnd((VSCEndEvent) e);
+        } else if (e instanceof VSCViolationEvent) {
+            onVSCViolation((VSCViolationEvent) e);
         }
     }
 
@@ -127,6 +136,8 @@ public class RaceControlController
             = (RaceEventEntry entry, int mouseX, int mouseY) -> {
                 if (entry instanceof ContactEventEntry) {
                     ((ContactEventEntry) entry).onInfoClicked(mouseX, mouseY);
+                } else if (entry instanceof VSCViolationEventEntry) {
+                    ((VSCViolationEventEntry) entry).onInfoClicked(mouseX, mouseY);
                 }
             };
 
@@ -166,6 +177,33 @@ public class RaceControlController
         ContactInfo info = event.getInfo();
         tableModel.addEntry(new ContactEventEntry(client.getSessionId(), info.getSessionEarliestTime(),
                 "Contact", true, info));
+        panel.getTable().invalidate();
+    }
+
+    private void onVSCStart(VSCStartEvent e) {
+        String descriptor = "Virtual safety car started.   Speedlimit: "
+                + e.getSpeedLimit() + " kmh";
+        tableModel.addEntry(new SimpleEventEntry(e.getSessionId(),
+                e.getTimeStamp(),
+                descriptor,
+                false));
+        panel.getTable().invalidate();
+    }
+
+    private void onVSCEnd(VSCEndEvent e) {
+        tableModel.addEntry(new SimpleEventEntry(e.getSessionId(),
+                e.getSessionTime(),
+                "Virtual safety car ending",
+                false));
+        panel.getTable().invalidate();
+    }
+
+    private void onVSCViolation(VSCViolationEvent e) {
+        tableModel.addEntry(new VSCViolationEventEntry(e.getSessionId(),
+                e.getSessionTime(),
+                "VSC violation",
+                false,
+                e));
         panel.getTable().invalidate();
     }
 

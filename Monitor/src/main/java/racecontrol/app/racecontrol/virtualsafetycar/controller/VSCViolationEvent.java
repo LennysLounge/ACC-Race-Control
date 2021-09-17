@@ -47,7 +47,4 @@ public class VSCViolationEvent extends Event{
     public float getSessionTime() {
         return sessionTime;
     }
-    
-    
-    
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
+import racecontrol.LookAndFeel;
 import static racecontrol.LookAndFeel.COLOR_GRAY;
 import static racecontrol.LookAndFeel.COLOR_RED;
 import static racecontrol.LookAndFeel.COLOR_WHITE;
@@ -121,6 +122,7 @@ public class RaceEventTableModel
         String time = TimeUtils.asDuration(entry.getSessionTime());
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
+        applet.textFont(LookAndFeel.fontRegular());
         applet.text(time, context.width / 2f, context.height / 2f);
     };
 
@@ -130,6 +132,7 @@ public class RaceEventTableModel
         RaceEventEntry entry = (RaceEventEntry) context.object;
         applet.fill(COLOR_WHITE);
         applet.textAlign(LEFT, CENTER);
+        applet.textFont(LookAndFeel.fontRegular());
         applet.text(entry.getTypeDescriptor(), context.height / 2f, context.height / 2f);
     };
 
@@ -144,6 +147,7 @@ public class RaceEventTableModel
             PApplet applet,
             RenderContext context) -> {
         RaceEventEntry entry = (RaceEventEntry) context.object;
+        applet.textFont(LookAndFeel.fontRegular());
         if (entry.isHasReplay() && entry.getSessionId() == activeSessionId) {
             if (entry.getReplayTime() == -1) {
                 applet.fill(COLOR_WHITE);
@@ -175,6 +179,7 @@ public class RaceEventTableModel
             String time = TimeUtils.asDuration(entry.getReplayTime());
             applet.fill(COLOR_WHITE);
             applet.textAlign(CENTER, CENTER);
+            applet.textFont(LookAndFeel.fontRegular());
             applet.text(time, context.width / 2f, context.height / 2f);
         }
     };
