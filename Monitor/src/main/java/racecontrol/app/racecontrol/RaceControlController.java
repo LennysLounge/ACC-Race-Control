@@ -14,7 +14,7 @@ import racecontrol.app.racecontrol.entries.ContactEventEntry;
 import racecontrol.app.racecontrol.entries.RaceEventEntry;
 import racecontrol.app.racecontrol.entries.SimpleEventEntry;
 import racecontrol.app.racecontrol.googlesheetsapi.GoogleSheetsAPIConfigurationController;
-import racecontrol.app.racecontrol.virtualsafetycar.VirtualSafetyCarController;
+import racecontrol.app.racecontrol.virtualsafetycar.VirtualSafetyCarConfigController;
 import racecontrol.client.AccBroadcastingClient;
 import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.data.CarInfo;
@@ -58,7 +58,7 @@ public class RaceControlController
 
     private GoogleSheetsAPIConfigurationController googleSheetsConfigController;
 
-    private VirtualSafetyCarController virtualSafetyCarController;
+    private VirtualSafetyCarConfigController virtualSafetyCarController;
 
     public static RaceControlController getInstance() {
         if (instance == null) {
@@ -78,7 +78,7 @@ public class RaceControlController
         replayOffsetExtension = ReplayOffsetExtension.getInstance();
         appController = AppController.getInstance();
         googleSheetsConfigController = new GoogleSheetsAPIConfigurationController();
-        virtualSafetyCarController = new VirtualSafetyCarController();
+        virtualSafetyCarController = new VirtualSafetyCarConfigController();
         raceReportController = RaceReportController.getInstance();
 
         tableModel.setInfoColumnAction(infoClickAction);

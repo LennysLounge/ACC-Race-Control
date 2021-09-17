@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.app.racecontrol.virtualsafetycar;
+package racecontrol.app.racecontrol.virtualsafetycar.controller;
 
 import racecontrol.eventbus.Event;
 
@@ -11,6 +11,6 @@ import racecontrol.eventbus.Event;
  *
  * @author Leonard
  */
-public class VSCViolationEvent extends Event{
-    
+public class VSCEndEvent extends Event {
+
 }
