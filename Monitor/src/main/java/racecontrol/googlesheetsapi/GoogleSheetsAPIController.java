@@ -6,7 +6,6 @@
 package racecontrol.googlesheetsapi;
 
 import java.io.FileNotFoundException;
-import racecontrol.app.racecontrol.googlesheetsapi.GoogleSheetsAPIConfigurationPanel;
 import racecontrol.Main;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.events.SessionPhaseChangedEvent;
@@ -35,6 +34,9 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import racecontrol.app.racecontrol.virtualsafetycar.controller.VSCEndEvent;
+import racecontrol.app.racecontrol.virtualsafetycar.controller.VSCStartEvent;
+import racecontrol.app.racecontrol.virtualsafetycar.controller.VSCViolationEvent;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
@@ -124,14 +126,6 @@ public class GoogleSheetsAPIController
                     greenFlagOffsetTimestamp = System.currentTimeMillis();
                 }
             }
-        } else if (e instanceof ContactEvent) {
-            ContactInfo info = ((ContactEvent) e).getInfo();
-            String sessionTime = TimeUtils.asDuration(info.getSessionEarliestTime());
-            String carNumbers = info.getCars().stream()
-                    .map(car -> getCarNumberAndLapCount(car))
-                    .collect(Collectors.joining("\n"));
-            queue.add(new SendIncidentEvent(sessionTime, carNumbers));
-            LOG.info("accident received: " + carNumbers);
         } else if (e instanceof SessionPhaseChangedEvent) {
             SessionInfo info = ((SessionPhaseChangedEvent) e).getSessionInfo();
             if (info.getSessionType() == SessionType.RACE
@@ -151,6 +145,35 @@ public class GoogleSheetsAPIController
                 queue.add(new SendCarConnectedEvent(carConnections));
                 carConnections.clear();
             }
+        } else if (e instanceof ContactEvent) {
+            ContactInfo info = ((ContactEvent) e).getInfo();
+            String sessionTime = TimeUtils.asDuration(info.getSessionEarliestTime());
+            String carNumbers = info.getCars().stream()
+                    .map(car -> getCarNumberAndLapCount(car))
+                    .collect(Collectors.joining("\n"));
+            queue.add(new SendIncidentEvent(sessionTime, carNumbers));
+            //LOG.info("accident received: " + carNumbers);
+        } else if (e instanceof VSCStartEvent) {
+            VSCStartEvent event = (VSCStartEvent) e;
+            String text = String.format("VSC Start\n%d kmh", event.getSpeedLimit());
+            String sessionTime = TimeUtils.asDuration(event.getTimeStamp());
+            queue.add(new SendIncidentEvent(sessionTime, text));
+            //LOG.info("VSC Start received: " + text);
+        } else if (e instanceof VSCEndEvent) {
+            VSCEndEvent event = (VSCEndEvent) e;
+            String text = "VSC End";
+            String sessionTime = TimeUtils.asDuration(event.getSessionTime());
+            queue.add(new SendIncidentEvent(sessionTime, text));
+            //LOG.info("VSC End received");
+        } else if (e instanceof VSCViolationEvent) {
+            VSCViolationEvent event = (VSCViolationEvent) e;
+            CarInfo car = client.getModel().getCar(event.getCarId());
+            String text = String.format("%s\n+%d kmh\n%s s",
+                    car.getCarNumber(), event.getSpeedOver(),
+                    TimeUtils.asDelta(event.getTimeOver()));
+            String sessionTime = TimeUtils.asDuration(event.getSessionTime());
+            queue.add(new SendIncidentEvent(sessionTime, text));
+            //LOG.info("VSC violation received: " + text);
         }
 
         if (isGreenFlagOffsetBeeingMeasured()) {
@@ -258,8 +281,8 @@ public class GoogleSheetsAPIController
     public boolean isGreenFlagOffsetBeeingMeasured() {
         return isMeasuringGreenFlagOffset;
     }
-    
-    public boolean isRunning(){
+
+    public boolean isRunning() {
         return running;
     }
 
