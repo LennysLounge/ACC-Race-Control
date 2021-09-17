@@ -6,6 +6,7 @@
     * The google sheets API settings are not in "Race Control" under the "Google sheets" button.
   * The application log is now in the "Log" section.
 * When in a team event write all team members into the entry list in the google spreadsheet.
+* Add a virtual safety car option to the race control panel.
 
 
 
