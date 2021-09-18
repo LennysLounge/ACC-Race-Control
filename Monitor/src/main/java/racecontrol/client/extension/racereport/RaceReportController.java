@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import racecontrol.client.AccBroadcastingExtension;
 import racecontrol.gui.app.racecontrol.RaceControlController;
 import racecontrol.gui.app.racecontrol.entries.RaceEventEntry;
 import racecontrol.client.data.SessionId;
@@ -37,7 +38,7 @@ import racecontrol.utility.TimeUtils;
  * @author Leonard
  */
 public class RaceReportController
-        implements EventListener {
+        implements EventListener, AccBroadcastingExtension {
 
     /**
      * Singelton instance.

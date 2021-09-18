@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import racecontrol.client.AccBroadcastingExtension;
 import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VSCEndEvent;
 import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VSCStartEvent;
 import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VSCViolationEvent;
@@ -46,7 +47,7 @@ import racecontrol.logging.UILogger;
  * @author Leonard
  */
 public class GoogleSheetsAPIController
-        implements EventListener {
+        implements EventListener, AccBroadcastingExtension {
 
     /**
      * Singelton instance.

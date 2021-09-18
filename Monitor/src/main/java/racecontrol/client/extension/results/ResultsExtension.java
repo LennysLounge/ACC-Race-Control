@@ -10,14 +10,12 @@ import racecontrol.client.extension.contact.ContactEvent;
 import racecontrol.client.events.BroadcastingEventEvent;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.data.BroadcastingEvent;
-import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.data.enums.BroadcastingEventType;
 import racecontrol.client.data.enums.SessionPhase;
 import racecontrol.client.data.enums.SessionType;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
-import racecontrol.gui.lpui.LPContainer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
@@ -29,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import racecontrol.client.AccBroadcastingExtension;
 import racecontrol.eventbus.EventListener;
 
 /**
@@ -36,7 +35,7 @@ import racecontrol.eventbus.EventListener;
  * @author Leonard
  */
 public class ResultsExtension
-        implements EventListener {
+        implements EventListener, AccBroadcastingExtension {
 
     private static final Logger LOG = Logger.getLogger(ResultsExtension.class.getName());
 

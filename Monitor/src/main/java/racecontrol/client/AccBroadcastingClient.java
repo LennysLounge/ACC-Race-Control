@@ -47,9 +47,12 @@ import racecontrol.client.events.BroadcastingEventEvent;
 import racecontrol.client.events.EntryListUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.extension.contact.ContactExtension;
+import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIController;
+import racecontrol.client.extension.laptimes.LapTimeExtension;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.logging.UILogger;
 import racecontrol.client.extension.racereport.RaceReportController;
+import racecontrol.client.extension.results.ResultsExtension;
 
 /**
  * A basic connection to the broadcasting interface from Assetto Corsa
@@ -123,15 +126,22 @@ public class AccBroadcastingClient {
      * Counts how many packets have been received.
      */
     private static int packetCount = 0;
+    /**
+     * List of broadcast extensions.
+     */
+    private final List<AccBroadcastingExtension> extensions = new ArrayList<>();
 
     private AccBroadcastingClient() {
     }
 
     public void initialise() {
         //instanciate extensions
-        ReplayOffsetExtension.getInstance();
-        ContactExtension.getInstance();
-        RaceReportController.getInstance();
+        extensions.add(ContactExtension.getInstance());
+        extensions.add(GoogleSheetsAPIController.getInstance());
+        extensions.add(new LapTimeExtension());
+        extensions.add(RaceReportController.getInstance());
+        extensions.add(ReplayOffsetExtension.getInstance());
+        extensions.add(new ResultsExtension());
     }
 
     /**

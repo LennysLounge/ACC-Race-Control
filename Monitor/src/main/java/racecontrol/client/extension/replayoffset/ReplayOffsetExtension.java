@@ -15,6 +15,7 @@ import racecontrol.client.data.SessionInfo;
 import racecontrol.client.events.SessionChangedEvent;
 import java.util.logging.Logger;
 import racecontrol.client.AccBroadcastingClient;
+import racecontrol.client.AccBroadcastingExtension;
 import racecontrol.client.events.ConnectionOpenedEvent;
 
 /**
@@ -24,7 +25,7 @@ import racecontrol.client.events.ConnectionOpenedEvent;
  * @author Leonard
  */
 public class ReplayOffsetExtension
-    implements EventListener{
+        implements EventListener, AccBroadcastingExtension {
 
     /**
      * Explaination of how this works:
@@ -123,9 +124,9 @@ public class ReplayOffsetExtension
 
     private long lowerBound = 0;
     private long upperBound = 0;
-    
-    public static ReplayOffsetExtension getInstance(){
-        if(instance == null){
+
+    public static ReplayOffsetExtension getInstance() {
+        if (instance == null) {
             instance = new ReplayOffsetExtension();
         }
         return instance;
@@ -133,7 +134,7 @@ public class ReplayOffsetExtension
 
     private ReplayOffsetExtension() {
         EventBus.register(this);
-        client =  AccBroadcastingClient.getClient();
+        client = AccBroadcastingClient.getClient();
         replayStartTime = 0;
         gameConnectionTime = 0;
         isInSearchMode = false;
@@ -141,13 +142,12 @@ public class ReplayOffsetExtension
 
     @Override
     public void onEvent(Event e) {
-        if(e instanceof ConnectionOpenedEvent){
+        if (e instanceof ConnectionOpenedEvent) {
             //reset state
             replayStartTime = 0;
             gameConnectionTime = 0;
             isInSearchMode = false;
-        }
-        else if (e instanceof SessionChangedEvent) {
+        } else if (e instanceof SessionChangedEvent) {
             SessionChangedEvent event = (SessionChangedEvent) e;
             if (!event.isInitialisation()) {
                 replayStartTime = System.currentTimeMillis();
@@ -166,7 +166,7 @@ public class ReplayOffsetExtension
                     replayStartTime = gameConnectionTime;
                     LOG.info("Setting replayStartTime based on game connection time to: " + gameConnectionTime);
                     EventBus.publish(new ReplayStartKnownEvent());
-                }else{
+                } else {
                     EventBus.publish(new ReplayStartRequiresSearchEvent());
                 }
             }

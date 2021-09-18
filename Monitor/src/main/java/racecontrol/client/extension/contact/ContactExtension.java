@@ -16,6 +16,7 @@ import racecontrol.utility.TimeUtils;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.AccBroadcastingClient;
 import java.util.logging.Logger;
+import racecontrol.client.AccBroadcastingExtension;
 import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
 
@@ -26,7 +27,8 @@ import racecontrol.logging.UILogger;
  * @author Leonard
  */
 public class ContactExtension
-        implements EventListener {
+        implements EventListener, AccBroadcastingExtension {
+
     /**
      * Singelton instance.
      */
@@ -47,9 +49,9 @@ public class ContactExtension
      * Reference to the replay offset extension
      */
     private final ReplayOffsetExtension replayOffsetExtension;
-    
-    public static ContactExtension getInstance(){
-        if(instance == null){
+
+    public static ContactExtension getInstance() {
+        if (instance == null) {
             instance = new ContactExtension();
         }
         return instance;
@@ -85,7 +87,7 @@ public class ContactExtension
 
     public void onAccident(BroadcastingEvent event) {
         float sessionTime = client.getModel().getSessionInfo().getSessionTime();
-        int replaytime = replayOffsetExtension.getReplayTimeFromSessionTime((int)sessionTime);
+        int replaytime = replayOffsetExtension.getReplayTimeFromSessionTime((int) sessionTime);
         String logMessage = "Contact: #" + client.getModel().getCar(event.getCarId()).getCarNumber()
                 + "\t\t" + TimeUtils.asDuration(sessionTime)
                 + "\t" + TimeUtils.asDuration(replaytime);
