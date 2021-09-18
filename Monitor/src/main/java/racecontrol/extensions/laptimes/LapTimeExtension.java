@@ -17,7 +17,7 @@ import racecontrol.client.data.RealtimeInfo;
 import racecontrol.client.data.enums.LapType;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.utility.TimeUtils;
-import racecontrol.lpgui.gui.LPContainer;
+import racecontrol.gui.lpui.LPContainer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

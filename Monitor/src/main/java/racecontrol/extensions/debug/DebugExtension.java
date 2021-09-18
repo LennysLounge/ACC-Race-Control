@@ -10,7 +10,7 @@ import racecontrol.eventbus.EventBus;
 import racecontrol.client.extension.AccClientExtension;
 import racecontrol.eventbus.Event;
 import racecontrol.client.extension.replayoffset.ReplayStartKnownEvent;
-import racecontrol.lpgui.gui.LPContainer;
+import racecontrol.gui.lpui.LPContainer;
 
 /**
  * A Basic Extension to test stuff out with.

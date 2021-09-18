@@ -5,11 +5,11 @@
  */
 package racecontrol.extensions.velocitymap;
 
-import static racecontrol.LookAndFeel.COLOR_DARK_GRAY;
-import static racecontrol.LookAndFeel.LINE_HEIGHT;
-import racecontrol.lpgui.gui.LPButton;
-import racecontrol.lpgui.gui.LPContainer;
-import racecontrol.lpgui.gui.LPLabel;
+import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
+import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
+import racecontrol.gui.lpui.LPButton;
+import racecontrol.gui.lpui.LPContainer;
+import racecontrol.gui.lpui.LPLabel;
 import java.util.ArrayList;
 import java.util.List;
 import processing.core.PApplet;

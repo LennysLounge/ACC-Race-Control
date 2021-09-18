@@ -15,7 +15,7 @@ import static racecontrol.client.data.enums.CarLocation.TRACK;
 import static racecontrol.client.data.enums.LapType.REGULAR;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.TrackDataEvent;
-import racecontrol.lpgui.gui.LPContainer;
+import racecontrol.gui.lpui.LPContainer;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;

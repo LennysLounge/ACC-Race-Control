@@ -5,12 +5,12 @@
  */
 package racecontrol.extensions.cameracontrolraw;
 
-import static racecontrol.LookAndFeel.COLOR_DARK_GRAY;
-import static racecontrol.LookAndFeel.LINE_HEIGHT;
-import racecontrol.lpgui.gui.LPButton;
-import racecontrol.lpgui.gui.LPContainer;
-import racecontrol.lpgui.gui.LPLabel;
-import racecontrol.lpgui.gui.LPTextField;
+import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
+import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
+import racecontrol.gui.lpui.LPButton;
+import racecontrol.gui.lpui.LPContainer;
+import racecontrol.gui.lpui.LPLabel;
+import racecontrol.gui.lpui.LPTextField;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

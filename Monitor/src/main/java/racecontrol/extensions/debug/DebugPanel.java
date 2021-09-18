@@ -6,12 +6,12 @@
 package racecontrol.extensions.debug;
 
 import processing.core.PApplet;
-import racecontrol.LookAndFeel;
-import static racecontrol.LookAndFeel.LINE_HEIGHT;
-import racecontrol.lpgui.gui.LPButton;
-import racecontrol.lpgui.gui.LPContainer;
-import racecontrol.lpgui.gui.LPLabel;
-import racecontrol.lpgui.gui.LPTextField;
+import racecontrol.gui.LookAndFeel;
+import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
+import racecontrol.gui.lpui.LPButton;
+import racecontrol.gui.lpui.LPContainer;
+import racecontrol.gui.lpui.LPLabel;
+import racecontrol.gui.lpui.LPTextField;
 
 /**
  *

@@ -5,6 +5,8 @@
  */
 package racecontrol;
 
+import racecontrol.utility.Version;
+import racecontrol.gui.RaceControlApplet;
 import racecontrol.persistance.PersistantConfig;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

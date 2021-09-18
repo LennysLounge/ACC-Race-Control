@@ -7,7 +7,7 @@ package racecontrol.extensions.velocitymap;
 
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.extension.AccClientExtension;
-import racecontrol.lpgui.gui.LPContainer;
+import racecontrol.gui.lpui.LPContainer;
 import racecontrol.client.extension.AccBroadcastingClientExtensionModule;
 
 /**

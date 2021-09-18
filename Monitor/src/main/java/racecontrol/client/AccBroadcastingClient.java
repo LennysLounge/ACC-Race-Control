@@ -54,7 +54,7 @@ import racecontrol.client.extension.AccClientExtension;
 import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.logging.UILogger;
-import racecontrol.lpgui.gui.LPContainer;
+import racecontrol.gui.lpui.LPContainer;
 import racecontrol.client.extension.racereport.RaceReportController;
 
 /**
@@ -614,6 +614,7 @@ public class AccBroadcastingClient {
                 } catch (SocketException e) {
                     if (forceExit) {
                         LOG.info("Socket was closed by user.");
+                        exitState = ExitState.NORMAL;
                     } else {
                         LOG.log(Level.SEVERE, "Socket closed unexpected.", e);
                         exitState = ExitState.PORT_UNREACHABLE;

@@ -11,7 +11,7 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.data.TrackInfo;
 import racecontrol.client.events.TrackDataEvent;
-import racecontrol.lpgui.gui.LPContainer;
+import racecontrol.gui.lpui.LPContainer;
 import java.util.logging.Logger;
 import racecontrol.client.AccBroadcastingClient;
 
