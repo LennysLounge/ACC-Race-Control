@@ -64,7 +64,7 @@ public class BroadcastingPanel
         this.extension = extension;
         this.liveTimingPanel = liveTimingPanel;
 
-        setName("BROADCASTING");
+        setName("Live Timing");
 
         addComponent(liveTimingPanel);
 

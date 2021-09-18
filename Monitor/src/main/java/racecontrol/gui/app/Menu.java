@@ -45,6 +45,10 @@ public class Menu
      */
     private final List<MenuItem> items = new ArrayList<>();
     /**
+     * List of menu items from the bottom.
+     */
+    private final List<MenuItem> itemsBottom = new ArrayList<>();
+    /**
      * Width when expanded.
      */
     private float expandedWidth;
@@ -53,13 +57,13 @@ public class Menu
      */
     private float expandedHeight;
     /**
-     * Item index of the mouse position.
+     * Item of the mouse position.
      */
-    private int mouseOverItemIndex = -1;
+    private MenuItem mouseOverMenuItem;
     /**
-     * Currently selected index.
+     * Currently selected menu item.
      */
-    private int selectedIndex = -1;
+    private MenuItem selectedMenuItem;
 
     public Menu() {
     }
@@ -69,40 +73,53 @@ public class Menu
         applet.fill(COLOR_DARK_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
 
-        int i = 0;
+        float height = 0;
         for (MenuItem item : items) {
-            if (i == mouseOverItemIndex) {
-                applet.fill(COLOR_DARK_RED);
-                applet.rect(0, itemSize * i, getWidth(), itemSize);
-            }
-            if (i == selectedIndex) {
-                applet.fill(COLOR_RED);
-                applet.rect(0, itemSize * i, itemSize * 0.1f, itemSize);
-            }
+            drawMenuItem(applet, item, height);
+            height += itemSize;
+        }
 
-            //draw icon
-            if (item.getIcon() != null) {
-                applet.tint((i == selectedIndex || i == mouseOverItemIndex) ? 255 : 100);
-                item.getIcon().resize((int) (itemSize * 0.6f), (int) (itemSize * 0.6f));
-                applet.image(item.getIcon(), itemSize * 0.3f, itemSize * (i + 0.2f));
-            } else {
-                applet.noFill();
-                applet.stroke(COLOR_WHITE);
-                applet.strokeWeight(3);
-                applet.rect(itemSize * 0.3f, itemSize * (i + 0.2f), itemSize * 0.6f, itemSize * 0.6f);
-                applet.strokeWeight(1);
-                applet.noStroke();
-            }
+        height = getHeight() - itemSize - 10;
+        for (MenuItem item : itemsBottom) {
+            drawMenuItem(applet, item, height);
+            height -= itemSize;
+        }
 
-            if (!collapsed) {
-                //draw text
-                applet.textAlign(LEFT, CENTER);
-                applet.fill((i == selectedIndex || i == mouseOverItemIndex) ? COLOR_WHITE : 100);
-                applet.textFont(LookAndFeel.fontRegular());
-                applet.noStroke();
-                applet.text(item.getTitle(), itemSize + 10, itemSize * (i + 0.5f));
-            }
-            i++;
+    }
+
+    private void drawMenuItem(PApplet applet, MenuItem item, float height) {
+        boolean isMouseOver = item == mouseOverMenuItem;
+        boolean isSelected = item == selectedMenuItem;
+        if (isMouseOver) {
+            applet.fill(COLOR_DARK_RED);
+            applet.rect(0, height, getWidth(), itemSize);
+        }
+        if (isSelected) {
+            applet.fill(COLOR_RED);
+            applet.rect(0, height, itemSize * 0.1f, itemSize);
+        }
+
+        //draw icon
+        if (item.getIcon() != null) {
+            applet.tint((isSelected || isMouseOver) ? 255 : 100);
+            item.getIcon().resize((int) (itemSize * 0.6f), (int) (itemSize * 0.6f));
+            applet.image(item.getIcon(), itemSize * 0.3f, height + itemSize * 0.2f);
+        } else {
+            applet.noFill();
+            applet.stroke(COLOR_WHITE);
+            applet.strokeWeight(3);
+            applet.rect(itemSize * 0.3f, height + itemSize * 0.2f, itemSize * 0.6f, itemSize * 0.6f);
+            applet.strokeWeight(1);
+            applet.noStroke();
+        }
+
+        if (!collapsed) {
+            //draw text
+            applet.textAlign(LEFT, CENTER);
+            applet.fill((isSelected || isMouseOver) ? COLOR_WHITE : 100);
+            applet.textFont(LookAndFeel.fontRegular());
+            applet.noStroke();
+            applet.text(item.getTitle(), itemSize + 10, height + itemSize * 0.5f);
         }
     }
 
@@ -119,28 +136,45 @@ public class Menu
 
     @Override
     public void onMousePressed(int x, int y, int button) {
-        int itemIndex = (int) (y / itemSize);
-        if (itemIndex < items.size()) {
-            int oldIndex = selectedIndex;
-            selectedIndex = itemIndex;
-            items.get(itemIndex).triggerAction(items.get(oldIndex));
+        MenuItem item = getMenuItemForPosition(y);
+        if (item == null) {
+            return;
         }
+        if (button == LEFT
+                && items.indexOf(item) != 0
+                && item != selectedMenuItem) {
+            selectedMenuItem = item;
+            invalidate();
+
+        }
+
+        item.triggerAction(button);
     }
 
     @Override
     public void onMouseMove(int x, int y) {
-        int itemIndex = (int) (y / itemSize);
-        if (itemIndex < items.size()) {
-            if (itemIndex != mouseOverItemIndex) {
-                mouseOverItemIndex = itemIndex;
-                invalidate();
-            }
+        MenuItem item = getMenuItemForPosition(y);
+        if (item != mouseOverMenuItem) {
+            mouseOverMenuItem = item;
+            invalidate();
         }
+    }
+
+    private MenuItem getMenuItemForPosition(int y) {
+        int topIndex = (int) (y / itemSize);
+        int bottomIndex = (int) ((getHeight() - y - 10) / itemSize);
+        if (topIndex < items.size()) {
+            return items.get(topIndex);
+        }
+        if (bottomIndex < itemsBottom.size()) {
+            return itemsBottom.get(bottomIndex);
+        }
+        return null;
     }
 
     @Override
     public void onMouseLeave() {
-        mouseOverItemIndex = -1;
+        mouseOverMenuItem = null;
         invalidate();
     }
 
@@ -167,16 +201,21 @@ public class Menu
         items.add(item);
     }
 
+    public void addMenuItemBottom(MenuItem item) {
+        itemsBottom.add(item);
+    }
+
     public void removeMenuItem(MenuItem item) {
         items.remove(item);
+        itemsBottom.remove(item);
     }
 
     public void setSelectedMenuItem(MenuItem item) {
-        selectedIndex = items.indexOf(item);
+        selectedMenuItem = item;
     }
-
-    public void setSelectedMenuIndex(int index) {
-        selectedIndex = index;
+    
+    public MenuItem getSelectedItem(){
+        return selectedMenuItem;
     }
 
     public static class MenuItem {
@@ -190,34 +229,31 @@ public class Menu
          */
         private PImage icon;
         /**
-         * Click action.
+         * Click action. Consumes an integer that describes which button was
+         * pressed.
          */
-        private final Consumer<MenuItem> action;
+        private Consumer<Integer> action = (button) -> {
+        };
 
-        public MenuItem(String title,
-                PImage icon,
-                Runnable action) {
-            this(title, icon, (MenuItem item) -> action.run());
-        }
-
-        public MenuItem(String title,
-                PImage icon,
-                Consumer<MenuItem> action) {
+        public MenuItem(String title, PImage icon) {
             this.title = title;
             this.icon = icon;
-            this.action = action;
         }
 
         public String getTitle() {
             return title;
         }
 
-        public void triggerAction(MenuItem prev) {
-            action.accept(prev);
+        public void triggerAction(int button) {
+            action.accept(button);
         }
 
         public PImage getIcon() {
             return icon;
+        }
+
+        public void setClickAction(Consumer<Integer> action) {
+            this.action = action;
         }
     }
 

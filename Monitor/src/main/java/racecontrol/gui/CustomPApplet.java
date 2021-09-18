@@ -8,8 +8,6 @@ package racecontrol.gui;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import processing.core.PGraphics;
@@ -32,6 +30,7 @@ public class CustomPApplet extends LPBase {
 
     /**
      * Loads a resource as a PImage
+     *
      * @param resource path to the resource.
      * @return PImage
      */

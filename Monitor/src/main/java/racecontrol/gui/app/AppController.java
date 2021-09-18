@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
+import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.LEFT;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import racecontrol.gui.RaceControlApplet;
@@ -27,6 +29,7 @@ import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.gui.lpui.LPComponent;
+import racecontrol.gui.lpui.LPContainer;
 
 /**
  *
@@ -60,7 +63,13 @@ public class AppController
     private TestPanel testPanel;
 
     private RaceControlController raceControlController;
-
+    /**
+     * Placeholder panel for a detached panel.
+     */
+    private DetachedPlaceholderPanel detachedPlaceholderPanel;
+    /**
+     * Is initialised.
+     */
     private boolean initialised;
     /**
      * Map of components to their window applet.
@@ -86,6 +95,7 @@ public class AppController
         EventBus.register(this);
 
         appPanel = new AppPanel();
+        detachedPlaceholderPanel = new DetachedPlaceholderPanel();
         settingsPanel = new SettingsPanel();
         loggingPanel = new LoggingPanel();
         broadcastingController = new BroadcastingController();
@@ -93,95 +103,82 @@ public class AppController
         raceControlController.initialise();
         testPanel = new TestPanel();
 
-        appPanel.menu.addMenuItem(new MenuItem("Menu",
-                loadResourceAsPImage("/images/RC_Menu_Symbol.png"),
-                (MenuItem prevItem) -> {
-                    appPanel.menu.setSelectedMenuItem(prevItem);
-                    appPanel.menu.toggleCollapse();
-                    appPanel.updateComponents();
-                    appPanel.invalidate();
-                }));
-
-        appPanel.menu.addMenuItem(new MenuItem("Live Timing",
-                loadResourceAsPImage("/images/RC_Menu_LiveTiming.png"),
-                () -> {
-                    appPanel.setActivePage(broadcastingController.getPanel());
-                    appPanel.updateComponents();
-                    appPanel.invalidate();
-                }));
-
-        appPanel.menu.addMenuItem(new MenuItem("Race Control",
-                loadResourceAsPImage("/images/RC_Menu_Control.png"),
-                () -> {
-                    appPanel.setActivePage(raceControlController.getPanel());
-                    appPanel.updateComponents();
-                    appPanel.invalidate();
-                }));
-        /*
-        appPanel.menu.addMenuItem(new MenuItem("Broadcast",
-                loadResourceAsPImage("/images/RC_Menu_Broadcast.png"),
-                () -> {
-                    appPanel.setActivePage(loggingPanel);
-                    appPanel.updateComponents();
-                    appPanel.invalidate();
-                }));
-        appPanel.menu.addMenuItem(new MenuItem("Autopilot",
-                loadResourceAsPImage("/images/RC_Menu_AutoBroadcast.png"),
-                () -> {
-                    appPanel.setActivePage(loggingPanel);
-                    appPanel.updateComponents();
-                    appPanel.invalidate();
-                }));
-         */
-        appPanel.menu.addMenuItem(new MenuItem("Log",
-                loadResourceAsPImage("/images/RC_Menu_LOG.png"),
-                () -> {
-                    appPanel.setActivePage(loggingPanel);
-                    appPanel.updateComponents();
-                    appPanel.invalidate();
-                }));
-        /*
-        appPanel.menu.addMenuItem(new MenuItem("Trackmap",
-                loadResourceAsPImage("/images/RC_Menu_TrackMap.png"),
-                () -> {
-                    appPanel.setActivePage(testPanel);
-                    appPanel.updateComponents();
-                    appPanel.invalidate();
-                }));
-         */
-        appPanel.menu.addMenuItem(new MenuItem("Debug",
-                loadResourceAsPImage("/images/RC_Menu_Debugging.png"),
-                () -> {
-                    appPanel.setActivePage(testPanel);
-                    appPanel.updateComponents();
-                    appPanel.invalidate();
-                }));
-
-        Menu.MenuItem settingsMenuItem = new MenuItem("Settings",
-                loadResourceAsPImage("/images/RC_Menu_Settings.png"),
-                () -> {
-                    appPanel.setActivePage(settingsPanel);
-                    appPanel.updateComponents();
-                    appPanel.invalidate();
-                });
-        appPanel.menu.addMenuItem(settingsMenuItem);
-        appPanel.menu.setVisible(true);
+        appPanel.liveTimingMenuItem.setClickAction(button -> menuItemClicked(appPanel.liveTimingMenuItem, button));
+        appPanel.raceControlMenuItem.setClickAction(button -> menuItemClicked(appPanel.raceControlMenuItem, button));
+        appPanel.debugMenuItem.setClickAction(button -> menuItemClicked(appPanel.debugMenuItem, button));
+        appPanel.logMenuItem.setClickAction(button -> menuItemClicked(appPanel.logMenuItem, button));
+        appPanel.settingsMenuItem.setClickAction(button -> menuItemClicked(appPanel.settingsMenuItem, button));
 
         appPanel.setActivePage(settingsPanel);
-        appPanel.menu.setSelectedMenuItem(settingsMenuItem);
+        appPanel.menu.setSelectedMenuItem(appPanel.settingsMenuItem);
     }
 
     public LPComponent getGUIComponent() {
         return appPanel;
     }
 
+    private void menuItemClicked(MenuItem item, int button) {
+        LPContainer panel = getPanelForMenuItem(item);
+        if (panel != null) {
+            if (button == LEFT) {
+                if (windowPanels.containsKey(panel)) {
+                    // panel is detached so we grab the focus instead.
+                    windowPanels.get(panel).grabFocus();
+                    detachedPlaceholderPanel.setPanelName(panel.getName());
+                    panel = detachedPlaceholderPanel;
+                }
+                appPanel.setActivePage(panel);
+                appPanel.updateComponents();
+                appPanel.invalidate();
+            }
+
+            if (button == CENTER
+                    && panel != settingsPanel
+                    && appPanel.menu.getSelectedItem() == item) {
+                detachPanel(panel);
+            }
+        }
+    }
+
+    private void detachPanel(LPContainer panel) {
+        panel.setPosition(0, 0);
+        PanelWindowApplet applet = launchNewWindow(panel, true);
+        applet.addCloseAction(() -> {
+            if(getPanelForMenuItem(appPanel.menu.getSelectedItem()) == panel){
+                appPanel.setActivePage(panel);
+                appPanel.updateComponents();
+                appPanel.invalidate();
+            }
+        });
+        detachedPlaceholderPanel.setPanelName(panel.getName());
+        detachedPlaceholderPanel.invalidate();
+        appPanel.setActivePage(detachedPlaceholderPanel);
+        appPanel.updateComponents();
+        appPanel.invalidate();
+    }
+
+    private LPContainer getPanelForMenuItem(MenuItem item) {
+        if (item == appPanel.liveTimingMenuItem) {
+            return broadcastingController.getPanel();
+        } else if (item == appPanel.raceControlMenuItem) {
+            return raceControlController.getPanel();
+        } else if (item == appPanel.debugMenuItem) {
+            return testPanel;
+        } else if (item == appPanel.logMenuItem) {
+            return loggingPanel;
+        } else if (item == appPanel.settingsMenuItem) {
+            return settingsPanel;
+        }
+        return null;
+    }
+
     @Override
     public void onEvent(Event e) {
         if (e instanceof RealtimeUpdateEvent) {
-            appPanel.getHeader().invalidate();
+            appPanel.header.invalidate();
         } else if (e instanceof ConnectionOpenedEvent) {
             appPanel.setActivePage(broadcastingController.getPanel());
-            appPanel.menu.setSelectedMenuIndex(1);
+            //appPanel.menu.setSelectedMenuIndex(1);
             appPanel.updateComponents();
             appPanel.invalidate();
         } else if (e instanceof ConnectionClosedEvent) {
@@ -212,7 +209,7 @@ public class AppController
                 windowPanels.remove(panel);
             });
             windowPanels.put(panel, applet);
-        }else{
+        } else {
             windowPanels.get(panel).grabFocus();
         }
         return windowPanels.get(panel);

@@ -19,10 +19,10 @@ import racecontrol.gui.lpui.LPContainer;
 public class TestPanel extends LPContainer {
     
     private final TestStatusPanel testStatusPanel = new TestStatusPanel();
-
+    
     public TestPanel() {
+        setName("Debug");
         AppController appController = AppController.getInstance();
-        
         
         testStatusPanel.closeButton.setAction(()->{
             appController.removeStatusPanel(testStatusPanel);

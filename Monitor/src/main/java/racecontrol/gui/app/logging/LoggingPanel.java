@@ -32,7 +32,7 @@ public class LoggingPanel
     private final LoggingTableModel model = new LoggingTableModel();
 
     public LoggingPanel() {
-        setName("LOGGING");
+        setName("Logging");
 
         table.setTableModel(model);
         addComponent(table);

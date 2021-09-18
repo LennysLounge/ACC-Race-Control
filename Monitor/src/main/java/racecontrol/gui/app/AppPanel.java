@@ -7,7 +7,9 @@ package racecontrol.gui.app;
 
 import java.util.LinkedList;
 import java.util.List;
+import racecontrol.gui.CustomPApplet;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
+import racecontrol.gui.app.Menu.MenuItem;
 import racecontrol.gui.lpui.LPComponent;
 import racecontrol.gui.lpui.LPContainer;
 
@@ -21,11 +23,43 @@ public class AppPanel
     /**
      * Header shows the connection status and basic information.
      */
-    private final HeaderPanel header;
+    protected final HeaderPanel header;
     /**
      * Menu to select the visible page.
      */
     protected final Menu menu;
+    /**
+     * Live timing menu item.
+     */
+    protected final MenuItem liveTimingMenuItem;
+    /**
+     * Race control menu item.
+     */
+    protected final MenuItem raceControlMenuItem;
+    /**
+     * Broadcast menu item.
+     */
+    protected final MenuItem broadcastMenuItem;
+    /**
+     * Autopilot menu item.
+     */
+    protected final MenuItem autopilotMenuItem;
+    /**
+     * Trackmap menu item.
+     */
+    protected final MenuItem trackmapMenuItem;
+    /**
+     * Log menu item.
+     */
+    protected final MenuItem logMenuItem;
+    /**
+     * Debug menu item.
+     */
+    protected final MenuItem debugMenuItem;
+    /**
+     * Settings menu item.
+     */
+    protected final MenuItem settingsMenuItem;
     /**
      * Currently active page.
      */
@@ -41,6 +75,45 @@ public class AppPanel
 
         menu = new Menu();
         addComponent(menu);
+        MenuItem menuItem = new MenuItem("Menu", ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Symbol.png"));
+        menuItem.setClickAction((button) -> {
+            menu.toggleCollapse();
+            updateComponents();
+            invalidate();
+        });
+        menu.addMenuItem(menuItem);
+
+        liveTimingMenuItem = new MenuItem("Live Timing",
+                ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_LiveTiming.png"));
+        menu.addMenuItem(liveTimingMenuItem);
+
+        raceControlMenuItem = new MenuItem("Race Control",
+                ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Control.png"));
+        menu.addMenuItem(raceControlMenuItem);
+
+        broadcastMenuItem = new MenuItem("Broadcast",
+                ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Broadcast.png"));
+        menu.addMenuItem(broadcastMenuItem);
+
+        autopilotMenuItem = new MenuItem("Autopilot",
+                ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_AutoBroadcast.png"));
+        menu.addMenuItem(autopilotMenuItem);
+
+        trackmapMenuItem = new MenuItem("Trackmap",
+                ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_TrackMap.png"));
+        menu.addMenuItem(trackmapMenuItem);
+
+        logMenuItem = new MenuItem("Log",
+                ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_LOG.png"));
+        menu.addMenuItem(logMenuItem);
+
+        debugMenuItem = new MenuItem("Debug",
+                ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Debugging.png"));
+        menu.addMenuItem(debugMenuItem);
+
+        settingsMenuItem = new MenuItem("Settings",
+                ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Settings.png"));
+        menu.addMenuItemBottom(settingsMenuItem);
 
         updateComponents();
     }
@@ -69,10 +142,6 @@ public class AppPanel
             activePage.setSize(getWidth() - menuWidth, getHeight() - headerHeight);
             activePage.setPosition(menuWidth, headerHeight);
         }
-    }
-
-    public HeaderPanel getHeader() {
-        return header;
     }
 
     public void setActivePage(LPComponent page) {

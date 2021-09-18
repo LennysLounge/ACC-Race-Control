@@ -41,6 +41,7 @@ public class RaceControlPanel
     };
 
     public RaceControlPanel() {
+        setName("Race Control");
         table = new LPTable();
         addComponent(table);
 

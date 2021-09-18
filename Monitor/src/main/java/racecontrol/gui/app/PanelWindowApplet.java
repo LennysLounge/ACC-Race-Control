@@ -6,19 +6,13 @@
 package racecontrol.gui.app;
 
 import com.jogamp.nativewindow.WindowClosingProtocol.WindowClosingMode;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import processing.core.PApplet;
-import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.event.KeyEvent;
 import racecontrol.gui.CustomPApplet;
-import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.lpui.LPComponent;
 
 /**
