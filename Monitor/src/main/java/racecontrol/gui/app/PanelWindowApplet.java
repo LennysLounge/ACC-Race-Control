@@ -103,21 +103,6 @@ public class PanelWindowApplet
         this.closeActions.add(closeAction);
     }
 
-    private PImage loadResourceAsPImage(String resource) {
-        try {
-            BufferedImage bi = ImageIO.read(RaceControlApplet.class.getResourceAsStream(resource));
-            PGraphics g = createGraphics(bi.getWidth(), bi.getHeight());
-            g.beginDraw();
-            Graphics2D g2d = (Graphics2D) g.getNative();
-            g2d.drawImage(bi, 0, 0, bi.getWidth(), bi.getHeight(), null);
-            g.endDraw();
-            PImage b = g.copy();
-            return b;
-        } catch (IOException ex) {
-            return null;
-        }
-    }
-
     /**
      * Moves this window on top and grabs the focus.
      */

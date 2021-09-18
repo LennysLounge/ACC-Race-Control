@@ -70,7 +70,7 @@ public class RaceControlApplet extends CustomPApplet {
             surface.setIcon(i);
         }
         frameRate(30);
-        
+
         LPComponent.setStaticApplet(this);
 
         //create the connection client.
@@ -88,12 +88,13 @@ public class RaceControlApplet extends CustomPApplet {
     public void draw() {
 
         super.draw();
-        
-        List<Runnable> tasks = new ArrayList<>(runLater);
-        for(Runnable task: tasks){
-            task.run();
+
+        synchronized (runLater) {
+            for (Runnable task : runLater) {
+                task.run();
+            }
+            runLater.clear();
         }
-        runLater.clear();
     }
 
     @Override
@@ -116,22 +117,9 @@ public class RaceControlApplet extends CustomPApplet {
         super.exit();
     }
 
-    private PImage loadResourceAsPImage(String resource) {
-        try {
-            BufferedImage bi = ImageIO.read(RaceControlApplet.class.getResourceAsStream(resource));
-            PGraphics g = createGraphics(bi.getWidth(), bi.getHeight());
-            g.beginDraw();
-            Graphics2D g2d = (Graphics2D) g.getNative();
-            g2d.drawImage(bi, 0, 0, bi.getWidth(), bi.getHeight(), null);
-            g.endDraw();
-            PImage b = g.copy();
-            return b;
-        } catch (IOException ex) {
-            return null;
-        }
-    }
-
     public static void runLater(Runnable task) {
-        runLater.add(task);
+        synchronized (runLater) {
+            runLater.add(task);
+        }
     }
 }
