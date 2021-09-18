@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Leonard Sch?ngel
+ * Copyright (c) 2021 Leonard Schüngel
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
@@ -12,7 +12,6 @@ import racecontrol.gui.lpui.LPButton;
 import racecontrol.gui.lpui.LPContainer;
 import racecontrol.gui.lpui.LPLabel;
 import racecontrol.gui.lpui.LPNumberTextField;
-import racecontrol.gui.lpui.LPTextField;
 
 /**
  *

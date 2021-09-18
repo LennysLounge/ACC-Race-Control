@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.results;
+package racecontrol.client.extension.results;
 
 import racecontrol.client.extension.contact.ContactInfo;
 import racecontrol.client.data.BroadcastingEvent;

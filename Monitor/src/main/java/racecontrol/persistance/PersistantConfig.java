@@ -5,7 +5,7 @@
  */
 package racecontrol.persistance;
 
-import racecontrol.extensions.velocitymap.VelocityMapExtension;
+import racecontrol.client.extension.velocitymap.VelocityMapExtension;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

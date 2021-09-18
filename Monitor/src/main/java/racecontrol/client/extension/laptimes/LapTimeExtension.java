@@ -3,12 +3,11 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.laptimes;
+package racecontrol.client.extension.laptimes;
 
 import racecontrol.client.data.SessionId;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.eventbus.Event;
-import racecontrol.client.extension.AccClientExtension;
 import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.CarInfo;
@@ -17,7 +16,6 @@ import racecontrol.client.data.RealtimeInfo;
 import racecontrol.client.data.enums.LapType;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.utility.TimeUtils;
-import racecontrol.gui.lpui.LPContainer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,6 +30,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import racecontrol.eventbus.EventBus;
+import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
 
 /**
@@ -39,12 +38,16 @@ import racecontrol.logging.UILogger;
  * @author Leonard
  */
 public class LapTimeExtension
-        extends AccClientExtension {
+        implements EventListener {
 
     /**
      * This classes logger.
      */
     private static final Logger LOG = Logger.getLogger(ContactExtension.class.getName());
+    /**
+     * Reference to the game client.
+     */
+    private final AccBroadcastingClient client;
     /**
      * Counts the laps for each car
      */
@@ -74,9 +77,10 @@ public class LapTimeExtension
      */
     private final boolean isLoggingEnabled;
 
-    public LapTimeExtension(AccBroadcastingClient client, boolean isLoggingEnabled) {
-        super(client);
-        this.isLoggingEnabled = isLoggingEnabled;
+    public LapTimeExtension() {
+        EventBus.register(this);
+        client = AccBroadcastingClient.getClient();
+        this.isLoggingEnabled = false;
         if (isLoggingEnabled) {
             createFolder();
         }
@@ -108,7 +112,7 @@ public class LapTimeExtension
                 lapCount.put(info.getCarId(), info.getLaps());
                 LapInfo lap = info.getLastLap();
                 boolean isPersonalBest = lap.getLapTimeMS() == info.getBestSessionLap().getLapTimeMS();
-                boolean isSessionBest = lap.getLapTimeMS() == getClient().getModel().getSessionInfo().getBestSessionLap().getLapTimeMS();
+                boolean isSessionBest = lap.getLapTimeMS() == client.getModel().getSessionInfo().getBestSessionLap().getLapTimeMS();
                 onLapComplete(lap, isPersonalBest, isSessionBest);
             }
         } else {
@@ -117,7 +121,7 @@ public class LapTimeExtension
     }
 
     private void onLapComplete(LapInfo lap, boolean isPB, boolean isSB) {
-        CarInfo car = getClient().getModel().getCar(lap.getCarId());
+        CarInfo car = client.getModel().getCar(lap.getCarId());
 
         boolean isFirstLap = lapCount.get(lap.getCarId()) == 1;
         int lapNr = lapCount.get(lap.getCarId());
@@ -154,7 +158,7 @@ public class LapTimeExtension
 
         UILogger.log(message);
         LOG.info(message);
-        
+
         EventBus.publish(new LapCompletedEvent(car, lap.getLapTimeMS()));
     }
 
@@ -162,7 +166,7 @@ public class LapTimeExtension
         try ( PrintWriter writer = new PrintWriter(logFile)) {
 
             for (Entry<Integer, List<Integer>> entry : laps.entrySet()) {
-                CarInfo car = getClient().getModel().getCar(entry.getKey());
+                CarInfo car = client.getModel().getCar(entry.getKey());
                 writer.print(car.getCarNumber());
                 writer.print("," + car.getDriver().getFirstName() + " " + car.getDriver().getLastName());
                 for (int lap : entry.getValue()) {
@@ -196,10 +200,5 @@ public class LapTimeExtension
             }
         }
 
-    }
-
-    @Override
-    public LPContainer getPanel() {
-        return null;
     }
 }

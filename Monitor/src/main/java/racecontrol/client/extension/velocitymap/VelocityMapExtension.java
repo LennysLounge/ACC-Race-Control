@@ -3,12 +3,9 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.velocitymap;
+package racecontrol.client.extension.velocitymap;
 
 import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
-import racecontrol.client.extension.AccClientExtension;
 import racecontrol.client.data.RealtimeInfo;
 import racecontrol.client.data.TrackInfo;
 import static racecontrol.client.data.enums.CarLocation.TRACK;
@@ -25,13 +22,14 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import racecontrol.client.AccBroadcastingClient;
+import racecontrol.eventbus.EventListener;
 
 /**
  *
  * @author Leonard
  */
 public class VelocityMapExtension
-        extends AccClientExtension {
+        implements EventListener {
 
     private final static Logger LOG = Logger.getLogger(VelocityMapExtension.class.getName());
 
@@ -41,19 +39,13 @@ public class VelocityMapExtension
     private final int mapSize = 200;
     private String trackName = "none";
 
-    public VelocityMapExtension(AccBroadcastingClient client) {
-        super(client);
+    public VelocityMapExtension() {
         panel = new VelocityMapPanel(this);
         for (int i = 0; i < mapSize; i++) {
             velocityMap.add(-1f);
             velocityMapTotal.add(new ArrayList<>());
         }
         panel.setVelocityMap(velocityMap);
-    }
-
-    @Override
-    public LPContainer getPanel() {
-        return panel;
     }
 
     @Override

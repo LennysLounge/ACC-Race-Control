@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Leonard Sch?ngel
+ * Copyright (c) 2021 Leonard Schüngel
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
@@ -28,8 +28,8 @@ import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
-import racecontrol.extensions.laptimes.LapCompletedEvent;
-import racecontrol.extensions.results.ResultsExtension;
+import racecontrol.client.extension.laptimes.LapCompletedEvent;
+import racecontrol.client.extension.results.ResultsExtension;
 import racecontrol.utility.TimeUtils;
 
 /**

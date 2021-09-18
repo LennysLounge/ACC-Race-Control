@@ -34,27 +34,21 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import static java.util.Objects.requireNonNull;
-import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import racecontrol.client.events.BroadcastingEventEvent;
 import racecontrol.client.events.EntryListUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
-import racecontrol.client.extension.AccBroadcastingClientExtensionModule;
-import racecontrol.client.extension.AccClientExtension;
 import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.logging.UILogger;
-import racecontrol.gui.lpui.LPContainer;
 import racecontrol.client.extension.racereport.RaceReportController;
 
 /**
@@ -129,22 +123,8 @@ public class AccBroadcastingClient {
      * Counts how many packets have been received.
      */
     private static int packetCount = 0;
-    /**
-     * List of all extension modules.
-     */
-    private final List<AccBroadcastingClientExtensionModule> extensionModules = new LinkedList<>();
-    /**
-     * Map from extension class to the extension instance.
-     */
-    private final Map<Class, AccClientExtension> extensions = new LinkedHashMap<>();
-    /**
-     * List that containes all extension classes that are currently beeing
-     * created.
-     */
-    private final List<Class> circularDependencyPrevention = new LinkedList<>();
 
     private AccBroadcastingClient() {
-        loadModules();
     }
 
     public void initialise() {
@@ -201,10 +181,6 @@ public class AccBroadcastingClient {
         //create new data model and sessionId
         model = new AccBroadcastingData();
         sessionId = new SessionId(SessionType.NONE, -1, 0);
-
-        //create extensions
-        removeExtensions();
-        createExtensions();
 
         startListernerThread();
     }
@@ -284,32 +260,6 @@ public class AccBroadcastingClient {
      */
     public SessionId getSessionId() {
         return sessionId;
-    }
-
-    public List<AccBroadcastingClientExtensionModule> getExtensionModules() {
-        return extensionModules;
-    }
-
-    public Collection<AccClientExtension> getExtensions() {
-        return extensions.values();
-    }
-
-    public Collection<LPContainer> getExtensionPanels() {
-        List<LPContainer> panels = new LinkedList<>();
-        for (AccBroadcastingClientExtensionModule module : extensionModules) {
-            if (!module.isEnabled()) {
-                continue;
-            }
-            for (AccClientExtension extension : extensions.values()) {
-                if (module.getExtensionClass().isInstance(extension)) {
-                    LPContainer p = extension.getPanel();
-                    if (p != null) {
-                        panels.add(p);
-                    }
-                }
-            }
-        }
-        return panels;
     }
 
     /**
@@ -451,26 +401,6 @@ public class AccBroadcastingClient {
         socket.close();
     }
 
-    public <T extends AccClientExtension> T getOrCreateExtension(Class<T> clazz) {
-        if (!extensions.containsKey(clazz)) {
-            if (circularDependencyPrevention.contains(clazz)) {
-                //throw exception
-            }
-            circularDependencyPrevention.add(clazz);
-
-            extensionModules.stream()
-                    .filter(module -> module.getExtensionClass() == clazz)
-                    .forEach(module -> {
-                        AccClientExtension extension = module.createExtension(this);
-                        EventBus.register(extension);
-                        extensions.put(clazz, extension);
-                    });
-
-            circularDependencyPrevention.remove(clazz);
-        }
-        return clazz.cast(extensions.get(clazz));
-    }
-
     private void sendRequest(byte[] requestBytes) {
         if (socket.isConnected()) {
             try {
@@ -479,25 +409,6 @@ public class AccBroadcastingClient {
                 LOG.log(Level.SEVERE, "Error sending request.", e);
             }
         }
-    }
-
-    private void loadModules() {
-        ServiceLoader.load(AccBroadcastingClientExtensionModule.class).forEach(module -> {
-            LOG.info("Loading extension " + module.getClass().getSimpleName());
-            extensionModules.add(module);
-        });
-    }
-
-    private void createExtensions() {
-        extensionModules.stream()
-                .filter(module -> module.isEnabled())
-                .forEach(module -> getOrCreateExtension(module.getExtensionClass()));
-    }
-
-    private void removeExtensions() {
-        extensions.values().stream()
-                .forEach(extension -> EventBus.unregister(extension));
-        extensions.clear();
     }
 
     public enum ExitState {

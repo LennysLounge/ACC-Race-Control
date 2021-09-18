@@ -13,7 +13,6 @@ import racecontrol.client.data.SessionInfo;
 import racecontrol.client.data.TrackInfo;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.TrackDataEvent;
-import racecontrol.client.extension.AccClientExtension;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;

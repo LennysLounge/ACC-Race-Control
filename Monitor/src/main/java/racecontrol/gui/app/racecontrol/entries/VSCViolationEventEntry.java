@@ -1,11 +1,10 @@
 /*
- * Copyright (c) 2021 Leonard Sch?ngel
+ * Copyright (c) 2021 Leonard Schüngel
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
 package racecontrol.gui.app.racecontrol.entries;
 
-import static java.awt.SystemColor.text;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CLOSE;
@@ -141,10 +140,10 @@ public class VSCViolationEventEntry
         applet.fill(COLOR_WHITE);
         applet.noStroke();
         applet.textFont(LookAndFeel.fontRegular());
-        applet.textAlign(RIGHT, CENTER);        
+        applet.textAlign(RIGHT, CENTER);
         String speed = String.format("+%d kmh,", v.getSpeedOver());
         applet.text(speed, w + 110, LINE_HEIGHT / 2f);
-        
+
         String time = TimeUtils.asDelta(v.getTimeOver());
         applet.text(time, w + 210, LINE_HEIGHT / 2f);
 

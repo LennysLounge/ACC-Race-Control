@@ -3,12 +3,9 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.results;
+package racecontrol.client.extension.results;
 
 import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
-import racecontrol.client.extension.AccClientExtension;
 import racecontrol.client.extension.contact.ContactEvent;
 import racecontrol.client.events.BroadcastingEventEvent;
 import racecontrol.client.data.SessionId;
@@ -32,14 +29,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import racecontrol.client.AccBroadcastingClient;
+import racecontrol.eventbus.EventListener;
 
 /**
  *
  * @author Leonard
  */
 public class ResultsExtension
-        extends AccClientExtension {
+        implements EventListener {
 
     private static final Logger LOG = Logger.getLogger(ResultsExtension.class.getName());
 
@@ -54,8 +51,7 @@ public class ResultsExtension
 
     private final IncidentReport report = new IncidentReport();
 
-    public ResultsExtension(AccBroadcastingClient client) {
-        super(client);
+    public ResultsExtension() {
     }
 
     @Override
@@ -93,11 +89,6 @@ public class ResultsExtension
         }
     }
 
-    @Override
-    public LPContainer getPanel() {
-        return null;
-    }
-
     private void createNewFile(SessionId id) {
         LOG.info("Session Changed, creating dirs and files");
 
@@ -125,10 +116,6 @@ public class ResultsExtension
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error writing results to file: {}.\ncurrentFilePath:" + currentFilePath, e);
         }
-    }
-
-    private String getCarNumberAndLapCount(CarInfo car) {
-        return car.getCarNumber() + " [" + (car.getRealtime().getLaps() + 1) + "]";
     }
 
 }

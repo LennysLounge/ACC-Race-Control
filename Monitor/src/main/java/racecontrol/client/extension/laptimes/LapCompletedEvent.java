@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2021 Leonard Sch?ngel
+ * Copyright (c) 2021 Leonard Schüngel
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.extensions.laptimes;
+package racecontrol.client.extension.laptimes;
 
 import racecontrol.client.data.CarInfo;
 import racecontrol.eventbus.Event;
