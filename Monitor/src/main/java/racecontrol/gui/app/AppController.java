@@ -178,7 +178,7 @@ public class AppController
             appPanel.header.invalidate();
         } else if (e instanceof ConnectionOpenedEvent) {
             appPanel.setActivePage(broadcastingController.getPanel());
-            //appPanel.menu.setSelectedMenuIndex(1);
+            appPanel.menu.setSelectedMenuItem(appPanel.liveTimingMenuItem);
             appPanel.updateComponents();
             appPanel.invalidate();
         } else if (e instanceof ConnectionClosedEvent) {
