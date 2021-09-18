@@ -69,6 +69,7 @@ public class PersistantConfig {
     /**
      * Load config.
      */
+    @SuppressWarnings("unchecked")
     public static void init() {
         if (initialised) {
             return;

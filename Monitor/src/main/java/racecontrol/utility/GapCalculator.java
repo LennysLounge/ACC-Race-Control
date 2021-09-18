@@ -39,6 +39,7 @@ public class GapCalculator {
      */
     private float lapTime;
 
+    @SuppressWarnings("unchecked")
     public void loadVMapForTrack(String trackName) {
         try {
             InputStream in = getClass().getResourceAsStream("/velocitymap/" + trackName + ".vMap");
