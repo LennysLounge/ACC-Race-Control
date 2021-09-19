@@ -5,6 +5,8 @@
  */
 package racecontrol.gui.app.statuspanel;
 
+import racecontrol.client.events.ReplayEndedEvent;
+import racecontrol.client.events.ReplayStartedEvent;
 import racecontrol.client.extension.replayoffset.ReplayOffsetSearchStartedEvent;
 import racecontrol.client.extension.replayoffset.ReplayStartKnownEvent;
 import racecontrol.eventbus.Event;
@@ -36,7 +38,15 @@ public class StatusPanelManager
     /**
      * The replay offset search status panel.
      */
-    private ReplayOffsetSearchStatusPanel replayOffsetSearchStatusPanel;
+    private final ReplayOffsetSearchStatusPanel replayOffsetSearchStatusPanel;
+    /**
+     * True if the program is currently searching for the replay time.
+     */
+    private boolean isReplaySearchGoingOn;
+    /**
+     * The replay playing status panel.
+     */
+    private final ReplayPlayingStatusPanel replayPlayingStatusPanel;
 
     public static StatusPanelManager getInstance() {
         if (instance == null) {
@@ -48,6 +58,7 @@ public class StatusPanelManager
     private StatusPanelManager() {
         EventBus.register(this);
         replayOffsetSearchStatusPanel = new ReplayOffsetSearchStatusPanel();
+        replayPlayingStatusPanel = new ReplayPlayingStatusPanel();
     }
 
     public void initialise(AppPanel panel) {
@@ -73,9 +84,16 @@ public class StatusPanelManager
     public void onEvent(Event e) {
         if (e instanceof ReplayOffsetSearchStartedEvent) {
             addStatusPanel(replayOffsetSearchStatusPanel);
+            isReplaySearchGoingOn = true;
         } else if (e instanceof ReplayStartKnownEvent) {
             removeStatusPanel(replayOffsetSearchStatusPanel);
+            isReplaySearchGoingOn = false;
+        } else if (e instanceof ReplayStartedEvent) {
+            if (!isReplaySearchGoingOn) {
+                addStatusPanel(replayPlayingStatusPanel);
+            }
+        } else if (e instanceof ReplayEndedEvent) {
+            removeStatusPanel(replayPlayingStatusPanel);
         }
     }
-
 }

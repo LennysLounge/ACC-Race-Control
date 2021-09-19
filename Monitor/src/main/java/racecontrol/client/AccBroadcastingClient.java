@@ -46,6 +46,8 @@ import java.util.logging.Logger;
 import racecontrol.client.events.BroadcastingEventEvent;
 import racecontrol.client.events.EntryListUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
+import racecontrol.client.events.ReplayEndedEvent;
+import racecontrol.client.events.ReplayStartedEvent;
 import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIController;
 import racecontrol.client.extension.laptimes.LapTimeExtension;
@@ -571,6 +573,7 @@ public class AccBroadcastingClient {
 
         @Override
         public void onRealtimeUpdate(SessionInfo sessionInfo) {
+            SessionInfo oldInfo = model.getSessionInfo();
             model = model.withSessionInfo(sessionInfo);
 
             //Check for disconnected cars.
@@ -605,23 +608,36 @@ public class AccBroadcastingClient {
                 sessionPhase = SessionPhase.getNext(sessionPhase);
                 onSessionPhaseChaged(sessionPhase, sessionInfo);
             }
-            //Set cameras when starting a replay.
-            if (sessionInfo.isReplayPlaying() && switchCameraForReplay) {
-                if (replayCarId != -1) {
-                    sendChangeFocusRequest(replayCarId);
+            // find replay start and end
+            boolean replayStarted = !oldInfo.isReplayPlaying() && sessionInfo.isReplayPlaying();
+            boolean replayEnded = oldInfo.isReplayPlaying() && !sessionInfo.isReplayPlaying();
+
+            if (replayStarted) {
+                EventBus.publish(new ReplayStartedEvent());
+
+                //set cameras when starting a replay with camera control.
+                if (switchCameraForReplay) {
+                    if (replayCarId != -1) {
+                        sendChangeFocusRequest(replayCarId);
+                    }
+                    if (replayCameraSet != "" && replayCamera != "") {
+                        sendSetCameraRequest(replayCameraSet, replayCamera);
+                    }
+                    switchCameraForReplay = false;
+                    resetCameraWhenReplayIsDone = true;
                 }
-                if (replayCameraSet != "" && replayCamera != "") {
-                    sendSetCameraRequest(replayCameraSet, replayCamera);
-                }
-                switchCameraForReplay = false;
-                resetCameraWhenReplayIsDone = true;
             }
-            //set cameras when a replay is done.
-            if (!sessionInfo.isReplayPlaying() && resetCameraWhenReplayIsDone) {
-                sendSetCameraRequest(
-                        model.getSessionInfo().getActiveCameraSet(),
-                        model.getSessionInfo().getActiveCamera());
-                resetCameraWhenReplayIsDone = false;
+
+            if (replayEnded) {
+                EventBus.publish(new ReplayEndedEvent());
+
+                //set cameras when a replay is done.
+                if (resetCameraWhenReplayIsDone) {
+                    sendSetCameraRequest(
+                            model.getSessionInfo().getActiveCameraSet(),
+                            model.getSessionInfo().getActiveCamera());
+                    resetCameraWhenReplayIsDone = false;
+                }
             }
 
             EventBus.publish(new RealtimeUpdateEvent(sessionInfo));
