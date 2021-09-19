@@ -5,6 +5,7 @@
  */
 package racecontrol.gui.app;
 
+import racecontrol.gui.app.statuspanel.StatusPanelManager;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;

@@ -5,6 +5,7 @@
  */
 package racecontrol.gui.app;
 
+import racecontrol.gui.app.statuspanel.StatusPanelManager;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;

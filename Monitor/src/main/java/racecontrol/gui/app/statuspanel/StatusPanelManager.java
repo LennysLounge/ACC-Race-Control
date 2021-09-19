@@ -3,8 +3,14 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.gui.app;
+package racecontrol.gui.app.statuspanel;
 
+import racecontrol.client.extension.replayoffset.ReplayOffsetSearchStartedEvent;
+import racecontrol.client.extension.replayoffset.ReplayStartKnownEvent;
+import racecontrol.eventbus.Event;
+import racecontrol.eventbus.EventBus;
+import racecontrol.eventbus.EventListener;
+import racecontrol.gui.app.AppPanel;
 import racecontrol.gui.lpui.LPComponent;
 
 /**
@@ -12,7 +18,8 @@ import racecontrol.gui.lpui.LPComponent;
  *
  * @author Leonard
  */
-public class StatusPanelManager {
+public class StatusPanelManager
+        implements EventListener {
 
     /**
      * Singelton instance.
@@ -26,12 +33,21 @@ public class StatusPanelManager {
      * Indicates that the instance is initialised.
      */
     private boolean initialised;
+    /**
+     * The replay offset search status panel.
+     */
+    private ReplayOffsetSearchStatusPanel replayOffsetSearchStatusPanel;
 
     public static StatusPanelManager getInstance() {
         if (instance == null) {
             instance = new StatusPanelManager();
         }
         return instance;
+    }
+
+    private StatusPanelManager() {
+        EventBus.register(this);
+        replayOffsetSearchStatusPanel = new ReplayOffsetSearchStatusPanel();
     }
 
     public void initialise(AppPanel panel) {
@@ -52,4 +68,14 @@ public class StatusPanelManager {
         }
         panel.removeStatusPanel(statusPanel);
     }
+
+    @Override
+    public void onEvent(Event e) {
+        if (e instanceof ReplayOffsetSearchStartedEvent) {
+            addStatusPanel(replayOffsetSearchStatusPanel);
+        } else if (e instanceof ReplayStartKnownEvent) {
+            removeStatusPanel(replayOffsetSearchStatusPanel);
+        }
+    }
+
 }

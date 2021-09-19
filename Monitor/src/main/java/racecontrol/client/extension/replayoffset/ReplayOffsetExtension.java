@@ -268,6 +268,7 @@ public class ReplayOffsetExtension
         if (isReplayTimeKnown()) {
             return;
         }
+        EventBus.publish(new ReplayOffsetSearchStartedEvent());
         searchStepSize = 300000;
         searchStep = 1;
         upperBound = System.currentTimeMillis() + searchStepSize;

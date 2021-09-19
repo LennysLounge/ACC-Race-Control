@@ -13,7 +13,7 @@ import racecontrol.client.events.AfterPacketReceivedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
-import racecontrol.gui.app.StatusPanelManager;
+import racecontrol.gui.app.statuspanel.StatusPanelManager;
 
 /**
  *
