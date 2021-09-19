@@ -5,6 +5,7 @@
  */
 package racecontrol.client.extension.googlesheetsapi;
 
+import com.google.api.services.sheets.v4.model.Spreadsheet;
 import java.io.FileNotFoundException;
 import racecontrol.Main;
 import racecontrol.client.data.SessionId;
@@ -99,6 +100,10 @@ public class GoogleSheetsAPIController
      * List of recently connected cars to be send to the entry list.
      */
     private final List<CarInfo> carConnections = new LinkedList<>();
+    /**
+     * Info about the connected spreadsheet.
+     */
+    private Spreadsheet spreadsheet;
 
     public static GoogleSheetsAPIController getInstance() {
         if (instance == null) {
@@ -254,6 +259,9 @@ public class GoogleSheetsAPIController
         };
         eventLoop.start();
 
+        //get spreasheet data
+        queue.add(new GetSpreadsheetEvent());
+        
         //set session.
         onSessionChanged(client.getSessionId());
         queue.add(new SendCarConnectedEvent(new LinkedList<>(client.getModel().getCarsInfo().values())));
@@ -286,6 +294,13 @@ public class GoogleSheetsAPIController
     public boolean isRunning() {
         return running;
     }
+    
+    public String getSpreadsheetTitle(){
+        if(spreadsheet == null){
+            return "";
+        }
+        return spreadsheet.getProperties().getTitle();
+    }
 
     private void eventLoop() throws InterruptedException {
         while (running) {
@@ -302,6 +317,9 @@ public class GoogleSheetsAPIController
             }
             if (o instanceof SendCarConnectedEvent) {
                 sendCarEntries((SendCarConnectedEvent) o);
+            }
+            if (o instanceof GetSpreadsheetEvent) {
+                getSpreadsheet();
             }
         }
     }
@@ -391,6 +409,14 @@ public class GoogleSheetsAPIController
         }
     }
 
+    private void getSpreadsheet() {
+        try {
+            spreadsheet = sheetService.getSpreadsheet();
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error getting spreadsheet data", e);
+        }
+    }
+
     public LPContainer getPanel() {
         return panel;
     }
@@ -416,6 +442,9 @@ public class GoogleSheetsAPIController
     }
 
     private class QuitEvent {
+    }
+
+    private class GetSpreadsheetEvent {
     }
 
     private class GreenFlagEvent {

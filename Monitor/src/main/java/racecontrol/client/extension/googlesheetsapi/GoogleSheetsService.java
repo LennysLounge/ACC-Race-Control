@@ -17,6 +17,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
+import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import java.io.FileInputStream;
@@ -143,6 +144,12 @@ public class GoogleSheetsService {
         ValueRange response = request.execute();
 
         return response.getValues();
+    }
+
+    public Spreadsheet getSpreadsheet() throws IOException {
+        Sheets.Spreadsheets.Get request = sheetService.spreadsheets().get(spreadSheetId);
+
+        return request.execute();
     }
 
 }

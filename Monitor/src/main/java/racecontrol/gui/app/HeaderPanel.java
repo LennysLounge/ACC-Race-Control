@@ -21,6 +21,7 @@ import static racecontrol.gui.LookAndFeel.fontRegular;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
+import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIController;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.lpui.LPContainer;
 
@@ -31,15 +32,18 @@ import racecontrol.gui.lpui.LPContainer;
 public class HeaderPanel
         extends LPContainer {
 
+    /**
+     * Reference to the game client;
+     */
     private final AccBroadcastingClient client;
     /**
-     * Reference to the replay offset extension.
+     * Reference to the google sheets extension.
      */
-    private final ReplayOffsetExtension replayOffsetExtension;
+    private final GoogleSheetsAPIController googleSheetController;
 
     public HeaderPanel() {
         this.client = AccBroadcastingClient.getClient();
-        replayOffsetExtension = ReplayOffsetExtension.getInstance();
+        this.googleSheetController = GoogleSheetsAPIController.getInstance();
     }
 
     @Override
@@ -48,29 +52,35 @@ public class HeaderPanel
             applet.fill(COLOR_DARK_DARK_GRAY);
             applet.noStroke();
             applet.rect(0, 0, getWidth(), getHeight());
-            int y = 0;
 
-            String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
-            String sessionName = sessionIdToString(client.getSessionId());
-            String packetsReceived = "Packets received: " + client.getPacketCount();
             applet.fill(255);
             applet.textAlign(LEFT, CENTER);
             applet.textFont(fontRegular());
-            applet.text(packetsReceived, 20, y + LINE_HEIGHT * 0.5f);
-            
+            String conId = "Connection ID: " + client.getModel().getConnectionID();
+            applet.text(conId, 10, LINE_HEIGHT * 0.5f);
+
+            if (googleSheetController.isRunning()) {
+                String googleSheetsActive = "Connected to:  \""
+                        + googleSheetController.getSpreadsheetTitle() + "\"";
+                applet.text(googleSheetsActive, 200, LINE_HEIGHT * 0.5f);
+            }
+
             applet.textAlign(RIGHT, CENTER);
             applet.textSize(TEXT_SIZE * 0.8f);
+            String sessionName = sessionIdToString(client.getSessionId());
             float sessionNameWidth = applet.textWidth(sessionName);
-            applet.text(sessionName, getWidth() - 10, y + LINE_HEIGHT * 0.5f);
+            applet.text(sessionName, getWidth() - 10, LINE_HEIGHT * 0.5f);
+
             applet.textFont(fontMedium());
             applet.textSize(TEXT_SIZE);
+            String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().getSessionInfo().getSessionEndTime());
             applet.text(sessionTimeLeft,
                     getWidth() - sessionNameWidth - 27,
-                    y + LINE_HEIGHT / 2f);
+                    LINE_HEIGHT * 0.5f);
 
             applet.fill(0xff359425);
             applet.rect(getWidth() - sessionNameWidth - 22,
-                    y + LINE_HEIGHT * 0.1f,
+                    LINE_HEIGHT * 0.1f,
                     LINE_HEIGHT * 0.175f, LINE_HEIGHT * 0.8f);
         } else {
             applet.fill(COLOR_RED);
