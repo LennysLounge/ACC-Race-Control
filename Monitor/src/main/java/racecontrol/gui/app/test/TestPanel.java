@@ -9,6 +9,7 @@ import processing.core.PApplet;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.app.AppController;
+import racecontrol.gui.app.StatusPanelManager;
 import racecontrol.gui.lpui.LPButton;
 import racecontrol.gui.lpui.LPContainer;
 
@@ -17,34 +18,32 @@ import racecontrol.gui.lpui.LPContainer;
  * @author Leonard
  */
 public class TestPanel extends LPContainer {
-    
+
     private final TestStatusPanel testStatusPanel = new TestStatusPanel();
-    
+
     public TestPanel() {
         setName("Debug");
-        AppController appController = AppController.getInstance();
-        
-        testStatusPanel.closeButton.setAction(()->{
-            appController.removeStatusPanel(testStatusPanel);
+
+        testStatusPanel.closeButton.setAction(() -> {
+            StatusPanelManager.getInstance().removeStatusPanel(testStatusPanel);
         });
-        
+
         LPButton addStatusPanel = new LPButton("Add status panel");
         addStatusPanel.setSize(200, LINE_HEIGHT);
         addStatusPanel.setPosition(20, 0);
-        addStatusPanel.setAction(()->{
-            appController.addStatusPanel(testStatusPanel);
+        addStatusPanel.setAction(() -> {
+            StatusPanelManager.getInstance().addStatusPanel(testStatusPanel);
         });
         addComponent(addStatusPanel);
-        
+
         LPButton removeStatusPanel = new LPButton("Remove status panel");
         removeStatusPanel.setSize(200, LINE_HEIGHT);
         removeStatusPanel.setPosition(240, 0);
-        removeStatusPanel.setAction(()->{
-            appController.removeStatusPanel(testStatusPanel);
+        removeStatusPanel.setAction(() -> {
+            StatusPanelManager.getInstance().removeStatusPanel(testStatusPanel);
         });
         addComponent(removeStatusPanel);
-        
-        
+
     }
 
     @Override

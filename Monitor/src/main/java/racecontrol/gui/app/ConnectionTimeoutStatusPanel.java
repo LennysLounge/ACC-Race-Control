@@ -31,7 +31,7 @@ public class ConnectionTimeoutStatusPanel
         dismiss.setSize(100, LINE_HEIGHT);
         addComponent(dismiss);
         dismiss.setAction(() -> {
-            AppController.getInstance().removeStatusPanel(this);
+            StatusPanelManager.getInstance().removeStatusPanel(this);
         });
     }
 

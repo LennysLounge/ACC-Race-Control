@@ -13,6 +13,7 @@ import racecontrol.client.events.AfterPacketReceivedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.gui.app.StatusPanelManager;
 
 /**
  *
@@ -26,7 +27,11 @@ public class VirtualSafetyCarConfigController
      */
     private final VirtualSafetyCarPanel panel = new VirtualSafetyCarPanel();
     /**
-     * The app controller.
+     * The status panel manager.
+     */
+    private final StatusPanelManager statusPanelManager;
+    /**
+     * App controller.
      */
     private final AppController appController;
     /**
@@ -40,6 +45,7 @@ public class VirtualSafetyCarConfigController
 
     public VirtualSafetyCarConfigController() {
         EventBus.register(this);
+        statusPanelManager = StatusPanelManager.getInstance();
         appController = AppController.getInstance();
         vscController = VirtualSafetyCarController.getInstance();
         statusPanel = new VSCStatusPanel();
@@ -67,13 +73,13 @@ public class VirtualSafetyCarConfigController
             panel.invalidate();
 
             statusPanel.setVSCStart();
-            appController.addStatusPanel(statusPanel);
+            statusPanelManager.addStatusPanel(statusPanel);
         } else if (e instanceof VSCEndEvent) {
             panel.isVSCDisabled = true;
             panel.updateComponents();
             panel.invalidate();
 
-            appController.removeStatusPanel(statusPanel);
+            statusPanelManager.removeStatusPanel(statusPanel);
         } else if (e instanceof AfterPacketReceivedEvent) {
             if (vscController.isActive()) {
                 statusPanel.invalidate();

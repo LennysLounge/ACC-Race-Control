@@ -64,6 +64,10 @@ public class AppController
 
     private RaceControlController raceControlController;
     /**
+     * Manages the status panels.
+     */
+    private StatusPanelManager statusPanelManager;
+    /**
      * Placeholder panel for a detached panel.
      */
     private DetachedPlaceholderPanel detachedPlaceholderPanel;
@@ -102,6 +106,8 @@ public class AppController
         raceControlController = RaceControlController.getInstance();
         raceControlController.initialise();
         testPanel = new TestPanel();
+        statusPanelManager = StatusPanelManager.getInstance();
+        statusPanelManager.initialise(appPanel);
 
         appPanel.liveTimingMenuItem.setClickAction(button -> menuItemClicked(appPanel.liveTimingMenuItem, button));
         appPanel.raceControlMenuItem.setClickAction(button -> menuItemClicked(appPanel.raceControlMenuItem, button));
@@ -144,7 +150,7 @@ public class AppController
         panel.setPosition(0, 0);
         PanelWindowApplet applet = launchNewWindow(panel, true);
         applet.addCloseAction(() -> {
-            if(getPanelForMenuItem(appPanel.menu.getSelectedItem()) == panel){
+            if (getPanelForMenuItem(appPanel.menu.getSelectedItem()) == panel) {
                 appPanel.setActivePage(panel);
                 appPanel.updateComponents();
                 appPanel.invalidate();
@@ -187,7 +193,7 @@ public class AppController
                 appPanel.setActivePage(settingsPanel);
                 appPanel.updateComponents();
             } else if (event.getExitState() == AccBroadcastingClient.ExitState.TIMEOUT) {
-                addStatusPanel(new ConnectionTimeoutStatusPanel());
+                statusPanelManager.addStatusPanel(new ConnectionTimeoutStatusPanel());
             }
             appPanel.invalidate();
         }
@@ -213,14 +219,6 @@ public class AppController
             windowPanels.get(panel).grabFocus();
         }
         return windowPanels.get(panel);
-    }
-
-    public void addStatusPanel(LPComponent statusPanel) {
-        appPanel.addStatusPanel(statusPanel);
-    }
-
-    public void removeStatusPanel(LPComponent statusPanel) {
-        appPanel.removeStatusPanel(statusPanel);
     }
 
     private PImage loadResourceAsPImage(String resource) {
