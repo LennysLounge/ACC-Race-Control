@@ -45,16 +45,7 @@ public class HeaderPanel
     @Override
     public void draw(PApplet applet) {
         if (client.isConnected()) {
-            int backgroundColor = COLOR_DARK_DARK_GRAY;
-            if (client.getModel().getSessionInfo().isReplayPlaying()) {
-                backgroundColor = COLOR_BLUE;
-            }
-            if (replayOffsetExtension != null) {
-                if (replayOffsetExtension.isSearching()) {
-                    backgroundColor = LookAndFeel.COLOR_GREEN;
-                }
-            }
-            applet.fill(backgroundColor);
+            applet.fill(COLOR_DARK_DARK_GRAY);
             applet.noStroke();
             applet.rect(0, 0, getWidth(), getHeight());
             int y = 0;
@@ -66,21 +57,7 @@ public class HeaderPanel
             applet.textAlign(LEFT, CENTER);
             applet.textFont(fontRegular());
             applet.text(packetsReceived, 20, y + LINE_HEIGHT * 0.5f);
-            if (client.getModel().getSessionInfo().isReplayPlaying()) {
-                if (!replayOffsetExtension.isSearching()) {
-                    applet.text("Replay time remaining: " + TimeUtils.asDuration(client.getModel().getSessionInfo().getReplayRemainingTime()),
-                            500, LINE_HEIGHT * 0.5f);
-
-                    applet.text("Session Time: " + TimeUtils.asDuration(client.getModel().getSessionInfo().getReplaySessionTime()),
-                            850, LINE_HEIGHT * 0.5f);
-                }
-            }
-            if (replayOffsetExtension != null) {
-                if (replayOffsetExtension.isSearching()) {
-                    applet.text("Searching for replay time, please wait", 500, LINE_HEIGHT * 0.5f);
-                }
-            }
-
+            
             applet.textAlign(RIGHT, CENTER);
             applet.textSize(TEXT_SIZE * 0.8f);
             float sessionNameWidth = applet.textWidth(sessionName);
