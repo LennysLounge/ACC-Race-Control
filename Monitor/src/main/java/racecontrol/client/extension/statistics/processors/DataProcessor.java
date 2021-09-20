@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Leonard Sch?ngel
+ * Copyright (c) 2021 Leonard Schüngel
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
@@ -11,13 +11,18 @@ import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.DriverInfo;
 import racecontrol.client.data.RealtimeInfo;
 import racecontrol.client.data.SessionInfo;
+import static racecontrol.client.data.enums.CarLocation.TRACK;
 import static racecontrol.client.extension.statistics.CarProperties.BEST_LAP_TIME;
+import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
+import static racecontrol.client.extension.statistics.CarProperties.CAR_MODEL;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
+import static racecontrol.client.extension.statistics.CarProperties.CATEGORY;
 import static racecontrol.client.extension.statistics.CarProperties.CUP_POSITION;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.DELTA;
 import static racecontrol.client.extension.statistics.CarProperties.FIRSTNAME;
 import static racecontrol.client.extension.statistics.CarProperties.FULL_NAME;
+import static racecontrol.client.extension.statistics.CarProperties.IS_IN_PITS;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.NAME;
 import static racecontrol.client.extension.statistics.CarProperties.POSITION;
@@ -58,6 +63,8 @@ public class DataProcessor
         }
         WriteableCarStatistics car = cars.get(info.getCarId());
 
+        car.put(CAR_ID, info.getCarId());
+
         car.put(POSITION, info.getPosition());
         car.put(CUP_POSITION, info.getCupPosition());
         // identity
@@ -67,6 +74,8 @@ public class DataProcessor
         car.put(NAME, getName(carInfo.getDriver()));
         car.put(SHORT_NAME, carInfo.getDriver().getShortName());
         car.put(CAR_NUMBER, carInfo.getCarNumber());
+        car.put(CAR_MODEL, carInfo.getCarModelType());
+        car.put(CATEGORY, carInfo.getDriver().getCategory());
         //laps
         car.put(CURRENT_LAP_TIME, info.getCurrentLap().getLapTimeMS());
         car.put(LAST_LAP_TIME, info.getLastLap().getLapTimeMS());
@@ -74,6 +83,8 @@ public class DataProcessor
         car.put(DELTA, info.getDelta());
         car.put(IS_LAP_INVALID, info.getCurrentLap().isInvalid());
         car.put(LAP_COUNT, info.getLaps());
+        
+        car.put(IS_IN_PITS, info.getLocation() != TRACK);
 
     }
 

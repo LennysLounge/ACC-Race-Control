@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Leonard Sch?ngel
+ * Copyright (c) 2021 Leonard Schüngel
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
@@ -10,10 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import racecontrol.client.AccBroadcastingExtension;
+import racecontrol.client.data.CarInfo;
+import racecontrol.client.events.CarConnectedEvent;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.extension.statistics.processors.DataProcessor;
 import racecontrol.eventbus.Event;
+import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 
 /**
@@ -50,12 +53,16 @@ public class StatisticsExtension
     }
 
     private StatisticsExtension() {
+        EventBus.register(this);
         processors.add(new DataProcessor(cars));
     }
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof RealtimeUpdateEvent) {
+        if (e instanceof CarConnectedEvent) {
+            CarInfo car = ((CarConnectedEvent) e).getCar();
+            cars.put(car.getCarId(), new WriteableCarStatistics());
+        } else if (e instanceof RealtimeUpdateEvent) {
             processors.forEach((processor)
                     -> processor.onRealtimeUpdate(((RealtimeUpdateEvent) e).getSessionInfo()));
         } else if (e instanceof RealtimeCarUpdateEvent) {
