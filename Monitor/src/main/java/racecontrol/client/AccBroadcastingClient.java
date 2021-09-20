@@ -789,6 +789,7 @@ public class AccBroadcastingClient {
             LOG.info("Car disconnected: #" + car.getCarNumber() + "\t" + name);
             UILogger.log("Car disconnected: #" + car.getCarNumber() + "\t" + name);
             EventBus.publish(new CarDisconnectedEvent(car));
+            model.getCarsInfo().remove(car.getCarId());
         }
 
         private void onCarConnect(CarInfo car) {
