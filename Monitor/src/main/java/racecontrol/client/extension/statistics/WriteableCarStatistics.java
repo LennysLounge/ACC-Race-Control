@@ -49,9 +49,12 @@ public class WriteableCarStatistics {
     public static class Key<T> {
 
         final Class<T> type;
+        
+        final T defaultValue;
 
-        public Key(Class<T> type) {
+        public Key(Class<T> type, T defaultValue) {
             this.type = type;
+            this.defaultValue = defaultValue;
         }
     }
 

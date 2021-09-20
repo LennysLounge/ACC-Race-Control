@@ -5,7 +5,10 @@ package racecontrol.client.extension.statistics;
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import racecontrol.client.extension.statistics.WriteableCarStatistics.Key;
 
 /**
@@ -14,6 +17,8 @@ import racecontrol.client.extension.statistics.WriteableCarStatistics.Key;
  * @author Leonard
  */
 public class CarStatistics {
+
+    private static final Logger LOG = Logger.getLogger(CarStatistics.class.getName());
 
     /**
      * Map holds the properties.
@@ -32,6 +37,9 @@ public class CarStatistics {
      * @return The value of type T.
      */
     public <T> T get(Key<T> key) {
+        if (!properties.containsKey(key)) {
+            return key.defaultValue;
+        }
         return key.type.cast(properties.get(key));
     }
 }
