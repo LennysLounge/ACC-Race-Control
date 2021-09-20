@@ -75,16 +75,6 @@ public class LiveTimingController
     public void onEvent(Event e) {
         if (e instanceof RealtimeUpdateEvent) {
             onRealtimeUpdate(((RealtimeUpdateEvent) e).getSessionInfo());
-        } else if (e instanceof SessionChangedEvent) {
-            /*
-            SessionType newSession = ((SessionChangedEvent) e).getSessionInfo().getSessionType();
-            if (newSession == SessionType.RACE) {
-                model = new RaceTableModel();
-            } else {
-                model = new QualifyingTableModel();
-            }
-            table.setTableModel(model);
-             */
         }
     }
 
@@ -93,42 +83,11 @@ public class LiveTimingController
         client.getModel().getCarsInfo().values().forEach(
                 car -> cars.add(statisticsExtension.getCar(car.getCarId()))
         );
-        
+
         model.setEntries(cars);
         model.sort();
         table.invalidate();
 
-        /*
-        List<LiveTimingEntry> sortedEntries = new LinkedList<>(entries.values());
-        sortedEntries = sortedEntries.stream()
-                .sorted((e1, e2) -> comparePosition(e1, e2))
-                .collect(Collectors.toList());
-        
-        if (currentSession == SessionType.RACE) {
-            
-            sortedEntries = sortedEntries.stream()
-                    .sorted((e1, e2) -> compareRaceDistance(e1, e2))
-                    .collect(Collectors.toList());
-             
-            sortedEntries = calculateGaps(sortedEntries);
-        }
-
-        //find best sectors.
-        List<Integer> sessionBestSectors = new ArrayList<>(Arrays.asList(9999999, 9999999, 9999999));
-        for (LiveTimingEntry entry : sortedEntries) {
-            LapInfo bestLap = entry.getCarInfo().getRealtime().getBestSessionLap();
-            for (int i = 0; i < bestLap.getSplits().size(); i++) {
-                if (bestLap.getSplits().get(i) < sessionBestSectors.get(i)) {
-                    sessionBestSectors.set(i, bestLap.getSplits().get(i));
-                }
-            }
-        }
-
-        model.setEntries(sortedEntries);
-        model.setFocusedCarId(sessionInfo.getFocusedCarIndex());
-        model.setSessionBestLap(sessionInfo.getBestSessionLap());
-        model.setSessionBestSectors(sessionBestSectors);
-        //panel.invalidate();         */
     }
 
     private void onCellClickAction(int column, int row) {
