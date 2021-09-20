@@ -5,8 +5,6 @@
  */
 package racecontrol.gui.app.broadcasting.timing.tablemodels;
 
-import racecontrol.gui.app.broadcasting.timing.LiveTimingEntry;
-import racecontrol.client.data.CarInfo;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_GT4;
@@ -24,7 +22,6 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CLOSE;
 import static processing.core.PConstants.LEFT;
-import racecontrol.client.data.enums.DriverCategory;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_MODEL;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
 import static racecontrol.client.extension.statistics.CarProperties.CATEGORY;
@@ -47,7 +44,7 @@ public abstract class LiveTimingTableModel
     /**
      * Ordered list of car entries
      */
-    private List<CarStatistics> entries = new LinkedList<>();
+    protected List<CarStatistics> entries = new LinkedList<>();
     /**
      * Column shows the position number.
      */
@@ -185,6 +182,8 @@ public abstract class LiveTimingTableModel
     public int getRowCount() {
         return entries.size();
     }
+
+    public abstract void sort();
 
     public void setEntries(List<CarStatistics> entries) {
         this.entries = entries;

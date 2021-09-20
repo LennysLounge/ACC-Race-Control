@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
-import racecontrol.gui.app.broadcasting.timing.tablemodels.SimpleTableModel;
+import racecontrol.gui.app.broadcasting.timing.tablemodels.QualifyingTableModel;
 import racecontrol.gui.lpui.LPTable;
 
 /**
@@ -49,7 +49,7 @@ public class LiveTimingController
     /**
      * Table model to display the live timing.
      */
-    private LiveTimingTableModel model = new SimpleTableModel();
+    private LiveTimingTableModel model = new QualifyingTableModel();
     /**
      * timestamp for the last time the table was clicked.
      */
@@ -95,6 +95,8 @@ public class LiveTimingController
         );
         
         model.setEntries(cars);
+        model.sort();
+        table.invalidate();
 
         /*
         List<LiveTimingEntry> sortedEntries = new LinkedList<>(entries.values());

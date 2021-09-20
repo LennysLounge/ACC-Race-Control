@@ -26,7 +26,7 @@ import racecontrol.gui.lpui.LPTable.RenderContext;
  * @author Leonard
  */
 public class RaceTableModel
-        extends QualifyingTableModel {
+        extends LiveTimingTableModel {
 
     @Override
     public LPTableColumn[] getColumns() {
@@ -149,5 +149,9 @@ public class RaceTableModel
         applet.textFont(LookAndFeel.fontRegular());
         applet.text(text, context.width / 2, context.height / 2);
     };
+
+    @Override
+    public void sort() {
+    }
 
 }

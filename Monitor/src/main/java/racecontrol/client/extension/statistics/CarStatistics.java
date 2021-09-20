@@ -5,11 +5,9 @@ package racecontrol.client.extension.statistics;
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import racecontrol.client.extension.statistics.WriteableCarStatistics.Key;
+import racecontrol.client.extension.statistics.WritableCarStatistics.Key;
 
 /**
  * Car statistics where the properties are read only.

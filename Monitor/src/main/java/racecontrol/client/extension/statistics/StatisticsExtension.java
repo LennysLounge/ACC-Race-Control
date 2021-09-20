@@ -34,7 +34,7 @@ public class StatisticsExtension
     /**
      * Maps carId's to car statistics.
      */
-    private final Map<Integer, WriteableCarStatistics> cars = new HashMap<>();
+    private final Map<Integer, WritableCarStatistics> cars = new HashMap<>();
     /**
      * List of processors.
      */
@@ -61,7 +61,7 @@ public class StatisticsExtension
     public void onEvent(Event e) {
         if (e instanceof CarConnectedEvent) {
             CarInfo car = ((CarConnectedEvent) e).getCar();
-            cars.put(car.getCarId(), new WriteableCarStatistics());
+            cars.put(car.getCarId(), new WritableCarStatistics());
         } else if (e instanceof RealtimeUpdateEvent) {
             processors.forEach((processor)
                     -> processor.onRealtimeUpdate(((RealtimeUpdateEvent) e).getSessionInfo()));

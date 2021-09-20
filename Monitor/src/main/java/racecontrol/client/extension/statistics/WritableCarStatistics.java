@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * @author Leonard
  */
-public class WriteableCarStatistics {
+public class WritableCarStatistics {
 
     /**
      * Map holds the properties.
@@ -39,6 +39,9 @@ public class WriteableCarStatistics {
      * @return The value of type T.
      */
     public <T> T get(Key<T> key) {
+        if (!properties.containsKey(key)) {
+            return key.defaultValue;
+        }
         return key.type.cast(properties.get(key));
     }
 
@@ -49,7 +52,7 @@ public class WriteableCarStatistics {
     public static class Key<T> {
 
         final Class<T> type;
-        
+
         final T defaultValue;
 
         public Key(Class<T> type, T defaultValue) {
@@ -58,5 +61,4 @@ public class WriteableCarStatistics {
         }
     }
 
- 
 }
