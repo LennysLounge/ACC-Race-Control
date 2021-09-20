@@ -45,14 +45,29 @@ public class WritableCarStatistics {
         return key.type.cast(properties.get(key));
     }
 
+    /**
+     * Returns the properties for this car.
+     *
+     * @return Map of keys to objects.
+     */
     public Map<Key<?>, Object> getProperties() {
         return properties;
     }
 
+    /**
+     * Key to use to identify car statistics properties.
+     *
+     * @param <T> Type of the object this key referes to.
+     */
     public static class Key<T> {
 
+        /**
+         * Type of the object this key referes to.
+         */
         final Class<T> type;
-
+        /**
+         * Default value for this key if the property does not exist.
+         */
         final T defaultValue;
 
         public Key(Class<T> type, T defaultValue) {

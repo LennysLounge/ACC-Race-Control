@@ -5,9 +5,6 @@
  */
 package racecontrol.client.extension.statistics.processors;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.CarInfo;
@@ -48,8 +45,6 @@ import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_TWO;
-import racecontrol.client.extension.statistics.CarStatistics;
-import racecontrol.gui.app.broadcasting.timing.LiveTimingEntry;
 
 /**
  * A Basic processor for any easily available data.
