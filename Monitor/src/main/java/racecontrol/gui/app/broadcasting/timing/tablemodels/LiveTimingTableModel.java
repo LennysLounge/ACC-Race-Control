@@ -7,8 +7,6 @@ package racecontrol.gui.app.broadcasting.timing.tablemodels;
 
 import racecontrol.gui.app.broadcasting.timing.LiveTimingEntry;
 import racecontrol.client.data.CarInfo;
-import racecontrol.client.data.LapInfo;
-import racecontrol.client.data.enums.CarLocation;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_GT4;
@@ -26,43 +24,64 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CLOSE;
 import static processing.core.PConstants.LEFT;
+import racecontrol.client.data.enums.DriverCategory;
+import static racecontrol.client.extension.statistics.CarProperties.CAR_MODEL;
+import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
+import static racecontrol.client.extension.statistics.CarProperties.CATEGORY;
+import static racecontrol.client.extension.statistics.CarProperties.IS_IN_PITS;
+import static racecontrol.client.extension.statistics.CarProperties.NAME;
+import static racecontrol.client.extension.statistics.CarProperties.POSITION;
+import racecontrol.client.extension.statistics.CarStatistics;
 
 /**
  *
  * @author Leonard
  */
-public class LiveTimingTableModel
+public abstract class LiveTimingTableModel
         extends LPTableModel {
 
     /**
      * This class's logger.
      */
     private static final Logger LOG = Logger.getLogger(LiveTimingTableModel.class.getName());
-
     /**
      * Ordered list of car entries
      */
-    private List<LiveTimingEntry> entries = new LinkedList<>();
+    private List<CarStatistics> entries = new LinkedList<>();
     /**
-     * Car id of the focused car.
+     * Column shows the position number.
      */
-    private int focusedCarId = -1;
-    /**
-     * The best lap of the session.
-     */
-    private LapInfo sessionBestLap;
-    
-    private List<Integer> sessionBestSectors = new LinkedList<>();
-    
-    private final LPTable.CellRenderer positionRenderer = (
-            PApplet applet,
-            LPTable.RenderContext context) -> {
-        LiveTimingEntry entry = (LiveTimingEntry) context.object;
-        
+    protected final LPTableColumn positionColumn = new LPTableColumn("Pos")
+            .setMinWidth((int) (LINE_HEIGHT * 1.2f))
+            .setMaxWidth((int) (LINE_HEIGHT * 1.2f))
+            .setPriority(1000)
+            .setCellRenderer((applet, context) -> positionRenderer(applet, context));
+
+    protected final LPTableColumn nameColumn = new LPTableColumn("Name")
+            .setMaxWidth(LINE_HEIGHT * 5f)
+            .setMinWidth(LINE_HEIGHT * 5f)
+            .setPriority(1000)
+            .setCellRenderer((applet, context) -> nameRenderer(applet, context));
+
+    protected final LPTableColumn pitColumn = new LPTableColumn("")
+            .setMaxWidth((int) (LINE_HEIGHT * 0.4f))
+            .setMinWidth((int) (LINE_HEIGHT * 0.4f))
+            .setPriority(1000)
+            .setCellRenderer((applet, context) -> pitRenderer(applet, context));
+
+    protected final LPTableColumn carNumberColumn = new LPTableColumn("#")
+            .setMinWidth(LINE_HEIGHT * 1.5f)
+            .setMaxWidth(LINE_HEIGHT * 1.5f)
+            .setPriority(1000)
+            .setCellRenderer((applet, context) -> carNumberRenderer(applet, context));
+
+    private void positionRenderer(PApplet applet, LPTable.RenderContext context) {
+        int position = ((CarStatistics) context.object).get(POSITION);
+
         applet.noStroke();
         int bgColor = LookAndFeel.COLOR_RED;
         int fgColor = LookAndFeel.COLOR_WHITE;
-        if (entry.getCarInfo().getCarId() == focusedCarId) {
+        if (context.isSelected) {
             bgColor = LookAndFeel.COLOR_WHITE;
             fgColor = LookAndFeel.COLOR_BLACK;
         }
@@ -71,50 +90,26 @@ public class LiveTimingTableModel
         applet.fill(fgColor);
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontMedium());
-        applet.text(String.valueOf(entry.getCarInfo().getRealtime().getPosition()),
+        applet.text(String.valueOf(position),
                 context.width / 2f, context.height / 2f);
-    };
-    /**
-     * Column shows the position number.
-     */
-    protected final LPTableColumn positionColumn = new LPTableColumn("Pos")
-            .setMinWidth((int)(LINE_HEIGHT * 1.2f))
-            .setMaxWidth((int)(LINE_HEIGHT * 1.2f))
-            .setPriority(1000)
-            .setCellRenderer(positionRenderer);
-    
-    private final LPTable.CellRenderer nameRenderer = (
-            PApplet applet,
-            LPTable.RenderContext context) -> {
-        CarInfo car = ((LiveTimingEntry) context.object).getCarInfo();
-        String firstname = car.getDriver().getFirstName();
-        String lastname = car.getDriver().getLastName();
-        firstname = firstname.substring(0, Math.min(firstname.length(), 1));
-        String name = String.format("%s. %s", firstname, lastname);
-        
+    }
+
+    private void nameRenderer(PApplet applet, LPTable.RenderContext context) {
+        String name = ((CarStatistics) context.object).get(NAME);
+
         if (context.isMouseOverRow) {
             applet.fill(COLOR_DARK_RED);
             applet.rect(1, 1, context.width - 1, context.height - 2);
         }
-        
+
         applet.fill(COLOR_WHITE);
         applet.textAlign(LEFT, CENTER);
         applet.textFont(LookAndFeel.fontMedium());
         applet.text(name, context.height / 4f, context.height / 2f);
-    };
-    
-    protected final LPTableColumn nameColumn = new LPTableColumn("Name")
-            .setMaxWidth(LINE_HEIGHT * 5f)
-            .setMinWidth(LINE_HEIGHT * 5f)
-            .setGrowthRate(3)
-            .setPriority(1000)
-            .setCellRenderer(nameRenderer);
-    
-    private final LPTable.CellRenderer pitRenderer = (
-            PApplet applet,
-            LPTable.RenderContext context) -> {
-        boolean isInPits = ((LiveTimingEntry) context.object).getCarInfo()
-                .getRealtime().getLocation() != CarLocation.TRACK;
+    }
+
+    private void pitRenderer(PApplet applet, LPTable.RenderContext context) {
+        boolean isInPits = ((CarStatistics) context.object).get(IS_IN_PITS);
         if (context.isMouseOverRow) {
             applet.fill(COLOR_DARK_RED);
             applet.rect(0, 1, context.width - 1, context.height - 2);
@@ -130,22 +125,14 @@ public class LiveTimingTableModel
             applet.textFont(LookAndFeel.fontMedium());
             applet.textSize(LookAndFeel.TEXT_SIZE);
         }
-    };
-    
-    protected final LPTableColumn pitColumn = new LPTableColumn("")
-            .setMaxWidth((int)(LINE_HEIGHT * 0.4f))
-            .setMinWidth((int)(LINE_HEIGHT * 0.4f))
-            .setPriority(1000)
-            .setCellRenderer(pitRenderer);
-    
-    private final LPTable.CellRenderer carNumberRenderer = (
-            PApplet applet,
-            LPTable.RenderContext context) -> {
-        CarInfo car = ((LiveTimingEntry) context.object).getCarInfo();
-        
+    }
+
+    private void carNumberRenderer(PApplet applet, LPTable.RenderContext context) {
+        CarStatistics stats = (CarStatistics) context.object;
+
         int backColor = 0;
         int frontColor = 0;
-        switch (car.getDriver().getCategory()) {
+        switch (stats.get(CATEGORY)) {
             case BRONZE:
                 backColor = LookAndFeel.COLOR_RED;
                 frontColor = LookAndFeel.COLOR_BLACK;
@@ -165,7 +152,7 @@ public class LiveTimingTableModel
         applet.rect(1, 1, context.width - 2, context.height - 2);
 
         //render GT4 / Cup / Super trofeo corners.
-        CarType type = getCarType(car.getCarModelType());
+        CarType type = getCarType(stats.get(CAR_MODEL));
         if (type != CarType.GT3) {
             applet.fill(COLOR_WHITE);
             applet.beginShape();
@@ -186,70 +173,30 @@ public class LiveTimingTableModel
             applet.vertex(context.width - LINE_HEIGHT * 0.4f, context.height - 1);
             applet.endShape(CLOSE);
         }
-        
+
         applet.fill(frontColor);
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontMedium());
-        applet.text(String.valueOf(car.getCarNumber()), context.width / 2f, context.height / 2f);
-    };
-    
-    protected final LPTableColumn carNumberColumn = new LPTableColumn("#")
-            .setMinWidth(LINE_HEIGHT * 1.5f)
-            .setMaxWidth(LINE_HEIGHT * 1.5f)
-            .setPriority(1000)
-            .setCellRenderer(carNumberRenderer);
-    
+        applet.text(String.valueOf(stats.get(CAR_NUMBER)),
+                context.width / 2f, context.height / 2f);
+    }
+
     @Override
     public int getRowCount() {
         return entries.size();
     }
-    
-    @Override
-    public LPTableColumn[] getColumns() {
-        return new LPTableColumn[]{
-            positionColumn,
-            nameColumn,
-            pitColumn,
-            carNumberColumn
-        };
-    }
-    
-    @Override
-    public Object getValueAt(int column, int row) {
-        return getEntry(row);
-    }
-    
-    public void setEntries(List<LiveTimingEntry> entries) {
+
+    public void setEntries(List<CarStatistics> entries) {
         this.entries = entries;
     }
-    
-    public LiveTimingEntry getEntry(int row) {
+
+    public CarStatistics getEntry(int row) {
         if (row < entries.size()) {
             return entries.get(row);
         }
         return null;
     }
-    
-    public void setFocusedCarId(int carId) {
-        focusedCarId = carId;
-    }
-    
-    public LapInfo getSessionBestLap() {
-        return sessionBestLap;
-    }
-    
-    public void setSessionBestLap(LapInfo sessionBestLap) {
-        this.sessionBestLap = sessionBestLap;
-    }
-    
-    public List<Integer> getSessionBestSectors() {
-        return sessionBestSectors;
-    }
-    
-    public void setSessionBestSectors(List<Integer> sessionBestSectors) {
-        this.sessionBestSectors = sessionBestSectors;
-    }
-    
+
     private CarType getCarType(byte carModelId) {
         switch (carModelId) {
             case 9:
@@ -272,12 +219,12 @@ public class LiveTimingTableModel
                 return CarType.GT3;
         }
     }
-    
+
     private enum CarType {
         GT3,
         GT4,
         ST,
         CUP;
     }
-    
+
 }

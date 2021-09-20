@@ -74,6 +74,7 @@ public class QualifyingTableModel
 
     @Override
     public Object getValueAt(int column, int row) {
+        /*
         CarInfo car = getEntry(row).getCarInfo();
 
         switch (column) {
@@ -103,6 +104,7 @@ public class QualifyingTableModel
                         2
                 );
         }
+         */
         return "-";
     }
 
@@ -127,11 +129,13 @@ public class QualifyingTableModel
             text = TimeUtils.asLapTime(bestLapTime);
         }
         applet.noStroke();
+        /*
         if (bestLapTime == getSessionBestLap().getLapTimeMS()) {
             applet.fill(COLOR_PURPLE);
         } else {
             applet.fill(COLOR_WHITE);
         }
+         */
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
         applet.text(text, context.width / 2, context.height / 2);
@@ -143,6 +147,7 @@ public class QualifyingTableModel
         CarInfo car = ((LiveTimingEntry) context.object).getCarInfo();
         int bestLapTime = car.getRealtime().getBestSessionLap().getLapTimeMS();
         String text = "--";
+        /*
         if (bestLapTime != Integer.MAX_VALUE) {
             int sessionBestLapTime = getSessionBestLap().getLapTimeMS();
             int diff = bestLapTime - sessionBestLapTime;
@@ -151,6 +156,7 @@ public class QualifyingTableModel
             }
 
         }
+         */
         applet.noStroke();
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
@@ -210,6 +216,7 @@ public class QualifyingTableModel
 
         String text = "--";
         applet.fill(COLOR_WHITE);
+        /*
         if (sectorIndex < splits.size()) {
             if (splits.get(sectorIndex) != Integer.MAX_VALUE) {
                 text = TimeUtils.asSeconds(splits.get(sectorIndex));
@@ -218,6 +225,7 @@ public class QualifyingTableModel
                 }
             }
         }
+         */
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
         applet.text(text, context.width / 2, context.height / 2);

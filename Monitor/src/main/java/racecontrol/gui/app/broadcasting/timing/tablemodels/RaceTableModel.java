@@ -64,6 +64,7 @@ public class RaceTableModel
 
     @Override
     public Object getValueAt(int column, int row) {
+        /*
         CarInfo car = getEntry(row).getCarInfo();
 
         switch (column) {
@@ -82,6 +83,7 @@ public class RaceTableModel
             case 9:
                 return String.valueOf(car.getRealtime().getLaps());
         }
+         */
         return "-";
     }
 
