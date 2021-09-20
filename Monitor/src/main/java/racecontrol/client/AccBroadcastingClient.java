@@ -55,6 +55,7 @@ import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.logging.UILogger;
 import racecontrol.client.extension.racereport.RaceReportController;
 import racecontrol.client.extension.results.ResultsExtension;
+import racecontrol.client.extension.statistics.StatisticsExtension;
 
 /**
  * A basic connection to the broadcasting interface from Assetto Corsa
@@ -144,6 +145,7 @@ public class AccBroadcastingClient {
         extensions.add(RaceReportController.getInstance());
         extensions.add(ReplayOffsetExtension.getInstance());
         extensions.add(new ResultsExtension());
+        extensions.add(StatisticsExtension.getInstance());
     }
 
     /**
