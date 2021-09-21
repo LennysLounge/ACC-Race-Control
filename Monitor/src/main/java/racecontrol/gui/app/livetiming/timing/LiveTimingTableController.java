@@ -13,14 +13,18 @@ import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.events.SessionChangedEvent;
-import racecontrol.client.data.SessionInfo;
 import racecontrol.gui.lpui.LPContainer;
 import java.util.logging.Logger;
+import racecontrol.client.data.SessionInfo;
+import static racecontrol.client.data.enums.SessionType.PRACTICE;
+import static racecontrol.client.data.enums.SessionType.QUALIFYING;
+import static racecontrol.client.data.enums.SessionType.RACE;
+import racecontrol.client.events.SessionChangedEvent;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingTableModel;
+import racecontrol.gui.app.livetiming.timing.tablemodels.RaceTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.TestTableModel;
 import racecontrol.gui.lpui.LPTable;
 
@@ -62,13 +66,25 @@ public class LiveTimingTableController
 
     private final List<LiveTimingTableModel> tableModels = new ArrayList<>();
 
+    private final QualifyingTableModel qualifyingTableModel;
+
+    private final RaceTableModel raceTableModel;
+    /**
+     * Weather ot not to automatically switch the table model when the session
+     * changes.
+     */
+    private boolean autoSwitchTableModel = true;
+
     public LiveTimingTableController() {
         EventBus.register(this);
         statisticsExtension = StatisticsExtension.getInstance();
         client = AccBroadcastingClient.getClient();
         table.setCellClickAction((column, row) -> onCellClickAction(column, row));
 
-        tableModels.add(new QualifyingTableModel());
+        qualifyingTableModel = new QualifyingTableModel();
+        raceTableModel = new RaceTableModel();
+        tableModels.add(qualifyingTableModel);
+        tableModels.add(raceTableModel);
         tableModels.add(new TestTableModel());
         model = tableModels.get(0);
         table.setTableModel(model);
@@ -84,6 +100,8 @@ public class LiveTimingTableController
     public void onEvent(Event e) {
         if (e instanceof RealtimeUpdateEvent) {
             updateTableModel();
+        } else if (e instanceof SessionChangedEvent) {
+            sessionChanged(((SessionChangedEvent) e).getSessionInfo());
         }
     }
 
@@ -96,7 +114,20 @@ public class LiveTimingTableController
         model.setEntries(cars);
         model.sort();
         table.invalidate();
+    }
 
+    private void sessionChanged(SessionInfo info) {
+        if (autoSwitchTableModel) {
+            if (info.getSessionType() == RACE) {
+                table.setTableModel(raceTableModel);
+                model = raceTableModel;
+            } else if (info.getSessionType() == QUALIFYING
+                    || info.getSessionType() == PRACTICE) {
+                table.setTableModel(qualifyingTableModel);
+                model = qualifyingTableModel;
+            }
+        }
+        autoSwitchTableModel = true;
     }
 
     private void onCellClickAction(int column, int row) {
@@ -117,6 +148,7 @@ public class LiveTimingTableController
         int index = tableModels.indexOf(model);
         model = tableModels.get((index + 1) % tableModels.size());
         table.setTableModel(model);
+        autoSwitchTableModel = false;
     }
 
     public void cycleTableModelsRight() {
@@ -126,6 +158,7 @@ public class LiveTimingTableController
         }
         model = tableModels.get(index - 1);
         table.setTableModel(model);
+        autoSwitchTableModel = false;
     }
 
     public String getTableModelName() {

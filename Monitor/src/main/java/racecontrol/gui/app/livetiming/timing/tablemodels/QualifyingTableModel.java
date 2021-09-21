@@ -74,6 +74,11 @@ public class QualifyingTableModel
     }
 
     @Override
+    public String getName() {
+        return "Qualifying";
+    }
+
+    @Override
     public Object getValueAt(int column, int row) {
         return getEntry(row);
     }
@@ -215,10 +220,4 @@ public class QualifyingTableModel
         applet.fill(COLOR_WHITE);
         applet.text(text, context.width / 2, context.height / 2);
     }
-
-    @Override
-    public String getName() {
-        return "Qualifying";
-    }
-
 }

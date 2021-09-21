@@ -5,6 +5,10 @@
  */
 package racecontrol.gui.app.livetiming;
 
+import racecontrol.client.events.AfterPacketReceivedEvent;
+import racecontrol.client.events.SessionChangedEvent;
+import racecontrol.eventbus.Event;
+import racecontrol.eventbus.EventListener;
 import racecontrol.gui.app.AppController;
 import racecontrol.gui.app.PanelWindowApplet;
 import racecontrol.gui.app.livetiming.broadcastcontrol.BroadcastingController;
@@ -15,7 +19,8 @@ import racecontrol.gui.lpui.LPContainer;
  *
  * @author Leonard
  */
-public class LiveTimingController {
+public class LiveTimingController
+        implements EventListener {
 
     private final LiveTimingPanel panel;
 
@@ -70,6 +75,18 @@ public class LiveTimingController {
         panel.viewLabel.setText("View " + liveTimingTableController.getTableModelName());
         panel.onResize(panel.getWidth(), panel.getHeight());
         panel.invalidate();
+    }
+
+    @Override
+    public void onEvent(Event e) {
+        boolean flag = false;
+        if (e instanceof SessionChangedEvent) {
+            flag = true;
+        } else if (e instanceof AfterPacketReceivedEvent) {
+            if (flag) {
+                panel.viewLabel.setText("View " + liveTimingTableController.getTableModelName());
+            }
+        }
     }
 
 }

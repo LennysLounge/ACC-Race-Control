@@ -5,12 +5,21 @@
  */
 package racecontrol.gui.app.livetiming.timing.tablemodels;
 
-import racecontrol.gui.lpui.LPTable;
+import static java.util.stream.Collectors.toList;
 import racecontrol.gui.lpui.LPTableColumn;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.RIGHT;
+import static racecontrol.client.extension.statistics.CarProperties.BEST_LAP_TIME;
+import static racecontrol.client.extension.statistics.CarProperties.LAP_COUNT;
+import static racecontrol.client.extension.statistics.CarProperties.LAST_LAP_TIME;
+import static racecontrol.client.extension.statistics.CarProperties.POSITION;
+import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_LAP_TIME;
+import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.gui.LookAndFeel;
+import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
+import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.lpui.LPTable.RenderContext;
+import racecontrol.utility.TimeUtils;
 
 /**
  *
@@ -27,60 +36,46 @@ public class RaceTableModel
             pitColumn,
             carNumberColumn,
             new LPTableColumn("Gap")
-            .setCellRenderer(gapRenderer)
-            .setMinWidth(100)
-            .setMaxWidth(150)
-            .setTextAlign(RIGHT),
+            .setMaxWidth(100)
+            .setCellRenderer((applet, context) -> gapRenderer(applet, context)),
             new LPTableColumn("To Leader")
-            .setMinWidth(100)
-            .setPriority(-1)
-            .setCellRenderer(gapToLeaderRenderer)
-            .setMaxWidth(150)
-            .setTextAlign(RIGHT),
+            .setMaxWidth(100)
+            .setCellRenderer((applet, context) -> gapToLeaderRenderer(applet, context)),
             new LPTableColumn("Lap")
-            .setMinWidth(100)
-            .setPriority(-1)
-            .setCellRenderer(lapTimeRenderer),
+            .setMaxWidth(100)
+            .setCellRenderer((applet, context) -> lapTimeRenderer(applet, context)),
             new LPTableColumn("Last")
-            .setMinWidth(100)
-            .setTextAlign(CENTER),
+            .setMaxWidth(100)
+            .setCellRenderer((applet, context) -> lastLapRenderer(applet, context)),
             new LPTableColumn("Best")
-            .setMinWidth(100)
-            .setTextAlign(CENTER),
+            .setMaxWidth(100)
+            .setCellRenderer((applet, context) -> bestLapRenderer(applet, context)),
             new LPTableColumn("Laps")
-            .setMinWidth(70)
-            .setTextAlign(CENTER)
+            .setMaxWidth(70)
+            .setCellRenderer((applet, context) -> lapCountRenderer(applet, context))
         };
     }
 
     @Override
-    public Object getValueAt(int column, int row) {
-        /*
-        CarInfo car = getEntry(row).getCarInfo();
-
-        switch (column) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-                return getEntry(row);
-            case 7:
-                return TimeUtils.asLapTime(car.getRealtime().getLastLap().getLapTimeMS());
-            case 8:
-                return TimeUtils.asLapTime(car.getRealtime().getBestSessionLap().getLapTimeMS());
-            case 9:
-                return String.valueOf(car.getRealtime().getLaps());
-        }
-         */
-        return "-";
+    public String getName() {
+        return "Race";
     }
 
-    private final LPTable.CellRenderer gapRenderer = (
-            PApplet applet,
-            RenderContext context) -> {
+    @Override
+    public Object getValueAt(int column, int row) {
+        return getEntry(row);
+    }
+
+    @Override
+    public void sort() {
+        entries = entries.stream()
+                .sorted((c1, c2)
+                        -> c1.get(POSITION).compareTo(c2.get(POSITION))
+                )
+                .collect(toList());
+    }
+
+    private void gapRenderer(PApplet applet, RenderContext context) {
         /*
         LiveTimingEntry entry = ((LiveTimingEntry) context.object);
         String gap = TimeUtils.asGap(entry.getGap());
@@ -97,11 +92,9 @@ public class RaceTableModel
         }
         applet.text(gap, context.width - 20, context.height / 2);
          */
-    };
+    }
 
-    private final LPTable.CellRenderer gapToLeaderRenderer = (
-            PApplet applet,
-            RenderContext context) -> {
+    private void gapToLeaderRenderer(PApplet applet, RenderContext context) {
         /*
         LiveTimingEntry entry = ((LiveTimingEntry) context.object);
 
@@ -121,11 +114,9 @@ public class RaceTableModel
         applet.fill(COLOR_WHITE);
         applet.text(text, context.width - 20, context.height / 2);
          */
-    };
+    }
 
-    private final LPTable.CellRenderer lapTimeRenderer = (
-            PApplet applet,
-            RenderContext context) -> {
+    private void lapTimeRenderer(PApplet applet, RenderContext context) {
         /*
         CarInfo car = ((LiveTimingEntry) context.object).getCarInfo();
         LapInfo currentLap = car.getRealtime().getCurrentLap();
@@ -145,15 +136,49 @@ public class RaceTableModel
         applet.textFont(LookAndFeel.fontRegular());
         applet.text(text, context.width / 2, context.height / 2);
          */
-    };
-
-    @Override
-    public void sort() {
-    }
-    
-    @Override
-    public String getName() {
-        return "Race";
     }
 
+    private void lastLapRenderer(PApplet applet, RenderContext context) {
+        CarStatistics stats = (CarStatistics) context.object;
+        int lastLapTime = stats.get(LAST_LAP_TIME);
+        int sessionbestLapTime = stats.get(SESSION_BEST_LAP_TIME);
+        if (lastLapTime == sessionbestLapTime) {
+            applet.fill(COLOR_PURPLE);
+        } else {
+            applet.fill(COLOR_WHITE);
+        }
+        String text = "--";
+        if (lastLapTime != Integer.MAX_VALUE) {
+            text = TimeUtils.asLapTime(lastLapTime);
+        }
+        applet.textAlign(CENTER, CENTER);
+        applet.textFont(LookAndFeel.fontRegular());
+        applet.text(text, context.width / 2, context.height / 2);
+    }
+
+    private void bestLapRenderer(PApplet applet, RenderContext context) {
+        CarStatistics stats = (CarStatistics) context.object;
+        int bestLapTime = stats.get(BEST_LAP_TIME);
+        int sessionbestLapTime = stats.get(SESSION_BEST_LAP_TIME);
+        if (bestLapTime == sessionbestLapTime) {
+            applet.fill(COLOR_PURPLE);
+        } else {
+            applet.fill(COLOR_WHITE);
+        }
+        String text = "--";
+        if (bestLapTime != Integer.MAX_VALUE) {
+            text = TimeUtils.asLapTime(bestLapTime);
+        }
+        applet.textAlign(CENTER, CENTER);
+        applet.textFont(LookAndFeel.fontRegular());
+        applet.text(text, context.width / 2, context.height / 2);
+    }
+
+    private void lapCountRenderer(PApplet applet, RenderContext context) {
+        String text = String.valueOf(((CarStatistics) context.object).get(LAP_COUNT));
+        applet.fill(COLOR_WHITE);
+        applet.textAlign(CENTER, CENTER);
+        applet.textFont(LookAndFeel.fontRegular());
+        applet.text(text, context.width / 2, context.height / 2);
+    }
 }
