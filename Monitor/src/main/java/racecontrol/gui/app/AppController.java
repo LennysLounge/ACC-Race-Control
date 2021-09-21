@@ -19,7 +19,6 @@ import processing.core.PImage;
 import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.app.Menu.MenuItem;
 import racecontrol.gui.app.test.TestPanel;
-import racecontrol.gui.app.broadcasting.BroadcastingController;
 import racecontrol.gui.app.logging.LoggingPanel;
 import racecontrol.gui.app.racecontrol.RaceControlController;
 import racecontrol.client.AccBroadcastingClient;
@@ -29,6 +28,7 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.gui.app.livetiming.LiveTimingController;
 import racecontrol.gui.lpui.LPComponent;
 import racecontrol.gui.lpui.LPContainer;
 
@@ -57,9 +57,9 @@ public class AppController
      */
     private LoggingPanel loggingPanel;
     /**
-     * Broadcasting controller.
+     * Live timing component controller.
      */
-    private BroadcastingController broadcastingController;
+    private LiveTimingController liveTimingController;
 
     private TestPanel testPanel;
 
@@ -103,7 +103,7 @@ public class AppController
         detachedPlaceholderPanel = new DetachedPlaceholderPanel();
         settingsPanel = new SettingsPanel();
         loggingPanel = new LoggingPanel();
-        broadcastingController = new BroadcastingController();
+        liveTimingController = new LiveTimingController();
         raceControlController = RaceControlController.getInstance();
         raceControlController.initialise();
         testPanel = new TestPanel();
@@ -166,7 +166,7 @@ public class AppController
 
     private LPContainer getPanelForMenuItem(MenuItem item) {
         if (item == appPanel.liveTimingMenuItem) {
-            return broadcastingController.getPanel();
+            return liveTimingController.getPanel();
         } else if (item == appPanel.raceControlMenuItem) {
             return raceControlController.getPanel();
         } else if (item == appPanel.debugMenuItem) {
@@ -184,7 +184,7 @@ public class AppController
         if (e instanceof RealtimeUpdateEvent) {
             appPanel.header.invalidate();
         } else if (e instanceof ConnectionOpenedEvent) {
-            appPanel.setActivePage(broadcastingController.getPanel());
+            appPanel.setActivePage(liveTimingController.getPanel());
             appPanel.menu.setSelectedMenuItem(appPanel.liveTimingMenuItem);
             appPanel.updateComponents();
             appPanel.invalidate();
@@ -211,6 +211,7 @@ public class AppController
     public PanelWindowApplet launchNewWindow(LPComponent panel, boolean resizeable) {
         // only create a window if that panel doesnt already have one.
         if (!windowPanels.containsKey(panel)) {
+            panel.setPosition(0, 0);
             PanelWindowApplet applet = new PanelWindowApplet(panel, resizeable);
             applet.addCloseAction(() -> {
                 windowPanels.remove(panel);

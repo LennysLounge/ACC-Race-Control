@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.gui.app.broadcasting;
+package racecontrol.gui.app.livetiming.broadcastcontrol;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;

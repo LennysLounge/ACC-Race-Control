@@ -3,11 +3,11 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.gui.app.broadcasting.timing;
+package racecontrol.gui.app.livetiming.timing;
 
 import java.util.ArrayList;
 import java.util.List;
-import racecontrol.gui.app.broadcasting.timing.tablemodels.LiveTimingTableModel;
+import racecontrol.gui.app.livetiming.timing.tablemodels.LiveTimingTableModel;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
@@ -20,20 +20,20 @@ import java.util.logging.Logger;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
-import racecontrol.gui.app.broadcasting.timing.tablemodels.QualifyingTableModel;
+import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingTableModel;
 import racecontrol.gui.lpui.LPTable;
 
 /**
  *
  * @author Leonard
  */
-public class LiveTimingController
+public class LiveTimingTableController
         implements EventListener {
 
     /**
      * This classes logger.
      */
-    private static final Logger LOG = Logger.getLogger(LiveTimingController.class.getName());
+    private static final Logger LOG = Logger.getLogger(LiveTimingTableController.class.getName());
     /**
      * Reference to the connection client.
      */
@@ -59,7 +59,7 @@ public class LiveTimingController
      */
     private int lastTableClickRow = -1;
 
-    public LiveTimingController() {
+    public LiveTimingTableController() {
         EventBus.register(this);
         statisticsExtension = StatisticsExtension.getInstance();
         client = AccBroadcastingClient.getClient();

@@ -3,9 +3,9 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.gui.app.broadcasting;
+package racecontrol.gui.app.livetiming.broadcastcontrol;
 
-import racecontrol.gui.app.broadcasting.timing.LiveTimingController;
+import racecontrol.gui.app.livetiming.timing.LiveTimingTableController;
 import java.util.logging.Logger;
 import racecontrol.gui.RaceControlApplet;
 import racecontrol.client.AccBroadcastingClient;
@@ -37,12 +37,12 @@ public class BroadcastingController
     /**
      * Reference to the live timing extension.
      */
-    private final LiveTimingController liveTimingExtension;
+    private final LiveTimingTableController liveTimingExtension;
 
     public BroadcastingController() {
         EventBus.register(this);
         client = AccBroadcastingClient.getClient();
-        liveTimingExtension = new LiveTimingController();
+        liveTimingExtension = new LiveTimingTableController();
         this.panel = new BroadcastingPanel(this, liveTimingExtension.getPanel());
     }
 

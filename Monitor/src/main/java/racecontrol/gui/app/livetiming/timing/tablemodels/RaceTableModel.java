@@ -3,17 +3,8 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.gui.app.broadcasting.timing.tablemodels;
+package racecontrol.gui.app.livetiming.timing.tablemodels;
 
-import racecontrol.gui.app.broadcasting.timing.LiveTimingEntry;
-import racecontrol.client.data.CarInfo;
-import racecontrol.client.data.LapInfo;
-import racecontrol.client.data.enums.CarLocation;
-import racecontrol.client.data.enums.LapType;
-import racecontrol.utility.TimeUtils;
-import racecontrol.gui.LookAndFeel;
-import static racecontrol.gui.LookAndFeel.COLOR_ORANGE;
-import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.lpui.LPTable;
 import racecontrol.gui.lpui.LPTableColumn;
 import processing.core.PApplet;
@@ -90,6 +81,7 @@ public class RaceTableModel
     private final LPTable.CellRenderer gapRenderer = (
             PApplet applet,
             RenderContext context) -> {
+        /*
         LiveTimingEntry entry = ((LiveTimingEntry) context.object);
         String gap = TimeUtils.asGap(entry.getGap());
         if (entry.getCarInfo().getRealtime().getPosition() == 1
@@ -104,11 +96,13 @@ public class RaceTableModel
             applet.fill(COLOR_WHITE);
         }
         applet.text(gap, context.width - 20, context.height / 2);
+         */
     };
 
     private final LPTable.CellRenderer gapToLeaderRenderer = (
             PApplet applet,
             RenderContext context) -> {
+        /*
         LiveTimingEntry entry = ((LiveTimingEntry) context.object);
 
         String text = "--";
@@ -126,11 +120,13 @@ public class RaceTableModel
         applet.textFont(LookAndFeel.fontRegular());
         applet.fill(COLOR_WHITE);
         applet.text(text, context.width - 20, context.height / 2);
+         */
     };
 
     private final LPTable.CellRenderer lapTimeRenderer = (
             PApplet applet,
             RenderContext context) -> {
+        /*
         CarInfo car = ((LiveTimingEntry) context.object).getCarInfo();
         LapInfo currentLap = car.getRealtime().getCurrentLap();
         String text = "--";
@@ -148,6 +144,7 @@ public class RaceTableModel
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
         applet.text(text, context.width / 2, context.height / 2);
+         */
     };
 
     @Override

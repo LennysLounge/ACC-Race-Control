@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.gui.app.broadcasting.timing.tablemodels;
+package racecontrol.gui.app.livetiming.timing.tablemodels;
 
 import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;

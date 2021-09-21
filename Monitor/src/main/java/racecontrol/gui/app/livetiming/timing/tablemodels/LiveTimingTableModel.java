@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.gui.app.broadcasting.timing.tablemodels;
+package racecontrol.gui.app.livetiming.timing.tablemodels;
 
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_RED;
