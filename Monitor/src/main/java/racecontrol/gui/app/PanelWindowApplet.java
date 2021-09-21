@@ -54,7 +54,7 @@ public class PanelWindowApplet
     @Override
     public void setup() {
         surface.setResizable(resizeable);
-        surface.setTitle(panel.getName());
+        surface.setTitle(panel.getName() + " Detached");
         PImage i = loadResourceAsPImage("/images/Logo.png");
         if (i != null) {
             surface.setIcon(i);

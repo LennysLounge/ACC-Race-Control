@@ -43,6 +43,7 @@ public class LiveTimingPanel
     private final LPContainer broadcastingControls;
 
     public LiveTimingPanel(LPContainer broadcastingControls) {
+        setName("Live Timing");
         this.broadcastingControls = broadcastingControls;
 
         detachLiveTimingButton.setPosition(10, 0);

@@ -72,6 +72,7 @@ public class LiveTimingTableController
         tableModels.add(new TestTableModel());
         model = tableModels.get(0);
         table.setTableModel(model);
+        table.setName("Live Timing Table");
 
     }
 
