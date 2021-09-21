@@ -150,5 +150,10 @@ public class RaceTableModel
     @Override
     public void sort() {
     }
+    
+    @Override
+    public String getName() {
+        return "Race";
+    }
 
 }

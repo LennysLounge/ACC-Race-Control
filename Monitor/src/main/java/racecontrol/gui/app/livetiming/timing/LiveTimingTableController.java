@@ -21,6 +21,7 @@ import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingTableModel;
+import racecontrol.gui.app.livetiming.timing.tablemodels.TestTableModel;
 import racecontrol.gui.lpui.LPTable;
 
 /**
@@ -49,7 +50,7 @@ public class LiveTimingTableController
     /**
      * Table model to display the live timing.
      */
-    private LiveTimingTableModel model = new QualifyingTableModel();
+    private LiveTimingTableModel model;
     /**
      * timestamp for the last time the table was clicked.
      */
@@ -59,12 +60,19 @@ public class LiveTimingTableController
      */
     private int lastTableClickRow = -1;
 
+    private final List<LiveTimingTableModel> tableModels = new ArrayList<>();
+
     public LiveTimingTableController() {
         EventBus.register(this);
         statisticsExtension = StatisticsExtension.getInstance();
         client = AccBroadcastingClient.getClient();
-        table.setTableModel(model);
         table.setCellClickAction((column, row) -> onCellClickAction(column, row));
+
+        tableModels.add(new QualifyingTableModel());
+        tableModels.add(new TestTableModel());
+        model = tableModels.get(0);
+        table.setTableModel(model);
+
     }
 
     public LPContainer getPanel() {
@@ -74,11 +82,11 @@ public class LiveTimingTableController
     @Override
     public void onEvent(Event e) {
         if (e instanceof RealtimeUpdateEvent) {
-            onRealtimeUpdate(((RealtimeUpdateEvent) e).getSessionInfo());
+            updateTableModel();
         }
     }
 
-    public void onRealtimeUpdate(SessionInfo sessionInfo) {
+    private void updateTableModel() {
         List<CarStatistics> cars = new ArrayList<>();
         client.getModel().getCarsInfo().values().forEach(
                 car -> cars.add(statisticsExtension.getCar(car.getCarId()))
@@ -102,6 +110,25 @@ public class LiveTimingTableController
         }
         lastTableClickRow = row;
         lastTableClick = System.currentTimeMillis();
+    }
+
+    public void cycleTableModelsLeft() {
+        int index = tableModels.indexOf(model);
+        model = tableModels.get((index + 1) % tableModels.size());
+        table.setTableModel(model);
+    }
+
+    public void cycleTableModelsRight() {
+        int index = tableModels.indexOf(model);
+        if (index == 0) {
+            index = tableModels.size();
+        }
+        model = tableModels.get(index - 1);
+        table.setTableModel(model);
+    }
+
+    public String getTableModelName() {
+        return model.getName();
     }
 
 }

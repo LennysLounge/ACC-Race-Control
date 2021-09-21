@@ -216,4 +216,9 @@ public class QualifyingTableModel
         applet.text(text, context.width / 2, context.height / 2);
     }
 
+    @Override
+    public String getName() {
+        return "Qualifying";
+    }
+
 }

@@ -184,6 +184,8 @@ public abstract class LiveTimingTableModel
     }
 
     public abstract void sort();
+    
+    public abstract String getName();
 
     public void setEntries(List<CarStatistics> entries) {
         this.entries = entries;

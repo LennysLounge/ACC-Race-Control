@@ -36,6 +36,9 @@ public class LiveTimingController {
         panel.addLiveTimingTable(liveTimingTableController.getPanel());
 
         panel.detachLiveTimingButton.setAction(() -> detachLiveTiming());
+        panel.viewLeftButton.setAction(() -> cycleTableModelsLeft());
+        panel.viewRightButton.setAction(() -> cycleTableModelsRight());
+
     }
 
     public LPContainer getPanel() {
@@ -53,6 +56,20 @@ public class LiveTimingController {
             isLiveTimingDetached = false;
             panel.addLiveTimingTable(liveTimingTableController.getPanel());
         });
+    }
+
+    public void cycleTableModelsLeft() {
+        liveTimingTableController.cycleTableModelsLeft();
+        panel.viewLabel.setText("View " + liveTimingTableController.getTableModelName());
+        panel.onResize(panel.getWidth(), panel.getHeight());
+        panel.invalidate();
+    }
+
+    public void cycleTableModelsRight() {
+        liveTimingTableController.cycleTableModelsRight();
+        panel.viewLabel.setText("View " + liveTimingTableController.getTableModelName());
+        panel.onResize(panel.getWidth(), panel.getHeight());
+        panel.invalidate();
     }
 
 }
