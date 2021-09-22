@@ -14,13 +14,13 @@ public class LapRecord {
     /**
      * Lap time of this lap.
      */
-    private final float lapTime;
+    private final int lapTime;
     /**
      * Delta to the leader.
      */
-    private final float deltaToLeader;
+    private final int deltaToLeader;
 
-    public LapRecord(float lapTime, float deltaToLeader) {
+    public LapRecord(int lapTime, int deltaToLeader) {
         this.lapTime = lapTime;
         this.deltaToLeader = deltaToLeader;
     }
@@ -29,7 +29,7 @@ public class LapRecord {
         return lapTime;
     }
 
-    public float getDeltaToLeader() {
+    public int getDeltaToLeader() {
         return deltaToLeader;
     }
 }

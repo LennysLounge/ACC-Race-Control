@@ -108,7 +108,7 @@ public class RaceReportController
         dr.setPosition(e.getCar().getRealtime().getPosition());
         dr.setLapCount(e.getCar().getRealtime().getLaps());
 
-        float deltaToLeader = 0;
+        int deltaToLeader = 0;
 
         // if we are in a race session, calculate offset to leader.
         if (sessionId.getType() == RACE) {
@@ -119,7 +119,7 @@ public class RaceReportController
                 leaderOffset.put(lapCount, now);
             }
 
-            deltaToLeader = now - leaderOffset.get(lapCount);
+            deltaToLeader = (int) (now - leaderOffset.get(lapCount));
         }
 
         dr.getLaps().put(dr.getLapCount(), new LapRecord(e.getLapTime(), deltaToLeader));
