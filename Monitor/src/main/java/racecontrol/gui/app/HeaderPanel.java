@@ -6,12 +6,9 @@
 package racecontrol.gui.app;
 
 import processing.core.PApplet;
-import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.utility.TimeUtils;
-import racecontrol.gui.LookAndFeel;
-import static racecontrol.gui.LookAndFeel.COLOR_BLUE;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_DARK_GRAY;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;

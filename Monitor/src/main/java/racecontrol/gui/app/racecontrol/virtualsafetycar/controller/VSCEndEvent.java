@@ -15,9 +15,9 @@ import racecontrol.eventbus.Event;
 public class VSCEndEvent extends Event {
 
     private final SessionId sessionId;
-    private final float sessionTime;
+    private final int sessionTime;
 
-    public VSCEndEvent(SessionId sessionId, float sessionTime) {
+    public VSCEndEvent(SessionId sessionId, int sessionTime) {
         this.sessionId = sessionId;
         this.sessionTime = sessionTime;
     }
@@ -26,7 +26,7 @@ public class VSCEndEvent extends Event {
         return sessionId;
     }
 
-    public float getSessionTime() {
+    public int getSessionTime() {
         return sessionTime;
     }
 

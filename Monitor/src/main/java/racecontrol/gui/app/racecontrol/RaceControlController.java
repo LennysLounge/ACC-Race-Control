@@ -213,7 +213,7 @@ public class RaceControlController
 
     private void createDummyContactEvent() {
         int nCars = (int) Math.floor(Math.random() * Math.min(6, client.getModel().getCarsInfo().size()) + 1);
-        float sessionTime = client.getModel().getSessionInfo().getSessionTime();
+        int sessionTime = client.getModel().getSessionInfo().getSessionTime();
         ContactInfo incident = new ContactInfo(
                 sessionTime,
                 0,

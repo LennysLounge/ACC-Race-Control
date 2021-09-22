@@ -142,9 +142,9 @@ public class AccBroadcastingProtocol {
 
         LapInfo bestSessionLap = readLap(in);
 
-        SessionInfo sessionInfo = new SessionInfo(eventIndex, sessionIndex, sessionType, phase, sessionTime,
-                sessionEndTime, focusedCarIndex, activeCameraSet, activeCamera, currentHudPage, isReplayPlaying,
-                replaySessionTime, replayRemainingTime, timeOfDay, ambientTemp, trackTemp, cloudLevel,
+        SessionInfo sessionInfo = new SessionInfo(eventIndex, sessionIndex, sessionType, phase, (int) sessionTime,
+                (int) sessionEndTime, focusedCarIndex, activeCameraSet, activeCamera, currentHudPage, isReplayPlaying,
+                (int) replaySessionTime, (int) replayRemainingTime, (int) timeOfDay, ambientTemp, trackTemp, cloudLevel,
                 rainLevel, wetness, bestSessionLap);
 
         callback.onRealtimeUpdate(sessionInfo);
@@ -169,7 +169,7 @@ public class AccBroadcastingProtocol {
         LapInfo bestSessionLap = readLap(in);
         LapInfo lasLap = readLap(in);
         LapInfo currentLap = readLap(in);
-        
+
         RealtimeInfo info = new RealtimeInfo(carId, driverIndex, driverCount, gear, yaw, pitch, roll,
                 location, kmh, position, cupPosition, trackPosition, splinePosition, laps, delta,
                 bestSessionLap, lasLap, currentLap);
@@ -382,7 +382,7 @@ public class AccBroadcastingProtocol {
         in.read(int32, 0, 4);
         return ByteBuffer.wrap(int32).order(ByteOrder.LITTLE_ENDIAN).getFloat();
     }
-    
+
     private float readFloat_BIG(ByteArrayInputStream in) {
         byte[] int32 = new byte[4];
         in.read(int32, 0, 4);

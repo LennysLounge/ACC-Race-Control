@@ -75,7 +75,7 @@ public class GoogleSheetsAPIPanel extends LPContainer {
         String offset = "";
         if (extension.isGreenFlagOffsetBeeingMeasured()) {
             long diff = System.currentTimeMillis() - extension.getGreenFlagTimeStamp();
-            offset += TimeUtils.asDuration(diff);
+            offset += TimeUtils.asDuration((int)diff);
         } else {
             offset += "-";
         }

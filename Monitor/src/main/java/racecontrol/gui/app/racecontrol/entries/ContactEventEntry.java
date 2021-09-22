@@ -46,7 +46,7 @@ public class ContactEventEntry
 
     public ContactEventEntry(
             SessionId sessionId,
-            float sessionTime,
+            int sessionTime,
             String typeDesciptor,
             boolean hasReplay,
             ContactInfo incident) {

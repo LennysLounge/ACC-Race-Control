@@ -24,11 +24,11 @@ public class ContactInfo {
     /**
      * time of the earliest accident event.
      */
-    private final float sessionEarliestTime;
+    private final int sessionEarliestTime;
     /**
      * time of the latest accident event.
      */
-    private final float sessionLatestTime;
+    private final int sessionLatestTime;
     /**
      * The rough replay time for this incident.
      */
@@ -46,7 +46,7 @@ public class ContactInfo {
      */
     private final SessionId sessionID;
 
-    public ContactInfo(float time, int replayTime, CarInfo car, SessionId sessionId) {
+    public ContactInfo(int time, int replayTime, CarInfo car, SessionId sessionId) {
         this(time,
                 time,
                 Arrays.asList(car),
@@ -56,7 +56,7 @@ public class ContactInfo {
         );
     }
 
-    public ContactInfo(float time, int replayTime, SessionId sessionId) {
+    public ContactInfo(int time, int replayTime, SessionId sessionId) {
         this(time,
                 time,
                 new LinkedList<CarInfo>(),
@@ -66,8 +66,8 @@ public class ContactInfo {
         );
     }
 
-    private ContactInfo(float earliestTime,
-            float latestTime,
+    private ContactInfo(int earliestTime,
+            int latestTime,
             List<CarInfo> cars,
             long timestamp,
             SessionId sessionID,
@@ -80,7 +80,7 @@ public class ContactInfo {
         this.replayTime = replayTime;
     }
 
-    public ContactInfo addCar(float time, CarInfo car, long timestamp) {
+    public ContactInfo addCar(int time, CarInfo car, long timestamp) {
         List<CarInfo> c = new LinkedList<>();
         c.addAll(cars);
         c.add(car);
@@ -101,11 +101,11 @@ public class ContactInfo {
                 replayTime);
     }
 
-    public float getSessionEarliestTime() {
+    public int getSessionEarliestTime() {
         return sessionEarliestTime;
     }
 
-    public float getSessionLatestTime() {
+    public int getSessionLatestTime() {
         return sessionLatestTime;
     }
 

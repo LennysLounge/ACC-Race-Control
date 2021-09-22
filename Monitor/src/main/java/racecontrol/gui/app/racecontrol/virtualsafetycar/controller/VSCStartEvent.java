@@ -18,9 +18,9 @@ public class VSCStartEvent extends Event{
     private final int speedTolerance;
     private final int timeTolerance;
     private final SessionId sessionId;
-    private final float timeStamp;
+    private final int timeStamp;
 
-    public VSCStartEvent(int speedLimit, int speedTolerance, int timeTolerance, SessionId sessionId, float timeStamp) {
+    public VSCStartEvent(int speedLimit, int speedTolerance, int timeTolerance, SessionId sessionId, int timeStamp) {
         this.speedLimit = speedLimit;
         this.speedTolerance = speedTolerance;
         this.timeTolerance = timeTolerance;
@@ -44,7 +44,7 @@ public class VSCStartEvent extends Event{
         return sessionId;
     }
 
-    public float getTimeStamp() {
+    public int getTimeStamp() {
         return timeStamp;
     }
     

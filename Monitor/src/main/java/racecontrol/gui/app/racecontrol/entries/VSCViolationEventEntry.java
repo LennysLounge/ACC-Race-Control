@@ -45,7 +45,7 @@ public class VSCViolationEventEntry
 
     public VSCViolationEventEntry(
             SessionId sessionId,
-            float sessionTime,
+            int sessionTime,
             String typeDesciptor,
             boolean hasReplay,
             VSCViolationEvent info) {

@@ -18,16 +18,16 @@ public class SessionInfo {
     int sessionIndex;
     SessionType sessionType = SessionType.NONE;
     SessionPhase phase = SessionPhase.NONE;
-    float sessionTime;
-    float sessionEndTime;
+    int sessionTime;
+    int sessionEndTime;
     int focusedCarIndex;
     String activeCameraSet = "";
     String activeCamera = "";
     String currentHudPage = "";
     boolean replayPlaying;
-    float replaySessionTime;
-    float replayRemainingTime;
-    float timeOfDay;
+    int replaySessionTime;
+    int replayRemainingTime;
+    int timeOfDay;
     byte ambientTemp;
     byte trackTemp;
     byte cloudLevel;
@@ -38,10 +38,10 @@ public class SessionInfo {
     public SessionInfo() {
     }
 
-    public SessionInfo(int eventIndex, int sessionIndex, SessionType sessionType, SessionPhase phase, float sessionTime,
-            float sessionEndTime, int focusedCarIndex, String activeCameraSet, String activeCamera,
-            String currentHudPage, boolean replayPlaying, float replaySessionTime, float replayRemainingTime,
-            float timeOfDay, byte ambientTemp, byte trackTemp, byte cloudLevel, byte rainLevel, byte wetness,
+    public SessionInfo(int eventIndex, int sessionIndex, SessionType sessionType, SessionPhase phase, int sessionTime,
+            int sessionEndTime, int focusedCarIndex, String activeCameraSet, String activeCamera,
+            String currentHudPage, boolean replayPlaying, int replaySessionTime, int replayRemainingTime,
+            int timeOfDay, byte ambientTemp, byte trackTemp, byte cloudLevel, byte rainLevel, byte wetness,
             LapInfo bestSessionLap) {
         this.eventIndex = eventIndex;
         this.sessionIndex = sessionIndex;
@@ -81,11 +81,11 @@ public class SessionInfo {
         return phase;
     }
 
-    public float getSessionTime() {
+    public int getSessionTime() {
         return sessionTime;
     }
 
-    public float getSessionEndTime() {
+    public int getSessionEndTime() {
         return sessionEndTime;
     }
 
@@ -109,15 +109,15 @@ public class SessionInfo {
         return replayPlaying;
     }
 
-    public float getReplaySessionTime() {
+    public int getReplaySessionTime() {
         return replaySessionTime;
     }
 
-    public float getReplayRemainingTime() {
+    public int getReplayRemainingTime() {
         return replayRemainingTime;
     }
 
-    public float getTimeOfDay() {
+    public int getTimeOfDay() {
         return timeOfDay;
     }
 

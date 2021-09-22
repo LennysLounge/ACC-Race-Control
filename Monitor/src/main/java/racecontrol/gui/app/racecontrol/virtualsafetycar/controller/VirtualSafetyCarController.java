@@ -90,7 +90,7 @@ public class VirtualSafetyCarController
     private void onRealtimeCarUpdate(RealtimeInfo info) {
         if (info.getKMH() > speedLimit + speedTolerance) {
 
-            float sessionNow = client.getModel().getSessionInfo().getSessionTime();
+            int sessionNow = client.getModel().getSessionInfo().getSessionTime();
             // get or create record.
             VSCRecord record = carsOverTheLimit.getOrDefault(info.getCarId(),
                     new VSCRecord(info.getCarId(),
@@ -155,7 +155,7 @@ public class VirtualSafetyCarController
             this.speedLimit = speedLimit;
             this.speedTolerance = speedTolerance;
             this.timeTolerance = timeTolerance;
-            float sessionTime = client.getModel().getSessionInfo().getSessionTime();
+            int sessionTime = client.getModel().getSessionInfo().getSessionTime();
             vscOn = true;
 
             String logText = "VSC started at " + TimeUtils.asDuration(sessionTime)
@@ -189,11 +189,11 @@ public class VirtualSafetyCarController
     private class VSCRecord {
 
         public final int carId;
-        public final float sessionTimeStamp;
+        public final int sessionTimeStamp;
         public int speedOver;
-        public float timeOver;
+        public int timeOver;
 
-        public VSCRecord(int carId, float sessionTimeStamp, int speedOver) {
+        public VSCRecord(int carId, int sessionTimeStamp, int speedOver) {
             this.carId = carId;
             this.sessionTimeStamp = sessionTimeStamp;
             this.speedOver = speedOver;

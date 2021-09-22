@@ -16,11 +16,11 @@ public class VSCViolationEvent extends Event{
     
     private final int carId;
     private final int speedOver;
-    private final float timeOver;
+    private final int timeOver;
     private final SessionId sessionId;
-    private final float sessionTime;
+    private final int sessionTime;
 
-    public VSCViolationEvent(int carId, int speedOver, float time, SessionId sessionId, float sessionTime) {
+    public VSCViolationEvent(int carId, int speedOver, int time, SessionId sessionId, int sessionTime) {
         this.carId = carId;
         this.speedOver = speedOver;
         this.timeOver = time;
@@ -36,7 +36,7 @@ public class VSCViolationEvent extends Event{
         return speedOver;
     }
 
-    public float getTimeOver() {
+    public int getTimeOver() {
         return timeOver;
     }
 
@@ -44,7 +44,7 @@ public class VSCViolationEvent extends Event{
         return sessionId;
     }
 
-    public float getSessionTime() {
+    public int getSessionTime() {
         return sessionTime;
     }
 }

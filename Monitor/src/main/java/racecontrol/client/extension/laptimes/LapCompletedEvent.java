@@ -17,9 +17,9 @@ public class LapCompletedEvent
     
     private final CarInfo car;
     
-    private final float lapTime;
+    private final int lapTime;
 
-    public LapCompletedEvent(CarInfo car, float lapTime) {
+    public LapCompletedEvent(CarInfo car, int lapTime) {
         this.car = car;
         this.lapTime = lapTime;
     }
@@ -28,7 +28,7 @@ public class LapCompletedEvent
         return car;
     }
 
-    public float getLapTime() {
+    public int getLapTime() {
         return lapTime;
     }
     

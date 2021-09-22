@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2021 Leonard Schüngel
- * 
+ *
  * For licensing information see the included license (LICENSE.txt)
  */
 package racecontrol.gui.app.racecontrol.virtualsafetycar;
@@ -45,7 +45,7 @@ public class VSCStatusPanel
         applet.textFont(LookAndFeel.fontMedium());
         applet.textAlign(LEFT, CENTER);
         long time = System.currentTimeMillis() - vscStart;
-        String text = "VSC Active!   Elapsed time: " + TimeUtils.asDuration(time);
+        String text = "VSC Active!   Elapsed time: " + TimeUtils.asDuration((int) time);
         applet.text(text, 10, LINE_HEIGHT / 2);
     }
 
@@ -53,8 +53,8 @@ public class VSCStatusPanel
     public void onResize(float w, float h) {
         settingsButton.setPosition(w - 110, 0);
     }
-    
-    public void setVSCStart(){
+
+    public void setVSCStart() {
         vscStart = System.currentTimeMillis();
     }
 

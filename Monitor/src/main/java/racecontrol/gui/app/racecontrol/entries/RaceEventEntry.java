@@ -15,14 +15,14 @@ import racecontrol.gui.lpui.LPTable;
 public abstract class RaceEventEntry {
 
     private final SessionId sessionId;
-    private final float sessionTime;
+    private final int sessionTime;
     private final String typeDescriptor;
     private final boolean hasReplay;
-    private float replayTime;
+    private int replayTime;
 
     public RaceEventEntry(
             SessionId sessionId,
-            float sessionTime,
+            int sessionTime,
             String typeDescriptor,
             boolean hasReplay) {
         this.sessionId = sessionId;
@@ -37,7 +37,7 @@ public abstract class RaceEventEntry {
      *
      * @param replayTime the replay time.
      */
-    public void setReplayTime(float replayTime) {
+    public void setReplayTime(int replayTime) {
         this.replayTime = replayTime;
     }
 
@@ -58,7 +58,7 @@ public abstract class RaceEventEntry {
         return sessionId;
     }
 
-    public float getSessionTime() {
+    public int getSessionTime() {
         return sessionTime;
     }
 
@@ -70,7 +70,7 @@ public abstract class RaceEventEntry {
         return hasReplay;
     }
 
-    public float getReplayTime() {
+    public int getReplayTime() {
         return replayTime;
     }
 
