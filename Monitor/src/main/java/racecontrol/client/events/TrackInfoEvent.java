@@ -12,11 +12,11 @@ import racecontrol.client.data.TrackInfo;
  *
  * @author Leonard
  */
-public class TrackDataEvent extends Event {
+public class TrackInfoEvent extends Event {
 
     private TrackInfo info;
 
-    public TrackDataEvent(TrackInfo info) {
+    public TrackInfoEvent(TrackInfo info) {
         this.info = info;
     }
 

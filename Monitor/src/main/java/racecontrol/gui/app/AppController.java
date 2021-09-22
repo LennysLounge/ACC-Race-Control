@@ -29,6 +29,7 @@ import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.gui.app.livetiming.LiveTimingController;
+import racecontrol.gui.app.trackdata.TrackDataController;
 import racecontrol.gui.lpui.LPComponent;
 import racecontrol.gui.lpui.LPContainer;
 
@@ -64,6 +65,10 @@ public class AppController
     private TestPanel testPanel;
 
     private RaceControlController raceControlController;
+    /**
+     * Track data controller.
+     */
+    private TrackDataController trackDataController;
     /**
      * Manages the status panels.
      */
@@ -109,11 +114,14 @@ public class AppController
         testPanel = new TestPanel();
         statusPanelManager = StatusPanelManager.getInstance();
         statusPanelManager.initialise(appPanel);
+        trackDataController = new TrackDataController();
 
         appPanel.liveTimingMenuItem.setClickAction(button -> menuItemClicked(appPanel.liveTimingMenuItem, button));
         appPanel.raceControlMenuItem.setClickAction(button -> menuItemClicked(appPanel.raceControlMenuItem, button));
         appPanel.debugMenuItem.setClickAction(button -> menuItemClicked(appPanel.debugMenuItem, button));
         appPanel.logMenuItem.setClickAction(button -> menuItemClicked(appPanel.logMenuItem, button));
+        appPanel.trackDataItem.setClickAction(button -> menuItemClicked(appPanel.trackDataItem, button));
+
         appPanel.settingsMenuItem.setClickAction(button -> menuItemClicked(appPanel.settingsMenuItem, button));
 
         appPanel.setActivePage(settingsPanel);
@@ -175,6 +183,8 @@ public class AppController
             return loggingPanel;
         } else if (item == appPanel.settingsMenuItem) {
             return settingsPanel;
+        } else if (item == appPanel.trackDataItem) {
+            return trackDataController.getPanel();
         }
         return null;
     }

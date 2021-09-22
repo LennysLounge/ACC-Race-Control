@@ -12,7 +12,7 @@ import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.data.TrackInfo;
 import racecontrol.client.events.RealtimeUpdateEvent;
-import racecontrol.client.events.TrackDataEvent;
+import racecontrol.client.events.TrackInfoEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
@@ -52,8 +52,8 @@ public class BroadcastingController
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof TrackDataEvent) {
-            TrackInfo info = ((TrackDataEvent) e).getInfo();
+        if (e instanceof TrackInfoEvent) {
+            TrackInfo info = ((TrackInfoEvent) e).getInfo();
             RaceControlApplet.runLater(() -> {
                 panel.setCameraSets(info.getCameraSets());
             });

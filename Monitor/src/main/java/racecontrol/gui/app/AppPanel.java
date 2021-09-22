@@ -57,6 +57,10 @@ public class AppPanel
      */
     protected final MenuItem debugMenuItem;
     /**
+     * Debug menu for track data.
+     */
+    protected final MenuItem trackDataItem;
+    /**
      * Settings menu item.
      */
     protected final MenuItem settingsMenuItem;
@@ -110,6 +114,10 @@ public class AppPanel
         debugMenuItem = new MenuItem("Debug",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Debugging.png"));
         menu.addMenuItem(debugMenuItem);
+        
+        trackDataItem = new MenuItem("Track Data",
+                ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Debugging.png"));
+        menu.addMenuItem(trackDataItem);
 
         settingsMenuItem = new MenuItem("Settings",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Settings.png"));

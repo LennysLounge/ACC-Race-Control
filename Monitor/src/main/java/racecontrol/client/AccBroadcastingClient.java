@@ -14,7 +14,7 @@ import racecontrol.client.events.EntryListCarUpdateEvent;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RegistrationResultEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
-import racecontrol.client.events.TrackDataEvent;
+import racecontrol.client.events.TrackInfoEvent;
 import racecontrol.eventbus.EventBus;
 import racecontrol.client.data.AccBroadcastingData;
 import racecontrol.client.data.BroadcastingEvent;
@@ -56,6 +56,7 @@ import racecontrol.logging.UILogger;
 import racecontrol.client.extension.racereport.RaceReportController;
 import racecontrol.client.extension.results.ResultsExtension;
 import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.client.extension.trackdata.TrackDataExtension;
 
 /**
  * A basic connection to the broadcasting interface from Assetto Corsa
@@ -146,6 +147,7 @@ public class AccBroadcastingClient {
         extensions.add(ReplayOffsetExtension.getInstance());
         extensions.add(new ResultsExtension());
         extensions.add(StatisticsExtension.getInstance());
+        extensions.add(TrackDataExtension.getInstance());
     }
 
     /**
@@ -731,7 +733,7 @@ public class AccBroadcastingClient {
         @Override
         public void onTrackData(TrackInfo info) {
             model = model.withTrackInfo(info);
-            EventBus.publish(new TrackDataEvent(info));
+            EventBus.publish(new TrackInfoEvent(info));
         }
 
         @Override
