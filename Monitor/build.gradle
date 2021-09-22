@@ -69,4 +69,10 @@ task buildRelease(type: Zip){
     destinationDir(file("$projectDir/build/release/"))
 }
 
+/*
+compileJava {
+    options.compilerArgs << '-Xlint:unchecked'
+}
+*/
+
 
