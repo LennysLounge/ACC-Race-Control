@@ -11,10 +11,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import racecontrol.client.AccBroadcastingExtension;
 import racecontrol.client.data.TrackInfo;
 import racecontrol.client.events.TrackInfoEvent;
@@ -54,7 +56,6 @@ public class TrackDataExtension
     public void onEvent(Event e) {
         if (e instanceof TrackInfoEvent) {
             loadTrackData(((TrackInfoEvent) e).getInfo());
-            loadVelocityMapAndSaveToTrackData(((TrackInfoEvent) e).getInfo());
         }
     }
 
@@ -65,7 +66,7 @@ public class TrackDataExtension
             trackData = (TrackData) objIn.readObject();
         } catch (IOException | ClassNotFoundException | NullPointerException ex) {
             LOG.log(Level.WARNING, info.getTrackName() + " track data not found or could not be read.", ex);
-            trackData = new TrackData(info.getTrackName(), info.getTrackMeters());
+            loadVelocityMapAndSaveToTrackData(info);
         }
     }
 
@@ -74,22 +75,31 @@ public class TrackDataExtension
     }
 
     public void saveTrackData(TrackData trackData) {
-        try {
-            FileOutputStream fos = new FileOutputStream(trackData.getTrackname() + ".trackData");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(trackData);
-            oos.close();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VelocityMapExtension.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(VelocityMapExtension.class.getName()).log(Level.SEVERE, null, ex);
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save Track Data");
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter jsonFilter = new FileNameExtensionFilter("Track data (.trackData)", ".trackData");
+        fileChooser.setFileFilter(jsonFilter);
+
+        int userSelection = fileChooser.showSaveDialog(null);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            String name = fileChooser.getSelectedFile().getParent() + "\\" + trackData.getTrackname() + ".trackData";
+            try {
+                FileOutputStream fos = new FileOutputStream(name);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(trackData);
+                oos.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(VelocityMapExtension.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(VelocityMapExtension.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
     private void loadVelocityMapAndSaveToTrackData(TrackInfo info) {
         List<Float> vmap = loadVMapForTrack(info.getTrackName());
-        TrackData data = new TrackData(info.getTrackName(), info.getTrackMeters(), vmap, 0.333f, 0.666f, 1f, null);
-        saveTrackData(data);
+        trackData = new TrackData(info.getTrackName(), info.getTrackMeters(), vmap, 0.333f, 0.666f, 1f, new ArrayList<>());
     }
 
     public List<Float> loadVMapForTrack(String trackName) {

@@ -7,6 +7,8 @@ package racecontrol.gui.app.trackdata;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import racecontrol.client.data.RealtimeInfo;
 import static racecontrol.client.data.enums.CarLocation.TRACK;
 import static racecontrol.client.data.enums.LapType.REGULAR;
@@ -26,6 +28,8 @@ import racecontrol.gui.lpui.LPContainer;
 public class TrackDataController
         implements EventListener {
 
+    private static final Logger LOG = Logger.getLogger(TrackDataController.class.getName());
+
     private final TrackDataPanel panel;
 
     private final TrackDataExtension trackDataExtension;
@@ -37,16 +41,28 @@ public class TrackDataController
     private final List<Float> vMap = new ArrayList<>();
     private final List<List<Float>> vMapTotal = new ArrayList<>();
 
+    private final List<Float> dirMap = new ArrayList<>();
+    private final List<List<Float>> dirMapTotal = new ArrayList<>();
+
     public TrackDataController() {
         EventBus.register(this);
         panel = new TrackDataPanel();
         trackDataExtension = TrackDataExtension.getInstance();
 
         for (int i = 0; i < mapSize; i++) {
-            vMap.add(-1f);
+            vMap.add(0f);
             vMapTotal.add(new ArrayList<>());
+            dirMap.add(0f);
+            dirMapTotal.add(new ArrayList<>());
         }
         panel.vMap = vMap;
+        panel.dirMap = dirMap;
+
+        panel.saveAllButton.setAction(() -> saveAll());
+        panel.saveVMapButton.setAction(() -> saveVMap());
+        panel.saveDMapButton.setAction(() -> saveDMap());
+        panel.saveSectorsButton.setAction(() -> saveSectors());
+
     }
 
     public LPContainer getPanel() {
@@ -59,6 +75,9 @@ public class TrackDataController
             onTrackInfo();
         } else if (e instanceof RealtimeCarUpdateEvent) {
             updateVMap(((RealtimeCarUpdateEvent) e).getInfo());
+            updateDirMap(((RealtimeCarUpdateEvent) e).getInfo());
+            panel.drawCarState(((RealtimeCarUpdateEvent) e).getInfo());
+            panel.invalidate();
         }
     }
 
@@ -71,6 +90,7 @@ public class TrackDataController
         panel.sectorThreeTextField.setValue(String.format("%.3f", trackData.getSectorThreeLine()));
 
         panel.savedVMap = trackData.getGt3VelocityMap();
+        panel.savedDirMap = trackData.getDirectionMap();
     }
 
     private void updateVMap(RealtimeInfo info) {
@@ -86,8 +106,20 @@ public class TrackDataController
             vMapTotal.get(index).add(info.getKMH() * 1f);
             vMapTotal.get(index).sort((a, b) -> a.compareTo(b));
             vMap.set(index, getMedian(vMapTotal.get(index)));
-            
-            panel.addVMapPoint(info.getSplinePosition(), info.getKMH());
+        }
+    }
+
+    private void updateDirMap(RealtimeInfo info) {
+        if (info.getCurrentLap().getType() == REGULAR
+                && info.getLocation() == TRACK
+                && info.getKMH() > 10) {
+            int index = (int) Math.floor(info.getSplinePosition() * mapSize);
+            if (index == mapSize) {
+                index = 0;
+            }
+            dirMapTotal.get(index).add(info.getYaw());
+            dirMapTotal.get(index).sort((a, b) -> a.compareTo(b));
+            dirMap.set(index, getMedian(dirMapTotal.get(index)));
         }
     }
 
@@ -101,6 +133,73 @@ public class TrackDataController
         } else {
             return l.get(middle);
         }
+    }
+
+    private void saveAll() {
+        float s1, s2, s3;
+        try {
+            s1 = Float.parseFloat(panel.sectorOneTextField.getValue());
+            s2 = Float.parseFloat(panel.sectorTwoTextField.getValue());
+            s3 = Float.parseFloat(panel.sectorThreeTextField.getValue());
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Error parsing sectors", e);
+            return;
+        }
+
+        TrackData oldData = trackDataExtension.getTrackData();
+        TrackData newData = new TrackData(oldData.getTrackname(),
+                oldData.getTrackMeters(),
+                vMap,
+                s1,
+                s2,
+                s3,
+                dirMap);
+        trackDataExtension.saveTrackData(newData);
+    }
+
+    private void saveVMap() {
+        TrackData oldData = trackDataExtension.getTrackData();
+        TrackData newData = new TrackData(oldData.getTrackname(),
+                oldData.getTrackMeters(),
+                vMap,
+                oldData.getSectorOneLine(),
+                oldData.getSectorTwoLine(),
+                oldData.getSectorThreeLine(),
+                oldData.getDirectionMap());
+        trackDataExtension.saveTrackData(newData);
+    }
+
+    private void saveDMap() {
+        TrackData oldData = trackDataExtension.getTrackData();
+        TrackData newData = new TrackData(oldData.getTrackname(),
+                oldData.getTrackMeters(),
+                oldData.getGt3VelocityMap(),
+                oldData.getSectorOneLine(),
+                oldData.getSectorTwoLine(),
+                oldData.getSectorThreeLine(),
+                dirMap);
+        trackDataExtension.saveTrackData(newData);
+    }
+
+    private void saveSectors() {
+        float s1, s2, s3;
+        try {
+            s1 = Float.parseFloat(panel.sectorOneTextField.getValue());
+            s2 = Float.parseFloat(panel.sectorTwoTextField.getValue());
+            s3 = Float.parseFloat(panel.sectorThreeTextField.getValue());
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Error parsing sectors", e);
+            return;
+        }
+        TrackData oldData = trackDataExtension.getTrackData();
+        TrackData newData = new TrackData(oldData.getTrackname(),
+                oldData.getTrackMeters(),
+                oldData.getGt3VelocityMap(),
+                s1,
+                s2,
+                s3,
+                oldData.getDirectionMap());
+        trackDataExtension.saveTrackData(newData);
     }
 
 }

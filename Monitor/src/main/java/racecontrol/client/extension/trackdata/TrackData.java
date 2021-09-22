@@ -8,6 +8,7 @@ package racecontrol.client.extension.trackdata;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -37,15 +38,15 @@ public class TrackData
             List<Float> directionMap) {
         this.trackname = trackname;
         this.trackMeters = trackMeters;
-        this.gt3VelocityMap = gt3VelocityMap;
+        this.gt3VelocityMap = requireNonNull(gt3VelocityMap, "gt3VelocityMap");
         this.sectorOneLine = sectorOneLine;
         this.sectorTwoLine = sectorTwoLine;
         this.sectorThreeLine = sectorThreeLine;
-        this.directionMap = directionMap;
+        this.directionMap = requireNonNull(directionMap, "directionMap");
     }
 
     public TrackData(String trackName, int trackLength) {
-        this(trackName, trackLength, new ArrayList<>(), 0.33f, 0.66f, 1f, new ArrayList<>());
+        this(trackName, trackLength, new ArrayList<>(), 0.333f, 0.666f, 1f, new ArrayList<>());
     }
 
     public TrackData() {
