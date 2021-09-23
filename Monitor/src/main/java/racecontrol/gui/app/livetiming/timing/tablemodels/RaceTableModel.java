@@ -9,13 +9,23 @@ import static java.util.stream.Collectors.toList;
 import racecontrol.gui.lpui.LPTableColumn;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.RIGHT;
+import static racecontrol.client.data.enums.CarLocation.TRACK;
 import static racecontrol.client.extension.statistics.CarProperties.BEST_LAP_TIME;
+import static racecontrol.client.extension.statistics.CarProperties.CAR_LOCATION;
+import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_TIME;
+import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_LEADER;
+import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_POSITION_AHEAD;
+import static racecontrol.client.extension.statistics.CarProperties.IS_LAP_INVALID;
+import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_LEADER;
+import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_SPLIT;
 import static racecontrol.client.extension.statistics.CarProperties.LAP_COUNT;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.POSITION;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_LAP_TIME;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
+import static racecontrol.gui.LookAndFeel.COLOR_ORANGE;
 import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.lpui.LPTable.RenderContext;
@@ -76,66 +86,56 @@ public class RaceTableModel
     }
 
     private void gapRenderer(PApplet applet, RenderContext context) {
-        /*
-        LiveTimingEntry entry = ((LiveTimingEntry) context.object);
-        String gap = TimeUtils.asGap(entry.getGap());
-        if (entry.getCarInfo().getRealtime().getPosition() == 1
-                && entry.getGap() == 0) {
-            gap = "--";
+        CarStatistics stats = (CarStatistics) context.object;
+        int gap = stats.get(GAP_TO_POSITION_AHEAD);
+        String text = TimeUtils.asGap(gap);
+        if (stats.get(POSITION) == 1) {
+            text = "--";
         }
         applet.textAlign(RIGHT, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
-        if (entry.getGap() < 1000 && entry.getGap() > 0) {
+        if (gap < 1000 && gap > 0) {
             applet.fill(COLOR_ORANGE);
         } else {
             applet.fill(COLOR_WHITE);
         }
-        applet.text(gap, context.width - 20, context.height / 2);
-         */
+        applet.text(text, context.width - 20, context.height / 2);
     }
 
     private void gapToLeaderRenderer(PApplet applet, RenderContext context) {
-        /*
-        LiveTimingEntry entry = ((LiveTimingEntry) context.object);
-
+        CarStatistics stats = (CarStatistics) context.object;
         String text = "--";
-        if (entry.showLapsBehind()) {
-            text = String.format("+%d Laps", entry.getLapsBehind());
+        if (stats.get(LAPS_BEHIND_SPLIT)) {
+            text = String.format("+%d Laps", stats.get(LAPS_BEHIND_LEADER));
         } else {
-            if (entry.getGapToLeader() == 0) {
+            if (stats.get(GAP_TO_LEADER) == 0) {
                 text = "--";
             } else {
-                text = TimeUtils.asGap(entry.getGapToLeader());
+                text = TimeUtils.asGap(stats.get(GAP_TO_LEADER));
             }
         }
-
         applet.textAlign(RIGHT, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
         applet.fill(COLOR_WHITE);
         applet.text(text, context.width - 20, context.height / 2);
-         */
+
     }
 
     private void lapTimeRenderer(PApplet applet, RenderContext context) {
-        /*
-        CarInfo car = ((LiveTimingEntry) context.object).getCarInfo();
-        LapInfo currentLap = car.getRealtime().getCurrentLap();
+        CarStatistics stats = (CarStatistics) context.object;
+
         String text = "--";
         applet.fill(COLOR_WHITE);
-        if (car.getRealtime().getLocation() == CarLocation.TRACK
-                && currentLap.getType() == LapType.REGULAR) {
+        if (stats.get(CAR_LOCATION) == TRACK) {
             applet.fill(LookAndFeel.COLOR_WHITE);
-            if (currentLap.isInvalid()) {
+            if (stats.get(IS_LAP_INVALID)) {
                 applet.fill(LookAndFeel.COLOR_RED);
             }
-            text = TimeUtils.asLapTime(currentLap.getLapTimeMS());
-        } else if (car.getRealtime().getLocation() == CarLocation.TRACK) {
-            text = currentLap.getType().name();
+            text = TimeUtils.asLapTime(stats.get(CURRENT_LAP_TIME));
         }
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
         applet.text(text, context.width / 2, context.height / 2);
-         */
     }
 
     private void lastLapRenderer(PApplet applet, RenderContext context) {
