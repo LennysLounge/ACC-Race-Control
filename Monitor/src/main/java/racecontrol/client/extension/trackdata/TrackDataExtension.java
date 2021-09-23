@@ -57,6 +57,7 @@ public class TrackDataExtension
     public void onEvent(Event e) {
         if (e instanceof TrackInfoEvent) {
             loadTrackData(((TrackInfoEvent) e).getInfo());
+            EventBus.publish(new TrackDataEvent(trackData));
         }
     }
 
@@ -68,7 +69,7 @@ public class TrackDataExtension
             trackData = (TrackData) objIn.readObject();
         } catch (IOException | ClassNotFoundException | NullPointerException ex) {
             LOG.log(Level.WARNING, info.getTrackName() + " track data not found or could not be read.", ex);
-            loadVelocityMapAndSaveToTrackData(info);
+            trackData = new TrackData(info.getTrackName(), info.getTrackMeters());
         }
     }
 
@@ -98,22 +99,4 @@ public class TrackDataExtension
             }
         }
     }
-
-    private void loadVelocityMapAndSaveToTrackData(TrackInfo info) {
-        List<Float> vmap = loadVMapForTrack(info.getTrackName());
-        trackData = new TrackData(info.getTrackName(), info.getTrackMeters(), vmap, 0.333f, 0.666f, 1f, 0, new ArrayList<>());
-    }
-
-    @SuppressWarnings("unchecked")
-    public List<Float> loadVMapForTrack(String trackName) {
-        try {
-            InputStream in = getClass().getResourceAsStream("/velocitymap/" + trackName + ".vMap");
-            ObjectInputStream objIn = new ObjectInputStream(in);
-            return (List<Float>) objIn.readObject();
-        } catch (IOException | ClassNotFoundException | NullPointerException ex) {
-            LOG.log(Level.WARNING, trackName + " velocity map not found", ex);
-        }
-        return null;
-    }
-
 }

@@ -1,0 +1,26 @@
+/*
+ * Copyright (c) 2021 Leonard Sch?ngel
+ * 
+ * For licensing information see the included license (LICENSE.txt)
+ */
+package racecontrol.client.extension.trackdata;
+
+import racecontrol.eventbus.Event;
+
+/**
+ *
+ * @author Leonard
+ */
+public class TrackDataEvent extends Event {
+
+    private final TrackData data;
+
+    public TrackDataEvent(TrackData data) {
+        this.data = data;
+    }
+
+    public TrackData getTrackData() {
+        return data;
+    }
+
+}
