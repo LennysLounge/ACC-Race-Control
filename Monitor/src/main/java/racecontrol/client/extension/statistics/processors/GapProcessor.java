@@ -61,20 +61,26 @@ public class GapProcessor extends StatisticsProcessor {
             LapInfo sessionBestLap = info.getBestSessionLap();
             int diff = car.get(BEST_LAP_TIME) - sessionBestLap.getLapTimeMS();
             car.put(LAP_TIME_GAP_TO_SESSION_BEST, diff);
-
-            if (trackData == null
-                    || trackData.getGt3VelocityMap().isEmpty()) {
-                car.put(GAP_TO_LEADER, 0);
-                car.put(GAP_TO_POSITION_AHEAD, 0);
-                car.put(GAP_TO_CAR_AHEAD, 0);
-            }
         }
 
         // Skip if we dont know the track or the v map.
         if (trackData == null
-                || trackData.getGt3VelocityMap().isEmpty()) {
+                || trackData.getGt3VelocityMap().isEmpty()
+                || client.getModel().getCarsInfo().isEmpty()) {
+            for (WritableCarStatistics car : getCars().values()) {
+                if (trackData == null
+                        || trackData.getGt3VelocityMap().isEmpty()) {
+                    car.put(GAP_TO_LEADER, 0);
+                    car.put(GAP_TO_POSITION_AHEAD, 0);
+                    car.put(GAP_TO_CAR_AHEAD, 0);
+                    car.put(LAPS_BEHIND_LEADER, 0);
+                    car.put(LAPS_BEHIND_SPLIT, false);
+                    car.put(RACE_DISTANCE_BEHIND, 0f);
+                }
+            }
             return;
         }
+
         // calculate gaps to position ahead and leader.
         List<CarInfo> cars = client.getModel().getCarsInfo().values().stream()
                 .sorted((c1, c2) -> c1.getRealtime().getPosition() - c2.getRealtime().getPosition())
@@ -82,6 +88,12 @@ public class GapProcessor extends StatisticsProcessor {
         float leaderRaceDistance = cars.get(0).getRealtime().getLaps()
                 + cars.get(0).getRealtime().getSplinePosition();
         int splitLapsBehind = 0;
+        WritableCarStatistics carStats = getCars().get(cars.get(0).getCarId());
+        carStats.put(GAP_TO_LEADER, 0);
+        carStats.put(GAP_TO_POSITION_AHEAD, 0);
+        carStats.put(LAPS_BEHIND_LEADER, 0);
+        carStats.put(LAPS_BEHIND_SPLIT, false);
+        carStats.put(RACE_DISTANCE_BEHIND, 0f);
         for (int i = 1; i < cars.size(); i++) {
             int gap = (int) gapCalculator.calculateGap(cars.get(i), cars.get(i - 1));
             int gapToLeader = (int) gapCalculator.calculateGap(cars.get(i), cars.get(0));
@@ -90,19 +102,27 @@ public class GapProcessor extends StatisticsProcessor {
                     + cars.get(i).getRealtime().getSplinePosition();
             int lapsBehind = (int) Math.floor(leaderRaceDistance - raceDistance);
 
-            WritableCarStatistics car = getCars().get(cars.get(i).getCarId());
-            car.put(GAP_TO_LEADER, gapToLeader);
-            car.put(GAP_TO_POSITION_AHEAD, gap);
-            car.put(LAPS_BEHIND_LEADER, lapsBehind);
-            car.put(LAPS_BEHIND_SPLIT, lapsBehind > splitLapsBehind);
-            car.put(RACE_DISTANCE_BEHIND, leaderRaceDistance - raceDistance);
+            carStats = getCars().get(cars.get(i).getCarId());
+            carStats.put(GAP_TO_LEADER, gapToLeader);
+            carStats.put(GAP_TO_POSITION_AHEAD, gap);
+            carStats.put(LAPS_BEHIND_LEADER, lapsBehind);
+            carStats.put(LAPS_BEHIND_SPLIT, lapsBehind > splitLapsBehind);
+            carStats.put(RACE_DISTANCE_BEHIND, leaderRaceDistance - raceDistance);
 
             splitLapsBehind = lapsBehind;
         }
 
-        for (WritableCarStatistics car : getCars().values()) {
-            car.put(GAP_TO_CAR_AHEAD, 0);
+        cars = client.getModel().getCarsInfo().values().stream()
+                .sorted((c1, c2) -> (int) Math.signum(c2.getRealtime().getSplinePosition() - c1.getRealtime().getSplinePosition()))
+                .collect(Collectors.toList());
+        for (int i = 0; i < cars.size(); i++) {
+            int prev = (i == 0) ? cars.size() - 1 : i - 1;
+            int gapToCar = (int) gapCalculator.calculateGap(cars.get(i), cars.get(prev));
+
+            carStats = getCars().get(cars.get(i).getCarId());
+            carStats.put(GAP_TO_CAR_AHEAD, gapToCar);
         }
+
     }
 
 }
