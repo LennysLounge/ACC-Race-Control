@@ -5,7 +5,6 @@
  */
 package racecontrol.persistance;
 
-import racecontrol.client.extension.velocitymap.VelocityMapExtension;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -140,9 +139,9 @@ public class PersistantConfig {
             oos.writeObject(config);
             oos.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(VelocityMapExtension.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PersistantConfig.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(VelocityMapExtension.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PersistantConfig.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

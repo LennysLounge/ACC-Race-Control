@@ -11,9 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -21,7 +18,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import racecontrol.client.AccBroadcastingExtension;
 import racecontrol.client.data.TrackInfo;
 import racecontrol.client.events.TrackInfoEvent;
-import racecontrol.client.extension.velocitymap.VelocityMapExtension;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
@@ -93,9 +89,9 @@ public class TrackDataExtension
                 oos.writeObject(trackData);
                 oos.close();
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(VelocityMapExtension.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TrackDataExtension.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(VelocityMapExtension.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TrackDataExtension.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
