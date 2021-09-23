@@ -33,15 +33,14 @@ public interface CarProperties {
     public final Key<Integer> DELTA = new Key<>(Integer.class, 0);
     public final Key<Boolean> IS_LAP_INVALID = new Key<>(Boolean.class, false);
     public final Key<Integer> LAP_COUNT = new Key<>(Integer.class, 0);
-    public final Key<Integer> LAP_TIME_GAP_TO_SESSION_BEST = new Key<>(Integer.class, 0);
     // Gaps
-    public final Key<Integer> GAP_TO_SESSION_BEST_LAP = new Key<>(Integer.class, 0);
+    public final Key<Integer> LAP_TIME_GAP_TO_SESSION_BEST = new Key<>(Integer.class, 0);
     public final Key<Integer> GAP_TO_LEADER = new Key<>(Integer.class, 0);
     public final Key<Integer> GAP_TO_POSITION_AHEAD = new Key<>(Integer.class, 0);
     public final Key<Integer> GAP_TO_CAR_AHEAD = new Key<>(Integer.class, 0);
     public final Key<Integer> LAPS_BEHIND_LEADER = new Key<>(Integer.class, 0);
     public final Key<Boolean> LAPS_BEHIND_SPLIT = new Key<>(Boolean.class, false);
-    public final Key<Float> RACE_DISTANCE_BEHIND = new Key<>(Float.class, 0f);
+    public final Key<Float> RACE_DISTANCE_BEHIND_LEADER = new Key<>(Float.class, 0f);
     // Sectors
     public final Key<Integer> LAST_SECTOR_ONE = new Key<>(Integer.class, 0);
     public final Key<Integer> LAST_SECTOR_TWO = new Key<>(Integer.class, 0);

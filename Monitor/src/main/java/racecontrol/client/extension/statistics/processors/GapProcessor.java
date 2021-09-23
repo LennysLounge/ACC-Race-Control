@@ -20,12 +20,12 @@ import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_POSIT
 import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_LEADER;
 import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_SPLIT;
 import static racecontrol.client.extension.statistics.CarProperties.LAP_TIME_GAP_TO_SESSION_BEST;
-import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_BEHIND;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
 import racecontrol.client.extension.statistics.WritableCarStatistics;
 import racecontrol.client.extension.trackdata.TrackData;
 import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.eventbus.Event;
+import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_BEHIND_LEADER;
 
 /**
  *
@@ -75,7 +75,7 @@ public class GapProcessor extends StatisticsProcessor {
                     car.put(GAP_TO_CAR_AHEAD, 0);
                     car.put(LAPS_BEHIND_LEADER, 0);
                     car.put(LAPS_BEHIND_SPLIT, false);
-                    car.put(RACE_DISTANCE_BEHIND, 0f);
+                    car.put(RACE_DISTANCE_BEHIND_LEADER, 0f);
                 }
             }
             return;
@@ -93,7 +93,7 @@ public class GapProcessor extends StatisticsProcessor {
         carStats.put(GAP_TO_POSITION_AHEAD, 0);
         carStats.put(LAPS_BEHIND_LEADER, 0);
         carStats.put(LAPS_BEHIND_SPLIT, false);
-        carStats.put(RACE_DISTANCE_BEHIND, 0f);
+        carStats.put(RACE_DISTANCE_BEHIND_LEADER, 0f);
         for (int i = 1; i < cars.size(); i++) {
             int gap = (int) gapCalculator.calculateGap(cars.get(i), cars.get(i - 1));
             int gapToLeader = (int) gapCalculator.calculateGap(cars.get(i), cars.get(0));
@@ -107,7 +107,7 @@ public class GapProcessor extends StatisticsProcessor {
             carStats.put(GAP_TO_POSITION_AHEAD, gap);
             carStats.put(LAPS_BEHIND_LEADER, lapsBehind);
             carStats.put(LAPS_BEHIND_SPLIT, lapsBehind > splitLapsBehind);
-            carStats.put(RACE_DISTANCE_BEHIND, leaderRaceDistance - raceDistance);
+            carStats.put(RACE_DISTANCE_BEHIND_LEADER, leaderRaceDistance - raceDistance);
 
             splitLapsBehind = lapsBehind;
         }

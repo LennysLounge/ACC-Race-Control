@@ -12,12 +12,12 @@ import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_LEADE
 import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_POSITION_AHEAD;
 import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_LEADER;
 import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_SPLIT;
-import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_BEHIND;
 import racecontrol.client.extension.statistics.CarStatistics;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.lpui.LPTable;
 import racecontrol.gui.lpui.LPTableColumn;
 import racecontrol.utility.TimeUtils;
+import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_BEHIND_LEADER;
 
 /**
  *
@@ -95,7 +95,7 @@ public class TestTableModel
     }
 
     private void t3(PApplet applet, LPTable.RenderContext context) {
-        String text = String.valueOf(((CarStatistics) context.object).get(RACE_DISTANCE_BEHIND));
+        String text = String.valueOf(((CarStatistics) context.object).get(RACE_DISTANCE_BEHIND_LEADER));
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);
