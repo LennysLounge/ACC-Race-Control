@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,6 +60,7 @@ public class TrackDataExtension
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void loadTrackData(TrackInfo info) {
         try {
             InputStream in = getClass().getResourceAsStream("/trackdata/" + info.getTrackName() + ".trackData");
@@ -99,9 +101,10 @@ public class TrackDataExtension
 
     private void loadVelocityMapAndSaveToTrackData(TrackInfo info) {
         List<Float> vmap = loadVMapForTrack(info.getTrackName());
-        trackData = new TrackData(info.getTrackName(), info.getTrackMeters(), vmap, 0.333f, 0.666f, 1f, new ArrayList<>());
+        trackData = new TrackData(info.getTrackName(), info.getTrackMeters(), vmap, 0.333f, 0.666f, 1f, 0, new ArrayList<>());
     }
 
+    @SuppressWarnings("unchecked")
     public List<Float> loadVMapForTrack(String trackName) {
         try {
             InputStream in = getClass().getResourceAsStream("/velocitymap/" + trackName + ".vMap");

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Leonard Sch?ngel
+ * Copyright (c) 2021 Leonard Schüngel
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
@@ -58,11 +58,7 @@ public class TrackDataController
         panel.vMap = vMap;
         panel.dirMap = dirMap;
 
-        panel.saveAllButton.setAction(() -> saveAll());
-        panel.saveVMapButton.setAction(() -> saveVMap());
-        panel.saveDMapButton.setAction(() -> saveDMap());
-        panel.saveSectorsButton.setAction(() -> saveSectors());
-
+        panel.saveButton.setAction(() -> saveAll());
     }
 
     public LPContainer getPanel() {
@@ -85,9 +81,10 @@ public class TrackDataController
         trackData = trackDataExtension.getTrackData();
 
         panel.trackNameLabel.setText(trackData.getTrackname());
-        panel.sectorOneTextField.setValue(String.format("%.3f", trackData.getSectorOneLine()));
-        panel.sectorTwoTextField.setValue(String.format("%.3f", trackData.getSectorTwoLine()));
-        panel.sectorThreeTextField.setValue(String.format("%.3f", trackData.getSectorThreeLine()));
+        panel.sectorOneTextField.setValue(String.format("%.3f", trackData.getSectorOneLine()).replace(",", "."));
+        panel.sectorTwoTextField.setValue(String.format("%.3f", trackData.getSectorTwoLine()).replace(",", "."));
+        panel.sectorThreeTextField.setValue(String.format("%.3f", trackData.getSectorThreeLine()).replace(",", "."));
+        panel.speedTrapTextField.setValue(String.format("%.3f", trackData.getSpeedTrapLine()).replace(",", "."));
 
         panel.savedVMap = trackData.getGt3VelocityMap();
         panel.savedDirMap = trackData.getDirectionMap();
@@ -136,69 +133,37 @@ public class TrackDataController
     }
 
     private void saveAll() {
-        float s1, s2, s3;
+        float s1, s2, s3, speedTrap;
         try {
             s1 = Float.parseFloat(panel.sectorOneTextField.getValue());
             s2 = Float.parseFloat(panel.sectorTwoTextField.getValue());
             s3 = Float.parseFloat(panel.sectorThreeTextField.getValue());
+            speedTrap = Float.parseFloat(panel.speedTrapTextField.getValue());
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error parsing sectors", e);
             return;
         }
 
         TrackData oldData = trackDataExtension.getTrackData();
-        TrackData newData = new TrackData(oldData.getTrackname(),
-                oldData.getTrackMeters(),
-                vMap,
-                s1,
-                s2,
-                s3,
-                dirMap);
-        trackDataExtension.saveTrackData(newData);
-    }
 
-    private void saveVMap() {
-        TrackData oldData = trackDataExtension.getTrackData();
-        TrackData newData = new TrackData(oldData.getTrackname(),
-                oldData.getTrackMeters(),
-                vMap,
-                oldData.getSectorOneLine(),
-                oldData.getSectorTwoLine(),
-                oldData.getSectorThreeLine(),
-                oldData.getDirectionMap());
-        trackDataExtension.saveTrackData(newData);
-    }
-
-    private void saveDMap() {
-        TrackData oldData = trackDataExtension.getTrackData();
-        TrackData newData = new TrackData(oldData.getTrackname(),
-                oldData.getTrackMeters(),
-                oldData.getGt3VelocityMap(),
-                oldData.getSectorOneLine(),
-                oldData.getSectorTwoLine(),
-                oldData.getSectorThreeLine(),
-                dirMap);
-        trackDataExtension.saveTrackData(newData);
-    }
-
-    private void saveSectors() {
-        float s1, s2, s3;
-        try {
-            s1 = Float.parseFloat(panel.sectorOneTextField.getValue());
-            s2 = Float.parseFloat(panel.sectorTwoTextField.getValue());
-            s3 = Float.parseFloat(panel.sectorThreeTextField.getValue());
-        } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Error parsing sectors", e);
-            return;
+        List<Float> newVMap = oldData.getGt3VelocityMap();
+        if (panel.enableVMapCheckBox.isSelected()) {
+            newVMap = vMap;
         }
-        TrackData oldData = trackDataExtension.getTrackData();
+
+        List<Float> newDMap = oldData.getDirectionMap();
+        if (panel.enableDMapCheckBox.isSelected()) {
+            newDMap = dirMap;
+        }
+
         TrackData newData = new TrackData(oldData.getTrackname(),
                 oldData.getTrackMeters(),
-                oldData.getGt3VelocityMap(),
+                newVMap,
                 s1,
                 s2,
                 s3,
-                oldData.getDirectionMap());
+                speedTrap,
+                newDMap);
         trackDataExtension.saveTrackData(newData);
     }
 

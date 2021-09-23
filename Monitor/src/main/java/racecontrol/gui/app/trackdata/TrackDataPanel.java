@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Leonard Sch?ngel
+ * Copyright (c) 2021 Leonard Schüngel
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
@@ -14,6 +14,7 @@ import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.lpui.LPButton;
+import racecontrol.gui.lpui.LPCheckBox;
 import racecontrol.gui.lpui.LPContainer;
 import racecontrol.gui.lpui.LPLabel;
 import racecontrol.gui.lpui.LPTextField;
@@ -34,10 +35,13 @@ public class TrackDataPanel
     private final LPLabel sectorThreeLabel = new LPLabel("S3");
     protected final LPTextField sectorThreeTextField = new LPTextField();
 
-    protected final LPButton saveAllButton = new LPButton("Save All");
-    protected final LPButton saveVMapButton = new LPButton("Save vMap");
-    protected final LPButton saveDMapButton = new LPButton("Save dMap");
-    protected final LPButton saveSectorsButton = new LPButton("Save Sec");
+    private final LPLabel speedTrapLabel = new LPLabel("Speed trap");
+    protected final LPTextField speedTrapTextField = new LPTextField();
+
+    protected final LPButton saveButton = new LPButton("Save");
+
+    protected final LPCheckBox enableVMapCheckBox = new LPCheckBox();
+    protected final LPCheckBox enableDMapCheckBox = new LPCheckBox();
 
     protected List<Float> vMap = new ArrayList<>();
     protected List<Float> savedVMap = new ArrayList<>();
@@ -54,30 +58,26 @@ public class TrackDataPanel
 
     public TrackDataPanel() {
         addComponent(trackNameLabel);
-        sectorOneLabel.setSize(30, LINE_HEIGHT);
+
         addComponent(sectorOneLabel);
         sectorOneTextField.setSize(100, LINE_HEIGHT);
         addComponent(sectorOneTextField);
-        sectorTwoLabel.setSize(30, LINE_HEIGHT);
         addComponent(sectorTwoLabel);
         sectorTwoTextField.setSize(100, LINE_HEIGHT);
         addComponent(sectorTwoTextField);
-        sectorThreeLabel.setSize(30, LINE_HEIGHT);
         addComponent(sectorThreeLabel);
         sectorThreeTextField.setSize(100, LINE_HEIGHT);
         addComponent(sectorThreeTextField);
 
-        saveAllButton.setSize(100, LINE_HEIGHT);
-        addComponent(saveAllButton);
+        addComponent(speedTrapLabel);
+        speedTrapTextField.setSize(100, LINE_HEIGHT);
+        addComponent(speedTrapTextField);
 
-        saveVMapButton.setSize(100, LINE_HEIGHT);
-        addComponent(saveVMapButton);
+        saveButton.setSize(100, LINE_HEIGHT);
+        addComponent(saveButton);
 
-        saveDMapButton.setSize(100, LINE_HEIGHT);
-        addComponent(saveDMapButton);
-
-        saveSectorsButton.setSize(100, LINE_HEIGHT);
-        addComponent(saveSectorsButton);
+        addComponent(enableVMapCheckBox);
+        addComponent(enableDMapCheckBox);
     }
 
     @Override
@@ -93,13 +93,17 @@ public class TrackDataPanel
         sectorThreeLabel.setPosition(620, 0);
         sectorThreeTextField.setPosition(650, 0);
 
-        saveAllButton.setPosition(w - 110, 0);
-        saveVMapButton.setPosition(w - 220, 0);
-        saveDMapButton.setPosition(w - 330, 0);
-        saveSectorsButton.setPosition(w - 440, 0);
+        speedTrapLabel.setPosition(770, 0);
+        speedTrapTextField.setPosition(870, 0);
+
+        saveButton.setPosition(w - 110, 0);
 
         graphHeight = (getHeight() - LINE_HEIGHT - 20) / 2f;
         graphWidth = getWidth() - 20;
+
+        enableVMapCheckBox.setPosition(20, LINE_HEIGHT + 10);
+        enableDMapCheckBox.setPosition(20, LINE_HEIGHT + 20 + graphHeight);
+
         resizeGraphs();
     }
 
@@ -157,15 +161,17 @@ public class TrackDataPanel
         applet.image(vMapGraph, 0, 0);
 
         // draw current VMap
-        applet.stroke(100, 255, 100);
-        applet.noFill();
-        applet.beginShape();
-        for (int i = 0; i < vMap.size(); i++) {
-            float x = graphWidth / vMap.size() * i;
-            float y = PApplet.map(vMap.get(i), 0, 300, graphHeight, 0);
-            applet.vertex(x, y);
+        if (enableVMapCheckBox.isSelected()) {
+            applet.stroke(100, 255, 100);
+            applet.noFill();
+            applet.beginShape();
+            for (int i = 0; i < vMap.size(); i++) {
+                float x = graphWidth / vMap.size() * i;
+                float y = PApplet.map(vMap.get(i), 0, 300, graphHeight, 0);
+                applet.vertex(x, y);
+            }
+            applet.endShape();
         }
-        applet.endShape();
 
         // draw saved vmap.
         applet.stroke(100, 100, 255);
@@ -203,15 +209,17 @@ public class TrackDataPanel
         applet.image(dirMapGraph, 0, 0);
 
         // draw current dirMap
-        applet.stroke(100, 255, 100);
-        applet.noFill();
-        applet.beginShape();
-        for (int i = 0; i < dirMap.size(); i++) {
-            float x = graphWidth / dirMap.size() * i;
-            float y = PApplet.map(dirMap.get(i), -PApplet.PI, PApplet.PI, graphHeight - 10, 10);
-            applet.vertex(x, y);
+        if (enableDMapCheckBox.isSelected()) {
+            applet.stroke(100, 255, 100);
+            applet.noFill();
+            applet.beginShape();
+            for (int i = 0; i < dirMap.size(); i++) {
+                float x = graphWidth / dirMap.size() * i;
+                float y = PApplet.map(dirMap.get(i), -PApplet.PI, PApplet.PI, graphHeight - 10, 10);
+                applet.vertex(x, y);
+            }
+            applet.endShape();
         }
-        applet.endShape();
 
         // draw saved dirMap.
         applet.stroke(100, 100, 255);

@@ -27,6 +27,8 @@ public class TrackData
     private final float sectorTwoLine;
     private final float sectorThreeLine;
 
+    private final float speedTrapLine;
+
     private final List<Float> directionMap;
 
     public TrackData(String trackname,
@@ -35,6 +37,7 @@ public class TrackData
             float sectorOneLine,
             float sectorTwoLine,
             float sectorThreeLine,
+            float speedTrapLine,
             List<Float> directionMap) {
         this.trackname = trackname;
         this.trackMeters = trackMeters;
@@ -42,15 +45,16 @@ public class TrackData
         this.sectorOneLine = sectorOneLine;
         this.sectorTwoLine = sectorTwoLine;
         this.sectorThreeLine = sectorThreeLine;
+        this.speedTrapLine = speedTrapLine;
         this.directionMap = requireNonNull(directionMap, "directionMap");
     }
 
     public TrackData(String trackName, int trackLength) {
-        this(trackName, trackLength, new ArrayList<>(), 0.333f, 0.666f, 1f, new ArrayList<>());
+        this(trackName, trackLength, new ArrayList<>(), 0.333f, 0.666f, 1f, 0f, new ArrayList<>());
     }
 
     public TrackData() {
-        this("none", 0, new ArrayList<>(), 0, 0, 0, new ArrayList<>());
+        this("none", 0, new ArrayList<>(), 0, 0, 0, 0, new ArrayList<>());
     }
 
     public String getTrackname() {
@@ -75,6 +79,10 @@ public class TrackData
 
     public float getSectorThreeLine() {
         return sectorThreeLine;
+    }
+
+    public float getSpeedTrapLine() {
+        return speedTrapLine;
     }
 
     public List<Float> getDirectionMap() {
