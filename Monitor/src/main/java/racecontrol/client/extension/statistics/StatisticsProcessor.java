@@ -5,16 +5,25 @@
  */
 package racecontrol.client.extension.statistics;
 
-import racecontrol.client.data.RealtimeInfo;
-import racecontrol.client.data.SessionInfo;
+import java.util.Map;
+import racecontrol.eventbus.Event;
 
 /**
  * Describes methods a statistics processor must implement.
+ *
  * @author Leonard
  */
-public interface StatisticsProcessor {
+public abstract class StatisticsProcessor {
 
-    public void onRealtimeCarUpdate(RealtimeInfo info);
+    private final Map<Integer, WritableCarStatistics> cars;
 
-    public void onRealtimeUpdate(SessionInfo info);
+    public StatisticsProcessor(Map<Integer, WritableCarStatistics> cars) {
+        this.cars = cars;
+    }
+
+    public Map<Integer, WritableCarStatistics> getCars() {
+        return cars;
+    }
+
+    public abstract void onEvent(Event e);
 }

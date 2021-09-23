@@ -12,9 +12,8 @@ import java.util.Map;
 import racecontrol.client.AccBroadcastingExtension;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.events.CarConnectedEvent;
-import racecontrol.client.events.RealtimeCarUpdateEvent;
-import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.extension.statistics.processors.DataProcessor;
+import racecontrol.client.extension.statistics.processors.GapProcessor;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
@@ -38,7 +37,7 @@ public class StatisticsExtension
     /**
      * List of processors.
      */
-    private final List<StatisticsProcessor> processors = new ArrayList<>();
+    private final List<StatisticsProcessor> processors;
 
     /**
      * Gives the instance of the statistics extension.
@@ -54,7 +53,9 @@ public class StatisticsExtension
 
     private StatisticsExtension() {
         EventBus.register(this);
+        this.processors = new ArrayList<>();
         processors.add(new DataProcessor(cars));
+        processors.add(new GapProcessor(cars));
     }
 
     @Override
@@ -62,13 +63,9 @@ public class StatisticsExtension
         if (e instanceof CarConnectedEvent) {
             CarInfo car = ((CarConnectedEvent) e).getCar();
             cars.put(car.getCarId(), new WritableCarStatistics());
-        } else if (e instanceof RealtimeUpdateEvent) {
-            processors.forEach((processor)
-                    -> processor.onRealtimeUpdate(((RealtimeUpdateEvent) e).getSessionInfo()));
-        } else if (e instanceof RealtimeCarUpdateEvent) {
-            processors.forEach((processor)
-                    -> processor.onRealtimeCarUpdate(((RealtimeCarUpdateEvent) e).getInfo()));
         }
+        
+        processors.forEach(processor -> processor.onEvent(e));
     }
 
     public CarStatistics getCar(int carId) {

@@ -13,6 +13,8 @@ import racecontrol.client.data.LapInfo;
 import racecontrol.client.data.RealtimeInfo;
 import racecontrol.client.data.SessionInfo;
 import static racecontrol.client.data.enums.CarLocation.TRACK;
+import racecontrol.client.events.RealtimeCarUpdateEvent;
+import racecontrol.client.events.RealtimeUpdateEvent;
 import static racecontrol.client.extension.statistics.CarProperties.BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_LOCATION;
@@ -31,7 +33,6 @@ import static racecontrol.client.extension.statistics.CarProperties.POSITION;
 import static racecontrol.client.extension.statistics.CarProperties.SHORT_NAME;
 import static racecontrol.client.extension.statistics.CarProperties.SURNAME;
 import racecontrol.client.extension.statistics.WritableCarStatistics;
-import racecontrol.client.extension.statistics.StatisticsProcessor;
 import static racecontrol.client.extension.statistics.CarProperties.IS_LAP_INVALID;
 import static racecontrol.client.extension.statistics.CarProperties.LAP_COUNT;
 import static racecontrol.client.extension.statistics.CarProperties.LAP_TIME_GAP_TO_SESSION_BEST;
@@ -45,36 +46,41 @@ import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_TWO;
+import racecontrol.client.extension.statistics.StatisticsProcessor;
+import racecontrol.eventbus.Event;
 
 /**
  * A Basic processor for any easily available data.
  *
  * @author Leonard
  */
-public class DataProcessor
-        implements StatisticsProcessor {
+public class DataProcessor extends StatisticsProcessor {
 
     /**
      * Reference to the game client.
      */
     private final AccBroadcastingClient client;
-    /**
-     * Map of car Ids to car statistics.
-     */
-    private final Map<Integer, WritableCarStatistics> cars;
 
     public DataProcessor(Map<Integer, WritableCarStatistics> cars) {
-        this.cars = cars;
+        super(cars);
         client = AccBroadcastingClient.getClient();
     }
 
     @Override
+    public void onEvent(Event e) {
+        if (e instanceof RealtimeCarUpdateEvent) {
+            onRealtimeCarUpdate(((RealtimeCarUpdateEvent) e).getInfo());
+        } else if (e instanceof RealtimeUpdateEvent) {
+            onRealtimeUpdate(((RealtimeUpdateEvent) e).getSessionInfo());
+        }
+    }
+
     public void onRealtimeCarUpdate(RealtimeInfo info) {
         CarInfo carInfo = client.getModel().getCar(info.getCarId());
-        if (!cars.containsKey(info.getCarId())) {
+        if (!getCars().containsKey(info.getCarId())) {
             return;
         }
-        WritableCarStatistics car = cars.get(info.getCarId());
+        WritableCarStatistics car = getCars().get(info.getCarId());
 
         car.put(CAR_ID, info.getCarId());
 
@@ -124,7 +130,6 @@ public class DataProcessor
         return i;
     }
 
-    @Override
     public void onRealtimeUpdate(SessionInfo info) {
         LapInfo sessionBestLap = info.getBestSessionLap();
 
@@ -133,7 +138,7 @@ public class DataProcessor
         int bestSectorTwo = Integer.MAX_VALUE;
         int bestSectorThree = Integer.MAX_VALUE;
 
-        for (WritableCarStatistics car : cars.values()) {
+        for (WritableCarStatistics car : getCars().values()) {
 
             if (car.get(BEST_SECTOR_ONE) < bestSectorOne) {
                 bestSectorOne = car.get(BEST_SECTOR_ONE);
@@ -146,18 +151,13 @@ public class DataProcessor
             }
         }
 
-        for (WritableCarStatistics car : cars.values()) {
+        for (WritableCarStatistics car : getCars().values()) {
 
             car.put(SESSION_BEST_LAP_TIME, sessionBestLap.getLapTimeMS());
             car.put(SESSION_BEST_SECTOR_ONE, bestSectorOne);
             car.put(SESSION_BEST_SECTOR_TWO, bestSectorTwo);
             car.put(SESSION_BEST_SECTOR_THREE, bestSectorThree);
-
-            //calculate gap to session best lap time.
-            int diff = car.get(BEST_LAP_TIME) - sessionBestLap.getLapTimeMS();
-            car.put(LAP_TIME_GAP_TO_SESSION_BEST, diff);
-
+            
         }
     }
-
 }

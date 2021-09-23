@@ -3,16 +3,13 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.utility;
+package racecontrol.client.extension.statistics.processors;
 
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.RealtimeInfo;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+import racecontrol.client.extension.trackdata.TrackData;
 
 /**
  *
@@ -23,41 +20,21 @@ public class GapCalculator {
     private static final Logger LOG = Logger.getLogger(GapCalculator.class.getName());
 
     /**
-     * Name of the track that is currently loaded.
-     */
-    private String trackName;
-    /**
-     * Length of the current track in meter.
-     */
-    private int trackLength;
-    /**
-     * Velocity map for the current track.
-     */
-    private List<Float> velocityMap;
-    /**
      * Predicted lap time.
      */
     private float lapTime;
+    /**
+     * Track data.
+     */
+    private TrackData trackData;
 
-    @SuppressWarnings("unchecked")
-    public void loadVMapForTrack(String trackName) {
-        try {
-            InputStream in = getClass().getResourceAsStream("/velocitymap/" + trackName + ".vMap");
-            ObjectInputStream objIn = new ObjectInputStream(in);
-            velocityMap = (List<Float>) objIn.readObject();
-            lapTime = calculateLapTime();
-        } catch (IOException | ClassNotFoundException | NullPointerException ex) {
-            LOG.log(Level.WARNING, trackName + " velocity map not found", ex);
-            velocityMap = null;
-        }
+    public void setTrackData(TrackData trackData) {
+        this.trackData = trackData;
+        lapTime = calculateLapTime();
     }
 
     public float getLapTime() {
         return lapTime;
-    }
-
-    public void setTrackLength(int trackLength) {
-        this.trackLength = trackLength;
     }
 
     /**
@@ -68,9 +45,11 @@ public class GapCalculator {
      * @return gap from -> to in ms.
      */
     public float calculateGap(CarInfo behind, CarInfo infront) {
-        if (velocityMap == null) {
+        if (trackData.getGt3VelocityMap().isEmpty()) {
             return calculateGapNaive(behind, infront);
         }
+
+        List<Float> velocityMap = trackData.getGt3VelocityMap();
 
         float start = behind.getRealtime().getSplinePosition();
         float end = infront.getRealtime().getSplinePosition();
@@ -107,7 +86,7 @@ public class GapCalculator {
     private float calcTimeBetweenSplinePoints(float s1, float s2) {
         float s1Velocity = findVmapVelocityForPosition(s1);
         float s2Velocity = findVmapVelocityForPosition(s2);
-        float distance = (s2 - s1) * trackLength;
+        float distance = (s2 - s1) * trackData.getTrackMeters();
         return calcTimeBetweenPointsWithVelocity(s1Velocity, s2Velocity, distance);
     }
 
@@ -119,6 +98,7 @@ public class GapCalculator {
      * @return the vMap speed.
      */
     private float findVmapVelocityForPosition(float s) {
+        List<Float> velocityMap = trackData.getGt3VelocityMap();
         int lowerIndex = (int) Math.floor(s * velocityMap.size()) % velocityMap.size();
         int upperIndex = (lowerIndex + 1) % velocityMap.size();
         float t = s * velocityMap.size() % 1;
@@ -155,15 +135,17 @@ public class GapCalculator {
         RealtimeInfo prev = behind.getRealtime();
         RealtimeInfo now = infront.getRealtime();
         float splineDistance = (now.getSplinePosition()) - (prev.getSplinePosition());
-        float trackDistance = trackLength * splineDistance;
+        float trackDistance = trackData.getTrackMeters() * splineDistance;
         float averageSpeed = (prev.getKMH() + now.getKMH()) / 2f / 3.6f;
         return trackDistance / averageSpeed * 1000;
     }
 
     private float calculateLapTime() {
-        if (velocityMap.isEmpty()) {
+        if (trackData.getGt3VelocityMap().isEmpty()) {
             return 0;
         }
+
+        List<Float> velocityMap = trackData.getGt3VelocityMap();
 
         float stepSize = 1f / velocityMap.size();
         float totalTime = 0;
