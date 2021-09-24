@@ -23,7 +23,8 @@ import racecontrol.client.events.SessionChangedEvent;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
-import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingTableModel;
+import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingBestTableModel;
+import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingCurrentTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.RaceTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.TestTableModel;
 import racecontrol.gui.lpui.LPTable;
@@ -66,7 +67,7 @@ public class LiveTimingTableController
 
     private final List<LiveTimingTableModel> tableModels = new ArrayList<>();
 
-    private final QualifyingTableModel qualifyingTableModel;
+    private final QualifyingBestTableModel qualifyingTableModel;
 
     private final RaceTableModel raceTableModel;
     /**
@@ -81,9 +82,10 @@ public class LiveTimingTableController
         client = AccBroadcastingClient.getClient();
         table.setCellClickAction((column, row) -> onCellClickAction(column, row));
 
-        qualifyingTableModel = new QualifyingTableModel();
+        qualifyingTableModel = new QualifyingBestTableModel();
         raceTableModel = new RaceTableModel();
         tableModels.add(qualifyingTableModel);
+        tableModels.add(new QualifyingCurrentTableModel());
         tableModels.add(raceTableModel);
         tableModels.add(new TestTableModel());
         model = tableModels.get(0);

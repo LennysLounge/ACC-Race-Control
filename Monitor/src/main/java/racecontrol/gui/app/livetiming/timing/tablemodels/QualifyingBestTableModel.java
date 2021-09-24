@@ -36,7 +36,7 @@ import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
  *
  * @author Leonard
  */
-public class QualifyingTableModel
+public class QualifyingBestTableModel
         extends LiveTimingTableModel {
 
     @Override
@@ -60,13 +60,13 @@ public class QualifyingTableModel
             .setCellRenderer((applet, context) -> gapRenderer(applet, context)),
             new LPTableColumn("S1")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> sectorOneRenderer(applet, context)),
+            .setCellRenderer((applet, context) -> bestSectorOneRenderer(applet, context)),
             new LPTableColumn("S2")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> sectorTwoRenderer(applet, context)),
+            .setCellRenderer((applet, context) -> bestSectorTwoRenderer(applet, context)),
             new LPTableColumn("S3")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> sectorThreeRenderer(applet, context)),
+            .setCellRenderer((applet, context) -> bestSectorThreeRenderer(applet, context)),
             new LPTableColumn("Laps")
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> lapsRenderer(applet, context))
@@ -75,7 +75,7 @@ public class QualifyingTableModel
 
     @Override
     public String getName() {
-        return "Qualifying";
+        return "Qualifying Best";
     }
 
     @Override
@@ -92,7 +92,7 @@ public class QualifyingTableModel
                 .collect(toList());
     }
 
-    private void lapTimeRenderer(PApplet applet, LPTable.RenderContext context) {
+    protected void lapTimeRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
         String text = "--";
@@ -109,7 +109,7 @@ public class QualifyingTableModel
         applet.text(text, context.width / 2, context.height / 2);
     }
 
-    private void deltaRenderer(PApplet applet, LPTable.RenderContext context) {
+    protected void deltaRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
         String text = "--";
@@ -126,7 +126,7 @@ public class QualifyingTableModel
         applet.text(text, context.width / 2, context.height / 2);
     }
 
-    private void bestLapRenderer(PApplet applet, LPTable.RenderContext context) {
+    protected void bestLapRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
         int bestLapTime = stats.get(BEST_LAP_TIME);
         int sessionbestLapTime = stats.get(SESSION_BEST_LAP_TIME);
@@ -145,7 +145,7 @@ public class QualifyingTableModel
         applet.text(text, context.width / 2, context.height / 2);
     }
 
-    private void gapRenderer(PApplet applet, LPTable.RenderContext context) {
+    protected void gapRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
         String text = "--";
         if (stats.get(BEST_LAP_TIME) != Integer.MAX_VALUE
@@ -159,7 +159,7 @@ public class QualifyingTableModel
         applet.text(text, context.width / 2, context.height / 2);
     }
 
-    private void sectorOneRenderer(PApplet applet, LPTable.RenderContext context) {
+    protected void bestSectorOneRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
         int splitTime = stats.get(BEST_SECTOR_ONE);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_ONE);
@@ -177,7 +177,7 @@ public class QualifyingTableModel
         applet.text(text, context.width / 2, context.height / 2);
     }
 
-    private void sectorTwoRenderer(PApplet applet, LPTable.RenderContext context) {
+    protected void bestSectorTwoRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
         int splitTime = stats.get(BEST_SECTOR_TWO);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_TWO);
@@ -195,7 +195,7 @@ public class QualifyingTableModel
         applet.text(text, context.width / 2, context.height / 2);
     }
 
-    private void sectorThreeRenderer(PApplet applet, LPTable.RenderContext context) {
+    protected void bestSectorThreeRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
         int splitTime = stats.get(BEST_SECTOR_THREE);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_THREE);
@@ -213,7 +213,7 @@ public class QualifyingTableModel
         applet.text(text, context.width / 2, context.height / 2);
     }
 
-    private void lapsRenderer(PApplet applet, LPTable.RenderContext context) {
+    protected void lapsRenderer(PApplet applet, LPTable.RenderContext context) {
         String text = String.valueOf(((CarStatistics) context.object).get(LAP_COUNT));
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontRegular());

@@ -24,7 +24,7 @@ import racecontrol.utility.TimeUtils;
  * @author Leonard
  */
 public class TestTableModel
-        extends QualifyingTableModel {
+        extends QualifyingBestTableModel {
 
     @Override
     public LPTableColumn[] getColumns() {
