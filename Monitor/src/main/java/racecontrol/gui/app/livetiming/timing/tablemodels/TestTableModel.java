@@ -7,17 +7,17 @@ package racecontrol.gui.app.livetiming.timing.tablemodels;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_CAR_AHEAD;
-import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_LEADER;
-import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_POSITION_AHEAD;
-import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_LEADER;
-import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_SPLIT;
+import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_ONE;
+import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_ONE_CALC;
+import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_THREE;
+import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_THREE_CALC;
+import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_TWO;
+import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_TWO_CALC;
 import racecontrol.client.extension.statistics.CarStatistics;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.lpui.LPTable;
 import racecontrol.gui.lpui.LPTableColumn;
 import racecontrol.utility.TimeUtils;
-import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_BEHIND_LEADER;
 
 /**
  *
@@ -33,24 +33,24 @@ public class TestTableModel
             nameColumn,
             pitColumn,
             carNumberColumn,
-            new LPTableColumn("Gap")
+            new LPTableColumn("S1")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> gapRenderer(applet, context)),
-            new LPTableColumn("To leader")
+            .setCellRenderer((applet, context) -> r1(applet, context)),
+            new LPTableColumn("S1C")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> gapLeaderRenderer(applet, context)),
-            new LPTableColumn("to car")
+            .setCellRenderer((applet, context) -> r2(applet, context)),
+            new LPTableColumn("S2")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> gapCarRenderer(applet, context)),
-            new LPTableColumn("l behind")
+            .setCellRenderer((applet, context) -> r3(applet, context)),
+            new LPTableColumn("S2C")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> t1(applet, context)),
-            new LPTableColumn("split")
+            .setCellRenderer((applet, context) -> r4(applet, context)),
+            new LPTableColumn("S3")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> t2(applet, context)),
-            new LPTableColumn("rd")
+            .setCellRenderer((applet, context) -> r5(applet, context)),
+            new LPTableColumn("S3C")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> t3(applet, context))
+            .setCellRenderer((applet, context) -> r6(applet, context))
         };
     }
 
@@ -59,43 +59,67 @@ public class TestTableModel
         return "Test";
     }
 
-    private void gapRenderer(PApplet applet, LPTable.RenderContext context) {
-        String text = TimeUtils.asGap(((CarStatistics) context.object).get(GAP_TO_POSITION_AHEAD));
+    private void r1(PApplet applet, LPTable.RenderContext context) {
+        int time = ((CarStatistics) context.object).get(CURRENT_SECTOR_ONE);
+        String text = "";
+        if(time != 0){
+            text = TimeUtils.asSeconds(time);
+        }
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);
     }
 
-    private void gapLeaderRenderer(PApplet applet, LPTable.RenderContext context) {
-        String text = TimeUtils.asGap(((CarStatistics) context.object).get(GAP_TO_LEADER));
+    private void r2(PApplet applet, LPTable.RenderContext context) {
+        int time = ((CarStatistics) context.object).get(CURRENT_SECTOR_ONE_CALC);
+        String text = "";
+        if(time != 0){
+            text = TimeUtils.asSeconds(time);
+        }
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);
     }
 
-    private void gapCarRenderer(PApplet applet, LPTable.RenderContext context) {
-        String text = TimeUtils.asGap(((CarStatistics) context.object).get(GAP_TO_CAR_AHEAD));
+    private void r3(PApplet applet, LPTable.RenderContext context) {
+        int time = ((CarStatistics) context.object).get(CURRENT_SECTOR_TWO);
+        String text = "";
+        if(time != 0){
+            text = TimeUtils.asSeconds(time);
+        }
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);
     }
 
-    private void t1(PApplet applet, LPTable.RenderContext context) {
-        String text = String.valueOf(((CarStatistics) context.object).get(LAPS_BEHIND_LEADER));
+    private void r4(PApplet applet, LPTable.RenderContext context) {
+        int time = ((CarStatistics) context.object).get(CURRENT_SECTOR_TWO_CALC);
+        String text = "";
+        if(time != 0){
+            text = TimeUtils.asSeconds(time);
+        }
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);
     }
 
-    private void t2(PApplet applet, LPTable.RenderContext context) {
-        String text = String.valueOf(((CarStatistics) context.object).get(LAPS_BEHIND_SPLIT));
+    private void r5(PApplet applet, LPTable.RenderContext context) {
+        int time = ((CarStatistics) context.object).get(CURRENT_SECTOR_THREE);
+        String text = "";
+        if(time != 0){
+            text = TimeUtils.asSeconds(time);
+        }
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);
     }
 
-    private void t3(PApplet applet, LPTable.RenderContext context) {
-        String text = String.valueOf(((CarStatistics) context.object).get(RACE_DISTANCE_BEHIND_LEADER));
+    private void r6(PApplet applet, LPTable.RenderContext context) {
+        int time = ((CarStatistics) context.object).get(CURRENT_SECTOR_THREE_CALC);
+        String text = "";
+        if(time != 0){
+            text = TimeUtils.asSeconds(time);
+        }
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);

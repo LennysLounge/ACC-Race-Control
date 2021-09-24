@@ -14,6 +14,7 @@ import racecontrol.client.data.CarInfo;
 import racecontrol.client.events.CarConnectedEvent;
 import racecontrol.client.extension.statistics.processors.DataProcessor;
 import racecontrol.client.extension.statistics.processors.GapProcessor;
+import racecontrol.client.extension.statistics.processors.SectorTimesProcessor;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
@@ -56,6 +57,7 @@ public class StatisticsExtension
         this.processors = new ArrayList<>();
         processors.add(new DataProcessor(cars));
         processors.add(new GapProcessor(cars));
+        processors.add(new SectorTimesProcessor(cars));
     }
 
     @Override

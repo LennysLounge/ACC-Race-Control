@@ -73,7 +73,7 @@ public class TrackDataController
         } else if (e instanceof RealtimeCarUpdateEvent) {
             updateVMap(((RealtimeCarUpdateEvent) e).getInfo());
             updateDirMap(((RealtimeCarUpdateEvent) e).getInfo());
-            panel.drawCarState(((RealtimeCarUpdateEvent) e).getInfo());
+            //panel.drawCarState(((RealtimeCarUpdateEvent) e).getInfo());
             panel.invalidate();
         }
     }
@@ -82,10 +82,10 @@ public class TrackDataController
         trackData = trackDataExtension.getTrackData();
 
         panel.trackNameLabel.setText(trackData.getTrackname());
-        panel.sectorOneTextField.setValue(String.format("%.3f", trackData.getSectorOneLine()).replace(",", "."));
-        panel.sectorTwoTextField.setValue(String.format("%.3f", trackData.getSectorTwoLine()).replace(",", "."));
-        panel.sectorThreeTextField.setValue(String.format("%.3f", trackData.getSectorThreeLine()).replace(",", "."));
-        panel.speedTrapTextField.setValue(String.format("%.3f", trackData.getSpeedTrapLine()).replace(",", "."));
+        panel.sectorOneTextField.setValue(String.format("%.4f", trackData.getSectorOneLine()).replace(",", "."));
+        panel.sectorTwoTextField.setValue(String.format("%.4f", trackData.getSectorTwoLine()).replace(",", "."));
+        panel.sectorThreeTextField.setValue(String.format("%.4f", trackData.getSectorThreeLine()).replace(",", "."));
+        panel.speedTrapTextField.setValue(String.format("%.4f", trackData.getSpeedTrapLine()).replace(",", "."));
 
         panel.savedVMap = trackData.getGt3VelocityMap();
         panel.savedDirMap = trackData.getDirectionMap();

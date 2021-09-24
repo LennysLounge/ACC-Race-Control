@@ -42,6 +42,12 @@ public interface CarProperties {
     public final Key<Boolean> LAPS_BEHIND_SPLIT = new Key<>(Boolean.class, false);
     public final Key<Float> RACE_DISTANCE_BEHIND_LEADER = new Key<>(Float.class, 0f);
     // Sectors
+    public final Key<Integer> CURRENT_SECTOR_ONE_CALC = new Key<>(Integer.class, 0);
+    public final Key<Integer> CURRENT_SECTOR_TWO_CALC = new Key<>(Integer.class, 0);
+    public final Key<Integer> CURRENT_SECTOR_THREE_CALC = new Key<>(Integer.class, 0);
+    public final Key<Integer> CURRENT_SECTOR_ONE = new Key<>(Integer.class, 0);
+    public final Key<Integer> CURRENT_SECTOR_TWO = new Key<>(Integer.class, 0);
+    public final Key<Integer> CURRENT_SECTOR_THREE = new Key<>(Integer.class, 0);
     public final Key<Integer> LAST_SECTOR_ONE = new Key<>(Integer.class, 0);
     public final Key<Integer> LAST_SECTOR_TWO = new Key<>(Integer.class, 0);
     public final Key<Integer> LAST_SECTOR_THREE = new Key<>(Integer.class, 0);

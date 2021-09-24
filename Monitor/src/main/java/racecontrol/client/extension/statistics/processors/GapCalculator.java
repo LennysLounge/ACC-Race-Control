@@ -48,11 +48,15 @@ public class GapCalculator {
         if (trackData.getGt3VelocityMap().isEmpty()) {
             return calculateGapNaive(behind, infront);
         }
+        return calculateGap(behind.getRealtime().getSplinePosition(),
+                infront.getRealtime().getSplinePosition());
+    }
 
+    public float calculateGap(float behind, float infront) {
         List<Float> velocityMap = trackData.getGt3VelocityMap();
 
-        float start = behind.getRealtime().getSplinePosition();
-        float end = infront.getRealtime().getSplinePosition();
+        float start = behind;
+        float end = infront;
         //make sure the end is always > than the start so we dont have to worry
         //about that later.
         //0->1 wrappeing does not matter because it will be Modulo'ed out when
