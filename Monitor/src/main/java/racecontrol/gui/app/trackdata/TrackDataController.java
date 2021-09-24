@@ -58,7 +58,8 @@ public class TrackDataController
         panel.vMap = vMap;
         panel.dirMap = dirMap;
 
-        panel.saveButton.setAction(() -> saveAll());
+        panel.saveToFileButton.setAction(() -> saveAll());
+        panel.saveButton.setAction(()->useData());
     }
 
     public LPContainer getPanel() {
@@ -165,6 +166,41 @@ public class TrackDataController
                 speedTrap,
                 newDMap);
         trackDataExtension.saveTrackData(newData);
+    }
+    
+    private void useData() {
+        float s1, s2, s3, speedTrap;
+        try {
+            s1 = Float.parseFloat(panel.sectorOneTextField.getValue());
+            s2 = Float.parseFloat(panel.sectorTwoTextField.getValue());
+            s3 = Float.parseFloat(panel.sectorThreeTextField.getValue());
+            speedTrap = Float.parseFloat(panel.speedTrapTextField.getValue());
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Error parsing sectors", e);
+            return;
+        }
+
+        TrackData oldData = trackDataExtension.getTrackData();
+
+        List<Float> newVMap = oldData.getGt3VelocityMap();
+        if (panel.enableVMapCheckBox.isSelected()) {
+            newVMap = vMap;
+        }
+
+        List<Float> newDMap = oldData.getDirectionMap();
+        if (panel.enableDMapCheckBox.isSelected()) {
+            newDMap = dirMap;
+        }
+
+        TrackData newData = new TrackData(oldData.getTrackname(),
+                oldData.getTrackMeters(),
+                newVMap,
+                s1,
+                s2,
+                s3,
+                speedTrap,
+                newDMap);
+        trackDataExtension.useTrackData(newData);
     }
 
 }

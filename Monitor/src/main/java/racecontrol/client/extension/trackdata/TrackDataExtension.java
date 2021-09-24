@@ -72,6 +72,11 @@ public class TrackDataExtension
     public TrackData getTrackData() {
         return trackData;
     }
+    
+    public void useTrackData(TrackData trackData){
+        this.trackData = trackData;
+        EventBus.publish(new TrackDataEvent(trackData));
+    }
 
     public void saveTrackData(TrackData trackData) {
         JFileChooser fileChooser = new JFileChooser();

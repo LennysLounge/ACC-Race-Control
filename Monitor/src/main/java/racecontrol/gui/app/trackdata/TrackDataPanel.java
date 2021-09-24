@@ -38,7 +38,8 @@ public class TrackDataPanel
     private final LPLabel speedTrapLabel = new LPLabel("Speed trap");
     protected final LPTextField speedTrapTextField = new LPTextField();
 
-    protected final LPButton saveButton = new LPButton("Save");
+    protected final LPButton saveToFileButton = new LPButton("Save to file");
+    protected final LPButton saveButton = new LPButton("Save to file");
 
     protected final LPCheckBox enableVMapCheckBox = new LPCheckBox();
     protected final LPCheckBox enableDMapCheckBox = new LPCheckBox();
@@ -73,6 +74,8 @@ public class TrackDataPanel
         speedTrapTextField.setSize(100, LINE_HEIGHT);
         addComponent(speedTrapTextField);
 
+        saveToFileButton.setSize(100, LINE_HEIGHT);
+        addComponent(saveToFileButton);
         saveButton.setSize(100, LINE_HEIGHT);
         addComponent(saveButton);
 
@@ -96,7 +99,8 @@ public class TrackDataPanel
         speedTrapLabel.setPosition(770, 0);
         speedTrapTextField.setPosition(870, 0);
 
-        saveButton.setPosition(w - 110, 0);
+        saveToFileButton.setPosition(w - 110, 0);
+        saveButton.setPosition(w - 20, 0);
 
         graphHeight = (getHeight() - LINE_HEIGHT - 20) / 2f;
         graphWidth = getWidth() - 20;
