@@ -8,6 +8,9 @@
 * When in a team event write all team members into the entry list in the google spreadsheet.
 * Add a virtual safety car option to the race control panel.
 * Add detachable panels for each menu page. To detach a menu page, mouse wheel click on the menu item.
+* Add option to change between different live timing views.
+* Add option to detach only the live timing table.
+
 
 
 
