@@ -643,7 +643,6 @@ public class AccBroadcastingClient {
                     resetCameraWhenReplayIsDone = false;
                 }
             }
-
             EventBus.publish(new RealtimeUpdateEvent(sessionInfo));
         }
 
@@ -699,7 +698,6 @@ public class AccBroadcastingClient {
                 cars.putAll(model.getCarsInfo());
                 cars.put(car.getCarId(), car);
                 model = model.withCars(cars);
-
                 EventBus.publish(new RealtimeCarUpdateEvent(info));
             } else {
                 //if the car doesnt exist in the model ask for a new entry list.

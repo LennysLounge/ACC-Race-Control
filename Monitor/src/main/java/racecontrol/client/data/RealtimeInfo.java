@@ -31,8 +31,10 @@ public class RealtimeInfo {
     LapInfo bestSessionLap = new LapInfo();
     LapInfo lastLap = new LapInfo();
     LapInfo currentLap = new LapInfo();
+    private final boolean isDefault;
 
     public RealtimeInfo() {
+        isDefault = true;
     }
 
     public RealtimeInfo(int carId, int driverIndex, byte driverCount, byte gear, float yaw, float pitch, float roll,
@@ -56,6 +58,7 @@ public class RealtimeInfo {
         this.bestSessionLap = bestSessionLap;
         this.lastLap = lasLap;
         this.currentLap = currentLap;
+        this.isDefault = false;
     }
 
     public int getCarId() {
@@ -128,6 +131,10 @@ public class RealtimeInfo {
 
     public LapInfo getCurrentLap() {
         return currentLap;
+    }
+    
+    public boolean isDefault(){
+        return isDefault;
     }
 
 }

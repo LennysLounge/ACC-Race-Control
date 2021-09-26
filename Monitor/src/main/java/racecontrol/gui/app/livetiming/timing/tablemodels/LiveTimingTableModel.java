@@ -25,6 +25,7 @@ import static processing.core.PConstants.LEFT;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_MODEL;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
 import static racecontrol.client.extension.statistics.CarProperties.CATEGORY;
+import static racecontrol.client.extension.statistics.CarProperties.IS_FOCUSED_ON;
 import static racecontrol.client.extension.statistics.CarProperties.IS_IN_PITS;
 import static racecontrol.client.extension.statistics.CarProperties.NAME;
 import static racecontrol.client.extension.statistics.CarProperties.POSITION;
@@ -73,12 +74,12 @@ public abstract class LiveTimingTableModel
             .setCellRenderer((applet, context) -> carNumberRenderer(applet, context));
 
     private void positionRenderer(PApplet applet, LPTable.RenderContext context) {
-        int position = ((CarStatistics) context.object).get(POSITION);
+        CarStatistics stats = (CarStatistics) context.object;
 
         applet.noStroke();
         int bgColor = LookAndFeel.COLOR_RED;
         int fgColor = LookAndFeel.COLOR_WHITE;
-        if (context.isSelected) {
+        if (stats.get(IS_FOCUSED_ON)) {
             bgColor = LookAndFeel.COLOR_WHITE;
             fgColor = LookAndFeel.COLOR_BLACK;
         }
@@ -87,7 +88,7 @@ public abstract class LiveTimingTableModel
         applet.fill(fgColor);
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontMedium());
-        applet.text(String.valueOf(position),
+        applet.text(String.valueOf(stats.get(POSITION)),
                 context.width / 2f, context.height / 2f);
     }
 
@@ -184,7 +185,7 @@ public abstract class LiveTimingTableModel
     }
 
     public abstract void sort();
-    
+
     public abstract String getName();
 
     public void setEntries(List<CarStatistics> entries) {

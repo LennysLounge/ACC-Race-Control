@@ -15,6 +15,7 @@ import racecontrol.eventbus.EventListener;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.gui.lpui.LPContainer;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
@@ -81,7 +82,7 @@ public class LiveTimingTableController
 
         model = tableModels.get(0);
         table.setTableModel(model);
-        table.setName("Live Timing Table");        
+        table.setName("Live Timing Table");
     }
 
     public LPContainer getPanel() {
@@ -96,10 +97,10 @@ public class LiveTimingTableController
     }
 
     private void updateTableModel() {
-        List<CarStatistics> cars = new ArrayList<>();
-        client.getModel().getCarsInfo().values().forEach(
-                car -> cars.add(statisticsExtension.getCar(car.getCarId()))
-        );
+        List<CarStatistics> cars = client.getModel().getCarsInfo().values().stream()
+                .filter(car -> !car.getRealtime().isDefault())
+                .map(car -> statisticsExtension.getCar(car.getCarId()))
+                .collect(Collectors.toList());
 
         model.setEntries(cars);
         model.sort();

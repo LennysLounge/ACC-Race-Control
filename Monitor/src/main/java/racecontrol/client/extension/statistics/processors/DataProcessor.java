@@ -35,11 +35,11 @@ import static racecontrol.client.extension.statistics.CarProperties.SURNAME;
 import racecontrol.client.extension.statistics.WritableCarStatistics;
 import static racecontrol.client.extension.statistics.CarProperties.IS_LAP_INVALID;
 import static racecontrol.client.extension.statistics.CarProperties.LAP_COUNT;
-import static racecontrol.client.extension.statistics.CarProperties.LAP_TIME_GAP_TO_SESSION_BEST;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.BEST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarProperties.BEST_SECTOR_TWO;
 import static racecontrol.client.extension.statistics.CarProperties.BEST_SECTOR_THREE;
+import static racecontrol.client.extension.statistics.CarProperties.IS_FOCUSED_ON;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_TWO;
@@ -130,34 +130,9 @@ public class DataProcessor extends StatisticsProcessor {
         return i;
     }
 
-    public void onRealtimeUpdate(SessionInfo info) {
-        LapInfo sessionBestLap = info.getBestSessionLap();
-
-        // find best sectors.
-        int bestSectorOne = Integer.MAX_VALUE;
-        int bestSectorTwo = Integer.MAX_VALUE;
-        int bestSectorThree = Integer.MAX_VALUE;
-
+    public void onRealtimeUpdate(SessionInfo info) {        
         for (WritableCarStatistics car : getCars().values()) {
-
-            if (car.get(BEST_SECTOR_ONE) < bestSectorOne) {
-                bestSectorOne = car.get(BEST_SECTOR_ONE);
-            }
-            if (car.get(BEST_SECTOR_TWO) < bestSectorTwo) {
-                bestSectorTwo = car.get(BEST_SECTOR_TWO);
-            }
-            if (car.get(BEST_SECTOR_THREE) < bestSectorThree) {
-                bestSectorThree = car.get(BEST_SECTOR_THREE);
-            }
-        }
-
-        for (WritableCarStatistics car : getCars().values()) {
-
-            car.put(SESSION_BEST_LAP_TIME, sessionBestLap.getLapTimeMS());
-            car.put(SESSION_BEST_SECTOR_ONE, bestSectorOne);
-            car.put(SESSION_BEST_SECTOR_TWO, bestSectorTwo);
-            car.put(SESSION_BEST_SECTOR_THREE, bestSectorThree);
-            
+            car.put(IS_FOCUSED_ON, info.getFocusedCarIndex() == car.get(CAR_ID));
         }
     }
 }
