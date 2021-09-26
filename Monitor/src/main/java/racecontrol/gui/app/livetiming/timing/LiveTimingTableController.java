@@ -15,16 +15,10 @@ import racecontrol.eventbus.EventListener;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.gui.lpui.LPContainer;
 import java.util.logging.Logger;
-import racecontrol.client.data.SessionInfo;
-import static racecontrol.client.data.enums.SessionType.PRACTICE;
-import static racecontrol.client.data.enums.SessionType.QUALIFYING;
-import static racecontrol.client.data.enums.SessionType.RACE;
-import racecontrol.client.events.SessionChangedEvent;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingBestTableModel;
-import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingCurrentTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.RaceTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.TestTableModel;
 import racecontrol.gui.lpui.LPTable;
@@ -70,11 +64,6 @@ public class LiveTimingTableController
     private final QualifyingBestTableModel qualifyingTableModel;
 
     private final RaceTableModel raceTableModel;
-    /**
-     * Weather ot not to automatically switch the table model when the session
-     * changes.
-     */
-    private boolean autoSwitchTableModel = true;
 
     public LiveTimingTableController() {
         EventBus.register(this);
@@ -84,14 +73,15 @@ public class LiveTimingTableController
 
         qualifyingTableModel = new QualifyingBestTableModel();
         raceTableModel = new RaceTableModel();
+
         tableModels.add(qualifyingTableModel);
-        tableModels.add(new QualifyingCurrentTableModel());
+        //tableModels.add(new QualifyingCurrentTableModel());
         tableModels.add(raceTableModel);
         tableModels.add(new TestTableModel());
+
         model = tableModels.get(0);
         table.setTableModel(model);
-        table.setName("Live Timing Table");
-
+        table.setName("Live Timing Table");        
     }
 
     public LPContainer getPanel() {
@@ -102,8 +92,6 @@ public class LiveTimingTableController
     public void onEvent(Event e) {
         if (e instanceof RealtimeUpdateEvent) {
             updateTableModel();
-        } else if (e instanceof SessionChangedEvent) {
-            sessionChanged(((SessionChangedEvent) e).getSessionInfo());
         }
     }
 
@@ -116,20 +104,6 @@ public class LiveTimingTableController
         model.setEntries(cars);
         model.sort();
         table.invalidate();
-    }
-
-    private void sessionChanged(SessionInfo info) {
-        if (autoSwitchTableModel) {
-            if (info.getSessionType() == RACE) {
-                table.setTableModel(raceTableModel);
-                model = raceTableModel;
-            } else if (info.getSessionType() == QUALIFYING
-                    || info.getSessionType() == PRACTICE) {
-                table.setTableModel(qualifyingTableModel);
-                model = qualifyingTableModel;
-            }
-        }
-        autoSwitchTableModel = true;
     }
 
     private void onCellClickAction(int column, int row) {
@@ -148,19 +122,25 @@ public class LiveTimingTableController
 
     public void cycleTableModelsLeft() {
         int index = tableModels.indexOf(model);
-        model = tableModels.get((index + 1) % tableModels.size());
-        table.setTableModel(model);
-        autoSwitchTableModel = false;
-    }
-
-    public void cycleTableModelsRight() {
-        int index = tableModels.indexOf(model);
         if (index == 0) {
             index = tableModels.size();
         }
         model = tableModels.get(index - 1);
         table.setTableModel(model);
-        autoSwitchTableModel = false;
+    }
+
+    public void cycleTableModelsRight() {
+        int index = tableModels.indexOf(model);
+        model = tableModels.get((index + 1) % tableModels.size());
+        table.setTableModel(model);
+    }
+
+    public void setViewQuali() {
+        table.setTableModel(qualifyingTableModel);
+    }
+
+    public void setViewRace() {
+        table.setTableModel(raceTableModel);
     }
 
     public String getTableModelName() {

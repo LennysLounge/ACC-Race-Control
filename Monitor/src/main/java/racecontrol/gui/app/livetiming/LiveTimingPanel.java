@@ -22,7 +22,7 @@ public class LiveTimingPanel
         extends LPContainer {
 
     protected final LPButton detachLiveTimingButton = new LPButton("Detach");
-    protected final LPLabel viewLabel = new LPLabel("View Qualifying");
+    protected final LPLabel viewLabel = new LPLabel("");
     protected final LPPaginatorButton viewLeftButton = new LPPaginatorButton(true);
     protected final LPPaginatorButton viewRightButton = new LPPaginatorButton(false);
     /**

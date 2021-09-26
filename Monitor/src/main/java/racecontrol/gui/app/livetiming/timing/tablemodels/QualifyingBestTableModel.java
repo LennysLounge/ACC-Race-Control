@@ -46,18 +46,18 @@ public class QualifyingBestTableModel
             nameColumn,
             pitColumn,
             carNumberColumn,
-            new LPTableColumn("Lap")
-            .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> lapTimeRenderer(applet, context)),
-            new LPTableColumn("Delta")
-            .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> deltaRenderer(applet, context)),
             new LPTableColumn("Best")
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> bestLapRenderer(applet, context)),
             new LPTableColumn("Gap")
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> gapRenderer(applet, context)),
+            new LPTableColumn("Lap")
+            .setMaxWidth(100)
+            .setCellRenderer((applet, context) -> lapTimeRenderer(applet, context)),
+            new LPTableColumn("Delta")
+            .setMaxWidth(100)
+            .setCellRenderer((applet, context) -> deltaRenderer(applet, context)),
             new LPTableColumn("S1")
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> bestSectorOneRenderer(applet, context)),

@@ -5,6 +5,10 @@
  */
 package racecontrol.gui.app.livetiming;
 
+import racecontrol.client.data.SessionInfo;
+import static racecontrol.client.data.enums.SessionType.PRACTICE;
+import static racecontrol.client.data.enums.SessionType.QUALIFYING;
+import static racecontrol.client.data.enums.SessionType.RACE;
 import racecontrol.client.events.AfterPacketReceivedEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.eventbus.Event;
@@ -31,6 +35,11 @@ public class LiveTimingController
     private final AppController appController;
 
     private boolean isLiveTimingDetached;
+    /**
+     * Weather ot not to automatically switch the table model when the session
+     * changes.
+     */
+    private boolean autoSwitchTableModel = true;
 
     public LiveTimingController() {
         appController = AppController.getInstance();
@@ -44,6 +53,7 @@ public class LiveTimingController
         panel.viewLeftButton.setAction(() -> cycleTableModelsLeft());
         panel.viewRightButton.setAction(() -> cycleTableModelsRight());
 
+        updateViewLabel();
     }
 
     public LPContainer getPanel() {
@@ -65,28 +75,41 @@ public class LiveTimingController
 
     public void cycleTableModelsLeft() {
         liveTimingTableController.cycleTableModelsLeft();
-        panel.viewLabel.setText("View " + liveTimingTableController.getTableModelName());
-        panel.onResize(panel.getWidth(), panel.getHeight());
-        panel.invalidate();
+        autoSwitchTableModel = false;
+        updateViewLabel();
     }
 
     public void cycleTableModelsRight() {
         liveTimingTableController.cycleTableModelsRight();
-        panel.viewLabel.setText("View " + liveTimingTableController.getTableModelName());
-        panel.onResize(panel.getWidth(), panel.getHeight());
-        panel.invalidate();
+        autoSwitchTableModel = false;
+        updateViewLabel();
     }
 
     @Override
     public void onEvent(Event e) {
-        boolean flag = false;
         if (e instanceof SessionChangedEvent) {
-            flag = true;
-        } else if (e instanceof AfterPacketReceivedEvent) {
-            if (flag) {
-                panel.viewLabel.setText("View " + liveTimingTableController.getTableModelName());
+            sessionChanged(((SessionChangedEvent) e).getSessionInfo());
+        }
+    }
+
+    private void sessionChanged(SessionInfo info) {
+        if (autoSwitchTableModel) {
+            if (info.getSessionType() == RACE) {
+                liveTimingTableController.setViewRace();
+                updateViewLabel();
+            } else if (info.getSessionType() == QUALIFYING
+                    || info.getSessionType() == PRACTICE) {
+                liveTimingTableController.setViewQuali();
+                updateViewLabel();
             }
         }
+        autoSwitchTableModel = true;
+    }
+
+    private void updateViewLabel() {
+        panel.viewLabel.setText("View " + liveTimingTableController.getTableModelName());
+        panel.onResize(panel.getWidth(), panel.getHeight());
+        panel.invalidate();
     }
 
 }
