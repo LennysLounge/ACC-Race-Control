@@ -20,6 +20,7 @@ import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingBestTableModel;
+import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingLastTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.RaceTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.TestTableModel;
 import racecontrol.gui.lpui.LPTable;
@@ -76,7 +77,7 @@ public class LiveTimingTableController
         raceTableModel = new RaceTableModel();
 
         tableModels.add(qualifyingTableModel);
-        //tableModels.add(new QualifyingCurrentTableModel());
+        tableModels.add(new QualifyingLastTableModel());
         tableModels.add(raceTableModel);
         tableModels.add(new TestTableModel());
 

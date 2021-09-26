@@ -15,7 +15,11 @@ import racecontrol.client.data.SessionInfo;
 import static racecontrol.client.data.enums.CarLocation.TRACK;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
+import static racecontrol.client.extension.statistics.CarProperties.BEST_LAP_INVALID;
 import static racecontrol.client.extension.statistics.CarProperties.BEST_LAP_TIME;
+import static racecontrol.client.extension.statistics.CarProperties.BEST_SECTOR_ONE;
+import static racecontrol.client.extension.statistics.CarProperties.BEST_SECTOR_THREE;
+import static racecontrol.client.extension.statistics.CarProperties.BEST_SECTOR_TWO;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_LOCATION;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_MODEL;
@@ -33,21 +37,15 @@ import static racecontrol.client.extension.statistics.CarProperties.POSITION;
 import static racecontrol.client.extension.statistics.CarProperties.SHORT_NAME;
 import static racecontrol.client.extension.statistics.CarProperties.SURNAME;
 import racecontrol.client.extension.statistics.WritableCarStatistics;
-import static racecontrol.client.extension.statistics.CarProperties.IS_LAP_INVALID;
 import static racecontrol.client.extension.statistics.CarProperties.LAP_COUNT;
-import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_LAP_TIME;
-import static racecontrol.client.extension.statistics.CarProperties.BEST_SECTOR_ONE;
-import static racecontrol.client.extension.statistics.CarProperties.BEST_SECTOR_TWO;
-import static racecontrol.client.extension.statistics.CarProperties.BEST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarProperties.IS_FOCUSED_ON;
+import racecontrol.client.extension.statistics.StatisticsProcessor;
+import racecontrol.eventbus.Event;
+import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_INVALID;
+import static racecontrol.client.extension.statistics.CarProperties.LAST_LAP_INVALID;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_TWO;
-import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_ONE;
-import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_THREE;
-import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_TWO;
-import racecontrol.client.extension.statistics.StatisticsProcessor;
-import racecontrol.eventbus.Event;
 
 /**
  * A Basic processor for any easily available data.
@@ -98,7 +96,9 @@ public class DataProcessor extends StatisticsProcessor {
         car.put(LAST_LAP_TIME, info.getLastLap().getLapTimeMS());
         car.put(BEST_LAP_TIME, info.getBestSessionLap().getLapTimeMS());
         car.put(DELTA, info.getDelta());
-        car.put(IS_LAP_INVALID, info.getCurrentLap().isInvalid());
+        car.put(CURRENT_LAP_INVALID, info.getCurrentLap().isInvalid());
+        car.put(LAST_LAP_INVALID, info.getLastLap().isInvalid());
+        car.put(BEST_LAP_INVALID, info.getBestSessionLap().isInvalid());
         car.put(LAP_COUNT, info.getLaps());
         // Sectors
         LapInfo lap = info.getBestSessionLap();
@@ -123,16 +123,16 @@ public class DataProcessor extends StatisticsProcessor {
         return String.format("%s. %s", firstname, driver.getLastName());
     }
 
+    public void onRealtimeUpdate(SessionInfo info) {
+        for (WritableCarStatistics car : getCars().values()) {
+            car.put(IS_FOCUSED_ON, info.getFocusedCarIndex() == car.get(CAR_ID));
+        }
+    }
+
     private Integer intOrDefault(Integer i, int d) {
         if (i == null) {
             return d;
         }
         return i;
-    }
-
-    public void onRealtimeUpdate(SessionInfo info) {        
-        for (WritableCarStatistics car : getCars().values()) {
-            car.put(IS_FOCUSED_ON, info.getFocusedCarIndex() == car.get(CAR_ID));
-        }
     }
 }

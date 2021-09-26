@@ -31,7 +31,9 @@ public interface CarProperties {
     public final Key<Integer> LAST_LAP_TIME = new Key<>(Integer.class, 0);
     public final Key<Integer> BEST_LAP_TIME = new Key<>(Integer.class, 0);
     public final Key<Integer> DELTA = new Key<>(Integer.class, 0);
-    public final Key<Boolean> IS_LAP_INVALID = new Key<>(Boolean.class, false);
+    public final Key<Boolean> CURRENT_LAP_INVALID = new Key<>(Boolean.class, false);
+    public final Key<Boolean> LAST_LAP_INVALID = new Key<>(Boolean.class, false);
+    public final Key<Boolean> BEST_LAP_INVALID = new Key<>(Boolean.class, false);
     public final Key<Integer> LAP_COUNT = new Key<>(Integer.class, 0);
     // Gaps
     public final Key<Integer> LAP_TIME_GAP_TO_SESSION_BEST = new Key<>(Integer.class, 0);

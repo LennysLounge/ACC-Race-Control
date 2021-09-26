@@ -16,7 +16,6 @@ import static racecontrol.client.extension.statistics.CarProperties.CAR_LOCATION
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_LEADER;
 import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_POSITION_AHEAD;
-import static racecontrol.client.extension.statistics.CarProperties.IS_LAP_INVALID;
 import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_LEADER;
 import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_SPLIT;
 import static racecontrol.client.extension.statistics.CarProperties.LAP_COUNT;
@@ -27,9 +26,12 @@ import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_ORANGE;
 import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
+import static racecontrol.gui.LookAndFeel.COLOR_RACE;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
+import racecontrol.gui.lpui.LPTable;
 import racecontrol.gui.lpui.LPTable.RenderContext;
 import racecontrol.utility.TimeUtils;
+import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_INVALID;
 
 /**
  *
@@ -128,7 +130,7 @@ public class RaceTableModel
         applet.fill(COLOR_WHITE);
         if (stats.get(CAR_LOCATION) == TRACK) {
             applet.fill(LookAndFeel.COLOR_WHITE);
-            if (stats.get(IS_LAP_INVALID)) {
+            if (stats.get(CURRENT_LAP_INVALID)) {
                 applet.fill(LookAndFeel.COLOR_RED);
             }
             text = TimeUtils.asLapTime(stats.get(CURRENT_LAP_TIME));
@@ -138,12 +140,16 @@ public class RaceTableModel
         applet.text(text, context.width / 2, context.height / 2);
     }
 
-    private void lastLapRenderer(PApplet applet, RenderContext context) {
+    private void lastLapRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
         int lastLapTime = stats.get(LAST_LAP_TIME);
+        int bestLapTime = stats.get(BEST_LAP_TIME);
         int sessionbestLapTime = stats.get(SESSION_BEST_LAP_TIME);
+
         if (lastLapTime == sessionbestLapTime) {
             applet.fill(COLOR_PURPLE);
+        } else if (lastLapTime <= bestLapTime) {
+            applet.fill(COLOR_RACE);
         } else {
             applet.fill(COLOR_WHITE);
         }
@@ -151,6 +157,7 @@ public class RaceTableModel
         if (lastLapTime != Integer.MAX_VALUE) {
             text = TimeUtils.asLapTime(lastLapTime);
         }
+        applet.noStroke();
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
         applet.text(text, context.width / 2, context.height / 2);

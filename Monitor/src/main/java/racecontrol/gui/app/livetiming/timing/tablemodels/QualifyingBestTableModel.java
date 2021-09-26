@@ -13,7 +13,6 @@ import static racecontrol.client.extension.statistics.CarProperties.BEST_LAP_TIM
 import static racecontrol.client.extension.statistics.CarProperties.CAR_LOCATION;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.DELTA;
-import static racecontrol.client.extension.statistics.CarProperties.IS_LAP_INVALID;
 import static racecontrol.client.extension.statistics.CarProperties.LAP_TIME_GAP_TO_SESSION_BEST;
 import static racecontrol.client.extension.statistics.CarProperties.POSITION;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_LAP_TIME;
@@ -31,6 +30,7 @@ import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_TWO;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
+import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_INVALID;
 
 /**
  *
@@ -46,9 +46,6 @@ public class QualifyingBestTableModel
             nameColumn,
             pitColumn,
             carNumberColumn,
-            new LPTableColumn("Best")
-            .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> bestLapRenderer(applet, context)),
             new LPTableColumn("Gap")
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> gapRenderer(applet, context)),
@@ -58,6 +55,9 @@ public class QualifyingBestTableModel
             new LPTableColumn("Delta")
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> deltaRenderer(applet, context)),
+            new LPTableColumn("Best")
+            .setMaxWidth(100)
+            .setCellRenderer((applet, context) -> bestLapRenderer(applet, context)),
             new LPTableColumn("S1")
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> bestSectorOneRenderer(applet, context)),
@@ -99,7 +99,7 @@ public class QualifyingBestTableModel
         applet.fill(COLOR_WHITE);
         if (stats.get(CAR_LOCATION) == TRACK) {
             applet.fill(LookAndFeel.COLOR_WHITE);
-            if (stats.get(IS_LAP_INVALID)) {
+            if (stats.get(CURRENT_LAP_INVALID)) {
                 applet.fill(LookAndFeel.COLOR_RED);
             }
             text = TimeUtils.asLapTime(stats.get(CURRENT_LAP_TIME));

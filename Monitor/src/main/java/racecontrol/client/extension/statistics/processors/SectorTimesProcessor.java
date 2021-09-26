@@ -33,6 +33,9 @@ import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECT
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_TWO_CALC;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_THREE_CALC;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_TWO;
+import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_ONE;
+import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_THREE;
+import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_TWO;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_THREE;
@@ -252,5 +255,4 @@ public class SectorTimesProcessor
         float splinePos;
         int time;
     }
-
 }
