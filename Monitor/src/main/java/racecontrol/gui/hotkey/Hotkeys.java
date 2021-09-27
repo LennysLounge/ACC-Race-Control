@@ -48,56 +48,78 @@ public class Hotkeys {
         }
         switch (event.getKeyCode()) {
             case KEY_1:
-                client.sendSetCameraRequest("Drivable", "Cockpit");
+                if (client.isConnected()) {
+                    client.sendSetCameraRequest("Drivable", "Cockpit");
+                }
                 break;
             case KEY_2:
-                client.sendSetCameraRequest("Drivable", "Bonnet");
+                if (client.isConnected()) {
+                    client.sendSetCameraRequest("Drivable", "Bonnet");
+                }
                 break;
             case KEY_3:
-                client.sendSetCameraRequest("Drivable", "Chase");
+                if (client.isConnected()) {
+                    client.sendSetCameraRequest("Drivable", "Chase");
+                }
                 break;
             case KEY_F1:
-                List<String> cameras = Arrays.asList("Cockpit", "Dash", "Helmet", "Bonnet", "DashPro", "Chase", "FarChase");
-                String activeCamera = client.getModel().getSessionInfo().getActiveCamera();
-                int index = cameras.indexOf(activeCamera);
-                client.sendSetCameraRequest("Drivable", cameras.get((index + 1) % cameras.size()));
+                if (client.isConnected()) {
+                    var cameras = Arrays.asList("Cockpit", "Dash", "Helmet", "Bonnet", "DashPro", "Chase", "FarChase");
+                    String activeCamera = client.getModel().getSessionInfo().getActiveCamera();
+                    int index = cameras.indexOf(activeCamera);
+                    client.sendSetCameraRequest("Drivable", cameras.get((index + 1) % cameras.size()));
+                }
                 break;
             case KEY_F2:
-                List<String> hudPages = Arrays.asList("Blank", "Basic HUD", "Help", "TimeTable", "Broadcasting", "TrackMap");
-                String activeHud = client.getModel().getSessionInfo().getCurrentHudPage();
-                index = hudPages.indexOf(activeHud);
-                client.sendSetHudPageRequest(hudPages.get((index + 1) % hudPages.size()));
+                if (client.isConnected()) {
+                    var hudPages = Arrays.asList("Blank", "Basic HUD", "Help", "TimeTable", "Broadcasting", "TrackMap");
+                    String activeHud = client.getModel().getSessionInfo().getCurrentHudPage();
+                    int index = hudPages.indexOf(activeHud);
+                    client.sendSetHudPageRequest(hudPages.get((index + 1) % hudPages.size()));
+                }
                 break;
             case KEY_F3:
-                //camera set "setVR" is not used and will default switch between
-                //set1 set2 helicam and pitlane. We can use this to emulate
-                //the F3 functionality.
-                client.sendSetCameraRequest("setVR", "-");
+                if (client.isConnected()) {
+                    //camera set "setVR" is not used and will default switch between
+                    //set1 set2 helicam and pitlane. We can use this to emulate
+                    //the F3 functionality.
+                    client.sendSetCameraRequest("setVR", "-");
+                }
                 break;
             case KEY_F6:
-                cameras = Arrays.asList("Onboard0", "Onboard1", "Onboard2", "Onboard3");
-                activeCamera = client.getModel().getSessionInfo().getActiveCamera();
-                index = cameras.indexOf(activeCamera);
-                client.sendSetCameraRequest("Onboard", cameras.get((index + 1) % cameras.size()));
+                if (client.isConnected()) {
+                    var cameras = Arrays.asList("Onboard0", "Onboard1", "Onboard2", "Onboard3");
+                    var activeCamera = client.getModel().getSessionInfo().getActiveCamera();
+                    var index = cameras.indexOf(activeCamera);
+                    client.sendSetCameraRequest("Onboard", cameras.get((index + 1) % cameras.size()));
+                }
                 break;
             case KEY_LEFT:
-                if (event.isShiftDown()) {
-                    moveFocusRelative(1);
+                if (client.isConnected()) {
+                    if (event.isShiftDown()) {
+                        moveFocusRelative(1);
+                    }
                 }
                 break;
             case KEY_RIGHT:
-                if (event.isShiftDown()) {
-                    moveFocusRelative(-1);
+                if (client.isConnected()) {
+                    if (event.isShiftDown()) {
+                        moveFocusRelative(-1);
+                    }
                 }
                 break;
             case KEY_UP:
-                if (event.isShiftDown()) {
-                    moveFocusAbsolute(1);
+                if (client.isConnected()) {
+                    if (event.isShiftDown()) {
+                        moveFocusAbsolute(1);
+                    }
                 }
                 break;
             case KEY_DOWN:
-                if (event.isShiftDown()) {
-                    moveFocusAbsolute(-1);
+                if (client.isConnected()) {
+                    if (event.isShiftDown()) {
+                        moveFocusAbsolute(-1);
+                    }
                 }
                 break;
         }
@@ -115,7 +137,7 @@ public class Hotkeys {
         if (target < 0) {
             target = cars.size();
         }
-        if(target >= cars.size()){
+        if (target >= cars.size()) {
             target = 0;
         }
         client.sendChangeFocusRequest(cars.get(target).getCarId());
@@ -133,19 +155,19 @@ public class Hotkeys {
         if (target < 0) {
             target = cars.size();
         }
-        if(target >= cars.size()){
+        if (target >= cars.size()) {
             target = 0;
         }
         client.sendChangeFocusRequest(cars.get(target).getCarId());
     }
-    
-    private int compareSplinePos(CarInfo c1, CarInfo c2){
+
+    private int compareSplinePos(CarInfo c1, CarInfo c2) {
         float s1 = c1.getRealtime().getSplinePosition();
         float s2 = c2.getRealtime().getSplinePosition();
-        if(s1 > s2){
+        if (s1 > s2) {
             return 1;
         }
-        if(s2 > s1){
+        if (s2 > s1) {
             return -1;
         }
         return 0;

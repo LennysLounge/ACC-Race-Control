@@ -135,28 +135,6 @@ public class LPContainer
     }
 
     @Override
-    public void onKeyPressedInternal(KeyEvent event) {
-        if (!isVisible()) {
-            return;
-        }
-        super.onKeyPressedInternal(event);
-        for (LPComponent c : components) {
-            c.onKeyPressedInternal(event);
-        }
-    }
-
-    @Override
-    public void onKeyReleasedInternal(KeyEvent event) {
-        if (!isVisible()) {
-            return;
-        }
-        super.onKeyReleasedInternal(event);
-        for (LPComponent c : components) {
-            c.onKeyReleasedInternal(event);
-        }
-    }
-
-    @Override
     public void setEnabled(boolean isEnabled) {
         for (LPComponent c : components) {
             c.setEnabled(isEnabled);

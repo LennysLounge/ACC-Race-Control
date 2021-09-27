@@ -96,8 +96,12 @@ public class RaceControlApplet extends CustomPApplet {
         if (key == ESC) {
             key = 0;
         }
-        hotkey.handleHotkeys(event);
         super.keyPressed(event);
+    }
+
+    @Override
+    public void keyPressedFallthrough(KeyEvent event) {
+        hotkey.handleHotkeys(event);
     }
 
     @Override

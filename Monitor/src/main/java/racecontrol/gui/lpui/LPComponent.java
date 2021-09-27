@@ -22,7 +22,7 @@ public class LPComponent {
     /**
      * Static Reference to the PApplet.
      */
-    private static PApplet staticApplet;
+    private static LPBase staticApplet;
     /**
      * The base applet.
      */
@@ -75,6 +75,10 @@ public class LPComponent {
      * True if the component is currently visible and should be drawn.
      */
     private boolean visible = true;
+    /**
+     * Indicates that an event should be propagated to this components parent.
+     */
+    private boolean propagateEventToParent = true;
 
     /**
      * Creates a new instance.
@@ -147,15 +151,16 @@ public class LPComponent {
      *
      * @param a PApplet.
      */
-    public static void setStaticApplet(PApplet a) {
+    public static void setStaticApplet(LPBase a) {
         staticApplet = a;
     }
-    
+
     /**
      * Returns the static applet.
+     *
      * @return PApplet
      */
-    public static PApplet getStaticApplet(){
+    public static LPBase getStaticApplet() {
         return staticApplet;
     }
 
@@ -394,9 +399,11 @@ public class LPComponent {
             return;
         }
         onMouseReleased(mouseX, mouseY, mouseButton);
-        if (parent != null) {
+        if (parent != null
+                && propagateEventToParent) {
             parent.onMouseReleasedInternal(mouseX, mouseY, mouseButton);
         }
+        propagateEventToParent = true;
     }
 
     /**
@@ -411,11 +418,12 @@ public class LPComponent {
     }
 
     /**
-     * Mouse scroll event. Used internaly, do not call directly.
+     * Mouse scroll event.Used internaly, do not call directly.
      *
      * @param mouseX X-position of the mouse click.
      * @param mouseY Y-position of the mouse click.
      * @param scrolDir direction of the scroll.
+     * @return The component the mouse was over when the scroll happened.
      */
     public LPComponent onMouseScrollInternal(int mouseX, int mouseY, int scrolDir) {
         if (!isVisible()) {
@@ -557,6 +565,12 @@ public class LPComponent {
             return;
         }
         onKeyPressed(event);
+        if (parent == null) {
+            getStaticApplet().keyPressedFallthrough(event);
+        } else if (propagateEventToParent) {
+            parent.onKeyPressedInternal(event);
+        }
+        propagateEventToParent = true;
     }
 
     /**
@@ -577,6 +591,13 @@ public class LPComponent {
             return;
         }
         onKeyReleased(event);
+
+        if (parent == null) {
+            getStaticApplet().keyReleasedFallthrough(event);
+        } else if (propagateEventToParent) {
+            parent.onKeyReleasedInternal(event);
+        }
+        propagateEventToParent = true;
     }
 
     /**
@@ -585,6 +606,10 @@ public class LPComponent {
      * @param event the key event.
      */
     public void onKeyReleased(KeyEvent event) {
+    }
+
+    public void stopPropagation() {
+        propagateEventToParent = false;
     }
 
 }

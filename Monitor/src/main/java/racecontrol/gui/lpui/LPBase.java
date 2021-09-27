@@ -88,12 +88,32 @@ public class LPBase extends PApplet {
 
     @Override
     public void keyPressed(KeyEvent event) {
-        base.onKeyPressedInternal(event);
+        LPComponent focusedComponent = LPComponent.getFocused();
+        if (focusedComponent != null) {
+            focusedComponent.onKeyPressedInternal(event);
+        }
+    }
+    
+    /**
+     * Event for when a key press occured that was not captured.
+     * @param event 
+     */
+    public void keyPressedFallthrough(KeyEvent event){
     }
 
     @Override
     public void keyReleased(KeyEvent event) {
-        base.onKeyReleasedInternal(event);
+        LPComponent focusedComponent = LPComponent.getFocused();
+        if (focusedComponent != null) {
+            focusedComponent.onKeyReleasedInternal(event);
+        }
+    }
+    
+    /**
+     * Event for when a key release occured that was not captured.
+     * @param event 
+     */
+    public void keyReleasedFallthrough(KeyEvent event){
     }
 
 }

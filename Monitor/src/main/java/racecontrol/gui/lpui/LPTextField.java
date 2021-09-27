@@ -382,6 +382,7 @@ public class LPTextField
             setCursorOnAndReschedule();
             invalidate();
         }
+        stopPropagation();
     }
 
     @Override
