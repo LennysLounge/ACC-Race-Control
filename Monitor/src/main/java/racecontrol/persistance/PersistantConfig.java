@@ -12,8 +12,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,27 +39,9 @@ public class PersistantConfig {
      */
     private static boolean initialised = false;
     /**
-     * Map that hodls the current config.
+     * Map holds the configurations.
      */
-    private static Map<String, String> config = new HashMap<>();
-    /**
-     * Connection settings.
-     */
-    public static String CONNECTION_IP = "connectionIp";
-    public static String CONNECTION_PORT = "connectionPort";
-    public static String CONNECTION_PASSWORD = "connectionPassword";
-    public static String CONNECTION_INTERVAL = "connectionInterval";
-    /**
-     * Path to credentials file.
-     */
-    public static String CREDENTIALS_FILE_PATH = "credentialsFile";
-    /**
-     * general extension enabled.
-     */
-    public static String EXTENSION_LIVE_TIMING_ENABLED = "extensionLiveTimingEnabled";
-    public static String EXTENSION_INCIDENTS_ENABLED = "extensionIncidentEnabled";
-    public static String EXTENSION_CAMERA_CONTROL_ENABLED = "extensionCameraControlEnabled";
-    public static String EXTENSION_BROADCSATING_ENABLED = "extensionBroadcastingEnabled";
+    private static Map<Key<?>, Object> configuration = new HashMap<>();
 
     /**
      * non instantiable.
@@ -77,58 +61,12 @@ public class PersistantConfig {
         try {
             InputStream in = new FileInputStream(FILE_NAME);
             ObjectInputStream objIn = new ObjectInputStream(in);
-            config = (Map<String, String>) objIn.readObject();
+            configuration = (Map<Key<?>, Object>) objIn.readObject();
         } catch (IOException | ClassNotFoundException | NullPointerException ex) {
             LOG.info("Persistant conig not found, creating new.");
-            createDefaults();
             saveConfig();
         }
         initialised = true;
-    }
-
-    /**
-     * Creats the default values for the config.
-     */
-    private static void createDefaults() {
-        setConfig(CONNECTION_IP, "127.0.0.1");
-        setConfig(CONNECTION_PORT, "9000");
-        setConfig(CONNECTION_PASSWORD, "asd");
-        setConfig(CONNECTION_INTERVAL, "250");
-        setConfig(CREDENTIALS_FILE_PATH, "Google Sheets Api Key\\credentials.json");
-        setConfig(EXTENSION_CAMERA_CONTROL_ENABLED, String.valueOf(false));
-        setConfig(EXTENSION_INCIDENTS_ENABLED, String.valueOf(true));
-        setConfig(EXTENSION_LIVE_TIMING_ENABLED, String.valueOf(true));
-        setConfig(EXTENSION_BROADCSATING_ENABLED, String.valueOf(false));
-    }
-
-    /**
-     * Sets the value for a config by its key.
-     *
-     * @param key The key for the config.
-     * @param value The value of the config.
-     */
-    public static void setConfig(String key, String value) {
-        config.put(key, value);
-        saveConfig();
-    }
-
-    /**
-     * Returns the config for a give key.
-     *
-     * @param key The key of the config.
-     * @return The value of the config.
-     */
-    public static String getConfig(String key) {
-        return config.get(key);
-    }
-
-    public static boolean getConfigBoolean(String key) {
-        try {
-            return Boolean.valueOf(getConfig(key));
-        } catch (Exception e) {
-
-        }
-        return false;
     }
 
     private static void saveConfig() {
@@ -136,12 +74,100 @@ public class PersistantConfig {
         try {
             fos = new FileOutputStream(FILE_NAME);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(config);
+            oos.writeObject(configuration);
             oos.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PersistantConfig.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(PersistantConfig.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    /**
+     * Add a new property
+     *
+     * @param <T> Class of the value.
+     * @param key The key place the value under.
+     * @param value The value to save.
+     */
+    public static <T> void put(Key<T> key, T value) {
+        configuration.put(key, value);
+        saveConfig();
+    }
+
+    /**
+     * Returns the property for the key.
+     *
+     * @param <T> Type of the value.
+     * @param key The key to look for.
+     * @return The value of type T.
+     */
+    public static <T> T get(Key<T> key) {
+        if (!configuration.containsKey(key)) {
+            return key.defaultValue;
+        }
+        return key.type.cast(configuration.get(key));
+    }
+
+    /**
+     * Key to use to identify configurations.
+     *
+     * @param <T> Type of the object this key referes to.
+     */
+    public static class Key<T>
+            implements Serializable {
+
+        /**
+         * Type of the object this key referes to.
+         */
+        final Class<T> type;
+        /**
+         * Default value for this key if the property does not exist.
+         */
+        final T defaultValue;
+        /**
+         * Identifier for this key.
+         */
+        final String identifier;
+
+        public Key(Class<T> type, T defaultValue, String identifier) {
+            this.type = type;
+            this.defaultValue = defaultValue;
+            this.identifier = identifier;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 71 * hash + Objects.hashCode(this.type);
+            hash = 71 * hash + Objects.hashCode(this.defaultValue);
+            hash = 71 * hash + Objects.hashCode(this.identifier);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final Key<?> other = (Key<?>) obj;
+            if (!Objects.equals(this.identifier, other.identifier)) {
+                return false;
+            }
+            if (!Objects.equals(this.type, other.type)) {
+                return false;
+            }
+            if (!Objects.equals(this.defaultValue, other.defaultValue)) {
+                return false;
+            }
+            return true;
+        }
+
     }
 }

@@ -7,14 +7,6 @@ package racecontrol.gui.app;
 
 import racecontrol.utility.Version;
 import racecontrol.persistance.PersistantConfig;
-import static racecontrol.persistance.PersistantConfig.CONNECTION_INTERVAL;
-import static racecontrol.persistance.PersistantConfig.CONNECTION_IP;
-import static racecontrol.persistance.PersistantConfig.CONNECTION_PASSWORD;
-import static racecontrol.persistance.PersistantConfig.CONNECTION_PORT;
-import static racecontrol.persistance.PersistantConfig.EXTENSION_CAMERA_CONTROL_ENABLED;
-import static racecontrol.persistance.PersistantConfig.EXTENSION_INCIDENTS_ENABLED;
-import static racecontrol.persistance.PersistantConfig.EXTENSION_LIVE_TIMING_ENABLED;
-import static racecontrol.persistance.PersistantConfig.setConfig;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
@@ -26,7 +18,6 @@ import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.lpui.LPButton;
 import racecontrol.gui.lpui.LPContainer;
 import racecontrol.gui.lpui.LPLabel;
-import racecontrol.gui.lpui.LPTabPanel;
 import racecontrol.gui.lpui.LPTextField;
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -36,7 +27,10 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static racecontrol.persistance.PersistantConfig.EXTENSION_BROADCSATING_ENABLED;
+import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_INTERVAL;
+import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_IP;
+import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_PASSWORD;
+import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_PORT;
 
 /**
  *
@@ -145,10 +139,10 @@ public class SettingsPanel
         connectButton.setAction(() -> disconnectButtonPressed());
 
         //save config
-        PersistantConfig.setConfig(CONNECTION_IP, ipTextField.getValue());
-        PersistantConfig.setConfig(CONNECTION_PORT, portTextField.getValue());
-        PersistantConfig.setConfig(CONNECTION_PASSWORD, connectionPWTextField.getValue());
-        PersistantConfig.setConfig(CONNECTION_INTERVAL, updateIntervalTextField.getValue());
+        PersistantConfig.put(CONNECTION_IP, ipTextField.getValue());
+        PersistantConfig.put(CONNECTION_PORT, portTextField.getValue());
+        PersistantConfig.put(CONNECTION_PASSWORD, connectionPWTextField.getValue());
+        PersistantConfig.put(CONNECTION_INTERVAL, updateIntervalTextField.getValue());
     }
 
     private void disconnectButtonPressed() {
@@ -195,22 +189,22 @@ public class SettingsPanel
 
         addComponent(ipLabel);
         ipTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        ipTextField.setValue(PersistantConfig.getConfig(CONNECTION_IP));
+        ipTextField.setValue(PersistantConfig.get(CONNECTION_IP));
         addComponent(ipTextField);
 
         addComponent(portLabel);
         portTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        portTextField.setValue(PersistantConfig.getConfig(CONNECTION_PORT));
+        portTextField.setValue(PersistantConfig.get(CONNECTION_PORT));
         addComponent(portTextField);
 
         addComponent(connectionPWLabel);
         connectionPWTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        connectionPWTextField.setValue(PersistantConfig.getConfig(CONNECTION_PASSWORD));
+        connectionPWTextField.setValue(PersistantConfig.get(CONNECTION_PASSWORD));
         addComponent(connectionPWTextField);
 
         addComponent(updateIntervalLabel);
         updateIntervalTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
-        updateIntervalTextField.setValue(PersistantConfig.getConfig(CONNECTION_INTERVAL));
+        updateIntervalTextField.setValue(PersistantConfig.get(CONNECTION_INTERVAL));
         addComponent(updateIntervalTextField);
 
         connectButton.setSize(380, LookAndFeel.LINE_HEIGHT);

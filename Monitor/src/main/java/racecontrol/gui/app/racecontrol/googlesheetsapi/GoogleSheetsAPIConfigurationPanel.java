@@ -6,7 +6,6 @@
 package racecontrol.gui.app.racecontrol.googlesheetsapi;
 
 import racecontrol.persistance.PersistantConfig;
-import static racecontrol.persistance.PersistantConfig.CREDENTIALS_FILE_PATH;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import static racecontrol.gui.LookAndFeel.TEXT_SIZE;
@@ -23,6 +22,7 @@ import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConfigura
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConfiguration.FIND_EMPTY_ROW_RANGE;
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConfiguration.REPLAY_OFFSET_CELL;
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConfiguration.SESSION_TIME_COLUMN;
+import static racecontrol.persistance.PersistantConfigKeys.CREDENTIALS_FILE_PATH;
 
 /**
  *
@@ -74,7 +74,7 @@ public class GoogleSheetsAPIConfigurationPanel
         addComponent(credentialsFileLabel);
         credentialsFileTextField.setPosition(20, LINE_HEIGHT * 3);
         credentialsFileTextField.setSize(200, LINE_HEIGHT);
-        credentialsFileTextField.setValue(PersistantConfig.getConfig(CREDENTIALS_FILE_PATH));
+        credentialsFileTextField.setValue(PersistantConfig.get(CREDENTIALS_FILE_PATH));
         addComponent(credentialsFileTextField);
         credentalsSearchButton.setSize(100, LINE_HEIGHT);
         credentalsSearchButton.setAction(() -> openSearchCredentialsFileDialog());

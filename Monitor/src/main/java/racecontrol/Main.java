@@ -24,6 +24,7 @@ import java.awt.SplashScreen;
 import java.util.concurrent.TimeUnit;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import racecontrol.persistance.PersistantConfig.Key;
 
 /**
  *
@@ -40,7 +41,7 @@ public class Main {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
         setupLogging();
         PersistantConfig.init();
-        
+
         setupSplash();
         TimeUnit.SECONDS.sleep(2);
 
