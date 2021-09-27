@@ -121,9 +121,7 @@ public class LPCollapsablePanel
     public void onMousePressed(int x, int y, int button) {
         if (x > COLLAPSE_BOX_X && x < COLLAPSE_BOX_X + COLLAPSE_BOX_SIZE
                 && y > COLLAPSE_BOX_Y && y < COLLAPSE_BOX_Y + COLLAPSE_BOX_SIZE) {
-            collapsed = !collapsed;
-            setSize(expandedWidth, expandedHeight);
-            getComponents().forEach((c) -> c.setVisible(!collapsed));
+            setCollapsed(!collapsed);
             mouseOverCollapseButton = false;
             invalidate();
             stateChangeAction.run();
@@ -139,6 +137,12 @@ public class LPCollapsablePanel
         } else {
             super.setSize(w, h);
         }
+    }
+
+    public void setCollapsed(boolean state) {
+        this.collapsed = state;
+        setSize(expandedWidth, expandedHeight);
+        getComponents().forEach((c) -> c.setVisible(!collapsed));
     }
 
     public boolean isCollapsed() {

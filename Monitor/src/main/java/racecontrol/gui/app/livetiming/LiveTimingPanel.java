@@ -13,6 +13,8 @@ import racecontrol.gui.lpui.LPCollapsablePanel;
 import racecontrol.gui.lpui.LPComponent;
 import racecontrol.gui.lpui.LPContainer;
 import racecontrol.gui.lpui.LPLabel;
+import racecontrol.persistance.PersistantConfig;
+import static racecontrol.persistance.PersistantConfigKeys.BROADCASTING_CONTROLS_COLLAPSED;
 
 /**
  *
@@ -58,11 +60,13 @@ public class LiveTimingPanel
         addComponent(viewRightButton);
 
         collapsablePanel.setAction(() -> {
+            PersistantConfig.put(BROADCASTING_CONTROLS_COLLAPSED, collapsablePanel.isCollapsed());
             onResize((int) getWidth(), (int) getHeight());
             invalidate();
         });
         collapsablePanel.addComponent(broadcastingControls);
         addComponent(collapsablePanel);
+        collapsablePanel.setCollapsed(PersistantConfig.get(BROADCASTING_CONTROLS_COLLAPSED));
     }
 
     @Override
