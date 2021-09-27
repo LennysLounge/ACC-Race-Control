@@ -120,8 +120,8 @@ public class LiveTimingPanel
         collapsablePanel.setPosition(0, h - broadcastControllHeight);
 
         if (isLiveTimingTableVisible) {
-            liveTimingTable.setSize(w, h - LINE_HEIGHT - broadcastControllHeight);
-            liveTimingTable.setPosition(0, LINE_HEIGHT);
+            liveTimingTable.setSize(w - 20, h - LINE_HEIGHT - broadcastControllHeight);
+            liveTimingTable.setPosition(10, LINE_HEIGHT);
         }
         detachLiveTimingButton.setPosition(w - 90, 0);
 

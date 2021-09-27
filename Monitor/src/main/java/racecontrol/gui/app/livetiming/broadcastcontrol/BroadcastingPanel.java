@@ -53,13 +53,10 @@ public class BroadcastingPanel
     private final LPLabel instantReplayDurationLabel = new LPLabel("seconds.");
     private final LPButton instantReplayCustomButton = new LPButton("Go");
 
-    public BroadcastingPanel(BroadcastingController extension,
-            LPContainer liveTimingPanel) {
+    public BroadcastingPanel(BroadcastingController extension) {
         this.extension = extension;
 
         setName("Broadcasting control");
-
-        addComponent(liveTimingPanel);
 
         hudLabel.setSize(150, LINE_HEIGHT);
         addComponent(hudLabel);
@@ -167,7 +164,7 @@ public class BroadcastingPanel
             instantReplayLabel.setVisible(false);
         } else {
             instantReplayLabel.setVisible(true);
-            instantReplayLabel.setPosition(x + 36,0);
+            instantReplayLabel.setPosition(x + 36, 0);
             positionInstantReplayElements(x + 36, 1);
         }
     }

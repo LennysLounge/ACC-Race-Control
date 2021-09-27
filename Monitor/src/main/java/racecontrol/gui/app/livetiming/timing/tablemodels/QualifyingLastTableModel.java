@@ -45,28 +45,36 @@ public class QualifyingLastTableModel
             pitColumn,
             carNumberColumn,
             new LPTableColumn("Gap")
-            .setMaxWidth(100)
+            .setMinWidth(90)
+            .setPriority(3)
             .setCellRenderer((applet, context) -> gapRenderer(applet, context)),
             new LPTableColumn("Lap")
-            .setMaxWidth(100)
+            .setMinWidth(100)
+            .setPriority(1)
             .setCellRenderer((applet, context) -> lapTimeRenderer(applet, context)),
             new LPTableColumn("Delta")
-            .setMaxWidth(100)
+            .setMinWidth(100)
+            .setPriority(2)
             .setCellRenderer((applet, context) -> deltaRenderer(applet, context)),
             new LPTableColumn("Last")
-            .setMaxWidth(100)
+            .setMinWidth(100)
+            .setPriority(4)
             .setCellRenderer((applet, context) -> lastLapRenderer(applet, context)),
             new LPTableColumn("S1")
-            .setMaxWidth(100)
+            .setMinWidth(80)
+            .setPriority(0)
             .setCellRenderer((applet, context) -> lastSectorOneRenderer(applet, context)),
             new LPTableColumn("S2")
-            .setMaxWidth(100)
+            .setMinWidth(80)
+            .setPriority(0)
             .setCellRenderer((applet, context) -> lastSectorTwoRenderer(applet, context)),
             new LPTableColumn("S3")
-            .setMaxWidth(100)
+            .setMinWidth(80)
+            .setPriority(0)
             .setCellRenderer((applet, context) -> lastSectorThreeRenderer(applet, context)),
             new LPTableColumn("Laps")
-            .setMaxWidth(100)
+            .setMinWidth(50)
+            .setPriority(1)
             .setCellRenderer((applet, context) -> lapsRenderer(applet, context))
         };
     }

@@ -34,16 +34,11 @@ public class BroadcastingController
      * Panel.
      */
     private final BroadcastingPanel panel;
-    /**
-     * Reference to the live timing extension.
-     */
-    private final LiveTimingTableController liveTimingExtension;
 
     public BroadcastingController() {
         EventBus.register(this);
         client = AccBroadcastingClient.getClient();
-        liveTimingExtension = new LiveTimingTableController();
-        this.panel = new BroadcastingPanel(this, liveTimingExtension.getPanel());
+        this.panel = new BroadcastingPanel(this);
     }
 
     public LPContainer getPanel() {

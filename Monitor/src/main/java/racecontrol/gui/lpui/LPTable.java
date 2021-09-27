@@ -5,6 +5,8 @@
  */
 package racecontrol.gui.lpui;
 
+import java.util.ArrayList;
+import java.util.List;
 import racecontrol.gui.LookAndFeel;
 import java.util.function.BiConsumer;
 import java.util.logging.Logger;
@@ -47,6 +49,10 @@ public class LPTable extends LPContainer {
      * The table model for this table.
      */
     private LPTableModel model = defaultTableModel;
+    /**
+     * The columns in the table model.
+     */
+    private LPTableColumn[] columns = new LPTableColumn[0];
     /**
      * height of the table model.
      */
@@ -109,9 +115,6 @@ public class LPTable extends LPContainer {
         applet.rect(0, 0, getWidth(), getHeight());
 
         calculateVisibleArea();
-
-        LPTableColumn[] columns = model.getColumns();
-
         //Draw header
         if (drawHeader) {
             float columnOffset = 0;
@@ -364,7 +367,7 @@ public class LPTable extends LPContainer {
         scrollbar.isVisible = visibleHeight < modelHeight;
 
         //calculate column widths
-        columnWidths = calculateColumnWidths(model.getColumns(),
+        columnWidths = calculateColumnWidths(columns,
                 getWidth() - ((scrollbar.isVisible) ? scrollbar.width : 0));
 
         //limit the maximum scroll
@@ -400,6 +403,7 @@ public class LPTable extends LPContainer {
      */
     public void setTableModel(LPTableModel model) {
         this.model = model;
+        columns = model.getColumns();
     }
 
     public void drawHeader(boolean state) {
@@ -522,11 +526,6 @@ public class LPTable extends LPContainer {
          * Amount of stroll this table currently has.
          */
         private float scroll = 0;
-        /**
-         * difference from actual scroll position to the currently dragged
-         * position to enable smooth scrolling by dragging.
-         */
-        private int smoothScrollDiff = 0;
         /**
          * Indicates that the mouse is hovering over the scrollbar.
          */

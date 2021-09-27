@@ -48,21 +48,27 @@ public class RaceTableModel
             pitColumn,
             carNumberColumn,
             new LPTableColumn("Gap")
+            .setMinWidth(100)
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> gapRenderer(applet, context)),
             new LPTableColumn("To Leader")
+            .setMinWidth(100)
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> gapToLeaderRenderer(applet, context)),
             new LPTableColumn("Lap")
-            .setMaxWidth(100)
+            .setMinWidth(100)
+            .setMaxWidth(200)
             .setCellRenderer((applet, context) -> lapTimeRenderer(applet, context)),
             new LPTableColumn("Last")
-            .setMaxWidth(100)
+            .setMinWidth(100)
+            .setMaxWidth(200)
             .setCellRenderer((applet, context) -> lastLapRenderer(applet, context)),
             new LPTableColumn("Best")
-            .setMaxWidth(100)
+            .setMinWidth(100)
+            .setMaxWidth(200)
             .setCellRenderer((applet, context) -> bestLapRenderer(applet, context)),
             new LPTableColumn("Laps")
+            .setMinWidth(70)
             .setMaxWidth(70)
             .setCellRenderer((applet, context) -> lapCountRenderer(applet, context))
         };
