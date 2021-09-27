@@ -9,17 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import processing.core.PVector;
 import racecontrol.client.data.RealtimeInfo;
 import static racecontrol.client.data.enums.CarLocation.TRACK;
 import static racecontrol.client.data.enums.LapType.REGULAR;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.TrackInfoEvent;
 import racecontrol.client.extension.trackdata.TrackData;
+import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.client.extension.trackdata.TrackDataExtension;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.gui.lpui.LPContainer;
+import racecontrol.gui.lpui.LPTabPanel;
 
 /**
  *
@@ -30,7 +33,9 @@ public class TrackDataController
 
     private static final Logger LOG = Logger.getLogger(TrackDataController.class.getName());
 
-    private final TrackDataPanel panel;
+    private final TrackDataPanel dataPanel;
+    private final TrackMapPanel mapPanel;
+    private final LPTabPanel tabPanel = new LPTabPanel();
 
     private final TrackDataExtension trackDataExtension;
 
@@ -46,7 +51,8 @@ public class TrackDataController
 
     public TrackDataController() {
         EventBus.register(this);
-        panel = new TrackDataPanel();
+        dataPanel = new TrackDataPanel();
+        mapPanel = new TrackMapPanel();
         trackDataExtension = TrackDataExtension.getInstance();
 
         for (int i = 0; i < mapSize; i++) {
@@ -55,15 +61,19 @@ public class TrackDataController
             dirMap.add(0f);
             dirMapTotal.add(new ArrayList<>());
         }
-        panel.vMap = vMap;
-        panel.dirMap = dirMap;
+        dataPanel.vMap = vMap;
+        dataPanel.dirMap = dirMap;
 
-        panel.saveToFileButton.setAction(() -> saveAll());
-        panel.saveButton.setAction(()->useData());
+        dataPanel.saveToFileButton.setAction(() -> saveAll());
+        dataPanel.saveButton.setAction(() -> useData());
+
+        tabPanel.addTab(dataPanel);
+        tabPanel.addTab(mapPanel);
+        tabPanel.setTabIndex(0);
     }
 
     public LPContainer getPanel() {
-        return panel;
+        return tabPanel;
     }
 
     @Override
@@ -73,22 +83,25 @@ public class TrackDataController
         } else if (e instanceof RealtimeCarUpdateEvent) {
             updateVMap(((RealtimeCarUpdateEvent) e).getInfo());
             updateDirMap(((RealtimeCarUpdateEvent) e).getInfo());
-            //panel.drawCarState(((RealtimeCarUpdateEvent) e).getInfo());
-            panel.invalidate();
+            dataPanel.drawCarState(((RealtimeCarUpdateEvent) e).getInfo());
+            dataPanel.invalidate();
+            //mapPanel.invalidate();
+        }else if(e instanceof TrackDataEvent){
+            mapPanel.trackData = ((TrackDataEvent)e).getTrackData();
         }
     }
 
     private void onTrackInfo() {
         trackData = trackDataExtension.getTrackData();
 
-        panel.trackNameLabel.setText(trackData.getTrackname());
-        panel.sectorOneTextField.setValue(String.format("%.4f", trackData.getSectorOneLine()).replace(",", "."));
-        panel.sectorTwoTextField.setValue(String.format("%.4f", trackData.getSectorTwoLine()).replace(",", "."));
-        panel.sectorThreeTextField.setValue(String.format("%.4f", trackData.getSectorThreeLine()).replace(",", "."));
-        panel.speedTrapTextField.setValue(String.format("%.4f", trackData.getSpeedTrapLine()).replace(",", "."));
+        dataPanel.trackNameLabel.setText(trackData.getTrackname());
+        dataPanel.sectorOneTextField.setValue(String.format("%.4f", trackData.getSectorOneLine()).replace(",", "."));
+        dataPanel.sectorTwoTextField.setValue(String.format("%.4f", trackData.getSectorTwoLine()).replace(",", "."));
+        dataPanel.sectorThreeTextField.setValue(String.format("%.4f", trackData.getSectorThreeLine()).replace(",", "."));
+        dataPanel.speedTrapTextField.setValue(String.format("%.4f", trackData.getSpeedTrapLine()).replace(",", "."));
 
-        panel.savedVMap = trackData.getGt3VelocityMap();
-        panel.savedDirMap = trackData.getDirectionMap();
+        dataPanel.savedVMap = trackData.getGt3VelocityMap();
+        dataPanel.savedDirMap = trackData.getDirectionMap();
     }
 
     private void updateVMap(RealtimeInfo info) {
@@ -108,16 +121,17 @@ public class TrackDataController
     }
 
     private void updateDirMap(RealtimeInfo info) {
-        if (info.getCurrentLap().getType() == REGULAR
+        if (info.getCurrentLap().getType() == REGULAR 
                 && info.getLocation() == TRACK
-                && info.getKMH() > 10) {
+                && info.getKMH() > 10
+                && !info.getCurrentLap().isInvalid()) {
             int index = (int) Math.floor(info.getSplinePosition() * mapSize);
             if (index == mapSize) {
                 index = 0;
             }
             dirMapTotal.get(index).add(info.getYaw());
             dirMapTotal.get(index).sort((a, b) -> a.compareTo(b));
-            dirMap.set(index, getMedian(dirMapTotal.get(index)));
+            dirMap.set(index, getAverageAngel(dirMapTotal.get(index)));
         }
     }
 
@@ -132,14 +146,20 @@ public class TrackDataController
             return l.get(middle);
         }
     }
+    
+    private float getAverageAngel(List<Float> l){
+        PVector sum = new PVector(0, 0);
+        l.forEach(f -> sum.add(PVector.fromAngle(f)));
+        return sum.div(l.size()).heading();
+    }
 
     private void saveAll() {
         float s1, s2, s3, speedTrap;
         try {
-            s1 = Float.parseFloat(panel.sectorOneTextField.getValue());
-            s2 = Float.parseFloat(panel.sectorTwoTextField.getValue());
-            s3 = Float.parseFloat(panel.sectorThreeTextField.getValue());
-            speedTrap = Float.parseFloat(panel.speedTrapTextField.getValue());
+            s1 = Float.parseFloat(dataPanel.sectorOneTextField.getValue());
+            s2 = Float.parseFloat(dataPanel.sectorTwoTextField.getValue());
+            s3 = Float.parseFloat(dataPanel.sectorThreeTextField.getValue());
+            speedTrap = Float.parseFloat(dataPanel.speedTrapTextField.getValue());
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error parsing sectors", e);
             return;
@@ -148,12 +168,12 @@ public class TrackDataController
         TrackData oldData = trackDataExtension.getTrackData();
 
         List<Float> newVMap = oldData.getGt3VelocityMap();
-        if (panel.enableVMapCheckBox.isSelected()) {
+        if (dataPanel.enableVMapCheckBox.isSelected()) {
             newVMap = vMap;
         }
 
         List<Float> newDMap = oldData.getDirectionMap();
-        if (panel.enableDMapCheckBox.isSelected()) {
+        if (dataPanel.enableDMapCheckBox.isSelected()) {
             newDMap = dirMap;
         }
 
@@ -167,14 +187,14 @@ public class TrackDataController
                 newDMap);
         trackDataExtension.saveTrackData(newData);
     }
-    
+
     private void useData() {
         float s1, s2, s3, speedTrap;
         try {
-            s1 = Float.parseFloat(panel.sectorOneTextField.getValue());
-            s2 = Float.parseFloat(panel.sectorTwoTextField.getValue());
-            s3 = Float.parseFloat(panel.sectorThreeTextField.getValue());
-            speedTrap = Float.parseFloat(panel.speedTrapTextField.getValue());
+            s1 = Float.parseFloat(dataPanel.sectorOneTextField.getValue());
+            s2 = Float.parseFloat(dataPanel.sectorTwoTextField.getValue());
+            s3 = Float.parseFloat(dataPanel.sectorThreeTextField.getValue());
+            speedTrap = Float.parseFloat(dataPanel.speedTrapTextField.getValue());
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error parsing sectors", e);
             return;
@@ -183,12 +203,12 @@ public class TrackDataController
         TrackData oldData = trackDataExtension.getTrackData();
 
         List<Float> newVMap = oldData.getGt3VelocityMap();
-        if (panel.enableVMapCheckBox.isSelected()) {
+        if (dataPanel.enableVMapCheckBox.isSelected()) {
             newVMap = vMap;
         }
 
         List<Float> newDMap = oldData.getDirectionMap();
-        if (panel.enableDMapCheckBox.isSelected()) {
+        if (dataPanel.enableDMapCheckBox.isSelected()) {
             newDMap = dirMap;
         }
 

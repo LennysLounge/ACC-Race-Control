@@ -58,6 +58,7 @@ public class TrackDataPanel
     private List<RealtimeInfo> carStates = new ArrayList<>();
 
     public TrackDataPanel() {
+        setName("Data");
         addComponent(trackNameLabel);
 
         addComponent(sectorOneLabel);
@@ -112,7 +113,7 @@ public class TrackDataPanel
     }
 
     private void resizeGraphs() {
-        PGraphics g = getApplet().createGraphics((int) graphWidth, (int) graphHeight);
+        PGraphics g = getApplet().createGraphics((int) Math.max(100, graphWidth), (int) Math.max(100, graphHeight));
         g.fill(0);
         g.beginDraw();
         g.background(0);
@@ -123,7 +124,7 @@ public class TrackDataPanel
         vMapGraph = g;
         vMapGraph.strokeWeight(3);
         vMapGraph.stroke(255, 255, 255, 50);
-        g = getApplet().createGraphics((int) graphWidth, (int) graphHeight);
+        g = getApplet().createGraphics((int) Math.max(100, graphWidth), (int) Math.max(100, graphHeight));
         g.fill(0);
         g.beginDraw();
         g.background(0);
