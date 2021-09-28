@@ -28,7 +28,7 @@ import static racecontrol.client.extension.statistics.CarProperties.CATEGORY;
 import static racecontrol.client.extension.statistics.CarProperties.IS_FOCUSED_ON;
 import static racecontrol.client.extension.statistics.CarProperties.IS_IN_PITS;
 import static racecontrol.client.extension.statistics.CarProperties.NAME;
-import static racecontrol.client.extension.statistics.CarProperties.POSITION;
+import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_FINISHED;
 import racecontrol.client.extension.statistics.CarStatistics;
 import static racecontrol.gui.LookAndFeel.COLOR_BLACK;
@@ -90,7 +90,7 @@ public abstract class LiveTimingTableModel
         applet.fill(fgColor);
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontMedium());
-        applet.text(String.valueOf(stats.get(POSITION)),
+        applet.text(String.valueOf(stats.get(REALTIME_POSITION)),
                 context.width / 2f, context.height / 2f);
     }
 

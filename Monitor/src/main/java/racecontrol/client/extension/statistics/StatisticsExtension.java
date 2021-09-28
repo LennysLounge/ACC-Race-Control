@@ -14,7 +14,9 @@ import racecontrol.client.data.CarInfo;
 import racecontrol.client.events.CarConnectedEvent;
 import racecontrol.client.extension.statistics.processors.DataProcessor;
 import racecontrol.client.extension.statistics.processors.GapProcessor;
+import racecontrol.client.extension.statistics.processors.RealtimePositionProcessor;
 import racecontrol.client.extension.statistics.processors.SectorTimesProcessor;
+import racecontrol.client.extension.statistics.processors.SessionOverProcessor;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
@@ -56,9 +58,10 @@ public class StatisticsExtension
         EventBus.register(this);
         this.processors = new ArrayList<>();
         processors.add(new DataProcessor(cars));
-        processors.add(new GapProcessor(cars));
         processors.add(new SectorTimesProcessor(cars));
         processors.add(new SessionOverProcessor(cars));
+        processors.add(new RealtimePositionProcessor(cars));
+        processors.add(new GapProcessor(cars));
     }
 
     @Override
@@ -67,7 +70,7 @@ public class StatisticsExtension
             CarInfo car = ((CarConnectedEvent) e).getCar();
             cars.put(car.getCarId(), new WritableCarStatistics());
         }
-        
+
         processors.forEach(processor -> processor.onEvent(e));
     }
 

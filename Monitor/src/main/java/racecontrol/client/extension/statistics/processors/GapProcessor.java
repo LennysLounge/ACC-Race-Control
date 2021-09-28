@@ -26,6 +26,7 @@ import racecontrol.client.extension.trackdata.TrackData;
 import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.eventbus.Event;
 import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_BEHIND_LEADER;
+import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
 
 /**
  *
@@ -83,7 +84,10 @@ public class GapProcessor extends StatisticsProcessor {
 
         // calculate gaps to position ahead and leader.
         List<CarInfo> cars = client.getModel().getCarsInfo().values().stream()
-                .sorted((c1, c2) -> c1.getRealtime().getPosition() - c2.getRealtime().getPosition())
+                .sorted((c1, c2) -> {
+                    return getCars().get(c1.getCarId()).get(REALTIME_POSITION)
+                            .compareTo(getCars().get(c2.getCarId()).get(REALTIME_POSITION));
+                })
                 .collect(Collectors.toList());
         float leaderRaceDistance = cars.get(0).getRealtime().getLaps()
                 + cars.get(0).getRealtime().getSplinePosition();

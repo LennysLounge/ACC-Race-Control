@@ -63,6 +63,11 @@ public interface CarProperties {
     public final Key<CarLocation> CAR_LOCATION = new Key<>(CarLocation.class, CarLocation.NONE);
     public final Key<Boolean> IS_FOCUSED_ON = new Key<>(Boolean.class, false);
 
+    public final Key<Float> RACE_DISTANCE_SIMPLE = new Key<>(Float.class, 0f);
+    public final Key<Float> RACE_DISTANCE_COMPLEX = new Key<>(Float.class, 0f);
+    public final Key<Integer> REALTIME_POSITION = new Key<>(Integer.class, 0);
+    public final Key<Boolean> USE_REALTIME_POS = new Key<>(Boolean.class, false);
+    
     public final Key<Boolean> SESSION_FINISHED = new Key<>(Boolean.class, false);
 
     // Session

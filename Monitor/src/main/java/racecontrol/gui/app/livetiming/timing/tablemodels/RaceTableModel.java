@@ -32,6 +32,7 @@ import racecontrol.gui.lpui.LPTable;
 import racecontrol.gui.lpui.LPTable.RenderContext;
 import racecontrol.utility.TimeUtils;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_INVALID;
+import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
 
 /**
  *
@@ -88,7 +89,7 @@ public class RaceTableModel
     public void sort() {
         entries = entries.stream()
                 .sorted((c1, c2)
-                        -> c1.get(POSITION).compareTo(c2.get(POSITION))
+                        -> c1.get(REALTIME_POSITION).compareTo(c2.get(REALTIME_POSITION))
                 )
                 .collect(toList());
     }
