@@ -10,6 +10,8 @@
 * Add detachable panels for each menu page. To detach a menu page, mouse wheel click on the menu item.
 * Add option to change between different live timing views.
 * Add option to detach only the live timing table.
+* Update the race positions in realtime not only on sector lines.
+* Add an overtake indicator to show when an overtake has occured in the race view.
 
 
 
