@@ -9,11 +9,11 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_THREE_CALC;
+import static racecontrol.client.extension.statistics.CarProperties.OVERTAKE_INDICATOR;
 import static racecontrol.client.extension.statistics.CarProperties.POSITION;
 import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_COMPLEX;
 import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_SIMPLE;
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
-import static racecontrol.client.extension.statistics.CarProperties.USE_REALTIME_POS;
 import racecontrol.client.extension.statistics.CarStatistics;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.lpui.LPTable;
@@ -46,7 +46,7 @@ public class TestTableModel
             new LPTableColumn("Diff")
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> r4(applet, context)),
-            new LPTableColumn("Use RTPos")
+            new LPTableColumn("OI")
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> r5(applet, context))/*,
             new LPTableColumn("S3C")
@@ -60,7 +60,7 @@ public class TestTableModel
     public String getName() {
         return "Test";
     }
-    
+
     @Override
     public void sort() {
         entries = entries.stream()
@@ -107,8 +107,8 @@ public class TestTableModel
     }
 
     private void r5(PApplet applet, LPTable.RenderContext context) {
-        boolean over = ((CarStatistics) context.object).get(USE_REALTIME_POS);
-        String text = over ? "true" : "false";
+        int over = ((CarStatistics) context.object).get(OVERTAKE_INDICATOR);
+        String text = String.valueOf(over);
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);

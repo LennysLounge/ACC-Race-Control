@@ -14,6 +14,7 @@ import racecontrol.client.data.CarInfo;
 import racecontrol.client.events.CarConnectedEvent;
 import racecontrol.client.extension.statistics.processors.DataProcessor;
 import racecontrol.client.extension.statistics.processors.GapProcessor;
+import racecontrol.client.extension.statistics.processors.OvertakeProcessor;
 import racecontrol.client.extension.statistics.processors.RealtimePositionProcessor;
 import racecontrol.client.extension.statistics.processors.SectorTimesProcessor;
 import racecontrol.client.extension.statistics.processors.SessionOverProcessor;
@@ -62,6 +63,7 @@ public class StatisticsExtension
         processors.add(new SessionOverProcessor(cars));
         processors.add(new RealtimePositionProcessor(cars));
         processors.add(new GapProcessor(cars));
+        processors.add(new OvertakeProcessor(cars));
     }
 
     @Override

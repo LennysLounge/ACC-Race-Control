@@ -20,7 +20,6 @@ import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_
 import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_SPLIT;
 import static racecontrol.client.extension.statistics.CarProperties.LAP_COUNT;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_LAP_TIME;
-import static racecontrol.client.extension.statistics.CarProperties.POSITION;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_LAP_TIME;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
@@ -32,7 +31,9 @@ import racecontrol.gui.lpui.LPTable;
 import racecontrol.gui.lpui.LPTable.RenderContext;
 import racecontrol.utility.TimeUtils;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_INVALID;
+import static racecontrol.client.extension.statistics.CarProperties.OVERTAKE_INDICATOR;
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
+import static racecontrol.gui.LookAndFeel.COLOR_RED;
 
 /**
  *
@@ -48,13 +49,19 @@ public class RaceTableModel
             nameColumn,
             pitColumn,
             carNumberColumn,
+            new LPTableColumn("")
+            .setMinWidth(40)
+            .setMaxWidth(40)
+            .setCellRenderer((applet, context) -> overtakeRenderer(applet, context)),
             new LPTableColumn("Gap")
             .setMinWidth(100)
             .setMaxWidth(100)
+            .setTextAlign(RIGHT)
             .setCellRenderer((applet, context) -> gapRenderer(applet, context)),
             new LPTableColumn("To Leader")
             .setMinWidth(100)
-            .setMaxWidth(100)
+            .setMaxWidth(150)
+            .setTextAlign(RIGHT)
             .setCellRenderer((applet, context) -> gapToLeaderRenderer(applet, context)),
             new LPTableColumn("Lap")
             .setMinWidth(100)
@@ -94,11 +101,34 @@ public class RaceTableModel
                 .collect(toList());
     }
 
+    private void overtakeRenderer(PApplet applet, RenderContext context) {
+        CarStatistics stats = (CarStatistics) context.object;
+        int overtake = stats.get(OVERTAKE_INDICATOR);
+        if (overtake != 0) {
+            int size = 10 * (int) Math.signum(overtake);
+            float x = context.width / 2f;
+            float y = context.height / 2f + size / 2f;
+            if (overtake < 0) {
+                applet.stroke(COLOR_RACE);
+            } else {
+                applet.stroke(COLOR_RED);
+            }
+            applet.strokeWeight(3);
+            applet.line(x, y, x + size, y - size);
+            applet.line(x, y, x - size, y - size);
+            applet.strokeWeight(1);
+            applet.noStroke();
+        }
+    }
+
     private void gapRenderer(PApplet applet, RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
+        if (stats.get(CAR_LOCATION) != TRACK) {
+            return;
+        }
         int gap = stats.get(GAP_TO_POSITION_AHEAD);
         String text = TimeUtils.asGap(gap);
-        if (stats.get(POSITION) == 1) {
+        if (stats.get(REALTIME_POSITION) == 1) {
             text = "--";
         }
         applet.textAlign(RIGHT, CENTER);

@@ -197,6 +197,17 @@ public abstract class LiveTimingTableModel
         return entries.size();
     }
 
+    @Override
+    public int getSelectedRow() {
+        for (int i = 0; i < entries.size(); i++) {
+            var stats = entries.get(i);
+            if (stats.get(IS_FOCUSED_ON)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public abstract void sort();
 
     public abstract String getName();

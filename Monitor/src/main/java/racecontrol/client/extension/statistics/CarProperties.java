@@ -69,6 +69,8 @@ public interface CarProperties {
     public final Key<Boolean> USE_REALTIME_POS = new Key<>(Boolean.class, false);
     
     public final Key<Boolean> SESSION_FINISHED = new Key<>(Boolean.class, false);
+    
+    public final Key<Integer> OVERTAKE_INDICATOR = new Key<>(Integer.class, 0);
 
     // Session
     public final Key<Integer> SESSION_BEST_LAP_TIME = new Key<>(Integer.class, 0);
