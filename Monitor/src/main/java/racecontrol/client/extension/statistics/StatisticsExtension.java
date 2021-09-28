@@ -58,6 +58,7 @@ public class StatisticsExtension
         processors.add(new DataProcessor(cars));
         processors.add(new GapProcessor(cars));
         processors.add(new SectorTimesProcessor(cars));
+        processors.add(new SessionOverProcessor(cars));
     }
 
     @Override

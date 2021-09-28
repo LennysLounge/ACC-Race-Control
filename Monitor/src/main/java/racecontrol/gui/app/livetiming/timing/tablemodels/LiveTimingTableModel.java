@@ -29,7 +29,9 @@ import static racecontrol.client.extension.statistics.CarProperties.IS_FOCUSED_O
 import static racecontrol.client.extension.statistics.CarProperties.IS_IN_PITS;
 import static racecontrol.client.extension.statistics.CarProperties.NAME;
 import static racecontrol.client.extension.statistics.CarProperties.POSITION;
+import static racecontrol.client.extension.statistics.CarProperties.SESSION_FINISHED;
 import racecontrol.client.extension.statistics.CarStatistics;
+import static racecontrol.gui.LookAndFeel.COLOR_BLACK;
 
 /**
  *
@@ -107,14 +109,25 @@ public abstract class LiveTimingTableModel
     }
 
     private void pitRenderer(PApplet applet, LPTable.RenderContext context) {
-        boolean isInPits = ((CarStatistics) context.object).get(IS_IN_PITS);
+        CarStatistics stats = (CarStatistics) context.object;
         if (context.isMouseOverRow) {
             applet.fill(COLOR_DARK_RED);
             applet.rect(0, 1, context.width - 1, context.height - 2);
         }
-        if (isInPits) {
+        if (stats.get(SESSION_FINISHED)) {
+            applet.fill(COLOR_WHITE);
+            applet.rect(1, 1, context.width - 2, context.height - 2);
+            float s = (context.width - 2) / 2;
+            applet.fill(COLOR_BLACK);
+            int i = 0;
+            while ((s * (i + 1) + 2) < context.height) {
+                applet.rect(1 + s * (i % 2), 1 + s * i, s, s);
+                i++;
+            }
+            applet.rect(1 + s * (i % 2), 1 + s * i, s, context.height - (2 + s * i));
+        } else if (stats.get(IS_IN_PITS)) {
             applet.noStroke();
-            applet.fill(LookAndFeel.COLOR_WHITE);
+            applet.fill(COLOR_WHITE);
             applet.rect(1, 1, context.width - 2, context.height - 2);
             applet.fill(0);
             applet.textAlign(CENTER, CENTER);
