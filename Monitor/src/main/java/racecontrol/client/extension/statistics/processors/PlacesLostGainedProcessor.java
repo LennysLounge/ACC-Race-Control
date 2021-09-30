@@ -23,6 +23,7 @@ import racecontrol.client.extension.statistics.StatisticsProcessor;
 import racecontrol.client.extension.statistics.WritableCarStatistics;
 import racecontrol.eventbus.Event;
 import static racecontrol.client.extension.statistics.CarProperties.RACE_START_POSITION_ACCURATE;
+import static racecontrol.client.extension.statistics.CarProperties.SESSION_FINISHED;
 
 /**
  *
@@ -67,8 +68,10 @@ public class PlacesLostGainedProcessor
                             carStats.put(RACE_START_POSITION_ACCURATE, false);
                         }
 
-                        int lostGained = carStats.get(REALTIME_POSITION) - carStats.get(RACE_START_POSITION);
-                        carStats.put(PLACES_GAINED, lostGained);
+                        if (!carStats.get(SESSION_FINISHED)) {
+                            int lostGained = carStats.get(REALTIME_POSITION) - carStats.get(RACE_START_POSITION);
+                            carStats.put(PLACES_GAINED, lostGained);
+                        }
                     });
         }
     }
