@@ -84,7 +84,6 @@ public class OvertakeProcessor
                 }
             }
             prevPositions.put(car.getCarId(), stats.get(REALTIME_POSITION));
-            LOG.info("Save pos for #" + stats.get(CAR_NUMBER) + "\tpos:" + stats.get(REALTIME_POSITION));
         }
     }
 

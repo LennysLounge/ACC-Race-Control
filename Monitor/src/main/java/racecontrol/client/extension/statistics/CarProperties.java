@@ -67,10 +67,14 @@ public interface CarProperties {
     public final Key<Float> RACE_DISTANCE_COMPLEX = new Key<>(Float.class, 0f);
     public final Key<Integer> REALTIME_POSITION = new Key<>(Integer.class, 0);
     public final Key<Boolean> USE_REALTIME_POS = new Key<>(Boolean.class, false);
-    
+
     public final Key<Boolean> SESSION_FINISHED = new Key<>(Boolean.class, false);
-    
+
     public final Key<Integer> OVERTAKE_INDICATOR = new Key<>(Integer.class, 0);
+
+    public final Key<Integer> RACE_START_POSITION = new Key<>(Integer.class, 0);
+    public final Key<Boolean> RACE_START_POSITION_ACCURATE = new Key<>(Boolean.class, false);
+    public final Key<Integer> PLACES_GAINED = new Key<>(Integer.class, 0);
 
     // Session
     public final Key<Integer> SESSION_BEST_LAP_TIME = new Key<>(Integer.class, 0);

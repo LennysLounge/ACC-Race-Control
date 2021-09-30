@@ -12,6 +12,8 @@
 * Add option to detach only the live timing table.
 * Update the race positions in realtime not only on sector lines.
 * Add an overtake indicator to show when an overtake has occured in the race view.
+* Add a column to show the amount of places lost and gained during a race.
+* Add a column to show on which position a car started the race.
 
 
 
