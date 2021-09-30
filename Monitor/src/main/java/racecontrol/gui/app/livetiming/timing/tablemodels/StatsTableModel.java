@@ -9,10 +9,13 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
+import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUNT;
+import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUNT_ACCURATE;
+import static racecontrol.client.extension.statistics.CarProperties.PITLANE_TIME;
+import static racecontrol.client.extension.statistics.CarProperties.PITLANE_TIME_STATIONARY;
 import static racecontrol.client.extension.statistics.CarProperties.PLACES_GAINED;
 import static racecontrol.client.extension.statistics.CarProperties.RACE_START_POSITION;
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
-import static racecontrol.client.extension.statistics.CarProperties.STARTING_POSITION_KNOWN;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_RACE;
@@ -20,6 +23,8 @@ import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.lpui.LPTable.RenderContext;
 import racecontrol.gui.lpui.LPTableColumn;
+import static racecontrol.client.extension.statistics.CarProperties.RACE_START_POSITION_ACCURATE;
+import racecontrol.utility.TimeUtils;
 
 /**
  *
@@ -40,7 +45,16 @@ public class StatsTableModel
             .setCellRenderer((applet, context) -> placesLostGainedRenderer(applet, context)),
             new LPTableColumn("Grid")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> startingPositionRenderer(applet, context))
+            .setCellRenderer((applet, context) -> startingPositionRenderer(applet, context)),
+            new LPTableColumn("Pit Count")
+            .setMaxWidth(100)
+            .setCellRenderer((applet, context) -> pitCountRenderer(applet, context)),
+            new LPTableColumn("t/pit")
+            .setMaxWidth(100)
+            .setCellRenderer((applet, context) -> pitTimeRenderer(applet, context)),
+            new LPTableColumn("t/stopped")
+            .setMaxWidth(100)
+            .setCellRenderer((applet, context) -> pitTimeStationaryRenderer(applet, context))
         };
     }
 
@@ -84,7 +98,7 @@ public class StatsTableModel
             applet.noStroke();
 
             String text = String.valueOf(Math.abs(placesGained))
-                    + (stats.get(STARTING_POSITION_KNOWN) ? "" : "*");
+                    + (stats.get(RACE_START_POSITION_ACCURATE) ? "" : "*");
             applet.textAlign(LEFT, CENTER);
             applet.textFont(LookAndFeel.fontRegular());
             applet.text(text, context.width / 2f + 5, context.height / 2f);
@@ -96,7 +110,39 @@ public class StatsTableModel
         int startPos = stats.get(RACE_START_POSITION);
         if (startPos != 0) {
             String text = String.valueOf(startPos)
-                    + (stats.get(STARTING_POSITION_KNOWN) ? "" : "*");
+                    + (stats.get(RACE_START_POSITION_ACCURATE) ? "" : "*");
+            applet.fill(COLOR_WHITE);
+            applet.textAlign(CENTER, CENTER);
+            applet.textFont(LookAndFeel.fontRegular());
+            applet.text(text, context.width / 2f, context.height / 2f);
+        }
+    }
+
+    private void pitCountRenderer(PApplet applet, RenderContext context) {
+        CarStatistics stats = (CarStatistics) context.object;
+        String text = String.valueOf(stats.get(PITLANE_COUNT))
+                + (stats.get(PITLANE_COUNT_ACCURATE) ? "" : "*");
+        applet.fill(COLOR_WHITE);
+        applet.textAlign(CENTER, CENTER);
+        applet.textFont(LookAndFeel.fontRegular());
+        applet.text(text, context.width / 2f, context.height / 2f);
+    }
+
+    private void pitTimeRenderer(PApplet applet, RenderContext context) {
+        CarStatistics stats = (CarStatistics) context.object;
+        if (stats.get(PITLANE_TIME) > 0) {
+            String text = TimeUtils.asDurationShort(stats.get(PITLANE_TIME));
+            applet.fill(COLOR_WHITE);
+            applet.textAlign(CENTER, CENTER);
+            applet.textFont(LookAndFeel.fontRegular());
+            applet.text(text, context.width / 2f, context.height / 2f);
+        }
+    }
+
+    private void pitTimeStationaryRenderer(PApplet applet, RenderContext context) {
+        CarStatistics stats = (CarStatistics) context.object;
+        if (stats.get(PITLANE_TIME) > 0) {
+            String text = TimeUtils.asDurationShort(stats.get(PITLANE_TIME_STATIONARY));
             applet.fill(COLOR_WHITE);
             applet.textAlign(CENTER, CENTER);
             applet.textFont(LookAndFeel.fontRegular());

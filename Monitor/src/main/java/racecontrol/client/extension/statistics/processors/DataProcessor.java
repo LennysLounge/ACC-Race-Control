@@ -12,7 +12,7 @@ import racecontrol.client.data.DriverInfo;
 import racecontrol.client.data.LapInfo;
 import racecontrol.client.data.RealtimeInfo;
 import racecontrol.client.data.SessionInfo;
-import static racecontrol.client.data.enums.CarLocation.TRACK;
+import static racecontrol.client.data.enums.CarLocation.PITLANE;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import static racecontrol.client.extension.statistics.CarProperties.BEST_LAP_INVALID;
@@ -112,7 +112,7 @@ public class DataProcessor extends StatisticsProcessor {
         // Status
         car.put(POSITION, info.getPosition());
         car.put(CUP_POSITION, info.getCupPosition());
-        car.put(IS_IN_PITS, info.getLocation() != TRACK);
+        car.put(IS_IN_PITS, info.getLocation() == PITLANE);
         car.put(CAR_LOCATION, info.getLocation());
 
     }

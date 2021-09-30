@@ -14,6 +14,8 @@
 * Add an overtake indicator to show when an overtake has occured in the race view.
 * Add a column to show the amount of places lost and gained during a race.
 * Add a column to show on which position a car started the race.
+* Add a column to show how many pitstops a driver has done.
+* Add a column to show the time of the pitstop.
 
 
 
