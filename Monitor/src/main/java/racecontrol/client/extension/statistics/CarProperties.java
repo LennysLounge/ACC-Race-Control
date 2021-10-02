@@ -6,6 +6,7 @@
 package racecontrol.client.extension.statistics;
 
 import racecontrol.client.data.enums.CarLocation;
+import racecontrol.client.data.enums.CarModel;
 import racecontrol.client.data.enums.DriverCategory;
 import racecontrol.client.extension.statistics.WritableCarStatistics.Key;
 
@@ -24,7 +25,7 @@ public interface CarProperties {
     public final Key<String> NAME = new Key<>(String.class, "");
     public final Key<String> SHORT_NAME = new Key<>(String.class, "");
     public final Key<Integer> CAR_NUMBER = new Key<>(Integer.class, 0);
-    public final Key<Byte> CAR_MODEL = new Key<>(Byte.class, (byte) 0);
+    public final Key<CarModel> CAR_MODEL = new Key<>(CarModel.class, CarModel.ERROR);
     public final Key<DriverCategory> CATEGORY = new Key<>(DriverCategory.class, DriverCategory.BRONZE);
     // Laps
     public final Key<Integer> CURRENT_LAP_TIME = new Key<>(Integer.class, 0);
@@ -75,7 +76,7 @@ public interface CarProperties {
     public final Key<Integer> RACE_START_POSITION = new Key<>(Integer.class, 0);
     public final Key<Boolean> RACE_START_POSITION_ACCURATE = new Key<>(Boolean.class, false);
     public final Key<Integer> PLACES_GAINED = new Key<>(Integer.class, 0);
-    
+
     public final Key<Integer> PITLANE_TIME = new Key<>(Integer.class, 0);
     public final Key<Integer> PITLANE_TIME_STATIONARY = new Key<>(Integer.class, 0);
     public final Key<Integer> PITLANE_COUNT = new Key<>(Integer.class, 0);

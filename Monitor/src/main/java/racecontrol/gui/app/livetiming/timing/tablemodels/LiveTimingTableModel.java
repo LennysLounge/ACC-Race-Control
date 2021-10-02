@@ -22,6 +22,10 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CLOSE;
 import static processing.core.PConstants.LEFT;
+import racecontrol.client.data.enums.CarCategory;
+import static racecontrol.client.data.enums.CarCategory.CUP;
+import static racecontrol.client.data.enums.CarCategory.GT3;
+import static racecontrol.client.data.enums.CarCategory.ST;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_MODEL;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
 import static racecontrol.client.extension.statistics.CarProperties.CATEGORY;
@@ -163,17 +167,17 @@ public abstract class LiveTimingTableModel
         applet.rect(1, 1, context.width - 2, context.height - 2);
 
         //render GT4 / Cup / Super trofeo corners.
-        CarType type = getCarType(stats.get(CAR_MODEL));
-        if (type != CarType.GT3) {
+        CarCategory cat = stats.get(CAR_MODEL).getCategory();
+        if (cat != GT3) {
             applet.fill(COLOR_WHITE);
             applet.beginShape();
             applet.vertex(context.width - 1, context.height - 1);
             applet.vertex(context.width - 1, context.height - LINE_HEIGHT * 0.5f);
             applet.vertex(context.width - LINE_HEIGHT * 0.5f, context.height - 1);
             applet.endShape(CLOSE);
-            if (type == CarType.ST) {
+            if (cat == ST) {
                 applet.fill(COLOR_SUPER_TROFEO);
-            } else if (type == CarType.CUP) {
+            } else if (cat == CUP) {
                 applet.fill(LookAndFeel.COLOR_PORSCHE_CUP);
             } else {
                 applet.fill(COLOR_GT4);
@@ -221,36 +225,6 @@ public abstract class LiveTimingTableModel
             return entries.get(row);
         }
         return null;
-    }
-
-    private CarType getCarType(byte carModelId) {
-        switch (carModelId) {
-            case 9:
-                return CarType.CUP;
-            case 18:
-                return CarType.ST;
-            case 50:
-            case 51:
-            case 52:
-            case 53:
-            case 55:
-            case 56:
-            case 57:
-            case 58:
-            case 59:
-            case 60:
-            case 61:
-                return CarType.GT4;
-            default:
-                return CarType.GT3;
-        }
-    }
-
-    private enum CarType {
-        GT3,
-        GT4,
-        ST,
-        CUP;
     }
 
 }

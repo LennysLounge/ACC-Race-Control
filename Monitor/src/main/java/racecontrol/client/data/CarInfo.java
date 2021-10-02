@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
+import racecontrol.client.data.enums.CarModel;
 
 /**
  *
@@ -19,7 +20,7 @@ public class CarInfo {
     private static Logger LOG = Logger.getLogger(CarInfo.class.getName());
 
     private int carId;
-    private byte carModelType;
+    private CarModel carModel;
     private String teamName = "";
     private int carNumber;
     private byte cupCatergory;
@@ -31,11 +32,11 @@ public class CarInfo {
     public CarInfo() {
     }
 
-    public CarInfo(int carId, byte carModelType, String teamName, int carNumber,
+    public CarInfo(int carId, CarModel carModel, String teamName, int carNumber,
             byte cupCatergory, byte currentDriverIndex, int carNationality,
             List<DriverInfo> drivers, RealtimeInfo realtime) {
         this.carId = carId;
-        this.carModelType = carModelType;
+        this.carModel = carModel;
         this.teamName = teamName;
         this.carNumber = carNumber;
         this.cupCatergory = cupCatergory;
@@ -50,7 +51,7 @@ public class CarInfo {
     }
 
     public CarInfo withRealtime(RealtimeInfo realtime) {
-        return new CarInfo(carId, carModelType, teamName, carNumber, cupCatergory,
+        return new CarInfo(carId, carModel, teamName, carNumber, cupCatergory,
                 currentDriverIndex, carNationality, drivers, realtime);
     }
 
@@ -72,8 +73,8 @@ public class CarInfo {
         return carId;
     }
 
-    public byte getCarModelType() {
-        return carModelType;
+    public CarModel getCarModel() {
+        return carModel;
     }
 
     public String getTeamName() {

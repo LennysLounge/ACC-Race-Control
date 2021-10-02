@@ -29,6 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import racecontrol.client.data.enums.CarModel;
 
 /**
  *
@@ -206,7 +207,7 @@ public class AccBroadcastingProtocol {
             Nationality driverNationality = Nationality.fromId(readUInt16(in));
             drivers.add(new DriverInfo(firstName, lastName, shortName, category, driverNationality));
         }
-        CarInfo carInfo = new CarInfo(carId, carModelType, teamName, raceNumber,
+        CarInfo carInfo = new CarInfo(carId, CarModel.fromType(carModelType), teamName, raceNumber,
                 cupCatergory, currentDriverIndex, carNationality, drivers,
                 new RealtimeInfo());
         callback.onEntryListCarUpdate(carInfo);

@@ -20,6 +20,10 @@ import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VSCViolationE
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.SessionId;
+import racecontrol.client.data.enums.CarCategory;
+import static racecontrol.client.data.enums.CarCategory.CUP;
+import static racecontrol.client.data.enums.CarCategory.GT3;
+import static racecontrol.client.data.enums.CarCategory.ST;
 import racecontrol.gui.lpui.LPTable;
 import racecontrol.utility.TimeUtils;
 
@@ -102,17 +106,17 @@ public class VSCViolationEventEntry
         }
 
         //render GT4 / Cup / Super trofeo corners.
-        CarType type = getCarType(car.getCarModelType());
-        if (type != CarType.GT3) {
+        CarCategory cat = car.getCarModel().getCategory();
+        if (cat != GT3) {
             applet.fill(COLOR_WHITE);
             applet.beginShape();
             applet.vertex(w - 1, context.height - 1);
             applet.vertex(w - 1, context.height - LINE_HEIGHT * 0.5f);
             applet.vertex(w - LINE_HEIGHT * 0.5f, context.height - 1);
             applet.endShape(CLOSE);
-            if (type == CarType.ST) {
+            if (cat == ST) {
                 applet.fill(COLOR_SUPER_TROFEO);
-            } else if (type == CarType.CUP) {
+            } else if (cat == CUP) {
                 applet.fill(COLOR_PORSCHE_CUP);
             } else {
                 applet.fill(COLOR_GT4);
@@ -153,30 +157,6 @@ public class VSCViolationEventEntry
         return client.getModel().getCarsInfo().keySet().contains(carId);
     }
 
-    private CarType getCarType(byte carModelId) {
-        switch (carModelId) {
-            case 9:
-                return CarType.CUP;
-            case 18:
-                return CarType.ST;
-            case 50:
-            case 51:
-            case 52:
-            case 53:
-            case 55:
-            case 56:
-            case 57:
-            case 58:
-            case 59:
-            case 60:
-            case 61:
-                return CarType.GT4;
-            default:
-                return CarType.GT3;
-
-        }
-    }
-
     /**
      * Triggers the action for when the info cell was clicked.
      *
@@ -200,13 +180,6 @@ public class VSCViolationEventEntry
                 + String.format(" +%d kmh, +%.1f s",
                         violation.getSpeedOver(),
                         violation.getTimeOver() / 1000);
-    }
-
-    private enum CarType {
-        GT3,
-        GT4,
-        ST,
-        CUP;
     }
 
 }

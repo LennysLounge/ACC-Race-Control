@@ -89,7 +89,7 @@ public class DataProcessor extends StatisticsProcessor {
         car.put(NAME, getName(carInfo.getDriver()));
         car.put(SHORT_NAME, carInfo.getDriver().getShortName());
         car.put(CAR_NUMBER, carInfo.getCarNumber());
-        car.put(CAR_MODEL, carInfo.getCarModelType());
+        car.put(CAR_MODEL, carInfo.getCarModel());
         car.put(CATEGORY, carInfo.getDriver().getCategory());
         // Laps
         car.put(CURRENT_LAP_TIME, info.getCurrentLap().getLapTimeMS());
