@@ -86,8 +86,9 @@ public class TrackDataController
             dataPanel.drawCarState(((RealtimeCarUpdateEvent) e).getInfo());
             dataPanel.invalidate();
             //mapPanel.invalidate();
-        }else if(e instanceof TrackDataEvent){
-            mapPanel.trackData = ((TrackDataEvent)e).getTrackData();
+        } else if (e instanceof TrackDataEvent) {
+            mapPanel.trackData = ((TrackDataEvent) e).getTrackData();
+            dataPanel.speedTrapLine = ((TrackDataEvent) e).getTrackData().getSpeedTrapLine();
         }
     }
 
@@ -121,7 +122,7 @@ public class TrackDataController
     }
 
     private void updateDirMap(RealtimeInfo info) {
-        if (info.getCurrentLap().getType() == REGULAR 
+        if (info.getCurrentLap().getType() == REGULAR
                 && info.getLocation() == TRACK
                 && info.getKMH() > 10
                 && !info.getCurrentLap().isInvalid()) {
@@ -146,8 +147,8 @@ public class TrackDataController
             return l.get(middle);
         }
     }
-    
-    private float getAverageAngel(List<Float> l){
+
+    private float getAverageAngel(List<Float> l) {
         PVector sum = new PVector(0, 0);
         l.forEach(f -> sum.add(PVector.fromAngle(f)));
         return sum.div(l.size()).heading();

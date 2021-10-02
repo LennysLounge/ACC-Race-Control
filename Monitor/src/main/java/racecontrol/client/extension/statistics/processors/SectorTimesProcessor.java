@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.LapInfo;
 import racecontrol.client.data.RealtimeInfo;
@@ -62,7 +63,7 @@ public class SectorTimesProcessor
     /**
      * Fields used for Debugging purposes.
      */
-    private final boolean enableLogging = false;
+    private final boolean enableLogging = true;
     private final Map<Integer, List<Tuple>> sectorSuggestions = new HashMap<>();
     private final List<Integer> s1Avg = new ArrayList<>();
     private final List<Integer> s2Avg = new ArrayList<>();
@@ -86,6 +87,13 @@ public class SectorTimesProcessor
             trackData = ((TrackDataEvent) e).getTrackData();
             s1Avg.clear();
             s2Avg.clear();
+            AccBroadcastingClient.getClient().getModel().getCarsInfo().values().stream()
+                    .map(carInfo -> getCars().get(carInfo.getCarId()))
+                    .forEach(carStat -> {
+                        carStat.put(CURRENT_SECTOR_ONE_CALC, 0);
+                        carStat.put(CURRENT_SECTOR_TWO_CALC, 0);
+                        carStat.put(CURRENT_SECTOR_THREE_CALC, 0);
+                    });
         }
     }
 

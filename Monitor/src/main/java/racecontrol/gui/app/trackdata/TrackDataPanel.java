@@ -55,6 +55,8 @@ public class TrackDataPanel
     private float graphHeight;
     private float graphWidth;
 
+    protected float speedTrapLine;
+
     private List<RealtimeInfo> carStates = new ArrayList<>();
 
     public TrackDataPanel() {
@@ -138,7 +140,9 @@ public class TrackDataPanel
     }
 
     public void drawCarState(RealtimeInfo info) {
-        carStates.add(info);
+        if (carStates.size() > 300) {
+            carStates.add(info);
+        }
     }
 
     @Override
@@ -180,6 +184,7 @@ public class TrackDataPanel
 
         // draw saved vmap.
         applet.stroke(100, 100, 255);
+        applet.noFill();
         applet.beginShape();
         for (int i = 0; i < savedVMap.size(); i++) {
             float x = graphWidth / savedVMap.size() * i;
@@ -196,6 +201,12 @@ public class TrackDataPanel
             float y = PApplet.map(info.getKMH(), 0, 300, graphHeight, 0);
             applet.ellipse(x, y, 6, 6);
         }
+
+        // draw speed trap line
+        int xx = (int) (speedTrapLine * graphWidth);
+        applet.stroke(255);
+        applet.line(xx, 0, xx, graphHeight);
+        applet.noStroke();
 
         // Draw direction map
         applet.translate(0, graphHeight + 10);
