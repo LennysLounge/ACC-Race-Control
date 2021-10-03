@@ -9,14 +9,13 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_THREE_CALC;
-import static racecontrol.client.extension.statistics.CarProperties.DRIVER_STINT_TIME;
-import static racecontrol.client.extension.statistics.CarProperties.DRIVER_STINT_TIME_ACCURATE;
 import static racecontrol.client.extension.statistics.CarProperties.OVERTAKE_INDICATOR;
 import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUNT;
 import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUNT_ACCURATE;
 import static racecontrol.client.extension.statistics.CarProperties.PITLANE_TIME_STATIONARY;
+import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_COMPLEX;
+import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_SIMPLE;
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
-import static racecontrol.client.extension.statistics.CarProperties.SPEED_TRAP_SPEED;
 import racecontrol.client.extension.statistics.CarStatistics;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.lpui.LPTable;
@@ -37,12 +36,12 @@ public class TestTableModel
             nameColumn,
             pitColumn,
             carNumberColumn,
-            new LPTableColumn("stint time")
+            new LPTableColumn("RDS")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> r1(applet, context))/*,
-            new LPTableColumn("trap")
+            .setCellRenderer((applet, context) -> r1(applet, context)),
+            new LPTableColumn("RDC")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> r2(applet, context)),
+            .setCellRenderer((applet, context) -> r2(applet, context))/*,
             new LPTableColumn("Stationary")
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> r3(applet, context)),
@@ -76,8 +75,7 @@ public class TestTableModel
     private void r1(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
-        String text = TimeUtils.asDurationShort(stats.get(DRIVER_STINT_TIME));
-        text = text + (stats.get(DRIVER_STINT_TIME_ACCURATE) ? "" : "*");
+        String text = String.format("%.5f", stats.get(RACE_DISTANCE_SIMPLE));
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);
@@ -86,7 +84,7 @@ public class TestTableModel
     private void r2(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
-        String text = String.valueOf(stats.get(SPEED_TRAP_SPEED));
+        String text = String.format("%.5f", stats.get(RACE_DISTANCE_COMPLEX));
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);

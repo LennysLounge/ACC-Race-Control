@@ -11,13 +11,16 @@ import java.util.stream.Collectors;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.RealtimeInfo;
 import racecontrol.client.data.SessionInfo;
-import static racecontrol.client.data.enums.CarLocation.TRACK;
-import static racecontrol.client.data.enums.SessionPhase.SESSION;
+import static racecontrol.client.data.enums.CarLocation.PITLANE;
+import static racecontrol.client.data.enums.SessionPhase.PRESESSION;
 import static racecontrol.client.data.enums.SessionType.RACE;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
+import racecontrol.client.events.SessionPhaseChangedEvent;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
+import static racecontrol.client.extension.statistics.CarProperties.CAR_LOCATION;
+import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
 import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_COMPLEX;
 import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_SIMPLE;
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
@@ -56,6 +59,8 @@ public class RealtimePositionProcessor
             onSessionUpdate(((RealtimeUpdateEvent) e).getSessionInfo());
         } else if (e instanceof SessionChangedEvent) {
             resetDistances();
+        } else if (e instanceof SessionPhaseChangedEvent) {
+            sessionPhaseChanged(((SessionPhaseChangedEvent) e).getSessionInfo());
         }
     }
 
@@ -65,9 +70,8 @@ public class RealtimePositionProcessor
         float raceDistance = info.getSplinePosition() + info.getLaps();
         carStats.put(RACE_DISTANCE_SIMPLE, raceDistance);
 
-        if ((info.getSplinePosition() > 0.95f
-                || info.getSplinePosition() < 0.05f)
-                && info.getLocation() == TRACK) {
+        if (info.getSplinePosition() > 0.95f
+                || info.getSplinePosition() < 0.05f) {
             float diffToLastUpdate
                     = raceDistance - carStats.get(RACE_DISTANCE_COMPLEX);
             if (diffToLastUpdate < -0.5) {
@@ -114,6 +118,20 @@ public class RealtimePositionProcessor
             car.put(RACE_DISTANCE_SIMPLE, 0f);
             car.put(RACE_DISTANCE_COMPLEX, 0f);
         });
+    }
+
+    private void sessionPhaseChanged(SessionInfo info) {
+        if (info.getPhase() == PRESESSION) {
+            getCars().values().forEach(carStats -> {
+                if (carStats.get(CAR_LOCATION) == PITLANE) {
+                    carStats.put(RACE_DISTANCE_COMPLEX, -1f);
+                }
+
+                LOG.info("#" + carStats.get(CAR_NUMBER)
+                        + "\t" + carStats.get(CAR_LOCATION)
+                );
+            });
+        }
     }
 
 }
