@@ -9,12 +9,12 @@ import java.util.Map;
 import java.util.logging.Logger;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.SessionInfo;
+import static racecontrol.client.data.enums.SessionPhase.PRESESSION;
 import static racecontrol.client.data.enums.SessionPhase.SESSION;
 import static racecontrol.client.data.enums.SessionType.RACE;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
-import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
 import static racecontrol.client.extension.statistics.CarProperties.PLACES_GAINED;
 import static racecontrol.client.extension.statistics.CarProperties.POSITION;
 import static racecontrol.client.extension.statistics.CarProperties.RACE_START_POSITION;
@@ -89,7 +89,8 @@ public class PlacesLostGainedProcessor
 
     private void sessionPhaseChanged(SessionInfo info) {
         if (info.getSessionType() == RACE
-                && info.getPhase() == SESSION) {
+                && (info.getPhase() == SESSION
+                || info.getPhase() == PRESESSION)) {
             client.getModel().getCarsInfo().values().stream()
                     .map(carInfo -> getCars().get(carInfo.getCarId()))
                     .forEach(carStats -> {
