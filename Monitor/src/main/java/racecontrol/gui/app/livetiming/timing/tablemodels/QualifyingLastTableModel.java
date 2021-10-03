@@ -115,12 +115,10 @@ public class QualifyingLastTableModel
         int bestSplitTime = stats.get(BEST_SECTOR_ONE);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_ONE);
 
-        if (splitTime > 0) {
-            String text = TimeUtils.asSeconds(splitTime);
-            if (splitTime > 999999) {
-                text = "999.999";
-            }
-            applet.fill(COLOR_WHITE);
+        String text = "--";
+        applet.fill(COLOR_WHITE);
+        if (splitTime > 0 && splitTime < 999999) {
+            text = TimeUtils.asSeconds(splitTime);
             if (!stats.get(LAST_LAP_INVALID)) {
                 if (splitTime <= bestSplitTime) {
                     applet.fill(COLOR_RACE);
@@ -129,10 +127,11 @@ public class QualifyingLastTableModel
                     applet.fill(COLOR_PURPLE);
                 }
             }
-            applet.textAlign(CENTER, CENTER);
-            applet.textFont(LookAndFeel.fontRegular());
-            applet.text(text, context.width / 2, context.height / 2);
         }
+
+        applet.textAlign(CENTER, CENTER);
+        applet.textFont(LookAndFeel.fontRegular());
+        applet.text(text, context.width / 2, context.height / 2);
     }
 
     protected void lastSectorTwoRenderer(PApplet applet, LPTable.RenderContext context) {
@@ -141,11 +140,10 @@ public class QualifyingLastTableModel
         int bestSplitTime = stats.get(BEST_SECTOR_TWO);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_TWO);
 
-        if (splitTime > 0) {
-            String text = TimeUtils.asSeconds(splitTime);
-            if (splitTime > 999999) {
-                text = "999.999";
-            }
+        String text = "--";
+        applet.fill(COLOR_WHITE);
+        if (splitTime > 0 && splitTime < 999999) {
+            text = TimeUtils.asSeconds(splitTime);
             if (!stats.get(LAST_LAP_INVALID)) {
                 if (splitTime <= bestSplitTime) {
                     applet.fill(COLOR_RACE);
@@ -154,10 +152,10 @@ public class QualifyingLastTableModel
                     applet.fill(COLOR_PURPLE);
                 }
             }
-            applet.textAlign(CENTER, CENTER);
-            applet.textFont(LookAndFeel.fontRegular());
-            applet.text(text, context.width / 2, context.height / 2);
         }
+        applet.textAlign(CENTER, CENTER);
+        applet.textFont(LookAndFeel.fontRegular());
+        applet.text(text, context.width / 2, context.height / 2);
     }
 
     protected void lastSectorThreeRenderer(PApplet applet, LPTable.RenderContext context) {
@@ -166,12 +164,10 @@ public class QualifyingLastTableModel
         int bestSplitTime = stats.get(BEST_SECTOR_THREE);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_THREE);
 
-        if (splitTime > 0) {
-            String text = TimeUtils.asSeconds(splitTime);
-            if (splitTime > 999999) {
-                text = "999.999";
-            }
-            applet.fill(COLOR_WHITE);
+        String text = "--";
+        applet.fill(COLOR_WHITE);
+        if (splitTime > 0 && splitTime < 999999) {
+            text = TimeUtils.asSeconds(splitTime);
             if (!stats.get(LAST_LAP_INVALID)) {
                 if (splitTime <= bestSplitTime) {
                     applet.fill(COLOR_RACE);
@@ -180,9 +176,9 @@ public class QualifyingLastTableModel
                     applet.fill(COLOR_PURPLE);
                 }
             }
-            applet.textAlign(CENTER, CENTER);
-            applet.textFont(LookAndFeel.fontRegular());
-            applet.text(text, context.width / 2, context.height / 2);
         }
+        applet.textAlign(CENTER, CENTER);
+        applet.textFont(LookAndFeel.fontRegular());
+        applet.text(text, context.width / 2, context.height / 2);
     }
 }

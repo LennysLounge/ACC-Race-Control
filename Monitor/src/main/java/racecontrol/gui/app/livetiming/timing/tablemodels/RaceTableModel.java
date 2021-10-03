@@ -11,6 +11,7 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
 import static racecontrol.client.data.enums.CarLocation.TRACK;
+import static racecontrol.client.data.enums.SessionType.RACE;
 import static racecontrol.client.extension.statistics.CarProperties.BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_LOCATION;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_TIME;
@@ -33,6 +34,7 @@ import racecontrol.utility.TimeUtils;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_INVALID;
 import static racecontrol.client.extension.statistics.CarProperties.OVERTAKE_INDICATOR;
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
+import static racecontrol.client.extension.statistics.CarProperties.SESSION_ID;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
 
 /**
@@ -119,45 +121,6 @@ public class RaceTableModel
             applet.strokeWeight(1);
             applet.noStroke();
         }
-    }
-
-    private void gapRenderer(PApplet applet, RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
-        if (stats.get(CAR_LOCATION) != TRACK) {
-            return;
-        }
-        int gap = stats.get(GAP_TO_POSITION_AHEAD);
-        String text = TimeUtils.asGap(gap);
-        if (stats.get(REALTIME_POSITION) == 1) {
-            text = "--";
-        }
-        applet.textAlign(RIGHT, CENTER);
-        applet.textFont(LookAndFeel.fontRegular());
-        if (gap < 1000 && gap > 0) {
-            applet.fill(COLOR_ORANGE);
-        } else {
-            applet.fill(COLOR_WHITE);
-        }
-        applet.text(text, context.width - 20, context.height / 2);
-    }
-
-    private void gapToLeaderRenderer(PApplet applet, RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
-        String text = "--";
-        if (stats.get(LAPS_BEHIND_SPLIT)) {
-            text = String.format("+%d Laps", stats.get(LAPS_BEHIND_LEADER));
-        } else {
-            if (stats.get(GAP_TO_LEADER) == 0) {
-                text = "--";
-            } else {
-                text = TimeUtils.asGap(stats.get(GAP_TO_LEADER));
-            }
-        }
-        applet.textAlign(RIGHT, CENTER);
-        applet.textFont(LookAndFeel.fontRegular());
-        applet.fill(COLOR_WHITE);
-        applet.text(text, context.width - 20, context.height / 2);
-
     }
 
     private void lapTimeRenderer(PApplet applet, RenderContext context) {

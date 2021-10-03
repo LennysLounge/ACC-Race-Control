@@ -49,6 +49,7 @@ import static racecontrol.client.extension.statistics.CarProperties.LAST_LAP_INV
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_TWO;
+import static racecontrol.client.extension.statistics.CarProperties.SESSION_ID;
 import static racecontrol.client.extension.statistics.CarProperties.TEAM_NAME;
 
 /**
@@ -133,6 +134,7 @@ public class DataProcessor extends StatisticsProcessor {
     public void onRealtimeUpdate(SessionInfo info) {
         for (WritableCarStatistics car : getCars().values()) {
             car.put(IS_FOCUSED_ON, info.getFocusedCarIndex() == car.get(CAR_ID));
+            car.put(SESSION_ID, client.getSessionId());
         }
     }
 

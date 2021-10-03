@@ -8,6 +8,7 @@ package racecontrol.client.extension.statistics;
 import java.util.ArrayList;
 import java.util.List;
 import racecontrol.client.data.DriverInfo;
+import racecontrol.client.data.SessionId;
 import racecontrol.client.data.enums.CarLocation;
 import racecontrol.client.data.enums.CarModel;
 import racecontrol.client.data.enums.DriverCategory;
@@ -102,6 +103,7 @@ public interface CarProperties {
     public final Key<Integer> SESSION_BEST_SECTOR_ONE = new Key<>(Integer.class, 0);
     public final Key<Integer> SESSION_BEST_SECTOR_TWO = new Key<>(Integer.class, 0);
     public final Key<Integer> SESSION_BEST_SECTOR_THREE = new Key<>(Integer.class, 0);
+    public final Key<SessionId> SESSION_ID = new Key<>(SessionId.class, new SessionId());
 
     public class DriverList {
 

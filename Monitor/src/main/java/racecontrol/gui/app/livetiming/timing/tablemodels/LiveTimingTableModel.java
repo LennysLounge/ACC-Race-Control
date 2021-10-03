@@ -22,20 +22,34 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CLOSE;
 import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.RIGHT;
 import racecontrol.client.data.enums.CarCategory;
 import static racecontrol.client.data.enums.CarCategory.CUP;
 import static racecontrol.client.data.enums.CarCategory.GT3;
 import static racecontrol.client.data.enums.CarCategory.ST;
+import static racecontrol.client.data.enums.CarLocation.TRACK;
+import static racecontrol.client.data.enums.SessionType.RACE;
+import static racecontrol.client.extension.statistics.CarProperties.BEST_LAP_TIME;
+import static racecontrol.client.extension.statistics.CarProperties.CAR_LOCATION;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_MODEL;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
 import static racecontrol.client.extension.statistics.CarProperties.CATEGORY;
+import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_LEADER;
+import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_POSITION_AHEAD;
 import static racecontrol.client.extension.statistics.CarProperties.IS_FOCUSED_ON;
 import static racecontrol.client.extension.statistics.CarProperties.IS_IN_PITS;
+import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_LEADER;
+import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_SPLIT;
+import static racecontrol.client.extension.statistics.CarProperties.LAP_TIME_GAP_TO_SESSION_BEST;
 import static racecontrol.client.extension.statistics.CarProperties.NAME;
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_FINISHED;
+import static racecontrol.client.extension.statistics.CarProperties.SESSION_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
 import static racecontrol.gui.LookAndFeel.COLOR_BLACK;
+import static racecontrol.gui.LookAndFeel.COLOR_ORANGE;
+import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
+import racecontrol.utility.TimeUtils;
 
 /**
  *
@@ -121,14 +135,12 @@ public abstract class LiveTimingTableModel
         if (stats.get(SESSION_FINISHED)) {
             applet.fill(COLOR_WHITE);
             applet.rect(1, 1, context.width - 2, context.height - 2);
-            float s = (context.width - 2) / 2;
+            float w = (context.width - 2) / 2;
+            float h = (context.height - 2) / 6;
             applet.fill(COLOR_BLACK);
-            int i = 0;
-            while ((s * (i + 1) + 2) < context.height) {
-                applet.rect(1 + s * (i % 2), 1 + s * i, s, s);
-                i++;
+            for (int i = 0; i < 6; i++) {
+                applet.rect(1 + w * (i % 2), 1 + h * i, w, h);
             }
-            applet.rect(1 + s * (i % 2), 1 + s * i, s, context.height - (2 + s * i));
         } else if (stats.get(IS_IN_PITS)) {
             applet.noStroke();
             applet.fill(COLOR_WHITE);
@@ -194,6 +206,51 @@ public abstract class LiveTimingTableModel
         applet.textFont(LookAndFeel.fontMedium());
         applet.text(String.valueOf(stats.get(CAR_NUMBER)),
                 context.width / 2f, context.height / 2f);
+    }
+
+    protected void gapRenderer(PApplet applet, LPTable.RenderContext context) {
+        CarStatistics stats = (CarStatistics) context.object;
+
+        applet.fill(COLOR_WHITE);
+        String text = "--";
+
+        if (stats.get(SESSION_ID).getType() == RACE) {
+            int gap = stats.get(GAP_TO_POSITION_AHEAD);
+            if (stats.get(REALTIME_POSITION) > 1) {
+                text = TimeUtils.asGap(gap);
+            }
+
+            if (gap < 1000 && gap > 0) {
+                applet.fill(COLOR_ORANGE);
+            }
+        } else {
+            if (stats.get(BEST_LAP_TIME) != Integer.MAX_VALUE
+                    && stats.get(LAP_TIME_GAP_TO_SESSION_BEST) != 0) {
+                text = TimeUtils.asDelta(stats.get(LAP_TIME_GAP_TO_SESSION_BEST));
+            }
+        }
+
+        applet.textAlign(RIGHT, CENTER);
+        applet.textFont(LookAndFeel.fontRegular());
+        applet.text(text, context.width - 20, context.height / 2);
+    }
+
+    protected void gapToLeaderRenderer(PApplet applet, LPTable.RenderContext context) {
+        CarStatistics stats = (CarStatistics) context.object;
+        String text = "--";
+        if (stats.get(SESSION_ID).getType() == RACE) {
+            if (stats.get(LAPS_BEHIND_SPLIT)) {
+                text = String.format("+%d Laps", stats.get(LAPS_BEHIND_LEADER));
+            } else {
+                if (stats.get(GAP_TO_LEADER) != 0) {
+                    text = TimeUtils.asGap(stats.get(GAP_TO_LEADER));
+                }
+            }
+        }
+        applet.textAlign(RIGHT, CENTER);
+        applet.textFont(LookAndFeel.fontRegular());
+        applet.fill(COLOR_WHITE);
+        applet.text(text, context.width - 20, context.height / 2);
     }
 
     @Override

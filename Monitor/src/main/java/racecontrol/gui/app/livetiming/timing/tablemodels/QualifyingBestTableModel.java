@@ -153,20 +153,6 @@ public class QualifyingBestTableModel
         applet.text(text, context.width / 2, context.height / 2);
     }
 
-    protected void gapRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
-        String text = "--";
-        if (stats.get(BEST_LAP_TIME) != Integer.MAX_VALUE
-                && stats.get(LAP_TIME_GAP_TO_SESSION_BEST) != 0) {
-            text = TimeUtils.asDelta(stats.get(LAP_TIME_GAP_TO_SESSION_BEST));
-        }
-        applet.noStroke();
-        applet.fill(COLOR_WHITE);
-        applet.textAlign(CENTER, CENTER);
-        applet.textFont(LookAndFeel.fontRegular());
-        applet.text(text, context.width / 2, context.height / 2);
-    }
-
     protected void bestSectorOneRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
         int splitTime = stats.get(BEST_SECTOR_ONE);
