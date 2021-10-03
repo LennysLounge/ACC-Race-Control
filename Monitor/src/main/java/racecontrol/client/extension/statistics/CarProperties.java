@@ -5,6 +5,9 @@
  */
 package racecontrol.client.extension.statistics;
 
+import java.util.ArrayList;
+import java.util.List;
+import racecontrol.client.data.DriverInfo;
 import racecontrol.client.data.enums.CarLocation;
 import racecontrol.client.data.enums.CarModel;
 import racecontrol.client.data.enums.DriverCategory;
@@ -27,6 +30,8 @@ public interface CarProperties {
     public final Key<Integer> CAR_NUMBER = new Key<>(Integer.class, 0);
     public final Key<CarModel> CAR_MODEL = new Key<>(CarModel.class, CarModel.ERROR);
     public final Key<DriverCategory> CATEGORY = new Key<>(DriverCategory.class, DriverCategory.BRONZE);
+    public final Key<Integer> DRIVER_INDEX = new Key<>(Integer.class, 0);
+    public final Key<DriverList> DRIVER_LIST = new Key<>(DriverList.class, new DriverList());
     // Laps
     public final Key<Integer> CURRENT_LAP_TIME = new Key<>(Integer.class, 0);
     public final Key<Integer> LAST_LAP_TIME = new Key<>(Integer.class, 0);
@@ -63,30 +68,31 @@ public interface CarProperties {
     public final Key<Boolean> IS_IN_PITS = new Key<>(Boolean.class, false);
     public final Key<CarLocation> CAR_LOCATION = new Key<>(CarLocation.class, CarLocation.NONE);
     public final Key<Boolean> IS_FOCUSED_ON = new Key<>(Boolean.class, false);
-
+    // Realtime position
     public final Key<Float> RACE_DISTANCE_SIMPLE = new Key<>(Float.class, 0f);
     public final Key<Float> RACE_DISTANCE_COMPLEX = new Key<>(Float.class, 0f);
     public final Key<Integer> REALTIME_POSITION = new Key<>(Integer.class, 0);
     public final Key<Boolean> USE_REALTIME_POS = new Key<>(Boolean.class, false);
-
+    // Session over
     public final Key<Boolean> SESSION_FINISHED = new Key<>(Boolean.class, false);
-
+    // Overtake indicator
     public final Key<Integer> OVERTAKE_INDICATOR = new Key<>(Integer.class, 0);
-
+    // Places lost and gained
     public final Key<Integer> RACE_START_POSITION = new Key<>(Integer.class, 0);
     public final Key<Boolean> RACE_START_POSITION_ACCURATE = new Key<>(Boolean.class, false);
     public final Key<Integer> PLACES_GAINED = new Key<>(Integer.class, 0);
-
+    // Pitlane time
     public final Key<Integer> PITLANE_TIME = new Key<>(Integer.class, 0);
     public final Key<Integer> PITLANE_TIME_STATIONARY = new Key<>(Integer.class, 0);
     public final Key<Integer> PITLANE_COUNT = new Key<>(Integer.class, 0);
     public final Key<Boolean> PITLANE_COUNT_ACCURATE = new Key<>(Boolean.class, false);
-    
+    // Speed
     public final Key<Integer> SPEED_TRAP_SPEED = new Key<>(Integer.class, 0);
     public final Key<Integer> MAX_SPEED_TRAP_SPEED = new Key<>(Integer.class, 0);
     public final Key<Integer> MAXIMUM_SPEED = new Key<>(Integer.class, 0);
     public final Key<Integer> MAX_MAXIMUM_SPEED = new Key<>(Integer.class, 0);
-    
+    public final Key<Integer> CURRENT_SPEED = new Key<>(Integer.class, 0);
+    // Stint time
     public final Key<Integer> DRIVER_STINT_TIME = new Key<>(Integer.class, 0);
     public final Key<Boolean> DRIVER_STINT_TIME_ACCURATE = new Key<>(Boolean.class, false);
 
@@ -95,5 +101,22 @@ public interface CarProperties {
     public final Key<Integer> SESSION_BEST_SECTOR_ONE = new Key<>(Integer.class, 0);
     public final Key<Integer> SESSION_BEST_SECTOR_TWO = new Key<>(Integer.class, 0);
     public final Key<Integer> SESSION_BEST_SECTOR_THREE = new Key<>(Integer.class, 0);
+
+    public class DriverList {
+
+        private final List<DriverInfo> drivers;
+
+        public DriverList() {
+            this(new ArrayList<>());
+        }
+
+        public DriverList(List<DriverInfo> drivers) {
+            this.drivers = drivers;
+        }
+
+        public List<DriverInfo> getDrivers() {
+            return drivers;
+        }
+    }
 
 }

@@ -42,6 +42,9 @@ import static racecontrol.client.extension.statistics.CarProperties.IS_FOCUSED_O
 import racecontrol.client.extension.statistics.StatisticsProcessor;
 import racecontrol.eventbus.Event;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_INVALID;
+import static racecontrol.client.extension.statistics.CarProperties.DRIVER_INDEX;
+import static racecontrol.client.extension.statistics.CarProperties.DRIVER_LIST;
+import racecontrol.client.extension.statistics.CarProperties.DriverList;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_LAP_INVALID;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_THREE;
@@ -91,6 +94,8 @@ public class DataProcessor extends StatisticsProcessor {
         car.put(CAR_NUMBER, carInfo.getCarNumber());
         car.put(CAR_MODEL, carInfo.getCarModel());
         car.put(CATEGORY, carInfo.getDriver().getCategory());
+        car.put(DRIVER_INDEX, (int) carInfo.getRealtime().getDriverIndex());
+        car.put(DRIVER_LIST, new DriverList(carInfo.getDrivers()));
         // Laps
         car.put(CURRENT_LAP_TIME, info.getCurrentLap().getLapTimeMS());
         car.put(LAST_LAP_TIME, info.getLastLap().getLapTimeMS());

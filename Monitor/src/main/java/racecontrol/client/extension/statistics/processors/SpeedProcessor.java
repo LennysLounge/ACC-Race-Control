@@ -11,6 +11,7 @@ import racecontrol.client.data.RealtimeInfo;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
+import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SPEED;
 import static racecontrol.client.extension.statistics.CarProperties.MAXIMUM_SPEED;
 import static racecontrol.client.extension.statistics.CarProperties.MAX_MAXIMUM_SPEED;
 import static racecontrol.client.extension.statistics.CarProperties.MAX_SPEED_TRAP_SPEED;
@@ -57,6 +58,7 @@ public class SpeedProcessor
 
     private void realtimeCarUpdate(RealtimeInfo info) {
         WritableCarStatistics carStats = getCars().get(info.getCarId());
+        carStats.put(CURRENT_SPEED, info.getKMH());
 
         // Save maximum speed.
         if (info.getKMH() > carStats.get(MAXIMUM_SPEED)) {
