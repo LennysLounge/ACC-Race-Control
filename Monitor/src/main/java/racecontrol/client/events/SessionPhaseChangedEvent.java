@@ -14,14 +14,21 @@ import racecontrol.client.data.SessionInfo;
  */
 public class SessionPhaseChangedEvent extends Event {
 
-    private SessionInfo sessionInfo;
+    private final SessionInfo sessionInfo;
 
-    public SessionPhaseChangedEvent(SessionInfo sessionInfo) {
+    private final boolean initialisation;
+
+    public SessionPhaseChangedEvent(SessionInfo sessionInfo, boolean init) {
         this.sessionInfo = sessionInfo;
+        this.initialisation = init;
     }
 
     public SessionInfo getSessionInfo() {
         return sessionInfo;
+    }
+
+    public boolean isInitialisation() {
+        return initialisation;
     }
 
 }

@@ -586,6 +586,11 @@ public class AccBroadcastingClient {
             //initialise sessionId.
             if (!sessionId.isValid()) {
                 initSessionId(sessionInfo);
+                // fast forward to correct phase
+                while (sessionInfo.getPhase().getId() > sessionPhase.getId()) {
+                    sessionPhase = SessionPhase.getNext(sessionPhase);
+                    onSessionPhaseChaged(sessionPhase, sessionInfo, true);
+                }
             }
 
             //update the current session.
@@ -593,7 +598,7 @@ public class AccBroadcastingClient {
                 //fast forward currnet session to result UI
                 while (sessionPhase != SessionPhase.RESULTUI) {
                     sessionPhase = SessionPhase.getNext(sessionPhase);
-                    onSessionPhaseChaged(sessionPhase, sessionInfo);
+                    onSessionPhaseChaged(sessionPhase, sessionInfo, false);
                 }
                 //Move to next sessionId;
                 SessionType type = sessionInfo.getSessionType();
@@ -610,7 +615,7 @@ public class AccBroadcastingClient {
             //Fast forward to current phase
             while (sessionInfo.getPhase().getId() > sessionPhase.getId()) {
                 sessionPhase = SessionPhase.getNext(sessionPhase);
-                onSessionPhaseChaged(sessionPhase, sessionInfo);
+                onSessionPhaseChaged(sessionPhase, sessionInfo, false);
             }
             // find replay start and end
             boolean replayStarted = !oldInfo.isReplayPlaying() && sessionInfo.isReplayPlaying();
@@ -765,7 +770,7 @@ public class AccBroadcastingClient {
             EventBus.publish(new SessionChangedEvent(newId, info, init));
         }
 
-        private void onSessionPhaseChaged(SessionPhase phase, SessionInfo info) {
+        private void onSessionPhaseChaged(SessionPhase phase, SessionInfo info, boolean init) {
             LOG.info("session phase changed to " + phase.name());
             //Create sessionInfo object with the correct sessionPhase
             SessionInfo correctedSessionInfo = new SessionInfo(info.getEventIndex(),
@@ -776,7 +781,7 @@ public class AccBroadcastingClient {
                     info.getTimeOfDay(), info.getAmbientTemp(), info.getTrackTemp(),
                     info.getCloudLevel(), info.getRainLevel(), info.getWetness(),
                     info.getBestSessionLap());
-            EventBus.publish(new SessionPhaseChangedEvent(correctedSessionInfo));
+            EventBus.publish(new SessionPhaseChangedEvent(correctedSessionInfo, init));
         }
 
         private void onCarDisconnect(CarInfo car) {
