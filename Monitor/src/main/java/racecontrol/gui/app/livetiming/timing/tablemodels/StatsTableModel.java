@@ -9,6 +9,7 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
+import static racecontrol.client.extension.statistics.CarProperties.MAX_SPEED_TRAP_SPEED;
 import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUNT;
 import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUNT_ACCURATE;
 import static racecontrol.client.extension.statistics.CarProperties.PITLANE_TIME;
@@ -24,6 +25,8 @@ import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.lpui.LPTable.RenderContext;
 import racecontrol.gui.lpui.LPTableColumn;
 import static racecontrol.client.extension.statistics.CarProperties.RACE_START_POSITION_ACCURATE;
+import static racecontrol.client.extension.statistics.CarProperties.SPEED_TRAP_SPEED;
+import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
 import racecontrol.utility.TimeUtils;
 
 /**
@@ -54,7 +57,10 @@ public class StatsTableModel
             .setCellRenderer((applet, context) -> pitTimeRenderer(applet, context)),
             new LPTableColumn("t/stopped")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> pitTimeStationaryRenderer(applet, context))
+            .setCellRenderer((applet, context) -> pitTimeStationaryRenderer(applet, context)),
+            new LPTableColumn("Speed Trap")
+            .setMaxWidth(100)
+            .setCellRenderer((applet, context) -> speedTrapRenderer(applet, context))
         };
     }
 
@@ -144,6 +150,21 @@ public class StatsTableModel
         if (stats.get(PITLANE_TIME) > 0) {
             String text = TimeUtils.asDurationShort(stats.get(PITLANE_TIME_STATIONARY));
             applet.fill(COLOR_WHITE);
+            applet.textAlign(CENTER, CENTER);
+            applet.textFont(LookAndFeel.fontRegular());
+            applet.text(text, context.width / 2f, context.height / 2f);
+        }
+    }
+
+    private void speedTrapRenderer(PApplet applet, RenderContext context) {
+        CarStatistics stats = (CarStatistics) context.object;
+        if (stats.get(SPEED_TRAP_SPEED) > 0) {
+            String text = String.format("%d kmh", stats.get(SPEED_TRAP_SPEED));
+            if (stats.get(SPEED_TRAP_SPEED).equals(stats.get(MAX_SPEED_TRAP_SPEED))) {
+                applet.fill(COLOR_PURPLE);
+            } else {
+                applet.fill(COLOR_WHITE);
+            }
             applet.textAlign(CENTER, CENTER);
             applet.textFont(LookAndFeel.fontRegular());
             applet.text(text, context.width / 2f, context.height / 2f);

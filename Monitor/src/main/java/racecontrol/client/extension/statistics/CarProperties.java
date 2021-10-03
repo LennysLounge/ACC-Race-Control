@@ -81,6 +81,11 @@ public interface CarProperties {
     public final Key<Integer> PITLANE_TIME_STATIONARY = new Key<>(Integer.class, 0);
     public final Key<Integer> PITLANE_COUNT = new Key<>(Integer.class, 0);
     public final Key<Boolean> PITLANE_COUNT_ACCURATE = new Key<>(Boolean.class, false);
+    
+    public final Key<Integer> SPEED_TRAP_SPEED = new Key<>(Integer.class, 0);
+    public final Key<Integer> MAX_SPEED_TRAP_SPEED = new Key<>(Integer.class, 0);
+    public final Key<Integer> MAXIMUM_SPEED = new Key<>(Integer.class, 0);
+    public final Key<Integer> MAX_MAXIMUM_SPEED = new Key<>(Integer.class, 0);
 
     // Session
     public final Key<Integer> SESSION_BEST_LAP_TIME = new Key<>(Integer.class, 0);
