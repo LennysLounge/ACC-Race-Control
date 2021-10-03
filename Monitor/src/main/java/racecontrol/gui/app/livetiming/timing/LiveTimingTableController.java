@@ -133,20 +133,24 @@ public class LiveTimingTableController
         }
         model = tableModels.get(index - 1);
         table.setTableModel(model);
+        updateTableModel();
     }
 
     public void cycleTableModelsRight() {
         int index = tableModels.indexOf(model);
         model = tableModels.get((index + 1) % tableModels.size());
         table.setTableModel(model);
+        updateTableModel();
     }
 
     public void setViewQuali() {
         table.setTableModel(qualifyingTableModel);
+        updateTableModel();
     }
 
     public void setViewRace() {
         table.setTableModel(raceTableModel);
+        updateTableModel();
     }
 
     public String getTableModelName() {
