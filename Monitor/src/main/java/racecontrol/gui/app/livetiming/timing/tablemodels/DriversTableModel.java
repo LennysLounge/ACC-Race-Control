@@ -84,6 +84,26 @@ public class DriversTableModel
                 + LINE_HEIGHT;
     }
 
+    protected void pitRenderer(PApplet applet, LPTable.RenderContext context) {
+        LPTable.RenderContext newContext = new LPTable.RenderContext(
+                context.object,
+                context.rowIndex,
+                context.columnIndex,
+                context.isSelected,
+                false,
+                context.isMouseOverColumn,
+                context.isOdd,
+                context.width,
+                context.height,
+                context.tableWidth,
+                context.tableHeight,
+                context.tablePosX,
+                context.tablePosY,
+                context.mouseX,
+                context.mouseY);
+        super.pitRenderer(applet, newContext);
+    }
+
     @Override
     protected void nameRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
