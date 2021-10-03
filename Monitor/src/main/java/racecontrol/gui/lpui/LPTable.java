@@ -560,7 +560,7 @@ public class LPTable extends LPContainer {
         void render(PApplet applet, RenderContext context);
     }
 
-    public class RenderContext {
+    public static class RenderContext {
 
         public final Object object;
         public final int rowIndex;

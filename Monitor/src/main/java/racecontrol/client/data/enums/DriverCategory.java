@@ -11,16 +11,18 @@ package racecontrol.client.data.enums;
  */
 public enum DriverCategory {
 
-    BRONZE(0),
-    SILVER(1),
-    GOLD(2),
-    PLATINUM(3),
-    ERROR(255);
+    BRONZE(0, "Bronze"),
+    SILVER(1, "Silver"),
+    GOLD(2, "Gold"),
+    PLATINUM(3, "Platinum"),
+    ERROR(255, "Error");
 
     private int id;
+    private String text;
 
-    private DriverCategory(int id) {
+    private DriverCategory(int id, String text) {
         this.id = id;
+        this.text = text;
     }
 
     public static DriverCategory fromId(int id) {
@@ -40,6 +42,10 @@ public enum DriverCategory {
 
     public int getId() {
         return id;
+    }
+
+    public String getText() {
+        return text;
     }
 
 }

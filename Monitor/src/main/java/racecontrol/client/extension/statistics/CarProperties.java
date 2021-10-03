@@ -32,6 +32,7 @@ public interface CarProperties {
     public final Key<DriverCategory> CATEGORY = new Key<>(DriverCategory.class, DriverCategory.BRONZE);
     public final Key<Integer> DRIVER_INDEX = new Key<>(Integer.class, 0);
     public final Key<DriverList> DRIVER_LIST = new Key<>(DriverList.class, new DriverList());
+    public final Key<String> TEAM_NAME = new Key<>(String.class, "");
     // Laps
     public final Key<Integer> CURRENT_LAP_TIME = new Key<>(Integer.class, 0);
     public final Key<Integer> LAST_LAP_TIME = new Key<>(Integer.class, 0);

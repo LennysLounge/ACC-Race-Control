@@ -11,9 +11,19 @@ package racecontrol.client.data.enums;
  * @author Leonard
  */
 public enum CarCategory {
-    GT3,
-    GT4,
-    ST,
-    CUP,
-    NONE;
+    GT3("GT3"),
+    GT4("GT4"),
+    ST("Super Torfeo"),
+    CUP("Porsche Cup"),
+    NONE("None");
+
+    private final String text;
+
+    private CarCategory(String text) {
+        this.text = text;
+    }
+
+    public String getText() {
+        return text;
+    }
 }

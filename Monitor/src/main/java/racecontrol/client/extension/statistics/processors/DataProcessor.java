@@ -49,6 +49,7 @@ import static racecontrol.client.extension.statistics.CarProperties.LAST_LAP_INV
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_TWO;
+import static racecontrol.client.extension.statistics.CarProperties.TEAM_NAME;
 
 /**
  * A Basic processor for any easily available data.
@@ -96,6 +97,7 @@ public class DataProcessor extends StatisticsProcessor {
         car.put(CATEGORY, carInfo.getDriver().getCategory());
         car.put(DRIVER_INDEX, (int) carInfo.getRealtime().getDriverIndex());
         car.put(DRIVER_LIST, new DriverList(carInfo.getDrivers()));
+        car.put(TEAM_NAME, carInfo.getTeamName());
         // Laps
         car.put(CURRENT_LAP_TIME, info.getCurrentLap().getLapTimeMS());
         car.put(LAST_LAP_TIME, info.getLastLap().getLapTimeMS());

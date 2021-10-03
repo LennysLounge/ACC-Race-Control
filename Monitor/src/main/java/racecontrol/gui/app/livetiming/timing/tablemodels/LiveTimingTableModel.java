@@ -79,7 +79,7 @@ public abstract class LiveTimingTableModel
             .setPriority(1000)
             .setCellRenderer((applet, context) -> carNumberRenderer(applet, context));
 
-    private void positionRenderer(PApplet applet, LPTable.RenderContext context) {
+    protected void positionRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
         applet.noStroke();
@@ -98,7 +98,7 @@ public abstract class LiveTimingTableModel
                 context.width / 2f, context.height / 2f);
     }
 
-    private void nameRenderer(PApplet applet, LPTable.RenderContext context) {
+    protected void nameRenderer(PApplet applet, LPTable.RenderContext context) {
         String name = ((CarStatistics) context.object).get(NAME);
 
         if (context.isMouseOverRow) {
@@ -112,7 +112,7 @@ public abstract class LiveTimingTableModel
         applet.text(name, context.height / 4f, context.height / 2f);
     }
 
-    private void pitRenderer(PApplet applet, LPTable.RenderContext context) {
+    protected void pitRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
         if (context.isMouseOverRow) {
             applet.fill(COLOR_DARK_RED);
@@ -142,7 +142,7 @@ public abstract class LiveTimingTableModel
         }
     }
 
-    private void carNumberRenderer(PApplet applet, LPTable.RenderContext context) {
+    protected void carNumberRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
         int backColor = 0;

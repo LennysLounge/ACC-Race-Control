@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.gui.app.livetiming.timing.tablemodels.DriversTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingBestTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingLastTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.RaceTableModel;
@@ -81,6 +82,7 @@ public class LiveTimingTableController
         tableModels.add(new QualifyingLastTableModel());
         tableModels.add(raceTableModel);
         tableModels.add(new StatsTableModel());
+        tableModels.add(new DriversTableModel());
         tableModels.add(new TestTableModel());
 
         model = tableModels.get(0);
