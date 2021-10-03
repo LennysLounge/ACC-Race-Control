@@ -86,6 +86,9 @@ public interface CarProperties {
     public final Key<Integer> MAX_SPEED_TRAP_SPEED = new Key<>(Integer.class, 0);
     public final Key<Integer> MAXIMUM_SPEED = new Key<>(Integer.class, 0);
     public final Key<Integer> MAX_MAXIMUM_SPEED = new Key<>(Integer.class, 0);
+    
+    public final Key<Integer> DRIVER_STINT_TIME = new Key<>(Integer.class, 0);
+    public final Key<Boolean> DRIVER_STINT_TIME_ACCURATE = new Key<>(Boolean.class, false);
 
     // Session
     public final Key<Integer> SESSION_BEST_LAP_TIME = new Key<>(Integer.class, 0);

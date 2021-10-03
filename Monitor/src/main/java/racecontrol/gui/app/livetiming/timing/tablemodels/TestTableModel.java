@@ -9,7 +9,8 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_THREE_CALC;
-import static racecontrol.client.extension.statistics.CarProperties.MAX_SPEED_TRAP_SPEED;
+import static racecontrol.client.extension.statistics.CarProperties.DRIVER_STINT_TIME;
+import static racecontrol.client.extension.statistics.CarProperties.DRIVER_STINT_TIME_ACCURATE;
 import static racecontrol.client.extension.statistics.CarProperties.OVERTAKE_INDICATOR;
 import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUNT;
 import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUNT_ACCURATE;
@@ -36,12 +37,12 @@ public class TestTableModel
             nameColumn,
             pitColumn,
             carNumberColumn,
-            new LPTableColumn("max")
+            new LPTableColumn("stint time")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> r1(applet, context)),
+            .setCellRenderer((applet, context) -> r1(applet, context))/*,
             new LPTableColumn("trap")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> r2(applet, context))/*,
+            .setCellRenderer((applet, context) -> r2(applet, context)),
             new LPTableColumn("Stationary")
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> r3(applet, context)),
@@ -75,7 +76,8 @@ public class TestTableModel
     private void r1(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
-        String text = String.valueOf(stats.get(MAX_SPEED_TRAP_SPEED));
+        String text = TimeUtils.asDurationShort(stats.get(DRIVER_STINT_TIME));
+        text = text + (stats.get(DRIVER_STINT_TIME_ACCURATE) ? "" : "*");
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);

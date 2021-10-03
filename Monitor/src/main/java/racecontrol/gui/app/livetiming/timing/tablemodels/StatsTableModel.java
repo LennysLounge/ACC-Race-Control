@@ -9,6 +9,8 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
+import static racecontrol.client.extension.statistics.CarProperties.DRIVER_STINT_TIME;
+import static racecontrol.client.extension.statistics.CarProperties.DRIVER_STINT_TIME_ACCURATE;
 import static racecontrol.client.extension.statistics.CarProperties.MAX_SPEED_TRAP_SPEED;
 import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUNT;
 import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUNT_ACCURATE;
@@ -60,7 +62,10 @@ public class StatsTableModel
             .setCellRenderer((applet, context) -> pitTimeStationaryRenderer(applet, context)),
             new LPTableColumn("Speed Trap")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> speedTrapRenderer(applet, context))
+            .setCellRenderer((applet, context) -> speedTrapRenderer(applet, context)),
+            new LPTableColumn("Stint")
+            .setMaxWidth(100)
+            .setCellRenderer((applet, context) -> stintTimeRenderer(applet, context))
         };
     }
 
@@ -169,6 +174,16 @@ public class StatsTableModel
             applet.textFont(LookAndFeel.fontRegular());
             applet.text(text, context.width / 2f, context.height / 2f);
         }
+    }
+
+    private void stintTimeRenderer(PApplet applet, RenderContext context) {
+        CarStatistics stats = (CarStatistics) context.object;
+        String text = TimeUtils.asDurationShort(stats.get(DRIVER_STINT_TIME));
+        text = text + (stats.get(DRIVER_STINT_TIME_ACCURATE) ? "" : "*");
+        applet.fill(COLOR_WHITE);
+        applet.textAlign(CENTER, CENTER);
+        applet.textFont(LookAndFeel.fontRegular());
+        applet.text(text, context.width / 2f, context.height / 2f);
     }
 
 }

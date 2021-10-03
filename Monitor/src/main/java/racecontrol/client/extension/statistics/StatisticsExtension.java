@@ -21,6 +21,7 @@ import racecontrol.client.extension.statistics.processors.RealtimePositionProces
 import racecontrol.client.extension.statistics.processors.SectorTimesProcessor;
 import racecontrol.client.extension.statistics.processors.SessionOverProcessor;
 import racecontrol.client.extension.statistics.processors.SpeedProcessor;
+import racecontrol.client.extension.statistics.processors.StintTimeProcessor;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
@@ -70,6 +71,7 @@ public class StatisticsExtension
         processors.add(new PlacesLostGainedProcessor(cars));
         processors.add(new PitTimeProcessor(cars));
         processors.add(new SpeedProcessor(cars));
+        processors.add(new StintTimeProcessor(cars));
     }
 
     @Override
