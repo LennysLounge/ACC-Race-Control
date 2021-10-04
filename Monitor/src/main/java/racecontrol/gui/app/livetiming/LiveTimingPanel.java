@@ -102,8 +102,8 @@ public class LiveTimingPanel
     public void onResize(float w, float h) {
         viewLabel.setPosition((w - viewLabel.getWidth()) / 2f, 0);
         int distance = (int) Math.max(100, w * 0.2f);
-        viewLeftButton.setPosition(w / 2f - distance - viewLeftButton.getWidth(), 0);
-        viewRightButton.setPosition(w / 2f + distance, 0);
+        viewLeftButton.setPosition((int) (w / 2f - distance - viewLeftButton.getWidth()), 0);
+        viewRightButton.setPosition((int) (w / 2f + distance), 0);
 
         float broadcastControllHeight = LINE_HEIGHT;
         if (!collapsablePanel.isCollapsed()) {

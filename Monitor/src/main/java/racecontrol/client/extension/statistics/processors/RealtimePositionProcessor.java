@@ -126,10 +126,6 @@ public class RealtimePositionProcessor
                 if (carStats.get(CAR_LOCATION) == PITLANE) {
                     carStats.put(RACE_DISTANCE_COMPLEX, -1f);
                 }
-
-                LOG.info("#" + carStats.get(CAR_NUMBER)
-                        + "\t" + carStats.get(CAR_LOCATION)
-                );
             });
         }
     }

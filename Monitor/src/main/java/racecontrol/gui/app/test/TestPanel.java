@@ -6,9 +6,13 @@
 package racecontrol.gui.app.test;
 
 import processing.core.PApplet;
+import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.LEFT;
+import processing.core.PFont;
+import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
+import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
-import racecontrol.gui.app.AppController;
 import racecontrol.gui.app.statuspanel.StatusPanelManager;
 import racecontrol.gui.lpui.LPButton;
 import racecontrol.gui.lpui.LPContainer;
@@ -50,8 +54,34 @@ public class TestPanel extends LPContainer {
     public void draw(PApplet applet) {
         applet.fill(COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
-        applet.fill(255);
-        applet.text("Hello World", 200, 200);
+
+        for (int j = 0; j < 11; j++) {
+            for (int i = 0; i < 11; i++) {
+                if ((j * 11 + i) % 2 == 0) {
+                    applet.textFont(LookAndFeel.fontMedium());
+                } else {
+                    applet.textFont(LookAndFeel.fontRegular());
+                }
+                applet.fill(COLOR_WHITE);
+                applet.textAlign(CENTER, CENTER);
+                applet.noStroke();
+                applet.text("HELLO", 100 + 100 * i, 400 + 30 * j);
+            }
+        }
+        applet.fill(COLOR_WHITE);
+        applet.textAlign(LEFT, CENTER);
+        applet.textFont(LookAndFeel.fontRegular());
+
+        PFont regular = LookAndFeel.fontRegular();
+        PFont medium = LookAndFeel.fontMedium();
+
+        applet.text("regular: " + regular.toString(), 10, 60);
+        applet.text("regular: " + regular.getName(), 10, 100);
+        applet.text("regular: " + regular.getPostScriptName(), 10, 140);
+        
+        applet.text("medium: " + medium.toString(), 10, 220);
+        applet.text("medium: " + medium.getName(), 10, 260);
+        applet.text("medium: " + medium.getPostScriptName(), 10, 300);
     }
 
 }
