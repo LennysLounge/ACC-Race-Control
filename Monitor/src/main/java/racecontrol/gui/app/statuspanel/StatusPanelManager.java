@@ -12,6 +12,7 @@ import racecontrol.client.extension.replayoffset.ReplayStartKnownEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.app.AppPanel;
 import racecontrol.gui.lpui.LPComponent;
 
@@ -83,17 +84,26 @@ public class StatusPanelManager
     @Override
     public void onEvent(Event e) {
         if (e instanceof ReplayOffsetSearchStartedEvent) {
-            addStatusPanel(replayOffsetSearchStatusPanel);
+            RaceControlApplet.runLater(() -> {
+                addStatusPanel(replayOffsetSearchStatusPanel);
+            });
             isReplaySearchGoingOn = true;
         } else if (e instanceof ReplayStartKnownEvent) {
-            removeStatusPanel(replayOffsetSearchStatusPanel);
+            RaceControlApplet.runLater(() -> {
+                removeStatusPanel(replayOffsetSearchStatusPanel);
+            });
             isReplaySearchGoingOn = false;
         } else if (e instanceof ReplayStartedEvent) {
+
             if (!isReplaySearchGoingOn) {
-                addStatusPanel(replayPlayingStatusPanel);
+                RaceControlApplet.runLater(() -> {
+                    addStatusPanel(replayPlayingStatusPanel);
+                });
             }
         } else if (e instanceof ReplayEndedEvent) {
-            removeStatusPanel(replayPlayingStatusPanel);
+            RaceControlApplet.runLater(() -> {
+                removeStatusPanel(replayPlayingStatusPanel);
+            });
         }
     }
 }
