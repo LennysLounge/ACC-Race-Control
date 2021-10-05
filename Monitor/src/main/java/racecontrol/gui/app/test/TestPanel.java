@@ -55,8 +55,8 @@ public class TestPanel extends LPContainer {
         applet.fill(COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
 
-        for (int j = 0; j < 11; j++) {
-            for (int i = 0; i < 11; i++) {
+        for (int j = 0; j < 15; j++) {
+            for (int i = 0; i < 5; i++) {
                 if ((j * 11 + i) % 2 == 0) {
                     applet.textFont(LookAndFeel.fontMedium());
                 } else {
@@ -65,7 +65,7 @@ public class TestPanel extends LPContainer {
                 applet.fill(COLOR_WHITE);
                 applet.textAlign(CENTER, CENTER);
                 applet.noStroke();
-                applet.text("HELLO", 100 + 100 * i, 400 + 30 * j);
+                applet.text("HELLO", 1000 + 100 * i, 80 + 30 * j);
             }
         }
         applet.fill(COLOR_WHITE);
@@ -75,13 +75,19 @@ public class TestPanel extends LPContainer {
         PFont regular = LookAndFeel.fontRegular();
         PFont medium = LookAndFeel.fontMedium();
 
-        applet.text("regular: " + regular.toString(), 10, 60);
-        applet.text("regular: " + regular.getName(), 10, 100);
-        applet.text("regular: " + regular.getPostScriptName(), 10, 140);
-        
-        applet.text("medium: " + medium.toString(), 10, 220);
-        applet.text("medium: " + medium.getName(), 10, 260);
-        applet.text("medium: " + medium.getPostScriptName(), 10, 300);
+        int i = 0;
+        applet.text("regular: " + regular.toString(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("regular: " + regular.getName(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("regular: " + regular.getPostScriptName(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("regular: " + regular.getNative().toString(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("regular: " + regular.getNative().hashCode(), 10, 60 + LINE_HEIGHT * i++);
+        i++;
+
+        applet.text("medium: " + medium.toString(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("medium: " + medium.getName(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("medium: " + medium.getPostScriptName(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("medium: " + medium.getNative().toString(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("medium: " + medium.getNative().hashCode(), 10, 60 + LINE_HEIGHT * i++);
     }
 
 }
