@@ -36,6 +36,11 @@ import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import racecontrol.client.AccBroadcastingExtension;
+import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
+import static racecontrol.client.extension.statistics.CarProperties.LAP_COUNT;
+import static racecontrol.client.extension.statistics.CarProperties.SESSION_FINISHED;
+import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VSCEndEvent;
 import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VSCStartEvent;
 import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VSCViolationEvent;
@@ -47,22 +52,26 @@ import racecontrol.logging.UILogger;
  *
  * @author Leonard
  */
-public class GoogleSheetsAPIController
+public class GoogleSheetsAPIExtension
         implements EventListener, AccBroadcastingExtension {
 
     /**
      * Singelton instance.
      */
-    private static GoogleSheetsAPIController instance;
+    private static GoogleSheetsAPIExtension instance;
 
     /**
      * This class's logger.
      */
-    private static final Logger LOG = Logger.getLogger(GoogleSheetsAPIController.class.getName());
+    private static final Logger LOG = Logger.getLogger(GoogleSheetsAPIExtension.class.getName());
     /**
      * Reference to the game connection client.
      */
     private final AccBroadcastingClient client;
+    /**
+     * The statistics extension.
+     */
+    private final StatisticsExtension statisticsExtension;
     /**
      * The Sheet service for the spreadsheet api.
      */
@@ -105,16 +114,17 @@ public class GoogleSheetsAPIController
      */
     private Spreadsheet spreadsheet;
 
-    public static GoogleSheetsAPIController getInstance() {
+    public static GoogleSheetsAPIExtension getInstance() {
         if (instance == null) {
-            instance = new GoogleSheetsAPIController();
+            instance = new GoogleSheetsAPIExtension();
         }
         return instance;
     }
 
-    private GoogleSheetsAPIController() {
+    private GoogleSheetsAPIExtension() {
         EventBus.register(this);
         client = AccBroadcastingClient.getClient();
+        statisticsExtension = StatisticsExtension.getInstance();
         panel = new GoogleSheetsAPIPanel(this);
     }
 
@@ -153,10 +163,17 @@ public class GoogleSheetsAPIController
             }
         } else if (e instanceof ContactEvent) {
             ContactInfo info = ((ContactEvent) e).getInfo();
-            String sessionTime = TimeUtils.asDuration(info.getSessionEarliestTime());
             String carNumbers = info.getCars().stream()
-                    .map(car -> getCarNumberAndLapCount(car))
+                    .map(car -> {
+                        CarStatistics stats = statisticsExtension.getCar(car.getCarId());
+                        return String.format("%d[%s]",
+                                stats.get(CAR_NUMBER),
+                                stats.get(SESSION_FINISHED)
+                                ? "F"
+                                : stats.get(LAP_COUNT));
+                    })
                     .collect(Collectors.joining("\n"));
+            String sessionTime = TimeUtils.asDuration(info.getSessionEarliestTime());
             queue.add(new SendIncidentEvent(sessionTime, carNumbers));
             //LOG.info("accident received: " + carNumbers);
         } else if (e instanceof VSCStartEvent) {
@@ -192,10 +209,6 @@ public class GoogleSheetsAPIController
         setCurrentTargetSheet(getTargetSheet(currentSessionId));
         LOG.info("Target Sheet changed to \"" + currentSheetTarget + "\"");
         UILogger.log("Spreasheet target changed to \"" + currentSheetTarget + "\"");
-    }
-
-    private String getCarNumberAndLapCount(CarInfo car) {
-        return car.getCarNumber() + " [" + (car.getRealtime().getLaps() + 1) + "]";
     }
 
     private String getTargetSheet(SessionId sessionId) {
@@ -261,7 +274,7 @@ public class GoogleSheetsAPIController
 
         //get spreasheet data
         queue.add(new GetSpreadsheetEvent());
-        
+
         //set session.
         onSessionChanged(client.getSessionId());
         queue.add(new SendCarConnectedEvent(new LinkedList<>(client.getModel().getCarsInfo().values())));
@@ -294,9 +307,9 @@ public class GoogleSheetsAPIController
     public boolean isRunning() {
         return running;
     }
-    
-    public String getSpreadsheetTitle(){
-        if(spreadsheet == null){
+
+    public String getSpreadsheetTitle() {
+        if (spreadsheet == null) {
             return "";
         }
         return spreadsheet.getProperties().getTitle();

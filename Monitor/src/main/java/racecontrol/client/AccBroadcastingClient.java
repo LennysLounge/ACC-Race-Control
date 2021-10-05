@@ -49,7 +49,7 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.ReplayEndedEvent;
 import racecontrol.client.events.ReplayStartedEvent;
 import racecontrol.client.extension.contact.ContactExtension;
-import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIController;
+import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
 import racecontrol.client.extension.laptimes.LapTimeExtension;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.logging.UILogger;
@@ -141,7 +141,7 @@ public class AccBroadcastingClient {
     public void initialise() {
         //instanciate extensions
         extensions.add(ContactExtension.getInstance());
-        extensions.add(GoogleSheetsAPIController.getInstance());
+        extensions.add(GoogleSheetsAPIExtension.getInstance());
         extensions.add(new LapTimeExtension());
         extensions.add(RaceReportController.getInstance());
         extensions.add(ReplayOffsetExtension.getInstance());

@@ -18,7 +18,7 @@ import static racecontrol.gui.LookAndFeel.fontRegular;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
-import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIController;
+import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.lpui.LPContainer;
 
@@ -36,11 +36,11 @@ public class HeaderPanel
     /**
      * Reference to the google sheets extension.
      */
-    private final GoogleSheetsAPIController googleSheetController;
+    private final GoogleSheetsAPIExtension googleSheetController;
 
     public HeaderPanel() {
         this.client = AccBroadcastingClient.getClient();
-        this.googleSheetController = GoogleSheetsAPIController.getInstance();
+        this.googleSheetController = GoogleSheetsAPIExtension.getInstance();
     }
 
     @Override
@@ -58,7 +58,9 @@ public class HeaderPanel
 
             if (googleSheetController.isRunning()) {
                 String googleSheetsActive = "Connected to:  \""
-                        + googleSheetController.getSpreadsheetTitle() + "\"";
+                        + googleSheetController.getSpreadsheetTitle()
+                        + "::" + googleSheetController.getCurrentTargetSheet()
+                        + "\"";
                 applet.text(googleSheetsActive, 200, LINE_HEIGHT * 0.5f);
             }
 

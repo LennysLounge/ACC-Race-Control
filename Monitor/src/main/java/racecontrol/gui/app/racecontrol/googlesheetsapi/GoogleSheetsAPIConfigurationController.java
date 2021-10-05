@@ -7,7 +7,7 @@ package racecontrol.gui.app.racecontrol.googlesheetsapi;
 
 import java.util.logging.Logger;
 import racecontrol.gui.app.AppController;
-import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIController;
+import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsConfiguration;
 import racecontrol.gui.lpui.LPTabPanel;
 
@@ -30,13 +30,13 @@ public class GoogleSheetsAPIConfigurationController {
 
     private final GoogleSheetsAPIConfigurationPanel panel;
 
-    private final GoogleSheetsAPIController sheetsAPI;
+    private final GoogleSheetsAPIExtension sheetsAPI;
 
     public GoogleSheetsAPIConfigurationController() {
         appController = AppController.getInstance();
         panel = new GoogleSheetsAPIConfigurationPanel();
         panel.connectButton.setAction(() -> connectButton());
-        sheetsAPI = GoogleSheetsAPIController.getInstance();
+        sheetsAPI = GoogleSheetsAPIExtension.getInstance();
 
         tabPanel.addTab(panel);
         tabPanel.setSize(660, 460);

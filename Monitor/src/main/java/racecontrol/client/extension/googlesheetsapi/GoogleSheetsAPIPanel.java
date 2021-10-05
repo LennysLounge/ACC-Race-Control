@@ -22,7 +22,7 @@ import static processing.core.PConstants.LEFT;
  */
 public class GoogleSheetsAPIPanel extends LPContainer {
 
-    private final GoogleSheetsAPIController extension;
+    private final GoogleSheetsAPIExtension extension;
 
     private final LPButton setToPractice = new LPButton("Target \"Practice!\"");
     private final LPButton setToQuali = new LPButton("Target \"Qualifying!\"");
@@ -30,7 +30,7 @@ public class GoogleSheetsAPIPanel extends LPContainer {
     private final LPButton setToRace2 = new LPButton("target \"Race 2!\"");
     private final LPButton sendEmptyIncident = new LPButton("Send empty incident");
 
-    public GoogleSheetsAPIPanel(GoogleSheetsAPIController extension) {
+    public GoogleSheetsAPIPanel(GoogleSheetsAPIExtension extension) {
         this.extension = extension;
         setName("Overview");
 
