@@ -44,17 +44,14 @@ public class GoogleSheetsAPIConfigurationPanel
     private final LPLabel replayOffsetLabel = new LPLabel("Replay offset cell:");
     protected final LPTextField replayOffsetTextField = new LPTextField();
 
-    private final LPLabel findRowRangeLabel = new LPLabel("Find empty row in range:");
+    private final LPLabel findRowRangeLabel = new LPLabel("Incident range:");
     protected final LPTextField findRowRangeTextField = new LPTextField();
 
     private final LPLabel sessionColumnLabel = new LPLabel("Session column:");
     protected final LPTextField sessionColumnTextField = new LPTextField();
 
-    private final LPLabel carColumnLabel = new LPLabel("Involved cars column:");
+    private final LPLabel carColumnLabel = new LPLabel("Incident info column:");
     protected final LPTextField carColumnTextField = new LPTextField();
-
-    private final LPLabel addLapToCarLabel = new LPLabel("Add Lap to car number:");
-    private final LPCheckBox addLapToCarCheckBox = new LPCheckBox();
 
     protected final LPButton connectButton = new LPButton("Connect");
 
@@ -102,7 +99,7 @@ public class GoogleSheetsAPIConfigurationPanel
         findRowRangeLabel.setSize(240, LINE_HEIGHT);
         addComponent(findRowRangeLabel);
         findRowRangeTextField.setSize(100, LINE_HEIGHT);
-        findRowRangeTextField.setPosition(280, LINE_HEIGHT * 6);
+        findRowRangeTextField.setPosition(180, LINE_HEIGHT * 6);
         findRowRangeTextField.setValue(FIND_EMPTY_ROW_RANGE);
         addComponent(findRowRangeTextField);
 
@@ -121,13 +118,6 @@ public class GoogleSheetsAPIConfigurationPanel
         carColumnTextField.setPosition(550, LINE_HEIGHT * 7);
         carColumnTextField.setValue(CAR_INFO_COLUMN);
         addComponent(carColumnTextField);
-
-        addLapToCarLabel.setPosition(40, LINE_HEIGHT * 8);
-        addLapToCarLabel.setSize(220, LINE_HEIGHT);
-        addComponent(addLapToCarLabel);
-        addLapToCarCheckBox.setPosition(260, LINE_HEIGHT * 8 + (LINE_HEIGHT - TEXT_SIZE) / 2f);
-        addLapToCarCheckBox.setSelected(true);
-        addComponent(addLapToCarCheckBox);
 
         connectButton.setSize(200, LINE_HEIGHT);
         connectButton.setPosition(40, LINE_HEIGHT * 9);
@@ -165,9 +155,6 @@ public class GoogleSheetsAPIConfigurationPanel
         carColumnLabel.setEnabled(state);
         carColumnTextField.setEnabled(state);
 
-        addLapToCarLabel.setEnabled(state);
-        addLapToCarCheckBox.setEnabled(state);
-
         connectButton.setText(allowInput ? "Connect" : "Disconnect");
     }
 
@@ -191,7 +178,7 @@ public class GoogleSheetsAPIConfigurationPanel
     public void onResize(float w, float h) {
         spreadSheetLinkTextField.setSize(w - 40, LINE_HEIGHT);
         credentialsFileTextField.setSize(w - 160, LINE_HEIGHT);
-        credentalsSearchButton.setPosition(w - 120, LINE_HEIGHT * 5);
+        credentalsSearchButton.setPosition(w - 120, LINE_HEIGHT * 3);
     }
 
     @Override
