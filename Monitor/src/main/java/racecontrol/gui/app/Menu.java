@@ -192,6 +192,10 @@ public class Menu
         collapsed = !collapsed;
         setSize(expandedWidth, expandedHeight);
     }
+    
+    public boolean isCollapsed(){
+        return collapsed;
+    }
 
     public float getItemSize() {
         return itemSize;

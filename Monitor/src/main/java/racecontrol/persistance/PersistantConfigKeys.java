@@ -27,4 +27,6 @@ public interface PersistantConfigKeys {
     public Key<String> CONNECTION_INTERVAL = new Key<>(String.class, "250", "connectionInterval");
     
     public Key<Boolean> BROADCASTING_CONTROLS_COLLAPSED = new Key<>(Boolean.class, false, "broadcastingControlsCollapsed");
+    public Key<Boolean> MENU_COLLAPSED = new Key<>(Boolean.class, false, "menuCollapsed");
+    
 }

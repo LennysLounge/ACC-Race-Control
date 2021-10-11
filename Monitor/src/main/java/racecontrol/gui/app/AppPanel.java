@@ -12,6 +12,8 @@ import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.app.Menu.MenuItem;
 import racecontrol.gui.lpui.LPComponent;
 import racecontrol.gui.lpui.LPContainer;
+import racecontrol.persistance.PersistantConfig;
+import static racecontrol.persistance.PersistantConfigKeys.MENU_COLLAPSED;
 
 /**
  *
@@ -82,6 +84,7 @@ public class AppPanel
         MenuItem menuItem = new MenuItem("Menu", ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Symbol.png"));
         menuItem.setClickAction((button) -> {
             menu.toggleCollapse();
+            PersistantConfig.put(MENU_COLLAPSED, menu.isCollapsed());
             updateComponents();
             invalidate();
         });
@@ -97,15 +100,15 @@ public class AppPanel
 
         broadcastMenuItem = new MenuItem("Broadcast",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Broadcast.png"));
-        menu.addMenuItem(broadcastMenuItem);
+        //menu.addMenuItem(broadcastMenuItem);
 
         autopilotMenuItem = new MenuItem("Autopilot",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_AutoBroadcast.png"));
-        menu.addMenuItem(autopilotMenuItem);
+        //menu.addMenuItem(autopilotMenuItem);
 
         trackmapMenuItem = new MenuItem("Trackmap",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_TrackMap.png"));
-        menu.addMenuItem(trackmapMenuItem);
+        //menu.addMenuItem(trackmapMenuItem);
 
         logMenuItem = new MenuItem("Log",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_LOG.png"));
@@ -114,15 +117,20 @@ public class AppPanel
         debugMenuItem = new MenuItem("Debug",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Debugging.png"));
         menu.addMenuItem(debugMenuItem);
-        
+
         trackDataItem = new MenuItem("Track Data",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Debugging.png"));
-        menu.addMenuItem(trackDataItem);
+        //menu.addMenuItem(trackDataItem);
 
         settingsMenuItem = new MenuItem("Settings",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Settings.png"));
         menu.addMenuItemBottom(settingsMenuItem);
-
+        
+        if(PersistantConfig.get(MENU_COLLAPSED)){
+            menu.collapse();
+        }else{
+            menu.expand();
+        }
         updateComponents();
     }
 

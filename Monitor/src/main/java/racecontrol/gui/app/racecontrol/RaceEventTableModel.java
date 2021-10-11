@@ -83,6 +83,9 @@ public class RaceEventTableModel
 
     @Override
     public void onClick(int column, int row, int mouseX, int mouseY) {
+        if(row >= getRowCount()){
+            return;
+        }
         if (column == 2) {
             //info column clicked.
             infoColumnClicked.onClick(entries.get(row), mouseX, mouseY);

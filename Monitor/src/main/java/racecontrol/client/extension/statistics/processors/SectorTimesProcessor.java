@@ -63,7 +63,7 @@ public class SectorTimesProcessor
     /**
      * Fields used for Debugging purposes.
      */
-    private final boolean enableLogging = true;
+    private final boolean enableLogging = false;
     private final Map<Integer, List<Tuple>> sectorSuggestions = new HashMap<>();
     private final List<Integer> s1Avg = new ArrayList<>();
     private final List<Integer> s2Avg = new ArrayList<>();

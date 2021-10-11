@@ -57,9 +57,7 @@ public class RaceControlController
     private ReplayOffsetExtension replayOffsetExtension;
 
     private RaceReportController raceReportController;
-
-    private AppController appController;
-
+    
     private GoogleSheetsAPIConfigurationController googleSheetsConfigController;
 
     private VirtualSafetyCarConfigController virtualSafetyCarController;
@@ -80,7 +78,6 @@ public class RaceControlController
         panel = new RaceControlPanel();
         tableModel = new RaceEventTableModel();
         replayOffsetExtension = ReplayOffsetExtension.getInstance();
-        appController = AppController.getInstance();
         googleSheetsConfigController = new GoogleSheetsAPIConfigurationController();
         virtualSafetyCarController = new VirtualSafetyCarConfigController();
         raceReportController = RaceReportController.getInstance();

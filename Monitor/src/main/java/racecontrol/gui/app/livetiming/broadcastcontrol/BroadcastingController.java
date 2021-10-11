@@ -5,7 +5,6 @@
  */
 package racecontrol.gui.app.livetiming.broadcastcontrol;
 
-import racecontrol.gui.app.livetiming.timing.LiveTimingTableController;
 import java.util.logging.Logger;
 import racecontrol.gui.RaceControlApplet;
 import racecontrol.client.AccBroadcastingClient;

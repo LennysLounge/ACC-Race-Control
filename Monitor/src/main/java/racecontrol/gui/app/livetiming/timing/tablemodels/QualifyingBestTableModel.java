@@ -13,7 +13,6 @@ import static racecontrol.client.extension.statistics.CarProperties.BEST_LAP_TIM
 import static racecontrol.client.extension.statistics.CarProperties.CAR_LOCATION;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.DELTA;
-import static racecontrol.client.extension.statistics.CarProperties.LAP_TIME_GAP_TO_SESSION_BEST;
 import static racecontrol.client.extension.statistics.CarProperties.POSITION;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_LAP_TIME;
 import racecontrol.client.extension.statistics.CarStatistics;

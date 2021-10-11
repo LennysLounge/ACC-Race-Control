@@ -114,7 +114,7 @@ public class AppController
         testPanel = new TestPanel();
         statusPanelManager = StatusPanelManager.getInstance();
         statusPanelManager.initialise(appPanel);
-        trackDataController = new TrackDataController();
+        trackDataController = null; //new TrackDataController();
 
         appPanel.liveTimingMenuItem.setClickAction(button -> menuItemClicked(appPanel.liveTimingMenuItem, button));
         appPanel.raceControlMenuItem.setClickAction(button -> menuItemClicked(appPanel.raceControlMenuItem, button));
