@@ -11,20 +11,14 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
 import static racecontrol.client.data.enums.CarLocation.TRACK;
-import static racecontrol.client.data.enums.SessionType.RACE;
 import static racecontrol.client.extension.statistics.CarProperties.BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_LOCATION;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_TIME;
-import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_LEADER;
-import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_POSITION_AHEAD;
-import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_LEADER;
-import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_SPLIT;
 import static racecontrol.client.extension.statistics.CarProperties.LAP_COUNT;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_LAP_TIME;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
-import static racecontrol.gui.LookAndFeel.COLOR_ORANGE;
 import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
 import static racecontrol.gui.LookAndFeel.COLOR_RACE;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
@@ -34,7 +28,6 @@ import racecontrol.utility.TimeUtils;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_INVALID;
 import static racecontrol.client.extension.statistics.CarProperties.OVERTAKE_INDICATOR;
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
-import static racecontrol.client.extension.statistics.CarProperties.SESSION_ID;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
 
 /**

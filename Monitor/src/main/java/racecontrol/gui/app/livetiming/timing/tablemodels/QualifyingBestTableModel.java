@@ -62,15 +62,15 @@ public class QualifyingBestTableModel
             .setMinWidth(100)
             .setPriority(4)
             .setCellRenderer((applet, context) -> bestLapRenderer(applet, context)),
-            new LPTableColumn("S1")
+            new LPTableColumn("BS1")
             .setMinWidth(80)
             .setPriority(0)
             .setCellRenderer((applet, context) -> bestSectorOneRenderer(applet, context)),
-            new LPTableColumn("S2")
+            new LPTableColumn("BS2")
             .setMinWidth(80)
             .setPriority(0)
             .setCellRenderer((applet, context) -> bestSectorTwoRenderer(applet, context)),
-            new LPTableColumn("S3")
+            new LPTableColumn("BS3")
             .setMinWidth(80)
             .setPriority(0)
             .setCellRenderer((applet, context) -> bestSectorThreeRenderer(applet, context)),

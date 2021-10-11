@@ -13,6 +13,8 @@ import racecontrol.client.data.DriverInfo;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_MODEL;
 import static racecontrol.client.extension.statistics.CarProperties.DRIVER_INDEX;
 import static racecontrol.client.extension.statistics.CarProperties.DRIVER_LIST;
+import static racecontrol.client.extension.statistics.CarProperties.DRIVER_STINT_TIME;
+import static racecontrol.client.extension.statistics.CarProperties.DRIVER_STINT_TIME_ACCURATE;
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
@@ -20,6 +22,7 @@ import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.lpui.LPTable;
 import racecontrol.gui.lpui.LPTableColumn;
+import racecontrol.utility.TimeUtils;
 
 /**
  *
@@ -51,7 +54,13 @@ public class DriversTableModel
             new LPTableColumn("Car")
             .setMinWidth(100)
             .setTextAlign(LEFT)
-            .setCellRenderer((applet, context) -> carRenderer(applet, context))
+            .setGrowthRate(2)
+            .setCellRenderer((applet, context) -> carRenderer(applet, context)),
+            new LPTableColumn("Stint")
+            .setMinWidth(100)
+            .setTextAlign(LEFT)
+            .setGrowthRate(1)
+            .setCellRenderer((applet, context) -> stintTimeRenderer(applet, context))
         };
     }
 
@@ -159,4 +168,13 @@ public class DriversTableModel
         applet.text(name, 10f, LINE_HEIGHT / 2f);
     }
 
+    private void stintTimeRenderer(PApplet applet, LPTable.RenderContext context) {
+        CarStatistics stats = (CarStatistics) context.object;
+        String text = TimeUtils.asDurationShort(stats.get(DRIVER_STINT_TIME));
+        text = text + (stats.get(DRIVER_STINT_TIME_ACCURATE) ? "" : "*");
+        applet.fill(COLOR_WHITE);
+        applet.textAlign(LEFT, CENTER);
+        applet.textFont(LookAndFeel.fontRegular());
+        applet.text(text, 10f, context.height / 2f);
+    }
 }
