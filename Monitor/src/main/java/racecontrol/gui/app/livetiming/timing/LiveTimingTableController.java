@@ -83,7 +83,7 @@ public class LiveTimingTableController
         tableModels.add(raceTableModel);
         tableModels.add(new StatsTableModel());
         tableModels.add(new DriversTableModel());
-        tableModels.add(new TestTableModel());
+        //tableModels.add(new TestTableModel());
 
         model = tableModels.get(0);
         table.setTableModel(model);
@@ -113,6 +113,9 @@ public class LiveTimingTableController
     }
 
     private void onCellClickAction(int column, int row) {
+        if (row >= model.getRowCount()) {
+            return;
+        }
         //We want to change the focused car when we double click
         if (row == lastTableClickRow) {
             long now = System.currentTimeMillis();

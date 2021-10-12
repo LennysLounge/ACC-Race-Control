@@ -111,7 +111,7 @@ public class AppController
         liveTimingController = new LiveTimingController();
         raceControlController = RaceControlController.getInstance();
         raceControlController.initialise();
-        testPanel = new TestPanel();
+        testPanel = null;// new TestPanel();
         statusPanelManager = StatusPanelManager.getInstance();
         statusPanelManager.initialise(appPanel);
         trackDataController = null; //new TrackDataController();

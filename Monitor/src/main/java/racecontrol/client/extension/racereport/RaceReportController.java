@@ -123,9 +123,11 @@ public class RaceReportController
         }
 
         dr.getLaps().put(dr.getLapCount(), new LapRecord(e.getLapTime(), deltaToLeader));
+        /*
         LOG.info("Lap recorded for #" + e.getCar().getCarNumber()
                 + "\ttime: " + TimeUtils.asLapTime(e.getLapTime())
                 + "\toffset: " + TimeUtils.asDelta(deltaToLeader));
+         */
     }
 
     /**

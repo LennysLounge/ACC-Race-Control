@@ -35,17 +35,17 @@ public class DriversTableModel
     public LPTableColumn[] getColumns() {
         return new LPTableColumn[]{
             positionColumn,
-            carNumberColumn,
-            pitColumn,
             nameColumn
-            .setMaxWidth(LINE_HEIGHT * 8f)
-            .setMinWidth(LINE_HEIGHT * 8f)
+            .setMaxWidth(LINE_HEIGHT * 7f)
+            .setMinWidth(LINE_HEIGHT * 7f)
             .setPriority(1000),
             new LPTableColumn("Category")
             .setMaxWidth(100)
             .setMinWidth(100)
             .setTextAlign(LEFT)
             .setCellRenderer((applet, context) -> driverCategoryRenderer(applet, context)),
+            pitColumn,
+            carNumberColumn,
             new LPTableColumn("Class")
             .setMaxWidth(100)
             .setMinWidth(100)

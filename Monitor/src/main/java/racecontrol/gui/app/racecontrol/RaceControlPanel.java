@@ -65,7 +65,7 @@ public class RaceControlPanel
         //addComponent(subModuleLabel);
 
         exportButton = new LPButton("Export event list");
-        addComponent(exportButton);
+        //addComponent(exportButton);
         googleSheetsButton = new LPButton("Google Sheets API");
         addComponent(googleSheetsButton);
         virtualSafetyCarButton = new LPButton("Virtual safety car");
@@ -91,14 +91,14 @@ public class RaceControlPanel
         float buttonHeight = LINE_HEIGHT * 1.5f;
         float buttonPadding = LINE_HEIGHT * 0.1f;
 
-        exportButton.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
-        exportButton.setPosition(buttonPadding * 2, heightOffset + buttonPadding * 2);
         googleSheetsButton.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
-        googleSheetsButton.setPosition(buttonWidth + buttonPadding, heightOffset + buttonPadding * 2);
+        googleSheetsButton.setPosition(buttonPadding * 2, heightOffset + buttonPadding * 2);
         virtualSafetyCarButton.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
-        virtualSafetyCarButton.setPosition(buttonPadding * 2, heightOffset + buttonHeight + buttonPadding);
+        virtualSafetyCarButton.setPosition(buttonWidth + buttonPadding, heightOffset + buttonPadding * 2);
         placeHolder2.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
-        placeHolder2.setPosition(buttonWidth + buttonPadding, heightOffset + buttonHeight + buttonPadding);
+        placeHolder2.setPosition(buttonPadding * 2, heightOffset + buttonHeight + buttonPadding);
+        placeHolder3.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
+        placeHolder3.setPosition(buttonWidth + buttonPadding, heightOffset + buttonHeight + buttonPadding);
 
         float headerHeight = heightOffset + buttonHeight * 2 + LINE_HEIGHT;
         eventListLabel.setPosition(20, headerHeight - LINE_HEIGHT);
