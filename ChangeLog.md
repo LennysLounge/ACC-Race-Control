@@ -1,24 +1,25 @@
 # v1.3.0
 
-* Removed the tabs and replaced them with a side menu.
-  * The live timing and broadcasting controls are now in the "Live Timing" section.
-  * The incident overview is now in the "Race Control" section.
-    * The google sheets API settings are not in "Race Control" under the "Google sheets" button.
-  * The application log is now in the "Log" section.
-* When in a team event write all team members into the entry list in the google spreadsheet.
-* Add a virtual safety car option to the race control panel.
-* Add detachable panels for each menu page. To detach a menu page, mouse wheel click on the menu item.
-* Add option to change between different live timing views.
-* Add option to detach only the live timing table.
-* Update the race positions in realtime not only on sector lines.
-* Add an overtake indicator to show when an overtake has occured in the race view.
-* Add a column to show the amount of places lost and gained during a race.
-* Add a column to show on which position a car started the race.
-* Add a column to show how many pitstops a driver has done.
-* Add a column to show the time of the pitstop.
+* UI changes (replce the tabs with a menu on the left hand side).
+  * All menu items are now detachable by clicking on them with the mouse wheel.
 
+* Changes to the live timing tab.
+  * I now the "Live Timing" item in the menu.
+  * Added multiple views to the live timing table to give different data.
+    * Two views focused on qualifying.
+    * One view focused on the race.
+    * One view focused on miscellaneous statistics.
+    * One view focused on the driver.
+    * More miscellaneous changes.
+  * Broadcasting control can now be hidden in a collapsable panel.
+  * The Main live timing table can be detached.
 
-
+* Changes to the incident tab.
+  * Is now the "Race Control" item in the menu.
+  * Move google sheets integration configuration here.
+    * When in a team event write all team members into the entry list in the google spreadsheet.
+    * When a car has finished the session and causes an incident to be logged to the spreadsheet add a "[F]" behind the car number to signal that fact.
+  * Add a virtual safety car system to set a strict speed limit.
 
 # v1.2.1
 
