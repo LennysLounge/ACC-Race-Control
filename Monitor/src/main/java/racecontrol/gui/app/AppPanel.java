@@ -116,7 +116,7 @@ public class AppPanel
 
         debugMenuItem = new MenuItem("Debug",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Debugging.png"));
-        //menu.addMenuItem(debugMenuItem);
+        menu.addMenuItem(debugMenuItem);
 
         trackDataItem = new MenuItem("Track Data",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Debugging.png"));

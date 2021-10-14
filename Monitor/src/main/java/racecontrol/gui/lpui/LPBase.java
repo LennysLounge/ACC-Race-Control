@@ -35,6 +35,9 @@ public class LPBase extends PApplet {
             onResize(width, height);
         }
 
+        int dt = (int)(1000 / frameRate);
+        base.animateInternal(dt);
+
         translate(base.getPosX(), base.getPosY());
         clip(0, 0, base.getWidth(), base.getHeight());
         base.drawInternal(this);
@@ -93,12 +96,13 @@ public class LPBase extends PApplet {
             focusedComponent.onKeyPressedInternal(event);
         }
     }
-    
+
     /**
      * Event for when a key press occured that was not captured.
-     * @param event 
+     *
+     * @param event
      */
-    public void keyPressedFallthrough(KeyEvent event){
+    public void keyPressedFallthrough(KeyEvent event) {
     }
 
     @Override
@@ -108,12 +112,13 @@ public class LPBase extends PApplet {
             focusedComponent.onKeyReleasedInternal(event);
         }
     }
-    
+
     /**
      * Event for when a key release occured that was not captured.
-     * @param event 
+     *
+     * @param event
      */
-    public void keyReleasedFallthrough(KeyEvent event){
+    public void keyReleasedFallthrough(KeyEvent event) {
     }
 
 }

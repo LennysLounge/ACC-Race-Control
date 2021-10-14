@@ -5,6 +5,8 @@
  */
 package racecontrol.gui.lpui;
 
+import java.util.ArrayList;
+import java.util.List;
 import static java.util.Objects.requireNonNull;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
@@ -79,6 +81,10 @@ public class LPComponent {
      * Indicates that an event should be propagated to this components parent.
      */
     private boolean propagateEventToParent = true;
+    /**
+     * List of animation tasks for this component.
+     */
+    private final List<LPAnimationTask> animationTasks = new ArrayList<>();
 
     /**
      * Creates a new instance.
@@ -608,8 +614,29 @@ public class LPComponent {
     public void onKeyReleased(KeyEvent event) {
     }
 
+    /**
+     * Stops the propagation of events to the parent.
+     */
     public void stopPropagation() {
         propagateEventToParent = false;
+    }
+
+    /**
+     * Adds an animation task to this component.
+     *
+     * @param task the task to add.
+     */
+    protected void addAnimationTask(LPAnimationTask task) {
+        animationTasks.add(task);
+    }
+    
+    /**
+     * Gets called to animate this component.
+     * Used internally.
+     * @param dt delta time since the last frame in milliseconds.
+     */
+    void animateInternal(int dt){
+        animationTasks.forEach(task -> task.animate(dt));
     }
 
 }
