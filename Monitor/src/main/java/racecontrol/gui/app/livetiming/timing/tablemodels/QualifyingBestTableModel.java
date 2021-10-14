@@ -18,8 +18,8 @@ import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
-import racecontrol.gui.lpui.LPTable;
-import racecontrol.gui.lpui.LPTableColumn;
+import racecontrol.gui.lpui.table.LPTable;
+import racecontrol.gui.lpui.table.LPTableColumn;
 import racecontrol.utility.TimeUtils;
 import static racecontrol.client.extension.statistics.CarProperties.BEST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarProperties.BEST_SECTOR_THREE;

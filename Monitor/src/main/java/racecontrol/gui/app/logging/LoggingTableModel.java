@@ -6,9 +6,9 @@
 package racecontrol.gui.app.logging;
 
 import racecontrol.gui.LookAndFeel;
-import racecontrol.gui.lpui.LPTableColumn;
-import racecontrol.gui.lpui.LPTable;
-import racecontrol.gui.lpui.LPTableModel;
+import racecontrol.gui.lpui.table.LPTableColumn;
+import racecontrol.gui.lpui.table.LPTable;
+import racecontrol.gui.lpui.table.LPTableModel;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
@@ -61,7 +61,7 @@ public class LoggingTableModel extends LPTableModel {
 
     @Override
     public Object getValueAt(int column, int row) {
-        LogMessage message = messages.get(messages.size() - row - 1);
+        LogMessage message = messages.get(row);
         switch (column) {
             case 0:
                 DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
@@ -78,6 +78,7 @@ public class LoggingTableModel extends LPTableModel {
 
     public void addMessage(LogMessage message) {
         messages.add(message);
+        entryAdded(messages.indexOf(message));
     }
 
 }

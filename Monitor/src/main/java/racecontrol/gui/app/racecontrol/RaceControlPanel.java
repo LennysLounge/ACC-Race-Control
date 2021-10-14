@@ -12,7 +12,7 @@ import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.lpui.LPButton;
 import racecontrol.gui.lpui.LPContainer;
 import racecontrol.gui.lpui.LPLabel;
-import racecontrol.gui.lpui.LPTable;
+import racecontrol.gui.lpui.table.LPTable;
 
 /**
  *
@@ -102,8 +102,8 @@ public class RaceControlPanel
 
         float headerHeight = heightOffset + buttonHeight * 2 + LINE_HEIGHT;
         eventListLabel.setPosition(20, headerHeight - LINE_HEIGHT);
-        table.setSize(w, h - headerHeight);
-        table.setPosition(0, headerHeight);
+        table.setSize(w - 20, h - headerHeight);
+        table.setPosition(10, headerHeight);
     }
 
     public LPTable getTable() {

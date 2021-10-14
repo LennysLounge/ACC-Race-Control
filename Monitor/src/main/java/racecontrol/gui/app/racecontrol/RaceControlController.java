@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import racecontrol.gui.RaceControlApplet;
-import racecontrol.gui.app.AppController;
 import racecontrol.gui.app.racecontrol.entries.ContactEventEntry;
 import racecontrol.gui.app.racecontrol.entries.RaceEventEntry;
 import racecontrol.gui.app.racecontrol.entries.SimpleEventEntry;
@@ -33,6 +32,7 @@ import racecontrol.client.extension.racereport.RaceReportController;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.extension.replayoffset.ReplayStartKnownEvent;
 import racecontrol.client.extension.replayoffset.ReplayStartRequiresSearchEvent;
+import racecontrol.logging.UILogger;
 
 /**
  *
@@ -221,6 +221,7 @@ public class RaceControlController
                     getRandomCar(),
                     0);
         }
+        UILogger.log("contact blar blar blar");
         ContactEvent event = new ContactEvent(incident);
         addContactEntry(event);
     }

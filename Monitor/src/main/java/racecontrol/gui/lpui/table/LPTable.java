@@ -3,12 +3,15 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.gui.lpui;
+package racecontrol.gui.lpui.table;
 
+import static java.util.Objects.requireNonNull;
 import racecontrol.gui.LookAndFeel;
 import java.util.function.BiConsumer;
 import java.util.logging.Logger;
 import processing.core.PApplet;
+import racecontrol.gui.lpui.LPAnimationTask;
+import racecontrol.gui.lpui.LPContainer;
 import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
@@ -20,7 +23,9 @@ import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
  *
  * @author Leonard
  */
-public class LPTable extends LPContainer {
+public class LPTable
+        extends LPContainer
+        implements TableModelChangedListener {
 
     private static final Logger LOG = Logger.getLogger(LPTable.class.getName());
 
@@ -396,7 +401,7 @@ public class LPTable extends LPContainer {
                 lowerVisibleRowYOffset = -(scrollbar.scroll - height);
             }
             upperVisibleIndex = i;
-            if (height > scrollbar.scroll + visibleHeight) {
+            if (height >= scrollbar.scroll + visibleHeight) {
                 break;
             }
             height += model.getRowHeight(i);
@@ -409,7 +414,10 @@ public class LPTable extends LPContainer {
      * @param model The new table model.
      */
     public void setTableModel(LPTableModel model) {
+        requireNonNull(model, "model");
+        this.model.unregisterListener(this);
         this.model = model;
+        this.model.registerListener(this);
         columns = model.getColumns();
     }
 
@@ -497,6 +505,23 @@ public class LPTable extends LPContainer {
             }
         }
         return widths;
+    }
+
+    @Override
+    public void onEntryAdded(int index) {
+        calculateVisibleArea();
+
+        if (scrollbar.isVisible) {
+            if (index == model.getRowCount() - 1) {
+                // if the distance to the bottom is less then or equal to the
+                // height of the row that was added then we were previously
+                // scrolled at the bottom.
+                float distanceToBottom = modelHeight - visibleHeight - scrollbar.actualScroll;
+                if (distanceToBottom <= model.getRowHeight(index)) {
+                    scrollbar.setScrollSmooth(scrollbar.actualScroll + LINE_HEIGHT);
+                }
+            }
+        }
     }
 
     private class Scrollbar {
