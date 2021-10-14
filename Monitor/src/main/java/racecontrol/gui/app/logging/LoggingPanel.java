@@ -47,8 +47,8 @@ public class LoggingPanel
 
     @Override
     public void onResize(float w, float h) {
-        table.setPosition(20, 0);
-        table.setSize(w - 10, h);
+        table.setPosition(10, 0);
+        table.setSize(w - 20, h - 10);
     }
 
     @Override

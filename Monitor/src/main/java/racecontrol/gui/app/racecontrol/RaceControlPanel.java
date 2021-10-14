@@ -102,7 +102,7 @@ public class RaceControlPanel
 
         float headerHeight = heightOffset + buttonHeight * 2 + LINE_HEIGHT;
         eventListLabel.setPosition(20, headerHeight - LINE_HEIGHT);
-        table.setSize(w - 20, h - headerHeight);
+        table.setSize(w - 20, h - headerHeight - 10);
         table.setPosition(10, headerHeight);
     }
 
