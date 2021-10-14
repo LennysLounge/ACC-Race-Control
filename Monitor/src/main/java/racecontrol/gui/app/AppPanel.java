@@ -125,10 +125,10 @@ public class AppPanel
         settingsMenuItem = new MenuItem("Settings",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Settings.png"));
         menu.addMenuItemBottom(settingsMenuItem);
-        
-        if(PersistantConfig.get(MENU_COLLAPSED)){
+
+        if (PersistantConfig.get(MENU_COLLAPSED)) {
             menu.collapse();
-        }else{
+        } else {
             menu.expand();
         }
         updateComponents();
@@ -162,10 +162,15 @@ public class AppPanel
 
     public void setActivePage(LPComponent page) {
         if (activePage != null) {
-            removeComponent(activePage);
+            activePage.setVisible(false);
+            activePage.setEnabled(false);
+        }
+        if (!getComponents().contains(page)) {
+            addComponent(page);
         }
         activePage = page;
-        addComponent(page);
+        activePage.setVisible(true);
+        activePage.setEnabled(true);
     }
 
     public void addStatusPanel(LPComponent statusPanel) {
