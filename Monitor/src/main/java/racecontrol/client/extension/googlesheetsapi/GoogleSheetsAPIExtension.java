@@ -170,7 +170,7 @@ public class GoogleSheetsAPIExtension
                                 stats.get(CAR_NUMBER),
                                 stats.get(SESSION_FINISHED)
                                 ? "F"
-                                : stats.get(LAP_COUNT));
+                                : (stats.get(LAP_COUNT) + 1));
                     })
                     .collect(Collectors.joining("\n"));
             String sessionTime = TimeUtils.asDuration(info.getSessionEarliestTime());

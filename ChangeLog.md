@@ -1,7 +1,10 @@
-# v1.4.0
+# v1.3.1
 
 Changes:
+* Automatically scroll a table when at the bottom.
 
+Bug fixes:
+* Write the correct lap count to the google spreadsheet.
 
 # v1.3.0
 
