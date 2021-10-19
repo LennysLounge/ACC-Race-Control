@@ -142,4 +142,17 @@ public class LPContainer
         super.setEnabled(isEnabled);
     }
 
+    /**
+     * Gets called to animate this component. Used internally.
+     *
+     * @param dt delta time since the last frame in milliseconds.
+     */
+    @Override
+    void animateInternal(int dt) {
+        super.animateInternal(dt);
+        for (LPComponent c : components) {
+            c.animateInternal(dt);
+        }
+    }
+
 }

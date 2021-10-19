@@ -18,8 +18,8 @@ import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANC
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.CarStatistics;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
-import racecontrol.gui.lpui.LPTable;
-import racecontrol.gui.lpui.LPTableColumn;
+import racecontrol.gui.lpui.table.LPTable;
+import racecontrol.gui.lpui.table.LPTableColumn;
 import racecontrol.utility.TimeUtils;
 
 /**

@@ -6,7 +6,7 @@
 package racecontrol.gui.app.livetiming.timing.tablemodels;
 
 import static java.util.stream.Collectors.toList;
-import racecontrol.gui.lpui.LPTableColumn;
+import racecontrol.gui.lpui.table.LPTableColumn;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
@@ -22,8 +22,8 @@ import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
 import static racecontrol.gui.LookAndFeel.COLOR_RACE;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
-import racecontrol.gui.lpui.LPTable;
-import racecontrol.gui.lpui.LPTable.RenderContext;
+import racecontrol.gui.lpui.table.LPTable;
+import racecontrol.gui.lpui.table.LPTable.RenderContext;
 import racecontrol.utility.TimeUtils;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_INVALID;
 import static racecontrol.client.extension.statistics.CarProperties.OVERTAKE_INDICATOR;

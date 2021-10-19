@@ -6,8 +6,8 @@
 package racecontrol.gui.app.racecontrol.entries;
 
 import racecontrol.client.data.SessionId;
-import racecontrol.gui.lpui.LPTable;
-import racecontrol.gui.lpui.LPTableColumn;
+import racecontrol.gui.lpui.table.LPTable;
+import racecontrol.gui.lpui.table.LPTableColumn;
 
 /**
  *

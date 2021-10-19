@@ -24,7 +24,7 @@ import racecontrol.client.data.enums.CarCategory;
 import static racecontrol.client.data.enums.CarCategory.CUP;
 import static racecontrol.client.data.enums.CarCategory.GT3;
 import static racecontrol.client.data.enums.CarCategory.ST;
-import racecontrol.gui.lpui.LPTable;
+import racecontrol.gui.lpui.table.LPTable;
 import racecontrol.utility.TimeUtils;
 
 /**

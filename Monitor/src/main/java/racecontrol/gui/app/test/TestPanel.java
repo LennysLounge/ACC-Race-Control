@@ -14,6 +14,7 @@ import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.app.statuspanel.StatusPanelManager;
+import racecontrol.gui.lpui.LPAnimationTask;
 import racecontrol.gui.lpui.LPButton;
 import racecontrol.gui.lpui.LPContainer;
 
@@ -24,6 +25,10 @@ import racecontrol.gui.lpui.LPContainer;
 public class TestPanel extends LPContainer {
 
     private final TestStatusPanel testStatusPanel = new TestStatusPanel();
+
+    private final LPAnimationTask testAnimation = new LPAnimationTask(this::animationFunction, 1000);
+
+    private final LPButton animationButton;
 
     public TestPanel() {
         setName("Debug");
@@ -48,6 +53,15 @@ public class TestPanel extends LPContainer {
         });
         addComponent(removeStatusPanel);
 
+        animationButton = new LPButton("Animate");
+        animationButton.setSize(100, LINE_HEIGHT);
+        animationButton.setPosition(460, 0);
+        animationButton.setAction(() -> {
+            testAnimation.restart();
+        });
+        addComponent(animationButton);
+
+        addAnimationTask(testAnimation);
     }
 
     @Override
@@ -88,6 +102,12 @@ public class TestPanel extends LPContainer {
         applet.text("medium: " + medium.getPostScriptName(), 10, 60 + LINE_HEIGHT * i++);
         applet.text("medium: " + medium.getNative().toString(), 10, 60 + LINE_HEIGHT * i++);
         applet.text("medium: " + medium.getNative().hashCode(), 10, 60 + LINE_HEIGHT * i++);
+    }
+
+    private void animationFunction(int dt) {
+        int x = 460 + (int)(100 * testAnimation.getProgressNormal());
+        animationButton.setPosition(x, 0);
+        invalidate();
     }
 
 }

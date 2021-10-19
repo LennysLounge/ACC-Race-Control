@@ -26,8 +26,8 @@ import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
 import static racecontrol.gui.LookAndFeel.COLOR_RACE;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
-import racecontrol.gui.lpui.LPTable;
-import racecontrol.gui.lpui.LPTableColumn;
+import racecontrol.gui.lpui.table.LPTable;
+import racecontrol.gui.lpui.table.LPTableColumn;
 import racecontrol.utility.TimeUtils;
 
 /**

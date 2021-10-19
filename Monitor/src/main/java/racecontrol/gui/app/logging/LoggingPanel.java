@@ -11,7 +11,7 @@ import racecontrol.logging.LogMessage;
 import racecontrol.logging.LoggerListener;
 import racecontrol.logging.UILogger;
 import racecontrol.gui.lpui.LPContainer;
-import racecontrol.gui.lpui.LPTable;
+import racecontrol.gui.lpui.table.LPTable;
 
 /**
  *
@@ -48,7 +48,7 @@ public class LoggingPanel
     @Override
     public void onResize(float w, float h) {
         table.setPosition(10, 0);
-        table.setSize(w - 10, h);
+        table.setSize(w - 20, h - 10);
     }
 
     @Override

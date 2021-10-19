@@ -25,7 +25,7 @@ import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingLastTableMode
 import racecontrol.gui.app.livetiming.timing.tablemodels.RaceTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.StatsTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.TestTableModel;
-import racecontrol.gui.lpui.LPTable;
+import racecontrol.gui.lpui.table.LPTable;
 
 /**
  *

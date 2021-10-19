@@ -17,10 +17,10 @@ import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.TEXT_SIZE;
 import racecontrol.gui.app.racecontrol.entries.RaceEventEntry;
 import racecontrol.client.data.SessionId;
-import racecontrol.gui.lpui.LPTable;
-import racecontrol.gui.lpui.LPTable.RenderContext;
-import racecontrol.gui.lpui.LPTableColumn;
-import racecontrol.gui.lpui.LPTableModel;
+import racecontrol.gui.lpui.table.LPTable;
+import racecontrol.gui.lpui.table.LPTable.RenderContext;
+import racecontrol.gui.lpui.table.LPTableColumn;
+import racecontrol.gui.lpui.table.LPTableModel;
 import racecontrol.utility.TimeUtils;
 
 /**
@@ -83,7 +83,7 @@ public class RaceEventTableModel
 
     @Override
     public void onClick(int column, int row, int mouseX, int mouseY) {
-        if(row >= getRowCount()){
+        if (row >= getRowCount()) {
             return;
         }
         if (column == 2) {
@@ -101,6 +101,7 @@ public class RaceEventTableModel
 
     public void addEntry(RaceEventEntry entry) {
         entries.add(entry);
+        entryAdded(entries.indexOf(entry));
     }
 
     public RaceEventEntry getEntry(int index) {

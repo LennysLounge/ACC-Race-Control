@@ -3,14 +3,15 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.gui.lpui;
+package racecontrol.gui.lpui.table;
 
-import java.util.ArrayList;
-import java.util.List;
+import static java.util.Objects.requireNonNull;
 import racecontrol.gui.LookAndFeel;
 import java.util.function.BiConsumer;
 import java.util.logging.Logger;
 import processing.core.PApplet;
+import racecontrol.gui.lpui.LPAnimationTask;
+import racecontrol.gui.lpui.LPContainer;
 import static processing.core.PConstants.ARROW;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
@@ -22,7 +23,9 @@ import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
  *
  * @author Leonard
  */
-public class LPTable extends LPContainer {
+public class LPTable
+        extends LPContainer
+        implements TableModelChangedListener {
 
     private static final Logger LOG = Logger.getLogger(LPTable.class.getName());
 
@@ -104,9 +107,18 @@ public class LPTable extends LPContainer {
      */
     private BiConsumer<Integer, Integer> cellClickAction = (column, row) -> {
     };
-
+    /**
+     * Current mouse x position.
+     */
     private float mouseX;
+    /**
+     * Current mouse y position.
+     */
     private float mouseY;
+
+    public LPTable() {
+        addAnimationTask(scrollbar.scrollAnimation);
+    }
 
     @Override
     public void draw(PApplet applet) {
@@ -230,7 +242,7 @@ public class LPTable extends LPContainer {
 
     @Override
     public void onMouseScroll(int scrollDir) {
-        scrollbar.setScroll(scrollbar.scroll + scrollDir * LINE_HEIGHT);
+        scrollbar.setScrollSmooth(scrollbar.actualScroll + scrollDir * LINE_HEIGHT);
         invalidate();
     }
 
@@ -372,10 +384,10 @@ public class LPTable extends LPContainer {
 
         //limit the maximum scroll
         if (scrollbar.scroll + visibleHeight > modelHeight) {
-            scrollbar.scroll = modelHeight - visibleHeight;
+            scrollbar.setScroll(modelHeight - visibleHeight);
         }
         if (scrollbar.scroll < 0) {
-            scrollbar.scroll = 0;
+            scrollbar.setScroll(0);
         }
 
         //find lower and upper limits
@@ -389,7 +401,7 @@ public class LPTable extends LPContainer {
                 lowerVisibleRowYOffset = -(scrollbar.scroll - height);
             }
             upperVisibleIndex = i;
-            if (height > scrollbar.scroll + visibleHeight) {
+            if (height >= scrollbar.scroll + visibleHeight) {
                 break;
             }
             height += model.getRowHeight(i);
@@ -402,7 +414,10 @@ public class LPTable extends LPContainer {
      * @param model The new table model.
      */
     public void setTableModel(LPTableModel model) {
+        requireNonNull(model, "model");
+        this.model.unregisterListener(this);
         this.model = model;
+        this.model.registerListener(this);
         columns = model.getColumns();
     }
 
@@ -492,6 +507,23 @@ public class LPTable extends LPContainer {
         return widths;
     }
 
+    @Override
+    public void onEntryAdded(int index) {
+        calculateVisibleArea();
+
+        if (scrollbar.isVisible) {
+            if (index == model.getRowCount() - 1) {
+                // if the distance to the bottom is less then or equal to the
+                // height of the row that was added then we were previously
+                // scrolled at the bottom.
+                float distanceToBottom = modelHeight - visibleHeight - scrollbar.actualScroll;
+                if (distanceToBottom <= model.getRowHeight(index)) {
+                    scrollbar.setScrollSmooth(scrollbar.actualScroll + LINE_HEIGHT);
+                }
+            }
+        }
+    }
+
     private class Scrollbar {
 
         /**
@@ -523,19 +555,70 @@ public class LPTable extends LPContainer {
          */
         public float dragHome = 0;
         /**
-         * Amount of stroll this table currently has.
+         * The visible amount of scroll. Gets animated to be equal with
+         * actualScroll.
          */
         private float scroll = 0;
+        /**
+         * Amount of stroll this table currently has.
+         */
+        private float actualScroll = 0;
+        /**
+         * scroll value where to start the animation.
+         */
+        private float scrollAnimationStart;
+        /**
+         * Scroll value where to end the animation.
+         */
+        private float scrollAnimationEnd;
+        /**
+         * Scroll velocity to start the animation.
+         */
+        private float scrollAnimationStartVelocity;
+        /**
+         * Current animation scroll velocity.
+         */
+        private float scrollAnimationCurrentVelocity;
         /**
          * Indicates that the mouse is hovering over the scrollbar.
          */
         private boolean isMouseOver = false;
+        /**
+         * Animation task for smooth scrolling.
+         */
+        private final LPAnimationTask scrollAnimation
+                = new LPAnimationTask(this::scrollAnimationFunction, 200);
 
-        public void setScroll(float scroll) {
-            if (scroll != this.scroll) {
-                this.scroll = scroll;
+        public void setScroll(float newScroll) {
+            if (actualScroll != newScroll) {
+                scrollAnimation.stop();
+                actualScroll = newScroll;
+                scroll = actualScroll;
                 invalidate();
             }
+        }
+
+        public void setScrollSmooth(float newScroll) {
+            if (this.actualScroll != newScroll) {
+                actualScroll = newScroll;
+                scrollAnimationStart = scrollbar.scroll;
+                scrollAnimationEnd = actualScroll;
+                scrollAnimationStartVelocity = scrollAnimationCurrentVelocity;
+                scrollAnimation.restart();
+                invalidate();
+            }
+        }
+
+        private void scrollAnimationFunction(int dt) {
+            float a = scrollAnimationStartVelocity - 2;
+            float b = 3 - 2 * scrollAnimationStartVelocity;
+            float c = scrollAnimationStartVelocity;
+            float x = scrollAnimation.getProgressNormal();
+            float t = a * x * x * x + b * x * x + c * x;
+            scrollAnimationCurrentVelocity = 3 * a * x * x + 2 * b * x + c;
+            scrollbar.scroll = scrollAnimationStart * (1 - t)
+                    + scrollAnimationEnd * t;
+            invalidate();
         }
 
         public float getScroll() {
