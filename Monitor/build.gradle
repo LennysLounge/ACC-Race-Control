@@ -2,11 +2,12 @@ plugins{
     id 'java'
     id 'jacoco'
     id 'application'
+    id 'maven'
 }
 
 apply from: "${rootDir}/gradle/versioning.gradle"
 apply from: "${rootDir}/gradle/license-header.gradle"
-def distributionName = "ACC Race Control" + project.ext.versionString
+def distributionName = "ACC Race Control " + project.ext.versionString
 
 
 application{
@@ -48,6 +49,14 @@ distributions{
     }
 }
 
+configure(install.repositories.mavenInstaller){
+    pom.project{
+        groupId = 'org.leonard-schuengel'
+        artifactId = 'acc-race-control'
+        version = '1.0'
+    }
+}
+
 task copyLibs(type:Copy){
     group = "Release"
     from configurations.runtimeClasspath
@@ -64,10 +73,13 @@ task buildRelease(type: Zip){
     group = "Release"
     dependsOn copyLibs
     dependsOn copyDist
+    dependsOn install
     from "$projectDir/build/release/" + distributionName
     archiveName distributionName + ".zip"
     destinationDir(file("$projectDir/build/release/"))
 }
+
+
 
 /*
 compileJava {
