@@ -40,6 +40,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
         setupLogging();
+        LOG.info("Version: " + Version.VERSION);
         PersistantConfig.init();
 
         setupSplash();
@@ -54,6 +55,7 @@ public class Main {
                 | UnsupportedLookAndFeelException ex) {
             LOG.log(Level.WARNING, "Error setting system look and feel.", ex);
         }
+
         //start visualisation.
         String[] a = {"MAIN"};
         PApplet.runSketch(a, new RaceControlApplet());
