@@ -63,7 +63,7 @@ public class RaceControlApplet extends CustomPApplet {
         if (i != null) {
             surface.setIcon(i);
         }
-        frameRate(30);
+        frameRate(60);
 
         LPComponent.setStaticApplet(this);
 

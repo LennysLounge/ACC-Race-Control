@@ -11,6 +11,7 @@ import processing.core.PApplet;
 import racecontrol.gui.CustomPApplet;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.app.Menu.MenuItem;
+import racecontrol.gui.lpui.LPAnimationTask;
 import racecontrol.gui.lpui.LPComponent;
 import racecontrol.gui.lpui.LPContainer;
 import racecontrol.persistance.PersistantConfig;
@@ -75,8 +76,23 @@ public class AppPanel
      * Currently showing status panels.
      */
     private final List<LPComponent> statusPanels = new LinkedList<>();
+    /**
+     * Animation task to animate the status panel appearance.
+     */
+    private final LPAnimationTask statusAnimation
+            = new LPAnimationTask(this::statusAnimationFunction, 200);
+    /**
+     * The offset for the status bar that is animated.
+     */
+    private float statusBarOffset = 0;
+    /**
+     * The start for the status bar offset animation.
+     */
+    private float statusBarOffsetStart = 0;
 
     public AppPanel() {
+        addAnimationTask(statusAnimation);
+        
         header = new HeaderPanel();
         addComponent(header);
 
@@ -126,7 +142,7 @@ public class AppPanel
         menu.addMenuItemBottom(settingsMenuItem);
 
         menu.setCollapse(PersistantConfig.get(MENU_COLLAPSED));
-        
+
         updateComponents();
     }
 
@@ -135,9 +151,9 @@ public class AppPanel
         menu.setSize(200, h);
         updateComponents();
     }
-    
+
     @Override
-    public void draw(PApplet applet){
+    public void draw(PApplet applet) {
         updateComponents();
     }
 
@@ -145,7 +161,7 @@ public class AppPanel
         menu.setPosition(0, 0);
 
         float menuWidth = menu.isVisible() ? menu.getWidth() : 0;
-        float headerHeight = 0;
+        float headerHeight = !statusAnimation.isFinished() ? statusBarOffset : 0;
         for (LPComponent statusPanel : statusPanels) {
             statusPanel.setSize(getWidth() - menuWidth, LINE_HEIGHT);
             statusPanel.setPosition(menuWidth, headerHeight);
@@ -159,6 +175,13 @@ public class AppPanel
             activePage.setSize(getWidth() - menuWidth, getHeight() - headerHeight);
             activePage.setPosition(menuWidth, headerHeight);
         }
+    }
+
+    private void statusAnimationFunction(float dt) {
+        float t = statusAnimation.getProgressNormal();
+        t = (t - 1) * (t - 1);
+        statusBarOffset = t * statusBarOffsetStart;
+        updateComponents();
     }
 
     public void setActivePage(LPComponent page) {
@@ -180,13 +203,21 @@ public class AppPanel
             addComponent(statusPanel);
             updateComponents();
             invalidate();
+
+            statusBarOffsetStart = statusBarOffset - LINE_HEIGHT;
+            statusAnimation.restart();
         }
     }
 
     public void removeStatusPanel(LPComponent statusPanel) {
-        statusPanels.remove(statusPanel);
-        removeComponent(statusPanel);
-        updateComponents();
-        invalidate();
+        if (statusPanels.contains(statusPanel)) {
+            statusPanels.remove(statusPanel);
+            removeComponent(statusPanel);
+            updateComponents();
+            invalidate();
+
+            statusBarOffsetStart = statusBarOffset + LINE_HEIGHT;
+            statusAnimation.restart();
+        }
     }
 }
