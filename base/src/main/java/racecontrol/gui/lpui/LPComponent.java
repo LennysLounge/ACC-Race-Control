@@ -234,7 +234,9 @@ public class LPComponent {
      * Invalidates the parent of this component.
      */
     public void invalidateParent() {
-        parent.invalidate();
+        if (parent != null) {
+            parent.invalidate();
+        }
     }
 
     /**
@@ -629,13 +631,13 @@ public class LPComponent {
     protected void addAnimationTask(LPAnimationTask task) {
         animationTasks.add(task);
     }
-    
+
     /**
-     * Gets called to animate this component.
-     * Used internally.
+     * Gets called to animate this component. Used internally.
+     *
      * @param dt delta time since the last frame in milliseconds.
      */
-    void animateInternal(int dt){
+    void animateInternal(int dt) {
         animationTasks.forEach(task -> task.animate(dt));
     }
 

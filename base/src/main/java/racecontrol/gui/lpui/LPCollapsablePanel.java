@@ -9,7 +9,6 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import racecontrol.gui.LookAndFeel;
-import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.gui.LookAndFeel.COLOR_MEDIUM_DARK_GRAY;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
@@ -44,10 +43,6 @@ public class LPCollapsablePanel
      */
     private boolean mouseOverCollapseButton = false;
     /**
-     * True if the panel is in the collapsed state.
-     */
-    private boolean collapsed = false;
-    /**
      * The expanded width.
      */
     private float expandedWidth;
@@ -55,14 +50,30 @@ public class LPCollapsablePanel
      * The expanded height.
      */
     private float expandedHeight;
-
     /**
      * Action for when the collapse state changes.
      */
     private Runnable stateChangeAction = () -> {
     };
+    /**
+     * Collapse animation.
+     */
+    private final LPAnimationTask collapseAnimation
+            = new LPAnimationTask(this::collapseAnimationFunction, 200);
+    /**
+     * Expand animation.
+     */
+    private final LPAnimationTask expandAnimation
+            = new LPAnimationTask(this::expandAnimationFunction, 200);
+    /**
+     * The collapse state for this panel. 0 is fully collapsed, 1 is fully
+     * expanded.
+     */
+    private float collapseValue;
 
     public LPCollapsablePanel(String title) {
+        addAnimationTask(collapseAnimation);
+        addAnimationTask(expandAnimation);
         this.title = title;
     }
 
@@ -81,7 +92,7 @@ public class LPCollapsablePanel
 
         applet.fill(255);
         applet.beginShape();
-        if (collapsed) {
+        if (isCollapsed()) {
             applet.vertex(COLLAPSE_BOX_X + COLLAPSE_BOX_SIZE / 2f, COLLAPSE_BOX_Y + (COLLAPSE_BOX_SIZE - triangleHeight) / 2);
             applet.vertex(COLLAPSE_BOX_X + (COLLAPSE_BOX_SIZE - triangleLength) / 2f, COLLAPSE_BOX_Y + COLLAPSE_BOX_SIZE - (COLLAPSE_BOX_SIZE - triangleHeight) / 2);
             applet.vertex(COLLAPSE_BOX_X + (COLLAPSE_BOX_SIZE + triangleLength) / 2f, COLLAPSE_BOX_Y + COLLAPSE_BOX_SIZE - (COLLAPSE_BOX_SIZE - triangleHeight) / 2);
@@ -98,8 +109,8 @@ public class LPCollapsablePanel
         applet.text(title, LINE_HEIGHT + 20, LINE_HEIGHT * 0.5f);
 
         applet.noStroke();
-        if (!collapsed) {
-            applet.fill(COLOR_DARK_GRAY);
+        if (collapseValue > 0) {
+            applet.fill(COLOR_MEDIUM_DARK_GRAY);
             applet.rect(0, LINE_HEIGHT, getWidth(), getHeight());
         }
     }
@@ -121,7 +132,7 @@ public class LPCollapsablePanel
     public void onMousePressed(int x, int y, int button) {
         if (x > COLLAPSE_BOX_X && x < COLLAPSE_BOX_X + COLLAPSE_BOX_SIZE
                 && y > COLLAPSE_BOX_Y && y < COLLAPSE_BOX_Y + COLLAPSE_BOX_SIZE) {
-            setCollapsed(!collapsed);
+            setCollapsedAnimate(!isCollapsed());
             mouseOverCollapseButton = false;
             invalidate();
             stateChangeAction.run();
@@ -130,23 +141,28 @@ public class LPCollapsablePanel
 
     @Override
     public void setSize(float w, float h) {
-        expandedWidth = w;
         expandedHeight = h;
+        expandedWidth = w;
+        updateSize();
+    }
+
+    public void setCollapsed(boolean collapsed) {
+        collapseValue = collapsed ? 0 : 1;
+        getComponents().forEach((c) -> c.setVisible(!collapsed));
+        updateSize();
+    }
+
+    public void setCollapsedAnimate(boolean collapsed) {
         if (collapsed) {
-            super.setSize(w, LINE_HEIGHT);
+            collapseAnimation.restart();
         } else {
-            super.setSize(w, h);
+            getComponents().forEach((c) -> c.setVisible(!collapsed));
+            expandAnimation.restart();
         }
     }
 
-    public void setCollapsed(boolean state) {
-        this.collapsed = state;
-        setSize(expandedWidth, expandedHeight);
-        getComponents().forEach((c) -> c.setVisible(!collapsed));
-    }
-
     public boolean isCollapsed() {
-        return collapsed;
+        return collapseValue < 0.5f;
     }
 
     public void setAction(Runnable a) {
@@ -155,6 +171,29 @@ public class LPCollapsablePanel
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    private void updateSize() {
+        float height = LINE_HEIGHT * (1 - collapseValue)
+                + expandedHeight * collapseValue;
+        super.setSize(expandedWidth, height);
+        invalidateParent();
+    }
+
+    public void collapseAnimationFunction(float dt) {
+        collapseValue = 1 - collapseAnimation.getProgressNormal();
+        collapseValue = collapseValue * collapseValue;
+        updateSize();
+
+        if (collapseAnimation.isFinished()) {
+            getComponents().forEach((c) -> c.setVisible(false));
+        }
+    }
+
+    public void expandAnimationFunction(float dt) {
+        float t = expandAnimation.getProgressNormal() - 1;
+        collapseValue = -(t * t) + 1;
+        updateSize();
     }
 
 }

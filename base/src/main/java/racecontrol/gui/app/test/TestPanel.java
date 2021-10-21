@@ -16,7 +16,9 @@ import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.app.statuspanel.StatusPanelManager;
 import racecontrol.gui.lpui.LPAnimationTask;
 import racecontrol.gui.lpui.LPButton;
+import racecontrol.gui.lpui.LPCollapsablePanel;
 import racecontrol.gui.lpui.LPContainer;
+import racecontrol.gui.lpui.LPLabel;
 
 /**
  *
@@ -29,6 +31,9 @@ public class TestPanel extends LPContainer {
     private final LPAnimationTask testAnimation = new LPAnimationTask(this::animationFunction, 1000);
 
     private final LPButton animationButton;
+
+    private final LPCollapsablePanel collapsePanel;
+    private final LPLabel collapsePanelLable = new LPLabel("Hello");
 
     public TestPanel() {
         setName("Debug");
@@ -62,6 +67,17 @@ public class TestPanel extends LPContainer {
         addComponent(animationButton);
 
         addAnimationTask(testAnimation);
+
+        collapsePanel = new LPCollapsablePanel("Collapse");
+        collapsePanel.setSize(200, 200);
+        collapsePanel.setPosition(10, 500);
+        BluePanel panel = new BluePanel();
+        collapsePanel.addComponent(panel);
+        panel.setSize(200, 200 - LINE_HEIGHT);
+        panel.setPosition(0, LINE_HEIGHT);
+        collapsePanel.setCollapsed(true);
+        addComponent(collapsePanel);
+        addComponent(collapsePanelLable);
     }
 
     @Override
@@ -102,12 +118,18 @@ public class TestPanel extends LPContainer {
         applet.text("medium: " + medium.getPostScriptName(), 10, 60 + LINE_HEIGHT * i++);
         applet.text("medium: " + medium.getNative().toString(), 10, 60 + LINE_HEIGHT * i++);
         applet.text("medium: " + medium.getNative().hashCode(), 10, 60 + LINE_HEIGHT * i++);
+
+        updateComponents();
     }
 
     private void animationFunction(int dt) {
-        int x = 460 + (int)(100 * testAnimation.getProgressNormal());
+        int x = 460 + (int) (100 * testAnimation.getProgressNormal());
         animationButton.setPosition(x, 0);
         invalidate();
+    }
+
+    private void updateComponents() {
+        collapsePanelLable.setPosition(10, collapsePanel.getPosY() + collapsePanel.getHeight());
     }
 
 }

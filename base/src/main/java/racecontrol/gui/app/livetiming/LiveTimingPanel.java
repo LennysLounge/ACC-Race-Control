@@ -73,58 +73,36 @@ public class LiveTimingPanel
     public void draw(PApplet applet) {
         applet.fill(COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
-
-        /*
-        applet.fill(COLOR_WHITE);
-        applet.textAlign(CENTER, CENTER);
-        applet.textFont(LookAndFeel.fontMedium());
-        applet.text("View Qualifying", getWidth() / 2f, LINE_HEIGHT / 2f);
-
-        applet.textAlign(RIGHT, CENTER);
-        applet.textFont(LookAndFeel.fontRegular());
-        applet.text("Detach", getWidth() - 10, LINE_HEIGHT / 2f);
-
-        applet.stroke(COLOR_WHITE);
-        applet.strokeWeight(2);
-        int x = (int) (getWidth() / 2f - 300);
-        applet.line(x, LINE_HEIGHT / 2f, x + 10, LINE_HEIGHT / 2f - 10);
-        applet.line(x, LINE_HEIGHT / 2f, x + 10, LINE_HEIGHT / 2f + 10);
-
-        x = (int) (getWidth() / 2f + 300);
-        applet.line(x, LINE_HEIGHT / 2f, x - 10, LINE_HEIGHT / 2f - 10);
-        applet.line(x, LINE_HEIGHT / 2f, x - 10, LINE_HEIGHT / 2f + 10);
-
-        applet.strokeWeight(1);
-         */
+        updateComponents();
     }
 
     @Override
     public void onResize(float w, float h) {
+        // live timing view selection.
         viewLabel.setPosition((w - viewLabel.getWidth()) / 2f, 0);
         int distance = (int) Math.max(100, w * 0.2f);
         viewLeftButton.setPosition((int) (w / 2f - distance - viewLeftButton.getWidth()), 0);
         viewRightButton.setPosition((int) (w / 2f + distance), 0);
 
-        float broadcastControllHeight = LINE_HEIGHT;
-        if (!collapsablePanel.isCollapsed()) {
-            if (isLiveTimingTableVisible) {
-                broadcastControllHeight = (LINE_HEIGHT * 7.5f);
-            } else {
-                broadcastControllHeight = h - LINE_HEIGHT;
-            }
-        }
+        detachLiveTimingButton.setPosition(w - 90, 0);
+
         broadcastingControls.setPosition(0, LINE_HEIGHT);
         broadcastingControls.setSize(w, LINE_HEIGHT * 6.5f);
 
-        collapsablePanel.setSize(w, broadcastControllHeight);
-        collapsablePanel.setPosition(0, h - broadcastControllHeight);
+        collapsablePanel.setSize(w, LINE_HEIGHT * 7.5f);
 
+        updateComponents();
+    }
+
+    private void updateComponents() {
+        float w = getWidth();
+        float h = getHeight();
+
+        collapsablePanel.setPosition(0, h - collapsablePanel.getHeight());
         if (isLiveTimingTableVisible) {
-            liveTimingTable.setSize(w - 20, h - LINE_HEIGHT - broadcastControllHeight);
+            liveTimingTable.setSize(w - 20, h - LINE_HEIGHT - collapsablePanel.getHeight());
             liveTimingTable.setPosition(10, LINE_HEIGHT);
         }
-        detachLiveTimingButton.setPosition(w - 90, 0);
-
     }
 
     public void addLiveTimingTable(LPComponent table) {
