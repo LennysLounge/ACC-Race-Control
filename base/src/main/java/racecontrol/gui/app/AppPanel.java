@@ -7,6 +7,7 @@ package racecontrol.gui.app;
 
 import java.util.LinkedList;
 import java.util.List;
+import processing.core.PApplet;
 import racecontrol.gui.CustomPApplet;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.app.Menu.MenuItem;
@@ -83,10 +84,8 @@ public class AppPanel
         addComponent(menu);
         MenuItem menuItem = new MenuItem("Menu", ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Symbol.png"));
         menuItem.setClickAction((button) -> {
-            menu.toggleCollapse();
+            menu.setCollapseAnimate(!menu.isCollapsed());
             PersistantConfig.put(MENU_COLLAPSED, menu.isCollapsed());
-            updateComponents();
-            invalidate();
         });
         menu.addMenuItem(menuItem);
 
@@ -126,21 +125,23 @@ public class AppPanel
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Settings.png"));
         menu.addMenuItemBottom(settingsMenuItem);
 
-        if (PersistantConfig.get(MENU_COLLAPSED)) {
-            menu.collapse();
-        } else {
-            menu.expand();
-        }
+        menu.setCollapse(PersistantConfig.get(MENU_COLLAPSED));
+        
         updateComponents();
     }
 
     @Override
     public void onResize(float w, float h) {
+        menu.setSize(200, h);
+        updateComponents();
+    }
+    
+    @Override
+    public void draw(PApplet applet){
         updateComponents();
     }
 
     public final void updateComponents() {
-        menu.setSize(200, getHeight());
         menu.setPosition(0, 0);
 
         float menuWidth = menu.isVisible() ? menu.getWidth() : 0;

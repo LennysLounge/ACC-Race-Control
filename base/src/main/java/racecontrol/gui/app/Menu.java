@@ -19,6 +19,7 @@ import static racecontrol.gui.LookAndFeel.COLOR_DARK_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
+import racecontrol.gui.lpui.LPAnimationTask;
 import racecontrol.gui.lpui.LPComponent;
 
 /**
@@ -32,10 +33,6 @@ public class Menu
      * This class's logger.
      */
     private static final Logger LOG = Logger.getLogger(Menu.class.getName());
-    /**
-     * True if the menu is collapsed.
-     */
-    private boolean collapsed = true;
     /**
      * Menu width when collapsed.
      */
@@ -64,8 +61,25 @@ public class Menu
      * Currently selected menu item.
      */
     private MenuItem selectedMenuItem;
+    /**
+     * Animation task to collapse the menu.
+     */
+    private final LPAnimationTask collapseAnimation
+            = new LPAnimationTask(this::collapseAnimationFunction, 200);
+    /**
+     * Animation task to expand the menu.
+     */
+    private final LPAnimationTask expandAnimation
+            = new LPAnimationTask(this::expandAnimationFunction, 200);
+    /**
+     * The collapse state for this menu. 0 is fully collapsed, 1 is fully
+     * expanded.
+     */
+    private float collapseValue = 0;
 
     public Menu() {
+        addAnimationTask(collapseAnimation);
+        addAnimationTask(expandAnimation);
     }
 
     @Override
@@ -84,7 +98,6 @@ public class Menu
             drawMenuItem(applet, item, height);
             height -= itemSize;
         }
-
     }
 
     private void drawMenuItem(PApplet applet, MenuItem item, float height) {
@@ -113,7 +126,7 @@ public class Menu
             applet.noStroke();
         }
 
-        if (!collapsed) {
+        if (collapseValue > 0) {
             //draw text
             applet.textAlign(LEFT, CENTER);
             applet.fill((isSelected || isMouseOver) ? COLOR_WHITE : 100);
@@ -127,11 +140,7 @@ public class Menu
     public void setSize(float w, float h) {
         expandedHeight = h;
         expandedWidth = w;
-        if (collapsed) {
-            super.setSize(itemSize * 1.2f, h);
-        } else {
-            super.setSize(w, h);
-        }
+        updateSize();
     }
 
     @Override
@@ -147,7 +156,6 @@ public class Menu
             invalidate();
 
         }
-
         item.triggerAction(button);
     }
 
@@ -158,6 +166,25 @@ public class Menu
             mouseOverMenuItem = item;
             invalidate();
         }
+    }
+
+    private void updateSize() {
+        float width = itemSize * 1.2f * (1 - collapseValue)
+                + expandedWidth * collapseValue;
+        super.setSize(width, expandedHeight);
+        invalidateParent();
+    }
+
+    public void collapseAnimationFunction(float dt) {
+        collapseValue = 1 - collapseAnimation.getProgressNormal();
+        collapseValue = collapseValue * collapseValue;
+        updateSize();
+    }
+
+    public void expandAnimationFunction(float dt) {
+        float t = expandAnimation.getProgressNormal() - 1;
+        collapseValue = -(t * t) + 1;
+        updateSize();
     }
 
     private MenuItem getMenuItemForPosition(int y) {
@@ -178,23 +205,21 @@ public class Menu
         invalidate();
     }
 
-    public void expand() {
-        collapsed = false;
-        setSize(expandedWidth, expandedHeight);
+    public void setCollapse(boolean state) {
+        collapseValue = state ? 0 : 1;
+        updateSize();
     }
 
-    public void collapse() {
-        collapsed = true;
-        setSize(expandedWidth, expandedHeight);
+    public void setCollapseAnimate(boolean collapsed) {
+        if (collapsed) {
+            collapseAnimation.restart();
+        } else {
+            expandAnimation.restart();
+        }
     }
 
-    public void toggleCollapse() {
-        collapsed = !collapsed;
-        setSize(expandedWidth, expandedHeight);
-    }
-    
-    public boolean isCollapsed(){
-        return collapsed;
+    public boolean isCollapsed() {
+        return collapseValue < 0.5f;
     }
 
     public float getItemSize() {
@@ -217,8 +242,8 @@ public class Menu
     public void setSelectedMenuItem(MenuItem item) {
         selectedMenuItem = item;
     }
-    
-    public MenuItem getSelectedItem(){
+
+    public MenuItem getSelectedItem() {
         return selectedMenuItem;
     }
 
@@ -231,7 +256,7 @@ public class Menu
         /**
          * Icon of the menu item.
          */
-        private PImage icon;
+        private final PImage icon;
         /**
          * Click action. Consumes an integer that describes which button was
          * pressed.
