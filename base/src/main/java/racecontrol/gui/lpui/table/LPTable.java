@@ -76,7 +76,6 @@ public class LPTable
      * offset for how far the lowest visible row is visible.
      */
     private float lowerVisibleRowYOffset = 0;
-
     /**
      * Indicates that the header should be drawn.
      */
@@ -360,6 +359,17 @@ public class LPTable
         mouseOverColumn = -1;
         mouseOverRow = -1;
         getApplet().cursor(ARROW);
+    }
+
+    @Override
+    public void onResize(float w, float h) {
+        // if the scrollbar is at the bottom of the table before it is resized
+        // make sure the scrollbar is at the bottom of the table after the
+        float distanceToBottom = modelHeight - visibleHeight - scrollbar.actualScroll;
+        calculateVisibleArea();
+        if (distanceToBottom == 0) {
+            scrollbar.setScroll(modelHeight - visibleHeight);
+        }
     }
 
     private void calculateVisibleArea() {
