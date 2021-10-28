@@ -1,6 +1,10 @@
 # v1.4.0
 
+Changes:
+* Animated UI.
 
+Bug fixes:
+* Detaching a page now correctly renders it.
 
 # v1.3.1
 

@@ -156,7 +156,13 @@ public class AppController
     }
 
     private void detachPanel(LPContainer panel) {
-        panel.setPosition(0, 0);
+        detachedPlaceholderPanel.setPanelName(panel.getName());
+        detachedPlaceholderPanel.invalidate();
+        appPanel.removeComponent(panel);
+        appPanel.setActivePage(detachedPlaceholderPanel);
+        appPanel.updateComponents();
+        appPanel.invalidate();
+
         PanelWindowApplet applet = launchNewWindow(panel, true);
         applet.addCloseAction(() -> {
             if (getPanelForMenuItem(appPanel.menu.getSelectedItem()) == panel) {
@@ -165,11 +171,6 @@ public class AppController
                 appPanel.invalidate();
             }
         });
-        detachedPlaceholderPanel.setPanelName(panel.getName());
-        detachedPlaceholderPanel.invalidate();
-        appPanel.setActivePage(detachedPlaceholderPanel);
-        appPanel.updateComponents();
-        appPanel.invalidate();
     }
 
     private LPContainer getPanelForMenuItem(MenuItem item) {
@@ -222,6 +223,7 @@ public class AppController
         // only create a window if that panel doesnt already have one.
         if (!windowPanels.containsKey(panel)) {
             panel.setPosition(0, 0);
+            panel.setVisible(true);
             PanelWindowApplet applet = new PanelWindowApplet(panel, resizeable);
             applet.addCloseAction(() -> {
                 windowPanels.remove(panel);
