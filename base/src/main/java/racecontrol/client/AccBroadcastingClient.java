@@ -48,6 +48,7 @@ import racecontrol.client.events.EntryListUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.ReplayEndedEvent;
 import racecontrol.client.events.ReplayStartedEvent;
+import racecontrol.client.extension.autobroadcast.AutobroadcastExtension;
 import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
 import racecontrol.client.extension.laptimes.LapTimeExtension;
@@ -148,6 +149,7 @@ public class AccBroadcastingClient {
         extensions.add(new ResultsExtension());
         extensions.add(StatisticsExtension.getInstance());
         extensions.add(TrackDataExtension.getInstance());
+        //extensions.add(AutobroadcastExtension.getInstance());
     }
 
     /**
@@ -348,6 +350,25 @@ public class AccBroadcastingClient {
         sendRequest(AccBroadcastingProtocol.buildFocusRequest(
                 model.getConnectionID(),
                 model.getSessionInfo().getFocusedCarIndex(),
+                camSet,
+                cam
+        ));
+    }
+    
+    /**
+     * Sends a request to change the current camera and the focus.
+     *
+     * @param carIndex the car index of the car to focus on.
+     * @param camSet The camera set to change to.
+     * @param cam The specific camera to change to.
+     */
+    public void sendSetCameraRequestWithFocus(int carIndex, String camSet, String cam) {
+        if (!model.getCarsInfo().containsKey(carIndex)) {
+            return;
+        }
+        sendRequest(AccBroadcastingProtocol.buildFocusRequest(
+                model.getConnectionID(),
+                carIndex,
                 camSet,
                 cam
         ));

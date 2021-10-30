@@ -28,6 +28,7 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.gui.app.autobroadcast.AutobroadcastController;
 import racecontrol.gui.app.livetiming.LiveTimingController;
 import racecontrol.gui.app.trackdata.TrackDataController;
 import racecontrol.gui.lpui.LPComponent;
@@ -69,6 +70,10 @@ public class AppController
      * Track data controller.
      */
     private TrackDataController trackDataController;
+    /**
+     * Autobroadcast controller.
+     */
+    private AutobroadcastController autobroadcastController;
     /**
      * Manages the status panels.
      */
@@ -115,9 +120,11 @@ public class AppController
         statusPanelManager = StatusPanelManager.getInstance();
         statusPanelManager.initialise(appPanel);
         trackDataController = null; //new TrackDataController();
+        autobroadcastController = null; //new AutobroadcastController();
 
         appPanel.liveTimingMenuItem.setClickAction(button -> menuItemClicked(appPanel.liveTimingMenuItem, button));
         appPanel.raceControlMenuItem.setClickAction(button -> menuItemClicked(appPanel.raceControlMenuItem, button));
+        appPanel.autopilotMenuItem.setClickAction(button -> menuItemClicked(appPanel.autopilotMenuItem, button));
         appPanel.debugMenuItem.setClickAction(button -> menuItemClicked(appPanel.debugMenuItem, button));
         appPanel.logMenuItem.setClickAction(button -> menuItemClicked(appPanel.logMenuItem, button));
         appPanel.trackDataItem.setClickAction(button -> menuItemClicked(appPanel.trackDataItem, button));
@@ -186,6 +193,8 @@ public class AppController
             return settingsPanel;
         } else if (item == appPanel.trackDataItem) {
             return trackDataController.getPanel();
+        } else if (item == appPanel.autopilotMenuItem) {
+            return autobroadcastController.getPanel();
         }
         return null;
     }
