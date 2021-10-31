@@ -10,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,27 +31,51 @@ public class WebSocketConnection {
         this.socket = socket;
     }
 
-    public void sendHandshakeResponse(HTTPRequest request) {
+    public String getMessage() {
+        if (!hasMessage()) {
+            return "";
+        }
+        String rtn = "";
         try {
-            byte[] acceptKey = (request.getHeader("Sec-WebSocket-Key")
-                    + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11")
-                    .getBytes("UTF-8");
-            Base64.Encoder encoder = Base64.getEncoder();
-            MessageDigest sha1Hash = MessageDigest.getInstance("SHA-1");
+            var in = socket.getInputStream();
+            byte[] bytes = in.readNBytes(in.available());
+            int opcode = bytes[0] & 0x7f;
+            int length = bytes[1] & 0x7f;
+            byte[] key = Arrays.copyOfRange(bytes, 2, 6);
+            byte[] message = Arrays.copyOfRange(bytes, 6, bytes.length);
 
-            HTTPResponse response = new HTTPResponse(101, "Switching Protocols");
-            response.setHeader("Connection", "Upgrade");
-            response.setHeader("Upgrade", "websocket");
-            response.setHeader("Sec-WebSocket-Accept",
-                    encoder.encodeToString(sha1Hash.digest(acceptKey)));
-
-            socket.getOutputStream().write(response.getBytes());
-            socket.getOutputStream().flush();
-
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-            LOG.log(Level.SEVERE, "Error upgrading to web socket", e);
+            byte[] decoded = new byte[length];
+            for (int i = 0; i < message.length; i++) {
+                decoded[i] = (byte) (message[i] ^ key[i & 0x3]);
+            }
+            rtn = new String(decoded);
         } catch (IOException e) {
-            LOG.log(Level.SEVERE, "Error upgrading to web socket", e);
+            LOG.log(Level.SEVERE, "Error accessing input from socket.", e);
+        }
+        return rtn;
+    }
+
+    public boolean hasMessage() {
+        boolean rtn = false;
+        try {
+            rtn = socket.getInputStream().available() > 0;
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error accessing input from socket.", e);
+        }
+        return rtn;
+    }
+
+    public void sendMessage(String message) {
+        try {
+            byte[] payload = new byte[message.length() + 2];
+            payload[0] = (byte) 0x81;
+            payload[1] = (byte) (message.length() & 0x7f);
+            System.arraycopy(message.getBytes(), 0, payload, 2, message.length());
+
+            socket.getOutputStream().write(payload);
+            socket.getOutputStream().flush();
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error accessing output from socket.", e);
         }
     }
 

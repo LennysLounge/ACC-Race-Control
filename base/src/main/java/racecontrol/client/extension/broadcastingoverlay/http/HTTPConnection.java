@@ -9,12 +9,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import racecontrol.client.extension.broadcastingoverlay.WebSocketConnectionCallback;
 import static racecontrol.client.extension.broadcastingoverlay.http.HTTPRequest.Method.GET;
+import racecontrol.client.extension.broadcastingoverlay.websocket.WebSocketServer;
 import racecontrol.utility.Version;
 
 /**
@@ -31,14 +35,14 @@ public class HTTPConnection
 
     private final Socket socket;
 
-    private boolean closeSocket = true;
+    private boolean isWebSocket = false;
 
     private final File WEB_ROOT = new File(System.getProperty("user.dir") + "/broadcasting overlay/");
     private final String DEFAULT_FILE = "index.html";
 
-    private final WebSocketConnectionCallback webSocketCallback;
+    private final WebSocketServer webSocketCallback;
 
-    public HTTPConnection(Socket socket, WebSocketConnectionCallback callback) {
+    public HTTPConnection(Socket socket, WebSocketServer callback) {
         this.socket = socket;
         this.webSocketCallback = callback;
     }
@@ -50,8 +54,6 @@ public class HTTPConnection
             HTTPRequest request = new HTTPRequest();
             request.read(socket.getInputStream());
 
-            LOG.info(request.toString());
-
             HTTPResponse response = new HTTPResponse();
             response.setVersion("HTTP/1.1");
             response.setHeader("Server", "ACC Race Control broadcasting overlay:v" + Version.VERSION);
@@ -62,9 +64,11 @@ public class HTTPConnection
             socket.getOutputStream().write(response.getBytes());
             socket.getOutputStream().flush();
 
-            if (closeSocket) {
+            if (isWebSocket) {
+                webSocketCallback.requestWebSocket(socket);
+            } else {
                 socket.close();
-                LOG.info("Connecton closed");
+                LOG.info("Connecton finished");
             }
         } catch (IOException ioe) {
             LOG.info("Server error : " + ioe);
@@ -77,8 +81,9 @@ public class HTTPConnection
             if (request.getTarget().endsWith("/")) {
                 serveIndex(response);
             } else if (request.getTarget().endsWith("/socket")) {
-                webSocketCallback.requestWebSocket(socket, request);
-                closeSocket = false;
+                LOG.info("Request for upgrade to web socket.");
+                webSocketHandshake(request, response);
+                isWebSocket = true;
             } else {
                 respondError(404, "File not found", response);
             }
@@ -127,6 +132,28 @@ public class HTTPConnection
         } catch (IOException e) {
             respondError(500, "Internal Server Error", response);
             LOG.log(Level.WARNING, "Error reading file", e);
+        }
+    }
+
+    private void webSocketHandshake(HTTPRequest request, HTTPResponse response) {
+        try {
+            byte[] acceptKey = (request.getHeader("Sec-WebSocket-Key")
+                    + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11")
+                    .getBytes("UTF-8");
+            Base64.Encoder encoder = Base64.getEncoder();
+            MessageDigest sha1Hash = MessageDigest.getInstance("SHA-1");
+
+            response.setStatus(101);
+            response.setStatusText("Switching Protocols");
+            response.setHeader("Connection", "Upgrade");
+            response.setHeader("Upgrade", "websocket");
+            response.setHeader("Sec-WebSocket-Accept",
+                    encoder.encodeToString(sha1Hash.digest(acceptKey)));
+
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+            LOG.log(Level.SEVERE, "Error upgrading to web socket", e);
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error upgrading to web socket", e);
         }
     }
 

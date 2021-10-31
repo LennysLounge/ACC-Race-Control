@@ -7,12 +7,11 @@ package racecontrol.client.extension.broadcastingoverlay.http;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import racecontrol.client.extension.broadcastingoverlay.http.HTTPConnection;
+import racecontrol.client.extension.broadcastingoverlay.websocket.WebSocketServer;
 
 /**
  *
@@ -37,9 +36,14 @@ public class HTTPServer
      * Indicates that this server is running.
      */
     private volatile boolean running = true;
+    /**
+     * A web socket server.
+     */
+    private final WebSocketServer webSocketServer;
 
-    public HTTPServer(int port) {
+    public HTTPServer(int port, WebSocketServer webSocketServer) {
         this.PORT = port;
+        this.webSocketServer = webSocketServer;
     }
 
     @Override
@@ -48,14 +52,14 @@ public class HTTPServer
             LOG.info("Web server started. Listening on port : " + PORT);
 
             serverConnect = new ServerSocket(PORT);
-            serverConnect.setSoTimeout(1000);
+            serverConnect.setSoTimeout(60000);
 
             while (running) {
                 try {
-                    HTTPConnection httpConnection = new HTTPConnection(serverConnect.accept(), null);
+                    HTTPConnection httpConnection = new HTTPConnection(serverConnect.accept(), webSocketServer);
 
                     // create dedicated thread to manage the client connection
-                    Thread thread = new Thread(httpConnection);
+                    Thread thread = new Thread(httpConnection, "HTTP connection");
                     thread.start();
 
                 } catch (SocketTimeoutException e) {
