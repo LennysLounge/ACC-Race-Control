@@ -29,6 +29,7 @@ import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.gui.app.autobroadcast.AutobroadcastController;
+import racecontrol.gui.app.broadcasting.BroadcastingController;
 import racecontrol.gui.app.livetiming.LiveTimingController;
 import racecontrol.gui.app.trackdata.TrackDataController;
 import racecontrol.gui.lpui.LPComponent;
@@ -75,6 +76,10 @@ public class AppController
      */
     private AutobroadcastController autobroadcastController;
     /**
+     * Broadcasting controller.
+     */
+    private BroadcastingController broadcastingController;
+    /**
      * Manages the status panels.
      */
     private StatusPanelManager statusPanelManager;
@@ -119,11 +124,13 @@ public class AppController
         testPanel = new TestPanel();
         statusPanelManager = StatusPanelManager.getInstance();
         statusPanelManager.initialise(appPanel);
+        broadcastingController = new BroadcastingController();
         trackDataController = null; //new TrackDataController();
         autobroadcastController = null; //new AutobroadcastController();
 
         appPanel.liveTimingMenuItem.setClickAction(button -> menuItemClicked(appPanel.liveTimingMenuItem, button));
         appPanel.raceControlMenuItem.setClickAction(button -> menuItemClicked(appPanel.raceControlMenuItem, button));
+        appPanel.broadcastMenuItem.setClickAction(button -> menuItemClicked(appPanel.broadcastMenuItem, button));
         appPanel.autopilotMenuItem.setClickAction(button -> menuItemClicked(appPanel.autopilotMenuItem, button));
         appPanel.debugMenuItem.setClickAction(button -> menuItemClicked(appPanel.debugMenuItem, button));
         appPanel.logMenuItem.setClickAction(button -> menuItemClicked(appPanel.logMenuItem, button));
@@ -195,6 +202,8 @@ public class AppController
             return trackDataController.getPanel();
         } else if (item == appPanel.autopilotMenuItem) {
             return autobroadcastController.getPanel();
+        } else if (item == appPanel.broadcastMenuItem) {
+            return broadcastingController.getPanel();
         }
         return null;
     }

@@ -115,7 +115,7 @@ public class AppPanel
 
         broadcastMenuItem = new MenuItem("Broadcast",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Broadcast.png"));
-        //menu.addMenuItem(broadcastMenuItem);
+        menu.addMenuItem(broadcastMenuItem);
 
         autopilotMenuItem = new MenuItem("Autopilot",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_AutoBroadcast.png"));

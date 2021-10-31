@@ -48,7 +48,7 @@ import racecontrol.client.events.EntryListUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.ReplayEndedEvent;
 import racecontrol.client.events.ReplayStartedEvent;
-import racecontrol.client.extension.autobroadcast.AutobroadcastExtension;
+import racecontrol.client.extension.broadcastingoverlay.BroadcastingOverlayExtension;
 import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
 import racecontrol.client.extension.laptimes.LapTimeExtension;
@@ -149,6 +149,7 @@ public class AccBroadcastingClient {
         extensions.add(new ResultsExtension());
         extensions.add(StatisticsExtension.getInstance());
         extensions.add(TrackDataExtension.getInstance());
+        extensions.add(BroadcastingOverlayExtension.getInstance());
         //extensions.add(AutobroadcastExtension.getInstance());
     }
 
@@ -354,7 +355,7 @@ public class AccBroadcastingClient {
                 cam
         ));
     }
-    
+
     /**
      * Sends a request to change the current camera and the focus.
      *
