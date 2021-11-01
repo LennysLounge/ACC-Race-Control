@@ -4,8 +4,16 @@
         <title>Index</title>
         <meta charset="windows-1252">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script>
+            ws = new WebSocket("ws://localhost:8080/socket");
+            ws.onmessage = function (event) {
+                let div = document.getElementById("content");
+                div.innerHTML = event.data;
+            }
+        </script>
     </head>
+
     <body>
-        <div>This is the index</div>
+        <div id="content" style="font-size: 10em"></div>
     </body>
 </html>

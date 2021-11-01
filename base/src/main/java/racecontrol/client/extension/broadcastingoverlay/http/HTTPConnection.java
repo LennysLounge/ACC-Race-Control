@@ -152,8 +152,6 @@ public class HTTPConnection
 
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             LOG.log(Level.SEVERE, "Error upgrading to web socket", e);
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, "Error upgrading to web socket", e);
         }
     }
 

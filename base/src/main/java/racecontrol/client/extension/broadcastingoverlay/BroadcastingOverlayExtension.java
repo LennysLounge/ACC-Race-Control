@@ -82,6 +82,7 @@ public class BroadcastingOverlayExtension
         if (isRunning) {
             LOG.info("Stop broadcasting overlay");
             webServer.stopServer();
+            webSocketServer.stopServer();
 
             isRunning = false;
         }
