@@ -49,10 +49,11 @@ public class HTTPConnection
 
     @Override
     public void run() {
-        LOG.info("Connecton opened. (" + new Date() + ")");
         try {
             HTTPRequest request = new HTTPRequest();
             request.read(socket.getInputStream());
+
+            LOG.info("HTTP request for " + request.getTarget());
 
             HTTPResponse response = new HTTPResponse();
             response.setVersion("HTTP/1.1");
@@ -68,7 +69,6 @@ public class HTTPConnection
                 webSocketCallback.requestWebSocket(socket);
             } else {
                 socket.close();
-                LOG.info("Connecton finished");
             }
         } catch (IOException ioe) {
             LOG.info("Server error : " + ioe);
@@ -85,7 +85,7 @@ public class HTTPConnection
                 webSocketHandshake(request, response);
                 isWebSocket = true;
             } else {
-                respondError(404, "File not found", response);
+                serveFile(request.getTarget(), response);
             }
         } else {
             respondError(501, "Not implemented", response);
@@ -102,6 +102,10 @@ public class HTTPConnection
     private String getContentType(String fileRequested) {
         if (fileRequested.endsWith(".htm") || fileRequested.endsWith(".html")) {
             return "text/html";
+        } else if (fileRequested.endsWith(".css")) {
+            return "text/css";
+        } else if (fileRequested.endsWith(".js")) {
+            return "text/javascript";
         } else {
             return "text/plain";
         }
@@ -128,6 +132,25 @@ public class HTTPConnection
             response.setHeader("Content-length", String.valueOf(fileLength));
             response.setBody(fileData);
         } catch (FileNotFoundException e) {
+            respondError(404, "File not found", response);
+        } catch (IOException e) {
+            respondError(500, "Internal Server Error", response);
+            LOG.log(Level.WARNING, "Error reading file", e);
+        }
+    }
+
+    private void serveFile(String target, HTTPResponse response) {
+        File file = new File(WEB_ROOT, target);
+        try {
+            byte[] fileData = readFileData(file);
+            int fileLength = fileData.length;
+            String content = getContentType(file.getAbsolutePath());
+
+            response.setHeader("Content-type", content);
+            response.setHeader("Content-length", String.valueOf(fileLength));
+            response.setBody(fileData);
+        } catch (FileNotFoundException e) {
+            LOG.info("404 " + target + " not found");
             respondError(404, "File not found", response);
         } catch (IOException e) {
             respondError(500, "Internal Server Error", response);

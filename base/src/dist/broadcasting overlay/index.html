@@ -4,16 +4,22 @@
         <title>Index</title>
         <meta charset="windows-1252">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script>
-            ws = new WebSocket("ws://localhost:8080/socket");
-            ws.onmessage = function (event) {
-                let div = document.getElementById("content");
-                div.innerHTML = event.data;
-            }
-        </script>
+        <link rel="stylesheet" href="style.css">
+        <script src="index.js"></script>
     </head>
 
     <body>
-        <div id="content" style="font-size: 10em"></div>
+        <div class="clockPosition">
+            <div class="clock">
+                <div class="clockBackground"></div>
+                <div class="clockSessionFlag1"></div>
+                <div class="clockSessionFlag2"></div>
+                <div class="clockTimeRemaining">12:19</div>
+                <div class="clockLocalTime">11:02</div>
+                <div class="clockLocalTimeAMPM">AM</div>
+                <div class="clockSessionName">QUALIFYING</div>
+                
+            </div>
+        </div>
     </body>
 </html>

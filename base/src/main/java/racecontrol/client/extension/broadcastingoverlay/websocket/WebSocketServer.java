@@ -33,6 +33,10 @@ public class WebSocketServer
      * The thread the server is running on.
      */
     private Thread serverThread;
+    /**
+     * List of messages to send to sockets.
+     */
+    private final List<String> messages = new ArrayList<>();
 
     @Override
     public void run() {
@@ -41,19 +45,20 @@ public class WebSocketServer
         while (running) {
             // update connections.
 
-            List<WebSocketConnection> connectionsCopy = new ArrayList<>(connections);
-            for (var connection : connectionsCopy) {
-                connection.update();
+            synchronized (messages) {
+                List<WebSocketConnection> connectionsCopy = new ArrayList<>(connections);
+                for (var connection : connectionsCopy) {
+                    connection.update();
 
-                connection.sendMessage(String.valueOf(System.currentTimeMillis()));
-                /*
-                while (connection.hasMessage()) {
-                    String message = connection.getNextMessage();
-                    LOG.info("message: " + message);
-                    connection.sendMessage(message);
+                    if (!messages.isEmpty()) {
+                        for (String msg : messages) {
+                            connection.sendMessage(msg);
+                        }
+                    }
                 }
-                 */
             }
+
+            messages.clear();
 
             try {
                 Thread.sleep(100);
@@ -81,6 +86,12 @@ public class WebSocketServer
     public void closeConnection(WebSocketConnection connection) {
         LOG.info("close connection");
         connections.remove(connection);
+    }
+
+    public void sendMessage(String message) {
+        synchronized (messages) {
+            messages.add(message);
+        }
     }
 
     public void stopServer() {

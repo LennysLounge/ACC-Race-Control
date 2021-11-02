@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600&display=swap');
+
+body{
+    margin:0;
+    background-image: url("acc4.png");
+}
+/*
+ * Styles the clock element.
+ */
+.clockPosition{
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    text-align: center;
+}
+.clock{
+    position:relative;
+    display: inline-flex;
+    height: 37px;
+    background-color:rgba(0,0,0,0.95);
+    color: #fff;
+    font-family: "heebo", "sans-serif";
+}
+.clock *{
+    display: inline-block;
+    position:relative;
+}
+.clock:before, .clock:after{
+    position:absolute;
+    width:37px;
+    height:37px;
+    content:"";
+    background-image: url("clock_bg_end.png");
+    background-repeat: no-repeat;
+    background-size:37px 37px;
+    opacity:0.95;
+}
+.clock:before{
+    left:-37px;
+    transform: scaleX(-1);
+}
+.clock:after{
+    right:-37px;
+}
+.clockSessionName{
+    top:9px;
+    order:3;
+    font-size: 16px;
+    font-weight: 300;
+    transform: scale(1,1.15);
+}
+.clockLocalTimeAMPM{
+    margin-left:5px;
+    top:9px;
+    order:6;
+    font-size: 16px;
+    font-weight: 300;
+    transform: scale(1,1.15);
+}
+.clockTimeRemaining{
+    top:3px;
+    order:1;
+    font-size: 26px;
+    font-weight: 500;
+    transform: scale(1,1.06);
+}
+.clockLocalTime{
+    top:3px;
+    order:5;
+    font-size: 26px;
+    font-weight: 500;
+    transform: scale(1,1.06);
+}
+.clockSessionFlag1, .clockSessionFlag2{
+    top:4px;
+    width:8px;
+    height:29px;
+    background:#40D13E;
+    margin: 0 7px 0 7px;
+}
+.clockSessionFlag1{
+    order:2;
+}
+.clockSessionFlag2{
+    order:4;
+}
+.clockBackground{
+    display:none;
+}
