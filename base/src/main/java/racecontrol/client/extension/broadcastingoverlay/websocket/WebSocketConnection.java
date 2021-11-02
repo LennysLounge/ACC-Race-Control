@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -95,27 +96,33 @@ public class WebSocketConnection {
     }
 
     public void sendMessage(String message) {
+        if(socket.isClosed()){
+            return;
+        }
         try {
-            int lengthByte = message.length();
+            byte[] msgBytes = message.getBytes(StandardCharsets.UTF_8);
+            
+            int lengthByte = msgBytes.length;
             int lengthBytes = 0;
             if (lengthByte >= 126) {
                 lengthByte = 126;
                 lengthBytes = 2;
             }
 
-            byte[] payload = new byte[2 + lengthBytes + message.length()];
+            byte[] payload = new byte[2 + lengthBytes + msgBytes.length];
             payload[0] = (byte) 0x81;
             payload[1] = (byte) (lengthByte & 0x7f);
             if (lengthBytes == 2) {
-                System.arraycopy(ByteBuffer.allocate(4).putInt(message.length()).array(), 2,
+                System.arraycopy(ByteBuffer.allocate(4).putInt(msgBytes.length).array(), 2,
                         payload, 2, 2);
             }
-            System.arraycopy(message.getBytes(), 0, payload, 2 + lengthBytes, message.length());
+            System.arraycopy(msgBytes, 0, payload, 2 + lengthBytes, msgBytes.length);
 
             socket.getOutputStream().write(payload);
             socket.getOutputStream().flush();
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "Error accessing output from socket.", e);
+            closeInternal();
         }
     }
 
