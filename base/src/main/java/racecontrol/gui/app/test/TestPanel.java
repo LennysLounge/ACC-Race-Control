@@ -5,6 +5,7 @@
  */
 package racecontrol.gui.app.test;
 
+import java.awt.Font;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
@@ -13,6 +14,7 @@ import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
+import static racecontrol.gui.LookAndFeel.TEXT_SIZE;
 import racecontrol.gui.app.statuspanel.StatusPanelManager;
 import racecontrol.gui.lpui.LPAnimationTask;
 import racecontrol.gui.lpui.LPButton;
@@ -70,7 +72,7 @@ public class TestPanel extends LPContainer {
 
         collapsePanel = new LPCollapsablePanel("Collapse");
         collapsePanel.setSize(200, 200);
-        collapsePanel.setPosition(10, 500);
+        collapsePanel.setPosition(10, 600);
         BluePanel panel = new BluePanel();
         collapsePanel.addComponent(panel);
         panel.setSize(200, 200 - LINE_HEIGHT);
@@ -92,6 +94,7 @@ public class TestPanel extends LPContainer {
                 } else {
                     applet.textFont(LookAndFeel.fontRegular());
                 }
+                applet.textSize(10 + j + 3);
                 applet.fill(COLOR_WHITE);
                 applet.textAlign(CENTER, CENTER);
                 applet.noStroke();
@@ -100,7 +103,10 @@ public class TestPanel extends LPContainer {
         }
         applet.fill(COLOR_WHITE);
         applet.textAlign(LEFT, CENTER);
+        applet.textFont(LookAndFeel.fontMedium());
+        applet.textSize(TEXT_SIZE);
         applet.textFont(LookAndFeel.fontRegular());
+        applet.textSize(TEXT_SIZE);
 
         PFont regular = LookAndFeel.fontRegular();
         PFont medium = LookAndFeel.fontMedium();
@@ -108,16 +114,31 @@ public class TestPanel extends LPContainer {
         int i = 0;
         applet.text("regular: " + regular.toString(), 10, 60 + LINE_HEIGHT * i++);
         applet.text("regular: " + regular.getName(), 10, 60 + LINE_HEIGHT * i++);
-        applet.text("regular: " + regular.getPostScriptName(), 10, 60 + LINE_HEIGHT * i++);
-        applet.text("regular: " + regular.getNative().toString(), 10, 60 + LINE_HEIGHT * i++);
-        applet.text("regular: " + regular.getNative().hashCode(), 10, 60 + LINE_HEIGHT * i++);
-        i++;
+        applet.text("regular native: " + regular.getNative().toString(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("regular native: " + regular.getNative().hashCode(), 10, 60 + LINE_HEIGHT * i++);
 
+        /*
+        i++;
+        
         applet.text("medium: " + medium.toString(), 10, 60 + LINE_HEIGHT * i++);
         applet.text("medium: " + medium.getName(), 10, 60 + LINE_HEIGHT * i++);
-        applet.text("medium: " + medium.getPostScriptName(), 10, 60 + LINE_HEIGHT * i++);
-        applet.text("medium: " + medium.getNative().toString(), 10, 60 + LINE_HEIGHT * i++);
-        applet.text("medium: " + medium.getNative().hashCode(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("medium native: " + medium.getNative().toString(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("medium native: " + medium.getNative().hashCode(), 10, 60 + LINE_HEIGHT * i++);
+         */
+        i++;
+        applet.textSize(21);
+
+        applet.text("regular: " + regular.toString(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("regular: " + regular.getName(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("regular native: " + regular.getNative().toString(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("regular native: " + regular.getNative().hashCode(), 10, 60 + LINE_HEIGHT * i++);
+        i++;
+        applet.textSize(20);
+
+        applet.text("regular: " + regular.toString(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("regular: " + regular.getName(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("regular native: " + regular.getNative().toString(), 10, 60 + LINE_HEIGHT * i++);
+        applet.text("regular native: " + regular.getNative().hashCode(), 10, 60 + LINE_HEIGHT * i++);
 
         updateComponents();
     }
