@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import racecontrol.client.AccBroadcastingExtension;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.events.CarConnectedEvent;
 import racecontrol.client.extension.statistics.processors.DataProcessor;
@@ -25,6 +24,7 @@ import racecontrol.client.extension.statistics.processors.StintTimeProcessor;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.appextension.ClientExtension;
 
 /**
  * Gathers data and statistics for the cars.
@@ -32,7 +32,7 @@ import racecontrol.eventbus.EventListener;
  * @author Leonard
  */
 public class StatisticsExtension
-        implements EventListener, AccBroadcastingExtension {
+        implements EventListener, ClientExtension {
 
     /**
      * Singelton instance.

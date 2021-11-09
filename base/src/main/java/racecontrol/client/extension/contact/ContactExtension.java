@@ -16,9 +16,9 @@ import racecontrol.utility.TimeUtils;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.AccBroadcastingClient;
 import java.util.logging.Logger;
-import racecontrol.client.AccBroadcastingExtension;
 import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
+import racecontrol.appextension.ClientExtension;
 
 /**
  * This extension listens for contact between cars during a session and creates
@@ -27,7 +27,7 @@ import racecontrol.logging.UILogger;
  * @author Leonard
  */
 public class ContactExtension
-        implements EventListener, AccBroadcastingExtension {
+        implements EventListener, ClientExtension {
 
     /**
      * Singelton instance.

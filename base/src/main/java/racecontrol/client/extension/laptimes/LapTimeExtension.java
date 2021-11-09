@@ -29,17 +29,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import racecontrol.client.AccBroadcastingExtension;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
+import racecontrol.appextension.ClientExtension;
 
 /**
  *
  * @author Leonard
  */
 public class LapTimeExtension
-        implements EventListener, AccBroadcastingExtension {
+        implements EventListener, ClientExtension {
 
     /**
      * This classes logger.

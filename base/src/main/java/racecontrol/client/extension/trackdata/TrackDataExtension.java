@@ -15,19 +15,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import racecontrol.client.AccBroadcastingExtension;
 import racecontrol.client.data.TrackInfo;
 import racecontrol.client.events.TrackInfoEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.appextension.ClientExtension;
 
 /**
  *
  * @author Leonard
  */
 public class TrackDataExtension
-        implements EventListener, AccBroadcastingExtension {
+        implements EventListener, ClientExtension {
 
     private static final Logger LOG = Logger.getLogger(TrackDataExtension.class.getName());
 

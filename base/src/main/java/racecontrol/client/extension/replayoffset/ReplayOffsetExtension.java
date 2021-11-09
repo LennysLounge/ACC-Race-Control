@@ -15,8 +15,8 @@ import racecontrol.client.data.SessionInfo;
 import racecontrol.client.events.SessionChangedEvent;
 import java.util.logging.Logger;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.AccBroadcastingExtension;
 import racecontrol.client.events.ConnectionOpenedEvent;
+import racecontrol.appextension.ClientExtension;
 
 /**
  * Calculates the replay start time and provides methods to find the replay time
@@ -25,7 +25,7 @@ import racecontrol.client.events.ConnectionOpenedEvent;
  * @author Leonard
  */
 public class ReplayOffsetExtension
-        implements EventListener, AccBroadcastingExtension {
+        implements EventListener, ClientExtension {
 
     /**
      * Explaination of how this works:

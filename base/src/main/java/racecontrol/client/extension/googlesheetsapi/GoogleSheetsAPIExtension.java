@@ -35,7 +35,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
-import racecontrol.client.AccBroadcastingExtension;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
 import static racecontrol.client.extension.statistics.CarProperties.LAP_COUNT;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_FINISHED;
@@ -47,13 +46,14 @@ import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VSCViolationE
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
+import racecontrol.appextension.ClientExtension;
 
 /**
  *
  * @author Leonard
  */
 public class GoogleSheetsAPIExtension
-        implements EventListener, AccBroadcastingExtension {
+        implements EventListener, ClientExtension {
 
     /**
      * Singelton instance.

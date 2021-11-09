@@ -21,9 +21,14 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.SplashScreen;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.ServiceLoader;
 import java.util.concurrent.TimeUnit;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import racecontrol.appextension.AppExtensionModule;
 
 /**
  *
@@ -36,11 +41,15 @@ public class Main {
      */
     private static final Logger LOG = Logger.getLogger(Main.class.getName());
 
+    private static final List<AppExtensionModule> extensionModules = new ArrayList<>();
+
     public static void main(String[] args) throws InterruptedException {
         Thread.setDefaultUncaughtExceptionHandler(new UncoughtExceptionHandler());
         setupLogging();
         LOG.info("Version: " + Version.VERSION);
         PersistantConfig.init();
+
+        loadModules();
 
         setupSplash();
         TimeUnit.SECONDS.sleep(2);
@@ -99,6 +108,17 @@ public class Main {
             LOG.log(Level.SEVERE, "Uncought exception:", e);
         }
 
+    }
+
+    private static void loadModules() {
+        ServiceLoader.load(AppExtensionModule.class).forEach(module -> {
+            LOG.info("Loading extension " + module.getName());
+            extensionModules.add(module);
+        });
+    }
+
+    public static List<AppExtensionModule> getModules() {
+        return Collections.unmodifiableList(extensionModules);
     }
 
 }

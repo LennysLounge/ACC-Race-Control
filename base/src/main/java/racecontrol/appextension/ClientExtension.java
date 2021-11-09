@@ -3,12 +3,12 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.client;
+package racecontrol.appextension;
 
 /**
  *
  * @author Leonard
  */
-public interface AccBroadcastingExtension {
+public interface ClientExtension {
     
 }

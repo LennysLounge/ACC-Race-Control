@@ -11,19 +11,19 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.AccBroadcastingExtension;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.appextension.ClientExtension;
 
 /**
  *
  * @author Leonard
  */
 public class AutobroadcastExtension
-        implements EventListener, AccBroadcastingExtension {
+        implements EventListener, ClientExtension {
 
     /**
      * Singelton instance.

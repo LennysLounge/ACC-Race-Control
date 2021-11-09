@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import racecontrol.client.AccBroadcastingExtension;
 import racecontrol.gui.app.racecontrol.RaceControlController;
 import racecontrol.gui.app.racecontrol.entries.RaceEventEntry;
 import racecontrol.client.data.SessionId;
@@ -32,13 +31,14 @@ import racecontrol.eventbus.EventListener;
 import racecontrol.client.extension.laptimes.LapCompletedEvent;
 import racecontrol.client.extension.results.ResultsExtension;
 import racecontrol.utility.TimeUtils;
+import racecontrol.appextension.ClientExtension;
 
 /**
  *
  * @author Leonard
  */
 public class RaceReportController
-        implements EventListener, AccBroadcastingExtension {
+        implements EventListener, ClientExtension {
 
     /**
      * Singelton instance.
