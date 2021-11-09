@@ -21,8 +21,6 @@ public class DetachedPlaceholderPanel
 
     private String text = "hm";
     
-
-    
     @Override
     public void draw(PApplet applet) {
         applet.fill(COLOR_DARK_GRAY);

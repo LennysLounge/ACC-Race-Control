@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import racecontrol.eventbus.EventListener;
-import racecontrol.appextension.ClientExtension;
+import racecontrol.client.ClientExtension;
 
 /**
  *

@@ -32,6 +32,10 @@ import racecontrol.client.extension.racereport.RaceReportController;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.extension.replayoffset.ReplayStartKnownEvent;
 import racecontrol.client.extension.replayoffset.ReplayStartRequiresSearchEvent;
+import static racecontrol.gui.RaceControlApplet.getApplet;
+import racecontrol.gui.app.Menu;
+import racecontrol.gui.app.Menu.MenuItem;
+import racecontrol.gui.app.PageController;
 import racecontrol.logging.UILogger;
 
 /**
@@ -39,7 +43,7 @@ import racecontrol.logging.UILogger;
  * @author Leonard
  */
 public class RaceControlController
-        implements EventListener {
+        implements EventListener, PageController {
 
     /**
      * Singelton instance.
@@ -57,22 +61,27 @@ public class RaceControlController
     private ReplayOffsetExtension replayOffsetExtension;
 
     private RaceReportController raceReportController;
-    
+
     private GoogleSheetsAPIConfigurationController googleSheetsConfigController;
 
     private VirtualSafetyCarConfigController virtualSafetyCarController;
 
+    private final Menu.MenuItem menuItem;
+
     public static RaceControlController getInstance() {
         if (instance == null) {
             instance = new RaceControlController();
+            instance.initialise();
         }
         return instance;
     }
 
     private RaceControlController() {
+        menuItem = new MenuItem("Race Control",
+                getApplet().loadResourceAsPImage("/images/RC_Menu_Control.png"));
     }
 
-    public void initialise() {
+    private void initialise() {
         EventBus.register(this);
         client = AccBroadcastingClient.getClient();
         panel = new RaceControlPanel();
@@ -100,8 +109,14 @@ public class RaceControlController
         panel.virtualSafetyCarButton.setAction(() -> virtualSafetyCarController.openSettingsPanel());
     }
 
+    @Override
     public RaceControlPanel getPanel() {
         return panel;
+    }
+
+    @Override
+    public Menu.MenuItem getMenuItem() {
+        return menuItem;
     }
 
     @Override

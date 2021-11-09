@@ -6,18 +6,13 @@
 package racecontrol.gui.app;
 
 import racecontrol.gui.app.statuspanel.StatusPanelManager;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import javax.imageio.ImageIO;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import processing.core.PGraphics;
-import processing.core.PImage;
-import racecontrol.gui.RaceControlApplet;
-import racecontrol.gui.app.Menu.MenuItem;
+import racecontrol.Main;
 import racecontrol.gui.app.test.TestPanel;
 import racecontrol.gui.app.logging.LoggingPanel;
 import racecontrol.gui.app.racecontrol.RaceControlController;
@@ -28,9 +23,7 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
-import racecontrol.gui.app.autobroadcast.AutobroadcastController;
 import racecontrol.gui.app.livetiming.LiveTimingController;
-import racecontrol.gui.app.trackdata.TrackDataController;
 import racecontrol.gui.lpui.LPComponent;
 import racecontrol.gui.lpui.LPContainer;
 
@@ -51,37 +44,21 @@ public class AppController
      */
     private AppPanel appPanel;
     /**
-     * Settings panel.
+     * Settings page.
      */
-    private SettingsPanel settingsPanel;
+    private SettingsPage settingsPage;
     /**
-     * Logging panel.
-     */
-    private LoggingPanel loggingPanel;
-    /**
-     * Live timing component controller.
+     * Live timing page controller.
      */
     private LiveTimingController liveTimingController;
-
-    private TestPanel testPanel;
-
-    private RaceControlController raceControlController;
     /**
-     * Track data controller.
+     * Placeholder panel for a detached page.
      */
-    private TrackDataController trackDataController;
-    /**
-     * Autobroadcast controller.
-     */
-    private AutobroadcastController autobroadcastController;
+    private DetachedPlaceholderPanel detachedPlaceholderPanel;
     /**
      * Manages the status panels.
      */
     private StatusPanelManager statusPanelManager;
-    /**
-     * Placeholder panel for a detached panel.
-     */
-    private DetachedPlaceholderPanel detachedPlaceholderPanel;
     /**
      * Is initialised.
      */
@@ -94,6 +71,7 @@ public class AppController
     public static AppController getInstance() {
         if (instance == null) {
             instance = new AppController();
+            instance.initialise();
         }
         return instance;
     }
@@ -101,7 +79,7 @@ public class AppController
     private AppController() {
     }
 
-    public void initialise() {
+    private void initialise() {
         if (initialised) {
             return;
         }
@@ -110,38 +88,49 @@ public class AppController
         EventBus.register(this);
 
         appPanel = new AppPanel();
-        detachedPlaceholderPanel = new DetachedPlaceholderPanel();
-        settingsPanel = new SettingsPanel();
-        loggingPanel = new LoggingPanel();
+        settingsPage = new SettingsPage();
         liveTimingController = new LiveTimingController();
-        raceControlController = RaceControlController.getInstance();
-        raceControlController.initialise();
-        testPanel = new TestPanel();
+        detachedPlaceholderPanel = new DetachedPlaceholderPanel();
+
         statusPanelManager = StatusPanelManager.getInstance();
-        statusPanelManager.initialise(appPanel);
-        trackDataController = null; //new TrackDataController();
-        autobroadcastController = null; //new AutobroadcastController();
+        statusPanelManager.setTargetPanel(appPanel);
 
-        appPanel.liveTimingMenuItem.setClickAction(button -> menuItemClicked(appPanel.liveTimingMenuItem, button));
-        appPanel.raceControlMenuItem.setClickAction(button -> menuItemClicked(appPanel.raceControlMenuItem, button));
-        appPanel.broadcastMenuItem.setClickAction(button -> menuItemClicked(appPanel.broadcastMenuItem, button));
-        appPanel.autopilotMenuItem.setClickAction(button -> menuItemClicked(appPanel.autopilotMenuItem, button));
-        appPanel.debugMenuItem.setClickAction(button -> menuItemClicked(appPanel.debugMenuItem, button));
-        appPanel.logMenuItem.setClickAction(button -> menuItemClicked(appPanel.logMenuItem, button));
-        appPanel.trackDataItem.setClickAction(button -> menuItemClicked(appPanel.trackDataItem, button));
+        setupMenu();
+    }
 
-        appPanel.settingsMenuItem.setClickAction(button -> menuItemClicked(appPanel.settingsMenuItem, button));
+    private void setupMenu() {
+        List<PageController> pageControllers = new ArrayList<>();
+        pageControllers.add(liveTimingController);
+        pageControllers.add(RaceControlController.getInstance());
+        pageControllers.add(new LoggingPanel());
+        pageControllers.add(new TestPanel());
+        
+        // Add page controllers from extension modules.
+        Main.getModules().forEach(module -> {
+            var page = module.getPageController();
+            if(page != null){
+                pageControllers.add(page);
+            }
+        });
 
-        appPanel.setActivePage(settingsPanel);
-        appPanel.menu.setSelectedMenuItem(appPanel.settingsMenuItem);
+        // set menu items
+        for (var page : pageControllers) {
+            appPanel.menu.addMenuItem(page.getMenuItem());
+            page.getMenuItem().setClickAction(button -> menuItemClicked(page, button));
+        }
+        appPanel.menu.addMenuItemBottom(settingsPage.getMenuItem());
+        settingsPage.getMenuItem().setClickAction(b -> menuItemClicked(settingsPage, b));
+
+        appPanel.setActivePage(settingsPage);
+        appPanel.menu.setSelectedMenuItem(settingsPage.getMenuItem());
     }
 
     public LPComponent getGUIComponent() {
         return appPanel;
     }
 
-    private void menuItemClicked(MenuItem item, int button) {
-        LPContainer panel = getPanelForMenuItem(item);
+    private void menuItemClicked(PageController page, int button) {
+        LPContainer panel = page.getPanel();
         if (panel != null) {
             if (button == LEFT) {
                 if (windowPanels.containsKey(panel)) {
@@ -156,48 +145,29 @@ public class AppController
             }
 
             if (button == CENTER
-                    && panel != settingsPanel
-                    && appPanel.menu.getSelectedItem() == item) {
-                detachPanel(panel);
+                    && panel != settingsPage
+                    && appPanel.menu.getSelectedItem() == page.getMenuItem()) {
+                detachPage(page);
             }
         }
     }
 
-    private void detachPanel(LPContainer panel) {
-        detachedPlaceholderPanel.setPanelName(panel.getName());
+    private void detachPage(PageController page) {
+        detachedPlaceholderPanel.setPanelName(page.getPanel().getName());
         detachedPlaceholderPanel.invalidate();
-        appPanel.removeComponent(panel);
+        appPanel.removeComponent(page.getPanel());
         appPanel.setActivePage(detachedPlaceholderPanel);
         appPanel.updateComponents();
         appPanel.invalidate();
 
-        PanelWindowApplet applet = launchNewWindow(panel, true);
+        PanelWindowApplet applet = launchNewWindow(page.getPanel(), true);
         applet.addCloseAction(() -> {
-            if (getPanelForMenuItem(appPanel.menu.getSelectedItem()) == panel) {
-                appPanel.setActivePage(panel);
+            if (appPanel.menu.getSelectedItem() == page.getMenuItem()) {
+                appPanel.setActivePage(page.getPanel());
                 appPanel.updateComponents();
                 appPanel.invalidate();
             }
         });
-    }
-
-    private LPContainer getPanelForMenuItem(MenuItem item) {
-        if (item == appPanel.liveTimingMenuItem) {
-            return liveTimingController.getPanel();
-        } else if (item == appPanel.raceControlMenuItem) {
-            return raceControlController.getPanel();
-        } else if (item == appPanel.debugMenuItem) {
-            return testPanel;
-        } else if (item == appPanel.logMenuItem) {
-            return loggingPanel;
-        } else if (item == appPanel.settingsMenuItem) {
-            return settingsPanel;
-        } else if (item == appPanel.trackDataItem) {
-            return trackDataController.getPanel();
-        } else if (item == appPanel.autopilotMenuItem) {
-            return autobroadcastController.getPanel();
-        }
-        return null;
     }
 
     @Override
@@ -212,7 +182,7 @@ public class AppController
         } else if (e instanceof ConnectionClosedEvent) {
             ConnectionClosedEvent event = (ConnectionClosedEvent) e;
             if (event.getExitState() == AccBroadcastingClient.ExitState.NORMAL) {
-                appPanel.setActivePage(settingsPanel);
+                appPanel.setActivePage(settingsPage);
                 appPanel.updateComponents();
             } else if (event.getExitState() == AccBroadcastingClient.ExitState.TIMEOUT) {
                 statusPanelManager.addStatusPanel(new ConnectionTimeoutStatusPanel());
@@ -245,18 +215,4 @@ public class AppController
         return windowPanels.get(panel);
     }
 
-    private PImage loadResourceAsPImage(String resource) {
-        try {
-            BufferedImage bi = ImageIO.read(RaceControlApplet.class.getResourceAsStream(resource));
-            PGraphics g = LPComponent.getStaticApplet().createGraphics(bi.getWidth(), bi.getHeight());
-            g.beginDraw();
-            Graphics2D g2d = (Graphics2D) g.getNative();
-            g2d.drawImage(bi, 0, 0, bi.getWidth(), bi.getHeight(), null);
-            g.endDraw();
-            PImage b = g.copy();
-            return b;
-        } catch (IOException ex) {
-            return null;
-        }
-    }
 }

@@ -6,7 +6,11 @@
 package racecontrol.gui.app.logging;
 
 import processing.core.PApplet;
+import racecontrol.gui.CustomPApplet;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
+import racecontrol.gui.app.Menu;
+import racecontrol.gui.app.Menu.MenuItem;
+import racecontrol.gui.app.PageController;
 import racecontrol.logging.LogMessage;
 import racecontrol.logging.LoggerListener;
 import racecontrol.logging.UILogger;
@@ -19,7 +23,7 @@ import racecontrol.gui.lpui.table.LPTable;
  */
 public class LoggingPanel
         extends LPContainer
-        implements LoggerListener {
+        implements LoggerListener, PageController {
 
     /**
      * The table that display the messages.
@@ -31,12 +35,17 @@ public class LoggingPanel
      */
     private final LoggingTableModel model = new LoggingTableModel();
 
+    private final MenuItem menuItem;
+
     public LoggingPanel() {
         setName("Logging");
 
         table.setTableModel(model);
         addComponent(table);
         UILogger.register(this);
+
+        this.menuItem = new MenuItem("Log",
+                ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_LOG.png"));
     }
 
     @Override
@@ -55,5 +64,15 @@ public class LoggingPanel
     public void messageLogged(String message) {
         model.addMessage(new LogMessage(message));
         invalidate();
+    }
+
+    @Override
+    public LPContainer getPanel() {
+        return this;
+    }
+
+    @Override
+    public Menu.MenuItem getMenuItem() {
+        return menuItem;
     }
 }

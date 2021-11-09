@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.appextension;
+package racecontrol.client;
 
 /**
  *

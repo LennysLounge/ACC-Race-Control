@@ -46,7 +46,7 @@ import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VSCViolationE
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
-import racecontrol.appextension.ClientExtension;
+import racecontrol.client.ClientExtension;
 
 /**
  *

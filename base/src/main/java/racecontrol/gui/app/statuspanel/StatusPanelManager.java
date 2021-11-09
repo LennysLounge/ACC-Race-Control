@@ -62,7 +62,7 @@ public class StatusPanelManager
         replayPlayingStatusPanel = new ReplayPlayingStatusPanel();
     }
 
-    public void initialise(AppPanel panel) {
+    public void setTargetPanel(AppPanel panel) {
         this.panel = panel;
         initialised = true;
     }

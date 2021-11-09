@@ -12,7 +12,10 @@ import static racecontrol.client.data.enums.SessionType.RACE;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventListener;
+import static racecontrol.gui.RaceControlApplet.getApplet;
 import racecontrol.gui.app.AppController;
+import racecontrol.gui.app.Menu.MenuItem;
+import racecontrol.gui.app.PageController;
 import racecontrol.gui.app.PanelWindowApplet;
 import racecontrol.gui.app.livetiming.broadcastcontrol.BroadcastingController;
 import racecontrol.gui.app.livetiming.timing.LiveTimingTableController;
@@ -23,7 +26,7 @@ import racecontrol.gui.lpui.LPContainer;
  * @author Leonard
  */
 public class LiveTimingController
-        implements EventListener {
+        implements EventListener, PageController {
 
     private final LiveTimingPanel panel;
 
@@ -40,7 +43,11 @@ public class LiveTimingController
      */
     private boolean autoSwitchTableModel = true;
 
+    private final MenuItem menuItem;
+
     public LiveTimingController() {
+        menuItem = new MenuItem("Live Timing",
+                getApplet().loadResourceAsPImage("/images/RC_Menu_LiveTiming.png"));
         appController = AppController.getInstance();
         liveTimingTableController = new LiveTimingTableController();
         broadcastingController = new BroadcastingController();
@@ -55,8 +62,14 @@ public class LiveTimingController
         updateViewLabel();
     }
 
+    @Override
     public LPContainer getPanel() {
         return panel;
+    }
+
+    @Override
+    public MenuItem getMenuItem() {
+        return menuItem;
     }
 
     private void detachLiveTiming() {

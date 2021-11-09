@@ -23,6 +23,10 @@ import racecontrol.gui.lpui.LPComponent;
 public class RaceControlApplet extends CustomPApplet {
 
     /**
+     * Singelton instance.
+     */
+    private static RaceControlApplet instance;
+    /**
      * This classes logger.
      */
     private static final Logger LOG = Logger.getLogger(RaceControlApplet.class.getName());
@@ -44,9 +48,18 @@ public class RaceControlApplet extends CustomPApplet {
     private AppController appControler;
 
     /**
-     * Creates a new instance of this object.
+     * Gets an instance of this object.
+     *
+     * @return The instance of this object.
      */
-    public RaceControlApplet() {
+    public static RaceControlApplet getApplet() {
+        if (instance == null) {
+            instance = new RaceControlApplet();
+        }
+        return instance;
+    }
+
+    private RaceControlApplet() {
     }
 
     @Override
@@ -74,7 +87,6 @@ public class RaceControlApplet extends CustomPApplet {
         hotkey = new Hotkeys();
 
         appControler = AppController.getInstance();
-        appControler.initialise();
         setComponent(appControler.getGUIComponent());
     }
 

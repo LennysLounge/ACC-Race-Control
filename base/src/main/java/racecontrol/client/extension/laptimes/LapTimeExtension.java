@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
-import racecontrol.appextension.ClientExtension;
+import racecontrol.client.ClientExtension;
 
 /**
  *

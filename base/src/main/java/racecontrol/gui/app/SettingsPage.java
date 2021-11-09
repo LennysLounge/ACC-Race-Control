@@ -27,6 +27,8 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
+import racecontrol.gui.CustomPApplet;
+import racecontrol.gui.app.Menu.MenuItem;
 import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_INTERVAL;
 import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_IP;
 import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_PASSWORD;
@@ -36,14 +38,14 @@ import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_PORT;
  *
  * @author Leonard
  */
-public class SettingsPanel
+public class SettingsPage
         extends LPContainer
-        implements EventListener {
+        implements EventListener, PageController {
 
     /**
      * This classes logger.
      */
-    private static final Logger LOG = Logger.getLogger(SettingsPanel.class.getName());
+    private static final Logger LOG = Logger.getLogger(SettingsPage.class.getName());
     /**
      * Client for game connection.
      */
@@ -60,12 +62,15 @@ public class SettingsPanel
     private final LPTextField updateIntervalTextField = new LPTextField();
     private final LPButton connectButton = new LPButton("Connect");
 
-
     private final LPLabel versionLabel = new LPLabel("Version: " + Version.VERSION);
 
-    public SettingsPanel() {
+    private final MenuItem menuItem;
+
+    public SettingsPage() {
         setName("CONFIGURATION");
         this.client = AccBroadcastingClient.getClient();
+        this.menuItem = new MenuItem("Settings",
+                ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Settings.png"));
 
         EventBus.register(this);
 
@@ -234,6 +239,16 @@ public class SettingsPanel
         connectButton.setPosition(20, lh * 5);
 
         versionLabel.setPosition(20, getHeight() - LINE_HEIGHT);
+    }
+
+    @Override
+    public LPContainer getPanel() {
+        return this;
+    }
+
+    @Override
+    public Menu.MenuItem getMenuItem() {
+        return menuItem;
     }
 
 }

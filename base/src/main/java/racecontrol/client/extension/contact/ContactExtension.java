@@ -18,7 +18,7 @@ import racecontrol.client.AccBroadcastingClient;
 import java.util.logging.Logger;
 import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
-import racecontrol.appextension.ClientExtension;
+import racecontrol.client.ClientExtension;
 
 /**
  * This extension listens for contact between cars during a session and creates

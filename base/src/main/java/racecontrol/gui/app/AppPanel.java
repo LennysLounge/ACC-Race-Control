@@ -35,39 +35,39 @@ public class AppPanel
     /**
      * Live timing menu item.
      */
-    protected final MenuItem liveTimingMenuItem;
+    protected MenuItem liveTimingMenuItem;
     /**
      * Race control menu item.
      */
-    protected final MenuItem raceControlMenuItem;
+    protected MenuItem raceControlMenuItem;
     /**
      * Broadcast menu item.
      */
-    protected final MenuItem broadcastMenuItem;
+    protected MenuItem broadcastMenuItem;
     /**
      * Autopilot menu item.
      */
-    protected final MenuItem autopilotMenuItem;
+    protected MenuItem autopilotMenuItem;
     /**
      * Trackmap menu item.
      */
-    protected final MenuItem trackmapMenuItem;
+    protected MenuItem trackmapMenuItem;
     /**
      * Log menu item.
      */
-    protected final MenuItem logMenuItem;
+    protected MenuItem logMenuItem;
     /**
      * Debug menu item.
      */
-    protected final MenuItem debugMenuItem;
+    protected MenuItem debugMenuItem;
     /**
      * Debug menu for track data.
      */
-    protected final MenuItem trackDataItem;
+    protected MenuItem trackDataItem;
     /**
      * Settings menu item.
      */
-    protected final MenuItem settingsMenuItem;
+    protected MenuItem settingsMenuItem;
     /**
      * Currently active page.
      */
@@ -92,7 +92,7 @@ public class AppPanel
 
     public AppPanel() {
         addAnimationTask(statusAnimation);
-        
+
         header = new HeaderPanel();
         addComponent(header);
 
@@ -105,6 +105,7 @@ public class AppPanel
         });
         menu.addMenuItem(menuItem);
 
+        /*
         liveTimingMenuItem = new MenuItem("Live Timing",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_LiveTiming.png"));
         menu.addMenuItem(liveTimingMenuItem);
@@ -140,7 +141,7 @@ public class AppPanel
         settingsMenuItem = new MenuItem("Settings",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Settings.png"));
         menu.addMenuItemBottom(settingsMenuItem);
-
+         */
         menu.setCollapse(PersistantConfig.get(MENU_COLLAPSED));
 
         updateComponents();

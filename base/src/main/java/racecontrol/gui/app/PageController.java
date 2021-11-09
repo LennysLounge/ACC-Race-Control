@@ -3,15 +3,16 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.appextension;
+package racecontrol.gui.app;
 
+import racecontrol.gui.app.Menu.MenuItem;
 import racecontrol.gui.lpui.LPContainer;
 
 /**
  *
  * @author Leonard
  */
-public interface PageExtensionController {
+public interface PageController {
 
     /**
      * Returns a panel for this controller.
@@ -19,5 +20,12 @@ public interface PageExtensionController {
      * @return A panel for this controller.
      */
     public LPContainer getPanel();
+
+    /**
+     * Returns the menu item for this controller.
+     *
+     * @return The menu item for this controller.
+     */
+    public MenuItem getMenuItem();
 
 }

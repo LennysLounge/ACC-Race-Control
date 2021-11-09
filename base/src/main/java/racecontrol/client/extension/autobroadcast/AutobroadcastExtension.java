@@ -16,7 +16,7 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
-import racecontrol.appextension.ClientExtension;
+import racecontrol.client.ClientExtension;
 
 /**
  *

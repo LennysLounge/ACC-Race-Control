@@ -5,6 +5,9 @@
  */
 package racecontrol.appextension;
 
+import racecontrol.client.ClientExtension;
+import racecontrol.gui.app.PageController;
+
 /**
  *
  * @author Leonard
@@ -30,6 +33,6 @@ public interface AppExtensionModule {
      *
      * @return The page controller for this module.
      */
-    public PageExtensionController getPageController();
+    public PageController getPageController();
 
 }

@@ -31,7 +31,7 @@ import racecontrol.eventbus.EventListener;
 import racecontrol.client.extension.laptimes.LapCompletedEvent;
 import racecontrol.client.extension.results.ResultsExtension;
 import racecontrol.utility.TimeUtils;
-import racecontrol.appextension.ClientExtension;
+import racecontrol.client.ClientExtension;
 
 /**
  *

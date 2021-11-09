@@ -57,7 +57,6 @@ import racecontrol.client.extension.racereport.RaceReportController;
 import racecontrol.client.extension.results.ResultsExtension;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.extension.trackdata.TrackDataExtension;
-import racecontrol.appextension.ClientExtension;
 
 /**
  * A basic connection to the broadcasting interface from Assetto Corsa

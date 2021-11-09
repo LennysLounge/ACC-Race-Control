@@ -10,11 +10,14 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import processing.core.PFont;
+import racecontrol.gui.CustomPApplet;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import static racecontrol.gui.LookAndFeel.TEXT_SIZE;
+import racecontrol.gui.app.Menu;
+import racecontrol.gui.app.PageController;
 import racecontrol.gui.app.statuspanel.StatusPanelManager;
 import racecontrol.gui.lpui.LPAnimationTask;
 import racecontrol.gui.lpui.LPButton;
@@ -26,7 +29,9 @@ import racecontrol.gui.lpui.LPLabel;
  *
  * @author Leonard
  */
-public class TestPanel extends LPContainer {
+public class TestPanel
+        extends LPContainer
+        implements PageController {
 
     private final TestStatusPanel testStatusPanel = new TestStatusPanel();
 
@@ -37,8 +42,13 @@ public class TestPanel extends LPContainer {
     private final LPCollapsablePanel collapsePanel;
     private final LPLabel collapsePanelLable = new LPLabel("Hello");
 
+    private final Menu.MenuItem menuItem;
+
     public TestPanel() {
         setName("Debug");
+
+        this.menuItem = new Menu.MenuItem("Debug",
+                ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Debugging.png"));
 
         testStatusPanel.closeButton.setAction(() -> {
             StatusPanelManager.getInstance().removeStatusPanel(testStatusPanel);
@@ -151,6 +161,16 @@ public class TestPanel extends LPContainer {
 
     private void updateComponents() {
         collapsePanelLable.setPosition(10, collapsePanel.getPosY() + collapsePanel.getHeight());
+    }
+
+    @Override
+    public LPContainer getPanel() {
+        return this;
+    }
+
+    @Override
+    public Menu.MenuItem getMenuItem() {
+        return menuItem;
     }
 
 }

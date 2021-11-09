@@ -66,7 +66,7 @@ public class Main {
 
         //start visualisation.
         String[] a = {"MAIN"};
-        PApplet.runSketch(a, new RaceControlApplet());
+        PApplet.runSketch(a, RaceControlApplet.getApplet());
     }
 
     private static void setupSplash() {

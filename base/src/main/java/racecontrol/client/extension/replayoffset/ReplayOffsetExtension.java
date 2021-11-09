@@ -16,7 +16,7 @@ import racecontrol.client.events.SessionChangedEvent;
 import java.util.logging.Logger;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.events.ConnectionOpenedEvent;
-import racecontrol.appextension.ClientExtension;
+import racecontrol.client.ClientExtension;
 
 /**
  * Calculates the replay start time and provides methods to find the replay time
