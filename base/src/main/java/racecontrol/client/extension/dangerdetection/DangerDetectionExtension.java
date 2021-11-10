@@ -5,19 +5,26 @@
  */
 package racecontrol.client.extension.dangerdetection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 import processing.core.PVector;
+import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.ClientExtension;
 import racecontrol.client.data.RealtimeInfo;
+import racecontrol.client.data.enums.CarLocation;
+import racecontrol.client.data.enums.SessionPhase;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
+import racecontrol.client.extension.statistics.CarProperties;
+import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.extension.trackdata.TrackData;
 import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.eventbus.Event;
+import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 
 /**
@@ -37,17 +44,25 @@ public class DangerDetectionExtension
      */
     private static final Logger LOG = Logger.getLogger(DangerDetectionExtension.class.getName());
     /**
+     * Reference to the connection client.
+     */
+    private final AccBroadcastingClient client;
+    /**
      * Base tolerance for the direction.
      */
-    private final float DIR_BASE_TOLERANCE = 0.2f;
+    public final float DIR_BASE_TOLERANCE = 0.2f;
     /**
-     * Tolerance for the speed.
+     * Tolerance for the speed before a white flag is shown.
      */
-    private final float SPEED_BASE_TOLERANCE = 50;
+    public final float SPEED_WHITE_TOLERANCE = 60;
+    /**
+     * Tolerance for the speed before a yellow flag is shown.
+     */
+    public final float SPEED_YELLOW_TOLERANCE = 100;
     /**
      * Time required without incident to remove the flag status.
      */
-    private final int FLAG_REMOVE_TIME = 5000;
+    private final int FLAG_REMOVE_TIME = 2000;
     /**
      * Velocity map that maps a point on track to its nominal velocity.
      */
@@ -86,6 +101,8 @@ public class DangerDetectionExtension
     }
 
     private DangerDetectionExtension() {
+        EventBus.register(this);
+        client = AccBroadcastingClient.getClient();
     }
 
     @Override
@@ -116,11 +133,16 @@ public class DangerDetectionExtension
      * @return true if the car is white flagged.
      */
     public boolean isCarYellowFlag(int carId) {
-        return whiteFlaggedCars.containsKey(carId);
+        return yellowFlaggedCars.containsKey(carId);
+    }
+
+    public List<Float> getDirectionToleranceMap() {
+        return new ArrayList<>(directionToleranceMap);
     }
 
     private void onTrackData(TrackData data) {
         velocityMap = data.getGt3VelocityMap();
+        directionToleranceMap = new ArrayList<>();
         for (int i = 0; i < velocityMap.size(); i++) {
             float z = 1 - (velocityMap.get(i) - 50) / 200;
             z = DIR_BASE_TOLERANCE + Math.max(0, Math.min(1, z * z));
@@ -131,24 +153,40 @@ public class DangerDetectionExtension
     }
 
     private void testTolerances(RealtimeInfo info) {
-        if (!hasTrackData) {
+        if (!shouldProcessData(info)) {
             return;
         }
-        float vDiff = info.getKMH() - getValueFromMap(velocityMap, info.getSplinePosition());
-        float dDiff = Math.abs(info.getYaw() - getDMapValue(info.getSplinePosition()));
 
-        if (vDiff < -SPEED_BASE_TOLERANCE) {
+        float vDiff = info.getKMH() - getValueFromMap(velocityMap, info.getSplinePosition());
+        float dDiff = Math.abs(angleBetewen(info.getYaw(), getDMapValue(info.getSplinePosition())));
+
+        if (vDiff < -SPEED_WHITE_TOLERANCE) {
             setWhiteFlag(info.getCarId(), vDiff);
         }
         float dTolerance = getValueFromMap(directionToleranceMap, info.getSplinePosition());
-        if (vDiff < -SPEED_BASE_TOLERANCE * 2 || dDiff > dTolerance) {
+        if (vDiff < -SPEED_WHITE_TOLERANCE * 2 || dDiff > dTolerance) {
             setYellowFlag(info.getCarId(), vDiff, dDiff);
         }
     }
 
+    private boolean shouldProcessData(RealtimeInfo info) {
+        if (!hasTrackData) {
+            return false;
+        }
+        if (info.getLocation() != CarLocation.TRACK) {
+            return false;
+        }
+        if (client.getModel().getSessionInfo().getPhase() != SessionPhase.SESSION
+                && client.getModel().getSessionInfo().getPhase() != SessionPhase.SESSIONOVER) {
+            return false;
+        }
+        return true;
+    }
+
     private void setWhiteFlag(int carId, float vDiff) {
         if (!whiteFlaggedCars.containsKey(carId)) {
-            LOG.info("White Flag for: " + carId
+            String carNumber = AccBroadcastingClient.getClient().getModel().getCar(carId).getCarNumber() + "";
+            LOG.info("White Flag for: " + carNumber
                     + ", speed: " + vDiff);
         }
         long now = System.currentTimeMillis();
@@ -156,10 +194,12 @@ public class DangerDetectionExtension
     }
 
     private void setYellowFlag(int carId, float vDiff, float dDiff) {
-        if (!whiteFlaggedCars.containsKey(carId)) {
-            LOG.info("Yellow Flag for: " + carId
+        if (!yellowFlaggedCars.containsKey(carId)) {
+            String carNumber = AccBroadcastingClient.getClient().getModel().getCar(carId).getCarNumber() + "";
+            LOG.info("Yellow Flag for: " + carNumber
                     + ", speed: " + vDiff
                     + ", angle: " + dDiff);
+            AccBroadcastingClient.getClient().sendChangeFocusRequest(carId);
         }
         long now = System.currentTimeMillis();
         yellowFlaggedCars.put(carId, now);
@@ -201,6 +241,17 @@ public class DangerDetectionExtension
         PVector lower = PVector.fromAngle(directionMap.get(lowerIndex)).mult(1 - t);
         PVector upper = PVector.fromAngle(directionMap.get(upperIndex)).mult(t);
         return lower.add(upper).heading();
+    }
+
+    private float angleBetewen(float a1, float a2) {
+        float diff = a1 - a2;
+        if (diff < -Math.PI) {
+            diff += Math.PI * 2;
+        }
+        if (diff > Math.PI) {
+            diff -= Math.PI * 2;
+        }
+        return diff;
     }
 
 }
