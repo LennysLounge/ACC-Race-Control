@@ -23,7 +23,9 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.gui.app.dangerdetection.DangerDetectionController;
 import racecontrol.gui.app.livetiming.LiveTimingController;
+import racecontrol.gui.app.trackdata.TrackDataController;
 import racecontrol.gui.lpui.LPComponent;
 import racecontrol.gui.lpui.LPContainer;
 
@@ -104,11 +106,13 @@ public class AppController
         pageControllers.add(RaceControlController.getInstance());
         pageControllers.add(new LoggingPanel());
         pageControllers.add(new TestPanel());
-        
+        pageControllers.add(new DangerDetectionController());
+        pageControllers.add(new TrackDataController());
+
         // Add page controllers from extension modules.
         Main.getModules().forEach(module -> {
             var page = module.getPageController();
-            if(page != null){
+            if (page != null) {
                 pageControllers.add(page);
             }
         });
