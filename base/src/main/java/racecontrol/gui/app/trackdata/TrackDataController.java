@@ -14,13 +14,15 @@ import racecontrol.client.data.RealtimeInfo;
 import static racecontrol.client.data.enums.CarLocation.TRACK;
 import static racecontrol.client.data.enums.LapType.REGULAR;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
-import racecontrol.client.events.TrackInfoEvent;
 import racecontrol.client.extension.trackdata.TrackData;
 import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.client.extension.trackdata.TrackDataExtension;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import static racecontrol.gui.RaceControlApplet.getApplet;
+import racecontrol.gui.app.Menu;
+import racecontrol.gui.app.PageController;
 import racecontrol.gui.lpui.LPContainer;
 import racecontrol.gui.lpui.LPTabPanel;
 
@@ -29,7 +31,7 @@ import racecontrol.gui.lpui.LPTabPanel;
  * @author Leonard
  */
 public class TrackDataController
-        implements EventListener {
+        implements EventListener, PageController {
 
     private static final Logger LOG = Logger.getLogger(TrackDataController.class.getName());
 
@@ -49,8 +51,16 @@ public class TrackDataController
     private final List<Float> dirMap = new ArrayList<>();
     private final List<List<Float>> dirMapTotal = new ArrayList<>();
 
+    /**
+     * Menu item for the page menu.
+     */
+    private final Menu.MenuItem menuItem;
+
     public TrackDataController() {
         EventBus.register(this);
+        menuItem = new Menu.MenuItem("Track data",
+                getApplet().loadResourceAsPImage("/images/RC_Menu_Debugging.png"));
+
         dataPanel = new TrackDataPanel();
         mapPanel = new TrackMapPanel();
         trackDataExtension = TrackDataExtension.getInstance();
@@ -72,13 +82,19 @@ public class TrackDataController
         tabPanel.setTabIndex(0);
     }
 
+    @Override
     public LPContainer getPanel() {
         return tabPanel;
     }
 
     @Override
+    public Menu.MenuItem getMenuItem() {
+        return menuItem;
+    }
+
+    @Override
     public void onEvent(Event e) {
-        if (e instanceof TrackInfoEvent) {
+        if (e instanceof TrackDataEvent) {
             onTrackInfo();
         } else if (e instanceof RealtimeCarUpdateEvent) {
             updateVMap(((RealtimeCarUpdateEvent) e).getInfo());
@@ -126,7 +142,13 @@ public class TrackDataController
                 && info.getLocation() == TRACK
                 && info.getKMH() > 10
                 && !info.getCurrentLap().isInvalid()) {
-            int index = (int) Math.floor(info.getSplinePosition() * mapSize);
+            /*
+            Rounding here is important. The anverage direction of a circular 
+            track section is equal to the direction at the middle of the section.
+            Rounding makes sure that the position this index represents is
+            at the middle of the section being meassured.
+            */
+            int index = (int) Math.round(info.getSplinePosition() * mapSize) % mapSize;
             if (index == mapSize) {
                 index = 0;
             }
