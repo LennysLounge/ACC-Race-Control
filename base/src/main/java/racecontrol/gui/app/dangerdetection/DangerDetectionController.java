@@ -143,9 +143,10 @@ public class DangerDetectionController
         applet.noStroke();
         applet.beginShape();
         applet.vertex(0, h);
-        for (int i = 0; i < trackData.getGt3VelocityMap().size(); i++) {
-            float v = Math.max(0, trackData.getGt3VelocityMap().get(i) - extension.SPEED_WHITE_TOLERANCE);
-            float x = (i * 1f / (trackData.getGt3VelocityMap().size() - 1) * 1f) * w;
+        List<Float> toleranceMapW = extension.getVelocityToleranceWhiteMap();
+        for (int i = 0; i < toleranceMapW.size(); i++) {
+            float v = toleranceMapW.get(i);
+            float x = (i * 1f / (toleranceMapW.size() - 1) * 1f) * w;
             float y = h - v * speedScale;
             applet.vertex(x, y);
         }
@@ -157,9 +158,10 @@ public class DangerDetectionController
         applet.noStroke();
         applet.beginShape();
         applet.vertex(0, h);
-        for (int i = 0; i < trackData.getGt3VelocityMap().size(); i++) {
-            float v = Math.max(0, trackData.getGt3VelocityMap().get(i) - extension.SPEED_YELLOW_TOLERANCE);
-            float x = (i * 1f / (trackData.getGt3VelocityMap().size() - 1) * 1f) * w;
+        List<Float> toleranceMapY = extension.getVelocityToleranceYellowMap();
+        for (int i = 0; i < toleranceMapY.size(); i++) {
+            float v = toleranceMapY.get(i);
+            float x = (i * 1f / (toleranceMapY.size() - 1) * 1f) * w;
             float y = h - v * speedScale;
             applet.vertex(x, y);
         }
