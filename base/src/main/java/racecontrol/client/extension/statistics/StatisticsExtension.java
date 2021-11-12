@@ -25,6 +25,7 @@ import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.ClientExtension;
+import racecontrol.client.extension.statistics.processors.FlagProcessor;
 
 /**
  * Gathers data and statistics for the cars.
@@ -72,6 +73,7 @@ public class StatisticsExtension
         processors.add(new PitTimeProcessor(cars));
         processors.add(new SpeedProcessor(cars));
         processors.add(new StintTimeProcessor(cars));
+        processors.add(new FlagProcessor(cars));
     }
 
     @Override

@@ -35,6 +35,7 @@ import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_LEADE
 import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_POSITION_AHEAD;
 import static racecontrol.client.extension.statistics.CarProperties.IS_FOCUSED_ON;
 import static racecontrol.client.extension.statistics.CarProperties.IS_IN_PITS;
+import static racecontrol.client.extension.statistics.CarProperties.IS_YELLOW_FLAG;
 import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_LEADER;
 import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_SPLIT;
 import static racecontrol.client.extension.statistics.CarProperties.LAP_TIME_GAP_TO_SESSION_BEST;
@@ -46,6 +47,7 @@ import racecontrol.client.extension.statistics.CarStatistics;
 import static racecontrol.gui.LookAndFeel.COLOR_BLACK;
 import static racecontrol.gui.LookAndFeel.COLOR_ORANGE;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
+import static racecontrol.gui.LookAndFeel.COLOR_YELLOW;
 import racecontrol.utility.TimeUtils;
 
 /**
@@ -148,6 +150,9 @@ public abstract class LiveTimingTableModel
             applet.text("P", context.width / 2f, context.height / 2f);
             applet.textFont(LookAndFeel.fontMedium());
             applet.textSize(LookAndFeel.TEXT_SIZE);
+        } else if (stats.get(IS_YELLOW_FLAG)) {
+            applet.fill(COLOR_YELLOW);
+            applet.rect(1, 1, context.width - 2, context.height - 2);
         }
     }
 
