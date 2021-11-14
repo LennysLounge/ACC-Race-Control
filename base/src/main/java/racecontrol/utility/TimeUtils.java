@@ -61,7 +61,7 @@ public class TimeUtils {
         int s = remaining % 60;
         remaining = (remaining - s) / 60;
         int m = remaining % 60;
-        return String.format("%2d:%02d.%03d", m, s, ms);
+        return String.format("%d:%02d.%03d", m, s, ms);
     }
 
     /**

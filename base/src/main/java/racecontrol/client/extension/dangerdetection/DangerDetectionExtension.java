@@ -28,6 +28,7 @@ import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.utility.TimeUtils;
 
 /**
  * Find the correct flag for a car.
@@ -258,6 +259,7 @@ public class DangerDetectionExtension
     }
 
     private void setWhiteFlag(int carId, float vDiff, float tolerance) {
+        /*
         if (!whiteFlaggedCars.containsKey(carId)) {
             String carNumber = AccBroadcastingClient.getClient().getModel().getCar(carId).getCarNumber() + "";
             LOG.info("White Flag for: #" + carNumber
@@ -266,16 +268,17 @@ public class DangerDetectionExtension
             );
 
         }
+         */
         long now = System.currentTimeMillis();
         whiteFlaggedCars.put(carId, now);
     }
 
     private void setYellowFlag(int carId, float vDiff, float dDiff) {
         if (!yellowFlaggedCars.containsKey(carId)) {
-            String carNumber = AccBroadcastingClient.getClient().getModel().getCar(carId).getCarNumber() + "";
-            LOG.info("Yellow Flag for: #" + carNumber
-                    + String.format(", speed: %.2f", vDiff)
-                    + String.format(", angle: %.2f", dDiff));
+            SessionInfo info = client.getModel().getSessionInfo();
+            LOG.info("Yellow Flag for: " + client.getModel().getCar(carId).getCarNumberString()
+                    + "\t" + TimeUtils.asDuration(info.getSessionTime()));
+
         }
         long now = System.currentTimeMillis();
         yellowFlaggedCars.put(carId, now);

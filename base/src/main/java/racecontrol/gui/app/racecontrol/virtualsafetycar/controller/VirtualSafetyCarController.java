@@ -126,11 +126,11 @@ public class VirtualSafetyCarController
     private void commitViolation(int carId) {
         VSCRecord record = carsOverTheLimit.get(carId);
 
-        String logText = String.format("VSC violation by car #%d \t+%d kmh \t%s s",
-                client.getModel().getCar(carId).getCarNumber(),
+        String logText = String.format("VSC violation by car %s \t+%d kmh \t%s s",
+                client.getModel().getCar(carId).getCarNumberString(),
                 record.speedOver,
                 TimeUtils.asDelta(record.timeOver));
-        
+
         LOG.info(logText);
         UILogger.log(logText);
 

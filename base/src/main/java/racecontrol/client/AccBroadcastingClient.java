@@ -149,7 +149,7 @@ public class AccBroadcastingClient {
         extensions.add(new ResultsExtension());
         extensions.add(TrackDataExtension.getInstance());
         extensions.add(DangerDetectionExtension.getInstance());
-        
+
         // statistics should always go last.
         extensions.add(StatisticsExtension.getInstance());
     }
@@ -814,8 +814,8 @@ public class AccBroadcastingClient {
             model = model.withCars(cars);
 
             String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
-            LOG.info("Car disconnected: #" + car.getCarNumber() + "\t" + name);
-            UILogger.log("Car disconnected: #" + car.getCarNumber() + "\t" + name);
+            LOG.info("Car disconnected: " + car.getCarNumberString() + "\t" + name);
+            UILogger.log("Car disconnected: " + car.getCarNumberString() + "\t" + name);
             EventBus.publish(new CarDisconnectedEvent(car));
         }
 
@@ -826,8 +826,8 @@ public class AccBroadcastingClient {
             model = model.withCars(cars);
 
             String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
-            LOG.info("Car connected: #" + car.getCarNumber() + "\t" + name);
-            UILogger.log("Car connected: #" + car.getCarNumber() + "\t" + name);
+            LOG.info("Car connected: " + car.getCarNumberString() + "\t" + name);
+            UILogger.log("Car connected: " + car.getCarNumberString() + "\t" + name);
             EventBus.publish(new CarConnectedEvent(car));
         }
 
