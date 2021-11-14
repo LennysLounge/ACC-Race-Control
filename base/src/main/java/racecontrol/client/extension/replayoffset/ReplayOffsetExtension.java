@@ -91,11 +91,6 @@ public class ReplayOffsetExtension
      */
     private long gameConnectionTime = 0;
     /**
-     * The replay seams to be offset from the time calculated here by roughly
-     * this ammount.
-     */
-    private final int MAGIC_OFFSET = -6000;
-    /**
      * Flag that incidates that the extension is currently searching for the
      * replay start time.
      */
@@ -211,7 +206,7 @@ public class ReplayOffsetExtension
         long now = System.currentTimeMillis();
         long sessionOffset = (now - replayStartTime)
                 - (int) client.getModel().getSessionInfo().getSessionTime();
-        return sessionTime + (int) sessionOffset + MAGIC_OFFSET;
+        return sessionTime + (int) sessionOffset;
     }
 
     /**
@@ -236,7 +231,7 @@ public class ReplayOffsetExtension
                 - (int) client.getModel().getSessionInfo().getSessionTime();
         long sessionOffset = (now - replayStartTime)
                 - (int) client.getModel().getSessionInfo().getSessionTime();
-        return (int) (requestTimeStamp - sessionStartTimeStamp + sessionOffset) + MAGIC_OFFSET;
+        return (int) (requestTimeStamp - sessionStartTimeStamp + sessionOffset);
     }
 
     /**

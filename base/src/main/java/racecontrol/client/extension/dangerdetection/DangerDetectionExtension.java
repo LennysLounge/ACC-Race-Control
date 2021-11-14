@@ -29,6 +29,7 @@ import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.logging.UILogger;
 import racecontrol.utility.TimeUtils;
 
 /**
@@ -234,7 +235,7 @@ public class DangerDetectionExtension
         vTolerance = getValueFromMap(velocityToleranceYellowMap, info.getSplinePosition());
         float dTolerance = getValueFromMap(directionToleranceMap, info.getSplinePosition());
         if (dDiff > dTolerance || info.getKMH() < vTolerance) {
-            setYellowFlag(info.getCarId(), vDiff, dDiff);
+            setYellowFlag(info.getCarId(), info.getKMH() < vTolerance, dDiff > dTolerance);
         }
     }
 
@@ -250,7 +251,7 @@ public class DangerDetectionExtension
                 && sessionInfo.getPhase() != SessionPhase.SESSIONOVER) {
             return false;
         }
-        if (sessionInfo.getSessionTime() < 15) {
+        if (sessionInfo.getSessionTime() < 15000) {
             return false;
         }
         if (pitExitProtection.containsKey(info.getCarId())) {
@@ -274,16 +275,19 @@ public class DangerDetectionExtension
         whiteFlaggedCars.put(carId, now);
     }
 
-    private void setYellowFlag(int carId, float vDiff, float dDiff) {
+    private void setYellowFlag(int carId, boolean isSlow, boolean isSpin) {
         if (!yellowFlaggedCars.containsKey(carId)) {
             SessionInfo info = client.getModel().getSessionInfo();
             int sessionTime = info.getSessionTime();
             int replayTime = ReplayOffsetExtension.getInstance().getReplayTimeFromSessionTime(sessionTime);
-            LOG.info("Yellow Flag for: " + client.getModel().getCar(carId).getCarNumberString()
-                    + "\t" + TimeUtils.asDuration(sessionTime)
+            String logMessage = "Yellow Flag: " + client.getModel().getCar(carId).getCarNumberString()
+                    + "\t\t" + TimeUtils.asDuration(sessionTime)
                     + "\t" + TimeUtils.asDuration(replayTime)
-            );
-
+                    + "\t";
+            logMessage += isSlow ? "[Slow]" : "";
+            logMessage += isSpin ? "[Spin]" : "";
+            
+            LOG.info(logMessage);
         }
         long now = System.currentTimeMillis();
         yellowFlaggedCars.put(carId, now);

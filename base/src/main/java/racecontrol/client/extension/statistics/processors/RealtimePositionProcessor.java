@@ -20,7 +20,6 @@ import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_LOCATION;
-import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
 import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_COMPLEX;
 import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_SIMPLE;
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
