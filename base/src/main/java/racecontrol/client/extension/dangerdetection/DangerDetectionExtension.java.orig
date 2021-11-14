@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Leonard Schï¿½ngel
+ * Copyright (c) 2021 Leonard Schüngel
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
@@ -29,7 +29,10 @@ import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+<<<<<<< HEAD
 import racecontrol.logging.UILogger;
+=======
+>>>>>>> 6790ef344186d51d63583772cb816e62ce1a8798
 import racecontrol.utility.TimeUtils;
 
 /**
@@ -278,6 +281,7 @@ public class DangerDetectionExtension
     private void setYellowFlag(int carId, boolean isSlow, boolean isSpin) {
         if (!yellowFlaggedCars.containsKey(carId)) {
             SessionInfo info = client.getModel().getSessionInfo();
+<<<<<<< HEAD
             int sessionTime = info.getSessionTime();
             int replayTime = ReplayOffsetExtension.getInstance().getReplayTimeFromSessionTime(sessionTime);
             String logMessage = "Yellow Flag: " + client.getModel().getCar(carId).getCarNumberString()
@@ -288,6 +292,11 @@ public class DangerDetectionExtension
             logMessage += isSpin ? "[Spin]" : "";
             
             LOG.info(logMessage);
+=======
+            LOG.info("Yellow Flag for: " + client.getModel().getCar(carId).getCarNumberString()
+                    + "\t" + TimeUtils.asDuration(info.getSessionTime()));
+
+>>>>>>> 6790ef344186d51d63583772cb816e62ce1a8798
         }
         long now = System.currentTimeMillis();
         yellowFlaggedCars.put(carId, now);

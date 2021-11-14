@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Leonard Schï¿½ngel
+ * Copyright (c) 2021 Leonard Schüngel
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
@@ -87,7 +87,11 @@ public class ContactExtension
 
     public void onAccident(BroadcastingEvent event) {
         int sessionTime = client.getModel().getSessionInfo().getSessionTime();
+<<<<<<< HEAD
         int replaytime = replayOffsetExtension.getReplayTimeFromSessionTime(sessionTime);
+=======
+        int replaytime = replayOffsetExtension.getReplayTimeFromSessionTime((int) sessionTime);
+>>>>>>> 6790ef344186d51d63583772cb816e62ce1a8798
         String logMessage = "Contact: " + client.getModel().getCar(event.getCarId()).getCarNumberString()
                 + "\t\t" + TimeUtils.asDuration(sessionTime)
                 + "\t" + TimeUtils.asDuration(replaytime);
