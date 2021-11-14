@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 import racecontrol.client.data.enums.CarModel;
+import static racecontrol.client.data.enums.CarModel.ERROR;
 
 /**
  *
@@ -17,19 +18,27 @@ import racecontrol.client.data.enums.CarModel;
  */
 public class CarInfo {
 
+    /**
+     * This class's logger.
+     */
     private static Logger LOG = Logger.getLogger(CarInfo.class.getName());
 
-    private int carId;
-    private CarModel carModel;
-    private String teamName = "";
-    private int carNumber;
-    private byte cupCatergory;
-    private byte currentDriverIndex;
-    private int carNationality;
-    private List<DriverInfo> drivers = new LinkedList<>();
-    private RealtimeInfo realtime = new RealtimeInfo();
+    private final int carId;
+    private final CarModel carModel;
+    private final String teamName;
+    private final int carNumber;
+    private final byte cupCatergory;
+    private final byte currentDriverIndex;
+    private final int carNationality;
+    private final List<DriverInfo> drivers;
+    private final RealtimeInfo realtime;
+    /**
+     * Car number as a formated string.
+     */
+    private final String carNumberString;
 
     public CarInfo() {
+        this(0, ERROR, "", 0, (byte) 0, (byte) 0, 0, new LinkedList<>(), new RealtimeInfo());
     }
 
     public CarInfo(int carId, CarModel carModel, String teamName, int carNumber,
@@ -44,6 +53,8 @@ public class CarInfo {
         this.carNationality = carNationality;
         this.drivers = drivers;
         this.realtime = realtime;
+
+        carNumberString = String.format("#%-3d", carNumber);
     }
 
     public RealtimeInfo getRealtime() {
@@ -99,5 +110,9 @@ public class CarInfo {
 
     public List<DriverInfo> getDrivers() {
         return Collections.unmodifiableList(drivers);
+    }
+    
+    public String getCarNumberString(){
+        return carNumberString;
     }
 }

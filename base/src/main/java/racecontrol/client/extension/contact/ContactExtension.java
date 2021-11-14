@@ -88,7 +88,7 @@ public class ContactExtension
     public void onAccident(BroadcastingEvent event) {
         int sessionTime = client.getModel().getSessionInfo().getSessionTime();
         int replaytime = replayOffsetExtension.getReplayTimeFromSessionTime((int) sessionTime);
-        String logMessage = "Contact: #" + client.getModel().getCar(event.getCarId()).getCarNumber()
+        String logMessage = "Contact: " + client.getModel().getCar(event.getCarId()).getCarNumberString()
                 + "\t\t" + TimeUtils.asDuration(sessionTime)
                 + "\t" + TimeUtils.asDuration(replaytime);
         UILogger.log(logMessage);

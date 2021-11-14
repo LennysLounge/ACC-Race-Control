@@ -139,7 +139,7 @@ public class LapTimeExtension
             }
         }
 
-        String message = "Lap completed: #" + car.getCarNumber()
+        String message = "Lap completed: " + car.getCarNumberString()
                 + "\t" + TimeUtils.asLapTime(lap.getLapTimeMS()) + "\t";
         if (isFirstLap) {
             message += "[Lap 1]";
