@@ -286,7 +286,7 @@ public class DangerDetectionExtension
                     + "\t";
             logMessage += isSlow ? "[Slow]" : "";
             logMessage += isSpin ? "[Spin]" : "";
-            
+
             LOG.info(logMessage);
         }
         long now = System.currentTimeMillis();
@@ -294,6 +294,8 @@ public class DangerDetectionExtension
 
         // yellow flag overrides a white flag.
         whiteFlaggedCars.remove(carId);
+
+        EventBus.publish(new YellowFlagEvent(client.getModel().getCar(carId)));
     }
 
     private void removeFlags() {
