@@ -29,7 +29,6 @@ import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
-import racecontrol.logging.UILogger;
 import racecontrol.utility.TimeUtils;
 
 /**
@@ -276,7 +275,14 @@ public class DangerDetectionExtension
     }
 
     private void setYellowFlag(int carId, boolean isSlow, boolean isSpin) {
-        if (!yellowFlaggedCars.containsKey(carId)) {
+        boolean isNew = !yellowFlaggedCars.containsKey(carId);
+        long now = System.currentTimeMillis();
+        yellowFlaggedCars.put(carId, now);
+
+        // yellow flag overrides a white flag.
+        whiteFlaggedCars.remove(carId);
+
+        if (isNew) {
             SessionInfo info = client.getModel().getSessionInfo();
             int sessionTime = info.getSessionTime();
             int replayTime = ReplayOffsetExtension.getInstance().getReplayTimeFromSessionTime(sessionTime);
@@ -288,14 +294,8 @@ public class DangerDetectionExtension
             logMessage += isSpin ? "[Spin]" : "";
 
             LOG.info(logMessage);
+            EventBus.publish(new YellowFlagEvent(client.getModel().getCar(carId)));
         }
-        long now = System.currentTimeMillis();
-        yellowFlaggedCars.put(carId, now);
-
-        // yellow flag overrides a white flag.
-        whiteFlaggedCars.remove(carId);
-
-        EventBus.publish(new YellowFlagEvent(client.getModel().getCar(carId)));
     }
 
     private void removeFlags() {
