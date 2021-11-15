@@ -2,6 +2,7 @@
 
 Changes:
 * Animated UI.
+* Improved the accuracy of the replay time in the google spreadsheet.
 
 Bug fixes:
 * Detaching a page now correctly renders it.

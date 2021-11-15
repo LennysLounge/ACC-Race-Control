@@ -109,7 +109,9 @@ public class ContactExtension
     }
 
     public void onAccident(BroadcastingEvent event) {
-        int sessionTime = client.getModel().getSessionInfo().getSessionTime();
+        // an accident event is usually 5000 ms after the contact.
+        // to get an accurate timing we subtract that offset.
+        int sessionTime = client.getModel().getSessionInfo().getSessionTime() - 5000;
         int replaytime = replayOffsetExtension.getReplayTimeFromSessionTime(sessionTime);
         String logMessage = "Contact: " + client.getModel().getCar(event.getCarId()).getCarNumberString()
                 + "\t\t" + TimeUtils.asDuration(sessionTime)
