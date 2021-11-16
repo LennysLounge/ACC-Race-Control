@@ -293,8 +293,11 @@ public class DangerDetectionExtension
             logMessage += isSlow ? "[Slow]" : "";
             logMessage += isSpin ? "[Spin]" : "";
 
-            LOG.info(logMessage);
-            EventBus.publish(new YellowFlagEvent(client.getModel().getCar(carId)));
+            
+            if (isSpin) {
+                LOG.info(logMessage);
+                EventBus.publish(new YellowFlagEvent(client.getModel().getCar(carId)));
+            }
         }
     }
 
