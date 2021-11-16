@@ -5,10 +5,14 @@
  */
 package racecontrol.client.extension.contact;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.events.AfterPacketReceivedEvent;
 import racecontrol.client.events.BroadcastingEventEvent;
@@ -20,13 +24,17 @@ import racecontrol.utility.TimeUtils;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.AccBroadcastingClient;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
 import racecontrol.client.ClientExtension;
 import racecontrol.client.data.CarInfo;
+import racecontrol.client.data.RealtimeInfo;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.events.ConnectionOpenedEvent;
+import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
+import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.extension.dangerdetection.YellowFlagEvent;
 
 /**
@@ -67,6 +75,8 @@ public class ContactExtension
      */
     private final List<Map<Integer, Map<Integer, Float>>> meetings = new LinkedList<>();
 
+    private final Map<Integer, Map<Integer, RealtimeInfo>> history = new HashMap<>();
+
     public static ContactExtension getInstance() {
         if (instance == null) {
             instance = new ContactExtension();
@@ -90,12 +100,24 @@ public class ContactExtension
                 onAccident(event);
             }
         } else if (e instanceof YellowFlagEvent) {
-            onYellow(((YellowFlagEvent) e).getCar());
+            //onYellow(((YellowFlagEvent) e).getCar());
         } else if (e instanceof RealtimeUpdateEvent) {
             onSessionUpdate(((RealtimeUpdateEvent) e).getSessionInfo());
         } else if (e instanceof ConnectionOpenedEvent) {
             meetingsSize = 3000 / client.getUpdateInterval();
+        } else if (e instanceof RealtimeCarUpdateEvent) {
+            onRealtimeUpdate(((RealtimeCarUpdateEvent) e).getInfo());
+        } else if (e instanceof SessionChangedEvent) {
+            history.clear();
         }
+    }
+
+    private void onRealtimeUpdate(RealtimeInfo info) {
+        int sessionTime = client.getModel().getSessionInfo().getSessionTime();
+        if (!history.containsKey(sessionTime)) {
+            history.put(sessionTime, new HashMap<>());
+        }
+        history.get(sessionTime).put(info.getCarId(), info);
     }
 
     public void afterPacketReceived(byte type) {
@@ -141,6 +163,7 @@ public class ContactExtension
         }
     }
 
+    /*
     private void onYellow(CarInfo car) {
         int trackLength = client.getModel().getTrackInfo().getTrackMeters();
         float pos = car.getRealtime().getSplinePosition();
@@ -177,7 +200,7 @@ public class ContactExtension
         }
 
     }
-
+     */
     private void onSessionUpdate(SessionInfo info) {
         Map<Integer, Map<Integer, Float>> m = new HashMap<>();
         int trackMeters = client.getModel().getTrackInfo().getTrackMeters();
@@ -202,10 +225,50 @@ public class ContactExtension
         if (meetings.size() > meetingsSize) {
             meetings.remove(0);
         }
+
+        // remove old history data
+        var iter = history.entrySet().iterator();
+        while (iter.hasNext()) {
+            var entry = iter.next();
+            int t = entry.getKey();
+            if (info.getSessionTime() - t > 10000) {
+                iter.remove();
+            }
+        }
     }
 
     private void commitAccident(ContactInfo a) {
+        int diff = client.getModel().getSessionInfo().getSessionTime() - a.getSessionEarliestTime();
         EventBus.publish(new ContactEvent(a));
+        printIncidentData(a);
+    }
+
+    private void printIncidentData(ContactInfo a) {
+        int trackMeters = client.getModel().getTrackInfo().getTrackMeters();
+        try {
+            String fileName = TimeUtils.asDuration(a.getSessionEarliestTime()).replaceAll(":", "_");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+            writer.write("SessionTime;" + a.getCars().stream()
+                    .map(car -> car.getCarNumberString())
+                    .collect(Collectors.joining(";")));
+            writer.write("\n");
+
+            for (int t : history.keySet().stream().sorted().collect(Collectors.toList())) {
+                int dt = t - a.getSessionEarliestTime();
+                writer.write(TimeUtils.asDelta(dt) + ";");
+
+                for (CarInfo car : a.getCars()) {
+                    RealtimeInfo carHistory = history.get(t).get(car.getCarId());
+                    writer.write(String.format("%.2f", carHistory.getSplinePosition() * trackMeters).replaceAll("\\.", ","));
+                    writer.write(";");
+                }
+                writer.write("\n");
+            }
+            writer.flush();
+            writer.close();
+        } catch (IOException ex) {
+            LOG.log(Level.WARNING, "shits fucked jo", ex);
+        }
     }
 
 }
