@@ -67,15 +67,14 @@ public class ContactExtension
      */
     private final ReplayOffsetExtension replayOffsetExtension;
     /**
-     * Size of the meetings array
+     * Holds car data for the past time. Maps session time to a map of carId to
+     * realtimeInfo.
      */
-    private int meetingsSize;
-    /**
-     * List of meetings going back in time.
-     */
-    private final List<Map<Integer, Map<Integer, Float>>> meetings = new LinkedList<>();
-
     private final Map<Integer, Map<Integer, RealtimeInfo>> history = new HashMap<>();
+    /**
+     * maximum time the history is saved for.
+     */
+    private final int HISTORY_MAX_TIME = 10000;
 
     public static ContactExtension getInstance() {
         if (instance == null) {
@@ -99,12 +98,8 @@ public class ContactExtension
             if (event.getType() == BroadcastingEventType.ACCIDENT) {
                 onAccident(event);
             }
-        } else if (e instanceof YellowFlagEvent) {
-            //onYellow(((YellowFlagEvent) e).getCar());
         } else if (e instanceof RealtimeUpdateEvent) {
             onSessionUpdate(((RealtimeUpdateEvent) e).getSessionInfo());
-        } else if (e instanceof ConnectionOpenedEvent) {
-            meetingsSize = 3000 / client.getUpdateInterval();
         } else if (e instanceof RealtimeCarUpdateEvent) {
             onRealtimeUpdate(((RealtimeCarUpdateEvent) e).getInfo());
         } else if (e instanceof SessionChangedEvent) {
@@ -113,6 +108,7 @@ public class ContactExtension
     }
 
     private void onRealtimeUpdate(RealtimeInfo info) {
+        // add info to history.
         int sessionTime = client.getModel().getSessionInfo().getSessionTime();
         if (!history.containsKey(sessionTime)) {
             history.put(sessionTime, new HashMap<>());
@@ -121,6 +117,7 @@ public class ContactExtension
     }
 
     public void afterPacketReceived(byte type) {
+        // commit any staged incident that is older than 1 second.
         if (stagedAccident != null) {
             long now = System.currentTimeMillis();
             if (now - stagedAccident.getSystemTimestamp() > 1000) {
@@ -163,112 +160,82 @@ public class ContactExtension
         }
     }
 
-    /*
-    private void onYellow(CarInfo car) {
-        int trackLength = client.getModel().getTrackInfo().getTrackMeters();
-        float pos = car.getRealtime().getSplinePosition();
-
-        Map<Integer, Float> smallestDistance = new HashMap<>();
-        Map<Integer, Integer> timeAgo = new HashMap<>();
-
-        int carId = car.getCarId();
-        int c = meetingsSize;
-        for (var m : meetings) {
-            int t = -(c-- * client.getUpdateInterval());
-            if (m.containsKey(carId)) {
-                for (var entry : m.get(carId).entrySet()) {
-                    int otherId = entry.getKey();
-                    float distance = entry.getValue();
-
-                    if (Math.abs(distance) < smallestDistance.getOrDefault(otherId, 10000f)) {
-                        smallestDistance.put(otherId, distance);
-                        timeAgo.put(otherId, t);
-                    }
-                }
-            }
-        }
-
-        for (int otherId : smallestDistance.keySet()) {
-            CarInfo other = client.getModel().getCar(otherId);
-            float distance = smallestDistance.get(otherId);
-            int t = timeAgo.get(otherId);
-            LOG.info(String.format("\t%s\t%.1fm\t%ss",
-                    other.getCarNumberString(),
-                    distance,
-                    TimeUtils.asDelta(t)
-            ));
-        }
-
-    }
-     */
     private void onSessionUpdate(SessionInfo info) {
-        Map<Integer, Map<Integer, Float>> m = new HashMap<>();
-        int trackMeters = client.getModel().getTrackInfo().getTrackMeters();
-
-        for (var car : client.getModel().getCarsInfo().values()) {
-            float pos = car.getRealtime().getSplinePosition();
-            for (var other : client.getModel().getCarsInfo().values()) {
-                if (car.getCarId() == other.getCarId()) {
-                    continue;
-                }
-                float distance = (pos - other.getRealtime().getSplinePosition()) * trackMeters;
-                if (Math.abs(distance) < 2) {
-                    if (!m.containsKey(car.getCarId())) {
-                        m.put(car.getCarId(), new HashMap<>());
-                    }
-                    m.get(car.getCarId()).put(other.getCarId(), distance);
-                }
-            }
-        }
-
-        meetings.add(m);
-        if (meetings.size() > meetingsSize) {
-            meetings.remove(0);
-        }
-
         // remove old history data
         var iter = history.entrySet().iterator();
         while (iter.hasNext()) {
             var entry = iter.next();
             int t = entry.getKey();
-            if (info.getSessionTime() - t > 10000) {
+            if (info.getSessionTime() - t > HISTORY_MAX_TIME) {
                 iter.remove();
             }
         }
     }
 
-    private void commitAccident(ContactInfo a) {
-        int diff = client.getModel().getSessionInfo().getSessionTime() - a.getSessionEarliestTime();
-        EventBus.publish(new ContactEvent(a));
-        printIncidentData(a);
-    }
-
-    private void printIncidentData(ContactInfo a) {
-        int trackMeters = client.getModel().getTrackInfo().getTrackMeters();
-        try {
-            String fileName = TimeUtils.asDuration(a.getSessionEarliestTime()).replaceAll(":", "_");
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-            writer.write("SessionTime;" + a.getCars().stream()
-                    .map(car -> car.getCarNumberString())
-                    .collect(Collectors.joining(";")));
-            writer.write("\n");
-
-            for (int t : history.keySet().stream().sorted().collect(Collectors.toList())) {
-                int dt = t - a.getSessionEarliestTime();
-                writer.write(TimeUtils.asDelta(dt) + ";");
-
-                for (CarInfo car : a.getCars()) {
-                    RealtimeInfo carHistory = history.get(t).get(car.getCarId());
-                    writer.write(String.format("%.2f", carHistory.getSplinePosition() * trackMeters).replaceAll("\\.", ","));
-                    writer.write(";");
-                }
-                writer.write("\n");
-            }
-            writer.flush();
-            writer.close();
-        } catch (IOException ex) {
-            LOG.log(Level.WARNING, "shits fucked jo", ex);
+    private void commitAccident(ContactInfo incident) {
+        if (incident.getCars().size() == 1) {
+            incident = findOtherCars(incident);
         }
+        EventBus.publish(new ContactEvent(incident));
     }
 
+    private ContactInfo findOtherCars(ContactInfo incident) {
+        // find history entry for the session time
+        final int sessionTime = incident.getSessionEarliestTime();
+        int time = history.keySet().stream()
+                .min((t1, t2) -> {
+                    int dt1 = Math.abs(t1 - sessionTime);
+                    int dt2 = Math.abs(t2 - sessionTime);
+                    return ((Integer) dt1).compareTo(dt2);
+                }).get();
+        Map<Integer, RealtimeInfo> h = history.get(time);
+
+        // find other car with the smallest distance
+        int subjectId = incident.getCars().get(0).getCarId();
+        RealtimeInfo subject = h.get(subjectId);
+        CarInfo closestCar = h.values().stream()
+                .filter(r -> r.getCarId() != subject.getCarId())
+                .min((r1, r2) -> {
+                    float d1 = Math.abs(getDistance(r1, subject));
+                    float d2 = Math.abs(getDistance(r2, subject));
+                    return ((Float) d1).compareTo(d2);
+                })
+                .map(r -> {
+                    CarInfo car = client.getModel().getCar(r.getCarId());
+                    return car.withRealtime(r);
+                })
+                .get();
+
+        // log 
+        if (closestCar != null) {
+            int trackMeters = client.getModel().getTrackInfo().getTrackMeters();
+            float distance = (closestCar.getRealtime().getSplinePosition()
+                    - subject.getSplinePosition()) * trackMeters;
+            LOG.info(String.format("Contact: ?%s\t\t%.2fm\t%s",
+                    closestCar.getCarNumberString(),
+                    distance,
+                    TimeUtils.asDuration(time)
+            ));
+        }
+
+        CarInfo other = null;
+        if (other != null) {
+            incident = incident.addCar(
+                    incident.getSessionEarliestTime(),
+                    other,
+                    incident.getSystemTimestamp());
+        }
+        return incident;
+    }
+
+    private float getDistance(RealtimeInfo r1, RealtimeInfo r2) {
+        float distance = r1.getSplinePosition() - r2.getSplinePosition();
+        if (distance > 0.5f) {
+            distance -= 1f;
+        }
+        if (distance < -0.5f) {
+            distance += 1f;
+        }
+        return distance;
+    }
 }
