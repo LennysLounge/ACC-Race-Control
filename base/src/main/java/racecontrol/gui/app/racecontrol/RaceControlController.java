@@ -157,7 +157,7 @@ public class RaceControlController
         if (entry.isHasReplay() && entry.getReplayTime() != -1) {
             LOG.info("Starting instant replay for incident");
             client.sendInstantReplayRequestWithCamera(
-                    entry.getSessionTime() - 10000,
+                    entry.getSessionTime() - 5000,
                     10,
                     getClient().getModel().getSessionInfo().getFocusedCarIndex(),
                     getClient().getModel().getSessionInfo().getActiveCameraSet(),
