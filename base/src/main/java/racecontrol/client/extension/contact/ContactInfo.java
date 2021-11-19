@@ -38,10 +38,6 @@ public class ContactInfo {
      */
     private final List<CarInfo> cars;
     /**
-     * System timestamp for this accident.
-     */
-    private final long systemTimestamp;
-    /**
      * The session index when it occured.
      */
     private final SessionId sessionID;
@@ -50,7 +46,6 @@ public class ContactInfo {
         this(time,
                 time,
                 Arrays.asList(car),
-                System.currentTimeMillis(),
                 sessionId,
                 replayTime
         );
@@ -60,7 +55,6 @@ public class ContactInfo {
         this(time,
                 time,
                 new LinkedList<CarInfo>(),
-                System.currentTimeMillis(),
                 sessionId,
                 replayTime
         );
@@ -69,25 +63,22 @@ public class ContactInfo {
     private ContactInfo(int earliestTime,
             int latestTime,
             List<CarInfo> cars,
-            long timestamp,
             SessionId sessionID,
             int replayTime) {
         this.sessionEarliestTime = earliestTime;
         this.sessionLatestTime = latestTime;
         this.cars = cars;
-        this.systemTimestamp = timestamp;
         this.sessionID = sessionID;
         this.replayTime = replayTime;
     }
 
-    public ContactInfo addCar(int time, CarInfo car, long timestamp) {
+    public ContactInfo withCar(int sessionTime, CarInfo car) {
         List<CarInfo> c = new LinkedList<>();
         c.addAll(cars);
         c.add(car);
         return new ContactInfo(sessionEarliestTime,
-                time,
+                sessionTime,
                 c,
-                timestamp,
                 sessionID,
                 replayTime);
     }
@@ -96,7 +87,6 @@ public class ContactInfo {
         return new ContactInfo(sessionEarliestTime,
                 sessionLatestTime,
                 cars,
-                systemTimestamp,
                 sessionID,
                 replayTime);
     }
@@ -111,10 +101,6 @@ public class ContactInfo {
 
     public List<CarInfo> getCars() {
         return Collections.unmodifiableList(cars);
-    }
-
-    public long getSystemTimestamp() {
-        return systemTimestamp;
     }
 
     public SessionId getSessionID() {

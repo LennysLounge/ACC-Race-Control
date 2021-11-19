@@ -231,10 +231,9 @@ public class RaceControlController
                 0,
                 client.getSessionId());
         for (int i = 0; i < nCars; i++) {
-            incident = incident.addCar(
+            incident = incident.withCar(
                     sessionTime,
-                    getRandomCar(),
-                    0);
+                    getRandomCar());
         }
         UILogger.log("contact blar blar blar");
         ContactEvent event = new ContactEvent(incident);
