@@ -1,3 +1,8 @@
+# v1.3.2
+
+Changes:
+* Added BMW M4 GT3 support.
+
 # v1.3.1
 
 Changes:

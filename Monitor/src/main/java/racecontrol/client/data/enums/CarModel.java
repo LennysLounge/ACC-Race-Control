@@ -44,6 +44,7 @@ public enum CarModel {
     PORSCHE_911_II_GT3_R(23, "Porsche 911 II GT3 R", GT3),
     FERRARI_488_GT3_EVO(24, "Ferrari 488 GT3 Evo", GT3),
     MERCEDES_AMG_GT3_2020(25, "Mercedes-AMG GT3 2020", GT3),
+    BMW_M4_GT3(30, "BMW M4 GT3", GT3),
     // GT4's
     ALPINE_A110_GT4(50, "Alpine A110 GT4", GT4),
     ASTON_MARTIN_VANTAGE_GT4(51, "Aston Martin Vantage GT4", GT4),
