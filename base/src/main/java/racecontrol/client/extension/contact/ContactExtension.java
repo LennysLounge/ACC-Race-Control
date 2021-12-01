@@ -5,9 +5,14 @@
  */
 package racecontrol.client.extension.contact;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
 import racecontrol.client.events.BroadcastingEventEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
@@ -27,6 +32,7 @@ import racecontrol.client.data.SessionInfo;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
+import racecontrol.client.extension.dangerdetection.YellowFlagEvent;
 
 /**
  * This extension listens for contact between cars during a session and creates
@@ -70,6 +76,10 @@ public class ContactExtension
      * maximum time the history is saved for.
      */
     private final int HISTORY_MAX_TIME = 10000;
+    /**
+     * Holds current yellow flag events.
+     */
+    private final List<YellowFlagEvent> yellowEvents = new ArrayList<>();
 
     /**
      * Get the instance of this extension.
@@ -101,11 +111,15 @@ public class ContactExtension
             }
         } else if (e instanceof RealtimeUpdateEvent) {
             commitStagedContact();
+            updateYellowEvents(((RealtimeUpdateEvent) e).getSessionInfo());
             updateHistory(((RealtimeUpdateEvent) e).getSessionInfo());
         } else if (e instanceof RealtimeCarUpdateEvent) {
             saveInHistory(((RealtimeCarUpdateEvent) e).getInfo());
         } else if (e instanceof SessionChangedEvent) {
             history.clear();
+            yellowEvents.clear();
+        } else if (e instanceof YellowFlagEvent) {
+            yellowEvents.add((YellowFlagEvent) e);
         }
     }
 
@@ -156,6 +170,8 @@ public class ContactExtension
                 contact.getSessionEarliestTime());
         LOG.info(logMessage);
         UILogger.log(logMessage);
+
+        contact = matchYellowEvents(contact);
 
         EventBus.publish(new ContactEvent(contact));
     }
@@ -225,11 +241,11 @@ public class ContactExtension
                     CarInfo car = CLIENT.getModel().getCar(r.getCarId());
                     return car.withRealtime(r);
                 });
-        
-        if(closestCarO.isEmpty()){
+
+        if (closestCarO.isEmpty()) {
             return contact;
         }
-        
+
         CarInfo closestCar = closestCarO.get();
         // log 
         if (closestCar != null) {
@@ -242,7 +258,7 @@ public class ContactExtension
                     TimeUtils.asDuration(time)
             ));
         }
-        
+
         return contact.withCar(
                 contact.getSessionLatestTime(),
                 closestCar);
@@ -257,5 +273,179 @@ public class ContactExtension
             distance += 1f;
         }
         return distance;
+    }
+
+    private ContactInfo matchYellowEvents(ContactInfo info) {
+        int time = getSessionTimeFromHistory(info.getSessionEarliestTime());
+
+        Map<Integer, CarInfo> carsInvolved = info.getCars().stream()
+                .collect(Collectors.toMap(
+                        car -> car.getCarId(), car -> car
+                ));
+
+        // find yellow flags that are within range of this collision
+        List<Integer> yellowFlaggedCars = new ArrayList<>();
+        var iter = yellowEvents.iterator();
+        while (iter.hasNext()) {
+            YellowFlagEvent yellow = iter.next();
+            int dt = yellow.getSessionTime() - time;
+            if (dt > -1000
+                    && dt < 5000
+                    && carsInvolved.containsKey(yellow.getCar().getCarId())) {
+
+                // removed matched event from list
+                iter.remove();
+                yellowFlaggedCars.add(yellow.getCar().getCarId());
+                LOG.info("\tmatched flag nr." + yellow.getId()
+                        + "\t" + TimeUtils.asDelta(dt)
+                        + "\t" + yellow.getCar().getCarNumberString()
+                );
+                logYellowCandidates(yellow);
+                logMatchedYellow(yellow, info);
+            }
+        }
+
+        return info.withYellowFlaggedCars(yellowFlaggedCars);
+    }
+
+    private void updateYellowEvents(SessionInfo info) {
+        // remove old yellow flag events
+        var iter = yellowEvents.iterator();
+        while (iter.hasNext()) {
+            var event = iter.next();
+            if (info.getSessionTime() - event.getSessionTime() > HISTORY_MAX_TIME) {
+                logUnmatchedYellow(event);
+                LOG.info("remoing yellow");
+                logYellowCandidates(event);
+                iter.remove();
+            }
+        }
+    }
+
+    private void logYellowCandidates(YellowFlagEvent event) {
+        // find 3 closed cars to the yellow flagged car.
+        int trackMeters = CLIENT.getModel().getTrackInfo().getTrackMeters();
+        final RealtimeInfo flaggedCar = event.getCar().getRealtime();
+        int time = getSessionTimeFromHistory(event.getSessionTime());
+
+        Map<Integer, RealtimeInfo> moment = history.get(time);
+
+        moment.values().stream()
+                .filter(car -> car.getCarId() != flaggedCar.getCarId())
+                .sorted((c1, c2) -> {
+                    float f1 = Math.abs(carDistance(c1, flaggedCar));
+                    float f2 = Math.abs(carDistance(c2, flaggedCar));
+                    return Float.compare(f1, f2);
+                })
+                .limit(3)
+                .forEach(car -> {
+                    float distance = carDistance(car, flaggedCar);
+                    CarInfo c = CLIENT.getModel().getCar(car.getCarId());
+                    LOG.info(String.format("\t\t%s\t%.2fm",
+                            c.getCarNumberString(),
+                            distance * trackMeters));
+                });
+    }
+
+    private float carDistance(RealtimeInfo car1, RealtimeInfo car2) {
+        float distance = car1.getSplinePosition()
+                - car2.getSplinePosition();
+        if (distance > 0.5) {
+            distance -= 1;
+        }
+        if (distance < -0.5) {
+            distance += 1;
+        }
+        return distance;
+    }
+
+    private void logMatchedYellow(YellowFlagEvent event, ContactInfo info) {
+        if (info.getCars().size() != 2) {
+            return;
+        }
+
+        int time = getSessionTimeFromHistory(event.getSessionTime());
+        int trackMeters = CLIENT.getModel().getTrackInfo().getTrackMeters();
+        Map<Integer, RealtimeInfo> h = history.get(time);
+        CarInfo flaggedCar = event.getCar();
+
+        for (CarInfo car : info.getCars()) {
+            if (car.getCarId() == flaggedCar.getCarId()) {
+                continue;
+            }
+
+            // find distance to subject
+            float distance = carDistance(
+                    h.get(car.getCarId()),
+                    flaggedCar.getRealtime()) * trackMeters;
+
+            // find car closest to subject
+            Optional<RealtimeInfo> closestOpt = h.values().stream()
+                    .filter(c -> c.getCarId() != flaggedCar.getCarId())
+                    .sorted((c1, c2) -> {
+                        float f1 = Math.abs(carDistance(c1, flaggedCar.getRealtime()));
+                        float f2 = Math.abs(carDistance(c2, flaggedCar.getRealtime()));
+                        return Float.compare(f1, f2);
+                    })
+                    .findFirst();
+
+            boolean closestIsContactOponent = false;
+            if (closestOpt.isPresent()) {
+                if (car.getCarId() == closestOpt.get().getCarId()) {
+                    closestIsContactOponent = true;
+                }
+            }
+
+            boolean isLapOne = flaggedCar.getRealtime().getLaps() == 0;
+
+            try {
+                FileWriter fw = new FileWriter("../../../matched.csv", true);
+                fw.write(String.format("%.2f\t%d\t%d\n",
+                        distance,
+                        closestIsContactOponent ? 1 : 0,
+                        isLapOne ? 1 : 0
+                ));
+                fw.flush();
+                fw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ContactExtension.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void logUnmatchedYellow(YellowFlagEvent event) {
+        int time = getSessionTimeFromHistory(event.getSessionTime());
+        int trackMeters = CLIENT.getModel().getTrackInfo().getTrackMeters();
+        Map<Integer, RealtimeInfo> h = history.get(time);
+        CarInfo flaggedCar = event.getCar();
+
+        Optional<RealtimeInfo> closestCar = h.values().stream()
+                .filter(car -> car.getCarId() != flaggedCar.getCarId())
+                .sorted((c1, c2) -> {
+                    float f1 = Math.abs(carDistance(c1, flaggedCar.getRealtime()));
+                    float f2 = Math.abs(carDistance(c2, flaggedCar.getRealtime()));
+                    return Float.compare(f1, f2);
+                })
+                .findFirst();
+
+        if (closestCar.isPresent()) {
+            float distance = carDistance(
+                    h.get(closestCar.get().getCarId()),
+                    flaggedCar.getRealtime()) * trackMeters; 
+            
+            boolean isLapOne = flaggedCar.getRealtime().getLaps() == 0;
+            
+            try {
+                FileWriter fw = new FileWriter("../../../un-matched.csv", true);
+                fw.write(String.format("%.2f\t%d\n",
+                        distance,
+                        isLapOne ? 1 : 0
+                        ));
+                fw.flush();
+                fw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ContactExtension.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 }

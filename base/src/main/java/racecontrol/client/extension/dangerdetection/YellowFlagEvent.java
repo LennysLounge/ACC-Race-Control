@@ -14,15 +14,38 @@ import racecontrol.eventbus.Event;
  */
 public class YellowFlagEvent
         extends Event {
-    
+
+    /**
+     * The car that caused the yellow flag.
+     */
     private final CarInfo car;
-    
-    public YellowFlagEvent(CarInfo car){
+    /**
+     * Session timestamp.
+     */
+    private final int sessionTime;
+    /**
+     * id
+     */
+    private final int id;
+
+    public YellowFlagEvent(CarInfo car,
+            int sessionTime,
+            int id) {
         this.car = car;
+        this.sessionTime = sessionTime;
+        this.id = id;
     }
-    
-    public CarInfo getCar(){
+
+    public CarInfo getCar() {
         return car;
+    }
+
+    public int getSessionTime() {
+        return sessionTime;
+    }
+
+    public int getId() {
+        return id;
     }
 
 }

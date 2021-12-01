@@ -5,6 +5,7 @@
  */
 package racecontrol.client.extension.contact;
 
+import java.util.ArrayList;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.data.CarInfo;
 import java.util.Arrays;
@@ -41,13 +42,18 @@ public class ContactInfo {
      * The session index when it occured.
      */
     private final SessionId sessionID;
+    /**
+     * List of cars that are yellow flagged.
+     */
+    private final List<Integer> yellowFlaggedCars;
 
     public ContactInfo(int time, int replayTime, CarInfo car, SessionId sessionId) {
         this(time,
                 time,
                 Arrays.asList(car),
                 sessionId,
-                replayTime
+                replayTime,
+                new ArrayList<>()
         );
     }
 
@@ -56,7 +62,8 @@ public class ContactInfo {
                 time,
                 new LinkedList<CarInfo>(),
                 sessionId,
-                replayTime
+                replayTime,
+                new ArrayList<>()
         );
     }
 
@@ -64,12 +71,14 @@ public class ContactInfo {
             int latestTime,
             List<CarInfo> cars,
             SessionId sessionID,
-            int replayTime) {
+            int replayTime,
+            List<Integer> yellowFlaggedCars) {
         this.sessionEarliestTime = earliestTime;
         this.sessionLatestTime = latestTime;
         this.cars = cars;
         this.sessionID = sessionID;
         this.replayTime = replayTime;
+        this.yellowFlaggedCars = yellowFlaggedCars;
     }
 
     public ContactInfo withCar(int sessionTime, CarInfo car) {
@@ -80,7 +89,8 @@ public class ContactInfo {
                 sessionTime,
                 c,
                 sessionID,
-                replayTime);
+                replayTime,
+                yellowFlaggedCars);
     }
 
     public ContactInfo withReplayTime(int replayTime) {
@@ -88,7 +98,17 @@ public class ContactInfo {
                 sessionLatestTime,
                 cars,
                 sessionID,
-                replayTime);
+                replayTime,
+                yellowFlaggedCars);
+    }
+
+    public ContactInfo withYellowFlaggedCars(List<Integer> yellowFlaggedCars) {
+        return new ContactInfo(sessionEarliestTime,
+                sessionLatestTime,
+                cars,
+                sessionID,
+                replayTime,
+                yellowFlaggedCars);
     }
 
     public int getSessionEarliestTime() {

@@ -107,6 +107,10 @@ public class DangerDetectionExtension
      * Holds cars that are protected by the pit exit. Maps carId to speed.
      */
     private final Map<Integer, Integer> pitExitProtection = new HashMap<>();
+    /**
+     * Id counter for yellow flag events.
+     */
+    private int idCounter = 0;
 
     /**
      * Get singelton instance.
@@ -283,20 +287,24 @@ public class DangerDetectionExtension
         whiteFlaggedCars.remove(carId);
 
         if (isNew) {
-            SessionInfo info = client.getModel().getSessionInfo();
-            int sessionTime = info.getSessionTime();
-            int replayTime = ReplayOffsetExtension.getInstance().getReplayTimeFromSessionTime(sessionTime);
-            String logMessage = "Yellow Flag: " + client.getModel().getCar(carId).getCarNumberString()
-                    + "\t\t" + TimeUtils.asDuration(sessionTime)
-                    + "\t" + TimeUtils.asDuration(replayTime)
-                    + "\t";
-            logMessage += isSlow ? "[Slow]" : "";
-            logMessage += isSpin ? "[Spin]" : "";
-
-            
             if (isSpin) {
+                SessionInfo info = client.getModel().getSessionInfo();
+                int sessionTime = info.getSessionTime();
+                int replayTime = ReplayOffsetExtension.getInstance().getReplayTimeFromSessionTime(sessionTime);
+                String logMessage = "Yellow Flag nr." + idCounter + " :"
+                        + client.getModel().getCar(carId).getCarNumberString()
+                        + "\t" + TimeUtils.asDuration(sessionTime)
+                        + "\t" + TimeUtils.asDuration(replayTime)
+                        + "\t";
+                logMessage += isSlow ? "[Slow]" : "";
+                logMessage += isSpin ? "[Spin]" : "";
+
                 LOG.info(logMessage);
-                EventBus.publish(new YellowFlagEvent(client.getModel().getCar(carId)));
+                EventBus.publish(new YellowFlagEvent(
+                        client.getModel().getCar(carId),
+                        sessionTime,
+                        idCounter++
+                ));
             }
         }
     }
