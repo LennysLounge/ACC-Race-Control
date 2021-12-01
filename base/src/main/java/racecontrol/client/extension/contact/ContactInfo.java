@@ -155,5 +155,9 @@ public class ContactInfo {
     public boolean isGameContact() {
         return gameContact;
     }
+    
+    public List<Integer> getYellowFlaggedCars(){
+        return Collections.unmodifiableList(yellowFlaggedCars);
+    }
 
 }
