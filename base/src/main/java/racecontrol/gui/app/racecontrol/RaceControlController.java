@@ -188,7 +188,8 @@ public class RaceControlController
     private void addContactEntry(ContactEvent event) {
         ContactInfo info = event.getInfo();
         tableModel.addEntry(new ContactEventEntry(client.getSessionId(), info.getSessionEarliestTime(),
-                "Contact", true, info));
+                info.isGameContact() ? "Contact" : "Possible contact",
+                true, info));
         panel.getTable().invalidate();
     }
 
