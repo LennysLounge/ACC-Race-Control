@@ -70,6 +70,7 @@ public interface CarProperties {
     public final Key<Boolean> IS_IN_PITS = new Key<>(Boolean.class, false);
     public final Key<CarLocation> CAR_LOCATION = new Key<>(CarLocation.class, CarLocation.NONE);
     public final Key<Boolean> IS_FOCUSED_ON = new Key<>(Boolean.class, false);
+    public final Key<Boolean> IS_SESSION_BEST = new Key<>(Boolean.class, false);
     public final Key<Boolean> IS_WHITE_FLAG = new Key<>(Boolean.class, false);
     public final Key<Boolean> IS_YELLOW_FLAG = new Key<>(Boolean.class, false);
     // Realtime position

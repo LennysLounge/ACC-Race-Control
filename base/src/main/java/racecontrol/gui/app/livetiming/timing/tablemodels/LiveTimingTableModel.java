@@ -35,12 +35,14 @@ import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_LEADE
 import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_POSITION_AHEAD;
 import static racecontrol.client.extension.statistics.CarProperties.IS_FOCUSED_ON;
 import static racecontrol.client.extension.statistics.CarProperties.IS_IN_PITS;
+import static racecontrol.client.extension.statistics.CarProperties.IS_SESSION_BEST;
 import static racecontrol.client.extension.statistics.CarProperties.IS_YELLOW_FLAG;
 import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_LEADER;
 import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_SPLIT;
 import static racecontrol.client.extension.statistics.CarProperties.LAP_TIME_GAP_TO_SESSION_BEST;
 import static racecontrol.client.extension.statistics.CarProperties.NAME;
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
+import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_FINISHED;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
@@ -72,25 +74,25 @@ public abstract class LiveTimingTableModel
             .setMinWidth((int) (LINE_HEIGHT * 1.2f))
             .setMaxWidth((int) (LINE_HEIGHT * 1.2f))
             .setPriority(1000)
-            .setCellRenderer((applet, context) -> positionRenderer(applet, context));
+            .setCellRenderer(this::positionRenderer);
 
     protected final LPTableColumn nameColumn = new LPTableColumn("Name")
             .setMaxWidth(LINE_HEIGHT * 5f)
             .setMinWidth(LINE_HEIGHT * 5f)
             .setPriority(1000)
-            .setCellRenderer((applet, context) -> nameRenderer(applet, context));
+            .setCellRenderer(this::nameRenderer);
 
     protected final LPTableColumn pitColumn = new LPTableColumn("")
             .setMaxWidth((int) (LINE_HEIGHT * 0.4f))
             .setMinWidth((int) (LINE_HEIGHT * 0.4f))
             .setPriority(1000)
-            .setCellRenderer((applet, context) -> pitRenderer(applet, context));
+            .setCellRenderer(this::pitRenderer);
 
     protected final LPTableColumn carNumberColumn = new LPTableColumn("#")
             .setMinWidth(LINE_HEIGHT * 1.5f)
             .setMaxWidth(LINE_HEIGHT * 1.5f)
             .setPriority(1000)
-            .setCellRenderer((applet, context) -> carNumberRenderer(applet, context));
+            .setCellRenderer(this::carNumberRenderer);
 
     protected void positionRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
@@ -98,7 +100,10 @@ public abstract class LiveTimingTableModel
         applet.noStroke();
         int bgColor = LookAndFeel.COLOR_RED;
         int fgColor = LookAndFeel.COLOR_WHITE;
-        if (stats.get(IS_FOCUSED_ON)) {
+        if (stats.get(IS_SESSION_BEST)) {
+            bgColor = LookAndFeel.COLOR_PURPLE;
+            fgColor = LookAndFeel.COLOR_WHITE;
+        } else if (stats.get(IS_FOCUSED_ON)) {
             bgColor = LookAndFeel.COLOR_WHITE;
             fgColor = LookAndFeel.COLOR_BLACK;
         }

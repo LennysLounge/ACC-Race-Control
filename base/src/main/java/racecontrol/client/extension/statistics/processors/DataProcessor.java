@@ -45,6 +45,7 @@ import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_
 import static racecontrol.client.extension.statistics.CarProperties.DRIVER_INDEX;
 import static racecontrol.client.extension.statistics.CarProperties.DRIVER_LIST;
 import racecontrol.client.extension.statistics.CarProperties.DriverList;
+import static racecontrol.client.extension.statistics.CarProperties.IS_SESSION_BEST;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_LAP_INVALID;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_THREE;
@@ -135,6 +136,10 @@ public class DataProcessor extends StatisticsProcessor {
         for (WritableCarStatistics car : getCars().values()) {
             car.put(IS_FOCUSED_ON, info.getFocusedCarIndex() == car.get(CAR_ID));
             car.put(SESSION_ID, client.getSessionId());
+            car.put(IS_SESSION_BEST,
+                    info.getBestSessionLap().getLapTimeMS() != Integer.MAX_VALUE
+                    && info.getBestSessionLap().getLapTimeMS() == car.get(BEST_LAP_TIME)
+            );
         }
     }
 

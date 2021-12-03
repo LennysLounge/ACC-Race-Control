@@ -5,6 +5,7 @@ Changes:
 * Improved the accuracy of the replay time in the google spreadsheet.
 * Added an advanced collision detection system to increase the reliability of reported collision for long endurance events.
 * Added a yellow flag system and shows yellow flags in the live timing table.
+* Show the current fastest lap holder as purple.
 
 Bug fixes:
 * Detaching a page now correctly renders it.
