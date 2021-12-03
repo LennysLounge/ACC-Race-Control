@@ -208,6 +208,7 @@ public class AppController
         if (!windowPanels.containsKey(panel)) {
             panel.setPosition(0, 0);
             panel.setVisible(true);
+            panel.setEnabled(true);
             PanelWindowApplet applet = new PanelWindowApplet(panel, resizeable);
             applet.addCloseAction(() -> {
                 windowPanels.remove(panel);
