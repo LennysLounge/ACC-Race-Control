@@ -86,7 +86,7 @@ public class LPAnimationTask {
             dt = duration - progress;
         }
         progress += dt;
-        animationFunction.animate(dt);
+        animationFunction.animate(this, dt);
 
         if (isFinished()) {
             running = false;
@@ -135,6 +135,6 @@ public class LPAnimationTask {
     @FunctionalInterface
     public interface LPAnimationFunction {
 
-        void animate(int deltaTime);
+        void animate(LPAnimationTask task, int deltaTime);
     }
 }

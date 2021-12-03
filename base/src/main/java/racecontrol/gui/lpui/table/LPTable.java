@@ -619,7 +619,7 @@ public class LPTable
             }
         }
 
-        private void scrollAnimationFunction(int dt) {
+        private void scrollAnimationFunction(LPAnimationTask task, int dt) {
             float a = scrollAnimationStartVelocity - 2;
             float b = 3 - 2 * scrollAnimationStartVelocity;
             float c = scrollAnimationStartVelocity;

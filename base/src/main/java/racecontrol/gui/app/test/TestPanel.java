@@ -5,7 +5,6 @@
  */
 package racecontrol.gui.app.test;
 
-import java.awt.Font;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
@@ -50,15 +49,15 @@ public class TestPanel
         this.menuItem = new Menu.MenuItem("Debug",
                 ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/RC_Menu_Debugging.png"));
 
-        testStatusPanel.closeButton.setAction(() -> {
-            StatusPanelManager.getInstance().removeStatusPanel(testStatusPanel);
-        });
-
         LPButton addStatusPanel = new LPButton("Add status panel");
         addStatusPanel.setSize(200, LINE_HEIGHT);
         addStatusPanel.setPosition(20, 0);
         addStatusPanel.setAction(() -> {
-            StatusPanelManager.getInstance().addStatusPanel(testStatusPanel);
+            TestStatusPanel panel = new TestStatusPanel();
+            panel.closeButton.setAction(() -> {
+                StatusPanelManager.getInstance().removeStatusPanel(panel);
+            });
+            StatusPanelManager.getInstance().addStatusPanel(panel);
         });
         addComponent(addStatusPanel);
 
@@ -153,7 +152,7 @@ public class TestPanel
         updateComponents();
     }
 
-    private void animationFunction(int dt) {
+    private void animationFunction(LPAnimationTask task, int dt) {
         int x = 460 + (int) (100 * testAnimation.getProgressNormal());
         animationButton.setPosition(x, 0);
         invalidate();

@@ -180,7 +180,7 @@ public class LPCollapsablePanel
         invalidateParent();
     }
 
-    public void collapseAnimationFunction(float dt) {
+    public void collapseAnimationFunction(LPAnimationTask task, float dt) {
         collapseValue = 1 - collapseAnimation.getProgressNormal();
         collapseValue = collapseValue * collapseValue;
         updateSize();
@@ -190,7 +190,7 @@ public class LPCollapsablePanel
         }
     }
 
-    public void expandAnimationFunction(float dt) {
+    public void expandAnimationFunction(LPAnimationTask task, float dt) {
         float t = expandAnimation.getProgressNormal() - 1;
         collapseValue = -(t * t) + 1;
         updateSize();

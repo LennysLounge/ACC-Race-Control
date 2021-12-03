@@ -633,6 +633,15 @@ public class LPComponent {
     }
 
     /**
+     * Removes an animation task from this component.
+     *
+     * @param task the task to remove.
+     */
+    protected void removeAnimationTask(LPAnimationTask task) {
+        animationTasks.remove(task);
+    }
+
+    /**
      * Gets called to animate this component. Used internally.
      *
      * @param dt delta time since the last frame in milliseconds.
