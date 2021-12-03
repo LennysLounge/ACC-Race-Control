@@ -166,13 +166,13 @@ public class GoogleSheetsAPIExtension
             String carNumbers = info.getCars().stream()
                     .map(car -> {
                         CarStatistics stats = statisticsExtension.getCar(car.getCarId());
-                        return String.format("%s %d[%s]",
-                                info.getYellowFlaggedCars().contains(car.getCarId()) ? "S" : "",
+                        return String.format("%d[%s]%s",
                                 stats.get(CAR_NUMBER),
-                                stats.get(SESSION_FINISHED) ? "F" : (stats.get(LAP_COUNT) + 1));
+                                stats.get(SESSION_FINISHED) ? "F" : (stats.get(LAP_COUNT) + 1),
+                                info.getYellowFlaggedCars().contains(car.getCarId()) ? "Spin" : "");
                     })
                     .collect(Collectors.joining("\n"));
-            if(!info.isGameContact()){
+            if (!info.isGameContact()) {
                 carNumbers = "MAYBE\n" + carNumbers;
             }
             String sessionTime = TimeUtils.asDuration(info.getSessionEarliestTime());
