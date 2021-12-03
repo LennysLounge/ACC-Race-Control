@@ -20,9 +20,11 @@ import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.events.ConnectionClosedEvent;
 import racecontrol.client.events.ConnectionOpenedEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
+import racecontrol.client.events.RegistrationResultEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.app.dangerdetection.DangerDetectionController;
 import racecontrol.gui.app.livetiming.LiveTimingController;
 import racecontrol.gui.app.trackdata.TrackDataController;
@@ -183,13 +185,21 @@ public class AppController
             appPanel.menu.setSelectedMenuItem(appPanel.liveTimingMenuItem);
             appPanel.updateComponents();
             appPanel.invalidate();
+        } else if (e instanceof RegistrationResultEvent) {
+            if (((RegistrationResultEvent) e).isReadOnly()) {
+                RaceControlApplet.runLater(() -> {
+                    statusPanelManager.addStatusPanel(new ConnectionReadOnlyStatusPanel());
+                });
+            }
         } else if (e instanceof ConnectionClosedEvent) {
             ConnectionClosedEvent event = (ConnectionClosedEvent) e;
             if (event.getExitState() == AccBroadcastingClient.ExitState.NORMAL) {
                 appPanel.setActivePage(settingsPage);
                 appPanel.updateComponents();
             } else if (event.getExitState() == AccBroadcastingClient.ExitState.TIMEOUT) {
-                statusPanelManager.addStatusPanel(new ConnectionTimeoutStatusPanel());
+                RaceControlApplet.runLater(() -> {
+                    statusPanelManager.addStatusPanel(new ConnectionTimeoutStatusPanel());
+                });
             }
             appPanel.invalidate();
         }

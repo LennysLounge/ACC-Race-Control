@@ -7,6 +7,10 @@ Changes:
 * Added a yellow flag system and shows yellow flags in the live timing table.
 * Show the current fastest lap holder as purple.
 * Adjust rendering of car classes in the car number field.
+* Add command password to login.
+    Loggin in without the correct command password put Race Control into read only mode.
+    In read only mode Race Control cannot controll the game and can only read data.
+
 
 Bug fixes:
 * Detaching a page now correctly renders it.
