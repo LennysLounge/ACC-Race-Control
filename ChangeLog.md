@@ -8,6 +8,10 @@ Changes:
 
 Bug fixes:
 * Detaching a page now correctly renders it.
+# v1.3.2
+
+Changes:
+* Added BMW M4 GT3 support.
 
 # v1.3.1
 
