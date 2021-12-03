@@ -8,7 +8,8 @@ package racecontrol.gui.lpui;
 import java.util.LinkedList;
 import java.util.List;
 import processing.core.PApplet;
-import processing.event.KeyEvent;
+import racecontrol.gui.CustomPApplet;
+import racecontrol.gui.app.test.BluePanel;
 
 /**
  *
@@ -43,15 +44,18 @@ public class LPContainer
         if (!isVisible()) {
             return;
         }
+        
+        CustomPApplet cApplet = (CustomPApplet)applet;
 
         super.drawInternal(applet);
 
         for (LPComponent c : components) {
-            applet.translate(c.getPosX(), c.getPosY());
-            applet.clip(0, 0, c.getWidth(), c.getHeight());
+            if(c instanceof BluePanel){
+                int x = 12;
+            }
+            Object lock = cApplet.pushClip(c.getPosX(), c.getPosY(), c.getWidth(), c.getHeight());
             c.drawInternal(applet);
-            applet.noClip();
-            applet.translate(-c.getPosX(), -c.getPosY());
+            cApplet.popClip(lock);
         }
     }
 

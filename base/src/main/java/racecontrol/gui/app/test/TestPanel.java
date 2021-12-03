@@ -85,7 +85,7 @@ public class TestPanel
         collapsePanel.setPosition(10, 600);
         BluePanel panel = new BluePanel();
         collapsePanel.addComponent(panel);
-        panel.setSize(200, 200 - LINE_HEIGHT);
+        panel.setSize(300, 200 - LINE_HEIGHT);
         panel.setPosition(0, LINE_HEIGHT);
         collapsePanel.setCollapsed(true);
         addComponent(collapsePanel);
