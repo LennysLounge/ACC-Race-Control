@@ -114,9 +114,13 @@ public class ContactEventEntry
                 applet.fill(COLOR_WHITE);
                 applet.beginShape();
                 applet.vertex(x + w - 1, context.height - 1);
-                applet.vertex(x + w - 1, context.height - LINE_HEIGHT * 0.5f);
-                applet.vertex(x + w - LINE_HEIGHT * 0.5f, context.height - 1);
+                applet.vertex(x + w - 1, context.height - LINE_HEIGHT * 0.55f);
+                applet.vertex(x + w - LINE_HEIGHT * 0.55f, context.height - 1);
                 applet.endShape(CLOSE);
+                applet.stroke(0, 0, 0, 50);
+                applet.line(context.width - 1, context.height - LINE_HEIGHT * 0.55f,
+                        context.width - LINE_HEIGHT * 0.55f, context.height);
+                applet.noStroke();
                 if (cat == ST) {
                     applet.fill(COLOR_SUPER_TROFEO);
                 } else if (cat == CUP) {

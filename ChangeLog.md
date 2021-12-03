@@ -6,6 +6,7 @@ Changes:
 * Added an advanced collision detection system to increase the reliability of reported collision for long endurance events.
 * Added a yellow flag system and shows yellow flags in the live timing table.
 * Show the current fastest lap holder as purple.
+* Adjust rendering of car classes in the car number field.
 
 Bug fixes:
 * Detaching a page now correctly renders it.
