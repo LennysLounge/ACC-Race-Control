@@ -29,6 +29,7 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import racecontrol.gui.CustomPApplet;
 import racecontrol.gui.app.Menu.MenuItem;
+import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_COMMAND_PW;
 import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_INTERVAL;
 import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_IP;
 import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_PASSWORD;
@@ -58,6 +59,8 @@ public class SettingsPage
     private final LPTextField portTextField = new LPTextField();
     private final LPLabel connectionPWLabel = new LPLabel("Connection PW:");
     private final LPTextField connectionPWTextField = new LPTextField();
+    private final LPLabel commandPWLabel = new LPLabel("Command PW:");
+    private final LPTextField commandPWTextField = new LPTextField();
     private final LPLabel updateIntervalLabel = new LPLabel("Update Interval:");
     private final LPTextField updateIntervalTextField = new LPTextField();
     private final LPButton connectButton = new LPButton("Connect");
@@ -125,7 +128,7 @@ public class SettingsPage
         try {
             client.connect("ACC Live timing",
                     connectionPWTextField.getValue(),
-                    "",
+                    commandPWTextField.getValue(),
                     updateInterval,
                     hostAddress,
                     hostPort);
@@ -147,6 +150,7 @@ public class SettingsPage
         PersistantConfig.put(CONNECTION_IP, ipTextField.getValue());
         PersistantConfig.put(CONNECTION_PORT, portTextField.getValue());
         PersistantConfig.put(CONNECTION_PASSWORD, connectionPWTextField.getValue());
+        PersistantConfig.put(CONNECTION_COMMAND_PW, commandPWTextField.getValue());
         PersistantConfig.put(CONNECTION_INTERVAL, updateIntervalTextField.getValue());
     }
 
@@ -207,6 +211,11 @@ public class SettingsPage
         connectionPWTextField.setValue(PersistantConfig.get(CONNECTION_PASSWORD));
         addComponent(connectionPWTextField);
 
+        addComponent(commandPWLabel);
+        commandPWTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
+        commandPWTextField.setValue(PersistantConfig.get(CONNECTION_COMMAND_PW));
+        addComponent(commandPWTextField);
+
         addComponent(updateIntervalLabel);
         updateIntervalTextField.setSize(200, LookAndFeel.LINE_HEIGHT);
         updateIntervalTextField.setValue(PersistantConfig.get(CONNECTION_INTERVAL));
@@ -224,19 +233,22 @@ public class SettingsPage
         int lh = (int) (LookAndFeel.LINE_HEIGHT * 1.2f);
         connectionHeading.setPosition(0, 0);
 
-        ipLabel.setPosition(20, lh * 1);
-        ipTextField.setPosition(200, lh * 1);
+        ipLabel.setPosition(20, lh * 1f);
+        ipTextField.setPosition(200, lh * 1f);
 
-        portLabel.setPosition(20, lh * 2);
+        portLabel.setPosition(20, lh * 2f);
         portTextField.setPosition(200, lh * 2f);
 
-        connectionPWLabel.setPosition(20, lh * 3);
+        connectionPWLabel.setPosition(20, lh * 3f);
         connectionPWTextField.setPosition(200, lh * 3f);
 
-        updateIntervalLabel.setPosition(20, lh * 4);
-        updateIntervalTextField.setPosition(200, lh * 4);
+        commandPWLabel.setPosition(20, lh * 4f);
+        commandPWTextField.setPosition(200, lh * 4f);
 
-        connectButton.setPosition(20, lh * 5);
+        updateIntervalLabel.setPosition(20, lh * 5f);
+        updateIntervalTextField.setPosition(200, lh * 5f);
+
+        connectButton.setPosition(20, lh * 6);
 
         versionLabel.setPosition(20, getHeight() - LINE_HEIGHT);
     }

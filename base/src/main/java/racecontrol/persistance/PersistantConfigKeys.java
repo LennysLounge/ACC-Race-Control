@@ -24,6 +24,7 @@ public interface PersistantConfigKeys {
     public Key<String> CONNECTION_IP = new Key<>(String.class, "127.0.0.1", "connectionIp");
     public Key<String> CONNECTION_PORT = new Key<>(String.class, "9000", "connectionPort");
     public Key<String> CONNECTION_PASSWORD = new Key<>(String.class, "asd", "connectionPassword");
+    public Key<String> CONNECTION_COMMAND_PW = new Key<>(String.class, "", "commandPassword");
     public Key<String> CONNECTION_INTERVAL = new Key<>(String.class, "100", "connectionInterval");
     
     public Key<Boolean> BROADCASTING_CONTROLS_COLLAPSED = new Key<>(Boolean.class, false, "broadcastingControlsCollapsed");
