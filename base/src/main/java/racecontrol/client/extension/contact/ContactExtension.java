@@ -333,7 +333,7 @@ public class ContactExtension
     }
 
     private void publishToSpreadsheet(ContactInfo info) {
-        String cars = info.isGameContact() ? "" : "MAYBE\n";
+        String cars = info.isGameContact() ? "" : "possible\n";
         cars += info.getCars().stream()
                 .map(car -> {
                     CarStatistics stats = STATISTICS_EXTENSION.getCar(car.getCarId());

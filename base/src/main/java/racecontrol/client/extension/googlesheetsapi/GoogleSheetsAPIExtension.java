@@ -10,6 +10,7 @@ import com.google.api.services.sheets.v4.model.Spreadsheet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.events.SessionPhaseChangedEvent;
@@ -163,6 +164,11 @@ public class GoogleSheetsAPIExtension
         } else {
             if (validSheets.containsKey(session)) {
                 return session;
+            }else{
+                Optional<String> validSheet = validSheets.keySet().stream().findFirst();
+                if(validSheet.isPresent()){
+                    return validSheet.get();
+                }
             }
         }
         return "";

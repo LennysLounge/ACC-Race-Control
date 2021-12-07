@@ -1,16 +1,25 @@
 # v1.4.0
 
 Changes:
-* Animated UI.
-* Improved the accuracy of the replay time in the google spreadsheet.
+* Added animation to the UI.
 * Added an advanced collision detection system to increase the reliability of reported collision for long endurance events.
+    * Contacts will now always show at least two cars for every contact.
+    * During long endurance events, the collision detection from the game gets continuously worse.
+        This causes Race Control to miss some contacts.
+        A system was added to help mitigate this.
+        Contacts detected by this system are marked as "Possible contact".
 * Added a yellow flag system and shows yellow flags in the live timing table.
 * Show the current fastest lap holder as purple.
 * Adjust rendering of car classes in the car number field.
 * Add command password to login.
     Loggin in without the correct command password put Race Control into read only mode.
     In read only mode Race Control cannot controll the game and can only read data.
-
+* Rework the Google sheets API integration.
+    * Improved the accuracy of the replay time in the google spreadsheet.
+    * The entry list is now sorted based on car number.
+    * Cars that have spun and caused a yellow flag after a contact will now be suffixed with "Spin" after the lap count.
+    * Possible contacts will be marked with the word "possible" in the cars column.
+    * Race Control will now search all sheets of a spreadsheet to find a suitable targets.
 
 Bug fixes:
 * Detaching a page now correctly renders it.
