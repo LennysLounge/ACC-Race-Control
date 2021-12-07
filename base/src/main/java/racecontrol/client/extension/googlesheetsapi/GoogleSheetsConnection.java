@@ -137,19 +137,27 @@ public class GoogleSheetsConnection {
     }
 
     public void sendIncident(String time, String info) {
-        queue.add(new SendIncidentEvent(time, info));
+        if (state == RUNNING || state == CONNECTING) {
+            queue.add(new SendIncidentEvent(time, info));
+        }
     }
 
     public void sendGreenFlagOffset(int time) {
-        queue.add(new GreenFlagEvent(time));
+        if (state == RUNNING || state == CONNECTING) {
+            queue.add(new GreenFlagEvent(time));
+        }
     }
 
     public void sendCarConnection(CarInfo car) {
-        sendCarsConnection(Arrays.asList(car));
+        if (state == RUNNING || state == CONNECTING) {
+            sendCarsConnection(Arrays.asList(car));
+        }
     }
 
     public void sendCarsConnection(List<CarInfo> cars) {
-        queue.add(new SendCarConnectedEvent(cars));
+        if (state == RUNNING || state == CONNECTING) {
+            queue.add(new SendCarConnectedEvent(cars));
+        }
     }
 
     private void eventLoop() throws InterruptedException {
@@ -222,40 +230,38 @@ public class GoogleSheetsConnection {
     }
 
     private void sendCarEntries(SendCarConnectedEvent event) throws IOException {
-
         String sheet = "'entry list'!";
-        String range = sheet + "B1:C500";
+        String range = sheet + "B3:C";
 
-        List<List<Object>> values;
-
-        values = sheetService.getCells(range);
-
-        Map<String, CarInfo> leftToAdd = new HashMap<>();
-        for (CarInfo car : event.carsConnected) {
-            String drivers = car.getDrivers().stream()
-                    .map(driver -> driver.getFirstName() + " " + driver.getLastName())
-                    .collect(Collectors.joining("\n"));
-            leftToAdd.put(drivers, car);
-        }
-
-        //update previous entries
-        for (int i = 0; i < values.size(); i++) {
-            List<Object> row = values.get(i);
+        // get values from spreadsheet and translate to entries.
+        Map<String, Integer> entries = new HashMap<>();
+        for (List<Object> row : sheetService.getCells(range)) {
             if (!row.isEmpty()) {
-                String name = (String) row.get(0);
-                //search new car connections for this entry
-                if (leftToAdd.containsKey(name)) {
-                    row = Arrays.asList(name, leftToAdd.get(name).getCarNumber());
-                    leftToAdd.remove(name);
+                String name = String.valueOf(row.get(0));
+                int number;
+                try {
+                    number = Integer.parseInt(String.valueOf(row.get(1)));
+                } catch (NumberFormatException e) {
+                    number = -1;
                 }
+                entries.put(name, number);
             }
-            values.set(i, row);
         }
 
-        //add remaining entries
-        for (String key : leftToAdd.keySet()) {
-            values.add(Arrays.asList(key, leftToAdd.get(key).getCarNumber()));
-        }
+        // add new cars and update car number if they changed.
+        event.carsConnected.stream()
+                .forEach(car -> {
+                    String name = car.getDrivers().stream()
+                            .map(driver -> driver.getFirstName() + " " + driver.getLastName())
+                            .collect(Collectors.joining("\n"));
+                    entries.put(name, car.getCarNumber());
+                });
+
+        // sort based on car number and translate convert to row column lists.
+        List<List<Object>> values = entries.entrySet().stream()
+                .sorted((e1, e2) -> e1.getValue() - e2.getValue())
+                .map(entry -> Arrays.asList((Object) entry.getKey(), (Object) entry.getValue()))
+                .collect(Collectors.toList());
 
         sheetService.updateCells(range, values);
     }
