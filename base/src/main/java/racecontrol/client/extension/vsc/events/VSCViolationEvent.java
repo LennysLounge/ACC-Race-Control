@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.gui.app.racecontrol.virtualsafetycar.controller;
+package racecontrol.client.extension.vsc.events;
 
 import racecontrol.client.data.SessionId;
 import racecontrol.eventbus.Event;

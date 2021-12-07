@@ -19,6 +19,7 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
+import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConnection.State.RUNNING;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.lpui.LPContainer;
 
@@ -56,10 +57,10 @@ public class HeaderPanel
             String conId = "Connection ID: " + client.getModel().getConnectionID();
             applet.text(conId, 10, LINE_HEIGHT * 0.5f);
 
-            if (googleSheetController.isRunning()) {
+            if (googleSheetController.getState() == RUNNING) {
                 String googleSheetsActive = "Connected to:  \""
                         + googleSheetController.getSpreadsheetTitle()
-                        + "::" + googleSheetController.getCurrentTargetSheet()
+                        + "::" + googleSheetController.getSheetTarget()
                         + "\"";
                 applet.text(googleSheetsActive, 200, LINE_HEIGHT * 0.5f);
             }

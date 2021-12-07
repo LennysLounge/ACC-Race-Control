@@ -52,6 +52,7 @@ public class LPTabPanel extends LPContainer {
 
     public void removeTab(LPContainer tab) {
         tabs.remove(tab);
+        setTabIndex(Math.min(tabIndex, tabs.size() - 1));
     }
 
     public void removeAllTabs() {

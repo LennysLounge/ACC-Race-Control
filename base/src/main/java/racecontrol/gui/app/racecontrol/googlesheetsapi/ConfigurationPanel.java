@@ -28,7 +28,7 @@ import static racecontrol.persistance.PersistantConfigKeys.CREDENTIALS_FILE_PATH
  *
  * @author Leonard
  */
-public class GoogleSheetsAPIConfigurationPanel
+public class ConfigurationPanel
         extends LPContainer {
 
     private final LPLabel spreadSheetLinkLabel = new LPLabel("Spreadsheet link:");
@@ -57,7 +57,7 @@ public class GoogleSheetsAPIConfigurationPanel
 
     protected boolean allowInput = true;
 
-    public GoogleSheetsAPIConfigurationPanel() {
+    public ConfigurationPanel() {
         setName("Settings");
 
         spreadSheetLinkLabel.setPosition(20, LINE_HEIGHT * 0);
@@ -88,7 +88,6 @@ public class GoogleSheetsAPIConfigurationPanel
         addComponent(useDaufaultLabel);
 
         replayOffsetLabel.setPosition(40, LINE_HEIGHT * 5);
-        replayOffsetLabel.setSize(180, LINE_HEIGHT);
         addComponent(replayOffsetLabel);
         replayOffsetTextField.setSize(100, LINE_HEIGHT);
         replayOffsetTextField.setPosition(220, LINE_HEIGHT * 5);
@@ -96,7 +95,6 @@ public class GoogleSheetsAPIConfigurationPanel
         addComponent(replayOffsetTextField);
 
         findRowRangeLabel.setPosition(40, LINE_HEIGHT * 6);
-        findRowRangeLabel.setSize(240, LINE_HEIGHT);
         addComponent(findRowRangeLabel);
         findRowRangeTextField.setSize(100, LINE_HEIGHT);
         findRowRangeTextField.setPosition(180, LINE_HEIGHT * 6);
@@ -104,7 +102,6 @@ public class GoogleSheetsAPIConfigurationPanel
         addComponent(findRowRangeTextField);
 
         sessionColumnLabel.setPosition(40, LINE_HEIGHT * 7);
-        sessionColumnLabel.setSize(160, LINE_HEIGHT);
         addComponent(sessionColumnLabel);
         sessionColumnTextField.setSize(100, LINE_HEIGHT);
         sessionColumnTextField.setPosition(200, LINE_HEIGHT * 7);
@@ -124,6 +121,12 @@ public class GoogleSheetsAPIConfigurationPanel
         addComponent(connectButton);
 
         setSize(660, 460);
+        updateComponents();
+    }
+    
+    @Override
+    public void setEnabled(boolean state){
+        super.setEnabled(state);
         updateComponents();
     }
 

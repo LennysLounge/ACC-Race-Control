@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
@@ -142,7 +143,9 @@ public class GoogleSheetsService {
         request.setMajorDimension("ROWS");
 
         ValueRange response = request.execute();
-
+        if(response.getValues() == null){
+            return new ArrayList<>();
+        }
         return response.getValues();
     }
 

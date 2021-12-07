@@ -6,45 +6,52 @@
 package racecontrol.gui.app.racecontrol.googlesheetsapi;
 
 import java.util.logging.Logger;
-import racecontrol.gui.app.AppController;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsConfiguration;
-import racecontrol.gui.lpui.LPTabPanel;
+import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConnection.State.OFFLINE;
+import racecontrol.client.extension.googlesheetsapi.GoogleSheetsDisconnetedEvent;
+import racecontrol.eventbus.Event;
+import racecontrol.eventbus.EventBus;
+import racecontrol.eventbus.EventListener;
+import racecontrol.gui.RaceControlApplet;
+import racecontrol.gui.lpui.LPContainer;
 
 /**
  *
  * @author Leonard
  */
-public class GoogleSheetsAPIConfigurationController {
+public class ConfigurationController
+    implements EventListener{
 
     /**
      * This class's logger.
      */
-    private static final Logger LOG = Logger.getLogger(GoogleSheetsAPIConfigurationController.class.getName());
-    /**
-     * Reference to the app controller.
-     */
-    private final AppController appController;
+    private static final Logger LOG = Logger.getLogger(ConfigurationController.class.getName());
 
-    private final LPTabPanel tabPanel = new LPTabPanel();
-
-    private final GoogleSheetsAPIConfigurationPanel panel;
+    private final ConfigurationPanel panel;
 
     private final GoogleSheetsAPIExtension sheetsAPI;
 
-    public GoogleSheetsAPIConfigurationController() {
-        appController = AppController.getInstance();
-        panel = new GoogleSheetsAPIConfigurationPanel();
+    public ConfigurationController() {
+        EventBus.register(this);
+        panel = new ConfigurationPanel();
         panel.connectButton.setAction(() -> connectButton());
         sheetsAPI = GoogleSheetsAPIExtension.getInstance();
-
-        tabPanel.addTab(panel);
-        tabPanel.setSize(660, 460);
-        tabPanel.setName("Google Sheets API");
+    }
+    
+    @Override
+    public void onEvent(Event e) {
+        if(e instanceof GoogleSheetsDisconnetedEvent){
+            RaceControlApplet.runLater(() -> {
+                panel.allowInput = true;
+                panel.updateComponents();
+                panel.invalidate();
+            });
+        }
     }
 
     private void connectButton() {
-        if (!sheetsAPI.isRunning()) {
+        if (sheetsAPI.getState() == OFFLINE) {
             //enable spreadsheet service.
             sheetsAPI.start(new GoogleSheetsConfiguration(
                     panel.spreadSheetLinkTextField.getValue(),
@@ -54,20 +61,20 @@ public class GoogleSheetsAPIConfigurationController {
                     panel.sessionColumnTextField.getValue(),
                     panel.carColumnTextField.getValue()
             ));
-            tabPanel.addTab(sheetsAPI.getPanel());
             panel.allowInput = false;
         } else {
             //disable spreadsheet service.
             sheetsAPI.stop();
-            tabPanel.removeTab(sheetsAPI.getPanel());
             panel.allowInput = true;
         }
         panel.updateComponents();
         panel.invalidate();
     }
 
-    public void openSettingsPanel() {
-        appController.launchNewWindow(tabPanel, false);
+    public LPContainer getPanel() {
+        return panel;
     }
+
+    
 
 }

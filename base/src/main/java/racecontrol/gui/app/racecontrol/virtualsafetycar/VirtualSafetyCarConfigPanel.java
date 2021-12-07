@@ -17,7 +17,7 @@ import racecontrol.gui.lpui.LPNumberTextField;
  *
  * @author Leonard
  */
-public class VirtualSafetyCarPanel
+public class VirtualSafetyCarConfigPanel
         extends LPContainer {
 
     protected final LPNumberTextField targetSpeedTextField = new LPNumberTextField();
@@ -41,7 +41,7 @@ public class VirtualSafetyCarPanel
 
     protected boolean isVSCDisabled = true;
 
-    public VirtualSafetyCarPanel() {
+    public VirtualSafetyCarConfigPanel() {
         setName("Virtual Safety Car");
         targetSpeedLabel.setPosition(10, LINE_HEIGHT * 0.5f);
         addComponent(targetSpeedLabel);

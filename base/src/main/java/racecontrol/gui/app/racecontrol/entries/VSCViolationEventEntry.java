@@ -16,7 +16,7 @@ import static racecontrol.gui.LookAndFeel.COLOR_PORSCHE_CUP;
 import static racecontrol.gui.LookAndFeel.COLOR_SUPER_TROFEO;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
-import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VSCViolationEvent;
+import racecontrol.client.extension.vsc.events.VSCViolationEvent;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.SessionId;

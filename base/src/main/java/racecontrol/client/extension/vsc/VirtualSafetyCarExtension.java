@@ -3,16 +3,21 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.gui.app.racecontrol.virtualsafetycar.controller;
+package racecontrol.client.extension.vsc;
 
+import racecontrol.client.extension.vsc.events.VSCViolationEvent;
+import racecontrol.client.extension.vsc.events.VSCStartEvent;
+import racecontrol.client.extension.vsc.events.VSCEndEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 import racecontrol.client.AccBroadcastingClient;
+import racecontrol.client.ClientExtension;
 import racecontrol.client.data.RealtimeInfo;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
+import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
@@ -23,21 +28,25 @@ import racecontrol.utility.TimeUtils;
  *
  * @author Leonard
  */
-public class VirtualSafetyCarController
-        implements EventListener {
+public class VirtualSafetyCarExtension
+        implements EventListener, ClientExtension {
 
     /**
      * This class's logger.
      */
-    private static final Logger LOG = Logger.getLogger(VirtualSafetyCarController.class.getName());
+    private static final Logger LOG = Logger.getLogger(VirtualSafetyCarExtension.class.getName());
     /**
      * Singelton instance.
      */
-    private static VirtualSafetyCarController instance;
+    private static VirtualSafetyCarExtension instance;
     /**
      * Reference to the game client.
      */
-    private final AccBroadcastingClient client;
+    private final AccBroadcastingClient CLIENT;
+    /**
+     * Reference to the google sheets extension.
+     */
+    private final GoogleSheetsAPIExtension GOOGLE_SHEETS_EXTENSION;
     /**
      * Current session id.
      */
@@ -64,16 +73,17 @@ public class VirtualSafetyCarController
      */
     private final Map<Integer, VSCRecord> carsOverTheLimit = new HashMap<>();
 
-    public static VirtualSafetyCarController getInstance() {
+    public static VirtualSafetyCarExtension getInstance() {
         if (instance == null) {
-            instance = new VirtualSafetyCarController();
+            instance = new VirtualSafetyCarExtension();
         }
         return instance;
     }
 
-    private VirtualSafetyCarController() {
+    private VirtualSafetyCarExtension() {
         EventBus.register(this);
-        client = AccBroadcastingClient.getClient();
+        CLIENT = AccBroadcastingClient.getClient();
+        GOOGLE_SHEETS_EXTENSION = GoogleSheetsAPIExtension.getInstance();
     }
 
     @Override
@@ -90,7 +100,7 @@ public class VirtualSafetyCarController
     private void onRealtimeCarUpdate(RealtimeInfo info) {
         if (info.getKMH() > speedLimit + speedTolerance) {
 
-            int sessionNow = client.getModel().getSessionInfo().getSessionTime();
+            int sessionNow = CLIENT.getModel().getSessionInfo().getSessionTime();
             // get or create record.
             VSCRecord record = carsOverTheLimit.getOrDefault(info.getCarId(),
                     new VSCRecord(info.getCarId(),
@@ -127,7 +137,7 @@ public class VirtualSafetyCarController
         VSCRecord record = carsOverTheLimit.get(carId);
 
         String logText = String.format("VSC violation by car %s \t+%d kmh \t%s s",
-                client.getModel().getCar(carId).getCarNumberString(),
+                CLIENT.getModel().getCar(carId).getCarNumberString(),
                 record.speedOver,
                 TimeUtils.asDelta(record.timeOver));
 
@@ -139,6 +149,13 @@ public class VirtualSafetyCarController
                 record.timeOver,
                 sessionId,
                 record.sessionTimeStamp));
+
+        // log to spreadsheet.
+        GOOGLE_SHEETS_EXTENSION.sendIncident(record.sessionTimeStamp,
+                String.format("%s\n+%d kmh\n%s s",
+                        CLIENT.getModel().getCar(record.carId).getCarNumber(),
+                        record.speedOver,
+                        TimeUtils.asDelta(record.timeOver)));
     }
 
     private void clearAndCommitViolations() {
@@ -151,14 +168,14 @@ public class VirtualSafetyCarController
     }
 
     public void startVSC(int speedLimit, int speedTolerance, int timeTolerance) {
-        if (client.isConnected()) {
+        if (CLIENT.isConnected()) {
             this.speedLimit = speedLimit;
             this.speedTolerance = speedTolerance;
             this.timeTolerance = timeTolerance;
-            int sessionTime = client.getModel().getSessionInfo().getSessionTime();
+            int time = CLIENT.getModel().getSessionInfo().getSessionTime();
             vscOn = true;
 
-            String logText = "VSC started at " + TimeUtils.asDuration(sessionTime)
+            String logText = "VSC started at " + TimeUtils.asDuration(time)
                     + " with a speed limit of " + speedLimit
                     + " tolerances (" + speedTolerance + "kmh, " + this.timeTolerance + "s)";
             LOG.info(logText);
@@ -167,7 +184,11 @@ public class VirtualSafetyCarController
                     speedTolerance,
                     timeTolerance,
                     sessionId,
-                    sessionTime));
+                    time));
+
+            // log to spreadsheet
+            GOOGLE_SHEETS_EXTENSION.sendIncident(time,
+                    String.format("VSC Start\n%d kmh", speedLimit));
         }
     }
 
@@ -179,7 +200,12 @@ public class VirtualSafetyCarController
         UILogger.log(logText);
         //publish all current violations.
         clearAndCommitViolations();
-        EventBus.publish(new VSCEndEvent(sessionId, client.getModel().getSessionInfo().getSessionTime()));
+
+        int time = CLIENT.getModel().getSessionInfo().getSessionTime();
+        EventBus.publish(new VSCEndEvent(sessionId, time));
+
+        // log to spreadsheet
+        GOOGLE_SHEETS_EXTENSION.sendIncident(time, "VSC End");
     }
 
     public boolean isActive() {

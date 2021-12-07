@@ -5,10 +5,10 @@
  */
 package racecontrol.gui.app.racecontrol.virtualsafetycar;
 
-import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VirtualSafetyCarController;
+import racecontrol.client.extension.vsc.VirtualSafetyCarExtension;
 import racecontrol.gui.app.AppController;
-import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VSCEndEvent;
-import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VSCStartEvent;
+import racecontrol.client.extension.vsc.events.VSCEndEvent;
+import racecontrol.client.extension.vsc.events.VSCStartEvent;
 import racecontrol.client.events.AfterPacketReceivedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
@@ -25,7 +25,7 @@ public class VirtualSafetyCarConfigController
     /**
      * Settings panel.
      */
-    private final VirtualSafetyCarPanel panel = new VirtualSafetyCarPanel();
+    private final VirtualSafetyCarConfigPanel panel = new VirtualSafetyCarConfigPanel();
     /**
      * The status panel manager.
      */
@@ -37,7 +37,7 @@ public class VirtualSafetyCarConfigController
     /**
      * Reference to the vsc controller.
      */
-    private final VirtualSafetyCarController vscController;
+    private final VirtualSafetyCarExtension vscController;
     /**
      * The status panel to show a VSC is active.
      */
@@ -47,7 +47,7 @@ public class VirtualSafetyCarConfigController
         EventBus.register(this);
         statusPanelManager = StatusPanelManager.getInstance();
         appController = AppController.getInstance();
-        vscController = VirtualSafetyCarController.getInstance();
+        vscController = VirtualSafetyCarExtension.getInstance();
         statusPanel = new VSCStatusPanel();
 
         panel.startButton.setAction(() -> startVSC());

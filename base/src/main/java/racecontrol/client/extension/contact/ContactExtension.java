@@ -32,6 +32,12 @@ import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.extension.dangerdetection.YellowFlagEvent;
+import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
+import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
+import static racecontrol.client.extension.statistics.CarProperties.LAP_COUNT;
+import static racecontrol.client.extension.statistics.CarProperties.SESSION_FINISHED;
+import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.extension.statistics.StatisticsExtension;
 
 /**
  * This extension listens for contact between cars during a session and creates
@@ -58,6 +64,14 @@ public class ContactExtension
      * Reference to the replay offset extension
      */
     private final ReplayOffsetExtension REPLAY_EXTENSION;
+    /**
+     * Reference to the google sheets api extension.
+     */
+    private final GoogleSheetsAPIExtension GOOGLE_SHEETS_EXTENSION;
+    /**
+     * Reference to the statistics extension.
+     */
+    private final StatisticsExtension STATISTICS_EXTENSION;
     /**
      * Last contact that is waiting to be commited.
      */
@@ -104,6 +118,8 @@ public class ContactExtension
         EventBus.register(this);
         CLIENT = AccBroadcastingClient.getClient();
         REPLAY_EXTENSION = ReplayOffsetExtension.getInstance();
+        GOOGLE_SHEETS_EXTENSION = GoogleSheetsAPIExtension.getInstance();
+        STATISTICS_EXTENSION = StatisticsExtension.getInstance();
     }
 
     @Override
@@ -239,6 +255,7 @@ public class ContactExtension
         contact = matchYellowEvents(contact);
 
         EventBus.publish(new ContactEvent(contact));
+        publishToSpreadsheet(contact);
     }
 
     private ContactInfo findOtherCars(ContactInfo contact) {
@@ -313,6 +330,23 @@ public class ContactExtension
         }
 
         return info.withYellowFlaggedCars(yellowFlaggedCars);
+    }
+
+    private void publishToSpreadsheet(ContactInfo info) {
+        String cars = info.isGameContact() ? "" : "MAYBE\n";
+        cars += info.getCars().stream()
+                .map(car -> {
+                    CarStatistics stats = STATISTICS_EXTENSION.getCar(car.getCarId());
+                    String carNumber = String.valueOf(car.getCarNumber());
+                    String lap = String.valueOf(stats.get(SESSION_FINISHED) ? "F" : (stats.get(LAP_COUNT) + 1));
+                    String spin = info.getYellowFlaggedCars().contains(car.getCarId()) ? "Spin" : "";
+                    return String.format("%s[%s] %s",
+                            carNumber,
+                            lap,
+                            spin);
+                })
+                .collect(Collectors.joining("\n"));
+        GOOGLE_SHEETS_EXTENSION.sendIncident(info.getSessionEarliestTime(), cars);
     }
 
     /*

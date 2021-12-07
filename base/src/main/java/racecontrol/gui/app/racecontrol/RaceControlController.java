@@ -13,11 +13,11 @@ import racecontrol.gui.app.racecontrol.entries.ContactEventEntry;
 import racecontrol.gui.app.racecontrol.entries.RaceEventEntry;
 import racecontrol.gui.app.racecontrol.entries.SimpleEventEntry;
 import racecontrol.gui.app.racecontrol.entries.VSCViolationEventEntry;
-import racecontrol.gui.app.racecontrol.googlesheetsapi.GoogleSheetsAPIConfigurationController;
+import racecontrol.gui.app.racecontrol.googlesheetsapi.ConfigurationController;
 import racecontrol.gui.app.racecontrol.virtualsafetycar.VirtualSafetyCarConfigController;
-import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VSCEndEvent;
-import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VSCStartEvent;
-import racecontrol.gui.app.racecontrol.virtualsafetycar.controller.VSCViolationEvent;
+import racecontrol.client.extension.vsc.events.VSCEndEvent;
+import racecontrol.client.extension.vsc.events.VSCStartEvent;
+import racecontrol.client.extension.vsc.events.VSCViolationEvent;
 import racecontrol.client.AccBroadcastingClient;
 import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.data.CarInfo;
@@ -36,6 +36,7 @@ import static racecontrol.gui.RaceControlApplet.getApplet;
 import racecontrol.gui.app.Menu;
 import racecontrol.gui.app.Menu.MenuItem;
 import racecontrol.gui.app.PageController;
+import racecontrol.gui.app.racecontrol.googlesheetsapi.GoogleSheetsController;
 import racecontrol.logging.UILogger;
 
 /**
@@ -62,7 +63,7 @@ public class RaceControlController
 
     private RaceReportController raceReportController;
 
-    private GoogleSheetsAPIConfigurationController googleSheetsConfigController;
+    private GoogleSheetsController googleSheetsController;
 
     private VirtualSafetyCarConfigController virtualSafetyCarController;
 
@@ -87,7 +88,7 @@ public class RaceControlController
         panel = new RaceControlPanel();
         tableModel = new RaceEventTableModel();
         replayOffsetExtension = ReplayOffsetExtension.getInstance();
-        googleSheetsConfigController = new GoogleSheetsAPIConfigurationController();
+        googleSheetsController = new GoogleSheetsController();
         virtualSafetyCarController = new VirtualSafetyCarConfigController();
         raceReportController = RaceReportController.getInstance();
 
@@ -105,7 +106,7 @@ public class RaceControlController
         });
 
         panel.exportButton.setAction(() -> exportEventList());
-        panel.googleSheetsButton.setAction(() -> googleSheetsConfigController.openSettingsPanel());
+        panel.googleSheetsButton.setAction(() -> googleSheetsController.openSettingsPanel());
         panel.virtualSafetyCarButton.setAction(() -> virtualSafetyCarController.openSettingsPanel());
     }
 

@@ -58,6 +58,7 @@ import racecontrol.client.extension.racereport.RaceReportController;
 import racecontrol.client.extension.results.ResultsExtension;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.extension.trackdata.TrackDataExtension;
+import racecontrol.client.extension.vsc.VirtualSafetyCarExtension;
 
 /**
  * A basic connection to the broadcasting interface from Assetto Corsa
@@ -149,6 +150,7 @@ public class AccBroadcastingClient {
         extensions.add(new ResultsExtension());
         extensions.add(TrackDataExtension.getInstance());
         extensions.add(DangerDetectionExtension.getInstance());
+        extensions.add(VirtualSafetyCarExtension.getInstance());
 
         // statistics should always go last.
         extensions.add(StatisticsExtension.getInstance());
