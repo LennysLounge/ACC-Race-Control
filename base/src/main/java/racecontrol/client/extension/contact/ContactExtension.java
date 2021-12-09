@@ -28,12 +28,12 @@ import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.RealtimeInfo;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.data.enums.CarLocation;
+import static racecontrol.client.data.enums.SessionType.RACE;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.extension.dangerdetection.YellowFlagEvent;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
-import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
 import static racecontrol.client.extension.statistics.CarProperties.LAP_COUNT;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_FINISHED;
 import racecontrol.client.extension.statistics.CarStatistics;
@@ -339,11 +339,16 @@ public class ContactExtension
                     CarStatistics stats = STATISTICS_EXTENSION.getCar(car.getCarId());
                     String carNumber = String.valueOf(car.getCarNumber());
                     String lap = String.valueOf(stats.get(SESSION_FINISHED) ? "F" : (stats.get(LAP_COUNT) + 1));
-                    String spin = info.getYellowFlaggedCars().contains(car.getCarId()) ? "Spin" : "";
-                    return String.format("%s[%s] %s",
+                    String hints = "";
+                    if (info.getSessionID().getType() != RACE
+                            && car.getRealtime().getCurrentLap().isInvalid()) {
+                        hints += " Invalid";
+                    }
+                    hints += info.getYellowFlaggedCars().contains(car.getCarId()) ? " Spin" : "";
+                    return String.format("%s[%s]%s",
                             carNumber,
                             lap,
-                            spin);
+                            hints);
                 })
                 .collect(Collectors.joining("\n"));
         GOOGLE_SHEETS_EXTENSION.sendIncident(info.getSessionEarliestTime(), cars);
