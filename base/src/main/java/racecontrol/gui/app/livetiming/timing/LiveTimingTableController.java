@@ -148,11 +148,13 @@ public class LiveTimingTableController
 
     public void setViewQuali() {
         table.setTableModel(qualifyingTableModel);
+        model = qualifyingTableModel;
         updateTableModel();
     }
 
     public void setViewRace() {
         table.setTableModel(raceTableModel);
+        model = raceTableModel;
         updateTableModel();
     }
 

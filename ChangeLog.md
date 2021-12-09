@@ -23,6 +23,8 @@ Changes:
 
 Bug fixes:
 * Detaching a page now correctly renders it.
+* The live timing table will now correctly switch to "Race" when the session changes.
+
 # v1.3.2
 
 Changes:

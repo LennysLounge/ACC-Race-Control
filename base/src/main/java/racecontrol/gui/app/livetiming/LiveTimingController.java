@@ -11,6 +11,7 @@ import static racecontrol.client.data.enums.SessionType.QUALIFYING;
 import static racecontrol.client.data.enums.SessionType.RACE;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.eventbus.Event;
+import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import static racecontrol.gui.RaceControlApplet.getApplet;
 import racecontrol.gui.app.AppController;
@@ -46,6 +47,7 @@ public class LiveTimingController
     private final MenuItem menuItem;
 
     public LiveTimingController() {
+        EventBus.register(this);
         menuItem = new MenuItem("Live Timing",
                 getApplet().loadResourceAsPImage("/images/RC_Menu_LiveTiming.png"));
         appController = AppController.getInstance();
