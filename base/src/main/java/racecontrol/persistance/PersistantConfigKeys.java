@@ -30,4 +30,14 @@ public interface PersistantConfigKeys {
     public Key<Boolean> BROADCASTING_CONTROLS_COLLAPSED = new Key<>(Boolean.class, false, "broadcastingControlsCollapsed");
     public Key<Boolean> MENU_COLLAPSED = new Key<>(Boolean.class, false, "menuCollapsed");
     
+    /**
+     * Contact config panel
+     */
+    public Key<Boolean> CONTACT_CONFIG_ENABLED = new Key<>(Boolean.class, true, "contactConfigEnabled");
+    public Key<Boolean> CONTACT_CONFIG_ADVANCED_ENABLED = new Key<>(Boolean.class, true, "contactConfigAdvancedEnabled");
+    public Key<Boolean> CONTACT_CONFIG_HINT_LAPCOUNT = new Key<>(Boolean.class, true, "contactConfigHintLapCount");
+    public Key<Boolean> CONTACT_CONFIG_HINT_SPIN = new Key<>(Boolean.class, true, "contactConfigHintSpin");
+    public Key<Boolean> CONTACT_CONFIG_HINT_INVALID = new Key<>(Boolean.class, true, "contactConfigHintInvalid");
+    
+    
 }

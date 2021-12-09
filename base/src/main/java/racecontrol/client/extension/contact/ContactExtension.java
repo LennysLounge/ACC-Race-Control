@@ -38,6 +38,12 @@ import static racecontrol.client.extension.statistics.CarProperties.LAP_COUNT;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_FINISHED;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.persistance.PersistantConfig;
+import static racecontrol.persistance.PersistantConfigKeys.CONTACT_CONFIG_ADVANCED_ENABLED;
+import static racecontrol.persistance.PersistantConfigKeys.CONTACT_CONFIG_ENABLED;
+import static racecontrol.persistance.PersistantConfigKeys.CONTACT_CONFIG_HINT_INVALID;
+import static racecontrol.persistance.PersistantConfigKeys.CONTACT_CONFIG_HINT_LAPCOUNT;
+import static racecontrol.persistance.PersistantConfigKeys.CONTACT_CONFIG_HINT_SPIN;
 
 /**
  * This extension listens for contact between cars during a session and creates
@@ -98,6 +104,27 @@ public class ContactExtension
      * contact.
      */
     private final float YELLOW_FLAG_DISTANCE_THRESHOLD = 10f;
+    /**
+     * Whether of not this extension is enabled.
+     */
+    private boolean enabled;
+    /**
+     * Whether or not the advanced collision detection is enabled.
+     */
+    private boolean advancedDetectionEnabled;
+    /**
+     * Whether or not the lap number is send to the google spreadsheet.
+     */
+    private boolean sendLapNumber;
+    /**
+     * Whether or not a spin is send to the google spreadsheet.
+     */
+    private boolean sendSpin;
+    /**
+     * Whether or not the invalid status of the current lap is send to the
+     * google spreadsheet.
+     */
+    private boolean sendInvalid;
 
     /**
      * Get the instance of this extension.
@@ -120,10 +147,45 @@ public class ContactExtension
         REPLAY_EXTENSION = ReplayOffsetExtension.getInstance();
         GOOGLE_SHEETS_EXTENSION = GoogleSheetsAPIExtension.getInstance();
         STATISTICS_EXTENSION = StatisticsExtension.getInstance();
+
+        enabled = PersistantConfig.get(CONTACT_CONFIG_ENABLED);
+        advancedDetectionEnabled = PersistantConfig.get(CONTACT_CONFIG_ADVANCED_ENABLED);
+        sendLapNumber = PersistantConfig.get(CONTACT_CONFIG_HINT_LAPCOUNT);
+        sendSpin = PersistantConfig.get(CONTACT_CONFIG_HINT_SPIN);
+        sendInvalid = PersistantConfig.get(CONTACT_CONFIG_HINT_INVALID);
+
+    }
+
+    public void setEnabled(boolean state) {
+        enabled = state;
+        PersistantConfig.put(CONTACT_CONFIG_ENABLED, state);
+    }
+
+    public void setAdvancedEnabled(boolean state) {
+        advancedDetectionEnabled = state;
+        PersistantConfig.put(CONTACT_CONFIG_ADVANCED_ENABLED, state);
+    }
+
+    public void setSendLapNumber(boolean state) {
+        sendLapNumber = state;
+        PersistantConfig.put(CONTACT_CONFIG_HINT_LAPCOUNT, state);
+    }
+
+    public void setSendSpin(boolean state) {
+        sendSpin = state;
+        PersistantConfig.put(CONTACT_CONFIG_HINT_SPIN, state);
+    }
+
+    public void setSendInvalid(boolean state) {
+        sendInvalid = state;
+        PersistantConfig.put(CONTACT_CONFIG_HINT_INVALID, state);
     }
 
     @Override
     public void onEvent(Event e) {
+        if (!enabled) {
+            return;
+        }
         if (e instanceof BroadcastingEventEvent) {
             BroadcastingEvent event = ((BroadcastingEventEvent) e).getEvent();
             if (event.getType() == BroadcastingEventType.ACCIDENT) {
@@ -339,16 +401,14 @@ public class ContactExtension
                     CarStatistics stats = STATISTICS_EXTENSION.getCar(car.getCarId());
                     String carNumber = String.valueOf(car.getCarNumber());
                     String lap = String.valueOf(stats.get(SESSION_FINISHED) ? "F" : (stats.get(LAP_COUNT) + 1));
-                    String hints = "";
-                    if (info.getSessionID().getType() != RACE
-                            && car.getRealtime().getCurrentLap().isInvalid()) {
-                        hints += " Invalid";
-                    }
-                    hints += info.getYellowFlaggedCars().contains(car.getCarId()) ? " Spin" : "";
-                    return String.format("%s[%s]%s",
+                    boolean isInvalid = car.getRealtime().getCurrentLap().isInvalid()
+                            && info.getSessionID().getType() != RACE;
+                    boolean isSpun = info.getYellowFlaggedCars().contains(car.getCarId());
+                    return String.format("%s%s%s%s",
                             carNumber,
-                            lap,
-                            hints);
+                            sendLapNumber ? ("[" + lap + "]") : "",
+                            sendSpin ? (isSpun ? " Spin" : "") : "",
+                            sendInvalid ? (isInvalid ? " Invalid" : "") : "");
                 })
                 .collect(Collectors.joining("\n"));
         GOOGLE_SHEETS_EXTENSION.sendIncident(info.getSessionEarliestTime(), cars);
@@ -397,7 +457,9 @@ public class ContactExtension
         for (var oldEvent : oldYellowEvents) {
             if (yellowEvents.contains(oldEvent)) {
                 if (isPossibleContact(oldEvent)) {
-                    commitYellowFlagContact(oldEvent);
+                    if (advancedDetectionEnabled) {
+                        commitYellowFlagContact(oldEvent);
+                    }
                 } else {
                     yellowEvents.remove(oldEvent);
                 }

@@ -56,6 +56,7 @@ public class LPCheckBox
     public void draw(PApplet applet) {
 
         applet.fill(COLOR_WHITE);
+        applet.noStroke();
         applet.rect(0, 0, TEXT_SIZE, TEXT_SIZE);
 
         if (selected) {

@@ -32,7 +32,7 @@ public class RaceControlPanel
     protected final LPButton exportButton;
     protected final LPButton googleSheetsButton;
     protected final LPButton virtualSafetyCarButton;
-    protected final LPButton placeHolder2;
+    protected final LPButton contactButton;
     protected final LPButton placeHolder3;
 
     private boolean showFindReplayButton = false;
@@ -70,8 +70,8 @@ public class RaceControlPanel
         addComponent(googleSheetsButton);
         virtualSafetyCarButton = new LPButton("Virtual safety car");
         addComponent(virtualSafetyCarButton);
-        placeHolder2 = new LPButton("placeHolder2");
-        //addComponent(placeHolder2);
+        contactButton = new LPButton("Contact");
+        addComponent(contactButton);
         placeHolder3 = new LPButton("placeHolder3");
         //addComponent(placeHolder3);
 
@@ -95,8 +95,8 @@ public class RaceControlPanel
         googleSheetsButton.setPosition(buttonPadding * 2, heightOffset + buttonPadding * 2);
         virtualSafetyCarButton.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
         virtualSafetyCarButton.setPosition(buttonWidth + buttonPadding, heightOffset + buttonPadding * 2);
-        placeHolder2.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
-        placeHolder2.setPosition(buttonPadding * 2, heightOffset + buttonHeight + buttonPadding);
+        contactButton.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
+        contactButton.setPosition(buttonPadding * 2, heightOffset + buttonHeight + buttonPadding);
         placeHolder3.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
         placeHolder3.setPosition(buttonWidth + buttonPadding, heightOffset + buttonHeight + buttonPadding);
 

@@ -36,6 +36,7 @@ import static racecontrol.gui.RaceControlApplet.getApplet;
 import racecontrol.gui.app.Menu;
 import racecontrol.gui.app.Menu.MenuItem;
 import racecontrol.gui.app.PageController;
+import racecontrol.gui.app.racecontrol.contact.ContactConfigController;
 import racecontrol.gui.app.racecontrol.googlesheetsapi.GoogleSheetsController;
 import racecontrol.logging.UILogger;
 
@@ -67,6 +68,8 @@ public class RaceControlController
 
     private VirtualSafetyCarConfigController virtualSafetyCarController;
 
+    private ContactConfigController contactConfigController;
+
     private final Menu.MenuItem menuItem;
 
     public static RaceControlController getInstance() {
@@ -91,6 +94,7 @@ public class RaceControlController
         googleSheetsController = new GoogleSheetsController();
         virtualSafetyCarController = new VirtualSafetyCarConfigController();
         raceReportController = RaceReportController.getInstance();
+        contactConfigController = new ContactConfigController();
 
         tableModel.setInfoColumnAction(infoClickAction);
         tableModel.setReplayClickAction((RaceEventEntry entry, int mouseX, int mouseY) -> replayClickAction(entry));
@@ -106,8 +110,9 @@ public class RaceControlController
         });
 
         panel.exportButton.setAction(() -> exportEventList());
-        panel.googleSheetsButton.setAction(() -> googleSheetsController.openSettingsPanel());
-        panel.virtualSafetyCarButton.setAction(() -> virtualSafetyCarController.openSettingsPanel());
+        panel.googleSheetsButton.setAction(googleSheetsController::openSettingsPanel);
+        panel.virtualSafetyCarButton.setAction(virtualSafetyCarController::openSettingsPanel);
+        panel.contactButton.setAction(contactConfigController::openSettingsPanel);
     }
 
     @Override
