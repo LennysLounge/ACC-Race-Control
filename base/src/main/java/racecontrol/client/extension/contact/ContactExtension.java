@@ -421,6 +421,13 @@ public class ContactExtension
      */
     private void saveYellowFlagEvent(YellowFlagEvent event) {
         CarInfo flaggedCar = event.getCar();
+        
+        
+        // skip yellows that happen when a car has finished the race.
+        CarStatistics stats = STATISTICS_EXTENSION.getCar(flaggedCar.getCarId());
+        if(stats.get(SESSION_FINISHED)){
+            return;
+        }
 
         // find closest car at the moment the yellow flag was shown.
         Optional<CarInfo> closestCarInstant
