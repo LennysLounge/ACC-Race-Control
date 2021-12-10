@@ -17,6 +17,10 @@ import static racecontrol.gui.LookAndFeel.COLOR_BLUE;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.app.livetiming.timing.tablemodels.LiveTimingTableModel;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.NameColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PitFlagColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PositionColumn;
 import racecontrol.gui.lpui.table.LPTable.RenderContext;
 import racecontrol.gui.lpui.table.LPTableColumn;
 
@@ -85,10 +89,10 @@ public class RatingTableModel
     @Override
     public LPTableColumn[] getColumns() {
         return new LPTableColumn[]{
-            positionColumn,
-            nameColumn,
-            pitColumn,
-            carNumberColumn,
+            new PositionColumn(),
+            new NameColumn(),
+            new PitFlagColumn(),
+            new CarNumberColumn(),
             new LPTableColumn("Proximit")
             .setMaxWidth(150)
             .setMinWidth(150)

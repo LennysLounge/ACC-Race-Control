@@ -29,6 +29,10 @@ import racecontrol.gui.lpui.table.LPTableColumn;
 import static racecontrol.client.extension.statistics.CarProperties.RACE_START_POSITION_ACCURATE;
 import static racecontrol.client.extension.statistics.CarProperties.SPEED_TRAP_SPEED;
 import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.NameColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PitFlagColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PositionColumn;
 import racecontrol.utility.TimeUtils;
 
 /**
@@ -41,10 +45,10 @@ public class StatsTableModel
     @Override
     public LPTableColumn[] getColumns() {
         return new LPTableColumn[]{
-            positionColumn,
-            nameColumn,
-            pitColumn,
-            carNumberColumn,
+            new PositionColumn(),
+            new NameColumn(),
+            new PitFlagColumn(),
+            new CarNumberColumn(),
             new LPTableColumn("+/-")
             .setMinWidth(100)
             .setCellRenderer((applet, context) -> placesLostGainedRenderer(applet, context)),

@@ -20,6 +20,10 @@ import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.NameColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PitFlagColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PositionColumn;
 import racecontrol.gui.lpui.table.LPTable;
 import racecontrol.gui.lpui.table.LPTableColumn;
 import racecontrol.utility.TimeUtils;
@@ -34,18 +38,20 @@ public class DriversTableModel
     @Override
     public LPTableColumn[] getColumns() {
         return new LPTableColumn[]{
-            positionColumn,
-            nameColumn
+            new PositionColumn(),
+            new NameColumn()
             .setMaxWidth(LINE_HEIGHT * 7f)
             .setMinWidth(LINE_HEIGHT * 7f)
-            .setPriority(1000),
+            .setPriority(1000)
+            .setCellRenderer(this::nameRenderer),
             new LPTableColumn("Category")
             .setMaxWidth(100)
             .setMinWidth(100)
             .setTextAlign(LEFT)
             .setCellRenderer((applet, context) -> driverCategoryRenderer(applet, context)),
-            pitColumn,
-            carNumberColumn,
+            new PitFlagColumn()
+            .setRenderMouseOver(false),
+            new CarNumberColumn(),
             new LPTableColumn("Class")
             .setMaxWidth(100)
             .setMinWidth(100)
@@ -93,27 +99,6 @@ public class DriversTableModel
                 + LINE_HEIGHT;
     }
 
-    protected void pitRenderer(PApplet applet, LPTable.RenderContext context) {
-        LPTable.RenderContext newContext = new LPTable.RenderContext(
-                context.object,
-                context.rowIndex,
-                context.columnIndex,
-                context.isSelected,
-                false,
-                context.isMouseOverColumn,
-                context.isOdd,
-                context.width,
-                context.height,
-                context.tableWidth,
-                context.tableHeight,
-                context.tablePosX,
-                context.tablePosY,
-                context.mouseX,
-                context.mouseY);
-        super.pitRenderer(applet, newContext);
-    }
-
-    @Override
     protected void nameRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
         int i = 0;

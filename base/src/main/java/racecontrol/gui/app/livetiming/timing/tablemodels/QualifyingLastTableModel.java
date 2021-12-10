@@ -26,6 +26,10 @@ import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
 import static racecontrol.gui.LookAndFeel.COLOR_RACE;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.NameColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PitFlagColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PositionColumn;
 import racecontrol.gui.lpui.table.LPTable;
 import racecontrol.gui.lpui.table.LPTableColumn;
 import racecontrol.utility.TimeUtils;
@@ -40,10 +44,10 @@ public class QualifyingLastTableModel
     @Override
     public LPTableColumn[] getColumns() {
         return new LPTableColumn[]{
-            positionColumn,
-            nameColumn,
-            pitColumn,
-            carNumberColumn,
+            new PositionColumn(),
+            new NameColumn(),
+            new PitFlagColumn(),
+            new CarNumberColumn(),
             new LPTableColumn("Gap")
             .setMinWidth(90)
             .setPriority(3)
