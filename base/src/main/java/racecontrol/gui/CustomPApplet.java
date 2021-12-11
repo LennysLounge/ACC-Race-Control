@@ -46,18 +46,34 @@ public class CustomPApplet extends LPBase {
      * @return A lock object used to reverse this clip.
      */
     public Object pushClip(float x, float y, float w, float h) {
-        ClipTranslate newClip = new ClipTranslate(x, y, w, h);
+        ClipTranslate newClip = new ClipTranslate(x, y, 0, 0, w, h);
         if (!clips.isEmpty()) {
-            // limit new clip to not be bigger than previous clip.
+            // translate new clip to old reference frame
+            newClip.x += newClip.tx;
+            newClip.y += newClip.ty;
+            
+            // turn width and height into end points
+            newClip.w = newClip.x + newClip.w;
+            newClip.h = newClip.y + newClip.h;
+
+            // constrain new clip to old clip area
             ClipTranslate prevClip = clips.peek();
-            newClip.x = constrain(newClip.x, 0, prevClip.w);
-            newClip.y = constrain(newClip.y, 0, prevClip.h);
-            newClip.w = constrain(newClip.w, 0, prevClip.w - newClip.x);
-            newClip.h = constrain(newClip.h, 0, prevClip.h - newClip.y);
+            newClip.x = constrain(newClip.x, prevClip.x, prevClip.x + prevClip.w);
+            newClip.y = constrain(newClip.y, prevClip.y, prevClip.y + prevClip.h);
+            newClip.w = constrain(newClip.w, prevClip.x, prevClip.x + prevClip.w);
+            newClip.h = constrain(newClip.h, prevClip.y, prevClip.y + prevClip.h);
+            
+            // turn width and height back to width and height
+            newClip.w = newClip.w - newClip.x;
+            newClip.h = newClip.h - newClip.y;
+
+            // translate new clip to new reference frame
+            newClip.x -= newClip.tx;
+            newClip.y -= newClip.ty;
         }
 
-        translate(newClip.x, newClip.y);
-        clip(0, 0, newClip.w, newClip.h);
+        translate(newClip.tx, newClip.ty);
+        clip(newClip.x, newClip.y, newClip.w, newClip.h);
         clips.push(newClip);
         return newClip.lock;
     }
@@ -76,7 +92,7 @@ public class CustomPApplet extends LPBase {
             return;
         }
         noClip();
-        translate(-clipTranslate.x, -clipTranslate.y);
+        translate(-clipTranslate.tx, -clipTranslate.ty);
         clips.pop();
     }
 
@@ -103,13 +119,17 @@ public class CustomPApplet extends LPBase {
 
     private class ClipTranslate {
 
+        float tx;
+        float ty;
         float x;
         float y;
         float w;
         float h;
         Object lock;
 
-        public ClipTranslate(float x, float y, float w, float h) {
+        public ClipTranslate(float tx, float ty, float x, float y, float w, float h) {
+            this.tx = tx;
+            this.ty = ty;
             this.x = x;
             this.y = y;
             this.w = w;
