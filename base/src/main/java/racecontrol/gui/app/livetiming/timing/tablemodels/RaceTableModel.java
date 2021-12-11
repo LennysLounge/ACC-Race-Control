@@ -30,6 +30,7 @@ import static racecontrol.client.extension.statistics.CarProperties.OVERTAKE_IND
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.ConstructorColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.NameColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PitFlagColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PositionColumn;
@@ -46,8 +47,9 @@ public class RaceTableModel
         return new LPTableColumn[]{
             new PositionColumn(),
             new NameColumn(),
-            new PitFlagColumn(),
+            new ConstructorColumn(),
             new CarNumberColumn(),
+            new PitFlagColumn(),
             new LPTableColumn("")
             .setMinWidth(40)
             .setMaxWidth(40)

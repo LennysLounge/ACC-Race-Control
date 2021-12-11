@@ -21,6 +21,7 @@ import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.ConstructorColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.NameColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PitFlagColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PositionColumn;
@@ -49,9 +50,9 @@ public class DriversTableModel
             .setMinWidth(100)
             .setTextAlign(LEFT)
             .setCellRenderer((applet, context) -> driverCategoryRenderer(applet, context)),
-            new PitFlagColumn()
-            .setRenderMouseOver(false),
+            new ConstructorColumn(),
             new CarNumberColumn(),
+            new PitFlagColumn(),
             new LPTableColumn("Class")
             .setMaxWidth(100)
             .setMinWidth(100)

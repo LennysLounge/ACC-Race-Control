@@ -19,6 +19,7 @@ import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POS
 import racecontrol.client.extension.statistics.CarStatistics;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.ConstructorColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.NameColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PitFlagColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PositionColumn;
@@ -38,8 +39,9 @@ public class TestTableModel
         return new LPTableColumn[]{
             new PositionColumn(),
             new NameColumn(),
-            new PitFlagColumn(),
+            new ConstructorColumn(),
             new CarNumberColumn(),
+            new PitFlagColumn(),
             new LPTableColumn("RDS")
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> r1(applet, context)),

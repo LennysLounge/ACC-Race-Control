@@ -27,6 +27,7 @@ import static racecontrol.gui.LookAndFeel.COLOR_RACE;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.ConstructorColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.NameColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PitFlagColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PositionColumn;
@@ -46,8 +47,9 @@ public class QualifyingLastTableModel
         return new LPTableColumn[]{
             new PositionColumn(),
             new NameColumn(),
-            new PitFlagColumn(),
+            new ConstructorColumn(),
             new CarNumberColumn(),
+            new PitFlagColumn(),
             new LPTableColumn("Gap")
             .setMinWidth(90)
             .setPriority(3)

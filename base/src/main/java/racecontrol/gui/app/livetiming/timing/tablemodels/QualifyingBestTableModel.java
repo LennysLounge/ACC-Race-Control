@@ -31,6 +31,7 @@ import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_INVALID;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.ConstructorColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.NameColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PitFlagColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PositionColumn;
@@ -47,8 +48,9 @@ public class QualifyingBestTableModel
         return new LPTableColumn[]{
             new PositionColumn(),
             new NameColumn(),
-            new PitFlagColumn(),
+            new ConstructorColumn(),
             new CarNumberColumn(),
+            new PitFlagColumn(),
             new LPTableColumn("Gap")
             .setMinWidth(90)
             .setPriority(3)

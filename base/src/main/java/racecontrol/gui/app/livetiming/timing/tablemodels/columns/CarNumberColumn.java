@@ -33,8 +33,8 @@ public class CarNumberColumn
 
     public CarNumberColumn() {
         super("#");
-        setMinWidth(LINE_HEIGHT * 1.5f);
-        setMaxWidth(LINE_HEIGHT * 1.5f);
+        setMinWidth(LINE_HEIGHT * 1.3f);
+        setMaxWidth(LINE_HEIGHT * 1.3f);
         setPriority(1000);
         setCellRenderer(this::carNumberRenderer);
     }
@@ -64,19 +64,19 @@ public class CarNumberColumn
         }
         applet.noStroke();
         applet.fill(backColor);
-        applet.rect(1, 1, context.width - 2, context.height - 2);
+        applet.rect(0, 1, context.width, context.height - 2);
 
         //render GT4 / Cup / Super trofeo corners.
         CarCategory cat = stats.get(CAR_MODEL).getCategory();
         if (cat != GT3) {
             applet.fill(COLOR_WHITE);
             applet.beginShape();
-            applet.vertex(context.width - 1, context.height - 1);
-            applet.vertex(context.width - 1, context.height - LINE_HEIGHT * 0.55f);
+            applet.vertex(context.width, context.height - 1);
+            applet.vertex(context.width, context.height - LINE_HEIGHT * 0.55f);
             applet.vertex(context.width - LINE_HEIGHT * 0.55f, context.height - 1);
             applet.endShape(CLOSE);
             applet.stroke(0, 0, 0, 50);
-            applet.line(context.width - 1, context.height - LINE_HEIGHT * 0.55f,
+            applet.line(context.width, context.height - LINE_HEIGHT * 0.55f,
                     context.width - LINE_HEIGHT * 0.55f, context.height);
             applet.noStroke();
             if (cat == ST) {
@@ -87,8 +87,8 @@ public class CarNumberColumn
                 applet.fill(COLOR_GT4);
             }
             applet.beginShape();
-            applet.vertex(context.width - 1, context.height - 1);
-            applet.vertex(context.width - 1, context.height - LINE_HEIGHT * 0.4f);
+            applet.vertex(context.width, context.height - 1);
+            applet.vertex(context.width, context.height - LINE_HEIGHT * 0.4f);
             applet.vertex(context.width - LINE_HEIGHT * 0.4f, context.height - 1);
             applet.endShape(CLOSE);
         }

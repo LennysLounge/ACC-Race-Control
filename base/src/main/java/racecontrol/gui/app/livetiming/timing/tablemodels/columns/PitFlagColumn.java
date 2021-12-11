@@ -13,7 +13,7 @@ import static racecontrol.client.extension.statistics.CarProperties.SESSION_FINI
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_BLACK;
-import static racecontrol.gui.LookAndFeel.COLOR_DARK_RED;
+import static racecontrol.gui.LookAndFeel.COLOR_GREEN_FLAG;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.COLOR_YELLOW;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
@@ -27,8 +27,6 @@ import racecontrol.gui.lpui.table.LPTableColumn;
  */
 public class PitFlagColumn
         extends LPTableColumn {
-    
-    private boolean renderMouseOver = true;
 
     public PitFlagColumn() {
         super("");
@@ -37,21 +35,12 @@ public class PitFlagColumn
         setPriority(1000);
         setCellRenderer(this::pitRenderer);
     }
-    
-    public PitFlagColumn setRenderMouseOver(boolean state){
-        renderMouseOver = state;
-        return this;
-    }
 
     protected void pitRenderer(PApplet applet, LPTable.RenderContext context) {
         if (!(context.object instanceof CarStatistics)) {
             return;
         }
         CarStatistics stats = (CarStatistics) context.object;
-        if (context.isMouseOverRow && renderMouseOver) {
-            applet.fill(COLOR_DARK_RED);
-            applet.rect(0, 1, context.width - 1, context.height - 2);
-        }
         if (stats.get(SESSION_FINISHED)) {
             applet.fill(COLOR_WHITE);
             applet.rect(1, 1, context.width - 2, context.height - 2);

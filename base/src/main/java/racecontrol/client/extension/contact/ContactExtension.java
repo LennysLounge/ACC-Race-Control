@@ -304,13 +304,12 @@ public class ContactExtension
             contact = findOtherCars(contact);
         }
 
-        String logMessage = String.format("Contact: %10s\t%s\t%s\t%d",
+        String logMessage = String.format("Contact: %10s\t%s\t%s",
                 contact.getCars().stream()
                         .map(car -> car.getCarNumberString())
                         .collect(Collectors.joining(", ")),
                 TimeUtils.asDuration(contact.getSessionEarliestTime()),
-                TimeUtils.asDuration(contact.getReplayTime()),
-                contact.getSessionEarliestTime());
+                TimeUtils.asDuration(contact.getReplayTime()));
         LOG.info(logMessage);
         UILogger.log(logMessage);
 
@@ -421,11 +420,10 @@ public class ContactExtension
      */
     private void saveYellowFlagEvent(YellowFlagEvent event) {
         CarInfo flaggedCar = event.getCar();
-        
-        
+
         // skip yellows that happen when a car has finished the race.
         CarStatistics stats = STATISTICS_EXTENSION.getCar(flaggedCar.getCarId());
-        if(stats.get(SESSION_FINISHED)){
+        if (stats.get(SESSION_FINISHED)) {
             return;
         }
 
