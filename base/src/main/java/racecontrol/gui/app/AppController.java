@@ -5,6 +5,7 @@
  */
 package racecontrol.gui.app;
 
+import racecontrol.gui.app.settings.SettingsPage;
 import racecontrol.gui.app.statuspanel.StatusPanelManager;
 import java.util.ArrayList;
 import java.util.HashMap;

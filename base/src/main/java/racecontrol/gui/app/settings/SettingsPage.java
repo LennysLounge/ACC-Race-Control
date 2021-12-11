@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.gui.app;
+package racecontrol.gui.app.settings;
 
 import racecontrol.utility.Version;
 import racecontrol.persistance.PersistantConfig;
@@ -28,7 +28,10 @@ import javax.swing.JOptionPane;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import racecontrol.gui.CustomPApplet;
+import racecontrol.gui.app.Menu;
 import racecontrol.gui.app.Menu.MenuItem;
+import racecontrol.gui.app.PageController;
+import racecontrol.gui.lpui.LPScrollPanel;
 import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_COMMAND_PW;
 import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_INTERVAL;
 import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_IP;
@@ -66,7 +69,8 @@ public class SettingsPage
     private final LPButton connectButton = new LPButton("Connect");
 
     private final LPLabel versionLabel = new LPLabel("Version: " + Version.VERSION);
-
+    private final ChangeLogPanel changeLogPanel = new ChangeLogPanel();
+    private final LPScrollPanel changeLogScrollPanel = new LPScrollPanel();
     private final MenuItem menuItem;
 
     public SettingsPage() {
@@ -226,6 +230,9 @@ public class SettingsPage
         addComponent(connectButton);
 
         addComponent(versionLabel);
+        addComponent(changeLogScrollPanel);
+        changeLogScrollPanel.setComponent(changeLogPanel);
+
     }
 
     @Override
@@ -251,6 +258,9 @@ public class SettingsPage
         connectButton.setPosition(20, lh * 6);
 
         versionLabel.setPosition(20, getHeight() - LINE_HEIGHT);
+
+        changeLogScrollPanel.setPosition(425, 10);
+        changeLogScrollPanel.setSize(w - 445, h - 30);
     }
 
     @Override

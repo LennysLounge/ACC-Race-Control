@@ -19,6 +19,14 @@ repositories {
     mavenCentral()
 }
 
+sourceSets{
+    main{
+        resources{
+            srcDirs "src/main/resources", "../changelog"
+        }
+    }
+}
+
 dependencies {
     testImplementation     'junit:junit:4.13'
     
