@@ -24,6 +24,7 @@ public class LPScrollPanel
     private final static Logger LOG = Logger.getLogger(LPScrollPanel.class.getName());
 
     private LPComponent component;
+    private float componentHeight;
 
     private float animatedScroll = 0;
     private float scroll = 0;
@@ -59,6 +60,10 @@ public class LPScrollPanel
      * Current animation scroll velocity.
      */
     private float scrollAnimationCurrentVelocity;
+    /**
+     * Position of the scroll bar.
+     */
+    private boolean scrollbarOnTheRight = false;
 
     public LPScrollPanel() {
         addAnimationTask(scrollAnimation);
@@ -72,15 +77,17 @@ public class LPScrollPanel
     public void draw(PApplet applet) {
         applet.fill(COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
-        if (component == null) {
-            return;
-        }
         if (!scrollbarVisible) {
             return;
         }
 
+        float scrollbarSide = 0;
+        if (scrollbarOnTheRight) {
+            scrollbarSide = getWidth() - scrollbarWidth;
+        }
         applet.stroke(COLOR_GRAY);
-        applet.line(scrollbarWidth / 2, 0, scrollbarWidth / 2, getHeight());
+        applet.line(scrollbarSide + scrollbarWidth / 2, 0,
+                scrollbarSide + scrollbarWidth / 2, getHeight());
         applet.noStroke();
 
         applet.fill(COLOR_RED);
@@ -88,7 +95,8 @@ public class LPScrollPanel
             applet.fill(COLOR_WHITE);
         }
         float padding = scrollbarWidth * 0.25f;
-        applet.rect(padding, scrollbarPosition, scrollbarWidth - padding * 2, scrollbarHeight);
+        applet.rect(scrollbarSide + padding, scrollbarPosition,
+                scrollbarWidth - padding * 2, scrollbarHeight);
 
     }
 
@@ -103,13 +111,16 @@ public class LPScrollPanel
         setScroll(0);
         invalidate();
     }
+    
+    public void setScrollbarOnRight(boolean state){
+        scrollbarOnTheRight = state;
+        updateScroll();
+        invalidate();
+    }
 
     @Override
     public void onResize(float w, float h) {
-        if (component != null) {
-            component.setSize(getWidth(), component.getHeight());
-            updateScroll();
-        }
+        updateScroll();
     }
 
     @Override
@@ -120,7 +131,7 @@ public class LPScrollPanel
     @Override
     public void onMouseMove(int x, int y) {
         boolean newState = false;
-        if (scrollbarVisible && x < scrollbarWidth) {
+        if (isMouseOverScrollbar(x, y)) {
             newState = true;
         }
         if (newState != mouseOverScrollbar) {
@@ -129,7 +140,7 @@ public class LPScrollPanel
         }
         if (mouseDragged) {
             float mouseDif = y - mouseDragHome;
-            float scrollDif = mouseDif * component.getHeight() / getHeight();
+            float scrollDif = mouseDif * componentHeight / getHeight();
             setScrollDirect(mouseDragScrollHome + scrollDif);
         }
     }
@@ -137,13 +148,21 @@ public class LPScrollPanel
     @Override
     public void onMousePressed(int x, int y, int button) {
         if (button == LEFT) {
-            if (x < scrollbarWidth && y > scrollbarPosition
-                    && y < scrollbarPosition + scrollbarHeight) {
+            if (isMouseOverScrollbar(x, y)) {
                 mouseDragged = true;
                 mouseDragHome = y;
                 mouseDragScrollHome = animatedScroll;
             }
         }
+    }
+
+    private boolean isMouseOverScrollbar(int x, int y) {
+        boolean isOverY = y > scrollbarPosition && y < scrollbarPosition + scrollbarHeight;
+        boolean isOverX = x < scrollbarWidth;
+        if (scrollbarOnTheRight) {
+            isOverX = x > getWidth() - scrollbarWidth;
+        }
+        return isOverX && isOverY;
     }
 
     @Override
@@ -164,14 +183,14 @@ public class LPScrollPanel
         if (scroll < 0) {
             scroll = 0;
         }
-        float maxScroll = component.getHeight() - getHeight();
+        float maxScroll = componentHeight - getHeight();
         if (scroll > maxScroll) {
             scroll = maxScroll;
         }
-        if(this.scroll < 0){
+        if (this.scroll < 0) {
             this.scroll = 0;
         }
-        if(this.scroll > maxScroll){
+        if (this.scroll > maxScroll) {
             this.scroll = maxScroll;
         }
         this.animatedScroll = scroll;
@@ -185,8 +204,12 @@ public class LPScrollPanel
         scrollbarHeight = (int) (getHeight() * (getHeight() / component.getHeight()));
         scrollbarPosition = (int) (getHeight() * (this.animatedScroll / component.getHeight()));
         scrollbarVisible = (component.getHeight() > getHeight());
+        float componentWidth = getWidth() - (scrollbarVisible ? scrollbarWidth : 0);
+        float componentX = (scrollbarVisible && !scrollbarOnTheRight) ? scrollbarWidth : 0;
 
-        component.setPosition(scrollbarVisible ? scrollbarWidth : 0, -animatedScroll);
+        component.setSize(componentWidth, component.getHeight());
+        component.setPosition(componentX, -animatedScroll);
+        componentHeight = component.getHeight();
         invalidate();
     }
 
@@ -201,7 +224,7 @@ public class LPScrollPanel
         invalidate();
     }
 
-    public void setScrollSmooth(float newScroll) {
+    private void setScrollSmooth(float newScroll) {
         if (scroll != newScroll) {
             scroll = newScroll;
             scrollAnimationStart = animatedScroll;
@@ -212,7 +235,7 @@ public class LPScrollPanel
         }
     }
 
-    public void setScrollDirect(float newScroll) {
+    private void setScrollDirect(float newScroll) {
         if (scroll != newScroll) {
             scrollAnimation.stop();
             scroll = newScroll;

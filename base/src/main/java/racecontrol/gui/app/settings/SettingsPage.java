@@ -232,6 +232,7 @@ public class SettingsPage
         addComponent(versionLabel);
         addComponent(changeLogScrollPanel);
         changeLogScrollPanel.setComponent(changeLogPanel);
+        changeLogScrollPanel.setScrollbarOnRight(true);
 
     }
 

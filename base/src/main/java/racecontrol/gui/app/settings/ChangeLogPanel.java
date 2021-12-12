@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
+import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.lpui.LPComponent;
@@ -40,7 +40,7 @@ public class ChangeLogPanel
 
     @Override
     public void draw(PApplet applet) {
-        applet.fill(COLOR_DARK_GRAY);
+        applet.fill(COLOR_RED);
         applet.rect(0, 0, getWidth(), getHeight());
 
         applet.fill(COLOR_WHITE);
