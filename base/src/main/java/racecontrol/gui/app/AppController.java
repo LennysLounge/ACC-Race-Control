@@ -108,9 +108,9 @@ public class AppController
         pageControllers.add(liveTimingController);
         pageControllers.add(RaceControlController.getInstance());
         pageControllers.add(new LoggingPanel());
-        pageControllers.add(new TestPanel());
-        pageControllers.add(new DangerDetectionController());
-        pageControllers.add(new TrackDataController());
+        //pageControllers.add(new TestPanel());
+        //pageControllers.add(new DangerDetectionController());
+        //pageControllers.add(new TrackDataController());
 
         // Add page controllers from extension modules.
         Main.getModules().forEach(module -> {
