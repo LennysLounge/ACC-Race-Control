@@ -182,10 +182,12 @@ public class AppController
         if (e instanceof RealtimeUpdateEvent) {
             appPanel.header.invalidate();
         } else if (e instanceof ConnectionOpenedEvent) {
-            appPanel.setActivePage(liveTimingController.getPanel());
-            appPanel.menu.setSelectedMenuItem(appPanel.liveTimingMenuItem);
-            appPanel.updateComponents();
-            appPanel.invalidate();
+            RaceControlApplet.runLater(() -> {
+                appPanel.setActivePage(liveTimingController.getPanel());
+                appPanel.menu.setSelectedMenuItem(appPanel.liveTimingMenuItem);
+                appPanel.updateComponents();
+                appPanel.invalidate();
+            });
         } else if (e instanceof RegistrationResultEvent) {
             if (((RegistrationResultEvent) e).isReadOnly()) {
                 RaceControlApplet.runLater(() -> {
@@ -193,16 +195,16 @@ public class AppController
                 });
             }
         } else if (e instanceof ConnectionClosedEvent) {
-            ConnectionClosedEvent event = (ConnectionClosedEvent) e;
-            if (event.getExitState() == AccBroadcastingClient.ExitState.NORMAL) {
-                appPanel.setActivePage(settingsPage);
-                appPanel.updateComponents();
-            } else if (event.getExitState() == AccBroadcastingClient.ExitState.TIMEOUT) {
-                RaceControlApplet.runLater(() -> {
+            RaceControlApplet.runLater(() -> {
+                ConnectionClosedEvent event = (ConnectionClosedEvent) e;
+                if (event.getExitState() == AccBroadcastingClient.ExitState.NORMAL) {
+                    appPanel.setActivePage(settingsPage);
+                    appPanel.updateComponents();
+                } else if (event.getExitState() == AccBroadcastingClient.ExitState.TIMEOUT) {
                     statusPanelManager.addStatusPanel(new ConnectionTimeoutStatusPanel());
-                });
-            }
-            appPanel.invalidate();
+                }
+                appPanel.invalidate();
+            });
         }
     }
 
