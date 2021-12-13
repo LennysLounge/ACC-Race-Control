@@ -64,6 +64,10 @@ public class LPScrollPanel
      * Position of the scroll bar.
      */
     private boolean scrollbarOnTheRight = false;
+    /**
+     * Scroll speed multiplier.
+     */
+    private float scrollSpeedMultiplier = 1f;
 
     public LPScrollPanel() {
         addAnimationTask(scrollAnimation);
@@ -100,6 +104,10 @@ public class LPScrollPanel
 
     }
 
+    public void setScrollSpeedMultiplier(float speed) {
+        this.scrollSpeedMultiplier = speed;
+    }
+
     public void setComponent(LPComponent c) {
         if (component != null) {
             removeComponent(component);
@@ -111,8 +119,8 @@ public class LPScrollPanel
         setScroll(0);
         invalidate();
     }
-    
-    public void setScrollbarOnRight(boolean state){
+
+    public void setScrollbarOnRight(boolean state) {
         scrollbarOnTheRight = state;
         updateScroll();
         invalidate();
@@ -125,7 +133,7 @@ public class LPScrollPanel
 
     @Override
     public void onMouseScroll(int scrollDir) {
-        setScrollSmooth(scroll + LINE_HEIGHT * scrollDir);
+        setScrollSmooth(scroll + LINE_HEIGHT * scrollDir * scrollSpeedMultiplier);
     }
 
     @Override

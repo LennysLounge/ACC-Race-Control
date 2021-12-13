@@ -12,11 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import processing.core.PApplet;
-import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.LEFT;
-import static racecontrol.gui.LookAndFeel.COLOR_RED;
-import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
-import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
+import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
 import racecontrol.gui.lpui.LPComponent;
 
 /**
@@ -26,7 +22,7 @@ import racecontrol.gui.lpui.LPComponent;
 public class ChangeLogPanel
         extends LPComponent {
 
-    private final List<String> changeLog = new ArrayList<>();
+    private final List<MarkdownEntry> changeLog = new ArrayList<>();
 
     public ChangeLogPanel() {
         loadChangelog();
@@ -35,34 +31,39 @@ public class ChangeLogPanel
     private void loadChangelog() {
         InputStream in = ChangeLogPanel.class.getResourceAsStream("/ChangeLog.md");
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        changeLog.addAll(reader.lines().collect(Collectors.toList()));
+
+        changeLog.addAll(reader.lines()
+                .map(line -> new MarkdownEntry(line))
+                .collect(Collectors.toList())
+        );
     }
 
     @Override
     public void draw(PApplet applet) {
-        applet.fill(COLOR_RED);
+        applet.fill(COLOR_DARK_GRAY);
         applet.rect(0, 0, getWidth(), getHeight());
 
-        applet.fill(COLOR_WHITE);
-        applet.noStroke();
-        applet.textAlign(LEFT, CENTER);
         int y = 0;
-        for (String line : changeLog) {
-            applet.text(line, 0, y + LINE_HEIGHT / 2f);
-            y += LINE_HEIGHT * 0.7f;
+        for (MarkdownEntry line : changeLog) {
+            line.render(applet, 10, y);
+            y += line.getHeight();
         }
     }
 
     @Override
     public void setSize(float w, float h) {
         super.setSize(w, h);
+        changeLog.forEach(entry -> entry.setWidth(w - 20));
+
         calculateHeight();
     }
 
     private void calculateHeight() {
-        int lines = changeLog.size();
-
-        super.setSize(getWidth(), lines * LINE_HEIGHT * 0.7f);
+        float height = 4000;
+        height = changeLog.stream()
+                .map(entry -> entry.getHeight())
+                .reduce(0f, Float::sum);
+        super.setSize(getWidth(), height);
     }
 
 }

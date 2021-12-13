@@ -71,6 +71,7 @@ public class SettingsPage
     private final LPLabel versionLabel = new LPLabel("Version: " + Version.VERSION);
     private final ChangeLogPanel changeLogPanel = new ChangeLogPanel();
     private final LPScrollPanel changeLogScrollPanel = new LPScrollPanel();
+    private final LPLabel changelogLabel = new LPLabel("Changelog:");
     private final MenuItem menuItem;
 
     public SettingsPage() {
@@ -233,6 +234,8 @@ public class SettingsPage
         addComponent(changeLogScrollPanel);
         changeLogScrollPanel.setComponent(changeLogPanel);
         changeLogScrollPanel.setScrollbarOnRight(true);
+        changeLogScrollPanel.setScrollSpeedMultiplier(2f);
+        addComponent(changelogLabel);
 
     }
 
@@ -260,8 +263,9 @@ public class SettingsPage
 
         versionLabel.setPosition(20, getHeight() - LINE_HEIGHT);
 
-        changeLogScrollPanel.setPosition(425, 10);
-        changeLogScrollPanel.setSize(w - 445, h - 30);
+        changelogLabel.setPosition(435, 0);
+        changeLogScrollPanel.setPosition(425, LINE_HEIGHT + 10);
+        changeLogScrollPanel.setSize(w - 425, h - LINE_HEIGHT - 30);
     }
 
     @Override
