@@ -50,9 +50,6 @@ public class LPContainer
         super.drawInternal(applet);
 
         for (LPComponent c : components) {
-            if(c instanceof BluePanel){
-                int x = 12;
-            }
             Object lock = cApplet.pushClip(c.getPosX(), c.getPosY(), c.getWidth(), c.getHeight());
             c.drawInternal(applet);
             cApplet.popClip(lock);
