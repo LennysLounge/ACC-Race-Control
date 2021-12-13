@@ -21,6 +21,7 @@ Changes:
     * Cars that have spun and caused a yellow flag after a contact will now be suffixed with "Spin" after the lap count.
     * Possible contacts, detected by the advanced collision detection, will be marked with the word "possible" in the cars column.
     * Race Control will now search all sheets of a spreadsheet to find a suitable targets.
+* Improve logging to make it easier to find bugs.
 
 Bug fixes:
 * Detaching a page now correctly renders it.

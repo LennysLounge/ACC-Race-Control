@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import processing.core.PImage;
 import processing.event.KeyEvent;
+import racecontrol.Main;
 import racecontrol.gui.app.AppController;
 import racecontrol.gui.lpui.LPComponent;
 
@@ -69,6 +70,8 @@ public class RaceControlApplet extends CustomPApplet {
 
     @Override
     public void setup() {
+        Thread.setDefaultUncaughtExceptionHandler(new Main.UncoughtExceptionHandler());
+
         LookAndFeel.init(this);
         surface.setResizable(true);
         surface.setTitle("ACC Race Control");

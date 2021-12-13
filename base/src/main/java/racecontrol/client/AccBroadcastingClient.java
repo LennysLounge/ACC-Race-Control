@@ -43,6 +43,7 @@ import java.util.Map.Entry;
 import static java.util.Objects.requireNonNull;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import racecontrol.Main;
 import racecontrol.client.events.BroadcastingEventEvent;
 import racecontrol.client.events.EntryListUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
@@ -520,6 +521,7 @@ public class AccBroadcastingClient {
 
         public UdpListener(String name) {
             super(name);
+            Thread.setDefaultUncaughtExceptionHandler(new Main.UncoughtExceptionHandler());
         }
 
         @Override

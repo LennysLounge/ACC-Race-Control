@@ -76,6 +76,15 @@ public class TestPanel
             testAnimation.restart();
         });
         addComponent(animationButton);
+        
+        LPButton crashButton = new LPButton("crash");
+        crashButton.setSize(100, LINE_HEIGHT);
+        crashButton.setPosition(680, 0);
+        crashButton.setAction(() -> {
+            Object o = null;
+            o.toString();
+        });
+        addComponent(crashButton);
 
         addAnimationTask(testAnimation);
 
