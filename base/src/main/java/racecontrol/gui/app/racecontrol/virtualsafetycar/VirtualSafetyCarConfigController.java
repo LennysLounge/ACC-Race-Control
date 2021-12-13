@@ -13,6 +13,7 @@ import racecontrol.client.events.AfterPacketReceivedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.app.statuspanel.StatusPanelManager;
 
 /**
@@ -68,22 +69,28 @@ public class VirtualSafetyCarConfigController
     @Override
     public void onEvent(Event e) {
         if (e instanceof VSCStartEvent) {
-            panel.isVSCDisabled = false;
-            panel.updateComponents();
-            panel.invalidate();
+            RaceControlApplet.runLater(() -> {
+                panel.isVSCDisabled = false;
+                panel.updateComponents();
+                panel.invalidate();
 
-            statusPanel.setVSCStart();
-            statusPanelManager.addStatusPanel(statusPanel);
+                statusPanel.setVSCStart();
+                statusPanelManager.addStatusPanel(statusPanel);
+            });
         } else if (e instanceof VSCEndEvent) {
-            panel.isVSCDisabled = true;
-            panel.updateComponents();
-            panel.invalidate();
+            RaceControlApplet.runLater(() -> {
+                panel.isVSCDisabled = true;
+                panel.updateComponents();
+                panel.invalidate();
 
-            statusPanelManager.removeStatusPanel(statusPanel);
+                statusPanelManager.removeStatusPanel(statusPanel);
+            });
         } else if (e instanceof AfterPacketReceivedEvent) {
-            if (vscController.isActive()) {
-                statusPanel.invalidate();
-            }
+            RaceControlApplet.runLater(() -> {
+                if (vscController.isActive()) {
+                    statusPanel.invalidate();
+                }
+            });
         }
     }
 

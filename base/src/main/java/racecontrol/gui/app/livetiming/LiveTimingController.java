@@ -13,6 +13,7 @@ import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.gui.RaceControlApplet;
 import static racecontrol.gui.RaceControlApplet.getApplet;
 import racecontrol.gui.app.AppController;
 import racecontrol.gui.app.Menu.MenuItem;
@@ -102,7 +103,9 @@ public class LiveTimingController
     @Override
     public void onEvent(Event e) {
         if (e instanceof SessionChangedEvent) {
-            sessionChanged(((SessionChangedEvent) e).getSessionInfo());
+            RaceControlApplet.runLater(() -> {
+                sessionChanged(((SessionChangedEvent) e).getSessionInfo());
+            });
         }
     }
 

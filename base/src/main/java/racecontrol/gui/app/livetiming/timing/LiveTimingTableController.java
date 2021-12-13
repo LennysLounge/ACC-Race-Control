@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.app.livetiming.timing.tablemodels.DriversTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingBestTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingLastTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.RaceTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.StatsTableModel;
-import racecontrol.gui.app.livetiming.timing.tablemodels.TestTableModel;
 import racecontrol.gui.lpui.table.LPTable;
 
 /**
@@ -97,7 +97,9 @@ public class LiveTimingTableController
     @Override
     public void onEvent(Event e) {
         if (e instanceof RealtimeUpdateEvent) {
-            updateTableModel();
+            RaceControlApplet.runLater(() -> {
+                updateTableModel();
+            });
         }
     }
 

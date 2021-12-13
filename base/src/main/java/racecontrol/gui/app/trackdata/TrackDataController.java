@@ -20,6 +20,7 @@ import racecontrol.client.extension.trackdata.TrackDataExtension;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.gui.RaceControlApplet;
 import static racecontrol.gui.RaceControlApplet.getApplet;
 import racecontrol.gui.app.Menu;
 import racecontrol.gui.app.PageController;
@@ -95,16 +96,22 @@ public class TrackDataController
     @Override
     public void onEvent(Event e) {
         if (e instanceof TrackDataEvent) {
-            onTrackInfo();
+            RaceControlApplet.runLater(() -> {
+                onTrackInfo();
+            });
         } else if (e instanceof RealtimeCarUpdateEvent) {
-            updateVMap(((RealtimeCarUpdateEvent) e).getInfo());
-            updateDirMap(((RealtimeCarUpdateEvent) e).getInfo());
-            dataPanel.drawCarState(((RealtimeCarUpdateEvent) e).getInfo());
-            dataPanel.invalidate();
-            //mapPanel.invalidate();
+            RaceControlApplet.runLater(() -> {
+                updateVMap(((RealtimeCarUpdateEvent) e).getInfo());
+                updateDirMap(((RealtimeCarUpdateEvent) e).getInfo());
+                dataPanel.drawCarState(((RealtimeCarUpdateEvent) e).getInfo());
+                dataPanel.invalidate();
+                //mapPanel.invalidate();
+            });
         } else if (e instanceof TrackDataEvent) {
-            mapPanel.trackData = ((TrackDataEvent) e).getTrackData();
-            dataPanel.speedTrapLine = ((TrackDataEvent) e).getTrackData().getSpeedTrapLine();
+            RaceControlApplet.runLater(() -> {
+                mapPanel.trackData = ((TrackDataEvent) e).getTrackData();
+                dataPanel.speedTrapLine = ((TrackDataEvent) e).getTrackData().getSpeedTrapLine();
+            });
         }
     }
 
@@ -147,7 +154,7 @@ public class TrackDataController
             track section is equal to the direction at the middle of the section.
             Rounding makes sure that the position this index represents is
             at the middle of the section being meassured.
-            */
+             */
             int index = (int) Math.round(info.getSplinePosition() * mapSize) % mapSize;
             if (index == mapSize) {
                 index = 0;

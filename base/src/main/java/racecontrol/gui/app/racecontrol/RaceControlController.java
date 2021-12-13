@@ -13,7 +13,6 @@ import racecontrol.gui.app.racecontrol.entries.ContactEventEntry;
 import racecontrol.gui.app.racecontrol.entries.RaceEventEntry;
 import racecontrol.gui.app.racecontrol.entries.SimpleEventEntry;
 import racecontrol.gui.app.racecontrol.entries.VSCViolationEventEntry;
-import racecontrol.gui.app.racecontrol.googlesheetsapi.ConfigurationController;
 import racecontrol.gui.app.racecontrol.virtualsafetycar.VirtualSafetyCarConfigController;
 import racecontrol.client.extension.vsc.events.VSCEndEvent;
 import racecontrol.client.extension.vsc.events.VSCStartEvent;
@@ -134,19 +133,29 @@ public class RaceControlController
         } else if (e instanceof ReplayStartKnownEvent) {
             RaceControlApplet.runLater(() -> {
                 panel.setShowReplayButton(false);
+                updateReplayTimes();
             });
-            updateReplayTimes();
         } else if (e instanceof SessionChangedEvent) {
-            addSessionChangeEntry((SessionChangedEvent) e);
-            tableModel.setSessionId(((SessionChangedEvent) e).getSessionId());
+            RaceControlApplet.runLater(() -> {
+                addSessionChangeEntry((SessionChangedEvent) e);
+                tableModel.setSessionId(((SessionChangedEvent) e).getSessionId());
+            });
         } else if (e instanceof ContactEvent) {
-            addContactEntry((ContactEvent) e);
+            RaceControlApplet.runLater(() -> {
+                addContactEntry((ContactEvent) e);
+            });
         } else if (e instanceof VSCStartEvent) {
-            onVSCStart((VSCStartEvent) e);
+            RaceControlApplet.runLater(() -> {
+                onVSCStart((VSCStartEvent) e);
+            });
         } else if (e instanceof VSCEndEvent) {
-            onVSCEnd((VSCEndEvent) e);
+            RaceControlApplet.runLater(() -> {
+                onVSCEnd((VSCEndEvent) e);
+            });
         } else if (e instanceof VSCViolationEvent) {
-            onVSCViolation((VSCViolationEvent) e);
+            RaceControlApplet.runLater(() -> {
+                onVSCViolation((VSCViolationEvent) e);
+            });
         }
     }
 

@@ -28,6 +28,7 @@ import javax.swing.JOptionPane;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import racecontrol.gui.CustomPApplet;
+import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.app.Menu;
 import racecontrol.gui.app.Menu.MenuItem;
 import racecontrol.gui.app.PageController;
@@ -88,7 +89,9 @@ public class SettingsPage
     @Override
     public void onEvent(Event e) {
         if (e instanceof ConnectionClosedEvent) {
-            connectionClosedEvent((ConnectionClosedEvent) e);
+            RaceControlApplet.runLater(() -> {
+                connectionClosedEvent((ConnectionClosedEvent) e);
+            });
         }
     }
 

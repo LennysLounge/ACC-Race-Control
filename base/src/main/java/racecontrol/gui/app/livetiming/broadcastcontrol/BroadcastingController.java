@@ -47,14 +47,15 @@ public class BroadcastingController
     @Override
     public void onEvent(Event e) {
         if (e instanceof TrackInfoEvent) {
-            TrackInfo info = ((TrackInfoEvent) e).getInfo();
             RaceControlApplet.runLater(() -> {
-                panel.setCameraSets(info.getCameraSets());
+                panel.setCameraSets(((TrackInfoEvent) e).getInfo().getCameraSets());
             });
         } else if (e instanceof RealtimeUpdateEvent) {
-            SessionInfo info = ((RealtimeUpdateEvent) e).getSessionInfo();
-            panel.setActiveCameraSet(info.getActiveCameraSet(), info.getActiveCamera());
-            panel.setActiveHudPage(info.getCurrentHudPage());
+            RaceControlApplet.runLater(() -> {
+                SessionInfo info = ((RealtimeUpdateEvent) e).getSessionInfo();
+                panel.setActiveCameraSet(info.getActiveCameraSet(), info.getActiveCamera());
+                panel.setActiveHudPage(info.getCurrentHudPage());
+            });
         }
     }
 

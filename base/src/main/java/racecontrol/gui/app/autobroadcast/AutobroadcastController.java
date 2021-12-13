@@ -12,6 +12,7 @@ import racecontrol.client.extension.autobroadcast.Entry;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.lpui.LPContainer;
 
 /**
@@ -39,7 +40,7 @@ public class AutobroadcastController
         EventBus.register(this);
         client = AccBroadcastingClient.getClient();
         extension = AutobroadcastExtension.getInstance();
-        
+
         panel = new AutobroadcastPanel();
         tableModel = new RatingTableModel();
 
@@ -50,26 +51,28 @@ public class AutobroadcastController
     @Override
     public void onEvent(Event e) {
         if (e instanceof RealtimeUpdateEvent) {
-            tableModel.setEntriesNew(extension.getEntries());
-            if(panel.sortByRatingCheckBox.isSelected()){
-                tableModel.sortRating();
-            }else{
-                tableModel.sortPosition();
-            }
-            panel.ratingTable.invalidate();
+            RaceControlApplet.runLater(() -> {
+                tableModel.setEntriesNew(extension.getEntries());
+                if (panel.sortByRatingCheckBox.isSelected()) {
+                    tableModel.sortRating();
+                } else {
+                    tableModel.sortPosition();
+                }
+                panel.ratingTable.invalidate();
+            });
         }
     }
 
     public LPContainer getPanel() {
         return panel;
     }
-    
+
     private void onCellClickAction(int column, int row) {
         if (row >= tableModel.getRowCount()) {
             return;
         }
         client.sendChangeFocusRequest(
-                        ((Entry) tableModel.getEntryNew(row)).getCarInfo().getCarId());
+                ((Entry) tableModel.getEntryNew(row)).getCarInfo().getCarId());
     }
 
 }

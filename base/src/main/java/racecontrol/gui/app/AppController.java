@@ -14,7 +14,6 @@ import java.util.Map;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import racecontrol.Main;
-import racecontrol.gui.app.test.TestPanel;
 import racecontrol.gui.app.logging.LoggingPanel;
 import racecontrol.gui.app.racecontrol.RaceControlController;
 import racecontrol.client.AccBroadcastingClient;
@@ -26,9 +25,7 @@ import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.gui.RaceControlApplet;
-import racecontrol.gui.app.dangerdetection.DangerDetectionController;
 import racecontrol.gui.app.livetiming.LiveTimingController;
-import racecontrol.gui.app.trackdata.TrackDataController;
 import racecontrol.gui.lpui.LPComponent;
 import racecontrol.gui.lpui.LPContainer;
 
@@ -180,7 +177,9 @@ public class AppController
     @Override
     public void onEvent(Event e) {
         if (e instanceof RealtimeUpdateEvent) {
-            appPanel.header.invalidate();
+            RaceControlApplet.runLater(() -> {
+                appPanel.header.invalidate();
+            });
         } else if (e instanceof ConnectionOpenedEvent) {
             RaceControlApplet.runLater(() -> {
                 appPanel.setActivePage(liveTimingController.getPanel());

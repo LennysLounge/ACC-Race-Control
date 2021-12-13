@@ -13,6 +13,7 @@ import racecontrol.client.extension.googlesheetsapi.GoogleSheetsError;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.app.AppController;
 import racecontrol.gui.lpui.LPTabPanel;
 
@@ -52,14 +53,18 @@ public class GoogleSheetsController
     @Override
     public void onEvent(Event e) {
         if (e instanceof GoogleSheetsConnectedEvent) {
-            tabPanel.addTab(controlController.getPanel());
+            RaceControlApplet.runLater(() -> {
+                tabPanel.addTab(controlController.getPanel());
+            });
         } else if (e instanceof GoogleSheetsDisconnetedEvent) {
-            tabPanel.removeTab(controlController.getPanel());
-            tabPanel.invalidate();
-            var event = (GoogleSheetsDisconnetedEvent) e;
-            if (event.hasError()) {
-                handleExit(event.getErrorInfo());
-            }
+            RaceControlApplet.runLater(() -> {
+                tabPanel.removeTab(controlController.getPanel());
+                tabPanel.invalidate();
+                var event = (GoogleSheetsDisconnetedEvent) e;
+                if (event.hasError()) {
+                    handleExit(event.getErrorInfo());
+                }
+            });
         }
     }
 

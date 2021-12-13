@@ -12,6 +12,7 @@ import racecontrol.client.extension.googlesheetsapi.GoogleSheetsTargetChangedEve
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
+import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.lpui.LPButton;
 import racecontrol.gui.lpui.LPContainer;
 
@@ -46,12 +47,18 @@ public class ControlController
     @Override
     public void onEvent(Event e) {
         if (e instanceof GoogleSheetsConnectedEvent) {
-            addTargetButtons((GoogleSheetsConnectedEvent) e);
-            updateTargetLabel();
+            RaceControlApplet.runLater(() -> {
+                addTargetButtons((GoogleSheetsConnectedEvent) e);
+                updateTargetLabel();
+            });
         } else if (e instanceof GoogleSheetsDisconnetedEvent) {
-            panel.removeTargetButtons();
+            RaceControlApplet.runLater(() -> {
+                panel.removeTargetButtons();
+            });
         } else if (e instanceof GoogleSheetsTargetChangedEvent) {
-            updateTargetLabel();
+            RaceControlApplet.runLater(() -> {
+                updateTargetLabel();
+            });
         }
     }
 
