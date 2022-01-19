@@ -1,3 +1,9 @@
+# v1.4.1
+
+Bug fixes:
+* Fixed a bug where the program would crash because an image could not be loaded. 
+
+
 # v1.4.0
 
 Changes:

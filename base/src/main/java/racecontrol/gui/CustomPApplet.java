@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Stack;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import processing.core.PGraphics;
@@ -51,7 +52,7 @@ public class CustomPApplet extends LPBase {
             // translate new clip to old reference frame
             newClip.x += newClip.tx;
             newClip.y += newClip.ty;
-            
+
             // turn width and height into end points
             newClip.w = newClip.x + newClip.w;
             newClip.h = newClip.y + newClip.h;
@@ -62,7 +63,7 @@ public class CustomPApplet extends LPBase {
             newClip.y = constrain(newClip.y, prevClip.y, prevClip.y + prevClip.h);
             newClip.w = constrain(newClip.w, prevClip.x, prevClip.x + prevClip.w);
             newClip.h = constrain(newClip.h, prevClip.y, prevClip.y + prevClip.h);
-            
+
             // turn width and height back to width and height
             newClip.w = newClip.w - newClip.x;
             newClip.h = newClip.h - newClip.y;
@@ -112,7 +113,8 @@ public class CustomPApplet extends LPBase {
             g.endDraw();
             PImage b = g.copy();
             return b;
-        } catch (IOException ex) {
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "error loading image: \"" + resource + "\"", ex);
             return null;
         }
     }

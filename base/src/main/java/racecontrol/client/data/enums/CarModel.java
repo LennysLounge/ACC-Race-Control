@@ -57,7 +57,7 @@ public enum CarModel {
     MCLAREN_570S_GT4(59, "McLaren 570S GT4", "McLaren", GT4),
     MERCEDES_AMG_GT4(60, "Mercedes AMG GT4", "Mercedes-AMG", GT4),
     PORSCHE_718_CAYMAN_GT4_CLUBSPORT(61, "Porsche 718 Cayman GT4 Clubsport", "Porsche", GT4),
-    ERROR(999, "ERROR", "", NONE);
+    ERROR(999, "ERROR", "Error", NONE);
 
     private final int type;
     private final String name;
