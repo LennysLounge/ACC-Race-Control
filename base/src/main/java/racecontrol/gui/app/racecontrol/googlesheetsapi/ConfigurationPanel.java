@@ -34,10 +34,6 @@ public class ConfigurationPanel
     private final LPLabel spreadSheetLinkLabel = new LPLabel("Spreadsheet link:");
     protected final LPTextField spreadSheetLinkTextField = new LPTextField();
 
-    private final LPLabel credentialsFileLabel = new LPLabel("Credentials:");
-    protected final LPTextField credentialsFileTextField = new LPTextField();
-    private final LPButton credentalsSearchButton = new LPButton("Search");
-
     private final LPCheckBox useDefaultCheckBox = new LPCheckBox();
     private final LPLabel useDaufaultLabel = new LPLabel("Use defaults");
 
@@ -65,17 +61,6 @@ public class ConfigurationPanel
         addComponent(spreadSheetLinkLabel);
         spreadSheetLinkTextField.setPosition(20, LINE_HEIGHT * 1);
         addComponent(spreadSheetLinkTextField);
-
-        credentialsFileLabel.setPosition(20, LINE_HEIGHT * 2);
-        credentialsFileLabel.setSize(150, LINE_HEIGHT);
-        addComponent(credentialsFileLabel);
-        credentialsFileTextField.setPosition(20, LINE_HEIGHT * 3);
-        credentialsFileTextField.setSize(200, LINE_HEIGHT);
-        credentialsFileTextField.setValue(PersistantConfig.get(CREDENTIALS_FILE_PATH));
-        addComponent(credentialsFileTextField);
-        credentalsSearchButton.setSize(100, LINE_HEIGHT);
-        credentalsSearchButton.setAction(() -> openSearchCredentialsFileDialog());
-        addComponent(credentalsSearchButton);
 
         useDefaultCheckBox.setPosition(20, LINE_HEIGHT * 4 + (LINE_HEIGHT - TEXT_SIZE) / 2f);
         useDefaultCheckBox.setChangeAction((state) -> {
@@ -136,10 +121,6 @@ public class ConfigurationPanel
         spreadSheetLinkLabel.setEnabled(state);
         spreadSheetLinkTextField.setEnabled(state);
 
-        credentialsFileLabel.setEnabled(state);
-        credentialsFileTextField.setEnabled(state);
-        credentalsSearchButton.setEnabled(state);
-
         useDaufaultLabel.setEnabled(state);
         useDefaultCheckBox.setEnabled(state);
 
@@ -180,8 +161,6 @@ public class ConfigurationPanel
     @Override
     public void onResize(float w, float h) {
         spreadSheetLinkTextField.setSize(w - 40, LINE_HEIGHT);
-        credentialsFileTextField.setSize(w - 160, LINE_HEIGHT);
-        credentalsSearchButton.setPosition(w - 120, LINE_HEIGHT * 3);
     }
 
     @Override
@@ -191,10 +170,6 @@ public class ConfigurationPanel
 
     public String getSpreadSheetLink() {
         return spreadSheetLinkTextField.getValue();
-    }
-
-    public String getCredentialsPath() {
-        return credentialsFileTextField.getValue();
     }
 
     public String getFindEmptyRowRange() {
@@ -228,23 +203,6 @@ public class ConfigurationPanel
 
     private boolean useDefaults() {
         return useDefaultCheckBox.isSelected();
-    }
-
-    private void openSearchCredentialsFileDialog() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
-
-        int result = fileChooser.showOpenDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            String path = fileChooser.getSelectedFile().getAbsolutePath();
-            String userDir = System.getProperty("user.dir") + "\\";
-
-            //if the selected path is within our user directory we shorten the path to a relative path based on the user dir.
-            if (path.startsWith(userDir)) {
-                path = path.replace(userDir, "");
-            }
-            credentialsFileTextField.setValue(path);
-        }
     }
 
 }

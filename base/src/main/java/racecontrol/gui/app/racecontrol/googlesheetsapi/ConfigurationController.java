@@ -55,7 +55,6 @@ public class ConfigurationController
             //enable spreadsheet service.
             sheetsAPI.start(new GoogleSheetsConfiguration(
                     panel.spreadSheetLinkTextField.getValue(),
-                    panel.credentialsFileTextField.getValue(),
                     panel.findRowRangeTextField.getValue(),
                     panel.replayOffsetTextField.getValue(),
                     panel.sessionColumnTextField.getValue(),

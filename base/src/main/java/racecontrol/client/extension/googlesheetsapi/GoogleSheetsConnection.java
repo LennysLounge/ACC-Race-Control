@@ -91,7 +91,7 @@ public class GoogleSheetsConnection {
         this.configuration = configuration;
 
         try {
-            sheetService = new GoogleSheetsService(configuration.getSpreadsheetLink(), configuration.getCredentialsPath());
+            sheetService = new GoogleSheetsService(configuration.getSpreadsheetLink());
         } catch (IllegalArgumentException ex) {
             LOG.log(Level.SEVERE, "The spreadsheet URL is not valid.", ex);
             JOptionPane.showMessageDialog(null, "The given spreadsheet link is not valid."
