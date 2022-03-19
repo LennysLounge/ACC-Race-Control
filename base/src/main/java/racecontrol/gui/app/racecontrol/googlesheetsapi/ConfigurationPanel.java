@@ -5,7 +5,6 @@
  */
 package racecontrol.gui.app.racecontrol.googlesheetsapi;
 
-import racecontrol.persistance.PersistantConfig;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import static racecontrol.gui.LookAndFeel.TEXT_SIZE;
@@ -14,15 +13,12 @@ import racecontrol.gui.lpui.LPCheckBox;
 import racecontrol.gui.lpui.LPContainer;
 import racecontrol.gui.lpui.LPLabel;
 import racecontrol.gui.lpui.LPTextField;
-import java.io.File;
-import javax.swing.JFileChooser;
 import processing.core.PApplet;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsConfiguration;
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConfiguration.CAR_INFO_COLUMN;
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConfiguration.FIND_EMPTY_ROW_RANGE;
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConfiguration.REPLAY_OFFSET_CELL;
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConfiguration.SESSION_TIME_COLUMN;
-import static racecontrol.persistance.PersistantConfigKeys.CREDENTIALS_FILE_PATH;
 
 /**
  *

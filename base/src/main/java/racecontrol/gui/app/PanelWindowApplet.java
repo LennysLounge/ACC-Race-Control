@@ -87,6 +87,7 @@ public class PanelWindowApplet
             closeAction.run();
         }
     }
+    
 
     /**
      * Adds a closing action for this window.

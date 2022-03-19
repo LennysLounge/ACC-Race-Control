@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 import processing.core.PImage;
 import processing.event.KeyEvent;
 import racecontrol.Main;
-import racecontrol.client.data.enums.CarModel;
 import racecontrol.gui.app.AppController;
 import racecontrol.gui.lpui.LPComponent;
 

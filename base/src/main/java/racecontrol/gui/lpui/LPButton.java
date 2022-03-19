@@ -115,5 +115,9 @@ public class LPButton
         backgroundColor = color;
         invalidate();
     }
+    
+    public boolean isPressed(){
+        return clicked;
+    }
 
 }
