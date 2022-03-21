@@ -482,6 +482,10 @@ public class AccBroadcastingClient {
          */
         private boolean forceExit = false;
         /**
+         * Flag to indicate that the connection should be running.
+         */
+        private boolean running = true;
+        /**
          * Maps a car id to the ammount of missed realtime updates.
          */
         private final Map<Integer, Integer> missedRealtimeUpdates = new HashMap<>();
@@ -555,7 +559,7 @@ public class AccBroadcastingClient {
         }
 
         private void udpListener() {
-            while (true) {
+            while (running) {
                 try {
                     DatagramPacket response = new DatagramPacket(new byte[2048], 2048);
                     socket.receive(response);
@@ -587,7 +591,7 @@ public class AccBroadcastingClient {
             if (success == false) {
                 LOG.info("Connection refused\n" + message);
                 exitState = ExitState.REFUSED;
-                stopAndKill();
+                running = false;
                 return;
             }
             model = model.withConnectionId(connectionID);
