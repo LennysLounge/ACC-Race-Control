@@ -92,6 +92,8 @@ public class ConnectionController
                     "Cannot find broadcasting configuration file. Please input connection settings manually",
                     "Error connecting to game",
                     JOptionPane.ERROR_MESSAGE);
+            panel.autoDetectSettingsCheckBox.setSelected(false);
+            panel.setDisconnected();
             return;
         }
 
@@ -106,6 +108,11 @@ public class ConnectionController
         } catch (SocketException | UnknownHostException e) {
             LOG.log(Level.SEVERE, "Error starting the connection to the game.", e);
         }
+        // set ui elements to reflect values that were used
+        panel.ipTextField.setValue("127.0.0.1");
+        panel.portTextField.setValue(String.valueOf(connectionData.port));
+        panel.connectionPWTextField.setValue(connectionData.connectionPassword);
+        panel.commandPWTextField.setValue(connectionData.commandPassword);
         client.sendRegisterRequest();
     }
 

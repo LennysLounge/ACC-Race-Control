@@ -21,6 +21,7 @@ import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_COMMAND_PW
 import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_IP;
 import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_PASSWORD;
 import static racecontrol.persistance.PersistantConfigKeys.CONNECTION_PORT;
+import static racecontrol.persistance.PersistantConfigKeys.USE_AUTO_CONNECT_SETTINGS;
 
 /**
  *
@@ -40,11 +41,10 @@ public class ConnectionPanel
     protected final LPTextField connectionPWTextField = new LPTextField();
     private final LPLabel commandPWLabel = new LPLabel("Command PW:");
     protected final LPTextField commandPWTextField = new LPTextField();
-    private final LPCheckBox autoDetectSettingsCheckBox = new LPCheckBox();
-    protected final LPLabel autoDetectSettingsLabel = new LPLabel("Auto detect connection settings");
+    protected final LPCheckBox autoDetectSettingsCheckBox = new LPCheckBox();
+    private final LPLabel autoDetectSettingsLabel = new LPLabel("Auto detect connection settings");
     protected final LPButton connectButton = new LPButton("Connect");
 
-    
     protected boolean autoDetectSettings = false;
 
     public ConnectionPanel() {
@@ -78,6 +78,8 @@ public class ConnectionPanel
 
         addComponent(autoDetectSettingsLabel);
         autoDetectSettingsCheckBox.setSize(LINE_HEIGHT, LINE_HEIGHT);
+        autoDetectSettings = PersistantConfig.get(USE_AUTO_CONNECT_SETTINGS);
+        autoDetectSettingsCheckBox.setSelected(autoDetectSettings);
         autoDetectSettingsCheckBox.setChangeAction(this::autoDetectSettingsFlipped);
         addComponent(autoDetectSettingsCheckBox);
 
@@ -85,6 +87,7 @@ public class ConnectionPanel
         addComponent(connectButton);
 
         setSize(400, LINE_HEIGHT * 1.2f * 7);
+        setDisconnected();
     }
 
     @Override
@@ -155,6 +158,7 @@ public class ConnectionPanel
 
     public void autoDetectSettingsFlipped(boolean state) {
         autoDetectSettings = state;
+        PersistantConfig.put(USE_AUTO_CONNECT_SETTINGS, state);
         setDisconnected();
     }
 
