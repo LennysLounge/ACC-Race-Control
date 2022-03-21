@@ -134,13 +134,21 @@ public class LPContainer
             c.onMouseLeaveInternal();
         }
     }
-
+    
     @Override
-    public void setEnabled(boolean isEnabled) {
+    public void onDisabled(){
         for (LPComponent c : components) {
-            c.setEnabled(isEnabled);
+            c.onDisabled();
         }
-        super.setEnabled(isEnabled);
+    }
+    
+    @Override
+    public void onEnabled(){
+        for (LPComponent c : components) {
+            if(c.isEnabled()){
+                c.onEnabled();
+            }
+        }
     }
 
     /**

@@ -298,13 +298,13 @@ public class LPComponent {
     }
 
     public boolean isEnabled() {
-        return isEnabled;
+        return isEnabled && (parent == null ? parent.isEnabled() : true);
     }
 
     public void setEnabled(boolean isEnabled) {
         if (this.isEnabled != isEnabled) {
             this.isEnabled = isEnabled;
-            if (isEnabled) {
+            if (isEnabled()) {
                 onEnabled();
             } else {
                 onDisabled();
