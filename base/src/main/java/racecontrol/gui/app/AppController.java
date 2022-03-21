@@ -181,13 +181,16 @@ public class AppController
                 appPanel.header.invalidate();
             });
         } else if (e instanceof ConnectionOpenedEvent) {
-            RaceControlApplet.runLater(() -> {
-                appPanel.setActivePage(liveTimingController.getPanel());
-                appPanel.menu.setSelectedMenuItem(appPanel.liveTimingMenuItem);
-                appPanel.updateComponents();
-                appPanel.invalidate();
-            });
+
         } else if (e instanceof RegistrationResultEvent) {
+            if (((RegistrationResultEvent) e).isSuccess()) {
+                RaceControlApplet.runLater(() -> {
+                    appPanel.setActivePage(liveTimingController.getPanel());
+                    appPanel.menu.setSelectedMenuItem(appPanel.liveTimingMenuItem);
+                    appPanel.updateComponents();
+                    appPanel.invalidate();
+                });
+            }
             if (((RegistrationResultEvent) e).isReadOnly()) {
                 RaceControlApplet.runLater(() -> {
                     statusPanelManager.addStatusPanel(new ConnectionReadOnlyStatusPanel());
