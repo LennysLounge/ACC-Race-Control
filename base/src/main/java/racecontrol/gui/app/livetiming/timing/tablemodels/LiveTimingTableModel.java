@@ -35,6 +35,7 @@ import racecontrol.utility.TimeUtils;
  */
 public abstract class LiveTimingTableModel
         extends LPTableModel {
+
     /**
      * This class's logger.
      */
@@ -103,6 +104,11 @@ public abstract class LiveTimingTableModel
             }
         }
         return -1;
+    }
+
+    @Override
+    public Object getValueAt(int column, int row) {
+        return getEntry(row);
     }
 
     public abstract void sort();

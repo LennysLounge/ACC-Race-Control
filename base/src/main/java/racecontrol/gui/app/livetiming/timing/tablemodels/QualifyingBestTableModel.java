@@ -9,12 +9,10 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static racecontrol.client.data.enums.CarLocation.TRACK;
-import static racecontrol.client.extension.statistics.CarProperties.BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_LOCATION;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.DELTA;
 import static racecontrol.client.extension.statistics.CarProperties.POSITION;
-import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_LAP_TIME;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
@@ -30,8 +28,10 @@ import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_TWO;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_LAP_INVALID;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.BestLaptime;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.ConstructorColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.LapCount;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.NameColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PitFlagColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PositionColumn;
@@ -63,10 +63,7 @@ public class QualifyingBestTableModel
             .setMinWidth(100)
             .setPriority(2)
             .setCellRenderer((applet, context) -> deltaRenderer(applet, context)),
-            new LPTableColumn("Best")
-            .setMinWidth(100)
-            .setPriority(4)
-            .setCellRenderer((applet, context) -> bestLapRenderer(applet, context)),
+            new BestLaptime(),
             new LPTableColumn("BS1")
             .setMinWidth(80)
             .setPriority(0)
@@ -79,21 +76,13 @@ public class QualifyingBestTableModel
             .setMinWidth(80)
             .setPriority(0)
             .setCellRenderer((applet, context) -> bestSectorThreeRenderer(applet, context)),
-            new LPTableColumn("Laps")
-            .setMinWidth(50)
-            .setPriority(1)
-            .setCellRenderer((applet, context) -> lapsRenderer(applet, context))
+            new LapCount()
         };
     }
 
     @Override
     public String getName() {
         return "Qualifying Best";
-    }
-
-    @Override
-    public Object getValueAt(int column, int row) {
-        return getEntry(row);
     }
 
     @Override
@@ -134,25 +123,6 @@ public class QualifyingBestTableModel
             }
             text = TimeUtils.asDelta(stats.get(DELTA));
         }
-        applet.textAlign(CENTER, CENTER);
-        applet.textFont(LookAndFeel.fontRegular());
-        applet.text(text, context.width / 2, context.height / 2);
-    }
-
-    protected void bestLapRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
-        int bestLapTime = stats.get(BEST_LAP_TIME);
-        int sessionbestLapTime = stats.get(SESSION_BEST_LAP_TIME);
-        if (bestLapTime == sessionbestLapTime) {
-            applet.fill(COLOR_PURPLE);
-        } else {
-            applet.fill(COLOR_WHITE);
-        }
-        String text = "--";
-        if (bestLapTime != Integer.MAX_VALUE) {
-            text = TimeUtils.asLapTime(bestLapTime);
-        }
-        applet.noStroke();
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
         applet.text(text, context.width / 2, context.height / 2);
@@ -209,14 +179,6 @@ public class QualifyingBestTableModel
         }
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
-        applet.text(text, context.width / 2, context.height / 2);
-    }
-
-    protected void lapsRenderer(PApplet applet, LPTable.RenderContext context) {
-        String text = String.valueOf(((CarStatistics) context.object).get(LAP_COUNT));
-        applet.textAlign(CENTER, CENTER);
-        applet.textFont(LookAndFeel.fontRegular());
-        applet.fill(COLOR_WHITE);
         applet.text(text, context.width / 2, context.height / 2);
     }
 }

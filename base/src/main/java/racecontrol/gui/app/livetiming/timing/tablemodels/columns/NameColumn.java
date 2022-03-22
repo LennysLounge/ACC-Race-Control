@@ -12,6 +12,8 @@ import static racecontrol.client.extension.statistics.CarProperties.NAME;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_RED;
+import static racecontrol.gui.LookAndFeel.COLOR_LAPPED;
+import static racecontrol.gui.LookAndFeel.COLOR_LAPPING;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.lpui.table.LPTable;
@@ -29,10 +31,17 @@ public class NameColumn
         setMaxWidth(LINE_HEIGHT * 5f);
         setMinWidth(LINE_HEIGHT * 5f);
         setPriority(1000);
-        setCellRenderer(this::nameRenderer);
+        setCellRenderer(NameColumn::defaultNameRenderer);
     }
 
-    protected void nameRenderer(PApplet applet, LPTable.RenderContext context) {
+    public static void defaultNameRenderer(PApplet applet, LPTable.RenderContext context) {
+        nameRenderer(applet, context, false, false);
+    }
+
+    public static void nameRenderer(PApplet applet,
+            LPTable.RenderContext context,
+            boolean isLapped,
+            boolean isLapping) {
         if (!(context.object instanceof CarStatistics)) {
             return;
         }
@@ -44,6 +53,12 @@ public class NameColumn
         }
 
         applet.fill(COLOR_WHITE);
+        if (isLapped) {
+            applet.fill(COLOR_LAPPED);
+        }
+        if (isLapping) {
+            applet.fill(COLOR_LAPPING);
+        }
         applet.textAlign(LEFT, CENTER);
         applet.textFont(LookAndFeel.fontMedium());
         applet.text(name, context.height / 4f, context.height / 2f);

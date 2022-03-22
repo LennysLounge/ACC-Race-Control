@@ -48,6 +48,7 @@ public interface CarProperties {
     public final Key<Integer> GAP_TO_LEADER = new Key<>(Integer.class, 0);
     public final Key<Integer> GAP_TO_POSITION_AHEAD = new Key<>(Integer.class, 0);
     public final Key<Integer> GAP_TO_CAR_AHEAD = new Key<>(Integer.class, 0);
+    public final Key<Integer> GAP_TO_CAR_BEHIND = new Key<>(Integer.class, 0);
     public final Key<Integer> LAPS_BEHIND_LEADER = new Key<>(Integer.class, 0);
     public final Key<Boolean> LAPS_BEHIND_SPLIT = new Key<>(Boolean.class, false);
     public final Key<Float> RACE_DISTANCE_BEHIND_LEADER = new Key<>(Float.class, 0f);
@@ -76,6 +77,7 @@ public interface CarProperties {
     // Realtime position
     public final Key<Float> RACE_DISTANCE_SIMPLE = new Key<>(Float.class, 0f);
     public final Key<Float> RACE_DISTANCE_COMPLEX = new Key<>(Float.class, 0f);
+    public final Key<Float> SPLINE_POS = new Key<>(Float.class, 0f);
     public final Key<Integer> REALTIME_POSITION = new Key<>(Integer.class, 0);
     public final Key<Boolean> USE_REALTIME_POS = new Key<>(Boolean.class, false);
     // Session over

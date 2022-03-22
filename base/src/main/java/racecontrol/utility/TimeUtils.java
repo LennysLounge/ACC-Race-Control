@@ -103,9 +103,9 @@ public class TimeUtils {
         remaining = (remaining - s) / 60;
         int m = remaining % 60;
         if (m > 0) {
-            return String.format("%+d:%02d.%d", m, s, (int) Math.floor(ms / 100));
+            return String.format("%s%d:%02d.%d", sign, m, s, (int) Math.floor(ms / 100));
         }
-        return String.format("%+d.%d", s, (int) Math.floor(ms / 100));
+        return String.format("%s%d.%d", sign, s, (int) Math.floor(ms / 100));
     }
 
     /**

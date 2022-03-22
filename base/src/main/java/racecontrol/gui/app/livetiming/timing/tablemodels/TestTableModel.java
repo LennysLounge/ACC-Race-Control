@@ -14,8 +14,8 @@ import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUN
 import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUNT_ACCURATE;
 import static racecontrol.client.extension.statistics.CarProperties.PITLANE_TIME_STATIONARY;
 import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_COMPLEX;
-import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_SIMPLE;
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
+import static racecontrol.client.extension.statistics.CarProperties.SPLINE_POS;
 import racecontrol.client.extension.statistics.CarStatistics;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
@@ -42,12 +42,12 @@ public class TestTableModel
             new ConstructorColumn(),
             new CarNumberColumn(),
             new PitFlagColumn(),
-            new LPTableColumn("RDS")
+            new LPTableColumn("SplinePos")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> r1(applet, context)),
+            .setCellRenderer((applet, context) -> r1(applet, context))/*,
             new LPTableColumn("RDC")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> r2(applet, context))/*,
+            .setCellRenderer((applet, context) -> r2(applet, context)),
             new LPTableColumn("Stationary")
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> r3(applet, context)),
@@ -81,7 +81,7 @@ public class TestTableModel
     private void r1(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
-        String text = String.format("%.5f", stats.get(RACE_DISTANCE_SIMPLE));
+        String text = String.format("%.5f", stats.get(SPLINE_POS));
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);

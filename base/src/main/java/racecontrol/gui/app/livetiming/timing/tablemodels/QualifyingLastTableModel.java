@@ -28,6 +28,8 @@ import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.ConstructorColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.LapCount;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.LastLaptime;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.NameColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PitFlagColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PositionColumn;
@@ -62,10 +64,7 @@ public class QualifyingLastTableModel
             .setMinWidth(100)
             .setPriority(2)
             .setCellRenderer((applet, context) -> deltaRenderer(applet, context)),
-            new LPTableColumn("Last")
-            .setMinWidth(100)
-            .setPriority(4)
-            .setCellRenderer((applet, context) -> lastLapRenderer(applet, context)),
+            new LastLaptime(),
             new LPTableColumn("S1")
             .setMinWidth(80)
             .setPriority(0)
@@ -78,10 +77,7 @@ public class QualifyingLastTableModel
             .setMinWidth(80)
             .setPriority(0)
             .setCellRenderer((applet, context) -> lastSectorThreeRenderer(applet, context)),
-            new LPTableColumn("Laps")
-            .setMinWidth(50)
-            .setPriority(1)
-            .setCellRenderer((applet, context) -> lapsRenderer(applet, context))
+            new LapCount()
         };
     }
 

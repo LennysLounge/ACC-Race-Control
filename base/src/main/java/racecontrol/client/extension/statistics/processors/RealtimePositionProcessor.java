@@ -24,6 +24,7 @@ import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANC
 import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_SIMPLE;
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_FINISHED;
+import static racecontrol.client.extension.statistics.CarProperties.SPLINE_POS;
 import static racecontrol.client.extension.statistics.CarProperties.USE_REALTIME_POS;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
 import racecontrol.client.extension.statistics.WritableCarStatistics;
@@ -65,6 +66,8 @@ public class RealtimePositionProcessor
 
     private void onRealtimeCarUpdate(RealtimeInfo info) {
         WritableCarStatistics carStats = getCars().get(info.getCarId());
+
+        carStats.put(SPLINE_POS, info.getSplinePosition()); 
 
         float raceDistance = info.getSplinePosition() + info.getLaps();
         carStats.put(RACE_DISTANCE_SIMPLE, raceDistance);

@@ -47,6 +47,9 @@ public class LookAndFeel {
     public static final int COLOR_PRACTICE = 0xfff75151;
     public static final int COLOR_QUALIFYING = 0xff5cadff;
     public static final int COLOR_RACE = 0xff79e463;
+    public static final int COLOR_LAPPING = 0xffff8900;
+    public static final int COLOR_LAPPED = 0xff00bcff;
+    public static final int COLOR_DRIVER_SILVER = 0xff666666;
     public static final int TRANSPARENT_WHITE = 0x14ffffff;
     public static final int TRANSPARENT_RED = 0x96ff0000;
     public static final int TRANSPARENT_BLACK = 0x96000000;

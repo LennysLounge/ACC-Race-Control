@@ -57,7 +57,7 @@ public class CarNumberColumn
                 frontColor = LookAndFeel.COLOR_BLACK;
                 break;
             case SILVER:
-                backColor = LookAndFeel.COLOR_GRAY;
+                backColor = LookAndFeel.COLOR_DRIVER_SILVER;
                 frontColor = LookAndFeel.COLOR_WHITE;
                 break;
             case GOLD:

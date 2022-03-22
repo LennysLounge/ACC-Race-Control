@@ -72,11 +72,6 @@ public class DriversTableModel
     }
 
     @Override
-    public Object getValueAt(int column, int row) {
-        return getEntry(row);
-    }
-
-    @Override
     public void sort() {
         entries = entries.stream()
                 .sorted((c1, c2)
