@@ -31,7 +31,11 @@ public class LookAndFeel {
     public static final int COLOR_BLUE = 0xff558ccc;
     public static final int COLOR_GT4 = 0xff262660;
     public static final int COLOR_PORSCHE_CUP = 0xff457c45;
+    public static final int COLOR_PORSCHE_CUP21 = 0xff284c28;
     public static final int COLOR_SUPER_TROFEO = 0xffccba00;
+    public static final int COLOR_SUPER_TROFEO22 = 0xff988a00;
+    public static final int COLOR_FERRARI_CHALLENGE = 0xffB90000;
+    public static final int COLOR_TCX = 0xff007CA7;
     public static final int COLOR_WHITE = 0xffffffff;
     public static final int COLOR_BLACK = 0xff000000;
     public static final int COLOR_LIGHT_GRAY = 0xffbcbcbc;

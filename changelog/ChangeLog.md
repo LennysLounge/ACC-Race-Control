@@ -1,3 +1,9 @@
+# v1.4.2
+
+Changes:
+* Added support for the Challengers pack DLC.
+
+
 # v1.4.1
 
 Bug fixes:

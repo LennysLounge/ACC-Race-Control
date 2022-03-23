@@ -9,9 +9,13 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CLOSE;
 import racecontrol.client.data.enums.CarCategory;
+import static racecontrol.client.data.enums.CarCategory.CHL;
 import static racecontrol.client.data.enums.CarCategory.CUP;
+import static racecontrol.client.data.enums.CarCategory.CUP21;
 import static racecontrol.client.data.enums.CarCategory.GT3;
 import static racecontrol.client.data.enums.CarCategory.ST;
+import static racecontrol.client.data.enums.CarCategory.ST22;
+import static racecontrol.client.data.enums.CarCategory.TCX;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_MODEL;
 import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
 import static racecontrol.client.extension.statistics.CarProperties.CATEGORY;
@@ -81,8 +85,16 @@ public class CarNumberColumn
             applet.noStroke();
             if (cat == ST) {
                 applet.fill(COLOR_SUPER_TROFEO);
+            } else if (cat == ST22) {
+                applet.fill(LookAndFeel.COLOR_SUPER_TROFEO22);
             } else if (cat == CUP) {
                 applet.fill(LookAndFeel.COLOR_PORSCHE_CUP);
+            } else if (cat == CUP21) {
+                applet.fill(LookAndFeel.COLOR_PORSCHE_CUP21);
+            } else if (cat == CHL) {
+                applet.fill(LookAndFeel.COLOR_FERRARI_CHALLENGE);
+            } else if (cat == TCX) {
+                applet.fill(LookAndFeel.COLOR_TCX);
             } else {
                 applet.fill(COLOR_GT4);
             }
