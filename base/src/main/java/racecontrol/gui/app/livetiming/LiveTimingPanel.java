@@ -8,7 +8,9 @@ package racecontrol.gui.app.livetiming;
 import processing.core.PApplet;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
+import static racecontrol.gui.LookAndFeel.TEXT_SIZE;
 import racecontrol.gui.lpui.LPButton;
+import racecontrol.gui.lpui.LPCheckBox;
 import racecontrol.gui.lpui.LPCollapsablePanel;
 import racecontrol.gui.lpui.LPComponent;
 import racecontrol.gui.lpui.LPContainer;
@@ -23,10 +25,15 @@ import static racecontrol.persistance.PersistantConfigKeys.BROADCASTING_CONTROLS
 public class LiveTimingPanel
         extends LPContainer {
 
+    /**
+     * UI components.
+     */
     protected final LPButton detachLiveTimingButton = new LPButton("Detach");
     protected final LPLabel viewLabel = new LPLabel("");
     protected final LPPaginatorButton viewLeftButton = new LPPaginatorButton(true);
     protected final LPPaginatorButton viewRightButton = new LPPaginatorButton(false);
+    protected final LPCheckBox relativeCheckBox = new LPCheckBox();
+    private final LPLabel relativeLabel = new LPLabel("Relative");
     /**
      * Collapsable panel that holds the broadcasting controls.
      */
@@ -59,6 +66,9 @@ public class LiveTimingPanel
         viewRightButton.setSize(LINE_HEIGHT, LINE_HEIGHT);
         addComponent(viewRightButton);
 
+        addComponent(relativeCheckBox);
+        addComponent(relativeLabel);
+
         collapsablePanel.setAction(() -> {
             PersistantConfig.put(BROADCASTING_CONTROLS_COLLAPSED, collapsablePanel.isCollapsed());
             onResize((int) getWidth(), (int) getHeight());
@@ -78,6 +88,9 @@ public class LiveTimingPanel
 
     @Override
     public void onResize(float w, float h) {
+        relativeCheckBox.setPosition(TEXT_SIZE, TEXT_SIZE / 2f);
+        relativeLabel.setPosition(TEXT_SIZE * 2.5f, 0);
+
         // live timing view selection.
         viewLabel.setPosition((w - viewLabel.getWidth()) / 2f, 0);
         int distance = (int) Math.max(100, w * 0.2f);

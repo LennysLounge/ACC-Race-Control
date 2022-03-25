@@ -26,7 +26,6 @@ import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingLastTableMode
 import racecontrol.gui.app.livetiming.timing.tablemodels.RaceTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.RelativeTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.StatsTableModel;
-import racecontrol.gui.app.livetiming.timing.tablemodels.TestTableModel;
 import racecontrol.gui.lpui.table.LPTable;
 
 /**
@@ -53,6 +52,19 @@ public class LiveTimingTableController
      */
     private final LPTable table = new LPTable();
     /**
+     * List of available tables models.
+     */
+    private final List<LiveTimingTableModel> tableModels = new ArrayList<>();
+    /**
+     * Table models.
+     */
+    private final LiveTimingTableModel TABLE_MODEL_QUALI_BEST = new QualifyingBestTableModel();
+    private final LiveTimingTableModel TABLE_MODEL_QUALI_LAST = new QualifyingLastTableModel();
+    private final LiveTimingTableModel TABLE_MODEL_RACE = new RaceTableModel();
+    private final LiveTimingTableModel TABLE_MODEL_STATS = new StatsTableModel();
+    private final LiveTimingTableModel TABLE_MODEL_DRIVERS = new DriversTableModel();
+    private final LiveTimingTableModel TABLE_MODEL_RELATIVE = new RelativeTableModel();
+    /**
      * Table model to display the live timing.
      */
     private LiveTimingTableModel model;
@@ -65,30 +77,14 @@ public class LiveTimingTableController
      */
     private int lastTableClickRow = -1;
 
-    private final List<LiveTimingTableModel> tableModels = new ArrayList<>();
-
-    private final QualifyingBestTableModel qualifyingTableModel;
-
-    private final RaceTableModel raceTableModel;
-
     public LiveTimingTableController() {
         EventBus.register(this);
         statisticsExtension = StatisticsExtension.getInstance();
         client = AccBroadcastingClient.getClient();
         table.setCellClickAction((column, row) -> onCellClickAction(column, row));
+        
+        useRelative(false);
 
-        qualifyingTableModel = new QualifyingBestTableModel();
-        raceTableModel = new RaceTableModel();
-
-        tableModels.add(qualifyingTableModel);
-        tableModels.add(new QualifyingLastTableModel());
-        tableModels.add(raceTableModel);
-        tableModels.add(new StatsTableModel());
-        tableModels.add(new DriversTableModel());
-        tableModels.add(new RelativeTableModel());
-        //tableModels.add(new TestTableModel());
-
-        model = tableModels.get(0);
         table.setTableModel(model);
         table.setName("Live Timing Table");
     }
@@ -152,19 +148,38 @@ public class LiveTimingTableController
     }
 
     public void setViewQuali() {
-        table.setTableModel(qualifyingTableModel);
-        model = qualifyingTableModel;
+        table.setTableModel(TABLE_MODEL_QUALI_BEST);
+        model = TABLE_MODEL_QUALI_BEST;
         updateTableModel();
     }
 
     public void setViewRace() {
-        table.setTableModel(raceTableModel);
-        model = raceTableModel;
+        table.setTableModel(TABLE_MODEL_RACE);
+        model = TABLE_MODEL_RACE;
         updateTableModel();
     }
 
     public String getTableModelName() {
         return model.getName();
+    }
+
+    public void useRelative(boolean state) {
+        if (state) {
+            tableModels.clear();
+            tableModels.add(TABLE_MODEL_RELATIVE);
+            model = TABLE_MODEL_RELATIVE;
+        } else {
+            tableModels.clear();
+            tableModels.add(TABLE_MODEL_QUALI_BEST);
+            tableModels.add(TABLE_MODEL_QUALI_LAST);
+            tableModels.add(TABLE_MODEL_RACE);
+            tableModels.add(TABLE_MODEL_STATS);
+            tableModels.add(TABLE_MODEL_DRIVERS);
+            //tableModels.add(new TestTableModel());
+            model = TABLE_MODEL_RACE;
+        }
+        table.setTableModel(model);
+        updateTableModel();
     }
 
 }

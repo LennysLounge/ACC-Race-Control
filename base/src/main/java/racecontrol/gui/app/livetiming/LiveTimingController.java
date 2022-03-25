@@ -58,9 +58,10 @@ public class LiveTimingController
         panel = new LiveTimingPanel(broadcastingController.getPanel());
         panel.addLiveTimingTable(liveTimingTableController.getPanel());
 
-        panel.detachLiveTimingButton.setAction(() -> detachLiveTiming());
-        panel.viewLeftButton.setAction(() -> cycleTableModelsLeft());
-        panel.viewRightButton.setAction(() -> cycleTableModelsRight());
+        panel.detachLiveTimingButton.setAction(this::detachLiveTiming);
+        panel.viewLeftButton.setAction(this::cycleTableModelsLeft);
+        panel.viewRightButton.setAction(this::cycleTableModelsRight);
+        panel.relativeCheckBox.setChangeAction(this::toggleUseRelatives);
 
         updateViewLabel();
     }
@@ -127,6 +128,11 @@ public class LiveTimingController
         panel.viewLabel.setText("View " + liveTimingTableController.getTableModelName());
         panel.onResize(panel.getWidth(), panel.getHeight());
         panel.invalidate();
+    }
+
+    private void toggleUseRelatives(boolean state) {
+        liveTimingTableController.useRelative(state);
+        updateViewLabel();
     }
 
 }
