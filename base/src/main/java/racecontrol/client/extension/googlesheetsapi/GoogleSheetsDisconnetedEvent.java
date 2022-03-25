@@ -5,7 +5,6 @@
  */
 package racecontrol.client.extension.googlesheetsapi;
 
-import com.google.api.client.googleapis.json.GoogleJsonError.ErrorInfo;
 import racecontrol.eventbus.Event;
 
 /**

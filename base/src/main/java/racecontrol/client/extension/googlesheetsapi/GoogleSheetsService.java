@@ -54,8 +54,7 @@ public class GoogleSheetsService {
      */
     private String spreadSheetId;
 
-    public GoogleSheetsService(String spreadSheetURL,
-            String credentialsPath)
+    public GoogleSheetsService(String spreadSheetURL)
             throws IllegalArgumentException, RuntimeException, FileNotFoundException {
         requireNonNull(spreadSheetURL, "spreadSheetURL");
 
@@ -63,8 +62,7 @@ public class GoogleSheetsService {
         setSpreadSheetID(spreadSheetURL);
 
         //Load client secrets
-        final String CREDENTIAL_PATH = credentialsPath;
-        InputStream in = new FileInputStream(CREDENTIAL_PATH);
+        InputStream in = GoogleSheetsService.class.getResourceAsStream("/googleapi/credentials.json");
         try {
             sheetService = createSheetsService(in);
         } catch (IOException | GeneralSecurityException e) {
