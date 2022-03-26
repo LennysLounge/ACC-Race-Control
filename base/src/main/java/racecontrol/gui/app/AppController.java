@@ -37,73 +37,32 @@ public class AppController
         implements EventListener {
 
     /**
-     * Singelton instance.
-     */
-    private static AppController instance;
-
-    /**
      * The GUI component.
      */
-    private AppPanel appPanel;
+    private final AppPanel appPanel = new AppPanel();
     /**
      * Settings page.
      */
-    private SettingsPage settingsPage;
+    private final SettingsPage settingsPage = new SettingsPage();
     /**
      * Live timing page controller.
      */
-    private LiveTimingController liveTimingController;
+    private final LiveTimingController liveTimingController = new LiveTimingController();
     /**
      * Placeholder panel for a detached page.
      */
-    private DetachedPlaceholderPanel detachedPlaceholderPanel;
-    /**
-     * Manages the status panels.
-     */
-    private StatusPanelManager statusPanelManager;
-    /**
-     * Is initialised.
-     */
-    private boolean initialised;
-    /**
-     * Map of components to their window applet.
-     */
-    private final Map<LPComponent, PanelWindowApplet> windowPanels = new HashMap<>();
+    private final DetachedPlaceholderPanel detachedPlaceholderPanel = new DetachedPlaceholderPanel();
 
-    public static AppController getInstance() {
-        if (instance == null) {
-            instance = new AppController();
-            instance.initialise();
-        }
-        return instance;
-    }
-
-    private AppController() {
-    }
-
-    private void initialise() {
-        if (initialised) {
-            return;
-        }
-        initialised = true;
-
+    public AppController() {
         EventBus.register(this);
-
-        appPanel = new AppPanel();
-        settingsPage = new SettingsPage();
-        liveTimingController = new LiveTimingController();
-        detachedPlaceholderPanel = new DetachedPlaceholderPanel();
-
-        statusPanelManager = StatusPanelManager.getInstance();
-        statusPanelManager.setTargetPanel(appPanel);
-
+        StatusPanelManager.getInstance().setTargetPanel(appPanel);
         setupMenu();
     }
 
     private void setupMenu() {
         List<PageController> pageControllers = new ArrayList<>();
         pageControllers.add(liveTimingController);
-        pageControllers.add(RaceControlController.getInstance());
+        pageControllers.add(RaceControlController.get());
         pageControllers.add(new LoggingPanel());
         //pageControllers.add(new TestPanel());
         //pageControllers.add(new DangerDetectionController());
@@ -137,9 +96,10 @@ public class AppController
         LPContainer panel = page.getPanel();
         if (panel != null) {
             if (button == LEFT) {
-                if (windowPanels.containsKey(panel)) {
+                PanelWindowApplet window = RaceControlApplet.getPanelWindow(panel);
+                if (window != null) {
                     // panel is detached so we grab the focus instead.
-                    windowPanels.get(panel).grabFocus();
+                    window.grabFocus();
                     detachedPlaceholderPanel.setPanelName(panel.getName());
                     panel = detachedPlaceholderPanel;
                 }
@@ -164,7 +124,7 @@ public class AppController
         appPanel.updateComponents();
         appPanel.invalidate();
 
-        PanelWindowApplet applet = launchNewWindow(page.getPanel(), true);
+        PanelWindowApplet applet = RaceControlApplet.launchNewWindow(page.getPanel(), true);
         applet.addCloseAction(() -> {
             if (appPanel.menu.getSelectedItem() == page.getMenuItem()) {
                 appPanel.setActivePage(page.getPanel());
@@ -193,7 +153,8 @@ public class AppController
             }
             if (((RegistrationResultEvent) e).isReadOnly()) {
                 RaceControlApplet.runLater(() -> {
-                    statusPanelManager.addStatusPanel(new ConnectionReadOnlyStatusPanel());
+                    StatusPanelManager.getInstance()
+                            .addStatusPanel(new ConnectionReadOnlyStatusPanel());
                 });
             }
         } else if (e instanceof ConnectionClosedEvent) {
@@ -203,36 +164,11 @@ public class AppController
                     appPanel.setActivePage(settingsPage);
                     appPanel.updateComponents();
                 } else if (event.getExitState() == AccBroadcastingClient.ExitState.TIMEOUT) {
-                    statusPanelManager.addStatusPanel(new ConnectionTimeoutStatusPanel());
+                    StatusPanelManager.getInstance()
+                            .addStatusPanel(new ConnectionTimeoutStatusPanel());
                 }
                 appPanel.invalidate();
             });
         }
     }
-
-    /**
-     * Creates a new window for a panel. Does not create a new window if the
-     * panel already is assigned to a window.
-     *
-     * @param panel The panel to create a window for.
-     * @param resizeable Is that panel resizable.
-     * @return The applet for that panel.
-     */
-    public PanelWindowApplet launchNewWindow(LPComponent panel, boolean resizeable) {
-        // only create a window if that panel doesnt already have one.
-        if (!windowPanels.containsKey(panel)) {
-            panel.setPosition(0, 0);
-            panel.setVisible(true);
-            panel.setEnabled(true);
-            PanelWindowApplet applet = new PanelWindowApplet(panel, resizeable);
-            applet.addCloseAction(() -> {
-                windowPanels.remove(panel);
-            });
-            windowPanels.put(panel, applet);
-        } else {
-            windowPanels.get(panel).grabFocus();
-        }
-        return windowPanels.get(panel);
-    }
-
 }

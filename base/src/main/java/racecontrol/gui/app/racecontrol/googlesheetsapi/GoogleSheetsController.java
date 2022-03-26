@@ -27,8 +27,6 @@ public class GoogleSheetsController
     /**
      * Reference to the app controller.
      */
-    private final AppController appController;
-
     private final LPTabPanel tabPanel = new LPTabPanel();
 
     private final ConfigurationController configController;
@@ -37,7 +35,6 @@ public class GoogleSheetsController
 
     public GoogleSheetsController() {
         EventBus.register(this);
-        appController = AppController.getInstance();
         configController = new ConfigurationController();
         controlController = new ControlController();
 
@@ -47,7 +44,7 @@ public class GoogleSheetsController
     }
 
     public void openSettingsPanel() {
-        appController.launchNewWindow(tabPanel, false);
+        RaceControlApplet.launchNewWindow(tabPanel, false);
     }
 
     @Override

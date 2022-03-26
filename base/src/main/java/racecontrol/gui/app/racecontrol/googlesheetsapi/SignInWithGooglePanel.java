@@ -13,12 +13,12 @@ import racecontrol.client.extension.googlesheetsapi.GoogleSheetsDisconnetedEvent
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
-import racecontrol.gui.CustomPApplet;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.gui.LookAndFeel.COLOR_LIGHT_GRAY;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.TEXT_SIZE;
+import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.lpui.LPButton;
 import racecontrol.gui.lpui.LPContainer;
 
@@ -41,7 +41,8 @@ public class SignInWithGooglePanel
     public SignInWithGooglePanel() {
         EventBus.register(this);
 
-        logo = ((CustomPApplet) getApplet()).loadResourceAsPImage("/images/ACC-RaceControl-Logo_dark.png");
+        logo = RaceControlApplet.getApplet()
+                .loadResourceAsPImage("/images/ACC-RaceControl-Logo_dark.png");
 
         setName("Sign in with google");
         setSize(400, 400);

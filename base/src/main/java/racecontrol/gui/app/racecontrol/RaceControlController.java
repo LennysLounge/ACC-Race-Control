@@ -8,6 +8,7 @@ package racecontrol.gui.app.racecontrol;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.app.racecontrol.entries.ContactEventEntry;
 import racecontrol.gui.app.racecontrol.entries.RaceEventEntry;
@@ -17,8 +18,6 @@ import racecontrol.gui.app.racecontrol.virtualsafetycar.VirtualSafetyCarConfigCo
 import racecontrol.client.extension.vsc.events.VSCEndEvent;
 import racecontrol.client.extension.vsc.events.VSCStartEvent;
 import racecontrol.client.extension.vsc.events.VSCViolationEvent;
-import racecontrol.client.AccBroadcastingClient;
-import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.events.SessionChangedEvent;
@@ -27,7 +26,7 @@ import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.extension.contact.ContactInfo;
 import racecontrol.client.extension.contact.ContactEvent;
-import racecontrol.client.extension.racereport.RaceReportController;
+import racecontrol.client.extension.racereport.RaceReportExtension;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.extension.replayoffset.ReplayStartKnownEvent;
 import racecontrol.client.extension.replayoffset.ReplayStartRequiresSearchEvent;
@@ -53,28 +52,21 @@ public class RaceControlController
 
     private static final Logger LOG = Logger.getLogger(RaceControlController.class.getName());
 
-    private AccBroadcastingClient client;
+    private final RaceControlPanel panel = new RaceControlPanel();
 
-    private RaceControlPanel panel;
+    private final RaceEventTableModel tableModel = new RaceEventTableModel();
 
-    private RaceEventTableModel tableModel;
+    private final GoogleSheetsController googleSheetsController = new GoogleSheetsController();
 
-    private ReplayOffsetExtension replayOffsetExtension;
+    private final VirtualSafetyCarConfigController virtualSafetyCarController = new VirtualSafetyCarConfigController();
 
-    private RaceReportController raceReportController;
-
-    private GoogleSheetsController googleSheetsController;
-
-    private VirtualSafetyCarConfigController virtualSafetyCarController;
-
-    private ContactConfigController contactConfigController;
+    private final ContactConfigController contactConfigController = new ContactConfigController();
 
     private final Menu.MenuItem menuItem;
 
-    public static RaceControlController getInstance() {
+    public static RaceControlController get() {
         if (instance == null) {
             instance = new RaceControlController();
-            instance.initialise();
         }
         return instance;
     }
@@ -82,18 +74,7 @@ public class RaceControlController
     private RaceControlController() {
         menuItem = new MenuItem("Race Control",
                 getApplet().loadResourceAsPImage("/images/RC_Menu_Control.png"));
-    }
-
-    private void initialise() {
         EventBus.register(this);
-        client = AccBroadcastingClient.getClient();
-        panel = new RaceControlPanel();
-        tableModel = new RaceEventTableModel();
-        replayOffsetExtension = ReplayOffsetExtension.getInstance();
-        googleSheetsController = new GoogleSheetsController();
-        virtualSafetyCarController = new VirtualSafetyCarConfigController();
-        raceReportController = RaceReportController.getInstance();
-        contactConfigController = new ContactConfigController();
 
         tableModel.setInfoColumnAction(infoClickAction);
         tableModel.setReplayClickAction((RaceEventEntry entry, int mouseX, int mouseY) -> replayClickAction(entry));
@@ -104,11 +85,11 @@ public class RaceControlController
         });
 
         panel.getSeachReplayButton().setAction(() -> {
-            replayOffsetExtension.findSessionChange();
+            ReplayOffsetExtension.getInstance().findSessionChange();
             panel.getSeachReplayButton().setEnabled(false);
         });
 
-        panel.exportButton.setAction(() -> exportEventList());
+        panel.exportButton.setAction(RaceReportExtension.get()::saveRaceReport);
         panel.googleSheetsButton.setAction(googleSheetsController::openSettingsPanel);
         panel.virtualSafetyCarButton.setAction(virtualSafetyCarController::openSettingsPanel);
         panel.contactButton.setAction(contactConfigController::openSettingsPanel);
@@ -171,7 +152,7 @@ public class RaceControlController
     private void replayClickAction(RaceEventEntry entry) {
         if (entry.isHasReplay() && entry.getReplayTime() != -1) {
             LOG.info("Starting instant replay for incident");
-            client.sendInstantReplayRequestWithCamera(
+            getClient().sendInstantReplayRequestWithCamera(
                     entry.getSessionTime() - 5000,
                     10,
                     getClient().getModel().getSessionInfo().getFocusedCarIndex(),
@@ -202,7 +183,7 @@ public class RaceControlController
 
     private void addContactEntry(ContactEvent event) {
         ContactInfo info = event.getInfo();
-        tableModel.addEntry(new ContactEventEntry(client.getSessionId(), info.getSessionEarliestTime(),
+        tableModel.addEntry(new ContactEventEntry(getClient().getSessionId(), info.getSessionEarliestTime(),
                 info.isGameContact() ? "Contact" : "Possible contact",
                 true, info));
         panel.getTable().invalidate();
@@ -235,17 +216,13 @@ public class RaceControlController
         panel.getTable().invalidate();
     }
 
-    private void exportEventList() {
-        raceReportController.saveRaceReport();
-    }
-
     private void createDummyContactEvent() {
-        int nCars = (int) Math.floor(Math.random() * Math.min(6, client.getModel().getCarsInfo().size()) + 1);
-        int sessionTime = client.getModel().getSessionInfo().getSessionTime();
+        int nCars = (int) Math.floor(Math.random() * Math.min(6, getClient().getModel().getCarsInfo().size()) + 1);
+        int sessionTime = getClient().getModel().getSessionInfo().getSessionTime();
         ContactInfo incident = new ContactInfo(
                 sessionTime,
                 0,
-                client.getSessionId());
+                getClient().getSessionId());
         for (int i = 0; i < nCars; i++) {
             incident = incident.withCar(
                     sessionTime,
@@ -257,7 +234,7 @@ public class RaceControlController
     }
 
     private CarInfo getRandomCar() {
-        int r = (int) Math.floor(Math.random() * client.getModel().getCarsInfo().size());
+        int r = (int) Math.floor(Math.random() * getClient().getModel().getCarsInfo().size());
         int i = 0;
         for (CarInfo car : getClient().getModel().getCarsInfo().values()) {
             if (i++ == r) {
@@ -271,7 +248,8 @@ public class RaceControlController
         for (int i = 0; i < tableModel.getRowCount(); i++) {
             RaceEventEntry entry = tableModel.getEntry(i);
             if (entry.isHasReplay() && entry.getReplayTime() == -1) {
-                entry.setReplayTime(replayOffsetExtension.getReplayTimeFromSessionTime((int) entry.getSessionTime()));
+                entry.setReplayTime(ReplayOffsetExtension.getInstance()
+                        .getReplayTimeFromSessionTime((int) entry.getSessionTime()));
             }
         }
     }

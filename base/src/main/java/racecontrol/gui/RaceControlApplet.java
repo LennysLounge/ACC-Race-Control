@@ -5,15 +5,18 @@
  */
 package racecontrol.gui;
 
+import java.util.HashMap;
 import racecontrol.gui.hotkey.Hotkeys;
 import racecontrol.client.AccBroadcastingClient;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import processing.core.PImage;
 import processing.event.KeyEvent;
 import racecontrol.Main;
 import racecontrol.gui.app.AppController;
+import racecontrol.gui.app.PanelWindowApplet;
 import racecontrol.gui.lpui.LPComponent;
 
 /**
@@ -36,6 +39,10 @@ public class RaceControlApplet extends CustomPApplet {
      */
     private static final List<Runnable> runLater = new LinkedList<>();
     /**
+     * Map of components to their window applet.
+     */
+    private static final Map<LPComponent, PanelWindowApplet> windowPanels = new HashMap<>();
+    /**
      * Connection client.
      */
     private AccBroadcastingClient client;
@@ -43,10 +50,6 @@ public class RaceControlApplet extends CustomPApplet {
      * The manager for hotkey actions.
      */
     private Hotkeys hotkey;
-    /**
-     * Controler for the base layer of the app.
-     */
-    private AppController appControler;
 
     /**
      * Gets an instance of this object.
@@ -89,8 +92,7 @@ public class RaceControlApplet extends CustomPApplet {
 
         hotkey = new Hotkeys();
 
-        appControler = AppController.getInstance();
-        setComponent(appControler.getGUIComponent());
+        setComponent(new AppController().getGUIComponent());
     }
 
     @Override
@@ -130,9 +132,52 @@ public class RaceControlApplet extends CustomPApplet {
         super.exit();
     }
 
+    /**
+     * Adds a task to a queue to run after the current UI event loop has been
+     * processed.
+     *
+     * @param task The task to run.
+     */
     public static void runLater(Runnable task) {
         synchronized (runLater) {
             runLater.add(task);
         }
+    }
+
+    /**
+     * Creates a new window for a panel. If a window for the given panel already
+     * exists it grabs focus for that window.
+     *
+     * @param panel The panel to create a window for.
+     * @param resizeable Is that panel resizable.
+     * @return The applet for that panel.
+     */
+    public static PanelWindowApplet launchNewWindow(LPComponent panel,
+            boolean resizeable) {
+        // only create a window if that panel doesnt already have one.
+        if (!windowPanels.containsKey(panel)) {
+            panel.setPosition(0, 0);
+            panel.setVisible(true);
+            panel.setEnabled(true);
+            PanelWindowApplet applet = new PanelWindowApplet(panel, resizeable);
+            applet.addCloseAction(() -> {
+                windowPanels.remove(panel);
+            });
+            windowPanels.put(panel, applet);
+        } else {
+            windowPanels.get(panel).grabFocus();
+        }
+        return windowPanels.get(panel);
+    }
+
+    /**
+     * Finds a window for a given component. If no window for the component
+     * exists, returns null.
+     *
+     * @param panel The component to find the matching window for.
+     * @return The panel window for the component.
+     */
+    public static PanelWindowApplet getPanelWindow(LPComponent panel) {
+        return windowPanels.get(panel);
     }
 }

@@ -32,10 +32,6 @@ public class VirtualSafetyCarConfigController
      */
     private final StatusPanelManager statusPanelManager;
     /**
-     * App controller.
-     */
-    private final AppController appController;
-    /**
      * Reference to the vsc controller.
      */
     private final VirtualSafetyCarExtension vscController;
@@ -47,7 +43,6 @@ public class VirtualSafetyCarConfigController
     public VirtualSafetyCarConfigController() {
         EventBus.register(this);
         statusPanelManager = StatusPanelManager.getInstance();
-        appController = AppController.getInstance();
         vscController = VirtualSafetyCarExtension.getInstance();
         statusPanel = new VSCStatusPanel();
 
@@ -57,7 +52,7 @@ public class VirtualSafetyCarConfigController
     }
 
     public void openSettingsPanel() {
-        appController.launchNewWindow(panel, false);
+        RaceControlApplet.launchNewWindow(panel, false);
     }
 
     private void startVSC() {

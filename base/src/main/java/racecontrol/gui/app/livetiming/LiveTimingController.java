@@ -36,8 +36,6 @@ public class LiveTimingController
 
     private final BroadcastingController broadcastingController;
 
-    private final AppController appController;
-
     private boolean isLiveTimingDetached;
     /**
      * Weather ot not to automatically switch the table model when the session
@@ -51,7 +49,6 @@ public class LiveTimingController
         EventBus.register(this);
         menuItem = new MenuItem("Live Timing",
                 getApplet().loadResourceAsPImage("/images/RC_Menu_LiveTiming.png"));
-        appController = AppController.getInstance();
         liveTimingTableController = new LiveTimingTableController();
         broadcastingController = new BroadcastingController();
 
@@ -82,7 +79,8 @@ public class LiveTimingController
         }
         panel.removeLiveTimingTable(liveTimingTableController.getPanel());
         isLiveTimingDetached = true;
-        PanelWindowApplet applet = appController.launchNewWindow(liveTimingTableController.getPanel(), true);
+        PanelWindowApplet applet = RaceControlApplet
+                .launchNewWindow(liveTimingTableController.getPanel(), true);
         applet.addCloseAction(() -> {
             isLiveTimingDetached = false;
             panel.addLiveTimingTable(liveTimingTableController.getPanel());

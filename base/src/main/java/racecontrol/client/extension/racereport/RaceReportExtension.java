@@ -37,21 +37,17 @@ import racecontrol.client.ClientExtension;
  *
  * @author Leonard
  */
-public class RaceReportController
+public class RaceReportExtension
         implements EventListener, ClientExtension {
 
     /**
      * Singelton instance.
      */
-    private static RaceReportController instance;
+    private static RaceReportExtension instance;
     /**
      * This class's logger.
      */
-    private static final Logger LOG = Logger.getLogger(RaceReportController.class.getName());
-    /**
-     * Reference to the race control component.
-     */
-    private final RaceControlController raceControlController;
+    private static final Logger LOG = Logger.getLogger(RaceReportExtension.class.getName());
     /**
      * maps sessionId to a session. Session maps a carId to a driver Record.
      */
@@ -66,16 +62,15 @@ public class RaceReportController
      */
     private SessionId sessionId;
 
-    public static RaceReportController getInstance() {
+    public static RaceReportExtension get() {
         if (instance == null) {
-            instance = new RaceReportController();
+            instance = new RaceReportExtension();
         }
         return instance;
     }
 
-    private RaceReportController() {
+    private RaceReportExtension() {
         EventBus.register(this);
-        raceControlController = RaceControlController.getInstance();
     }
 
     @Override
@@ -148,7 +143,7 @@ public class RaceReportController
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             // translate event list to event recrods.
             List<EventRecord> records = new ArrayList<>();
-            for (RaceEventEntry entry : raceControlController.getRaceEvents()) {
+            for (RaceEventEntry entry : RaceControlController.get().getRaceEvents()) {
                 records.add(new EventRecord(entry.getSessionTime(),
                         entry.getTypeDescriptor(),
                         entry.getInfo(),

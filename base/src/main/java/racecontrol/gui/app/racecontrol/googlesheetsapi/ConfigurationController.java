@@ -92,7 +92,7 @@ public class ConfigurationController
     private void connectButton() {
         if (sheetsAPI.getState() == OFFLINE) {
             if (googleSignInWindow == null) {
-                googleSignInWindow = AppController.getInstance()
+                googleSignInWindow = RaceControlApplet
                         .launchNewWindow(googleSignInPanel, false);
                 googleSignInWindow.addCloseAction(() -> {
                     googleSignInWindow = null;

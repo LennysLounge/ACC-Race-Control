@@ -6,6 +6,7 @@
 package racecontrol.gui.app.racecontrol.contact;
 
 import racecontrol.client.extension.contact.ContactExtension;
+import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.app.AppController;
 
 /**
@@ -14,10 +15,6 @@ import racecontrol.gui.app.AppController;
  */
 public class ContactConfigController {
 
-    /**
-     * Reference to the app controller.
-     */
-    private final AppController appController;
     /**
      * Reference to the contact extension.
      */
@@ -28,7 +25,6 @@ public class ContactConfigController {
     private final ContactConfigPanel panel;
 
     public ContactConfigController() {
-        appController = AppController.getInstance();
         contactExtension = ContactExtension.getInstance();
         panel = new ContactConfigPanel();
 
@@ -55,7 +51,7 @@ public class ContactConfigController {
     }
 
     public void openSettingsPanel() {
-        appController.launchNewWindow(panel, false);
+        RaceControlApplet.launchNewWindow(panel, false);
     }
 
 }
