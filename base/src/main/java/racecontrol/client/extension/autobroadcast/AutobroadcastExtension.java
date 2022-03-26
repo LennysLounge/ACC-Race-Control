@@ -45,6 +45,10 @@ public class AutobroadcastExtension
      * List of current entries.
      */
     private List<Entry> entries = new ArrayList<>();
+    /**
+     * Whether or not the extension is enabled.
+     */
+    private boolean enabled = false;
 
     public static AutobroadcastExtension getInstance() {
         if (instance == null) {
@@ -74,7 +78,7 @@ public class AutobroadcastExtension
                 .sorted((c1, c2) -> Float.compare(c2.getRating(), c1.getRating()))
                 .collect(toList());
 
-        if (entries.size() > 0) {
+        if (entries.size() > 0 && enabled) {
             int focus = entries.get(0).getCarInfo().getCarId();
             if (info.getFocusedCarIndex() != focus) {
                 client.sendSetCameraRequestWithFocus(focus, "setVR", "-");
@@ -96,6 +100,10 @@ public class AutobroadcastExtension
 
     public List<Entry> getEntries() {
         return entries;
+    }
+
+    public void setEnabled(boolean state) {
+        this.enabled = state;
     }
 
 }

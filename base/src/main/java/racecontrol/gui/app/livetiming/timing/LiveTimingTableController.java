@@ -26,6 +26,7 @@ import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingLastTableMode
 import racecontrol.gui.app.livetiming.timing.tablemodels.RaceTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.RelativeTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.StatsTableModel;
+import racecontrol.gui.app.livetiming.timing.tablemodels.TestTableModel;
 import racecontrol.gui.lpui.table.LPTable;
 
 /**
@@ -64,6 +65,7 @@ public class LiveTimingTableController
     private final LiveTimingTableModel TABLE_MODEL_STATS = new StatsTableModel();
     private final LiveTimingTableModel TABLE_MODEL_DRIVERS = new DriversTableModel();
     private final LiveTimingTableModel TABLE_MODEL_RELATIVE = new RelativeTableModel();
+    private final LiveTimingTableModel TABLE_MODEL_TEST = new TestTableModel();
     /**
      * Table model to display the live timing.
      */
@@ -175,7 +177,7 @@ public class LiveTimingTableController
             tableModels.add(TABLE_MODEL_RACE);
             tableModels.add(TABLE_MODEL_STATS);
             tableModels.add(TABLE_MODEL_DRIVERS);
-            //tableModels.add(new TestTableModel());
+            tableModels.add(new TestTableModel());
             model = TABLE_MODEL_RACE;
         }
         table.setTableModel(model);

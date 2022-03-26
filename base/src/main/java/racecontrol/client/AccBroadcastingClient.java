@@ -49,6 +49,7 @@ import racecontrol.client.events.EntryListUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.ReplayEndedEvent;
 import racecontrol.client.events.ReplayStartedEvent;
+import racecontrol.client.extension.autobroadcast.AutobroadcastExtension;
 import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.client.extension.dangerdetection.DangerDetectionExtension;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
@@ -155,6 +156,7 @@ public class AccBroadcastingClient {
         extensions.add(VirtualSafetyCarExtension.getInstance());
         extensions.add(VirtualSafetyCarExtension.getInstance());
         extensions.add(RaceEventExtension.get());
+        extensions.add(AutobroadcastExtension.getInstance());
 
         // statistics should always go last.
         extensions.add(StatisticsExtension.getInstance());

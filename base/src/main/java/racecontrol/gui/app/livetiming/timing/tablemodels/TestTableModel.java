@@ -8,6 +8,8 @@ package racecontrol.gui.app.livetiming.timing.tablemodels;
 import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
+import static racecontrol.client.AccBroadcastingClient.getClient;
+import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
 import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_THREE_CALC;
 import static racecontrol.client.extension.statistics.CarProperties.OVERTAKE_INDICATOR;
 import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUNT;
@@ -15,7 +17,6 @@ import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUN
 import static racecontrol.client.extension.statistics.CarProperties.PITLANE_TIME_STATIONARY;
 import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_COMPLEX;
 import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
-import static racecontrol.client.extension.statistics.CarProperties.SPLINE_POS;
 import racecontrol.client.extension.statistics.CarStatistics;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
@@ -42,15 +43,15 @@ public class TestTableModel
             new ConstructorColumn(),
             new CarNumberColumn(),
             new PitFlagColumn(),
-            new LPTableColumn("SplinePos")
+            new LPTableColumn("Pos")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> r1(applet, context))/*,
-            new LPTableColumn("RDC")
+            .setCellRenderer(this::r1),
+            new LPTableColumn("track pos")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> r2(applet, context)),
-            new LPTableColumn("Stationary")
+            .setCellRenderer(this::r2),
+            new LPTableColumn("spline pos")
             .setMaxWidth(100)
-            .setCellRenderer((applet, context) -> r3(applet, context)),
+            .setCellRenderer(this::r3)/*,
             new LPTableColumn("Count")
             .setMaxWidth(100)
             .setCellRenderer((applet, context) -> r4(applet, context)),
@@ -81,7 +82,7 @@ public class TestTableModel
     private void r1(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
-        String text = String.format("%.5f", stats.get(SPLINE_POS));
+        String text = String.format("%.5f", getClient().getModel().getCar(stats.get(CAR_ID)).getRealtime().getPosition()*1f);
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);
@@ -90,21 +91,19 @@ public class TestTableModel
     private void r2(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
-        String text = String.format("%.5f", stats.get(RACE_DISTANCE_COMPLEX));
+        String text = String.format("%.5f", getClient().getModel().getCar(stats.get(CAR_ID)).getRealtime().getTrackPosition()*1f);
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);
-
     }
 
     private void r3(PApplet applet, LPTable.RenderContext context) {
-        int timeInPits = ((CarStatistics) context.object).get(PITLANE_TIME_STATIONARY);
-        if (timeInPits != 0) {
-            String text = TimeUtils.asDurationShort(timeInPits);
-            applet.fill(COLOR_WHITE);
-            applet.textAlign(CENTER, CENTER);
-            applet.text(text, context.width / 2f, context.height / 2f);
-        }
+        CarStatistics stats = (CarStatistics) context.object;
+
+        String text = String.format("%.5f", getClient().getModel().getCar(stats.get(CAR_ID)).getRealtime().getSplinePosition());
+        applet.fill(COLOR_WHITE);
+        applet.textAlign(CENTER, CENTER);
+        applet.text(text, context.width / 2f, context.height / 2f);
     }
 
     private void r4(PApplet applet, LPTable.RenderContext context) {
