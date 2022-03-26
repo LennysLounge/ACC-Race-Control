@@ -19,8 +19,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import racecontrol.gui.app.racecontrol.RaceControlController;
-import racecontrol.gui.app.racecontrol.entries.RaceEventEntry;
+import racecontrol.client.extension.raceevent.entries.RaceEventEntry;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.data.enums.SessionType;
 import static racecontrol.client.data.enums.SessionType.RACE;
@@ -32,6 +31,7 @@ import racecontrol.client.extension.laptimes.LapCompletedEvent;
 import racecontrol.client.extension.results.ResultsExtension;
 import racecontrol.utility.TimeUtils;
 import racecontrol.client.ClientExtension;
+import racecontrol.client.extension.raceevent.RaceEventExtension;
 
 /**
  *
@@ -143,7 +143,7 @@ public class RaceReportExtension
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             // translate event list to event recrods.
             List<EventRecord> records = new ArrayList<>();
-            for (RaceEventEntry entry : RaceControlController.get().getRaceEvents()) {
+            for (RaceEventEntry entry : RaceEventExtension.get().getEntries()) {
                 records.add(new EventRecord(entry.getSessionTime(),
                         entry.getTypeDescriptor(),
                         entry.getInfo(),

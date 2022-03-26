@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.gui.app.racecontrol.entries;
+package racecontrol.client.extension.raceevent.entries;
 
 import java.util.List;
 import java.util.logging.Logger;

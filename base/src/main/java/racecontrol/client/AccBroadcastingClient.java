@@ -53,6 +53,7 @@ import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.client.extension.dangerdetection.DangerDetectionExtension;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
 import racecontrol.client.extension.laptimes.LapTimeExtension;
+import racecontrol.client.extension.raceevent.RaceEventExtension;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.logging.UILogger;
 import racecontrol.client.extension.racereport.RaceReportExtension;
@@ -152,6 +153,8 @@ public class AccBroadcastingClient {
         extensions.add(TrackDataExtension.getInstance());
         extensions.add(DangerDetectionExtension.getInstance());
         extensions.add(VirtualSafetyCarExtension.getInstance());
+        extensions.add(VirtualSafetyCarExtension.getInstance());
+        extensions.add(RaceEventExtension.get());
 
         // statistics should always go last.
         extensions.add(StatisticsExtension.getInstance());

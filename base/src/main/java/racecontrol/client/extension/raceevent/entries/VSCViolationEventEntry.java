@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.gui.app.racecontrol.entries;
+package racecontrol.client.extension.raceevent.entries;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;

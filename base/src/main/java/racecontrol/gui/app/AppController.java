@@ -62,7 +62,7 @@ public class AppController
     private void setupMenu() {
         List<PageController> pageControllers = new ArrayList<>();
         pageControllers.add(liveTimingController);
-        pageControllers.add(RaceControlController.get());
+        pageControllers.add(new RaceControlController());
         pageControllers.add(new LoggingPanel());
         //pageControllers.add(new TestPanel());
         //pageControllers.add(new DangerDetectionController());

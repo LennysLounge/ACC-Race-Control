@@ -15,7 +15,7 @@ import static racecontrol.gui.LookAndFeel.COLOR_GRAY;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.TEXT_SIZE;
-import racecontrol.gui.app.racecontrol.entries.RaceEventEntry;
+import racecontrol.client.extension.raceevent.entries.RaceEventEntry;
 import racecontrol.client.data.SessionId;
 import racecontrol.gui.lpui.table.LPTable;
 import racecontrol.gui.lpui.table.LPTable.RenderContext;
