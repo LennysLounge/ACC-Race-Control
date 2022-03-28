@@ -47,6 +47,7 @@ public interface CarProperties {
     public final Key<Integer> LAP_TIME_GAP_TO_SESSION_BEST = new Key<>(Integer.class, 0);
     public final Key<Integer> GAP_TO_LEADER = new Key<>(Integer.class, 0);
     public final Key<Integer> GAP_TO_POSITION_AHEAD = new Key<>(Integer.class, 0);
+    public final Key<Integer> GAP_TO_POSITION_BEHIND = new Key<>(Integer.class, 0);
     public final Key<Integer> GAP_TO_CAR_AHEAD = new Key<>(Integer.class, 0);
     public final Key<Integer> GAP_TO_CAR_BEHIND = new Key<>(Integer.class, 0);
     public final Key<Integer> LAPS_BEHIND_LEADER = new Key<>(Integer.class, 0);

@@ -93,26 +93,48 @@ public class RatingTableModel
             new NameColumn(),
             new PitFlagColumn(),
             new CarNumberColumn(),
-            new LPTableColumn("Proximit")
+            new LPTableColumn("Proximity")
             .setMaxWidth(150)
             .setMinWidth(150)
             .setCellRenderer(this::proximityRenderer),
-            new LPTableColumn("Proximit D")
+            new LPTableColumn("Pack")
             .setMaxWidth(150)
             .setMinWidth(150)
-            .setCellRenderer(this::proximityDeltaRenderer),
-            new LPTableColumn("Overtake")
+            .setCellRenderer(this::packRenderer),
+            new LPTableColumn("Pack Back")
             .setMaxWidth(150)
             .setMinWidth(150)
-            .setCellRenderer(this::overtakeRenderer),
-            new LPTableColumn("Change")
+            .setCellRenderer(this::packBackRenderer),
+            new LPTableColumn("Pack Front")
             .setMaxWidth(150)
             .setMinWidth(150)
-            .setCellRenderer(this::changeRenderer),
+            .setCellRenderer(this::packFrontRenderer),
+            new LPTableColumn("Position")
+            .setMaxWidth(150)
+            .setMinWidth(150)
+            .setCellRenderer(this::positionRenderer),
+            new LPTableColumn("Fast")
+            .setMaxWidth(150)
+            .setMinWidth(150)
+            .setCellRenderer(this::focusFastRenderer),
+            new LPTableColumn("Slow")
+            .setMaxWidth(150)
+            .setMinWidth(150)
+            .setCellRenderer(this::focusSlowRenderer),
             new LPTableColumn("Rating")
             .setMaxWidth(150)
             .setMinWidth(150)
             .setCellRenderer(this::ratingRenderer),};
+    }
+
+    private void proximityFrontRenderer(PApplet applet, RenderContext context) {
+        Entry entry = (Entry) context.object;
+        renderValue(applet, context, entry.getProximityFront());
+    }
+
+    private void proximityRearRenderer(PApplet applet, RenderContext context) {
+        Entry entry = (Entry) context.object;
+        renderValue(applet, context, entry.getProximityRear());
     }
 
     private void proximityRenderer(PApplet applet, RenderContext context) {
@@ -120,24 +142,39 @@ public class RatingTableModel
         renderValue(applet, context, entry.getProximity());
     }
 
-    private void proximityDeltaRenderer(PApplet applet, RenderContext context) {
+    private void positionRenderer(PApplet applet, RenderContext context) {
         Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getProximityDelta());
+        renderValue(applet, context, entry.getPosition());
     }
 
-    private void overtakeRenderer(PApplet applet, RenderContext context) {
+    private void focusFastRenderer(PApplet applet, RenderContext context) {
         Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getOvertake());
+        renderValue(applet, context, entry.getFocusFast());
     }
 
-    private void changeRenderer(PApplet applet, RenderContext context) {
+    private void focusSlowRenderer(PApplet applet, RenderContext context) {
         Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getChange());
+        renderValue(applet, context, entry.getFocusSlow());
     }
 
     private void ratingRenderer(PApplet applet, RenderContext context) {
         Entry entry = (Entry) context.object;
         renderValue(applet, context, entry.getRating());
+    }
+
+    private void packRenderer(PApplet applet, RenderContext context) {
+        Entry entry = (Entry) context.object;
+        renderValue(applet, context, entry.getPack());
+    }
+
+    private void packBackRenderer(PApplet applet, RenderContext context) {
+        Entry entry = (Entry) context.object;
+        renderValue(applet, context, entry.getPackBack());
+    }
+
+    private void packFrontRenderer(PApplet applet, RenderContext context) {
+        Entry entry = (Entry) context.object;
+        renderValue(applet, context, entry.getPackFront());
     }
 
     private void renderValue(PApplet applet, RenderContext context, float value) {

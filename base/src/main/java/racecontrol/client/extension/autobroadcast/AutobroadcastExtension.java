@@ -60,8 +60,7 @@ public class AutobroadcastExtension
     private AutobroadcastExtension() {
         EventBus.register(this);
         client = AccBroadcastingClient.getClient();
-        processors.add(new ProximityProcessor());
-        processors.add(new NoQuickChangeProcessor());
+        processors.add(new RatingProcessorImpl());
     }
 
     @Override
@@ -74,9 +73,6 @@ public class AutobroadcastExtension
 
     private void onSessionUpdate(SessionInfo info) {
         updateRatings();
-        entries = entries.stream()
-                .sorted((c1, c2) -> Float.compare(c2.getRating(), c1.getRating()))
-                .collect(toList());
 
         if (entries.size() > 0 && enabled) {
             int focus = entries.get(0).getCarInfo().getCarId();
@@ -95,6 +91,7 @@ public class AutobroadcastExtension
                     }
                     return entry;
                 })
+                .sorted((c1, c2) -> Float.compare(c2.getRating(), c1.getRating()))
                 .collect(Collectors.toList());
     }
 
