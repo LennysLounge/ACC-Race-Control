@@ -47,13 +47,35 @@ public class Entry {
      * avoid continuous jumping.
      */
     private float focusSlow;
+    /**
+     * After a focus change, cars that are not focused get a rating penalty to
+     * avoid continuous jumping.
+     */
+    private float focus;
+    /**
+     * Rating that combines the proximity and pack ratings.
+     */
+    private float packProximity;
+    /**
+     * Pace rating. Faster lap times create higher ratings.
+     */
+    private float pace;
+    /**
+     * Pace focus rating. When we are spectating a lap, we want to keep focusing
+     * on that lap until it is invalidated or finished.
+     */
+    private float paceFocus;
+    /**
+     * A small randomness to avoid ties.
+     */
+    private float randomness;
 
     public Entry(CarInfo carInfo) {
         this.carInfo = carInfo;
     }
 
     public float getRating() {
-        return 1f * proximity * position * focusFast * focusSlow * pack;
+        return 1f * proximity * pack * position * focus;
     }
 
     public CarInfo getCarInfo() {
@@ -130,6 +152,46 @@ public class Entry {
 
     public void setPackFront(float packFront) {
         this.packFront = packFront;
+    }
+
+    public float getPackProximity() {
+        return packProximity;
+    }
+
+    public void setPackProximity(float packProximity) {
+        this.packProximity = packProximity;
+    }
+
+    public float getFocus() {
+        return focus;
+    }
+
+    public void setFocus(float focus) {
+        this.focus = focus;
+    }
+
+    public float getPace() {
+        return pace;
+    }
+
+    public void setPace(float pace) {
+        this.pace = pace;
+    }
+
+    public float getPaceFocus() {
+        return paceFocus;
+    }
+
+    public void setPaceFocus(float paceFocus) {
+        this.paceFocus = paceFocus;
+    }
+
+    public float getRandomness() {
+        return randomness;
+    }
+
+    public void setRandomness(float randomness) {
+        this.randomness = randomness;
     }
     
     

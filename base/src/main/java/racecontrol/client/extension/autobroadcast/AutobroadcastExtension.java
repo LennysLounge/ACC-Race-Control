@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import static java.util.stream.Collectors.toList;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.events.RealtimeUpdateEvent;
@@ -17,6 +16,7 @@ import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.ClientExtension;
+import racecontrol.client.data.CarInfo;
 
 /**
  *
@@ -75,9 +75,10 @@ public class AutobroadcastExtension
         updateRatings();
 
         if (entries.size() > 0 && enabled) {
-            int focus = entries.get(0).getCarInfo().getCarId();
-            if (info.getFocusedCarIndex() != focus) {
-                client.sendSetCameraRequestWithFocus(focus, "setVR", "-");
+            CarInfo focus = entries.get(0).getCarInfo();
+            if (info.getFocusedCarIndex() != focus.getCarId()) {
+                client.sendSetCameraRequestWithFocus(focus.getCarId(), "setVR", "-");
+                LOG.info("Chaning focus to " + focus.getCarNumberString() + " with rating: " + entries.get(0).getRating());
             }
         }
     }

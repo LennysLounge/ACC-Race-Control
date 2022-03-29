@@ -50,6 +50,7 @@ import static racecontrol.client.extension.statistics.CarProperties.LAST_LAP_INV
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarProperties.LAST_SECTOR_TWO;
+import static racecontrol.client.extension.statistics.CarProperties.PREDICTED_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarProperties.SESSION_ID;
 import static racecontrol.client.extension.statistics.CarProperties.TEAM_NAME;
 
@@ -105,6 +106,7 @@ public class DataProcessor extends StatisticsProcessor {
         car.put(LAST_LAP_TIME, info.getLastLap().getLapTimeMS());
         car.put(BEST_LAP_TIME, info.getBestSessionLap().getLapTimeMS());
         car.put(DELTA, info.getDelta());
+        car.put(PREDICTED_LAP_TIME, info.getBestSessionLap().getLapTimeMS() + info.getDelta());
         car.put(CURRENT_LAP_INVALID, info.getCurrentLap().isInvalid());
         car.put(LAST_LAP_INVALID, info.getLastLap().isInvalid());
         car.put(BEST_LAP_INVALID, info.getBestSessionLap().isInvalid());

@@ -94,36 +94,29 @@ public class RatingTableModel
             new PitFlagColumn(),
             new CarNumberColumn(),
             new LPTableColumn("Proximity")
-            .setMaxWidth(150)
-            .setMinWidth(150)
+            .setMinWidth(100)
             .setCellRenderer(this::proximityRenderer),
             new LPTableColumn("Pack")
-            .setMaxWidth(150)
-            .setMinWidth(150)
+            .setMinWidth(100)
             .setCellRenderer(this::packRenderer),
-            new LPTableColumn("Pack Back")
-            .setMaxWidth(150)
-            .setMinWidth(150)
-            .setCellRenderer(this::packBackRenderer),
-            new LPTableColumn("Pack Front")
-            .setMaxWidth(150)
-            .setMinWidth(150)
-            .setCellRenderer(this::packFrontRenderer),
             new LPTableColumn("Position")
-            .setMaxWidth(150)
-            .setMinWidth(150)
+            .setMinWidth(100)
             .setCellRenderer(this::positionRenderer),
-            new LPTableColumn("Fast")
-            .setMaxWidth(150)
-            .setMinWidth(150)
-            .setCellRenderer(this::focusFastRenderer),
+            new LPTableColumn("Focus")
+            .setMinWidth(100)
+            .setCellRenderer(this::focusRenderer),/*
+            new LPTableColumn("Pace")
+            .setMinWidth(100)
+            .setCellRenderer(this::paceRenderer),
+            new LPTableColumn("Pace Focus")
+            .setMinWidth(100)
+            .setCellRenderer(this::paceFocusRenderer),
             new LPTableColumn("Slow")
             .setMaxWidth(150)
             .setMinWidth(150)
-            .setCellRenderer(this::focusSlowRenderer),
+            .setCellRenderer(this::focusSlowRenderer),*/
             new LPTableColumn("Rating")
-            .setMaxWidth(150)
-            .setMinWidth(150)
+            .setMinWidth(100)
             .setCellRenderer(this::ratingRenderer),};
     }
 
@@ -147,9 +140,9 @@ public class RatingTableModel
         renderValue(applet, context, entry.getPosition());
     }
 
-    private void focusFastRenderer(PApplet applet, RenderContext context) {
+    private void focusRenderer(PApplet applet, RenderContext context) {
         Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getFocusFast());
+        renderValue(applet, context, entry.getFocus());
     }
 
     private void focusSlowRenderer(PApplet applet, RenderContext context) {
@@ -167,14 +160,24 @@ public class RatingTableModel
         renderValue(applet, context, entry.getPack());
     }
 
-    private void packBackRenderer(PApplet applet, RenderContext context) {
+    private void packProximityRenderer(PApplet applet, RenderContext context) {
         Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getPackBack());
+        renderValue(applet, context, entry.getPackProximity());
     }
 
     private void packFrontRenderer(PApplet applet, RenderContext context) {
         Entry entry = (Entry) context.object;
         renderValue(applet, context, entry.getPackFront());
+    }
+
+    private void paceRenderer(PApplet applet, RenderContext context) {
+        Entry entry = (Entry) context.object;
+        renderValue(applet, context, entry.getPace());
+    }
+
+    private void paceFocusRenderer(PApplet applet, RenderContext context) {
+        Entry entry = (Entry) context.object;
+        renderValue(applet, context, entry.getPaceFocus());
     }
 
     private void renderValue(PApplet applet, RenderContext context, float value) {
