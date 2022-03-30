@@ -11,13 +11,13 @@ import racecontrol.client.data.RealtimeInfo;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
-import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SPEED;
-import static racecontrol.client.extension.statistics.CarProperties.MAXIMUM_SPEED;
-import static racecontrol.client.extension.statistics.CarProperties.MAX_MAXIMUM_SPEED;
-import static racecontrol.client.extension.statistics.CarProperties.MAX_SPEED_TRAP_SPEED;
-import static racecontrol.client.extension.statistics.CarProperties.SPEED_TRAP_SPEED;
+import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_SPEED;
+import static racecontrol.client.extension.statistics.CarStatistics.MAXIMUM_SPEED;
+import static racecontrol.client.extension.statistics.CarStatistics.MAX_MAXIMUM_SPEED;
+import static racecontrol.client.extension.statistics.CarStatistics.MAX_SPEED_TRAP_SPEED;
+import static racecontrol.client.extension.statistics.CarStatistics.SPEED_TRAP_SPEED;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
-import racecontrol.client.extension.statistics.WritableCarStatistics;
+import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.client.extension.trackdata.TrackData;
 import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.eventbus.Event;
@@ -38,7 +38,7 @@ public class SpeedProcessor
      */
     private final Map<Integer, Float> prevPosition = new HashMap<>();
 
-    public SpeedProcessor(Map<Integer, WritableCarStatistics> cars) {
+    public SpeedProcessor(Map<Integer, CarStatisticsWritable> cars) {
         super(cars);
     }
 
@@ -57,7 +57,7 @@ public class SpeedProcessor
     }
 
     private void realtimeCarUpdate(RealtimeInfo info) {
-        WritableCarStatistics carStats = getCars().get(info.getCarId());
+        CarStatisticsWritable carStats = getCars().get(info.getCarId());
         carStats.put(CURRENT_SPEED, info.getKMH());
 
         // Save maximum speed.

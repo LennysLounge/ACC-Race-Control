@@ -6,7 +6,7 @@
 package racecontrol.gui.app.livetiming.timing.tablemodels.columns;
 
 import processing.core.PApplet;
-import static racecontrol.client.extension.statistics.CarProperties.OVERTAKE_INDICATOR;
+import static racecontrol.client.extension.statistics.CarStatistics.OVERTAKE_INDICATOR;
 import racecontrol.client.extension.statistics.CarStatistics;
 import static racecontrol.gui.LookAndFeel.COLOR_RACE;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;

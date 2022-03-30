@@ -16,12 +16,12 @@ import static racecontrol.client.data.enums.SessionPhase.PRESESSION;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
-import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUNT;
-import static racecontrol.client.extension.statistics.CarProperties.PITLANE_COUNT_ACCURATE;
-import static racecontrol.client.extension.statistics.CarProperties.PITLANE_TIME;
-import static racecontrol.client.extension.statistics.CarProperties.PITLANE_TIME_STATIONARY;
+import static racecontrol.client.extension.statistics.CarStatistics.PITLANE_COUNT;
+import static racecontrol.client.extension.statistics.CarStatistics.PITLANE_COUNT_ACCURATE;
+import static racecontrol.client.extension.statistics.CarStatistics.PITLANE_TIME;
+import static racecontrol.client.extension.statistics.CarStatistics.PITLANE_TIME_STATIONARY;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
-import racecontrol.client.extension.statistics.WritableCarStatistics;
+import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.eventbus.Event;
 
 /**
@@ -46,7 +46,7 @@ public class PitTimeProcessor
      */
     private final Map<Integer, Long> pitStationaryTimestamp = new HashMap<>();
 
-    public PitTimeProcessor(Map<Integer, WritableCarStatistics> cars) {
+    public PitTimeProcessor(Map<Integer, CarStatisticsWritable> cars) {
         super(cars);
         this.client = AccBroadcastingClient.getClient();
     }
@@ -80,7 +80,7 @@ public class PitTimeProcessor
         if (info.getLocation() == PITLANE) {
             
             long now = System.currentTimeMillis();
-            WritableCarStatistics carStats = getCars().get(info.getCarId());
+            CarStatisticsWritable carStats = getCars().get(info.getCarId());
 
             // if car has entered the pits, set the timestamp, reset the
             // pit timers and increment pit count.

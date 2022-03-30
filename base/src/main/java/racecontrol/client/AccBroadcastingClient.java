@@ -49,6 +49,8 @@ import racecontrol.client.events.EntryListUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.ReplayEndedEvent;
 import racecontrol.client.events.ReplayStartedEvent;
+import racecontrol.client.extension.CarModel;
+import racecontrol.client.extension.CarModel.CarModelWritable;
 import racecontrol.client.extension.autobroadcast.AutobroadcastExtension;
 import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.client.extension.dangerdetection.DangerDetectionExtension;
@@ -160,6 +162,14 @@ public class AccBroadcastingClient {
 
         // statistics should always go last.
         extensions.add(StatisticsExtension.getInstance());
+        
+        CarModelWritable cm = new CarModel.CarModelWritable();
+        cm.setCarId(12);
+        cm.setCarNumber(144);
+        
+        CarModel c = cm;
+        CarModelWritable w = (CarModelWritable)c;
+        
     }
 
     /**

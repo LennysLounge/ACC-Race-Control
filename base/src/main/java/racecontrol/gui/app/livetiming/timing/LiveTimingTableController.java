@@ -16,7 +16,7 @@ import racecontrol.client.AccBroadcastingClient;
 import racecontrol.gui.lpui.LPContainer;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
+import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.gui.RaceControlApplet;

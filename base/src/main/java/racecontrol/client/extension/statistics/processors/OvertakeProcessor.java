@@ -14,11 +14,10 @@ import racecontrol.client.data.SessionInfo;
 import static racecontrol.client.data.enums.SessionType.RACE;
 import racecontrol.client.events.AfterPacketReceivedEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
-import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
-import static racecontrol.client.extension.statistics.CarProperties.OVERTAKE_INDICATOR;
-import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
+import static racecontrol.client.extension.statistics.CarStatistics.OVERTAKE_INDICATOR;
+import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
-import racecontrol.client.extension.statistics.WritableCarStatistics;
+import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.eventbus.Event;
 
 /**
@@ -50,7 +49,7 @@ public class OvertakeProcessor
      */
     private final Map<Integer, Long> timestamps = new HashMap<>();
 
-    public OvertakeProcessor(Map<Integer, WritableCarStatistics> cars) {
+    public OvertakeProcessor(Map<Integer, CarStatisticsWritable> cars) {
         super(cars);
         this.client = AccBroadcastingClient.getClient();
     }
@@ -74,7 +73,7 @@ public class OvertakeProcessor
                 return;
             }
 
-            WritableCarStatistics stats = getCars().get(car.getCarId());
+            CarStatisticsWritable stats = getCars().get(car.getCarId());
 
             if (prevPositions.containsKey(car.getCarId())) {
                 int diff = stats.get(REALTIME_POSITION) - prevPositions.get(car.getCarId());
@@ -93,7 +92,7 @@ public class OvertakeProcessor
         while (iter.hasNext()) {
             var entry = iter.next();
             if ((now - entry.getValue()) > INDICATOR_TIME) {
-                WritableCarStatistics stats = getCars().get(entry.getKey());
+                CarStatisticsWritable stats = getCars().get(entry.getKey());
                 stats.put(OVERTAKE_INDICATOR, 0);
                 iter.remove();
             }

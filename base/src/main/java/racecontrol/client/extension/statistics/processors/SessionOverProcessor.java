@@ -16,9 +16,9 @@ import static racecontrol.client.data.enums.SessionType.RACE;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
 import racecontrol.client.extension.laptimes.LapCompletedEvent;
-import static racecontrol.client.extension.statistics.CarProperties.SESSION_FINISHED;
+import static racecontrol.client.extension.statistics.CarStatistics.SESSION_FINISHED;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
-import racecontrol.client.extension.statistics.WritableCarStatistics;
+import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.eventbus.Event;
 
 /**
@@ -36,7 +36,7 @@ public class SessionOverProcessor
 
     private boolean isSessionOver = false;
 
-    public SessionOverProcessor(Map<Integer, WritableCarStatistics> cars) {
+    public SessionOverProcessor(Map<Integer, CarStatisticsWritable> cars) {
         super(cars);
         client = AccBroadcastingClient.getClient();
     }

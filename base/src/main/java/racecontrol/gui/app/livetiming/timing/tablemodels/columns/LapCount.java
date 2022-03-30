@@ -7,11 +7,11 @@ package racecontrol.gui.app.livetiming.timing.tablemodels.columns;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static racecontrol.client.extension.statistics.CarProperties.BEST_LAP_TIME;
-import static racecontrol.client.extension.statistics.CarProperties.LAP_COUNT;
-import static racecontrol.client.extension.statistics.CarProperties.LAST_LAP_INVALID;
-import static racecontrol.client.extension.statistics.CarProperties.LAST_LAP_TIME;
-import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_LAP_TIME;
+import static racecontrol.client.extension.statistics.CarStatistics.BEST_LAP_TIME;
+import static racecontrol.client.extension.statistics.CarStatistics.LAP_COUNT;
+import static racecontrol.client.extension.statistics.CarStatistics.LAST_LAP_INVALID;
+import static racecontrol.client.extension.statistics.CarStatistics.LAST_LAP_TIME;
+import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_LAP_TIME;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;

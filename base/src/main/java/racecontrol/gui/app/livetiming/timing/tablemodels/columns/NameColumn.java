@@ -8,7 +8,7 @@ package racecontrol.gui.app.livetiming.timing.tablemodels.columns;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import static racecontrol.client.extension.statistics.CarProperties.NAME;
+import static racecontrol.client.extension.statistics.CarStatistics.NAME;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_RED;

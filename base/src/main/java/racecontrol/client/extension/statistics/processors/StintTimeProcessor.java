@@ -19,13 +19,13 @@ import static racecontrol.client.data.enums.SessionPhase.SESSION;
 import racecontrol.client.events.BroadcastingEventEvent;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
-import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
-import static racecontrol.client.extension.statistics.CarProperties.CAR_LOCATION;
-import static racecontrol.client.extension.statistics.CarProperties.CAR_NUMBER;
-import static racecontrol.client.extension.statistics.CarProperties.DRIVER_STINT_TIME;
-import static racecontrol.client.extension.statistics.CarProperties.DRIVER_STINT_TIME_ACCURATE;
+import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
+import static racecontrol.client.extension.statistics.CarStatistics.CAR_LOCATION;
+import static racecontrol.client.extension.statistics.CarStatistics.CAR_NUMBER;
+import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT_TIME;
+import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT_TIME_ACCURATE;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
-import racecontrol.client.extension.statistics.WritableCarStatistics;
+import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.eventbus.Event;
 import racecontrol.utility.TimeUtils;
 
@@ -50,7 +50,7 @@ public class StintTimeProcessor
      */
     private final List<Integer> servedPenalty = new ArrayList<>();
 
-    public StintTimeProcessor(Map<Integer, WritableCarStatistics> cars) {
+    public StintTimeProcessor(Map<Integer, CarStatisticsWritable> cars) {
         super(cars);
     }
 
@@ -78,7 +78,7 @@ public class StintTimeProcessor
     }
 
     private void realtimeCarUpdate(RealtimeInfo info) {
-        WritableCarStatistics carStats = getCars().get(info.getCarId());
+        CarStatisticsWritable carStats = getCars().get(info.getCarId());
         long now = System.currentTimeMillis();
         if (!stintStartTimestamp.containsKey(info.getCarId())) {
             stintStartTimestamp.put(info.getCarId(), now);
@@ -111,7 +111,7 @@ public class StintTimeProcessor
 
     private void broadcastingEvent(BroadcastingEvent event) {
         if (event.getType() == PENALTYCOMMMSG) {
-            WritableCarStatistics stats = getCars().get(event.getCarId());
+            CarStatisticsWritable stats = getCars().get(event.getCarId());
             LOG.info(event.getMessage()
                     + "\t" + stats.get(CAR_NUMBER)
                     + "\t" + TimeUtils.asDurationShort(stats.get(DRIVER_STINT_TIME))

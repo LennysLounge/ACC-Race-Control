@@ -15,15 +15,15 @@ import static racecontrol.client.data.enums.SessionType.RACE;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
-import static racecontrol.client.extension.statistics.CarProperties.PLACES_GAINED;
-import static racecontrol.client.extension.statistics.CarProperties.POSITION;
-import static racecontrol.client.extension.statistics.CarProperties.RACE_START_POSITION;
-import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
+import static racecontrol.client.extension.statistics.CarStatistics.PLACES_GAINED;
+import static racecontrol.client.extension.statistics.CarStatistics.POSITION;
+import static racecontrol.client.extension.statistics.CarStatistics.RACE_START_POSITION;
+import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
-import racecontrol.client.extension.statistics.WritableCarStatistics;
+import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.eventbus.Event;
-import static racecontrol.client.extension.statistics.CarProperties.RACE_START_POSITION_ACCURATE;
-import static racecontrol.client.extension.statistics.CarProperties.SESSION_FINISHED;
+import static racecontrol.client.extension.statistics.CarStatistics.RACE_START_POSITION_ACCURATE;
+import static racecontrol.client.extension.statistics.CarStatistics.SESSION_FINISHED;
 
 /**
  *
@@ -39,7 +39,7 @@ public class PlacesLostGainedProcessor
      */
     private final AccBroadcastingClient client;
 
-    public PlacesLostGainedProcessor(Map<Integer, WritableCarStatistics> cars) {
+    public PlacesLostGainedProcessor(Map<Integer, CarStatisticsWritable> cars) {
         super(cars);
         this.client = AccBroadcastingClient.getClient();
     }

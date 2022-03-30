@@ -13,22 +13,22 @@ import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.LapInfo;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.events.RealtimeUpdateEvent;
-import static racecontrol.client.extension.statistics.CarProperties.BEST_LAP_TIME;
-import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_CAR_AHEAD;
-import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_CAR_BEHIND;
-import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_LEADER;
-import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_POSITION_AHEAD;
-import static racecontrol.client.extension.statistics.CarProperties.GAP_TO_POSITION_BEHIND;
-import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_LEADER;
-import static racecontrol.client.extension.statistics.CarProperties.LAPS_BEHIND_SPLIT;
-import static racecontrol.client.extension.statistics.CarProperties.LAP_TIME_GAP_TO_SESSION_BEST;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
-import racecontrol.client.extension.statistics.WritableCarStatistics;
+import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.client.extension.trackdata.TrackData;
 import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.eventbus.Event;
-import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_BEHIND_LEADER;
-import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
+import static racecontrol.client.extension.statistics.CarStatistics.BEST_LAP_TIME;
+import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_CAR_AHEAD;
+import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_CAR_BEHIND;
+import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_LEADER;
+import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_POSITION_AHEAD;
+import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_POSITION_BEHIND;
+import static racecontrol.client.extension.statistics.CarStatistics.LAPS_BEHIND_LEADER;
+import static racecontrol.client.extension.statistics.CarStatistics.LAPS_BEHIND_SPLIT;
+import static racecontrol.client.extension.statistics.CarStatistics.LAP_TIME_GAP_TO_SESSION_BEST;
+import static racecontrol.client.extension.statistics.CarStatistics.RACE_DISTANCE_BEHIND_LEADER;
+import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 
 /**
  *
@@ -42,7 +42,7 @@ public class GapProcessor extends StatisticsProcessor {
 
     private final GapCalculator gapCalculator = new GapCalculator();
 
-    public GapProcessor(Map<Integer, WritableCarStatistics> cars) {
+    public GapProcessor(Map<Integer, CarStatisticsWritable> cars) {
         super(cars);
         client = AccBroadcastingClient.getClient();
     }
@@ -60,7 +60,7 @@ public class GapProcessor extends StatisticsProcessor {
     public void onRealtimeUpdate(SessionInfo info) {
 
         //calculate gap to session best lap time.
-        for (WritableCarStatistics car : getCars().values()) {
+        for (CarStatisticsWritable car : getCars().values()) {
             LapInfo sessionBestLap = info.getBestSessionLap();
             int diff = car.get(BEST_LAP_TIME) - sessionBestLap.getLapTimeMS();
             car.put(LAP_TIME_GAP_TO_SESSION_BEST, diff);
@@ -70,7 +70,7 @@ public class GapProcessor extends StatisticsProcessor {
         if (trackData == null
                 || trackData.getGt3VelocityMap().isEmpty()
                 || client.getModel().getCarsInfo().isEmpty()) {
-            for (WritableCarStatistics car : getCars().values()) {
+            for (CarStatisticsWritable car : getCars().values()) {
                 if (trackData == null
                         || trackData.getGt3VelocityMap().isEmpty()) {
                     car.put(GAP_TO_LEADER, 0);
@@ -94,7 +94,7 @@ public class GapProcessor extends StatisticsProcessor {
         float leaderRaceDistance = cars.get(0).getRealtime().getLaps()
                 + cars.get(0).getRealtime().getSplinePosition();
         int splitLapsBehind = 0;
-        WritableCarStatistics carStats = getCars().get(cars.get(0).getCarId());
+        CarStatisticsWritable carStats = getCars().get(cars.get(0).getCarId());
         carStats.put(GAP_TO_LEADER, 0);
         carStats.put(GAP_TO_POSITION_AHEAD, Integer.MAX_VALUE);
         carStats.put(LAPS_BEHIND_LEADER, 0);

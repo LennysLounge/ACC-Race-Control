@@ -8,10 +8,10 @@ package racecontrol.client.extension.statistics.processors;
 import java.util.Map;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.extension.dangerdetection.DangerDetectionExtension;
-import static racecontrol.client.extension.statistics.CarProperties.IS_WHITE_FLAG;
-import static racecontrol.client.extension.statistics.CarProperties.IS_YELLOW_FLAG;
+import static racecontrol.client.extension.statistics.CarStatistics.IS_WHITE_FLAG;
+import static racecontrol.client.extension.statistics.CarStatistics.IS_YELLOW_FLAG;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
-import racecontrol.client.extension.statistics.WritableCarStatistics;
+import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.eventbus.Event;
 
 /**
@@ -26,7 +26,7 @@ public class FlagProcessor
      */
     private final DangerDetectionExtension dangerExtension;
 
-    public FlagProcessor(Map<Integer, WritableCarStatistics> cars) {
+    public FlagProcessor(Map<Integer, CarStatisticsWritable> cars) {
         super(cars);
         dangerExtension = DangerDetectionExtension.getInstance();
     }

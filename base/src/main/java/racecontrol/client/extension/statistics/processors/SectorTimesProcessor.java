@@ -19,25 +19,25 @@ import racecontrol.client.data.enums.CarLocation;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.extension.laptimes.LapCompletedEvent;
-import static racecontrol.client.extension.statistics.CarProperties.BEST_SECTOR_ONE;
-import static racecontrol.client.extension.statistics.CarProperties.BEST_SECTOR_THREE;
-import static racecontrol.client.extension.statistics.CarProperties.BEST_SECTOR_TWO;
-import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_ONE;
+import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_ONE;
+import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_THREE;
+import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_TWO;
+import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_SECTOR_ONE;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
-import racecontrol.client.extension.statistics.WritableCarStatistics;
+import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.client.extension.trackdata.TrackData;
 import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.utility.TimeUtils;
-import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_ONE_CALC;
-import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_THREE;
-import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_TWO_CALC;
-import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_THREE_CALC;
-import static racecontrol.client.extension.statistics.CarProperties.CURRENT_SECTOR_TWO;
-import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_LAP_TIME;
-import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_ONE;
-import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_THREE;
-import static racecontrol.client.extension.statistics.CarProperties.SESSION_BEST_SECTOR_TWO;
+import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_SECTOR_ONE_CALC;
+import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_SECTOR_THREE;
+import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_SECTOR_TWO_CALC;
+import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_SECTOR_THREE_CALC;
+import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_SECTOR_TWO;
+import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_LAP_TIME;
+import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_ONE;
+import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_THREE;
+import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_TWO;
 
 /**
  *
@@ -68,7 +68,7 @@ public class SectorTimesProcessor
     private final List<Integer> s1Avg = new ArrayList<>();
     private final List<Integer> s2Avg = new ArrayList<>();
 
-    public SectorTimesProcessor(Map<Integer, WritableCarStatistics> cars) {
+    public SectorTimesProcessor(Map<Integer, CarStatisticsWritable> cars) {
         super(cars);
     }
 
@@ -98,7 +98,7 @@ public class SectorTimesProcessor
     }
 
     private void onRealtimeCarUpdate(RealtimeInfo info) {
-        WritableCarStatistics car = getCars().get(info.getCarId());
+        CarStatisticsWritable car = getCars().get(info.getCarId());
         // set sectors to zero if the state is invalid.
         if (trackData == null
                 || !prevSplinePosition.containsKey(info.getCarId())
@@ -142,7 +142,7 @@ public class SectorTimesProcessor
     }
 
     private void onLapCompleted(CarInfo car) {
-        WritableCarStatistics carStats = getCars().get(car.getCarId());
+        CarStatisticsWritable carStats = getCars().get(car.getCarId());
         int lapTime = car.getRealtime().getLastLap().getLapTimeMS();
         int s3Time = lapTime - carStats.get(CURRENT_SECTOR_ONE_CALC) - carStats.get(CURRENT_SECTOR_TWO_CALC);
         carStats.put(CURRENT_SECTOR_THREE_CALC, s3Time);
@@ -170,7 +170,7 @@ public class SectorTimesProcessor
         int bestSectorOne = Integer.MAX_VALUE;
         int bestSectorTwo = Integer.MAX_VALUE;
         int bestSectorThree = Integer.MAX_VALUE;
-        for (WritableCarStatistics car : getCars().values()) {
+        for (CarStatisticsWritable car : getCars().values()) {
             if (car.get(BEST_SECTOR_ONE) < bestSectorOne) {
                 bestSectorOne = car.get(BEST_SECTOR_ONE);
             }
@@ -182,7 +182,7 @@ public class SectorTimesProcessor
             }
         }
         // write session bests to cars.
-        for (WritableCarStatistics car : getCars().values()) {
+        for (CarStatisticsWritable car : getCars().values()) {
             car.put(SESSION_BEST_LAP_TIME, sessionBestLap.getLapTimeMS());
             car.put(SESSION_BEST_SECTOR_ONE, bestSectorOne);
             car.put(SESSION_BEST_SECTOR_TWO, bestSectorTwo);
@@ -192,7 +192,7 @@ public class SectorTimesProcessor
 
     private void debugLog(CarInfo car) {
         if (trackData != null) {
-            WritableCarStatistics carStats = getCars().get(car.getCarId());
+            CarStatisticsWritable carStats = getCars().get(car.getCarId());
             LapInfo lastLap = car.getRealtime().getLastLap();
             // Sector suggestions.
             if (sectorSuggestions.containsKey(car.getCarId())) {

@@ -18,16 +18,16 @@ import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
-import static racecontrol.client.extension.statistics.CarProperties.CAR_ID;
-import static racecontrol.client.extension.statistics.CarProperties.CAR_LOCATION;
-import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_COMPLEX;
-import static racecontrol.client.extension.statistics.CarProperties.RACE_DISTANCE_SIMPLE;
-import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
-import static racecontrol.client.extension.statistics.CarProperties.SESSION_FINISHED;
-import static racecontrol.client.extension.statistics.CarProperties.SPLINE_POS;
-import static racecontrol.client.extension.statistics.CarProperties.USE_REALTIME_POS;
+import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
+import static racecontrol.client.extension.statistics.CarStatistics.CAR_LOCATION;
+import static racecontrol.client.extension.statistics.CarStatistics.RACE_DISTANCE_COMPLEX;
+import static racecontrol.client.extension.statistics.CarStatistics.RACE_DISTANCE_SIMPLE;
+import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
+import static racecontrol.client.extension.statistics.CarStatistics.SESSION_FINISHED;
+import static racecontrol.client.extension.statistics.CarStatistics.SPLINE_POS;
+import static racecontrol.client.extension.statistics.CarStatistics.USE_REALTIME_POS;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
-import racecontrol.client.extension.statistics.WritableCarStatistics;
+import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.eventbus.Event;
 
 /**
@@ -46,7 +46,7 @@ public class RealtimePositionProcessor
      */
     private final AccBroadcastingClient client;
 
-    public RealtimePositionProcessor(Map<Integer, WritableCarStatistics> cars) {
+    public RealtimePositionProcessor(Map<Integer, CarStatisticsWritable> cars) {
         super(cars);
         client = AccBroadcastingClient.getClient();
     }
@@ -65,7 +65,7 @@ public class RealtimePositionProcessor
     }
 
     private void onRealtimeCarUpdate(RealtimeInfo info) {
-        WritableCarStatistics carStats = getCars().get(info.getCarId());
+        CarStatisticsWritable carStats = getCars().get(info.getCarId());
 
         carStats.put(SPLINE_POS, info.getSplinePosition()); 
 
@@ -108,7 +108,7 @@ public class RealtimePositionProcessor
     }
 
     private boolean shouldUseRealtimePosition(SessionInfo info,
-            WritableCarStatistics carStats) {
+            CarStatisticsWritable carStats) {
         return info.getSessionType() == RACE
                 && info.getSessionTime() > 15000
                 && !carStats.get(SESSION_FINISHED);
@@ -116,7 +116,7 @@ public class RealtimePositionProcessor
 
     private void resetDistances() {
         client.getModel().getCarsInfo().values().forEach(carInfo -> {
-            WritableCarStatistics car = getCars().get(carInfo.getCarId());
+            CarStatisticsWritable car = getCars().get(carInfo.getCarId());
             car.put(RACE_DISTANCE_SIMPLE, 0f);
             car.put(RACE_DISTANCE_COMPLEX, 0f);
         });

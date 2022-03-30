@@ -11,7 +11,7 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import racecontrol.client.extension.autobroadcast.Entry;
-import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
+import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import static racecontrol.gui.LookAndFeel.COLOR_BLUE;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;

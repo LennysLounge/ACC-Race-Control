@@ -7,9 +7,9 @@ package racecontrol.gui.app.livetiming.timing.tablemodels.columns;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static racecontrol.client.extension.statistics.CarProperties.IS_FOCUSED_ON;
-import static racecontrol.client.extension.statistics.CarProperties.IS_SESSION_BEST;
-import static racecontrol.client.extension.statistics.CarProperties.REALTIME_POSITION;
+import static racecontrol.client.extension.statistics.CarStatistics.IS_FOCUSED_ON;
+import static racecontrol.client.extension.statistics.CarStatistics.IS_SESSION_BEST;
+import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;

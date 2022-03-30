@@ -15,13 +15,13 @@ import racecontrol.eventbus.Event;
  */
 public abstract class StatisticsProcessor {
 
-    private final Map<Integer, WritableCarStatistics> cars;
+    private final Map<Integer, CarStatisticsWritable> cars;
 
-    public StatisticsProcessor(Map<Integer, WritableCarStatistics> cars) {
+    public StatisticsProcessor(Map<Integer, CarStatisticsWritable> cars) {
         this.cars = cars;
     }
 
-    public Map<Integer, WritableCarStatistics> getCars() {
+    public Map<Integer, CarStatisticsWritable> getCars() {
         return cars;
     }
 

@@ -7,13 +7,14 @@ package racecontrol.client.extension.statistics;
 
 import java.util.HashMap;
 import java.util.Map;
+import racecontrol.client.extension.statistics.CarStatistics.Key;
 
 /**
  * Car statistics class that holds a map of properties.
  *
  * @author Leonard
  */
-public class WritableCarStatistics {
+public class CarStatisticsWritable {
 
     /**
      * Map holds the properties.
@@ -46,34 +47,12 @@ public class WritableCarStatistics {
     }
 
     /**
-     * Returns the properties for this car.
+     * Gets a readonly wraper of this object.
      *
-     * @return Map of keys to objects.
+     * @return A readonly car statistics object.
      */
-    public Map<Key<?>, Object> getProperties() {
-        return properties;
-    }
-
-    /**
-     * Key to use to identify car statistics properties.
-     *
-     * @param <T> Type of the object this key referes to.
-     */
-    public static class Key<T> {
-
-        /**
-         * Type of the object this key referes to.
-         */
-        final Class<T> type;
-        /**
-         * Default value for this key if the property does not exist.
-         */
-        final T defaultValue;
-
-        public Key(Class<T> type, T defaultValue) {
-            this.type = type;
-            this.defaultValue = defaultValue;
-        }
+    public CarStatistics getReadonly() {
+        return new CarStatistics(properties);
     }
 
 }

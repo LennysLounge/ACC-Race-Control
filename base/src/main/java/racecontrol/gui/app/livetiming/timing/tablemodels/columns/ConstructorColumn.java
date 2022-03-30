@@ -10,7 +10,7 @@ import java.util.Map;
 import processing.core.PApplet;
 import processing.core.PImage;
 import racecontrol.client.data.enums.CarModel;
-import static racecontrol.client.extension.statistics.CarProperties.CAR_MODEL;
+import static racecontrol.client.extension.statistics.CarStatistics.CAR_MODEL;
 import racecontrol.client.extension.statistics.CarStatistics;
 import static racecontrol.gui.LookAndFeel.COLOR_MEDIUM_GRAY;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
