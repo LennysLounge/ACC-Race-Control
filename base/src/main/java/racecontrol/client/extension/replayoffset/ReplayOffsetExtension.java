@@ -155,7 +155,7 @@ public class ReplayOffsetExtension
             if (replayStartTime == 0) {
                 long now = System.currentTimeMillis();
                 gameConnectionTime = now - event.getTimeMs();
-                long latestSessionChange = now - (int) client.getModel().getSessionInfo().getSessionTime();
+                long latestSessionChange = now - (int) client.getBroadcastingData().getSessionInfo().getSessionTime();
 
                 if (gameConnectionTime > latestSessionChange) {
                     replayStartTime = gameConnectionTime;
@@ -205,7 +205,7 @@ public class ReplayOffsetExtension
 
         long now = System.currentTimeMillis();
         long sessionOffset = (now - replayStartTime)
-                - (int) client.getModel().getSessionInfo().getSessionTime();
+                - (int) client.getBroadcastingData().getSessionInfo().getSessionTime();
         return sessionTime + (int) sessionOffset;
     }
 
@@ -228,9 +228,9 @@ public class ReplayOffsetExtension
         long now = System.currentTimeMillis();
         long requestTimeStamp = timeSinceConnection + gameConnectionTime;
         long sessionStartTimeStamp = now
-                - (int) client.getModel().getSessionInfo().getSessionTime();
+                - (int) client.getBroadcastingData().getSessionInfo().getSessionTime();
         long sessionOffset = (now - replayStartTime)
-                - (int) client.getModel().getSessionInfo().getSessionTime();
+                - (int) client.getBroadcastingData().getSessionInfo().getSessionTime();
         return (int) (requestTimeStamp - sessionStartTimeStamp + sessionOffset);
     }
 

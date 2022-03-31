@@ -128,16 +128,16 @@ public class RaceControlController
             getClient().sendInstantReplayRequestWithCamera(
                     entry.getSessionTime() - 5000,
                     10,
-                    getClient().getModel().getSessionInfo().getFocusedCarIndex(),
-                    getClient().getModel().getSessionInfo().getActiveCameraSet(),
-                    getClient().getModel().getSessionInfo().getActiveCamera()
+                    getClient().getBroadcastingData().getSessionInfo().getFocusedCarIndex(),
+                    getClient().getBroadcastingData().getSessionInfo().getActiveCameraSet(),
+                    getClient().getBroadcastingData().getSessionInfo().getActiveCamera()
             );
         }
     }
 
     private void createDummyContactEvent() {
-        int nCars = (int) Math.floor(Math.random() * Math.min(6, getClient().getModel().getCarsInfo().size()) + 1);
-        int sessionTime = getClient().getModel().getSessionInfo().getSessionTime();
+        int nCars = (int) Math.floor(Math.random() * Math.min(6, getClient().getBroadcastingData().getCarsInfo().size()) + 1);
+        int sessionTime = getClient().getBroadcastingData().getSessionInfo().getSessionTime();
         ContactInfo incident = new ContactInfo(
                 sessionTime,
                 0,
@@ -158,9 +158,9 @@ public class RaceControlController
     }
 
     private CarInfo getRandomCar() {
-        int r = (int) Math.floor(Math.random() * getClient().getModel().getCarsInfo().size());
+        int r = (int) Math.floor(Math.random() * getClient().getBroadcastingData().getCarsInfo().size());
         int i = 0;
-        for (CarInfo car : getClient().getModel().getCarsInfo().values()) {
+        for (CarInfo car : getClient().getBroadcastingData().getCarsInfo().values()) {
             if (i++ == r) {
                 return car;
             }

@@ -56,7 +56,7 @@ public class VSCViolationEventEntry
         super(sessionId, sessionTime, typeDesciptor, hasReplay);
         this.client = AccBroadcastingClient.getClient();
         this.violation = info;
-        this.carInfo = client.getModel().getCar(violation.getCarId());
+        this.carInfo = client.getBroadcastingData().getCar(violation.getCarId());
     }
 
     /**
@@ -154,7 +154,7 @@ public class VSCViolationEventEntry
     };
 
     private boolean isCarConnected(int carId) {
-        return client.getModel().getCarsInfo().keySet().contains(carId);
+        return client.getBroadcastingData().getCarsInfo().keySet().contains(carId);
     }
 
     /**

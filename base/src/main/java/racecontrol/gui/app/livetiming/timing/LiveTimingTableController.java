@@ -105,7 +105,7 @@ public class LiveTimingTableController
     }
 
     private void updateTableModel() {
-        List<CarStatistics> cars = client.getModel().getCarsInfo().values().stream()
+        List<CarStatistics> cars = client.getBroadcastingData().getCarsInfo().values().stream()
                 .filter(car -> !car.getRealtime().isDefault())
                 .map(car -> statisticsExtension.getCar(car.getCarId()))
                 .collect(Collectors.toList());

@@ -68,7 +68,7 @@ public class OvertakeProcessor
             return;
         }
 
-        for (CarInfo car : client.getModel().getCarsInfo().values()) {
+        for (CarInfo car : client.getBroadcastingData().getCarsInfo().values()) {
             if (car.getRealtime().isDefault()) {
                 return;
             }

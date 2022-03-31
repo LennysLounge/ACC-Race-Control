@@ -100,7 +100,7 @@ public class VirtualSafetyCarExtension
     private void onRealtimeCarUpdate(RealtimeInfo info) {
         if (info.getKMH() > speedLimit + speedTolerance) {
 
-            int sessionNow = CLIENT.getModel().getSessionInfo().getSessionTime();
+            int sessionNow = CLIENT.getBroadcastingData().getSessionInfo().getSessionTime();
             // get or create record.
             VSCRecord record = carsOverTheLimit.getOrDefault(info.getCarId(),
                     new VSCRecord(info.getCarId(),
@@ -137,7 +137,7 @@ public class VirtualSafetyCarExtension
         VSCRecord record = carsOverTheLimit.get(carId);
 
         String logText = String.format("VSC violation by car %s \t+%d kmh \t%s s",
-                CLIENT.getModel().getCar(carId).getCarNumberString(),
+                CLIENT.getBroadcastingData().getCar(carId).getCarNumberString(),
                 record.speedOver,
                 TimeUtils.asDelta(record.timeOver));
 
@@ -153,7 +153,7 @@ public class VirtualSafetyCarExtension
         // log to spreadsheet.
         GOOGLE_SHEETS_EXTENSION.sendIncident(record.sessionTimeStamp,
                 String.format("%s\n+%d kmh\n%s s",
-                        CLIENT.getModel().getCar(record.carId).getCarNumber(),
+                        CLIENT.getBroadcastingData().getCar(record.carId).getCarNumber(),
                         record.speedOver,
                         TimeUtils.asDelta(record.timeOver)));
     }
@@ -172,7 +172,7 @@ public class VirtualSafetyCarExtension
             this.speedLimit = speedLimit;
             this.speedTolerance = speedTolerance;
             this.timeTolerance = timeTolerance;
-            int time = CLIENT.getModel().getSessionInfo().getSessionTime();
+            int time = CLIENT.getBroadcastingData().getSessionInfo().getSessionTime();
             vscOn = true;
 
             String logText = "VSC started at " + TimeUtils.asDuration(time)
@@ -201,7 +201,7 @@ public class VirtualSafetyCarExtension
         //publish all current violations.
         clearAndCommitViolations();
 
-        int time = CLIENT.getModel().getSessionInfo().getSessionTime();
+        int time = CLIENT.getBroadcastingData().getSessionInfo().getSessionTime();
         EventBus.publish(new VSCEndEvent(sessionId, time));
 
         // log to spreadsheet

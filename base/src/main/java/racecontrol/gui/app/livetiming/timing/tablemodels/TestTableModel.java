@@ -82,7 +82,7 @@ public class TestTableModel
     private void r1(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
-        String text = String.format("%.5f", getClient().getModel().getCar(stats.get(CAR_ID)).getRealtime().getPosition()*1f);
+        String text = String.format("%.5f", getClient().getBroadcastingData().getCar(stats.get(CAR_ID)).getRealtime().getPosition()*1f);
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);
@@ -91,7 +91,7 @@ public class TestTableModel
     private void r2(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
-        String text = String.format("%.5f", getClient().getModel().getCar(stats.get(CAR_ID)).getRealtime().getTrackPosition()*1f);
+        String text = String.format("%.5f", getClient().getBroadcastingData().getCar(stats.get(CAR_ID)).getRealtime().getTrackPosition()*1f);
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);
@@ -100,7 +100,7 @@ public class TestTableModel
     private void r3(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
-        String text = String.format("%.5f", getClient().getModel().getCar(stats.get(CAR_ID)).getRealtime().getSplinePosition());
+        String text = String.format("%.5f", getClient().getBroadcastingData().getCar(stats.get(CAR_ID)).getRealtime().getSplinePosition());
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);

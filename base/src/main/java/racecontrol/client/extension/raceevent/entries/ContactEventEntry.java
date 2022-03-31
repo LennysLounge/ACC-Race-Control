@@ -170,7 +170,7 @@ public class ContactEventEntry
     }
 
     private boolean isCarConnected(int carId) {
-        return client.getModel().getCarsInfo().keySet().contains(carId);
+        return client.getBroadcastingData().getCarsInfo().keySet().contains(carId);
     }
 
     @Override

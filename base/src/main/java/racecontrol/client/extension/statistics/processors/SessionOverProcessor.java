@@ -55,7 +55,7 @@ public class SessionOverProcessor
     private void onLapCompleted(CarInfo car) {
         // The session is over when the leading car finishes his lap and
         // the session phase is "SESSIONOVER" during a race.
-        SessionInfo info = client.getModel().getSessionInfo();
+        SessionInfo info = client.getBroadcastingData().getSessionInfo();
         if (info.getSessionType() == RACE
                 && info.getPhase() == SESSIONOVER
                 && car.getRealtime().getPosition() == 1) {

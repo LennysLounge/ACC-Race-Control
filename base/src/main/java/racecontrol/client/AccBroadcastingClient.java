@@ -146,7 +146,7 @@ public class AccBroadcastingClient {
      *
      * @return The current data model.
      */
-    public AccBroadcastingData getModel() {
+    public AccBroadcastingData getBroadcastingData() {
         if (connection != null) {
             return connection.getBroadcastingData();
         }

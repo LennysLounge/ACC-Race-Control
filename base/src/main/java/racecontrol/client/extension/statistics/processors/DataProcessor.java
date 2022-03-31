@@ -81,7 +81,7 @@ public class DataProcessor extends StatisticsProcessor {
     }
 
     public void onRealtimeCarUpdate(RealtimeInfo info) {
-        CarInfo carInfo = client.getModel().getCar(info.getCarId());
+        CarInfo carInfo = client.getBroadcastingData().getCar(info.getCarId());
         if (!getCars().containsKey(info.getCarId())) {
             return;
         }

@@ -113,7 +113,7 @@ public class LapTimeExtension
                 lapCount.put(info.getCarId(), info.getLaps());
                 LapInfo lap = info.getLastLap();
                 boolean isPersonalBest = lap.getLapTimeMS() == info.getBestSessionLap().getLapTimeMS();
-                boolean isSessionBest = lap.getLapTimeMS() == client.getModel().getSessionInfo().getBestSessionLap().getLapTimeMS();
+                boolean isSessionBest = lap.getLapTimeMS() == client.getBroadcastingData().getSessionInfo().getBestSessionLap().getLapTimeMS();
                 onLapComplete(lap, isPersonalBest, isSessionBest);
             }
         } else {
@@ -122,7 +122,7 @@ public class LapTimeExtension
     }
 
     private void onLapComplete(LapInfo lap, boolean isPB, boolean isSB) {
-        CarInfo car = client.getModel().getCar(lap.getCarId());
+        CarInfo car = client.getBroadcastingData().getCar(lap.getCarId());
 
         boolean isFirstLap = lapCount.get(lap.getCarId()) == 1;
         int lapNr = lapCount.get(lap.getCarId());
@@ -167,7 +167,7 @@ public class LapTimeExtension
         try ( PrintWriter writer = new PrintWriter(logFile)) {
 
             for (Entry<Integer, List<Integer>> entry : laps.entrySet()) {
-                CarInfo car = client.getModel().getCar(entry.getKey());
+                CarInfo car = client.getBroadcastingData().getCar(entry.getKey());
                 writer.print(car.getCarNumber());
                 writer.print("," + car.getDriver().getFirstName() + " " + car.getDriver().getLastName());
                 for (int lap : entry.getValue()) {

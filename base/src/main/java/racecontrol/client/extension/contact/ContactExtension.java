@@ -212,7 +212,7 @@ public class ContactExtension
      */
     private void saveInHistory(RealtimeInfo info) {
         // add info to history.
-        int sessionTime = CLIENT.getModel().getSessionInfo().getSessionTime();
+        int sessionTime = CLIENT.getBroadcastingData().getSessionInfo().getSessionTime();
         if (!history.containsKey(sessionTime)) {
             history.put(sessionTime, new HashMap<>());
         }
@@ -270,8 +270,8 @@ public class ContactExtension
         // an accident event is usually 5000 ms after the contact.
         // to get an accurate timing we subtract that offset.
         int sessionTime = getSessionTimeFromHistory(
-                CLIENT.getModel().getSessionInfo().getSessionTime() - 5000);
-        CarInfo car = CLIENT.getModel().getCar(event.getCarId());
+                CLIENT.getBroadcastingData().getSessionInfo().getSessionTime() - 5000);
+        CarInfo car = CLIENT.getBroadcastingData().getCar(event.getCarId());
 
         // use realtime data from history
         car = car.withRealtime(history.get(sessionTime)
@@ -335,7 +335,7 @@ public class ContactExtension
                     return ((Float) d1).compareTo(d2);
                 })
                 .map(r -> {
-                    CarInfo car = CLIENT.getModel().getCar(r.getCarId());
+                    CarInfo car = CLIENT.getBroadcastingData().getCar(r.getCarId());
                     return car.withRealtime(r);
                 });
 
@@ -346,7 +346,7 @@ public class ContactExtension
         CarInfo closestCar = closestCarO.get();
         // log 
         if (closestCar != null) {
-            int trackMeters = CLIENT.getModel().getTrackInfo().getTrackMeters();
+            int trackMeters = CLIENT.getBroadcastingData().getTrackInfo().getTrackMeters();
             float distance = (closestCar.getRealtime().getSplinePosition()
                     - subject.getSplinePosition()) * trackMeters;
             LOG.info(String.format("Contact: ?%s\t\t%.2fm\t%s",
@@ -429,7 +429,7 @@ public class ContactExtension
 
         // find closest car at the moment the yellow flag was shown.
         Optional<CarInfo> closestCarInstant
-                = CLIENT.getModel().getCarsInfo().values().stream()
+                = CLIENT.getBroadcastingData().getCarsInfo().values().stream()
                         .filter(car -> car.getCarId() != flaggedCar.getCarId())
                         .filter(car -> car.getRealtime().getLocation() != CarLocation.NONE)
                         .filter(car -> car.getRealtime().getLocation() != CarLocation.PITLANE)
@@ -478,7 +478,7 @@ public class ContactExtension
         }
 
         float distance = getDistance(info.getClosestCar().getRealtime(),
-                info.getFlaggedCar().getRealtime()) * CLIENT.getModel().getTrackInfo().getTrackMeters();
+                info.getFlaggedCar().getRealtime()) * CLIENT.getBroadcastingData().getTrackInfo().getTrackMeters();
         if (Math.abs(distance) > YELLOW_FLAG_DISTANCE_THRESHOLD) {
             return false;
         }
@@ -487,7 +487,7 @@ public class ContactExtension
     }
 
     private void logYellowFlagContactInfo(YellowFlagContactInfo info) {
-        int trackMeters = CLIENT.getModel().getTrackInfo().getTrackMeters();
+        int trackMeters = CLIENT.getBroadcastingData().getTrackInfo().getTrackMeters();
         LOG.info(String.format("\t\t%s\t%.2fm",
                 info.getClosestCar().getCarNumberString(),
                 getDistance(info.getClosestCar().getRealtime(),

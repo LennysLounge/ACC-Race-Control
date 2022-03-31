@@ -69,7 +69,7 @@ public class GapProcessor extends StatisticsProcessor {
         // Skip if we dont know the track or the v map.
         if (trackData == null
                 || trackData.getGt3VelocityMap().isEmpty()
-                || client.getModel().getCarsInfo().isEmpty()) {
+                || client.getBroadcastingData().getCarsInfo().isEmpty()) {
             for (CarStatisticsWritable car : getCars().values()) {
                 if (trackData == null
                         || trackData.getGt3VelocityMap().isEmpty()) {
@@ -85,7 +85,7 @@ public class GapProcessor extends StatisticsProcessor {
         }
 
         // calculate gaps to position ahead and leader.
-        List<CarInfo> cars = client.getModel().getCarsInfo().values().stream()
+        List<CarInfo> cars = client.getBroadcastingData().getCarsInfo().values().stream()
                 .sorted((c1, c2) -> {
                     return getCars().get(c1.getCarId()).get(REALTIME_POSITION)
                             .compareTo(getCars().get(c2.getCarId()).get(REALTIME_POSITION));
@@ -129,7 +129,7 @@ public class GapProcessor extends StatisticsProcessor {
         carStats.put(GAP_TO_POSITION_BEHIND, Integer.MAX_VALUE);
 
         // cap to cars ahead / behind
-        cars = client.getModel().getCarsInfo().values().stream()
+        cars = client.getBroadcastingData().getCarsInfo().values().stream()
                 .sorted((c1, c2) -> Float.compare(c1.getRealtime().getSplinePosition(), c2.getRealtime().getSplinePosition()))
                 .collect(Collectors.toList());
         for (int i = 0; i < cars.size(); i++) {

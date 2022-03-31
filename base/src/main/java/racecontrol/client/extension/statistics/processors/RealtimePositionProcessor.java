@@ -88,7 +88,7 @@ public class RealtimePositionProcessor
 
     private void onSessionUpdate(SessionInfo info) {
         // sort cars based on their complex race distance.
-        var carsSorted = client.getModel().getCarsInfo().values().stream()
+        var carsSorted = client.getBroadcastingData().getCarsInfo().values().stream()
                 .map(carInfo -> getCars().get(carInfo.getCarId()))
                 .sorted((c1, c2) -> c2.get(RACE_DISTANCE_COMPLEX).compareTo(c1.get(RACE_DISTANCE_COMPLEX)))
                 .collect(Collectors.toList());
@@ -99,7 +99,7 @@ public class RealtimePositionProcessor
                 carStats.put(REALTIME_POSITION, pos);
             } else {
                 carStats.put(REALTIME_POSITION,
-                        client.getModel().getCar(carStats.get(CAR_ID))
+                        client.getBroadcastingData().getCar(carStats.get(CAR_ID))
                                 .getRealtime().getPosition());
             }
             carStats.put(USE_REALTIME_POS, shouldUseRealtimePosition(info, carStats));
@@ -115,7 +115,7 @@ public class RealtimePositionProcessor
     }
 
     private void resetDistances() {
-        client.getModel().getCarsInfo().values().forEach(carInfo -> {
+        client.getBroadcastingData().getCarsInfo().values().forEach(carInfo -> {
             CarStatisticsWritable car = getCars().get(carInfo.getCarId());
             car.put(RACE_DISTANCE_SIMPLE, 0f);
             car.put(RACE_DISTANCE_COMPLEX, 0f);

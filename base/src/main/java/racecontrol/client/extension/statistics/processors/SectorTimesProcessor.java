@@ -87,7 +87,7 @@ public class SectorTimesProcessor
             trackData = ((TrackDataEvent) e).getTrackData();
             s1Avg.clear();
             s2Avg.clear();
-            AccBroadcastingClient.getClient().getModel().getCarsInfo().values().stream()
+            AccBroadcastingClient.getClient().getBroadcastingData().getCarsInfo().values().stream()
                     .map(carInfo -> getCars().get(carInfo.getCarId()))
                     .forEach(carStat -> {
                         carStat.put(CURRENT_SECTOR_ONE_CALC, 0);

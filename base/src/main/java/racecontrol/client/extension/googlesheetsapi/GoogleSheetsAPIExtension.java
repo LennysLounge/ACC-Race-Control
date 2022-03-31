@@ -93,7 +93,7 @@ public class GoogleSheetsAPIExtension
 
     public void start(GoogleSheetsConfiguration config) {
         connection.start(config);
-        connection.sendCarsConnection(new ArrayList<>(CLIENT.getModel().getCarsInfo().values()));
+        connection.sendCarsConnection(new ArrayList<>(CLIENT.getBroadcastingData().getCarsInfo().values()));
     }
 
     public void stop() {

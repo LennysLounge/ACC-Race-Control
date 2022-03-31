@@ -252,7 +252,7 @@ public class DangerDetectionExtension
         if (info.getLocation() != CarLocation.TRACK) {
             return false;
         }
-        SessionInfo sessionInfo = client.getModel().getSessionInfo();
+        SessionInfo sessionInfo = client.getBroadcastingData().getSessionInfo();
         if (sessionInfo.getPhase() != SessionPhase.SESSION
                 && sessionInfo.getPhase() != SessionPhase.SESSIONOVER) {
             return false;
@@ -291,11 +291,11 @@ public class DangerDetectionExtension
 
         if (isNew) {
             if (isSpin) {
-                SessionInfo info = client.getModel().getSessionInfo();
+                SessionInfo info = client.getBroadcastingData().getSessionInfo();
                 int sessionTime = info.getSessionTime();
                 int replayTime = ReplayOffsetExtension.getInstance().getReplayTimeFromSessionTime(sessionTime);
                 String logMessage = "Yellow Flag nr." + idCounter + " :"
-                        + client.getModel().getCar(carId).getCarNumberString()
+                        + client.getBroadcastingData().getCar(carId).getCarNumberString()
                         + "\t" + TimeUtils.asDuration(sessionTime)
                         + "\t" + TimeUtils.asDuration(replayTime)
                         + "\t";
@@ -304,7 +304,7 @@ public class DangerDetectionExtension
 
                 LOG.info(logMessage);
                 EventBus.publish(new YellowFlagEvent(
-                        client.getModel().getCar(carId),
+                        client.getBroadcastingData().getCar(carId),
                         sessionTime,
                         idCounter++
                 ));

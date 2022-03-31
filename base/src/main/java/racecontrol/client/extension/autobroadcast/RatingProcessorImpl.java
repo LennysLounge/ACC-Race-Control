@@ -59,7 +59,7 @@ public class RatingProcessorImpl
         CarStatistics stats = StatisticsExtension.getInstance()
                 .getCar(entry.getCarInfo().getCarId());
         // sort cars by their race position from first to last.
-        List<CarStatistics> carsSorted = getClient().getModel().getCarsInfo().values().stream()
+        List<CarStatistics> carsSorted = getClient().getBroadcastingData().getCarsInfo().values().stream()
                 .map(carInfo -> StatisticsExtension.getInstance().getCar(carInfo.getCarId()))
                 .sorted((c1, c2) -> Float.compare(c1.get(REALTIME_POSITION), c2.get(REALTIME_POSITION)))
                 .collect(Collectors.toList());
@@ -101,7 +101,7 @@ public class RatingProcessorImpl
         // Position rating. Having a higher position gives a better rating.
         // scaled from p1 to last place linearly.
         float position = stats.get(REALTIME_POSITION) * 1f
-                / getClient().getModel().getCarsInfo().size() * 1f;
+                / getClient().getBroadcastingData().getCarsInfo().size() * 1f;
         entry.setPosition(1 - position);
 
         // Focus changed penalty. When the focus changes, cars that are not in

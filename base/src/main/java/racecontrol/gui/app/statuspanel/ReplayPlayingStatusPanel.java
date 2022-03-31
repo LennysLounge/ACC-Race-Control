@@ -43,10 +43,10 @@ public class ReplayPlayingStatusPanel
         applet.fill(COLOR_WHITE);
         applet.textAlign(LEFT, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
-        applet.text("Replay time remaining: " + TimeUtils.asDuration(client.getModel().getSessionInfo().getReplayRemainingTime()),
+        applet.text("Replay time remaining: " + TimeUtils.asDuration(client.getBroadcastingData().getSessionInfo().getReplayRemainingTime()),
                 10, LINE_HEIGHT * 0.5f);
 
-        applet.text("Session Time: " + TimeUtils.asDuration(client.getModel().getSessionInfo().getReplaySessionTime()),
+        applet.text("Session Time: " + TimeUtils.asDuration(client.getBroadcastingData().getSessionInfo().getReplaySessionTime()),
                 360, LINE_HEIGHT * 0.5f);
     }
 
