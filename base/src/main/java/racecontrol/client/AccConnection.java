@@ -61,11 +61,6 @@ public class AccConnection
     private final Logger LOG = Logger.getLogger(AccConnection.class.getName());
 
     /**
-     * Protocoll used to communicate with ACC.
-     */
-    private final AccBroadcastingProtocol protocol = new AccBroadcastingProtocol(this);
-
-    /**
      * exit state of this thread.
      */
     private ExitState exitState = ExitState.NONE;
@@ -232,7 +227,8 @@ public class AccConnection
             try {
                 DatagramPacket response = new DatagramPacket(new byte[2048], 2048);
                 socket.receive(response);
-                protocol.processMessage(new ByteArrayInputStream(response.getData()));
+                AccBroadcastingProtocol.processMessage(
+                        new ByteArrayInputStream(response.getData()), this);
                 afterPacketReceived(response.getData()[0]);
             } catch (SocketTimeoutException e) {
                 LOG.log(Level.WARNING, "Socket timed out.", e);

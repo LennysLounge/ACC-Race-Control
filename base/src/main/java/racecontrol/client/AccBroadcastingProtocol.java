@@ -66,38 +66,31 @@ public class AccBroadcastingProtocol {
      * Version of the broadcasting protocoll.
      */
     private static final byte BROADCASTING_PROTOCOL_VERSION = 0x04;
-    /**
-     * Callback to trigger the events.
-     */
-    private final AccBroadcastingProtocolCallback callback;
 
-    public AccBroadcastingProtocol(AccBroadcastingProtocolCallback callback) {
-        this.callback = callback;
-    }
-
-    public void processMessage(ByteArrayInputStream in) {
+    public static void processMessage(ByteArrayInputStream in,
+            AccBroadcastingProtocolCallback callback) {
         byte messageType = readByte(in);
         switch (messageType) {
             case InboundMessageTypes.REGISTRATION_RESULT:
-                readRegistrationResult(in);
+                readRegistrationResult(in, callback);
                 break;
             case InboundMessageTypes.REALTIME_UPDATE:
-                readRealtimeUpdate(in);
+                readRealtimeUpdate(in, callback);
                 break;
             case InboundMessageTypes.REALTIME_CAR_UPDATE:
-                readRealtimeCarUpdate(in);
+                readRealtimeCarUpdate(in, callback);
                 break;
             case InboundMessageTypes.ENTRY_LIST:
-                readEntryList(in);
+                readEntryList(in, callback);
                 break;
             case InboundMessageTypes.TRACK_DATA:
-                readTrackData(in);
+                readTrackData(in, callback);
                 break;
             case InboundMessageTypes.ENTRY_LIST_CAR:
-                readEntryListCar(in);
+                readEntryListCar(in, callback);
                 break;
             case InboundMessageTypes.BROADCASTING_EVENT:
-                readBroadcastingEvent(in);
+                readBroadcastingEvent(in, callback);
                 break;
 
             default:
@@ -105,7 +98,8 @@ public class AccBroadcastingProtocol {
         }
     }
 
-    private void readRegistrationResult(ByteArrayInputStream in) {
+    private static void readRegistrationResult(ByteArrayInputStream in,
+            AccBroadcastingProtocolCallback callback) {
         int connectionID = readInt32(in);
         boolean connectionSuccess = readByte(in) > 0;
         boolean isReadonly = readByte(in) == 0;
@@ -113,7 +107,8 @@ public class AccBroadcastingProtocol {
         callback.onRegistrationResult(connectionID, connectionSuccess, isReadonly, errorMessage);
     }
 
-    private void readRealtimeUpdate(ByteArrayInputStream in) {
+    private static void readRealtimeUpdate(ByteArrayInputStream in,
+            AccBroadcastingProtocolCallback callback) {
         int eventIndex = readUInt16(in);
         int sessionIndex = readUInt16(in);
         SessionType sessionType = SessionType.fromId(readByte(in));
@@ -151,7 +146,8 @@ public class AccBroadcastingProtocol {
         callback.onRealtimeUpdate(sessionInfo);
     }
 
-    private void readRealtimeCarUpdate(ByteArrayInputStream in) {
+    private static void readRealtimeCarUpdate(ByteArrayInputStream in,
+            AccBroadcastingProtocolCallback callback) {
         int carId = readUInt16(in);
         int driverIndex = readUInt16(in);
         byte driverCount = readByte(in);
@@ -177,7 +173,8 @@ public class AccBroadcastingProtocol {
         callback.onRealtimeCarUpdate(info);
     }
 
-    private void readEntryList(ByteArrayInputStream in) {
+    private static void readEntryList(ByteArrayInputStream in,
+            AccBroadcastingProtocolCallback callback) {
         List<Integer> cars = new LinkedList<>();
 
         int connectionId = readInt32(in);
@@ -188,7 +185,8 @@ public class AccBroadcastingProtocol {
         callback.onEntryListUpdate(cars);
     }
 
-    private void readEntryListCar(ByteArrayInputStream in) {
+    private static void readEntryListCar(ByteArrayInputStream in,
+            AccBroadcastingProtocolCallback callback) {
         int carId = readUInt16(in);
         byte carModelType = readByte(in);
         String teamName = readString(in);
@@ -213,7 +211,8 @@ public class AccBroadcastingProtocol {
         callback.onEntryListCarUpdate(carInfo);
     }
 
-    private void readBroadcastingEvent(ByteArrayInputStream in) {
+    private static void readBroadcastingEvent(ByteArrayInputStream in,
+            AccBroadcastingProtocolCallback callback) {
         BroadcastingEventType type = BroadcastingEventType.fromId(readByte(in));
         String msg = readString(in);
         int timeMs = readInt32(in);
@@ -223,7 +222,8 @@ public class AccBroadcastingProtocol {
         callback.onBroadcastingEvent(event);
     }
 
-    private void readTrackData(ByteArrayInputStream in) {
+    private static void readTrackData(ByteArrayInputStream in,
+            AccBroadcastingProtocolCallback callback) {
         int connectionID = readInt32(in);
         String trackName = readString(in);
         int trackId = readInt32(in);
@@ -355,42 +355,42 @@ public class AccBroadcastingProtocol {
         };
     }
 
-    private byte readByte(ByteArrayInputStream in) {
+    private static byte readByte(ByteArrayInputStream in) {
         return (byte) in.read();
     }
 
-    private int readUInt16(ByteArrayInputStream in) {
+    private static int readUInt16(ByteArrayInputStream in) {
         byte[] int32 = new byte[2];
         in.read(int32, 0, 2);
         return ByteBuffer.wrap(int32).order(ByteOrder.LITTLE_ENDIAN).getShort();
     }
 
-    private int readInt32(ByteArrayInputStream in) {
+    private static int readInt32(ByteArrayInputStream in) {
         byte[] int32 = new byte[4];
         in.read(int32, 0, 4);
         return ByteBuffer.wrap(int32).order(ByteOrder.LITTLE_ENDIAN).getInt();
     }
 
-    private String readString(ByteArrayInputStream in) {
+    private static String readString(ByteArrayInputStream in) {
         int length = readUInt16(in);
         byte[] message = new byte[length];
         in.read(message, 0, length);
         return new String(message, StandardCharsets.UTF_8);
     }
 
-    private float readFloat(ByteArrayInputStream in) {
+    private static float readFloat(ByteArrayInputStream in) {
         byte[] int32 = new byte[4];
         in.read(int32, 0, 4);
         return ByteBuffer.wrap(int32).order(ByteOrder.LITTLE_ENDIAN).getFloat();
     }
 
-    private float readFloat_BIG(ByteArrayInputStream in) {
+    private static float readFloat_BIG(ByteArrayInputStream in) {
         byte[] int32 = new byte[4];
         in.read(int32, 0, 4);
         return ByteBuffer.wrap(int32).order(ByteOrder.BIG_ENDIAN).getFloat();
     }
 
-    private LapInfo readLap(ByteArrayInputStream in) {
+    private static LapInfo readLap(ByteArrayInputStream in) {
 
         int lapTimeMS = readInt32(in);
         int carIndex = readUInt16(in);
