@@ -7,17 +7,15 @@ package racecontrol.gui.app.settings.connection;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import racecontrol.client.AccBroadcastingClient;
+import racecontrol.client.AccConnection;
 import racecontrol.client.events.ConnectionClosedEvent;
 import racecontrol.client.events.ConnectionOpenedEvent;
 import racecontrol.eventbus.Event;
@@ -173,7 +171,7 @@ public class ConnectionController
     }
 
     private void connectionClosedEvent(ConnectionClosedEvent event) {
-        if (event.getExitState() != AccBroadcastingClient.ExitState.NORMAL) {
+        if (event.getExitState() != AccConnection.ExitState.NORMAL) {
             showErrorMessage(event.getExitState());
         }
         panel.setDisconnected();
@@ -187,20 +185,20 @@ public class ConnectionController
         }
     }
 
-    private void showErrorMessage(AccBroadcastingClient.ExitState exitStatus) {
-        if (exitStatus == AccBroadcastingClient.ExitState.PORT_UNREACHABLE) {
+    private void showErrorMessage(AccConnection.ExitState exitStatus) {
+        if (exitStatus == AccConnection.ExitState.PORT_UNREACHABLE) {
             JOptionPane.showMessageDialog(null,
                     "Cannot connect to game. The game needs to be on track to connect.",
                     "Error connecting to game",
                     JOptionPane.ERROR_MESSAGE);
         }
-        if (exitStatus == AccBroadcastingClient.ExitState.REFUSED) {
+        if (exitStatus == AccConnection.ExitState.REFUSED) {
             JOptionPane.showMessageDialog(null,
                     "Connection refused by the game. Wrong password.",
                     "Error connecting to game",
                     JOptionPane.ERROR_MESSAGE);
         }
-        if (exitStatus == AccBroadcastingClient.ExitState.EXCEPTION) {
+        if (exitStatus == AccConnection.ExitState.EXCEPTION) {
             JOptionPane.showMessageDialog(null,
                     "Unknown error while connecting to game",
                     "Error connecting to game",

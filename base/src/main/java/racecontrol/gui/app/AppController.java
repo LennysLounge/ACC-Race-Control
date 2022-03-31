@@ -15,6 +15,7 @@ import racecontrol.Main;
 import racecontrol.gui.app.logging.LoggingPanel;
 import racecontrol.gui.app.racecontrol.RaceControlController;
 import racecontrol.client.AccBroadcastingClient;
+import racecontrol.client.AccConnection;
 import racecontrol.client.events.ConnectionClosedEvent;
 import racecontrol.client.events.ConnectionOpenedEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
@@ -160,10 +161,10 @@ public class AppController
         } else if (e instanceof ConnectionClosedEvent) {
             RaceControlApplet.runLater(() -> {
                 ConnectionClosedEvent event = (ConnectionClosedEvent) e;
-                if (event.getExitState() == AccBroadcastingClient.ExitState.NORMAL) {
+                if (event.getExitState() == AccConnection.ExitState.NORMAL) {
                     appPanel.setActivePage(settingsPage);
                     appPanel.updateComponents();
-                } else if (event.getExitState() == AccBroadcastingClient.ExitState.TIMEOUT) {
+                } else if (event.getExitState() == AccConnection.ExitState.TIMEOUT) {
                     StatusPanelManager.getInstance()
                             .addStatusPanel(new ConnectionTimeoutStatusPanel());
                 }

@@ -6,7 +6,7 @@
 package racecontrol.client.events;
 
 import racecontrol.eventbus.Event;
-import racecontrol.client.AccBroadcastingClient.ExitState;
+import racecontrol.client.AccConnection.ExitState;
 
 /**
  *
