@@ -252,14 +252,16 @@ public class AccConnection
     }
 
     @Override
-    public void onRegistrationResult(int connectionID, boolean success, boolean readOnly, String message) {
+    public void onRegistrationResult(int connectionId, boolean success, boolean readOnly, String message) {
         if (success == false) {
             LOG.info("Connection refused\n" + message);
             exitState = ExitState.REFUSED;
             running = false;
             return;
         }
-        model_old = model_old.withConnectionId(connectionID);
+
+        model.connectionId = connectionId;
+        model.readOnly = readOnly;
 
         try {
             getClient().sendEntryListRequest();
@@ -268,7 +270,7 @@ public class AccConnection
             LOG.log(Level.SEVERE, "Error while sending entrylist and trackdata request", e);
         }
 
-        EventBus.publish(new RegistrationResultEvent(connectionID, success, readOnly, message));
+        EventBus.publish(new RegistrationResultEvent(connectionId, success, readOnly, message));
     }
 
     @Override

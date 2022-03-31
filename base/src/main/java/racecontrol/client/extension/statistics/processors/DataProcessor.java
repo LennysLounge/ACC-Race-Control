@@ -137,7 +137,7 @@ public class DataProcessor extends StatisticsProcessor {
     public void onRealtimeUpdate(SessionInfo info) {
         for (CarStatisticsWritable car : getCars().values()) {
             car.put(IS_FOCUSED_ON, info.getFocusedCarIndex() == car.get(CAR_ID));
-            car.put(SESSION_ID, client.getSessionId());
+            car.put(SESSION_ID, client.getModel().currentSessionId);
             car.put(IS_SESSION_BEST,
                     info.getBestSessionLap().getLapTimeMS() != Integer.MAX_VALUE
                     && info.getBestSessionLap().getLapTimeMS() == car.get(BEST_LAP_TIME)

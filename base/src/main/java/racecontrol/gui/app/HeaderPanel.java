@@ -54,7 +54,7 @@ public class HeaderPanel
             applet.fill(255);
             applet.textAlign(LEFT, CENTER);
             applet.textFont(fontRegular());
-            String conId = "Connection ID: " + client.getBroadcastingData().getConnectionID();
+            String conId = "Connection ID: " + client.getModel().connectionId;
             applet.text(conId, 10, LINE_HEIGHT * 0.5f);
 
             if (googleSheetController.getState() == RUNNING) {
@@ -67,7 +67,7 @@ public class HeaderPanel
 
             applet.textAlign(RIGHT, CENTER);
             applet.textSize(TEXT_SIZE * 0.8f);
-            String sessionName = sessionIdToString(client.getSessionId());
+            String sessionName = sessionIdToString(client.getModel().currentSessionId);
             float sessionNameWidth = applet.textWidth(sessionName);
             applet.text(sessionName, getWidth() - 10, LINE_HEIGHT * 0.5f);
 

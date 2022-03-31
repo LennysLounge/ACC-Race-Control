@@ -5,21 +5,14 @@
  */
 package racecontrol.gui.app.racecontrol;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.gui.RaceControlApplet;
 import racecontrol.client.extension.raceevent.entries.ContactEventEntry;
 import racecontrol.client.extension.raceevent.entries.RaceEventEntry;
-import racecontrol.client.extension.raceevent.entries.SimpleEventEntry;
 import racecontrol.client.extension.raceevent.entries.VSCViolationEventEntry;
 import racecontrol.gui.app.racecontrol.virtualsafetycar.VirtualSafetyCarConfigController;
-import racecontrol.client.extension.vsc.events.VSCEndEvent;
-import racecontrol.client.extension.vsc.events.VSCStartEvent;
-import racecontrol.client.extension.vsc.events.VSCViolationEvent;
 import racecontrol.client.data.CarInfo;
-import racecontrol.client.data.SessionInfo;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
@@ -141,7 +134,7 @@ public class RaceControlController
         ContactInfo incident = new ContactInfo(
                 sessionTime,
                 0,
-                getClient().getSessionId());
+                getClient().getModel().currentSessionId);
         for (int i = 0; i < nCars; i++) {
             incident = incident.withCar(
                     sessionTime,
@@ -151,7 +144,7 @@ public class RaceControlController
         ContactEvent event = new ContactEvent(incident);
 
         ContactInfo info = event.getInfo();
-        tableModel.addEntry(new ContactEventEntry(getClient().getSessionId(), info.getSessionEarliestTime(),
+        tableModel.addEntry(new ContactEventEntry(getClient().getModel().currentSessionId, info.getSessionEarliestTime(),
                 info.isGameContact() ? "Contact" : "Possible contact",
                 true, info));
         panel.getTable().invalidate();

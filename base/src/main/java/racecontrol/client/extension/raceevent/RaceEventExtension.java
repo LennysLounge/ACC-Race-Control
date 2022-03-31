@@ -106,7 +106,7 @@ public class RaceEventExtension
 
     private void addContactEntry(ContactEvent event) {
         ContactInfo info = event.getInfo();
-        RaceEventEntry entry = new ContactEventEntry(getClient().getSessionId(),
+        RaceEventEntry entry = new ContactEventEntry(getClient().getModel().currentSessionId,
                 info.getSessionEarliestTime(),
                 info.isGameContact() ? "Contact" : "Possible contact",
                 true,

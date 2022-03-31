@@ -128,17 +128,20 @@ public class AccBroadcastingClient {
     }
 
     public void stopAndKill() {
+        if (connection == null) {
+            return;
+        }
         LOG.info("interupting listener");
         connection.interrupt();
     }
 
     /**
-     * Gives the update interval for the connection.
+     * Returns the current model.
      *
-     * @return The update interval.
+     * @return The current model.
      */
-    public int getUpdateInterval() {
-        return model.updateInterval;
+    public Model getModel() {
+        return model.copy();
     }
 
     /**
@@ -160,16 +163,10 @@ public class AccBroadcastingClient {
      * @return True when connected.
      */
     public boolean isConnected() {
-        return connection.isConnected();
-    }
-
-    /**
-     * Returns the current SessionId object.
-     *
-     * @return the current SessionId.
-     */
-    public SessionId getSessionId() {
-        return model.currentSessionId;
+        if (connection != null) {
+            return connection.isConnected();
+        }
+        return false;
     }
 
     /**
@@ -190,7 +187,10 @@ public class AccBroadcastingClient {
      *
      */
     public void sendUnregisterRequest() {
-        sendRequest(AccBroadcastingProtocol.buildUnregisterRequest(connection.getBroadcastingData().getConnectionID()
+        if (connection == null) {
+            return;
+        }
+        sendRequest(AccBroadcastingProtocol.buildUnregisterRequest(model.connectionId
         ));
     }
 
@@ -199,8 +199,11 @@ public class AccBroadcastingClient {
      *
      */
     public void sendEntryListRequest() {
+        if (connection == null) {
+            return;
+        }
         connection.setLastTimeEntryListRequest(System.currentTimeMillis());
-        sendRequest(AccBroadcastingProtocol.buildEntryListRequest(connection.getBroadcastingData().getConnectionID()
+        sendRequest(AccBroadcastingProtocol.buildEntryListRequest(model.connectionId
         ));
     }
 
@@ -209,7 +212,10 @@ public class AccBroadcastingClient {
      *
      */
     public void sendTrackDataRequest() {
-        sendRequest(AccBroadcastingProtocol.buildTrackDataRequest(connection.getBroadcastingData().getConnectionID()
+        if (connection == null) {
+            return;
+        }
+        sendRequest(AccBroadcastingProtocol.buildTrackDataRequest(model.connectionId
         ));
     }
 
@@ -219,10 +225,13 @@ public class AccBroadcastingClient {
      * @param carIndex the car index of the car to focus on.
      */
     public void sendChangeFocusRequest(int carIndex) {
+        if (connection == null) {
+            return;
+        }
         if (!connection.getBroadcastingData().getCarsInfo().containsKey(carIndex)) {
             return;
         }
-        sendRequest(AccBroadcastingProtocol.buildFocusRequest(connection.getBroadcastingData().getConnectionID(),
+        sendRequest(AccBroadcastingProtocol.buildFocusRequest(model.connectionId,
                 carIndex,
                 connection.getBroadcastingData().getSessionInfo().getActiveCameraSet(),
                 connection.getBroadcastingData().getSessionInfo().getActiveCamera()
@@ -236,7 +245,10 @@ public class AccBroadcastingClient {
      * @param cam The specific camera to change to.
      */
     public void sendSetCameraRequest(String camSet, String cam) {
-        sendRequest(AccBroadcastingProtocol.buildFocusRequest(connection.getBroadcastingData().getConnectionID(),
+        if (connection == null) {
+            return;
+        }
+        sendRequest(AccBroadcastingProtocol.buildFocusRequest(model.connectionId,
                 connection.getBroadcastingData().getSessionInfo().getFocusedCarIndex(),
                 camSet,
                 cam
@@ -251,10 +263,13 @@ public class AccBroadcastingClient {
      * @param cam The specific camera to change to.
      */
     public void sendSetCameraRequestWithFocus(int carIndex, String camSet, String cam) {
+        if (connection == null) {
+            return;
+        }
         if (!connection.getBroadcastingData().getCarsInfo().containsKey(carIndex)) {
             return;
         }
-        sendRequest(AccBroadcastingProtocol.buildFocusRequest(connection.getBroadcastingData().getConnectionID(),
+        sendRequest(AccBroadcastingProtocol.buildFocusRequest(model.connectionId,
                 carIndex,
                 camSet,
                 cam
@@ -267,7 +282,10 @@ public class AccBroadcastingClient {
      * @param page the hud page to change to.
      */
     public void sendSetHudPageRequest(String page) {
-        sendRequest(AccBroadcastingProtocol.buildHudPageRequest(connection.getBroadcastingData().getConnectionID(),
+        if (connection == null) {
+            return;
+        }
+        sendRequest(AccBroadcastingProtocol.buildHudPageRequest(model.connectionId,
                 page
         ));
     }
@@ -280,7 +298,10 @@ public class AccBroadcastingClient {
      * @param duration the duration of the replay before returning to normal.
      */
     public void sendInstantReplayRequestSimple(float seconds, float duration) {
-        sendRequest(AccBroadcastingProtocol.buildInstantReplayRequest(connection.getBroadcastingData().getConnectionID(),
+        if (connection == null) {
+            return;
+        }
+        sendRequest(AccBroadcastingProtocol.buildInstantReplayRequest(model.connectionId,
                 connection.getBroadcastingData().getSessionInfo().getSessionTime() - (seconds * 1000),
                 duration * 1000,
                 -1,
@@ -304,8 +325,11 @@ public class AccBroadcastingClient {
             int carIndex,
             String initialCameraSet,
             String initialCamera) {
+        if (connection == null) {
+            return;
+        }
         connection.setReplayCamera(carIndex, initialCameraSet, initialCamera);
-        sendRequest(AccBroadcastingProtocol.buildInstantReplayRequest(connection.getBroadcastingData().getConnectionID(),
+        sendRequest(AccBroadcastingProtocol.buildInstantReplayRequest(model.connectionId,
                 sessionTime,
                 duration * 1000,
                 -1,
@@ -318,10 +342,16 @@ public class AccBroadcastingClient {
      * Disconnect from the game.
      */
     public void disconnect() {
+        if (connection == null) {
+            return;
+        }
         connection.disconnect();
     }
 
     private void sendRequest(byte[] requestBytes) {
+        if (connection == null) {
+            return;
+        }
         connection.sendRequest(requestBytes);
     }
 }

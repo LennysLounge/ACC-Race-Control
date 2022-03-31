@@ -283,7 +283,7 @@ public class ContactExtension
             stagedContact = new ContactInfo(sessionTime,
                     REPLAY_EXTENSION.getReplayTimeFromSessionTime(sessionTime),
                     car,
-                    CLIENT.getSessionId());
+                    CLIENT.getModel().currentSessionId);
             stagedContactTimestamp = System.currentTimeMillis();
         }
     }
@@ -499,7 +499,7 @@ public class ContactExtension
         ContactInfo contact = new ContactInfo(
                 info.getSessionTime(),
                 REPLAY_EXTENSION.getReplayTimeFromSessionTime(info.getSessionTime()),
-                CLIENT.getSessionId())
+                CLIENT.getModel().currentSessionId)
                 .withCar(info.getSessionTime(), info.getFlaggedCar())
                 .withCar(info.getSessionTime(), info.getClosestCar())
                 .withYellowFlaggedCars(Arrays.asList(info.getFlaggedCar().getCarId()))

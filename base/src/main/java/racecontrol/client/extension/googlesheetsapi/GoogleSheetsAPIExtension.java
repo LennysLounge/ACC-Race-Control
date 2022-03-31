@@ -132,7 +132,7 @@ public class GoogleSheetsAPIExtension
             updateCarsConnected(((CarConnectedEvent) e).getCar());
         } else if (e instanceof GoogleSheetsConnectedEvent) {
             findValidSheetTargets(((GoogleSheetsConnectedEvent) e).getSpreadsheet());
-            updateSpreadsheetTarget(CLIENT.getSessionId());
+            updateSpreadsheetTarget(CLIENT.getModel().currentSessionId);
         }
     }
 
@@ -164,9 +164,9 @@ public class GoogleSheetsAPIExtension
         } else {
             if (validSheets.containsKey(session)) {
                 return session;
-            }else{
+            } else {
                 Optional<String> validSheet = validSheets.keySet().stream().findFirst();
-                if(validSheet.isPresent()){
+                if (validSheet.isPresent()) {
                     return validSheet.get();
                 }
             }

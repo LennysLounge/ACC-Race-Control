@@ -43,5 +43,31 @@ public class Model {
      * Session id for the current session.
      */
     public SessionId currentSessionId = new SessionId(SessionType.NONE, -1, 0);
+    /**
+     * The connection id.
+     */
+    public int connectionId = -1;
+    /**
+     * Flag for when the connection is in read only mode.
+     */
+    public boolean readOnly;
 
+    /**
+     * Creates a deep copy of the model.
+     *
+     * @return a deep copy of this model.
+     */
+    public Model copy() {
+        Model model = new Model();
+        model.hostAddress = hostAddress;
+        model.hostPort = hostPort;
+        model.displayName = displayName;
+        model.connectionPassword = connectionPassword;
+        model.commandPassword = commandPassword;
+        model.updateInterval = updateInterval;
+        model.currentSessionId = currentSessionId;
+        model.connectionId = connectionId;
+        model.readOnly = readOnly;
+        return model;
+    }
 }

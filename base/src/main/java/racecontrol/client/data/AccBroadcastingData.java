@@ -21,8 +21,6 @@ public class AccBroadcastingData {
 
     private static Logger LOG = Logger.getLogger(AccBroadcastingData.class.getName());
 
-    private int connectionID = -1;
-    private boolean readOnly;
     private Map<Integer, CarInfo> cars = new HashMap<>();
     private SessionInfo session = new SessionInfo();
     private TrackInfo trackInfo = new TrackInfo();
@@ -31,22 +29,12 @@ public class AccBroadcastingData {
     public AccBroadcastingData() {
     }
 
-    public AccBroadcastingData(int connectionID, boolean readOnly, Map<Integer, CarInfo> cars, SessionInfo session,
+    public AccBroadcastingData(Map<Integer, CarInfo> cars, SessionInfo session,
             TrackInfo trackInfo, List<BroadcastingEvent> events) {
-        this.connectionID = requireNonNull(connectionID, "connectionID");
-        this.readOnly = requireNonNull(readOnly, "readOnly");
         this.session = requireNonNull(session, "session");
         this.trackInfo = requireNonNull(trackInfo, "trackInfo");
         this.cars = requireNonNull(cars, "cars");
         this.events = requireNonNull(events, "events");
-    }
-
-    public int getConnectionID() {
-        return connectionID;
-    }
-
-    public AccBroadcastingData withConnectionId(int connectionID) {
-        return new AccBroadcastingData(connectionID, readOnly, cars, session, trackInfo, events);
     }
 
     public Map<Integer, CarInfo> getCarsInfo() {
@@ -58,7 +46,7 @@ public class AccBroadcastingData {
     }
 
     public AccBroadcastingData withCars(Map<Integer, CarInfo> cars) {
-        return new AccBroadcastingData(connectionID, readOnly, cars, session, trackInfo, events);
+        return new AccBroadcastingData(cars, session, trackInfo, events);
     }
 
     public SessionInfo getSessionInfo() {
@@ -66,7 +54,7 @@ public class AccBroadcastingData {
     }
 
     public AccBroadcastingData withSessionInfo(SessionInfo session) {
-        return new AccBroadcastingData(connectionID, readOnly, cars, session, trackInfo, events);
+        return new AccBroadcastingData(cars, session, trackInfo, events);
     }
 
     public TrackInfo getTrackInfo() {
@@ -74,7 +62,7 @@ public class AccBroadcastingData {
     }
 
     public AccBroadcastingData withTrackInfo(TrackInfo trackInfo) {
-        return new AccBroadcastingData(connectionID, readOnly, cars, session, trackInfo, events);
+        return new AccBroadcastingData(cars, session, trackInfo, events);
     }
 
     public List<BroadcastingEvent> getEvents() {
@@ -82,7 +70,7 @@ public class AccBroadcastingData {
     }
 
     public AccBroadcastingData withEvents(List<BroadcastingEvent> events) {
-        return new AccBroadcastingData(connectionID, readOnly, cars, session, trackInfo, events);
+        return new AccBroadcastingData(cars, session, trackInfo, events);
     }
 
 }

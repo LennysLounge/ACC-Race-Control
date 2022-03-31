@@ -172,7 +172,7 @@ public class ReplayOffsetExtension
                 if (info.isReplayPlaying()) {
                     waitForReplayToFinish = true;
                 } else {
-                    replayDelay += client.getUpdateInterval();
+                    replayDelay += client.getModel().updateInterval;
                     if (replayDelay > ALLOWED_REPLAY_DELAY) {
                         searchStep(true);
                     }
