@@ -84,7 +84,7 @@ public class LiveTimingTableController
         statisticsExtension = StatisticsExtension.getInstance();
         client = AccBroadcastingClient.getClient();
         table.setCellClickAction((column, row) -> onCellClickAction(column, row));
-        
+
         useRelative(false);
 
         table.setTableModel(model);
@@ -105,9 +105,9 @@ public class LiveTimingTableController
     }
 
     private void updateTableModel() {
-        List<CarStatistics> cars = client.getBroadcastingData().getCarsInfo().values().stream()
-                .filter(car -> !car.getRealtime().isDefault())
-                .map(car -> statisticsExtension.getCar(car.getCarId()))
+        List<CarStatistics> cars = client.getModel().cars.values().stream()
+                .filter(car -> !car.realtimeRaw.isDefault())
+                .map(car -> statisticsExtension.getCar(car.raw.getCarId()))
                 .collect(Collectors.toList());
 
         model.setEntries(cars);

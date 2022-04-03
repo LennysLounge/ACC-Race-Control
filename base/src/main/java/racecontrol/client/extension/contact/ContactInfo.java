@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
+import racecontrol.client.model.Car;
 
 /**
  *
@@ -37,7 +38,7 @@ public class ContactInfo {
     /**
      * List of cars involved by carID.
      */
-    private final List<CarInfo> cars;
+    private final List<Car> cars;
     /**
      * The session index when it occured.
      */
@@ -51,7 +52,7 @@ public class ContactInfo {
      */
     private final boolean gameContact;
 
-    public ContactInfo(int time, int replayTime, CarInfo car, SessionId sessionId) {
+    public ContactInfo(int time, int replayTime, Car car, SessionId sessionId) {
         this(time,
                 time,
                 Arrays.asList(car),
@@ -65,7 +66,7 @@ public class ContactInfo {
     public ContactInfo(int time, int replayTime, SessionId sessionId) {
         this(time,
                 time,
-                new LinkedList<CarInfo>(),
+                new LinkedList<Car>(),
                 sessionId,
                 replayTime,
                 new ArrayList<>(),
@@ -75,7 +76,7 @@ public class ContactInfo {
 
     private ContactInfo(int earliestTime,
             int latestTime,
-            List<CarInfo> cars,
+            List<Car> cars,
             SessionId sessionID,
             int replayTime,
             List<Integer> yellowFlaggedCars,
@@ -89,8 +90,8 @@ public class ContactInfo {
         this.gameContact = gameContact;
     }
 
-    public ContactInfo withCar(int sessionTime, CarInfo car) {
-        List<CarInfo> c = new LinkedList<>();
+    public ContactInfo withCar(int sessionTime, Car car) {
+        List<Car> c = new LinkedList<>();
         c.addAll(cars);
         c.add(car);
         return new ContactInfo(sessionEarliestTime,
@@ -140,7 +141,7 @@ public class ContactInfo {
         return sessionLatestTime;
     }
 
-    public List<CarInfo> getCars() {
+    public List<Car> getCars() {
         return Collections.unmodifiableList(cars);
     }
 
@@ -155,8 +156,8 @@ public class ContactInfo {
     public boolean isGameContact() {
         return gameContact;
     }
-    
-    public List<Integer> getYellowFlaggedCars(){
+
+    public List<Integer> getYellowFlaggedCars() {
         return Collections.unmodifiableList(yellowFlaggedCars);
     }
 

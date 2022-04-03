@@ -59,7 +59,8 @@ public class PlacesLostGainedProcessor
         // update the places lost gained.
         if (info.getSessionType() == RACE
                 && info.getPhase().getId() >= SESSION.getId()) {
-            client.getBroadcastingData().getCarsInfo().values().stream()
+            client.getModel().cars.values().stream()
+                    .map(car -> car.raw)
                     .map(carInfo -> getCars().get(carInfo.getCarId()))
                     .forEach(carStats -> {
 
@@ -78,7 +79,8 @@ public class PlacesLostGainedProcessor
 
     private void sessionChanged(SessionInfo info) {
         // set the starting position for each car to 0
-        client.getBroadcastingData().getCarsInfo().values().stream()
+        client.getModel().cars.values().stream()
+                .map(car -> car.raw)
                 .map(carInfo -> getCars().get(carInfo.getCarId()))
                 .forEach(carStats -> {
                     carStats.put(PLACES_GAINED, 0);
@@ -91,7 +93,8 @@ public class PlacesLostGainedProcessor
         if (info.getSessionType() == RACE
                 && (info.getPhase() == SESSION
                 || info.getPhase() == PRESESSION)) {
-            client.getBroadcastingData().getCarsInfo().values().stream()
+            client.getModel().cars.values().stream()
+                    .map(car -> car.raw)
                     .map(carInfo -> getCars().get(carInfo.getCarId()))
                     .forEach(carStats -> {
                         carStats.put(RACE_START_POSITION, carStats.get(REALTIME_POSITION));

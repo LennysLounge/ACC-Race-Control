@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.LapInfo;
 import racecontrol.client.data.SessionInfo;
 import racecontrol.client.events.RealtimeUpdateEvent;
@@ -29,6 +28,7 @@ import static racecontrol.client.extension.statistics.CarStatistics.LAPS_BEHIND_
 import static racecontrol.client.extension.statistics.CarStatistics.LAP_TIME_GAP_TO_SESSION_BEST;
 import static racecontrol.client.extension.statistics.CarStatistics.RACE_DISTANCE_BEHIND_LEADER;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
+import racecontrol.client.model.Car;
 
 /**
  *
@@ -69,7 +69,7 @@ public class GapProcessor extends StatisticsProcessor {
         // Skip if we dont know the track or the v map.
         if (trackData == null
                 || trackData.getGt3VelocityMap().isEmpty()
-                || client.getBroadcastingData().getCarsInfo().isEmpty()) {
+                || client.getModel().cars.isEmpty()) {
             for (CarStatisticsWritable car : getCars().values()) {
                 if (trackData == null
                         || trackData.getGt3VelocityMap().isEmpty()) {
@@ -85,16 +85,16 @@ public class GapProcessor extends StatisticsProcessor {
         }
 
         // calculate gaps to position ahead and leader.
-        List<CarInfo> cars = client.getBroadcastingData().getCarsInfo().values().stream()
+        List<Car> cars = client.getModel().cars.values().stream()
                 .sorted((c1, c2) -> {
-                    return getCars().get(c1.getCarId()).get(REALTIME_POSITION)
-                            .compareTo(getCars().get(c2.getCarId()).get(REALTIME_POSITION));
+                    return getCars().get(c1.raw.getCarId()).get(REALTIME_POSITION)
+                            .compareTo(getCars().get(c2.raw.getCarId()).get(REALTIME_POSITION));
                 })
                 .collect(Collectors.toList());
-        float leaderRaceDistance = cars.get(0).getRealtime().getLaps()
-                + cars.get(0).getRealtime().getSplinePosition();
+        float leaderRaceDistance = cars.get(0).realtimeRaw.getLaps()
+                + cars.get(0).realtimeRaw.getSplinePosition();
         int splitLapsBehind = 0;
-        CarStatisticsWritable carStats = getCars().get(cars.get(0).getCarId());
+        CarStatisticsWritable carStats = getCars().get(cars.get(0).raw.getCarId());
         carStats.put(GAP_TO_LEADER, 0);
         carStats.put(GAP_TO_POSITION_AHEAD, Integer.MAX_VALUE);
         carStats.put(LAPS_BEHIND_LEADER, 0);
@@ -104,11 +104,11 @@ public class GapProcessor extends StatisticsProcessor {
             int gap = (int) gapCalculator.calculateGap(cars.get(i), cars.get(i - 1));
             int gapToLeader = (int) gapCalculator.calculateGap(cars.get(i), cars.get(0));
 
-            float raceDistance = cars.get(i).getRealtime().getLaps()
-                    + cars.get(i).getRealtime().getSplinePosition();
+            float raceDistance = cars.get(i).realtimeRaw.getLaps()
+                    + cars.get(i).realtimeRaw.getSplinePosition();
             int lapsBehind = (int) Math.floor(leaderRaceDistance - raceDistance);
 
-            carStats = getCars().get(cars.get(i).getCarId());
+            carStats = getCars().get(cars.get(i).raw.getCarId());
             carStats.put(GAP_TO_LEADER, gapToLeader);
             carStats.put(GAP_TO_POSITION_AHEAD, gap);
 
@@ -121,29 +121,29 @@ public class GapProcessor extends StatisticsProcessor {
 
         // gap to position behind
         for (int i = 0; i < cars.size() - 1; i++) {
-            carStats = getCars().get(cars.get(i).getCarId());
+            carStats = getCars().get(cars.get(i).raw.getCarId());
             int gap = (int) gapCalculator.calculateGap(cars.get(i + 1), cars.get(i));
             carStats.put(GAP_TO_POSITION_BEHIND, gap);
         }
-        carStats = getCars().get(cars.get(cars.size() - 1).getCarId());
+        carStats = getCars().get(cars.get(cars.size() - 1).raw.getCarId());
         carStats.put(GAP_TO_POSITION_BEHIND, Integer.MAX_VALUE);
 
         // cap to cars ahead / behind
-        cars = client.getBroadcastingData().getCarsInfo().values().stream()
-                .sorted((c1, c2) -> Float.compare(c1.getRealtime().getSplinePosition(), c2.getRealtime().getSplinePosition()))
+        cars = client.getModel().cars.values().stream()
+                .sorted((c1, c2) -> Float.compare(c1.realtimeRaw.getSplinePosition(), c2.realtimeRaw.getSplinePosition()))
                 .collect(Collectors.toList());
         for (int i = 0; i < cars.size(); i++) {
             int next = (i == cars.size() - 1) ? 0 : i + 1;
             int gapToCar = (int) gapCalculator.calculateGap(cars.get(i), cars.get(next));
 
-            carStats = getCars().get(cars.get(i).getCarId());
+            carStats = getCars().get(cars.get(i).raw.getCarId());
             carStats.put(GAP_TO_CAR_AHEAD, gapToCar);
         }
         for (int i = 0; i < cars.size(); i++) {
             int prev = (i == 0) ? cars.size() - 1 : i - 1;
             int gapToCar = (int) gapCalculator.calculateGap(cars.get(prev), cars.get(i));
 
-            carStats = getCars().get(cars.get(i).getCarId());
+            carStats = getCars().get(cars.get(i).raw.getCarId());
             carStats.put(GAP_TO_CAR_BEHIND, gapToCar);
         }
 

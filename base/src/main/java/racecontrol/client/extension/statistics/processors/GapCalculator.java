@@ -10,6 +10,7 @@ import racecontrol.client.data.RealtimeInfo;
 import java.util.List;
 import java.util.logging.Logger;
 import racecontrol.client.extension.trackdata.TrackData;
+import racecontrol.client.model.Car;
 
 /**
  *
@@ -44,12 +45,12 @@ public class GapCalculator {
      * @param infront Car info of the car infront.
      * @return gap from -> to in ms.
      */
-    public float calculateGap(CarInfo behind, CarInfo infront) {
+    public float calculateGap(Car behind, Car infront) {
         if (trackData.getGt3VelocityMap().isEmpty()) {
             return calculateGapNaive(behind, infront);
         }
-        return calculateGap(behind.getRealtime().getSplinePosition(),
-                infront.getRealtime().getSplinePosition());
+        return calculateGap(behind.realtimeRaw.getSplinePosition(),
+                infront.realtimeRaw.getSplinePosition());
     }
 
     public float calculateGap(float behind, float infront) {
@@ -135,9 +136,9 @@ public class GapCalculator {
      * @param infront Car info of the car infront.
      * @return gap from -> to in ms.
      */
-    public float calculateGapNaive(CarInfo behind, CarInfo infront) {
-        RealtimeInfo prev = behind.getRealtime();
-        RealtimeInfo now = infront.getRealtime();
+    public float calculateGapNaive(Car behind, Car infront) {
+        RealtimeInfo prev = behind.realtimeRaw;
+        RealtimeInfo now = infront.realtimeRaw;
         float splineDistance = (now.getSplinePosition()) - (prev.getSplinePosition());
         float trackDistance = trackData.getTrackMeters() * splineDistance;
         float averageSpeed = (prev.getKMH() + now.getKMH()) / 2f / 3.6f;

@@ -5,7 +5,7 @@
  */
 package racecontrol.client.extension.laptimes;
 
-import racecontrol.client.data.CarInfo;
+import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
 
 /**
@@ -15,16 +15,16 @@ import racecontrol.eventbus.Event;
 public class LapCompletedEvent 
     extends Event{
     
-    private final CarInfo car;
+    private final Car car;
     
     private final int lapTime;
 
-    public LapCompletedEvent(CarInfo car, int lapTime) {
+    public LapCompletedEvent(Car car, int lapTime) {
         this.car = car;
         this.lapTime = lapTime;
     }
 
-    public CarInfo getCar() {
+    public Car getCar() {
         return car;
     }
 

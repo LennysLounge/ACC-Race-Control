@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.SessionInfo;
 import static racecontrol.client.data.enums.SessionType.RACE;
 import racecontrol.client.events.AfterPacketReceivedEvent;
@@ -18,6 +17,7 @@ import static racecontrol.client.extension.statistics.CarStatistics.OVERTAKE_IND
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
 import racecontrol.client.extension.statistics.CarStatisticsWritable;
+import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
 
 /**
@@ -68,21 +68,21 @@ public class OvertakeProcessor
             return;
         }
 
-        for (CarInfo car : client.getBroadcastingData().getCarsInfo().values()) {
-            if (car.getRealtime().isDefault()) {
+        for (Car car : client.getModel().cars.values()) {
+            if (car.realtimeRaw.isDefault()) {
                 return;
             }
 
-            CarStatisticsWritable stats = getCars().get(car.getCarId());
+            CarStatisticsWritable stats = getCars().get(car.raw.getCarId());
 
-            if (prevPositions.containsKey(car.getCarId())) {
-                int diff = stats.get(REALTIME_POSITION) - prevPositions.get(car.getCarId());
+            if (prevPositions.containsKey(car.raw.getCarId())) {
+                int diff = stats.get(REALTIME_POSITION) - prevPositions.get(car.raw.getCarId());
                 if (diff != 0) {
                     stats.put(OVERTAKE_INDICATOR, diff);
-                    timestamps.put(car.getCarId(), System.currentTimeMillis());
+                    timestamps.put(car.raw.getCarId(), System.currentTimeMillis());
                 }
             }
-            prevPositions.put(car.getCarId(), stats.get(REALTIME_POSITION));
+            prevPositions.put(car.raw.getCarId(), stats.get(REALTIME_POSITION));
         }
     }
 

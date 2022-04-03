@@ -24,6 +24,7 @@ import racecontrol.client.extension.racereport.RaceReportExtension;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.extension.replayoffset.ReplayStartKnownEvent;
 import racecontrol.client.extension.replayoffset.ReplayStartRequiresSearchEvent;
+import racecontrol.client.model.Car;
 import static racecontrol.gui.RaceControlApplet.getApplet;
 import racecontrol.gui.app.Menu;
 import racecontrol.gui.app.Menu.MenuItem;
@@ -129,7 +130,7 @@ public class RaceControlController
     }
 
     private void createDummyContactEvent() {
-        int nCars = (int) Math.floor(Math.random() * Math.min(6, getClient().getBroadcastingData().getCarsInfo().size()) + 1);
+        int nCars = (int) Math.floor(Math.random() * Math.min(6, getClient().getModel().cars.size()) + 1);
         int sessionTime = getClient().getModel().session.raw.getSessionTime();
         ContactInfo incident = new ContactInfo(
                 sessionTime,
@@ -150,10 +151,10 @@ public class RaceControlController
         panel.getTable().invalidate();
     }
 
-    private CarInfo getRandomCar() {
-        int r = (int) Math.floor(Math.random() * getClient().getBroadcastingData().getCarsInfo().size());
+    private Car getRandomCar() {
+        int r = (int) Math.floor(Math.random() * getClient().getModel().cars.size());
         int i = 0;
-        for (CarInfo car : getClient().getBroadcastingData().getCarsInfo().values()) {
+        for (Car car : getClient().getModel().cars.values()) {
             if (i++ == r) {
                 return car;
             }

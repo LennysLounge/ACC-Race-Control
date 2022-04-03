@@ -5,7 +5,7 @@
  */
 package racecontrol.client.extension.dangerdetection;
 
-import racecontrol.client.data.CarInfo;
+import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
 
 /**
@@ -18,7 +18,7 @@ public class YellowFlagEvent
     /**
      * The car that caused the yellow flag.
      */
-    private final CarInfo car;
+    private final Car car;
     /**
      * Session timestamp.
      */
@@ -28,7 +28,7 @@ public class YellowFlagEvent
      */
     private final int id;
 
-    public YellowFlagEvent(CarInfo car,
+    public YellowFlagEvent(Car car,
             int sessionTime,
             int id) {
         this.car = car;
@@ -36,7 +36,7 @@ public class YellowFlagEvent
         this.id = id;
     }
 
-    public CarInfo getCar() {
+    public Car getCar() {
         return car;
     }
 

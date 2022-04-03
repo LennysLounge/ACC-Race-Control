@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 import processing.event.KeyEvent;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.data.CarInfo;
+import racecontrol.client.model.Car;
+import racecontrol.client.model.Model;
 
 /**
  *
@@ -126,10 +128,11 @@ public class Hotkeys {
     }
 
     private void moveFocusRelative(int direction) {
-        int focusedCarIndex = client.getModel().session.raw.getFocusedCarIndex();
-        CarInfo focusedCar = client.getBroadcastingData().getCar(focusedCarIndex);
+        Model model = client.getModel();
+        int focusedCarIndex = model.session.raw.getFocusedCarIndex();
+        CarInfo focusedCar = model.cars.get(focusedCarIndex).raw;
 
-        List<CarInfo> cars = client.getBroadcastingData().getCarsInfo().values().stream()
+        List<Car> cars = model.cars.values().stream()
                 .sorted((c1, c2) -> compareSplinePos(c1, c2))
                 .collect(Collectors.toList());
         int index = cars.indexOf(focusedCar);
@@ -140,15 +143,16 @@ public class Hotkeys {
         if (target >= cars.size()) {
             target = 0;
         }
-        client.sendChangeFocusRequest(cars.get(target).getCarId());
+        client.sendChangeFocusRequest(cars.get(target).raw.getCarId());
     }
 
     private void moveFocusAbsolute(int direction) {
-        int focusedCarIndex = client.getModel().session.raw.getFocusedCarIndex();
-        CarInfo focusedCar = client.getBroadcastingData().getCar(focusedCarIndex);
+        Model model = client.getModel();
+        int focusedCarIndex = model.session.raw.getFocusedCarIndex();
+        CarInfo focusedCar = model.cars.get(focusedCarIndex).raw;
 
-        List<CarInfo> cars = client.getBroadcastingData().getCarsInfo().values().stream()
-                .sorted((c1, c2) -> c2.getRealtime().getPosition() - c1.getRealtime().getPosition())
+        List<Car> cars = model.cars.values().stream()
+                .sorted((c1, c2) -> c2.realtimeRaw.getPosition() - c1.realtimeRaw.getPosition())
                 .collect(Collectors.toList());
         int index = cars.indexOf(focusedCar);
         int target = index + direction;
@@ -158,12 +162,12 @@ public class Hotkeys {
         if (target >= cars.size()) {
             target = 0;
         }
-        client.sendChangeFocusRequest(cars.get(target).getCarId());
+        client.sendChangeFocusRequest(cars.get(target).raw.getCarId());
     }
 
-    private int compareSplinePos(CarInfo c1, CarInfo c2) {
-        float s1 = c1.getRealtime().getSplinePosition();
-        float s2 = c2.getRealtime().getSplinePosition();
+    private int compareSplinePos(Car c1, Car c2) {
+        float s1 = c1.realtimeRaw.getSplinePosition();
+        float s2 = c2.realtimeRaw.getSplinePosition();
         if (s1 > s2) {
             return 1;
         }

@@ -33,6 +33,7 @@ import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
 import racecontrol.client.ClientExtension;
+import racecontrol.client.model.Car;
 
 /**
  *
@@ -122,24 +123,25 @@ public class LapTimeExtension extends ClientExtension
     }
 
     private void onLapComplete(LapInfo lap, boolean isPB, boolean isSB) {
-        CarInfo car = client.getBroadcastingData().getCar(lap.getCarId());
+        LOG.info("lap completed for id: " + lap.getCarId());
+        Car car = getWritableModel().cars.get(lap.getCarId());
 
         boolean isFirstLap = lapCount.get(lap.getCarId()) == 1;
         int lapNr = lapCount.get(lap.getCarId());
 
-        if (!laps.containsKey(car.getCarId())) {
-            laps.put(car.getCarId(), new LinkedList<>());
-            rows.put(car.getCarId(), rowCounter++);
+        if (!laps.containsKey(car.raw.getCarId())) {
+            laps.put(car.raw.getCarId(), new LinkedList<>());
+            rows.put(car.raw.getCarId(), rowCounter++);
         }
 
         if (!isFirstLap && lap.getType() == LapType.REGULAR) {
-            laps.get(car.getCarId()).add(lap.getLapTimeMS());
+            laps.get(car.raw.getCarId()).add(lap.getLapTimeMS());
             if (isLoggingEnabled) {
                 printLapToFile();
             }
         }
 
-        String message = "Lap completed: " + car.getCarNumberString()
+        String message = "Lap completed: " + car.raw.getCarNumberString()
                 + "\t" + TimeUtils.asLapTime(lap.getLapTimeMS()) + "\t";
         if (isFirstLap) {
             message += "[Lap 1]";
@@ -167,7 +169,7 @@ public class LapTimeExtension extends ClientExtension
         try ( PrintWriter writer = new PrintWriter(logFile)) {
 
             for (Entry<Integer, List<Integer>> entry : laps.entrySet()) {
-                CarInfo car = client.getBroadcastingData().getCar(entry.getKey());
+                CarInfo car = getWritableModel().cars.get(entry.getKey()).raw;
                 writer.print(car.getCarNumber());
                 writer.print("," + car.getDriver().getFirstName() + " " + car.getDriver().getLastName());
                 for (int lap : entry.getValue()) {

@@ -46,6 +46,7 @@ import racecontrol.client.events.ReplayStartedEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
 import racecontrol.client.events.TrackInfoEvent;
+import racecontrol.client.model.Car;
 import racecontrol.client.model.Model;
 import racecontrol.eventbus.EventBus;
 import racecontrol.logging.UILogger;
@@ -400,8 +401,8 @@ public class AccConnection
         realtimeUpdatesReceived.forEach(carId -> missedRealtimeUpdates.put(carId, 0));
 
         //increase misses for cars that did not update
-        model_old.getCarsInfo().values().stream()
-                .map(carInfo -> carInfo.getCarId())
+        model.cars.values().stream()
+                .map(carModel -> carModel.raw.getCarId())
                 .filter(carId -> !realtimeUpdatesReceived.contains(carId))
                 .forEach(carId -> {
                     missedRealtimeUpdates.put(carId, missedRealtimeUpdates.getOrDefault(carId, 0) + 1);
@@ -414,7 +415,7 @@ public class AccConnection
         while (iter.hasNext()) {
             Map.Entry<Integer, Integer> entry = iter.next();
             if (entry.getValue() >= maximumRealtimeMisses) {
-                onCarDisconnect(model_old.getCar(entry.getKey()));
+                onCarDisconnect(model.cars.get(entry.getKey()).raw);
                 iter.remove();
             }
         }
@@ -439,14 +440,9 @@ public class AccConnection
         realtimeUpdatesReceived.add(info.getCarId());
 
         //update model
-        if (model_old.getCarsInfo().containsKey(info.getCarId())) {
-            CarInfo car = model_old.getCarsInfo().get(info.getCarId());
-            car = car.withRealtime(info);
-
-            Map<Integer, CarInfo> cars = new HashMap<>();
-            cars.putAll(model_old.getCarsInfo());
-            cars.put(car.getCarId(), car);
-            model_old = model_old.withCars(cars);
+        if (model.cars.containsKey(info.getCarId())) {
+            Car car = model.cars.get(info.getCarId());
+            car.realtimeRaw = info;
             EventBus.publish(new RealtimeCarUpdateEvent(info));
         } else {
             //if the car doesnt exist in the model ask for a new entry list.
@@ -456,17 +452,13 @@ public class AccConnection
 
     @Override
     public void onEntryListUpdate(List<Integer> carIds) {
-        Map<Integer, CarInfo> cars = new HashMap<>();
-        cars.putAll(model_old.getCarsInfo());
-
         //add any new carIds.
         carIds.forEach(carId -> {
-            if (!cars.containsKey(carId)) {
-                cars.put(carId, new CarInfo());
+            if (!model.cars.containsKey(carId)) {
+                model.cars.put(carId, new Car());
                 newConnectedCars.add(carId);
             }
         });
-        model_old = model_old.withCars(cars);
         EventBus.publish(new EntryListUpdateEvent(carIds));
     }
 
@@ -517,10 +509,8 @@ public class AccConnection
 
     private void onCarDisconnect(CarInfo car) {
         //remove car from the model.
-        Map<Integer, CarInfo> cars = new HashMap<>(model_old.getCarsInfo());
-        cars.remove(car.getCarId());
-        model_old = model_old.withCars(cars);
-
+        // TODO: mark car as disconnected.
+        
         String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
         LOG.info("Car disconnected: " + car.getCarNumberString() + "\t" + name);
         UILogger.log("Car disconnected: " + car.getCarNumberString() + "\t" + name);
@@ -529,9 +519,7 @@ public class AccConnection
 
     private void onCarConnect(CarInfo car) {
         //add car to the model.
-        Map<Integer, CarInfo> cars = new HashMap<>(model_old.getCarsInfo());
-        cars.put(car.getCarId(), car);
-        model_old = model_old.withCars(cars);
+        model.cars.get(car.getCarId()).raw = car;
 
         String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
         LOG.info("Car connected: " + car.getCarNumberString() + "\t" + name);

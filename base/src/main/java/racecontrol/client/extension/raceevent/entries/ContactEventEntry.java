@@ -26,6 +26,7 @@ import static racecontrol.client.data.enums.CarCategory.CUP;
 import static racecontrol.client.data.enums.CarCategory.GT3;
 import static racecontrol.client.data.enums.CarCategory.ST;
 import racecontrol.client.extension.contact.ContactInfo;
+import racecontrol.client.model.Car;
 import racecontrol.gui.lpui.table.LPTable;
 
 /**
@@ -68,13 +69,13 @@ public class ContactEventEntry
             LPTable.RenderContext context) -> {
         //Draw car numbres
         ContactEventEntry entry = (ContactEventEntry) context.object;
-        List<CarInfo> cars = entry.incident.getCars();
+        List<Car> cars = entry.incident.getCars();
         float x = 0;
-        for (CarInfo car : cars) {
-            String carNumber = String.valueOf(car.getCarNumber());
+        for (Car car : cars) {
+            String carNumber = String.valueOf(car.raw.getCarNumber());
             int background_color = 0;
             int text_color = 0;
-            switch (car.getDriver().getCategory()) {
+            switch (car.raw.getDriver().getCategory()) {
                 case BRONZE:
                     background_color = LookAndFeel.COLOR_RED;
                     text_color = LookAndFeel.COLOR_BLACK;
@@ -94,7 +95,7 @@ public class ContactEventEntry
             applet.fill(background_color);
             applet.rect(x + 1, 1, w - 2, context.height - 2);
 
-            if (isCarConnected(car.getCarId())) {
+            if (isCarConnected(car.raw.getCarId())) {
                 //draw outline if the mouse if over this car
                 if (context.isMouseOverColumn
                         && context.isMouseOverRow
@@ -109,7 +110,7 @@ public class ContactEventEntry
             }
 
             //render GT4 / Cup / Super trofeo corners.
-            CarCategory cat = car.getCarModel().getCategory();
+            CarCategory cat = car.raw.getCarModel().getCategory();
             if (cat != GT3) {
                 applet.fill(COLOR_WHITE);
                 applet.beginShape();
@@ -141,7 +142,7 @@ public class ContactEventEntry
             applet.text(String.valueOf(carNumber), x + w / 2, context.height / 2f);
 
             //Draw car number darker if this car is not connected.
-            if (!isCarConnected(car.getCarId())) {
+            if (!isCarConnected(car.raw.getCarId())) {
                 applet.fill(0, 0, 0, 150);
                 applet.rect(x + 1, 1, w - 2, context.height - 2);
             }
@@ -165,18 +166,18 @@ public class ContactEventEntry
         //Car column clicked
         int index = (int) (x / (LINE_HEIGHT * 1.25f));
         if (index < incident.getCars().size()) {
-            client.sendChangeFocusRequest(incident.getCars().get(index).getCarId());
+            client.sendChangeFocusRequest(incident.getCars().get(index).raw.getCarId());
         }
     }
 
     private boolean isCarConnected(int carId) {
-        return client.getBroadcastingData().getCarsInfo().keySet().contains(carId);
+        return client.getModel().cars.keySet().contains(carId);
     }
 
     @Override
     public String getInfo() {
         return incident.getCars().stream()
-                .map(car -> "#" + car.getCarNumber())
+                .map(car -> "#" + car.raw.getCarNumber())
                 .collect(Collectors.joining(", "));
     }
 }

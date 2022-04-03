@@ -84,9 +84,9 @@ public class AutobroadcastExtension extends ClientExtension
     }
 
     private void updateRatings() {
-        entries = client.getBroadcastingData().getCarsInfo().values().stream()
-                .map(carInfo -> {
-                    Entry entry = new Entry(carInfo);
+        entries = getWritableModel().cars.values().stream()
+                .map(car -> {
+                    Entry entry = new Entry(car.raw);
                     for (RatingProcessor p : processors) {
                         entry = p.calculateRating(entry);
                     }

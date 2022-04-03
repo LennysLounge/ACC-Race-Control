@@ -7,7 +7,6 @@ package racecontrol.client.extension.googlesheetsapi;
 
 import com.google.api.services.sheets.v4.model.Sheet;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -23,6 +22,7 @@ import racecontrol.client.events.CarConnectedEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.utility.TimeUtils;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
@@ -93,7 +93,10 @@ public class GoogleSheetsAPIExtension extends ClientExtension
 
     public void start(GoogleSheetsConfiguration config) {
         connection.start(config);
-        connection.sendCarsConnection(new ArrayList<>(CLIENT.getBroadcastingData().getCarsInfo().values()));
+        connection.sendCarsConnection(getWritableModel().cars.values().stream()
+                .map(car -> car.raw)
+                .collect(Collectors.toList())
+        );
     }
 
     public void stop() {

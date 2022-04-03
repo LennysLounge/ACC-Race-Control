@@ -67,7 +67,7 @@ public class RealtimePositionProcessor
     private void onRealtimeCarUpdate(RealtimeInfo info) {
         CarStatisticsWritable carStats = getCars().get(info.getCarId());
 
-        carStats.put(SPLINE_POS, info.getSplinePosition()); 
+        carStats.put(SPLINE_POS, info.getSplinePosition());
 
         float raceDistance = info.getSplinePosition() + info.getLaps();
         carStats.put(RACE_DISTANCE_SIMPLE, raceDistance);
@@ -88,7 +88,8 @@ public class RealtimePositionProcessor
 
     private void onSessionUpdate(SessionInfo info) {
         // sort cars based on their complex race distance.
-        var carsSorted = client.getBroadcastingData().getCarsInfo().values().stream()
+        var carsSorted = client.getModel().cars.values().stream()
+                .map(car -> car.raw)
                 .map(carInfo -> getCars().get(carInfo.getCarId()))
                 .sorted((c1, c2) -> c2.get(RACE_DISTANCE_COMPLEX).compareTo(c1.get(RACE_DISTANCE_COMPLEX)))
                 .collect(Collectors.toList());
@@ -99,8 +100,7 @@ public class RealtimePositionProcessor
                 carStats.put(REALTIME_POSITION, pos);
             } else {
                 carStats.put(REALTIME_POSITION,
-                        client.getBroadcastingData().getCar(carStats.get(CAR_ID))
-                                .getRealtime().getPosition());
+                        client.getModel().cars.get(carStats.get(CAR_ID)).realtimeRaw.getPosition());
             }
             carStats.put(USE_REALTIME_POS, shouldUseRealtimePosition(info, carStats));
             pos++;
@@ -115,10 +115,10 @@ public class RealtimePositionProcessor
     }
 
     private void resetDistances() {
-        client.getBroadcastingData().getCarsInfo().values().forEach(carInfo -> {
-            CarStatisticsWritable car = getCars().get(carInfo.getCarId());
-            car.put(RACE_DISTANCE_SIMPLE, 0f);
-            car.put(RACE_DISTANCE_COMPLEX, 0f);
+        client.getModel().cars.values().forEach(car -> {
+            CarStatisticsWritable carS = getCars().get(car.raw.getCarId());
+            carS.put(RACE_DISTANCE_SIMPLE, 0f);
+            carS.put(RACE_DISTANCE_COMPLEX, 0f);
         });
     }
 

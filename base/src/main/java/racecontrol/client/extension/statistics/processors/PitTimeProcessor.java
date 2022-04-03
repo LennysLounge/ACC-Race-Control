@@ -65,7 +65,8 @@ public class PitTimeProcessor
         if (info.getPhase() == PRESESSION) {
             pitEntryTimestamp.clear();
             pitStationaryTimestamp.clear();
-            client.getBroadcastingData().getCarsInfo().values().stream()
+            client.getModel().cars.values().stream()
+                    .map(car -> car.raw)
                     .map(carInfo -> getCars().get(carInfo.getCarId()))
                     .forEach(carStats -> {
                         carStats.put(PITLANE_TIME, 0);

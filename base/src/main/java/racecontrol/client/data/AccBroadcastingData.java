@@ -29,17 +29,4 @@ public class AccBroadcastingData {
             TrackInfo trackInfo, List<BroadcastingEvent> events) {
         this.cars = requireNonNull(cars, "cars");
     }
-
-    public Map<Integer, CarInfo> getCarsInfo() {
-        return Collections.unmodifiableMap(cars);
-    }
-
-    public CarInfo getCar(int carId) {
-        return cars.getOrDefault(carId, new CarInfo());
-    }
-
-    public AccBroadcastingData withCars(Map<Integer, CarInfo> cars) {
-        return new AccBroadcastingData(cars, null, null, null);
-    }
-
 }

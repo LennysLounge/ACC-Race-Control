@@ -6,6 +6,7 @@
 package racecontrol.client.extension.contact;
 
 import racecontrol.client.data.CarInfo;
+import racecontrol.client.model.Car;
 
 /**
  *
@@ -16,11 +17,11 @@ public class YellowFlagContactInfo {
     /**
      * The car that has been yellow flagged.
      */
-    private final CarInfo flaggedCar;
+    private final Car flaggedCar;
     /**
      * The car that is closest when the flag was raised.
      */
-    private final CarInfo closestCar;
+    private final Car closestCar;
     /**
      * Session time when the yellow flagg was raised.
      */
@@ -30,8 +31,8 @@ public class YellowFlagContactInfo {
      */
     private final int yellowFlagEventId;
 
-    public YellowFlagContactInfo(CarInfo flaggedCar,
-            CarInfo closestCar,
+    public YellowFlagContactInfo(Car flaggedCar,
+            Car closestCar,
             int sessionTime,
             int yellowFlagEventId) {
         this.flaggedCar = flaggedCar;
@@ -40,11 +41,11 @@ public class YellowFlagContactInfo {
         this.yellowFlagEventId = yellowFlagEventId;
     }
 
-    public CarInfo getFlaggedCar() {
+    public Car getFlaggedCar() {
         return flaggedCar;
     }
 
-    public CarInfo getClosestCar() {
+    public Car getClosestCar() {
         return closestCar;
     }
 

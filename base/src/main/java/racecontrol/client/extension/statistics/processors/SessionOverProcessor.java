@@ -8,7 +8,6 @@ package racecontrol.client.extension.statistics.processors;
 import java.util.Map;
 import racecontrol.client.AccBroadcastingClient;
 import static racecontrol.client.AccBroadcastingClient.getClient;
-import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.SessionInfo;
 import static racecontrol.client.data.enums.SessionPhase.SESSIONOVER;
 import static racecontrol.client.data.enums.SessionType.PRACTICE;
@@ -20,6 +19,7 @@ import racecontrol.client.extension.laptimes.LapCompletedEvent;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_FINISHED;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
 import racecontrol.client.extension.statistics.CarStatisticsWritable;
+import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
 
 /**
@@ -53,19 +53,19 @@ public class SessionOverProcessor
         }
     }
 
-    private void onLapCompleted(CarInfo car) {
+    private void onLapCompleted(Car car) {
         // The session is over when the leading car finishes his lap and
         // the session phase is "SESSIONOVER" during a race.
         SessionInfo info = getClient().getModel().session.raw;
         if (info.getSessionType() == RACE
                 && info.getPhase() == SESSIONOVER
-                && car.getRealtime().getPosition() == 1) {
+                && car.realtimeRaw.getPosition() == 1) {
             isSessionOver = true;
         }
 
         // when the session is over we set the finished flag for the car.
         if (isSessionOver) {
-            getCars().get(car.getCarId()).put(SESSION_FINISHED, true);
+            getCars().get(car.raw.getCarId()).put(SESSION_FINISHED, true);
         }
     }
 

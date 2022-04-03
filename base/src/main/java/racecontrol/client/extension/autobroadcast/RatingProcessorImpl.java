@@ -50,29 +50,30 @@ public class RatingProcessorImpl
      * Spline position of the focused car.
      */
     private float focusedCarSplinePos = 0f;
-    
+
     public RatingProcessorImpl() {
     }
-    
+
     @Override
     public Entry calculateRating(Entry entry) {
         CarStatistics stats = StatisticsExtension.getInstance()
                 .getCar(entry.getCarInfo().getCarId());
         // sort cars by their race position from first to last.
-        List<CarStatistics> carsSorted = getClient().getBroadcastingData().getCarsInfo().values().stream()
+        List<CarStatistics> carsSorted = getClient().getModel().cars.values().stream()
+                .map(car -> car.raw)
                 .map(carInfo -> StatisticsExtension.getInstance().getCar(carInfo.getCarId()))
                 .sorted((c1, c2) -> Float.compare(c1.get(REALTIME_POSITION), c2.get(REALTIME_POSITION)))
                 .collect(Collectors.toList());
         int index = stats.get(REALTIME_POSITION) - 1;
-        
+
         if (index < 0 || index >= carsSorted.size()) {
             return entry;
         }
-        
+
         if (!carsSorted.get(index).get(CAR_ID).equals(stats.get(CAR_ID))) {
             return entry;
         }
-        
+
         if (stats.get(IS_IN_PITS)) {
             return entry;
         }
@@ -101,7 +102,7 @@ public class RatingProcessorImpl
         // Position rating. Having a higher position gives a better rating.
         // scaled from p1 to last place linearly.
         float position = stats.get(REALTIME_POSITION) * 1f
-                / getClient().getBroadcastingData().getCarsInfo().size() * 1f;
+                / getClient().getModel().cars.size() * 1f;
         entry.setPosition(1 - position);
 
         // Focus changed penalty. When the focus changes, cars that are not in
@@ -185,12 +186,12 @@ public class RatingProcessorImpl
                 }
             }
         }
-        
-        entry.setRandomness((float)Math.random() * 0.001f);
-        
+
+        entry.setRandomness((float) Math.random() * 0.001f);
+
         return entry;
     }
-    
+
     @Override
     public void onEvent(Event e) {
         if (e instanceof RealtimeUpdateEvent) {
@@ -205,7 +206,7 @@ public class RatingProcessorImpl
             }
         }
     }
-    
+
     public void sessionUpdate(SessionInfo info) {
         if (info.getFocusedCarIndex() != focusedCarId) {
             focusedCarId = info.getFocusedCarIndex();
@@ -213,11 +214,11 @@ public class RatingProcessorImpl
             focusedCarCrossedFinish = false;
             focusedCarSplinePos = 0;
         }
-        
+
     }
-    
+
     private float clamp(float v) {
         return Math.max(0, Math.min(1, v));
     }
-    
+
 }

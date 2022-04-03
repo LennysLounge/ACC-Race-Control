@@ -81,7 +81,7 @@ public class DataProcessor extends StatisticsProcessor {
     }
 
     public void onRealtimeCarUpdate(RealtimeInfo info) {
-        CarInfo carInfo = client.getBroadcastingData().getCar(info.getCarId());
+        CarInfo carInfo = client.getModel().cars.get(info.getCarId()).raw;
         if (!getCars().containsKey(info.getCarId())) {
             return;
         }
@@ -98,7 +98,7 @@ public class DataProcessor extends StatisticsProcessor {
         car.put(CAR_NUMBER, carInfo.getCarNumber());
         car.put(CAR_MODEL, carInfo.getCarModel());
         car.put(CATEGORY, carInfo.getDriver().getCategory());
-        car.put(DRIVER_INDEX, (int) carInfo.getRealtime().getDriverIndex());
+        car.put(DRIVER_INDEX, (int) info.getDriverIndex());
         car.put(DRIVER_LIST, new DriverList(carInfo.getDrivers()));
         car.put(TEAM_NAME, carInfo.getTeamName());
         // Laps

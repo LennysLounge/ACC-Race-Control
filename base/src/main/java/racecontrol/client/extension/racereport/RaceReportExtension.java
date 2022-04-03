@@ -86,29 +86,29 @@ public class RaceReportExtension extends ClientExtension
 
     private void onLapCompleted(LapCompletedEvent e) {
         // add a driver record if one does not exist.
-        if (!sessions.get(sessionId).containsKey(e.getCar().getCarId())) {
-            String driverName = e.getCar().getDrivers().stream()
+        if (!sessions.get(sessionId).containsKey(e.getCar().raw.getCarId())) {
+            String driverName = e.getCar().raw.getDrivers().stream()
                     .map(driverInfo -> driverInfo.getFirstName() + " " + driverInfo.getLastName())
                     .collect(Collectors.joining(", "));
-            sessions.get(sessionId).put(e.getCar().getCarId(),
+            sessions.get(sessionId).put(e.getCar().raw.getCarId(),
                     new DriverRecord(
                             driverName,
-                            String.valueOf(e.getCar().getCarNumber())
+                            String.valueOf(e.getCar().raw.getCarNumber())
                     )
             );
         }
-        DriverRecord dr = sessions.get(sessionId).get(e.getCar().getCarId());
+        DriverRecord dr = sessions.get(sessionId).get(e.getCar().raw.getCarId());
 
         //set position and lap count
-        dr.setPosition(e.getCar().getRealtime().getPosition());
-        dr.setLapCount(e.getCar().getRealtime().getLaps());
+        dr.setPosition(e.getCar().realtimeRaw.getPosition());
+        dr.setLapCount(e.getCar().realtimeRaw.getLaps());
 
         int deltaToLeader = 0;
 
         // if we are in a race session, calculate offset to leader.
         if (sessionId.getType() == RACE) {
             //if this car is the leader add the leader offset.
-            int lapCount = e.getCar().getRealtime().getLaps();
+            int lapCount = e.getCar().realtimeRaw.getLaps();
             long now = System.currentTimeMillis();
             if (!leaderOffset.containsKey(lapCount)) {
                 leaderOffset.put(lapCount, now);

@@ -5,6 +5,9 @@
  */
 package racecontrol.client.model;
 
+import racecontrol.client.data.CarInfo;
+import racecontrol.client.data.RealtimeInfo;
+
 /**
  * Represents a car.
  *
@@ -12,9 +15,19 @@ package racecontrol.client.model;
  */
 public class Car {
 
+    /**
+     * Raw car info.
+     */
+    public CarInfo raw = new CarInfo();
+    /**
+     * Raw realtime info.
+     */
+    public RealtimeInfo realtimeRaw = new RealtimeInfo();
+
     public Car copy() {
         Car car = new Car();
-
+        car.raw = raw;
+        car.realtimeRaw = realtimeRaw;
         return car;
     }
 }

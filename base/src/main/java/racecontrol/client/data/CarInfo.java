@@ -57,15 +57,6 @@ public class CarInfo {
         carNumberString = String.format("#%-3d", carNumber);
     }
 
-    public RealtimeInfo getRealtime() {
-        return realtime;
-    }
-
-    public CarInfo withRealtime(RealtimeInfo realtime) {
-        return new CarInfo(carId, carModel, teamName, carNumber, cupCatergory,
-                currentDriverIndex, carNationality, drivers, realtime);
-    }
-
     public DriverInfo getDriver() {
         //read driver from the realtime info
         if (realtime != null

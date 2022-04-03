@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import racecontrol.client.AccBroadcastingClient;
+import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.LapInfo;
 import racecontrol.client.data.RealtimeInfo;
@@ -38,6 +38,7 @@ import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_TWO;
+import racecontrol.client.model.Car;
 
 /**
  *
@@ -87,7 +88,8 @@ public class SectorTimesProcessor
             trackData = ((TrackDataEvent) e).getTrackData();
             s1Avg.clear();
             s2Avg.clear();
-            AccBroadcastingClient.getClient().getBroadcastingData().getCarsInfo().values().stream()
+            getClient().getModel().cars.values().stream()
+                    .map(car -> car.raw)
                     .map(carInfo -> getCars().get(carInfo.getCarId()))
                     .forEach(carStat -> {
                         carStat.put(CURRENT_SECTOR_ONE_CALC, 0);
@@ -141,13 +143,13 @@ public class SectorTimesProcessor
         sectorSuggestions.get(info.getCarId()).add(t);
     }
 
-    private void onLapCompleted(CarInfo car) {
-        CarStatisticsWritable carStats = getCars().get(car.getCarId());
-        int lapTime = car.getRealtime().getLastLap().getLapTimeMS();
+    private void onLapCompleted(Car car) {
+        CarStatisticsWritable carStats = getCars().get(car.raw.getCarId());
+        int lapTime = car.realtimeRaw.getLastLap().getLapTimeMS();
         int s3Time = lapTime - carStats.get(CURRENT_SECTOR_ONE_CALC) - carStats.get(CURRENT_SECTOR_TWO_CALC);
         carStats.put(CURRENT_SECTOR_THREE_CALC, s3Time);
 
-        LapInfo lastLap = car.getRealtime().getLastLap();
+        LapInfo lastLap = car.realtimeRaw.getLastLap();
         carStats.put(CURRENT_SECTOR_ONE, lastLap.getSplits().get(0));
         carStats.put(CURRENT_SECTOR_TWO, lastLap.getSplits().get(1));
         carStats.put(CURRENT_SECTOR_THREE, lastLap.getSplits().get(2));
@@ -190,14 +192,14 @@ public class SectorTimesProcessor
         }
     }
 
-    private void debugLog(CarInfo car) {
+    private void debugLog(Car car) {
         if (trackData != null) {
-            CarStatisticsWritable carStats = getCars().get(car.getCarId());
-            LapInfo lastLap = car.getRealtime().getLastLap();
+            CarStatisticsWritable carStats = getCars().get(car.raw.getCarId());
+            LapInfo lastLap = car.realtimeRaw.getLastLap();
             // Sector suggestions.
-            if (sectorSuggestions.containsKey(car.getCarId())) {
+            if (sectorSuggestions.containsKey(car.raw.getCarId())) {
                 int s1Time = lastLap.getSplits().get(0);
-                for (Tuple t : sectorSuggestions.get(car.getCarId())) {
+                for (Tuple t : sectorSuggestions.get(car.raw.getCarId())) {
                     if (t.time > s1Time) {
                         LOG.info(String.format("S1 suggestion: %.7f\t%s",
                                 t.splinePos,
@@ -207,7 +209,7 @@ public class SectorTimesProcessor
                     }
                 }
                 int s2Time = lastLap.getSplits().get(1) + s1Time;
-                for (Tuple t : sectorSuggestions.get(car.getCarId())) {
+                for (Tuple t : sectorSuggestions.get(car.raw.getCarId())) {
                     if (t.time > s2Time) {
                         LOG.info(String.format("S2 suggestion: %.7f\t%s",
                                 t.splinePos,
@@ -216,7 +218,7 @@ public class SectorTimesProcessor
                         break;
                     }
                 }
-                sectorSuggestions.get(car.getCarId()).clear();
+                sectorSuggestions.get(car.raw.getCarId()).clear();
             }
 
             int s1Diff = carStats.get(CURRENT_SECTOR_ONE_CALC) - lastLap.getSplits().get(0);
