@@ -15,7 +15,6 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -323,8 +322,7 @@ public class AccConnection
 
     @Override
     public void onRealtimeUpdate(SessionInfo sessionInfo) {
-        SessionInfo oldInfo = model_old.getSessionInfo();
-        model_old = model_old.withSessionInfo(sessionInfo);
+        SessionInfo oldInfo = model.session.raw;
 
         //Check for disconnected cars.
         checkForMissedRealtimeCarUpdates();
@@ -388,8 +386,8 @@ public class AccConnection
 
             //set cameras when a replay is done.
             if (resetCameraWhenReplayIsDone) {
-                getClient().sendSetCameraRequest(model_old.getSessionInfo().getActiveCameraSet(),
-                        model_old.getSessionInfo().getActiveCamera());
+                getClient().sendSetCameraRequest(model.session.raw.getActiveCameraSet(),
+                        model.session.raw.getActiveCamera());
                 resetCameraWhenReplayIsDone = false;
             }
         }
@@ -473,7 +471,6 @@ public class AccConnection
 
     @Override
     public void onTrackData(TrackInfo info) {
-        model.trackInfo = info;
         EventBus.publish(new TrackInfoEvent(info));
     }
 

@@ -60,6 +60,10 @@ public class Model {
      * Track information.
      */
     public TrackInfo trackInfo;
+    /**
+     * Current session.
+     */
+    public Session session = new Session();
 
     /**
      * Creates a deep copy of the model.
@@ -79,6 +83,7 @@ public class Model {
         model.readOnly = readOnly;
         model.gameConnected = gameConnected;
         model.trackInfo = trackInfo;
+        model.session = session.copy();
         return model;
     }
 }

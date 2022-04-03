@@ -18,6 +18,7 @@ import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.client.extension.dangerdetection.DangerDetectionExtension;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
 import racecontrol.client.extension.laptimes.LapTimeExtension;
+import racecontrol.client.extension.model.ModelExtension;
 import racecontrol.client.extension.raceevent.RaceEventExtension;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.extension.racereport.RaceReportExtension;
@@ -78,6 +79,7 @@ public class AccBroadcastingClient
 
     public void initialise() {
         //instanciate extensions
+        extensions.add(new ModelExtension());
         extensions.add(ContactExtension.getInstance());
         extensions.add(GoogleSheetsAPIExtension.getInstance());
         extensions.add(new LapTimeExtension());
@@ -208,8 +210,8 @@ public class AccBroadcastingClient
         connection.sendRequest(AccBroadcastingProtocol
                 .buildFocusRequest(model.connectionId,
                         carIndex,
-                        connection.getBroadcastingData().getSessionInfo().getActiveCameraSet(),
-                        connection.getBroadcastingData().getSessionInfo().getActiveCamera()
+                        model.session.raw.getActiveCameraSet(),
+                        model.session.raw.getActiveCamera()
                 ));
     }
 
@@ -225,7 +227,7 @@ public class AccBroadcastingClient
         }
         connection.sendRequest(AccBroadcastingProtocol
                 .buildFocusRequest(model.connectionId,
-                        connection.getBroadcastingData().getSessionInfo().getFocusedCarIndex(),
+                        model.session.raw.getFocusedCarIndex(),
                         camSet,
                         cam
                 ));
@@ -281,7 +283,7 @@ public class AccBroadcastingClient
         }
         connection.sendRequest(AccBroadcastingProtocol
                 .buildInstantReplayRequest(model.connectionId,
-                        connection.getBroadcastingData().getSessionInfo().getSessionTime() - (seconds * 1000),
+                        model.session.raw.getSessionTime() - (seconds * 1000),
                         duration * 1000,
                         -1,
                         "",

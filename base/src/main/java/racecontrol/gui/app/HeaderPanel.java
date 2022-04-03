@@ -73,7 +73,7 @@ public class HeaderPanel
 
             applet.textFont(fontMedium());
             applet.textSize(TEXT_SIZE);
-            String sessionTimeLeft = TimeUtils.asDurationShort(client.getBroadcastingData().getSessionInfo().getSessionEndTime());
+            String sessionTimeLeft = TimeUtils.asDurationShort(client.getModel().session.raw.getSessionEndTime());
             applet.text(sessionTimeLeft,
                     getWidth() - sessionNameWidth - 27,
                     LINE_HEIGHT * 0.5f);

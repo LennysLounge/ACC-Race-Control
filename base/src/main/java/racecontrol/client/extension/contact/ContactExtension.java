@@ -212,7 +212,7 @@ public class ContactExtension extends ClientExtension
      */
     private void saveInHistory(RealtimeInfo info) {
         // add info to history.
-        int sessionTime = CLIENT.getBroadcastingData().getSessionInfo().getSessionTime();
+        int sessionTime = getWritableModel().session.raw.getSessionTime();
         if (!history.containsKey(sessionTime)) {
             history.put(sessionTime, new HashMap<>());
         }
@@ -270,7 +270,7 @@ public class ContactExtension extends ClientExtension
         // an accident event is usually 5000 ms after the contact.
         // to get an accurate timing we subtract that offset.
         int sessionTime = getSessionTimeFromHistory(
-                CLIENT.getBroadcastingData().getSessionInfo().getSessionTime() - 5000);
+                getWritableModel().session.raw.getSessionTime() - 5000);
         CarInfo car = CLIENT.getBroadcastingData().getCar(event.getCarId());
 
         // use realtime data from history

@@ -252,7 +252,7 @@ public class DangerDetectionExtension extends ClientExtension
         if (info.getLocation() != CarLocation.TRACK) {
             return false;
         }
-        SessionInfo sessionInfo = client.getBroadcastingData().getSessionInfo();
+        SessionInfo sessionInfo = getWritableModel().session.raw;
         if (sessionInfo.getPhase() != SessionPhase.SESSION
                 && sessionInfo.getPhase() != SessionPhase.SESSIONOVER) {
             return false;
@@ -291,7 +291,7 @@ public class DangerDetectionExtension extends ClientExtension
 
         if (isNew) {
             if (isSpin) {
-                SessionInfo info = client.getBroadcastingData().getSessionInfo();
+                SessionInfo info = getWritableModel().session.raw;
                 int sessionTime = info.getSessionTime();
                 int replayTime = ReplayOffsetExtension.getInstance().getReplayTimeFromSessionTime(sessionTime);
                 String logMessage = "Yellow Flag nr." + idCounter + " :"

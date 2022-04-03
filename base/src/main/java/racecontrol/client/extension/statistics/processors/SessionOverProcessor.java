@@ -7,6 +7,7 @@ package racecontrol.client.extension.statistics.processors;
 
 import java.util.Map;
 import racecontrol.client.AccBroadcastingClient;
+import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.SessionInfo;
 import static racecontrol.client.data.enums.SessionPhase.SESSIONOVER;
@@ -55,7 +56,7 @@ public class SessionOverProcessor
     private void onLapCompleted(CarInfo car) {
         // The session is over when the leading car finishes his lap and
         // the session phase is "SESSIONOVER" during a race.
-        SessionInfo info = client.getBroadcastingData().getSessionInfo();
+        SessionInfo info = getClient().getModel().session.raw;
         if (info.getSessionType() == RACE
                 && info.getPhase() == SESSIONOVER
                 && car.getRealtime().getPosition() == 1) {

@@ -65,7 +65,7 @@ public class Hotkeys {
             case KEY_F1:
                 if (client.isConnected()) {
                     var cameras = Arrays.asList("Cockpit", "Dash", "Helmet", "Bonnet", "DashPro", "Chase", "FarChase");
-                    String activeCamera = client.getBroadcastingData().getSessionInfo().getActiveCamera();
+                    String activeCamera = client.getModel().session.raw.getActiveCamera();
                     int index = cameras.indexOf(activeCamera);
                     client.sendSetCameraRequest("Drivable", cameras.get((index + 1) % cameras.size()));
                 }
@@ -73,7 +73,7 @@ public class Hotkeys {
             case KEY_F2:
                 if (client.isConnected()) {
                     var hudPages = Arrays.asList("Blank", "Basic HUD", "Help", "TimeTable", "Broadcasting", "TrackMap");
-                    String activeHud = client.getBroadcastingData().getSessionInfo().getCurrentHudPage();
+                    String activeHud = client.getModel().session.raw.getCurrentHudPage();
                     int index = hudPages.indexOf(activeHud);
                     client.sendSetHudPageRequest(hudPages.get((index + 1) % hudPages.size()));
                 }
@@ -89,7 +89,7 @@ public class Hotkeys {
             case KEY_F6:
                 if (client.isConnected()) {
                     var cameras = Arrays.asList("Onboard0", "Onboard1", "Onboard2", "Onboard3");
-                    var activeCamera = client.getBroadcastingData().getSessionInfo().getActiveCamera();
+                    var activeCamera = client.getModel().session.raw.getActiveCamera();
                     var index = cameras.indexOf(activeCamera);
                     client.sendSetCameraRequest("Onboard", cameras.get((index + 1) % cameras.size()));
                 }
@@ -126,7 +126,7 @@ public class Hotkeys {
     }
 
     private void moveFocusRelative(int direction) {
-        int focusedCarIndex = client.getBroadcastingData().getSessionInfo().getFocusedCarIndex();
+        int focusedCarIndex = client.getModel().session.raw.getFocusedCarIndex();
         CarInfo focusedCar = client.getBroadcastingData().getCar(focusedCarIndex);
 
         List<CarInfo> cars = client.getBroadcastingData().getCarsInfo().values().stream()
@@ -144,7 +144,7 @@ public class Hotkeys {
     }
 
     private void moveFocusAbsolute(int direction) {
-        int focusedCarIndex = client.getBroadcastingData().getSessionInfo().getFocusedCarIndex();
+        int focusedCarIndex = client.getModel().session.raw.getFocusedCarIndex();
         CarInfo focusedCar = client.getBroadcastingData().getCar(focusedCarIndex);
 
         List<CarInfo> cars = client.getBroadcastingData().getCarsInfo().values().stream()

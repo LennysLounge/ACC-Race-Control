@@ -100,7 +100,7 @@ public class VirtualSafetyCarExtension extends ClientExtension
     private void onRealtimeCarUpdate(RealtimeInfo info) {
         if (info.getKMH() > speedLimit + speedTolerance) {
 
-            int sessionNow = CLIENT.getBroadcastingData().getSessionInfo().getSessionTime();
+            int sessionNow = getWritableModel().session.raw.getSessionTime();
             // get or create record.
             VSCRecord record = carsOverTheLimit.getOrDefault(info.getCarId(),
                     new VSCRecord(info.getCarId(),
@@ -172,7 +172,7 @@ public class VirtualSafetyCarExtension extends ClientExtension
             this.speedLimit = speedLimit;
             this.speedTolerance = speedTolerance;
             this.timeTolerance = timeTolerance;
-            int time = CLIENT.getBroadcastingData().getSessionInfo().getSessionTime();
+            int time = getWritableModel().session.raw.getSessionTime();
             vscOn = true;
 
             String logText = "VSC started at " + TimeUtils.asDuration(time)
@@ -201,7 +201,7 @@ public class VirtualSafetyCarExtension extends ClientExtension
         //publish all current violations.
         clearAndCommitViolations();
 
-        int time = CLIENT.getBroadcastingData().getSessionInfo().getSessionTime();
+        int time = getWritableModel().session.raw.getSessionTime();
         EventBus.publish(new VSCEndEvent(sessionId, time));
 
         // log to spreadsheet

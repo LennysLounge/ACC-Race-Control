@@ -121,16 +121,16 @@ public class RaceControlController
             getClient().sendInstantReplayRequestWithCamera(
                     entry.getSessionTime() - 5000,
                     10,
-                    getClient().getBroadcastingData().getSessionInfo().getFocusedCarIndex(),
-                    getClient().getBroadcastingData().getSessionInfo().getActiveCameraSet(),
-                    getClient().getBroadcastingData().getSessionInfo().getActiveCamera()
+                    getClient().getModel().session.raw.getFocusedCarIndex(),
+                    getClient().getModel().session.raw.getActiveCameraSet(),
+                    getClient().getModel().session.raw.getActiveCamera()
             );
         }
     }
 
     private void createDummyContactEvent() {
         int nCars = (int) Math.floor(Math.random() * Math.min(6, getClient().getBroadcastingData().getCarsInfo().size()) + 1);
-        int sessionTime = getClient().getBroadcastingData().getSessionInfo().getSessionTime();
+        int sessionTime = getClient().getModel().session.raw.getSessionTime();
         ContactInfo incident = new ContactInfo(
                 sessionTime,
                 0,

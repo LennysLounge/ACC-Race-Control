@@ -113,7 +113,7 @@ public class LapTimeExtension extends ClientExtension
                 lapCount.put(info.getCarId(), info.getLaps());
                 LapInfo lap = info.getLastLap();
                 boolean isPersonalBest = lap.getLapTimeMS() == info.getBestSessionLap().getLapTimeMS();
-                boolean isSessionBest = lap.getLapTimeMS() == client.getBroadcastingData().getSessionInfo().getBestSessionLap().getLapTimeMS();
+                boolean isSessionBest = lap.getLapTimeMS() == getWritableModel().session.raw.getBestSessionLap().getLapTimeMS();
                 onLapComplete(lap, isPersonalBest, isSessionBest);
             }
         } else {
