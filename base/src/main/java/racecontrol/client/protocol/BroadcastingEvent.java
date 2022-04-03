@@ -3,9 +3,9 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.client.data;
+package racecontrol.client.protocol;
 
-import racecontrol.client.data.enums.BroadcastingEventType;
+import racecontrol.client.protocol.enums.BroadcastingEventType;
 import static java.util.Objects.requireNonNull;
 
 /**

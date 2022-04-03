@@ -6,7 +6,7 @@
 package racecontrol.client.extension.results;
 
 import racecontrol.client.extension.contact.ContactInfo;
-import racecontrol.client.data.BroadcastingEvent;
+import racecontrol.client.protocol.BroadcastingEvent;
 import java.util.LinkedList;
 import java.util.List;
 

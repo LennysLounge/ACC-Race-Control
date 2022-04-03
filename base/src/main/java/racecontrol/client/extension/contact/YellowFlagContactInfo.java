@@ -5,7 +5,7 @@
  */
 package racecontrol.client.extension.contact;
 
-import racecontrol.client.data.CarInfo;
+import racecontrol.client.protocol.CarInfo;
 import racecontrol.client.model.Car;
 
 /**

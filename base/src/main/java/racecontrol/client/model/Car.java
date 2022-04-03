@@ -5,8 +5,8 @@
  */
 package racecontrol.client.model;
 
-import racecontrol.client.data.CarInfo;
-import racecontrol.client.data.RealtimeInfo;
+import racecontrol.client.protocol.CarInfo;
+import racecontrol.client.protocol.RealtimeInfo;
 
 /**
  * Represents a car.

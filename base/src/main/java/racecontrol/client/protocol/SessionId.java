@@ -3,9 +3,9 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.client.data;
+package racecontrol.client.protocol;
 
-import racecontrol.client.data.enums.SessionType;
+import racecontrol.client.protocol.enums.SessionType;
 
 /**
  * Serves as a quince identifier for a session with its type, index and which

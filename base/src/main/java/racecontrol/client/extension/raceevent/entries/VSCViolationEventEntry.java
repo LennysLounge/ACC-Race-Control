@@ -18,12 +18,12 @@ import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.client.extension.vsc.events.VSCViolationEvent;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.data.CarInfo;
-import racecontrol.client.data.SessionId;
-import racecontrol.client.data.enums.CarCategory;
-import static racecontrol.client.data.enums.CarCategory.CUP;
-import static racecontrol.client.data.enums.CarCategory.GT3;
-import static racecontrol.client.data.enums.CarCategory.ST;
+import racecontrol.client.protocol.CarInfo;
+import racecontrol.client.protocol.SessionId;
+import racecontrol.client.protocol.enums.CarCategory;
+import static racecontrol.client.protocol.enums.CarCategory.CUP;
+import static racecontrol.client.protocol.enums.CarCategory.GT3;
+import static racecontrol.client.protocol.enums.CarCategory.ST;
 import racecontrol.gui.lpui.table.LPTable;
 import racecontrol.utility.TimeUtils;
 

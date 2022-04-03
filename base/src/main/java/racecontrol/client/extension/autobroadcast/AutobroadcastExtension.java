@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.data.SessionInfo;
+import racecontrol.client.protocol.SessionInfo;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.ClientExtension;
-import racecontrol.client.data.CarInfo;
+import racecontrol.client.protocol.CarInfo;
 
 /**
  *

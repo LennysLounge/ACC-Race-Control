@@ -5,8 +5,8 @@
  */
 package racecontrol.client.extension.statistics.processors;
 
-import racecontrol.client.data.CarInfo;
-import racecontrol.client.data.RealtimeInfo;
+import racecontrol.client.protocol.CarInfo;
+import racecontrol.client.protocol.RealtimeInfo;
 import java.util.List;
 import java.util.logging.Logger;
 import racecontrol.client.extension.trackdata.TrackData;

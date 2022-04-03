@@ -5,6 +5,8 @@
  */
 package racecontrol.client;
 
+import racecontrol.client.protocol.AccBroadcastingProtocolCallback;
+import racecontrol.client.protocol.AccBroadcastingProtocol;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -21,14 +23,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import racecontrol.Main;
 import static racecontrol.client.AccBroadcastingClient.getClient;
-import racecontrol.client.data.BroadcastingEvent;
-import racecontrol.client.data.CarInfo;
-import racecontrol.client.data.RealtimeInfo;
-import racecontrol.client.data.SessionId;
-import racecontrol.client.data.SessionInfo;
-import racecontrol.client.data.TrackInfo;
-import racecontrol.client.data.enums.SessionPhase;
-import racecontrol.client.data.enums.SessionType;
+import racecontrol.client.protocol.BroadcastingEvent;
+import racecontrol.client.protocol.CarInfo;
+import racecontrol.client.protocol.RealtimeInfo;
+import racecontrol.client.protocol.SessionId;
+import racecontrol.client.protocol.SessionInfo;
+import racecontrol.client.protocol.TrackInfo;
+import racecontrol.client.protocol.enums.SessionPhase;
+import racecontrol.client.protocol.enums.SessionType;
 import racecontrol.client.events.AfterPacketReceivedEvent;
 import racecontrol.client.events.BroadcastingEventEvent;
 import racecontrol.client.events.CarConnectedEvent;

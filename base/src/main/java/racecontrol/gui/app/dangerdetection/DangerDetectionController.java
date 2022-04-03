@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import processing.core.PApplet;
 import processing.core.PVector;
-import racecontrol.client.data.RealtimeInfo;
+import racecontrol.client.protocol.RealtimeInfo;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.extension.dangerdetection.DangerDetectionExtension;

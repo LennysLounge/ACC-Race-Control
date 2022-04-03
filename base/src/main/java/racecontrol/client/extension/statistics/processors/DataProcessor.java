@@ -7,12 +7,12 @@ package racecontrol.client.extension.statistics.processors;
 
 import java.util.Map;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.data.CarInfo;
-import racecontrol.client.data.DriverInfo;
-import racecontrol.client.data.LapInfo;
-import racecontrol.client.data.RealtimeInfo;
-import racecontrol.client.data.SessionInfo;
-import static racecontrol.client.data.enums.CarLocation.PITLANE;
+import racecontrol.client.protocol.CarInfo;
+import racecontrol.client.protocol.DriverInfo;
+import racecontrol.client.protocol.LapInfo;
+import racecontrol.client.protocol.RealtimeInfo;
+import racecontrol.client.protocol.SessionInfo;
+import static racecontrol.client.protocol.enums.CarLocation.PITLANE;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.extension.statistics.CarStatisticsWritable;

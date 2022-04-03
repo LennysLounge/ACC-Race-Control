@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.client.data;
+package racecontrol.client.protocol;
 
 import java.util.ArrayList;
 import java.util.Collections;

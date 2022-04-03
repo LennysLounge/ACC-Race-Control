@@ -5,7 +5,7 @@
  */
 package racecontrol.client.extension.autobroadcast;
 
-import racecontrol.client.data.CarInfo;
+import racecontrol.client.protocol.CarInfo;
 
 /**
  *

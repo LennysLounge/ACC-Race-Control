@@ -10,7 +10,7 @@ import racecontrol.gui.lpui.table.LPTableColumn;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
-import static racecontrol.client.data.enums.CarLocation.TRACK;
+import static racecontrol.client.protocol.enums.CarLocation.TRACK;
 import static racecontrol.client.extension.statistics.CarStatistics.BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.CAR_LOCATION;
 import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_LAP_TIME;

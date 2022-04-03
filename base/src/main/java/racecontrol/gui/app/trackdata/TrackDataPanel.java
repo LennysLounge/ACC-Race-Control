@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import racecontrol.client.data.RealtimeInfo;
+import racecontrol.client.protocol.RealtimeInfo;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;

@@ -6,7 +6,7 @@
 package racecontrol.gui.app;
 
 import processing.core.PApplet;
-import racecontrol.client.data.SessionId;
+import racecontrol.client.protocol.SessionId;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.utility.TimeUtils;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_DARK_GRAY;

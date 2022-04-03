@@ -9,7 +9,7 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import racecontrol.client.data.DriverInfo;
+import racecontrol.client.protocol.DriverInfo;
 import static racecontrol.client.extension.statistics.CarStatistics.CAR_MODEL;
 import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_INDEX;
 import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_LIST;

@@ -6,8 +6,8 @@
 package racecontrol.client.extension.contact;
 
 import java.util.ArrayList;
-import racecontrol.client.data.SessionId;
-import racecontrol.client.data.CarInfo;
+import racecontrol.client.protocol.SessionId;
+import racecontrol.client.protocol.CarInfo;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;

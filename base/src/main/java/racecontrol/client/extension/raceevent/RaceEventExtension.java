@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.ClientExtension;
-import racecontrol.client.data.SessionInfo;
+import racecontrol.client.protocol.SessionInfo;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.extension.contact.ContactEvent;
 import racecontrol.client.extension.contact.ContactInfo;

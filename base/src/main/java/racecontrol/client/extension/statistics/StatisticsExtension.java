@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import racecontrol.client.data.CarInfo;
+import racecontrol.client.protocol.CarInfo;
 import racecontrol.client.events.CarConnectedEvent;
 import racecontrol.client.extension.statistics.processors.DataProcessor;
 import racecontrol.client.extension.statistics.processors.GapProcessor;

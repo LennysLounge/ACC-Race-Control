@@ -3,17 +3,17 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.client.data.enums;
+package racecontrol.client.protocol.enums;
 
-import static racecontrol.client.data.enums.CarCategory.CUP;
-import static racecontrol.client.data.enums.CarCategory.CUP21;
-import static racecontrol.client.data.enums.CarCategory.GT3;
-import static racecontrol.client.data.enums.CarCategory.GT4;
-import static racecontrol.client.data.enums.CarCategory.NONE;
-import static racecontrol.client.data.enums.CarCategory.ST;
-import static racecontrol.client.data.enums.CarCategory.ST22;
-import static racecontrol.client.data.enums.CarCategory.TCX;
-import static racecontrol.client.data.enums.CarCategory.CHL;
+import static racecontrol.client.protocol.enums.CarCategory.CUP;
+import static racecontrol.client.protocol.enums.CarCategory.CUP21;
+import static racecontrol.client.protocol.enums.CarCategory.GT3;
+import static racecontrol.client.protocol.enums.CarCategory.GT4;
+import static racecontrol.client.protocol.enums.CarCategory.NONE;
+import static racecontrol.client.protocol.enums.CarCategory.ST;
+import static racecontrol.client.protocol.enums.CarCategory.ST22;
+import static racecontrol.client.protocol.enums.CarCategory.TCX;
+import static racecontrol.client.protocol.enums.CarCategory.CHL;
 
 /**
  * The different car models in the game.

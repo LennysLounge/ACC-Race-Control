@@ -5,10 +5,10 @@
  */
 package racecontrol.gui.app.livetiming;
 
-import racecontrol.client.data.SessionInfo;
-import static racecontrol.client.data.enums.SessionType.PRACTICE;
-import static racecontrol.client.data.enums.SessionType.QUALIFYING;
-import static racecontrol.client.data.enums.SessionType.RACE;
+import racecontrol.client.protocol.SessionInfo;
+import static racecontrol.client.protocol.enums.SessionType.PRACTICE;
+import static racecontrol.client.protocol.enums.SessionType.QUALIFYING;
+import static racecontrol.client.protocol.enums.SessionType.RACE;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;

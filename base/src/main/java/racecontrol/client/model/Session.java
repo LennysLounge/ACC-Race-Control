@@ -5,7 +5,7 @@
  */
 package racecontrol.client.model;
 
-import racecontrol.client.data.SessionInfo;
+import racecontrol.client.protocol.SessionInfo;
 
 /**
  * Represents a session.

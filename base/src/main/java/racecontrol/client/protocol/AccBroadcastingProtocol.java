@@ -3,22 +3,22 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.client;
+package racecontrol.client.protocol;
 
-import racecontrol.client.data.BroadcastingEvent;
-import racecontrol.client.data.CarInfo;
-import racecontrol.client.data.DriverInfo;
-import racecontrol.client.data.LapInfo;
-import racecontrol.client.data.RealtimeInfo;
-import racecontrol.client.data.SessionInfo;
-import racecontrol.client.data.TrackInfo;
-import racecontrol.client.data.enums.BroadcastingEventType;
-import racecontrol.client.data.enums.CarLocation;
-import racecontrol.client.data.enums.DriverCategory;
-import racecontrol.client.data.enums.LapType;
-import racecontrol.client.data.enums.Nationality;
-import racecontrol.client.data.enums.SessionPhase;
-import racecontrol.client.data.enums.SessionType;
+import racecontrol.client.protocol.BroadcastingEvent;
+import racecontrol.client.protocol.CarInfo;
+import racecontrol.client.protocol.DriverInfo;
+import racecontrol.client.protocol.LapInfo;
+import racecontrol.client.protocol.RealtimeInfo;
+import racecontrol.client.protocol.SessionInfo;
+import racecontrol.client.protocol.TrackInfo;
+import racecontrol.client.protocol.enums.BroadcastingEventType;
+import racecontrol.client.protocol.enums.CarLocation;
+import racecontrol.client.protocol.enums.DriverCategory;
+import racecontrol.client.protocol.enums.LapType;
+import racecontrol.client.protocol.enums.Nationality;
+import racecontrol.client.protocol.enums.SessionPhase;
+import racecontrol.client.protocol.enums.SessionType;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -29,7 +29,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import racecontrol.client.data.enums.CarModel;
+import racecontrol.client.AccBroadcastingClient;
+import racecontrol.client.protocol.enums.CarModel;
 
 /**
  *

@@ -5,7 +5,7 @@
  */
 package racecontrol.client.extension.vsc.events;
 
-import racecontrol.client.data.SessionId;
+import racecontrol.client.protocol.SessionId;
 import racecontrol.eventbus.Event;
 
 /**

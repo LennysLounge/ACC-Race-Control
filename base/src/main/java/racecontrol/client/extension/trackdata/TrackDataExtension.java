@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import racecontrol.client.data.TrackInfo;
+import racecontrol.client.protocol.TrackInfo;
 import racecontrol.client.events.TrackInfoEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;

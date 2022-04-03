@@ -3,10 +3,10 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.client.data;
+package racecontrol.client.protocol;
 
-import racecontrol.client.data.enums.SessionPhase;
-import racecontrol.client.data.enums.SessionType;
+import racecontrol.client.protocol.enums.SessionPhase;
+import racecontrol.client.protocol.enums.SessionType;
 
 /**
  *

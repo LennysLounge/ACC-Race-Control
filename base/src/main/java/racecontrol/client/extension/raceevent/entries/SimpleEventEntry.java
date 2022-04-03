@@ -5,7 +5,7 @@
  */
 package racecontrol.client.extension.raceevent.entries;
 
-import racecontrol.client.data.SessionId;
+import racecontrol.client.protocol.SessionId;
 import racecontrol.gui.lpui.table.LPTable;
 import racecontrol.gui.lpui.table.LPTableColumn;
 

@@ -6,7 +6,7 @@
 package racecontrol.client.events;
 
 import racecontrol.eventbus.Event;
-import racecontrol.client.data.TrackInfo;
+import racecontrol.client.protocol.TrackInfo;
 
 /**
  *

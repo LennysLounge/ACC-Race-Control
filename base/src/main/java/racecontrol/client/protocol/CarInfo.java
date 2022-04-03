@@ -3,14 +3,14 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.client.data;
+package racecontrol.client.protocol;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
-import racecontrol.client.data.enums.CarModel;
-import static racecontrol.client.data.enums.CarModel.ERROR;
+import racecontrol.client.protocol.enums.CarModel;
+import static racecontrol.client.protocol.enums.CarModel.ERROR;
 
 /**
  *

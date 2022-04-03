@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import processing.event.KeyEvent;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.data.CarInfo;
+import racecontrol.client.protocol.CarInfo;
 import racecontrol.client.model.Car;
 import racecontrol.client.model.Model;
 

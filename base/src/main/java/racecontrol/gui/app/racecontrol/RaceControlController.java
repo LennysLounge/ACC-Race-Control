@@ -12,7 +12,7 @@ import racecontrol.client.extension.raceevent.entries.ContactEventEntry;
 import racecontrol.client.extension.raceevent.entries.RaceEventEntry;
 import racecontrol.client.extension.raceevent.entries.VSCViolationEventEntry;
 import racecontrol.gui.app.racecontrol.virtualsafetycar.VirtualSafetyCarConfigController;
-import racecontrol.client.data.CarInfo;
+import racecontrol.client.protocol.CarInfo;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;

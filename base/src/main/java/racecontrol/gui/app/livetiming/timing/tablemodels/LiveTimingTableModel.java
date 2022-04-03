@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
-import static racecontrol.client.data.enums.SessionType.RACE;
+import static racecontrol.client.protocol.enums.SessionType.RACE;
 import static racecontrol.client.extension.statistics.CarStatistics.BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_LEADER;
 import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_POSITION_AHEAD;

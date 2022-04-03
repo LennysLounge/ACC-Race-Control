@@ -6,8 +6,8 @@
 package racecontrol.client.events;
 
 import racecontrol.eventbus.Event;
-import racecontrol.client.data.SessionId;
-import racecontrol.client.data.SessionInfo;
+import racecontrol.client.protocol.SessionId;
+import racecontrol.client.protocol.SessionInfo;
 
 /**
  *

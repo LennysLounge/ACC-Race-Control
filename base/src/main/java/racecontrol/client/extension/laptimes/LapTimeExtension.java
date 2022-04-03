@@ -5,15 +5,15 @@
  */
 package racecontrol.client.extension.laptimes;
 
-import racecontrol.client.data.SessionId;
+import racecontrol.client.protocol.SessionId;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.data.CarInfo;
-import racecontrol.client.data.LapInfo;
-import racecontrol.client.data.RealtimeInfo;
-import racecontrol.client.data.enums.LapType;
+import racecontrol.client.protocol.CarInfo;
+import racecontrol.client.protocol.LapInfo;
+import racecontrol.client.protocol.RealtimeInfo;
+import racecontrol.client.protocol.enums.LapType;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.utility.TimeUtils;
 import java.io.File;

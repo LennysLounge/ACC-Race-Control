@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import racecontrol.Main;
-import racecontrol.client.data.CarInfo;
+import racecontrol.client.protocol.CarInfo;
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConnection.State.CONNECTING;
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConnection.State.OFFLINE;
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConnection.State.RUNNING;

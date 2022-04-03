@@ -7,7 +7,7 @@ package racecontrol.client.extension.statistics.processors;
 
 import java.util.HashMap;
 import java.util.Map;
-import racecontrol.client.data.RealtimeInfo;
+import racecontrol.client.protocol.RealtimeInfo;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;

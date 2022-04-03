@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import racecontrol.client.data.DriverInfo;
-import racecontrol.client.data.SessionId;
-import racecontrol.client.data.enums.CarLocation;
-import racecontrol.client.data.enums.CarModel;
-import racecontrol.client.data.enums.DriverCategory;
+import racecontrol.client.protocol.DriverInfo;
+import racecontrol.client.protocol.SessionId;
+import racecontrol.client.protocol.enums.CarLocation;
+import racecontrol.client.protocol.enums.CarModel;
+import racecontrol.client.protocol.enums.DriverCategory;
 
 /**
  * Car statistics where the properties are read only.

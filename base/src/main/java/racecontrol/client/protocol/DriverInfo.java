@@ -3,10 +3,10 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.client.data;
+package racecontrol.client.protocol;
 
-import racecontrol.client.data.enums.DriverCategory;
-import racecontrol.client.data.enums.Nationality;
+import racecontrol.client.protocol.enums.DriverCategory;
+import racecontrol.client.protocol.enums.Nationality;
 
 /**
  *

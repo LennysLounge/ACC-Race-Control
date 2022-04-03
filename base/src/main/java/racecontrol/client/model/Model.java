@@ -8,9 +8,9 @@ package racecontrol.client.model;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
-import racecontrol.client.data.SessionId;
-import racecontrol.client.data.TrackInfo;
-import racecontrol.client.data.enums.SessionType;
+import racecontrol.client.protocol.SessionId;
+import racecontrol.client.protocol.TrackInfo;
+import racecontrol.client.protocol.enums.SessionType;
 
 /**
  *

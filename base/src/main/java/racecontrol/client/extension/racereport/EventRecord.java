@@ -5,7 +5,7 @@
  */
 package racecontrol.client.extension.racereport;
 
-import racecontrol.client.data.SessionId;
+import racecontrol.client.protocol.SessionId;
 
 /**
  *

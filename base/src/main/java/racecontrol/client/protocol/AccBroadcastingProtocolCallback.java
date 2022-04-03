@@ -3,13 +3,13 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.client;
+package racecontrol.client.protocol;
 
-import racecontrol.client.data.BroadcastingEvent;
-import racecontrol.client.data.CarInfo;
-import racecontrol.client.data.RealtimeInfo;
-import racecontrol.client.data.SessionInfo;
-import racecontrol.client.data.TrackInfo;
+import racecontrol.client.protocol.BroadcastingEvent;
+import racecontrol.client.protocol.CarInfo;
+import racecontrol.client.protocol.RealtimeInfo;
+import racecontrol.client.protocol.SessionInfo;
+import racecontrol.client.protocol.TrackInfo;
 import java.util.List;
 
 /**
