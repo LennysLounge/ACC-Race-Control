@@ -7,6 +7,7 @@ package racecontrol.client.model;
 
 import java.net.InetAddress;
 import racecontrol.client.data.SessionId;
+import racecontrol.client.data.TrackInfo;
 import racecontrol.client.data.enums.SessionType;
 
 /**
@@ -55,6 +56,10 @@ public class Model {
      * Whether the game is connected or not.
      */
     public boolean gameConnected = false;
+    /**
+     * Track information.
+     */
+    public TrackInfo trackInfo;
 
     /**
      * Creates a deep copy of the model.
@@ -73,6 +78,7 @@ public class Model {
         model.connectionId = connectionId;
         model.readOnly = readOnly;
         model.gameConnected = gameConnected;
+        model.trackInfo = trackInfo;
         return model;
     }
 }

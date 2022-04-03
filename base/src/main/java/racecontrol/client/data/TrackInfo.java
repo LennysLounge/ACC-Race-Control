@@ -5,6 +5,8 @@
  */
 package racecontrol.client.data;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,11 +48,11 @@ public class TrackInfo {
     }
 
     public Map<String, List<String>> getCameraSets() {
-        return cameraSets;
+        return Collections.unmodifiableMap(cameraSets);
     }
 
     public List<String> getHudPages() {
-        return hudPages;
+        return Collections.unmodifiableList(hudPages);
     }
 
 }

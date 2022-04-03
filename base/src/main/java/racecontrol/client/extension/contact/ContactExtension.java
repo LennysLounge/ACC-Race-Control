@@ -346,7 +346,7 @@ public class ContactExtension
         CarInfo closestCar = closestCarO.get();
         // log 
         if (closestCar != null) {
-            int trackMeters = CLIENT.getBroadcastingData().getTrackInfo().getTrackMeters();
+            int trackMeters = CLIENT.getModel().trackInfo.getTrackMeters();
             float distance = (closestCar.getRealtime().getSplinePosition()
                     - subject.getSplinePosition()) * trackMeters;
             LOG.info(String.format("Contact: ?%s\t\t%.2fm\t%s",
@@ -478,7 +478,7 @@ public class ContactExtension
         }
 
         float distance = getDistance(info.getClosestCar().getRealtime(),
-                info.getFlaggedCar().getRealtime()) * CLIENT.getBroadcastingData().getTrackInfo().getTrackMeters();
+                info.getFlaggedCar().getRealtime()) * CLIENT.getModel().trackInfo.getTrackMeters();
         if (Math.abs(distance) > YELLOW_FLAG_DISTANCE_THRESHOLD) {
             return false;
         }
@@ -487,7 +487,7 @@ public class ContactExtension
     }
 
     private void logYellowFlagContactInfo(YellowFlagContactInfo info) {
-        int trackMeters = CLIENT.getBroadcastingData().getTrackInfo().getTrackMeters();
+        int trackMeters = CLIENT.getModel().trackInfo.getTrackMeters();
         LOG.info(String.format("\t\t%s\t%.2fm",
                 info.getClosestCar().getCarNumberString(),
                 getDistance(info.getClosestCar().getRealtime(),

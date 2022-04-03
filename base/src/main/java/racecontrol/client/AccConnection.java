@@ -473,7 +473,7 @@ public class AccConnection
 
     @Override
     public void onTrackData(TrackInfo info) {
-        model_old = model_old.withTrackInfo(info);
+        model.trackInfo = info;
         EventBus.publish(new TrackInfoEvent(info));
     }
 
@@ -489,11 +489,6 @@ public class AccConnection
 
     @Override
     public void onBroadcastingEvent(BroadcastingEvent event) {
-        List<BroadcastingEvent> events = new LinkedList<>();
-        events.addAll(model_old.getEvents());
-        events.add(event);
-
-        model_old = model_old.withEvents(events);
         EventBus.publish(new BroadcastingEventEvent(event));
     }
 
