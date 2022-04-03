@@ -5,6 +5,7 @@
  */
 package racecontrol.client.extension.autobroadcast;
 
+import racecontrol.client.model.Car;
 import racecontrol.client.protocol.CarInfo;
 
 /**
@@ -18,7 +19,7 @@ public class Entry {
     /**
      * Car info for this entry.
      */
-    private final CarInfo carInfo;
+    private final Car car;
     /**
      * Proximit rating for this entry. The closer this car is following a car
      * the higher this value is.
@@ -70,16 +71,16 @@ public class Entry {
      */
     private float randomness;
 
-    public Entry(CarInfo carInfo) {
-        this.carInfo = carInfo;
+    public Entry(Car car) {
+        this.car = car;
     }
 
     public float getRating() {
         return 1f * proximity * pack * position * focus;
     }
 
-    public CarInfo getCarInfo() {
-        return carInfo;
+    public Car getCar() {
+        return car;
     }
 
     public float getProximityFront() {
@@ -193,7 +194,5 @@ public class Entry {
     public void setRandomness(float randomness) {
         this.randomness = randomness;
     }
-    
-    
 
 }

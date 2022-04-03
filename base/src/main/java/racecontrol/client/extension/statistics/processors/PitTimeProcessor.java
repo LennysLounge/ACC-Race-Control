@@ -66,8 +66,7 @@ public class PitTimeProcessor
             pitEntryTimestamp.clear();
             pitStationaryTimestamp.clear();
             client.getModel().cars.values().stream()
-                    .map(car -> car.raw)
-                    .map(carInfo -> getCars().get(carInfo.getCarId()))
+                    .map(car -> getCars().get(car.id))
                     .forEach(carStats -> {
                         carStats.put(PITLANE_TIME, 0);
                         carStats.put(PITLANE_TIME_STATIONARY, 0);

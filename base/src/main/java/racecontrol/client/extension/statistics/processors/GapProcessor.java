@@ -87,14 +87,14 @@ public class GapProcessor extends StatisticsProcessor {
         // calculate gaps to position ahead and leader.
         List<Car> cars = client.getModel().cars.values().stream()
                 .sorted((c1, c2) -> {
-                    return getCars().get(c1.raw.getCarId()).get(REALTIME_POSITION)
-                            .compareTo(getCars().get(c2.raw.getCarId()).get(REALTIME_POSITION));
+                    return getCars().get(c1.id).get(REALTIME_POSITION)
+                            .compareTo(getCars().get(c2.id).get(REALTIME_POSITION));
                 })
                 .collect(Collectors.toList());
         float leaderRaceDistance = cars.get(0).realtimeRaw.getLaps()
                 + cars.get(0).realtimeRaw.getSplinePosition();
         int splitLapsBehind = 0;
-        CarStatisticsWritable carStats = getCars().get(cars.get(0).raw.getCarId());
+        CarStatisticsWritable carStats = getCars().get(cars.get(0).id);
         carStats.put(GAP_TO_LEADER, 0);
         carStats.put(GAP_TO_POSITION_AHEAD, Integer.MAX_VALUE);
         carStats.put(LAPS_BEHIND_LEADER, 0);
@@ -108,7 +108,7 @@ public class GapProcessor extends StatisticsProcessor {
                     + cars.get(i).realtimeRaw.getSplinePosition();
             int lapsBehind = (int) Math.floor(leaderRaceDistance - raceDistance);
 
-            carStats = getCars().get(cars.get(i).raw.getCarId());
+            carStats = getCars().get(cars.get(i).id);
             carStats.put(GAP_TO_LEADER, gapToLeader);
             carStats.put(GAP_TO_POSITION_AHEAD, gap);
 
@@ -121,11 +121,11 @@ public class GapProcessor extends StatisticsProcessor {
 
         // gap to position behind
         for (int i = 0; i < cars.size() - 1; i++) {
-            carStats = getCars().get(cars.get(i).raw.getCarId());
+            carStats = getCars().get(cars.get(i).id);
             int gap = (int) gapCalculator.calculateGap(cars.get(i + 1), cars.get(i));
             carStats.put(GAP_TO_POSITION_BEHIND, gap);
         }
-        carStats = getCars().get(cars.get(cars.size() - 1).raw.getCarId());
+        carStats = getCars().get(cars.get(cars.size() - 1).id);
         carStats.put(GAP_TO_POSITION_BEHIND, Integer.MAX_VALUE);
 
         // cap to cars ahead / behind
@@ -136,14 +136,14 @@ public class GapProcessor extends StatisticsProcessor {
             int next = (i == cars.size() - 1) ? 0 : i + 1;
             int gapToCar = (int) gapCalculator.calculateGap(cars.get(i), cars.get(next));
 
-            carStats = getCars().get(cars.get(i).raw.getCarId());
+            carStats = getCars().get(cars.get(i).id);
             carStats.put(GAP_TO_CAR_AHEAD, gapToCar);
         }
         for (int i = 0; i < cars.size(); i++) {
             int prev = (i == 0) ? cars.size() - 1 : i - 1;
             int gapToCar = (int) gapCalculator.calculateGap(cars.get(prev), cars.get(i));
 
-            carStats = getCars().get(cars.get(i).raw.getCarId());
+            carStats = getCars().get(cars.get(i).id);
             carStats.put(GAP_TO_CAR_BEHIND, gapToCar);
         }
 

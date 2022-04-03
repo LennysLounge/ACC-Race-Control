@@ -107,7 +107,7 @@ public class LiveTimingTableController
     private void updateTableModel() {
         List<CarStatistics> cars = client.getModel().cars.values().stream()
                 .filter(car -> !car.realtimeRaw.isDefault())
-                .map(car -> statisticsExtension.getCar(car.raw.getCarId()))
+                .map(car -> statisticsExtension.getCar(car.id))
                 .collect(Collectors.toList());
 
         model.setEntries(cars);

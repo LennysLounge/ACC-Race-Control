@@ -130,7 +130,7 @@ public class Hotkeys {
     private void moveFocusRelative(int direction) {
         Model model = client.getModel();
         int focusedCarIndex = model.session.raw.getFocusedCarIndex();
-        CarInfo focusedCar = model.cars.get(focusedCarIndex).raw;
+        Car focusedCar = model.cars.get(focusedCarIndex);
 
         List<Car> cars = model.cars.values().stream()
                 .sorted((c1, c2) -> compareSplinePos(c1, c2))
@@ -143,13 +143,13 @@ public class Hotkeys {
         if (target >= cars.size()) {
             target = 0;
         }
-        client.sendChangeFocusRequest(cars.get(target).raw.getCarId());
+        client.sendChangeFocusRequest(cars.get(target).id);
     }
 
     private void moveFocusAbsolute(int direction) {
         Model model = client.getModel();
         int focusedCarIndex = model.session.raw.getFocusedCarIndex();
-        CarInfo focusedCar = model.cars.get(focusedCarIndex).raw;
+        Car focusedCar = model.cars.get(focusedCarIndex);
 
         List<Car> cars = model.cars.values().stream()
                 .sorted((c1, c2) -> c2.realtimeRaw.getPosition() - c1.realtimeRaw.getPosition())
@@ -162,7 +162,7 @@ public class Hotkeys {
         if (target >= cars.size()) {
             target = 0;
         }
-        client.sendChangeFocusRequest(cars.get(target).raw.getCarId());
+        client.sendChangeFocusRequest(cars.get(target).id);
     }
 
     private int compareSplinePos(Car c1, Car c2) {

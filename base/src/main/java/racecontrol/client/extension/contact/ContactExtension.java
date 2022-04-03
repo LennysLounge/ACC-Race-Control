@@ -276,7 +276,7 @@ public class ContactExtension extends ClientExtension
 
         // use realtime data from history
         car.realtimeRaw = history.get(sessionTime)
-                .getOrDefault(car.raw.getCarId(), car.realtimeRaw);
+                .getOrDefault(car.id, car.realtimeRaw);
 
         if (stagedContact != null) {
             stagedContact = stagedContact.withCar(sessionTime, car);
@@ -307,8 +307,7 @@ public class ContactExtension extends ClientExtension
 
         String logMessage = String.format("Contact: %10s\t%s\t%s",
                 contact.getCars().stream()
-                        .map(car -> car.raw)
-                        .map(car -> car.getCarNumberString())
+                        .map(car -> car.carNumberString())
                         .collect(Collectors.joining(", ")),
                 TimeUtils.asDuration(contact.getSessionEarliestTime()),
                 TimeUtils.asDuration(contact.getReplayTime()));
@@ -327,7 +326,7 @@ public class ContactExtension extends ClientExtension
         Map<Integer, RealtimeInfo> h = history.get(time);
 
         // find other car with the smallest distance
-        int subjectId = contact.getCars().get(0).raw.getCarId();
+        int subjectId = contact.getCars().get(0).id;
         RealtimeInfo subject = h.get(subjectId);
         Optional<Car> closestCarO = h.values().stream()
                 .filter(r -> r.getCarId() != subject.getCarId())
@@ -353,7 +352,7 @@ public class ContactExtension extends ClientExtension
             float distance = (closestCar.realtimeRaw.getSplinePosition()
                     - subject.getSplinePosition()) * trackMeters;
             LOG.info(String.format("Contact: ?%s\t\t%.2fm\t%s",
-                    closestCar.raw.getCarNumberString(),
+                    closestCar.carNumberString(),
                     distance,
                     TimeUtils.asDuration(time)
             ));
@@ -369,7 +368,7 @@ public class ContactExtension extends ClientExtension
 
         Map<Integer, Car> carsInvolved = info.getCars().stream()
                 .collect(Collectors.toMap(
-                        car -> car.raw.getCarId(), car -> car
+                        car -> car.id, car -> car
                 ));
 
         // find yellow flags that are within range of this collision
@@ -380,13 +379,13 @@ public class ContactExtension extends ClientExtension
             int dt = yellow.getSessionTime() - time;
             if (dt > -1000
                     && dt < 5000
-                    && carsInvolved.containsKey(yellow.getFlaggedCar().raw.getCarId())) {
+                    && carsInvolved.containsKey(yellow.getFlaggedCar().id)) {
 
                 // removed matched event from list
                 iter.remove();
-                yellowFlaggedCars.add(yellow.getFlaggedCar().raw.getCarId());
+                yellowFlaggedCars.add(yellow.getFlaggedCar().id);
                 LOG.info("\tmatched flag nr." + yellow.getYellowFlagEventId()
-                        + "\t" + yellow.getFlaggedCar().raw.getCarNumberString()
+                        + "\t" + yellow.getFlaggedCar().carNumberString()
                         + "\t" + TimeUtils.asDelta(dt) + "s"
                 );
                 logYellowFlagContactInfo(yellow);
@@ -400,12 +399,12 @@ public class ContactExtension extends ClientExtension
         String cars = info.isGameContact() ? "" : "possible\n";
         cars += info.getCars().stream()
                 .map(car -> {
-                    CarStatistics stats = STATISTICS_EXTENSION.getCar(car.raw.getCarId());
-                    String carNumber = String.valueOf(car.raw.getCarNumber());
+                    CarStatistics stats = STATISTICS_EXTENSION.getCar(car.id);
+                    String carNumber = String.valueOf(car.carNumber);
                     String lap = String.valueOf(stats.get(SESSION_FINISHED) ? "F" : (stats.get(LAP_COUNT) + 1));
                     boolean isInvalid = car.realtimeRaw.getCurrentLap().isInvalid()
                             && info.getSessionID().getType() != RACE;
-                    boolean isSpun = info.getYellowFlaggedCars().contains(car.raw.getCarId());
+                    boolean isSpun = info.getYellowFlaggedCars().contains(car.id);
                     return String.format("%s%s%s%s",
                             carNumber,
                             sendLapNumber ? ("[" + lap + "]") : "",
@@ -425,7 +424,7 @@ public class ContactExtension extends ClientExtension
         Car flaggedCar = event.getCar();
 
         // skip yellows that happen when a car has finished the race.
-        CarStatistics stats = STATISTICS_EXTENSION.getCar(flaggedCar.raw.getCarId());
+        CarStatistics stats = STATISTICS_EXTENSION.getCar(flaggedCar.id);
         if (stats.get(SESSION_FINISHED)) {
             return;
         }
@@ -433,7 +432,7 @@ public class ContactExtension extends ClientExtension
         // find closest car at the moment the yellow flag was shown.
         Optional<Car> closestCarInstant
                 = getWritableModel().cars.values().stream()
-                        .filter(car -> car.raw.getCarId() != flaggedCar.raw.getCarId())
+                        .filter(car -> car.id != flaggedCar.id)
                         .filter(car -> car.realtimeRaw.getLocation() != CarLocation.NONE)
                         .filter(car -> car.realtimeRaw.getLocation() != CarLocation.PITLANE)
                         .min((c1, c2) -> {
@@ -492,7 +491,7 @@ public class ContactExtension extends ClientExtension
     private void logYellowFlagContactInfo(YellowFlagContactInfo info) {
         int trackMeters = getWritableModel().trackInfo.getTrackMeters();
         LOG.info(String.format("\t\t%s\t%.2fm",
-                info.getClosestCar().raw.getCarNumberString(),
+                info.getClosestCar().carNumberString(),
                 getDistance(info.getClosestCar().realtimeRaw,
                         info.getFlaggedCar().realtimeRaw) * trackMeters
         ));
@@ -505,12 +504,12 @@ public class ContactExtension extends ClientExtension
                 getWritableModel().currentSessionId)
                 .withCar(info.getSessionTime(), info.getFlaggedCar())
                 .withCar(info.getSessionTime(), info.getClosestCar())
-                .withYellowFlaggedCars(Arrays.asList(info.getFlaggedCar().raw.getCarId()))
+                .withYellowFlaggedCars(Arrays.asList(info.getFlaggedCar().id))
                 .withIsGameContact(false);
 
         LOG.info(String.format("Possible contact for yellow nr.%s",
                 info.getYellowFlagEventId()));
-        LOG.info(String.format("\t\t%s\t-", info.getFlaggedCar().raw.getCarNumberString()));
+        LOG.info(String.format("\t\t%s\t-", info.getFlaggedCar().carNumberString()));
         logYellowFlagContactInfo(info);
         commitContact(contact);
     }

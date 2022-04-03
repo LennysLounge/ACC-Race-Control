@@ -72,10 +72,10 @@ public class ContactEventEntry
         List<Car> cars = entry.incident.getCars();
         float x = 0;
         for (Car car : cars) {
-            String carNumber = String.valueOf(car.raw.getCarNumber());
+            String carNumber = String.valueOf(car.carNumber);
             int background_color = 0;
             int text_color = 0;
-            switch (car.raw.getDriver().getCategory()) {
+            switch (car.getDriver().getCategory()) {
                 case BRONZE:
                     background_color = LookAndFeel.COLOR_RED;
                     text_color = LookAndFeel.COLOR_BLACK;
@@ -95,7 +95,7 @@ public class ContactEventEntry
             applet.fill(background_color);
             applet.rect(x + 1, 1, w - 2, context.height - 2);
 
-            if (isCarConnected(car.raw.getCarId())) {
+            if (isCarConnected(car.id)) {
                 //draw outline if the mouse if over this car
                 if (context.isMouseOverColumn
                         && context.isMouseOverRow
@@ -110,7 +110,7 @@ public class ContactEventEntry
             }
 
             //render GT4 / Cup / Super trofeo corners.
-            CarCategory cat = car.raw.getCarModel().getCategory();
+            CarCategory cat = car.carModel.getCategory();
             if (cat != GT3) {
                 applet.fill(COLOR_WHITE);
                 applet.beginShape();
@@ -142,7 +142,7 @@ public class ContactEventEntry
             applet.text(String.valueOf(carNumber), x + w / 2, context.height / 2f);
 
             //Draw car number darker if this car is not connected.
-            if (!isCarConnected(car.raw.getCarId())) {
+            if (!isCarConnected(car.id)) {
                 applet.fill(0, 0, 0, 150);
                 applet.rect(x + 1, 1, w - 2, context.height - 2);
             }
@@ -166,7 +166,7 @@ public class ContactEventEntry
         //Car column clicked
         int index = (int) (x / (LINE_HEIGHT * 1.25f));
         if (index < incident.getCars().size()) {
-            client.sendChangeFocusRequest(incident.getCars().get(index).raw.getCarId());
+            client.sendChangeFocusRequest(incident.getCars().get(index).id);
         }
     }
 
@@ -177,7 +177,7 @@ public class ContactEventEntry
     @Override
     public String getInfo() {
         return incident.getCars().stream()
-                .map(car -> "#" + car.raw.getCarNumber())
+                .map(car -> "#" + car.carNumber)
                 .collect(Collectors.joining(", "));
     }
 }

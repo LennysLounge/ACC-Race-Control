@@ -295,7 +295,7 @@ public class DangerDetectionExtension extends ClientExtension
                 int sessionTime = info.getSessionTime();
                 int replayTime = ReplayOffsetExtension.getInstance().getReplayTimeFromSessionTime(sessionTime);
                 String logMessage = "Yellow Flag nr." + idCounter + " :"
-                        + getWritableModel().cars.get(carId).raw.getCarNumberString()
+                        + getWritableModel().cars.get(carId).carNumberString()
                         + "\t" + TimeUtils.asDuration(sessionTime)
                         + "\t" + TimeUtils.asDuration(replayTime)
                         + "\t";

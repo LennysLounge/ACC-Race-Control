@@ -10,7 +10,6 @@ import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.protocol.CarInfo;
 import racecontrol.client.protocol.LapInfo;
 import racecontrol.client.protocol.RealtimeInfo;
 import racecontrol.client.protocol.enums.LapType;
@@ -129,19 +128,19 @@ public class LapTimeExtension extends ClientExtension
         boolean isFirstLap = lapCount.get(lap.getCarId()) == 1;
         int lapNr = lapCount.get(lap.getCarId());
 
-        if (!laps.containsKey(car.raw.getCarId())) {
-            laps.put(car.raw.getCarId(), new LinkedList<>());
-            rows.put(car.raw.getCarId(), rowCounter++);
+        if (!laps.containsKey(car.id)) {
+            laps.put(car.id, new LinkedList<>());
+            rows.put(car.id, rowCounter++);
         }
 
         if (!isFirstLap && lap.getType() == LapType.REGULAR) {
-            laps.get(car.raw.getCarId()).add(lap.getLapTimeMS());
+            laps.get(car.id).add(lap.getLapTimeMS());
             if (isLoggingEnabled) {
                 printLapToFile();
             }
         }
 
-        String message = "Lap completed: " + car.raw.getCarNumberString()
+        String message = "Lap completed: " + car.carNumberString()
                 + "\t" + TimeUtils.asLapTime(lap.getLapTimeMS()) + "\t";
         if (isFirstLap) {
             message += "[Lap 1]";
@@ -169,8 +168,8 @@ public class LapTimeExtension extends ClientExtension
         try ( PrintWriter writer = new PrintWriter(logFile)) {
 
             for (Entry<Integer, List<Integer>> entry : laps.entrySet()) {
-                CarInfo car = getWritableModel().cars.get(entry.getKey()).raw;
-                writer.print(car.getCarNumber());
+                Car car = getWritableModel().cars.get(entry.getKey());
+                writer.print(car.carNumber);
                 writer.print("," + car.getDriver().getFirstName() + " " + car.getDriver().getLastName());
                 for (int lap : entry.getValue()) {
                     writer.print("," + lap);

@@ -25,6 +25,7 @@ import racecontrol.client.protocol.CarInfo;
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConnection.State.CONNECTING;
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConnection.State.OFFLINE;
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConnection.State.RUNNING;
+import racecontrol.client.model.Car;
 import racecontrol.eventbus.EventBus;
 import racecontrol.utility.TimeUtils;
 
@@ -148,13 +149,13 @@ public class GoogleSheetsConnection {
         }
     }
 
-    public void sendCarConnection(CarInfo car) {
+    public void sendCarConnection(Car car) {
         if (state == RUNNING || state == CONNECTING) {
             sendCarsConnection(Arrays.asList(car));
         }
     }
 
-    public void sendCarsConnection(List<CarInfo> cars) {
+    public void sendCarsConnection(List<Car> cars) {
         if (state == RUNNING || state == CONNECTING) {
             queue.add(new SendCarConnectedEvent(cars));
         }
@@ -251,10 +252,10 @@ public class GoogleSheetsConnection {
         // add new cars and update car number if they changed.
         event.carsConnected.stream()
                 .forEach(car -> {
-                    String name = car.getDrivers().stream()
+                    String name = car.drivers.stream()
                             .map(driver -> driver.getFirstName() + " " + driver.getLastName())
                             .collect(Collectors.joining("\n"));
-                    entries.put(name, car.getCarNumber());
+                    entries.put(name, car.carNumber);
                 });
 
         // sort based on car number and translate convert to row column lists.
@@ -290,9 +291,9 @@ public class GoogleSheetsConnection {
 
     public static class SendCarConnectedEvent {
 
-        public final List<CarInfo> carsConnected;
+        public final List<Car> carsConnected;
 
-        public SendCarConnectedEvent(List<CarInfo> carsConnected) {
+        public SendCarConnectedEvent(List<Car> carsConnected) {
             this.carsConnected = new LinkedList<>(carsConnected);
         }
     }

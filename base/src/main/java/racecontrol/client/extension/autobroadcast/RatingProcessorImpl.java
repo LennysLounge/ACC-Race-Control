@@ -57,11 +57,10 @@ public class RatingProcessorImpl
     @Override
     public Entry calculateRating(Entry entry) {
         CarStatistics stats = StatisticsExtension.getInstance()
-                .getCar(entry.getCarInfo().getCarId());
+                .getCar(entry.getCar().id);
         // sort cars by their race position from first to last.
         List<CarStatistics> carsSorted = getClient().getModel().cars.values().stream()
-                .map(car -> car.raw)
-                .map(carInfo -> StatisticsExtension.getInstance().getCar(carInfo.getCarId()))
+                .map(car -> StatisticsExtension.getInstance().getCar(car.id))
                 .sorted((c1, c2) -> Float.compare(c1.get(REALTIME_POSITION), c2.get(REALTIME_POSITION)))
                 .collect(Collectors.toList());
         int index = stats.get(REALTIME_POSITION) - 1;

@@ -89,8 +89,7 @@ public class SectorTimesProcessor
             s1Avg.clear();
             s2Avg.clear();
             getClient().getModel().cars.values().stream()
-                    .map(car -> car.raw)
-                    .map(carInfo -> getCars().get(carInfo.getCarId()))
+                    .map(car -> getCars().get(car.id))
                     .forEach(carStat -> {
                         carStat.put(CURRENT_SECTOR_ONE_CALC, 0);
                         carStat.put(CURRENT_SECTOR_TWO_CALC, 0);
@@ -144,7 +143,7 @@ public class SectorTimesProcessor
     }
 
     private void onLapCompleted(Car car) {
-        CarStatisticsWritable carStats = getCars().get(car.raw.getCarId());
+        CarStatisticsWritable carStats = getCars().get(car.id);
         int lapTime = car.realtimeRaw.getLastLap().getLapTimeMS();
         int s3Time = lapTime - carStats.get(CURRENT_SECTOR_ONE_CALC) - carStats.get(CURRENT_SECTOR_TWO_CALC);
         carStats.put(CURRENT_SECTOR_THREE_CALC, s3Time);
@@ -194,12 +193,12 @@ public class SectorTimesProcessor
 
     private void debugLog(Car car) {
         if (trackData != null) {
-            CarStatisticsWritable carStats = getCars().get(car.raw.getCarId());
+            CarStatisticsWritable carStats = getCars().get(car.id);
             LapInfo lastLap = car.realtimeRaw.getLastLap();
             // Sector suggestions.
-            if (sectorSuggestions.containsKey(car.raw.getCarId())) {
+            if (sectorSuggestions.containsKey(car.id)) {
                 int s1Time = lastLap.getSplits().get(0);
-                for (Tuple t : sectorSuggestions.get(car.raw.getCarId())) {
+                for (Tuple t : sectorSuggestions.get(car.id)) {
                     if (t.time > s1Time) {
                         LOG.info(String.format("S1 suggestion: %.7f\t%s",
                                 t.splinePos,
@@ -209,7 +208,7 @@ public class SectorTimesProcessor
                     }
                 }
                 int s2Time = lastLap.getSplits().get(1) + s1Time;
-                for (Tuple t : sectorSuggestions.get(car.raw.getCarId())) {
+                for (Tuple t : sectorSuggestions.get(car.id)) {
                     if (t.time > s2Time) {
                         LOG.info(String.format("S2 suggestion: %.7f\t%s",
                                 t.splinePos,
@@ -218,7 +217,7 @@ public class SectorTimesProcessor
                         break;
                     }
                 }
-                sectorSuggestions.get(car.raw.getCarId()).clear();
+                sectorSuggestions.get(car.id).clear();
             }
 
             int s1Diff = carStats.get(CURRENT_SECTOR_ONE_CALC) - lastLap.getSplits().get(0);

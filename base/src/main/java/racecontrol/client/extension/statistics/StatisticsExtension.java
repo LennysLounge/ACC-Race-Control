@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import racecontrol.client.protocol.CarInfo;
 import racecontrol.client.events.CarConnectedEvent;
 import racecontrol.client.extension.statistics.processors.DataProcessor;
 import racecontrol.client.extension.statistics.processors.GapProcessor;
@@ -26,6 +25,7 @@ import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.ClientExtension;
 import racecontrol.client.extension.statistics.processors.FlagProcessor;
+import racecontrol.client.model.Car;
 
 /**
  * Gathers data and statistics for the cars.
@@ -79,8 +79,8 @@ public class StatisticsExtension extends ClientExtension
     @Override
     public void onEvent(Event e) {
         if (e instanceof CarConnectedEvent) {
-            CarInfo car = ((CarConnectedEvent) e).getCar();
-            cars.put(car.getCarId(), new CarStatisticsWritable());
+            Car car = ((CarConnectedEvent) e).getCar();
+            cars.put(car.id, new CarStatisticsWritable());
         }
 
         processors.forEach(processor -> processor.onEvent(e));

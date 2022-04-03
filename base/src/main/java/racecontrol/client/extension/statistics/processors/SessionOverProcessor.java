@@ -65,7 +65,7 @@ public class SessionOverProcessor
 
         // when the session is over we set the finished flag for the car.
         if (isSessionOver) {
-            getCars().get(car.raw.getCarId()).put(SESSION_FINISHED, true);
+            getCars().get(car.id).put(SESSION_FINISHED, true);
         }
     }
 

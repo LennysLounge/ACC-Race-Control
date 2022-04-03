@@ -86,18 +86,18 @@ public class RaceReportExtension extends ClientExtension
 
     private void onLapCompleted(LapCompletedEvent e) {
         // add a driver record if one does not exist.
-        if (!sessions.get(sessionId).containsKey(e.getCar().raw.getCarId())) {
-            String driverName = e.getCar().raw.getDrivers().stream()
+        if (!sessions.get(sessionId).containsKey(e.getCar().id)) {
+            String driverName = e.getCar().drivers.stream()
                     .map(driverInfo -> driverInfo.getFirstName() + " " + driverInfo.getLastName())
                     .collect(Collectors.joining(", "));
-            sessions.get(sessionId).put(e.getCar().raw.getCarId(),
+            sessions.get(sessionId).put(e.getCar().id,
                     new DriverRecord(
                             driverName,
-                            String.valueOf(e.getCar().raw.getCarNumber())
+                            String.valueOf(e.getCar().carNumber)
                     )
             );
         }
-        DriverRecord dr = sessions.get(sessionId).get(e.getCar().raw.getCarId());
+        DriverRecord dr = sessions.get(sessionId).get(e.getCar().id);
 
         //set position and lap count
         dr.setPosition(e.getCar().realtimeRaw.getPosition());

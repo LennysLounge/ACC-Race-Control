@@ -16,7 +16,7 @@ import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.ClientExtension;
-import racecontrol.client.protocol.CarInfo;
+import racecontrol.client.model.Car;
 
 /**
  *
@@ -75,10 +75,10 @@ public class AutobroadcastExtension extends ClientExtension
         updateRatings();
 
         if (entries.size() > 0 && enabled) {
-            CarInfo focus = entries.get(0).getCarInfo();
-            if (info.getFocusedCarIndex() != focus.getCarId()) {
-                client.sendSetCameraRequestWithFocus(focus.getCarId(), "setVR", "-");
-                LOG.info("Chaning focus to " + focus.getCarNumberString() + " with rating: " + entries.get(0).getRating());
+            Car focus = entries.get(0).getCar();
+            if (info.getFocusedCarIndex() != focus.id) {
+                client.sendSetCameraRequestWithFocus(focus.id, "setVR", "-");
+                LOG.info("Chaning focus to " + focus.carNumberString() + " with rating: " + entries.get(0).getRating());
             }
         }
     }
@@ -86,7 +86,7 @@ public class AutobroadcastExtension extends ClientExtension
     private void updateRatings() {
         entries = getWritableModel().cars.values().stream()
                 .map(car -> {
-                    Entry entry = new Entry(car.raw);
+                    Entry entry = new Entry(car);
                     for (RatingProcessor p : processors) {
                         entry = p.calculateRating(entry);
                     }

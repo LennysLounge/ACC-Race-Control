@@ -91,7 +91,7 @@ public class AutobroadcastController
             return;
         }
         client.sendChangeFocusRequest(
-                ((Entry) tableModel.getEntryNew(row)).getCarInfo().getCarId());
+                ((Entry) tableModel.getEntryNew(row)).getCar().id);
     }
 
     private void enableCheckboxChanged(boolean state) {

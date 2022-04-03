@@ -5,8 +5,8 @@
  */
 package racecontrol.client.events;
 
+import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
-import racecontrol.client.protocol.CarInfo;
 
 /**
  *
@@ -14,13 +14,13 @@ import racecontrol.client.protocol.CarInfo;
  */
 public class CarDisconnectedEvent extends Event {
 
-    private CarInfo car;
+    private Car car;
 
-    public CarDisconnectedEvent(CarInfo car) {
+    public CarDisconnectedEvent(Car car) {
         this.car = car;
     }
 
-    public CarInfo getCar() {
+    public Car getCar() {
         return car;
     }
 

@@ -14,7 +14,6 @@ import java.util.Set;
 import racecontrol.client.protocol.SessionId;
 import racecontrol.client.events.SessionPhaseChangedEvent;
 import racecontrol.eventbus.Event;
-import racecontrol.client.protocol.CarInfo;
 import racecontrol.client.protocol.SessionInfo;
 import racecontrol.client.protocol.enums.SessionPhase;
 import racecontrol.client.protocol.enums.SessionType;
@@ -30,6 +29,7 @@ import racecontrol.logging.UILogger;
 import racecontrol.client.ClientExtension;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsConnection.State;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
+import racecontrol.client.model.Car;
 
 /**
  *
@@ -94,7 +94,6 @@ public class GoogleSheetsAPIExtension extends ClientExtension
     public void start(GoogleSheetsConfiguration config) {
         connection.start(config);
         connection.sendCarsConnection(getWritableModel().cars.values().stream()
-                .map(car -> car.raw)
                 .collect(Collectors.toList())
         );
     }
@@ -177,7 +176,7 @@ public class GoogleSheetsAPIExtension extends ClientExtension
         return "";
     }
 
-    private void updateCarsConnected(CarInfo car) {
+    private void updateCarsConnected(Car car) {
         connection.sendCarConnection(car);
     }
 

@@ -73,16 +73,16 @@ public class OvertakeProcessor
                 return;
             }
 
-            CarStatisticsWritable stats = getCars().get(car.raw.getCarId());
+            CarStatisticsWritable stats = getCars().get(car.id);
 
-            if (prevPositions.containsKey(car.raw.getCarId())) {
-                int diff = stats.get(REALTIME_POSITION) - prevPositions.get(car.raw.getCarId());
+            if (prevPositions.containsKey(car.id)) {
+                int diff = stats.get(REALTIME_POSITION) - prevPositions.get(car.id);
                 if (diff != 0) {
                     stats.put(OVERTAKE_INDICATOR, diff);
-                    timestamps.put(car.raw.getCarId(), System.currentTimeMillis());
+                    timestamps.put(car.id, System.currentTimeMillis());
                 }
             }
-            prevPositions.put(car.raw.getCarId(), stats.get(REALTIME_POSITION));
+            prevPositions.put(car.id, stats.get(REALTIME_POSITION));
         }
     }
 

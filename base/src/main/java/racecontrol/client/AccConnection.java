@@ -49,6 +49,7 @@ import racecontrol.client.events.SessionPhaseChangedEvent;
 import racecontrol.client.events.TrackInfoEvent;
 import racecontrol.client.model.Car;
 import racecontrol.client.model.Model;
+import racecontrol.client.protocol.enums.Nationality;
 import racecontrol.eventbus.EventBus;
 import racecontrol.logging.UILogger;
 
@@ -394,7 +395,7 @@ public class AccConnection
 
         //increase misses for cars that did not update
         model.cars.values().stream()
-                .map(carModel -> carModel.raw.getCarId())
+                .map(car -> car.id)
                 .filter(carId -> !realtimeUpdatesReceived.contains(carId))
                 .forEach(carId -> {
                     missedRealtimeUpdates.put(carId, missedRealtimeUpdates.getOrDefault(carId, 0) + 1);
@@ -407,7 +408,7 @@ public class AccConnection
         while (iter.hasNext()) {
             Map.Entry<Integer, Integer> entry = iter.next();
             if (entry.getValue() >= maximumRealtimeMisses) {
-                onCarDisconnect(model.cars.get(entry.getKey()).raw);
+                onCarDisconnect(model.cars.get(entry.getKey()));
                 iter.remove();
             }
         }
@@ -464,7 +465,21 @@ public class AccConnection
     public void onEntryListCarUpdate(CarInfo carInfo) {
         //Fire Car connection event if the car is new.
         if (newConnectedCars.contains(carInfo.getCarId())) {
-            onCarConnect(carInfo);
+            //add car to the model.
+            Car car = model.cars.get(carInfo.getCarId());
+            car.id = carInfo.getCarId();
+            car.carModel = carInfo.getCarModel();
+            car.teamName = carInfo.getTeamName();
+            car.carNumber = carInfo.getCarNumber();
+            car.cupCategory = carInfo.getCupCatergory();
+            car.driverIndex = carInfo.getCurrentDriverIndex();
+            car.nationality = Nationality.fromId(carInfo.getCarNationality());
+            car.drivers = carInfo.getDrivers();
+
+            String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
+            LOG.info("Car connected: " + car.carNumberString() + "\t" + name);
+            UILogger.log("Car connected: " + car.carNumberString() + "\t" + name);
+            EventBus.publish(new CarConnectedEvent(car));
             newConnectedCars.remove(Integer.valueOf(carInfo.getCarId()));
         }
         EventBus.publish(new EntryListCarUpdateEvent(carInfo));
@@ -499,24 +514,14 @@ public class AccConnection
         EventBus.publish(new SessionPhaseChangedEvent(correctedSessionInfo, init));
     }
 
-    private void onCarDisconnect(CarInfo car) {
+    private void onCarDisconnect(Car car) {
         //remove car from the model.
         // TODO: mark car as disconnected.
-        
+
         String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
-        LOG.info("Car disconnected: " + car.getCarNumberString() + "\t" + name);
-        UILogger.log("Car disconnected: " + car.getCarNumberString() + "\t" + name);
+        LOG.info("Car disconnected: " + car.carNumberString() + "\t" + name);
+        UILogger.log("Car disconnected: " + car.carNumberString() + "\t" + name);
         EventBus.publish(new CarDisconnectedEvent(car));
-    }
-
-    private void onCarConnect(CarInfo car) {
-        //add car to the model.
-        model.cars.get(car.getCarId()).raw = car;
-
-        String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
-        LOG.info("Car connected: " + car.getCarNumberString() + "\t" + name);
-        UILogger.log("Car connected: " + car.getCarNumberString() + "\t" + name);
-        EventBus.publish(new CarConnectedEvent(car));
     }
 
     /**

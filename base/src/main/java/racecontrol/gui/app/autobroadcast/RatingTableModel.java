@@ -52,7 +52,7 @@ public class RatingTableModel
     public Object getValueAt(int column, int row) {
         Entry entry = entriesNew.get(row);
         if (column <= 3) {
-            return statistics.getCar(entry.getCarInfo().getCarId());
+            return statistics.getCar(entry.getCar().id);
         }
         return entry;
     }
@@ -69,8 +69,8 @@ public class RatingTableModel
     public void sortPosition() {
         entriesNew = entriesNew.stream()
                 .sorted((c1, c2) -> {
-                    var c1Stat = statistics.getCar(c1.getCarInfo().getCarId());
-                    var c2Stat = statistics.getCar(c2.getCarInfo().getCarId());
+                    var c1Stat = statistics.getCar(c1.getCar().id);
+                    var c2Stat = statistics.getCar(c2.getCar().id);
                     return c1Stat.get(REALTIME_POSITION).compareTo(c2Stat.get(REALTIME_POSITION));
                 })
                 .collect(toList());

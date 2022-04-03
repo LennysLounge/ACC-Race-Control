@@ -18,6 +18,7 @@ import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.client.extension.vsc.events.VSCViolationEvent;
 import racecontrol.client.AccBroadcastingClient;
+import racecontrol.client.model.Car;
 import racecontrol.client.protocol.CarInfo;
 import racecontrol.client.protocol.SessionId;
 import racecontrol.client.protocol.enums.CarCategory;
@@ -45,7 +46,7 @@ public class VSCViolationEventEntry
     /**
      * The car info in the violation event.
      */
-    private final CarInfo carInfo;
+    private final Car car;
 
     public VSCViolationEventEntry(
             SessionId sessionId,
@@ -56,7 +57,7 @@ public class VSCViolationEventEntry
         super(sessionId, sessionTime, typeDesciptor, hasReplay);
         this.client = AccBroadcastingClient.getClient();
         this.violation = info;
-        this.carInfo = client.getModel().cars.get(violation.getCarId()).raw;
+        this.car = client.getModel().cars.get(violation.getCarId());
     }
 
     /**
@@ -67,8 +68,8 @@ public class VSCViolationEventEntry
             LPTable.RenderContext context) -> {
         //Draw car number
         VSCViolationEventEntry entry = (VSCViolationEventEntry) context.object;
-        CarInfo car = entry.carInfo;
-        String carNumber = String.valueOf(car.getCarNumber());
+        Car car = entry.car;
+        String carNumber = String.valueOf(car.carNumber);
         int background_color = 0;
         int text_color = 0;
         switch (car.getDriver().getCategory()) {
@@ -91,7 +92,7 @@ public class VSCViolationEventEntry
         applet.fill(background_color);
         applet.rect(1, 1, w - 2, context.height - 2);
 
-        if (isCarConnected(car.getCarId())) {
+        if (isCarConnected(car.id)) {
             //draw outline if the mouse if over this car
             if (context.isMouseOverColumn
                     && context.isMouseOverRow
@@ -106,7 +107,7 @@ public class VSCViolationEventEntry
         }
 
         //render GT4 / Cup / Super trofeo corners.
-        CarCategory cat = car.getCarModel().getCategory();
+        CarCategory cat = car.carModel.getCategory();
         if (cat != GT3) {
             applet.fill(COLOR_WHITE);
             applet.beginShape();
@@ -134,7 +135,7 @@ public class VSCViolationEventEntry
         applet.text(String.valueOf(carNumber), w / 2, context.height / 2f);
 
         //Draw car number darker if this car is not connected.
-        if (!isCarConnected(car.getCarId())) {
+        if (!isCarConnected(car.id)) {
             applet.fill(0, 0, 0, 150);
             applet.rect(1, 1, w - 2, context.height - 2);
         }
@@ -165,7 +166,7 @@ public class VSCViolationEventEntry
      */
     public void onInfoClicked(int x, int y) {
         if (x < LINE_HEIGHT * 1.25f) {
-            client.sendChangeFocusRequest(carInfo.getCarId());
+            client.sendChangeFocusRequest(car.id);
         }
     }
 
@@ -176,7 +177,7 @@ public class VSCViolationEventEntry
 
     @Override
     public String getInfo() {
-        return "#" + carInfo.getCarNumber()
+        return "#" + car.carNumber
                 + String.format(" +%d kmh, +%.1f s",
                         violation.getSpeedOver(),
                         violation.getTimeOver() / 1000);
