@@ -21,7 +21,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import racecontrol.Main;
 import static racecontrol.client.AccBroadcastingClient.getClient;
-import racecontrol.client.data.AccBroadcastingData;
 import racecontrol.client.data.BroadcastingEvent;
 import racecontrol.client.data.CarInfo;
 import racecontrol.client.data.RealtimeInfo;
@@ -130,15 +129,10 @@ public class AccConnection
      * Socket used for the connection.
      */
     private final DatagramSocket socket;
-    /**
-     * Model that holds the data.
-     */
-    private AccBroadcastingData model_old = new AccBroadcastingData();
 
     public AccConnection(Model model) throws SocketException {
         super("ACC connection thread");
         this.model = model;
-        this.model_old = new AccBroadcastingData();
 
         Thread.setDefaultUncaughtExceptionHandler(new Main.UncoughtExceptionHandler());
 
@@ -229,10 +223,6 @@ public class AccConnection
             return true;
         }
         return false;
-    }
-
-    public AccBroadcastingData getBroadcastingData() {
-        return model_old;
     }
 
     /**

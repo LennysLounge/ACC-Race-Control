@@ -5,7 +5,6 @@
  */
 package racecontrol.client;
 
-import racecontrol.client.data.AccBroadcastingData;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -155,18 +154,6 @@ public class AccBroadcastingClient
      */
     public Model getModel() {
         return model.copy();
-    }
-
-    /**
-     * Returns the current model.
-     *
-     * @return The current data model.
-     */
-    public AccBroadcastingData getBroadcastingData() {
-        if (connection != null) {
-            return connection.getBroadcastingData();
-        }
-        return new AccBroadcastingData();
     }
 
     /**
