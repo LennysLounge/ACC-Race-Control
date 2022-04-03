@@ -5,19 +5,14 @@
  */
 package racecontrol.client;
 
-import racecontrol.client.data.SessionId;
 import racecontrol.client.data.AccBroadcastingData;
-import racecontrol.client.data.enums.SessionType;
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+import racecontrol.client.events.ConnectionClosedEvent;
 import racecontrol.client.extension.autobroadcast.AutobroadcastExtension;
 import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.client.extension.dangerdetection.DangerDetectionExtension;
@@ -31,6 +26,9 @@ import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.extension.trackdata.TrackDataExtension;
 import racecontrol.client.extension.vsc.VirtualSafetyCarExtension;
 import racecontrol.client.model.Model;
+import racecontrol.eventbus.Event;
+import racecontrol.eventbus.EventBus;
+import racecontrol.eventbus.EventListener;
 
 /**
  * A basic connection to the broadcasting interface from Assetto Corsa
@@ -38,7 +36,8 @@ import racecontrol.client.model.Model;
  *
  * @author Leonard
  */
-public class AccBroadcastingClient {
+public class AccBroadcastingClient
+        implements EventListener {
 
     /**
      * This class's logger.
@@ -61,7 +60,20 @@ public class AccBroadcastingClient {
      */
     private final List<ClientExtension> extensions = new ArrayList<>();
 
+    /**
+     * Creates and gets a singleton instance of this class.
+     *
+     * @return the singelton instance of this class.
+     */
+    public static AccBroadcastingClient getClient() {
+        if (instance == null) {
+            instance = new AccBroadcastingClient();
+        }
+        return instance;
+    }
+
     private AccBroadcastingClient() {
+        EventBus.register(this);
     }
 
     public void initialise() {
@@ -83,16 +95,11 @@ public class AccBroadcastingClient {
         extensions.add(StatisticsExtension.getInstance());
     }
 
-    /**
-     * Creates and gets a singleton instance of this class.
-     *
-     * @return the singelton instance of this class.
-     */
-    public static AccBroadcastingClient getClient() {
-        if (instance == null) {
-            instance = new AccBroadcastingClient();
+    @Override
+    public void onEvent(Event e) {
+        if (e instanceof ConnectionClosedEvent) {
+            connection = null;
         }
-        return instance;
     }
 
     /**
@@ -112,6 +119,10 @@ public class AccBroadcastingClient {
             int updateInterval,
             InetAddress hostAddress,
             int hostPort) throws SocketException {
+        if (connection != null) {
+            return;
+        }
+
         model = new Model();
         model.displayName = requireNonNull(displayName, "displayName");
         model.connectionPassword = requireNonNull(connectionPassword, "connectionPassword");
@@ -123,7 +134,7 @@ public class AccBroadcastingClient {
         model.hostAddress = requireNonNull(hostAddress, "hostAddress");
         model.hostPort = requireNonNull(hostPort, "hostPort");
 
-        connection = new AccConnection("ACC listener thread", model);
+        connection = new AccConnection(model);
         connection.start();
     }
 
@@ -131,8 +142,8 @@ public class AccBroadcastingClient {
         if (connection == null) {
             return;
         }
-        LOG.info("interupting listener");
-        connection.interrupt();
+        LOG.info("Stopping connection thread");
+        connection.close();
     }
 
     /**
@@ -170,53 +181,14 @@ public class AccBroadcastingClient {
     }
 
     /**
-     * Send a register command.
-     *
-     */
-    public void sendRegisterRequest() {
-        sendRequest(AccBroadcastingProtocol.buildRegisterRequest(
-                model.displayName,
-                model.connectionPassword,
-                model.updateInterval,
-                model.commandPassword
-        ));
-    }
-
-    /**
-     * Send unregister command.
-     *
+     * Send unregister request.
      */
     public void sendUnregisterRequest() {
-        if (connection == null) {
+        if (connection != null) {
             return;
         }
-        sendRequest(AccBroadcastingProtocol.buildUnregisterRequest(model.connectionId
-        ));
-    }
-
-    /**
-     * Send a request for the current entry list.
-     *
-     */
-    public void sendEntryListRequest() {
-        if (connection == null) {
-            return;
-        }
-        connection.setLastTimeEntryListRequest(System.currentTimeMillis());
-        sendRequest(AccBroadcastingProtocol.buildEntryListRequest(model.connectionId
-        ));
-    }
-
-    /**
-     * Send a request for the current track data.
-     *
-     */
-    public void sendTrackDataRequest() {
-        if (connection == null) {
-            return;
-        }
-        sendRequest(AccBroadcastingProtocol.buildTrackDataRequest(model.connectionId
-        ));
+        connection.sendRequest(AccBroadcastingProtocol
+                .buildUnregisterRequest(model.connectionId));
     }
 
     /**
@@ -231,11 +203,12 @@ public class AccBroadcastingClient {
         if (!connection.getBroadcastingData().getCarsInfo().containsKey(carIndex)) {
             return;
         }
-        sendRequest(AccBroadcastingProtocol.buildFocusRequest(model.connectionId,
-                carIndex,
-                connection.getBroadcastingData().getSessionInfo().getActiveCameraSet(),
-                connection.getBroadcastingData().getSessionInfo().getActiveCamera()
-        ));
+        connection.sendRequest(AccBroadcastingProtocol
+                .buildFocusRequest(model.connectionId,
+                        carIndex,
+                        connection.getBroadcastingData().getSessionInfo().getActiveCameraSet(),
+                        connection.getBroadcastingData().getSessionInfo().getActiveCamera()
+                ));
     }
 
     /**
@@ -248,11 +221,12 @@ public class AccBroadcastingClient {
         if (connection == null) {
             return;
         }
-        sendRequest(AccBroadcastingProtocol.buildFocusRequest(model.connectionId,
-                connection.getBroadcastingData().getSessionInfo().getFocusedCarIndex(),
-                camSet,
-                cam
-        ));
+        connection.sendRequest(AccBroadcastingProtocol
+                .buildFocusRequest(model.connectionId,
+                        connection.getBroadcastingData().getSessionInfo().getFocusedCarIndex(),
+                        camSet,
+                        cam
+                ));
     }
 
     /**
@@ -269,11 +243,12 @@ public class AccBroadcastingClient {
         if (!connection.getBroadcastingData().getCarsInfo().containsKey(carIndex)) {
             return;
         }
-        sendRequest(AccBroadcastingProtocol.buildFocusRequest(model.connectionId,
-                carIndex,
-                camSet,
-                cam
-        ));
+        connection.sendRequest(AccBroadcastingProtocol
+                .buildFocusRequest(model.connectionId,
+                        carIndex,
+                        camSet,
+                        cam
+                ));
     }
 
     /**
@@ -285,9 +260,10 @@ public class AccBroadcastingClient {
         if (connection == null) {
             return;
         }
-        sendRequest(AccBroadcastingProtocol.buildHudPageRequest(model.connectionId,
-                page
-        ));
+        connection.sendRequest(AccBroadcastingProtocol
+                .buildHudPageRequest(model.connectionId,
+                        page
+                ));
     }
 
     /**
@@ -301,13 +277,14 @@ public class AccBroadcastingClient {
         if (connection == null) {
             return;
         }
-        sendRequest(AccBroadcastingProtocol.buildInstantReplayRequest(model.connectionId,
-                connection.getBroadcastingData().getSessionInfo().getSessionTime() - (seconds * 1000),
-                duration * 1000,
-                -1,
-                "",
-                ""
-        ));
+        connection.sendRequest(AccBroadcastingProtocol
+                .buildInstantReplayRequest(model.connectionId,
+                        connection.getBroadcastingData().getSessionInfo().getSessionTime() - (seconds * 1000),
+                        duration * 1000,
+                        -1,
+                        "",
+                        ""
+                ));
     }
 
     /**
@@ -329,13 +306,14 @@ public class AccBroadcastingClient {
             return;
         }
         connection.setReplayCamera(carIndex, initialCameraSet, initialCamera);
-        sendRequest(AccBroadcastingProtocol.buildInstantReplayRequest(model.connectionId,
-                sessionTime,
-                duration * 1000,
-                -1,
-                "",
-                ""
-        ));
+        connection.sendRequest(AccBroadcastingProtocol
+                .buildInstantReplayRequest(model.connectionId,
+                        sessionTime,
+                        duration * 1000,
+                        -1,
+                        "",
+                        ""
+                ));
     }
 
     /**
@@ -345,13 +323,6 @@ public class AccBroadcastingClient {
         if (connection == null) {
             return;
         }
-        connection.disconnect();
-    }
-
-    private void sendRequest(byte[] requestBytes) {
-        if (connection == null) {
-            return;
-        }
-        connection.sendRequest(requestBytes);
+        connection.close();
     }
 }

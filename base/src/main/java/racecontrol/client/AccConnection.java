@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.PortUnreachableException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
@@ -128,17 +129,15 @@ public class AccConnection
     /**
      * Socket used for the connection.
      */
-    private DatagramSocket socket;
+    private final DatagramSocket socket;
     /**
      * Model that holds the data.
      */
     private AccBroadcastingData model_old = new AccBroadcastingData();
 
-    public AccConnection(String name,
-            Model model) throws SocketException {
-        super(name);
+    public AccConnection(Model model) throws SocketException {
+        super("ACC connection thread");
         this.model = model;
-        this.socket = socket;
         this.model_old = new AccBroadcastingData();
 
         Thread.setDefaultUncaughtExceptionHandler(new Main.UncoughtExceptionHandler());
@@ -147,45 +146,73 @@ public class AccConnection
         socket = new DatagramSocket();
         socket.setSoTimeout(10000);
         socket.connect(model.hostAddress, model.hostPort);
-
     }
 
     @Override
     public void run() {
         EventBus.publish(new ConnectionOpenedEvent());
         UILogger.log("Connection opened");
-        LOG.info("Starting Listener thread");
-        try {
-            udpListener();
-        } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Error in the listener thread", e);
-            exitState = ExitState.EXCEPTION;
-        } catch (StackOverflowError e) {
-            LOG.log(Level.SEVERE, "Overflow in listener thread", e);
-            exitState = ExitState.EXCEPTION;
+        LOG.info("Starting connection thread");
+
+        // register to the game.
+        sendRequest(AccBroadcastingProtocol.buildRegisterRequest(
+                model.displayName,
+                model.connectionPassword,
+                model.updateInterval,
+                model.commandPassword));
+
+        // start listener loop.
+        while (running) {
+            try {
+                DatagramPacket response = new DatagramPacket(new byte[2048], 2048);
+                socket.receive(response);
+                AccBroadcastingProtocol.processMessage(
+                        new ByteArrayInputStream(response.getData()), this);
+                afterPacketReceived(response.getData()[0]);
+            } catch (SocketTimeoutException e) {
+                LOG.log(Level.WARNING, "Socket timed out.", e);
+                exitState = ExitState.TIMEOUT;
+                running = false;
+            } catch (PortUnreachableException e) {
+                LOG.log(Level.SEVERE, "Socket is unreachable", e);
+                exitState = ExitState.PORT_UNREACHABLE;
+                running = false;
+            } catch (SocketException e) {
+                if (forceExit) {
+                    LOG.info("Socket was closed by user.");
+                    exitState = ExitState.USER;
+                } else {
+                    LOG.log(Level.SEVERE, "Socket closed unexpected.", e);
+                    exitState = ExitState.EXCEPTION;
+                }
+                running = false;
+            } catch (IOException e) {
+                LOG.log(Level.SEVERE, "Error in the listener thread", e);
+                exitState = ExitState.EXCEPTION;
+                running = false;
+            } catch (StackOverflowError e) {
+                LOG.log(Level.SEVERE, "Overflow in listener thread", e);
+                exitState = ExitState.EXCEPTION;
+                running = false;
+            }
         }
+
+        // set game to disconnected
+        model.gameConnected = false;
+
+        // send close connection
         EventBus.publish(new ConnectionClosedEvent(exitState));
         UILogger.log("Connection closed");
-        LOG.info("Listener thread done");
+        LOG.info("Connection thread done");
     }
 
-    @Override
-    public void interrupt() {
+    /**
+     * Interrupts the connection to initiate it to close.
+     */
+    public void close() {
         super.interrupt();
         forceExit = true;
         socket.close();
-    }
-
-    public void setLastTimeEntryListRequest(long t) {
-        lastTimeEntryListRequest = t;
-    }
-
-    public AccBroadcastingData getBroadcastingData() {
-        return model_old;
-    }
-
-    public ExitState getExitState() {
-        return exitState;
     }
 
     /**
@@ -198,20 +225,21 @@ public class AccConnection
         if (socket != null
                 && socket.isConnected()
                 && isAlive()
-                && exitState == AccConnection.ExitState.NONE) {
+                && running) {
             return true;
         }
         return false;
     }
 
-    /**
-     * Disconnect from the game.
-     */
-    public void disconnect() {
-        socket.disconnect();
-        socket.close();
+    public AccBroadcastingData getBroadcastingData() {
+        return model_old;
     }
 
+    /**
+     * Send a request to the game.
+     *
+     * @param requestBytes
+     */
     public void sendRequest(byte[] requestBytes) {
         if (socket.isConnected()) {
             try {
@@ -222,35 +250,58 @@ public class AccConnection
         }
     }
 
-    private void udpListener() {
-        while (running) {
-            try {
-                DatagramPacket response = new DatagramPacket(new byte[2048], 2048);
-                socket.receive(response);
-                AccBroadcastingProtocol.processMessage(
-                        new ByteArrayInputStream(response.getData()), this);
-                afterPacketReceived(response.getData()[0]);
-            } catch (SocketTimeoutException e) {
-                LOG.log(Level.WARNING, "Socket timed out.", e);
-                exitState = ExitState.TIMEOUT;
-                return;
-            } catch (SocketException e) {
-                if (forceExit) {
-                    LOG.info("Socket was closed by user.");
-                    exitState = ExitState.NORMAL;
-                } else {
-                    LOG.log(Level.SEVERE, "Socket closed unexpected.", e);
-                    exitState = ExitState.PORT_UNREACHABLE;
-                }
-                return;
-            } catch (IOException e) {
-                LOG.log(Level.SEVERE, "Error while receiving a response", e);
-                exitState = ExitState.EXCEPTION;
-                return;
-            }
+    /**
+     * Send a register request.
+     */
+    public void sendRegisterRequest() {
+        if (!isConnected()) {
+            return;
+        }
+        sendRequest(AccBroadcastingProtocol.buildRegisterRequest(
+                model.displayName,
+                model.connectionPassword,
+                model.updateInterval,
+                model.commandPassword
+        ));
+    }
+
+    /**
+     * Send unregister request.
+     */
+    public void sendUnregisterRequest() {
+        if (!isConnected()) {
+            return;
+        }
+        sendRequest(AccBroadcastingProtocol.buildUnregisterRequest(model.connectionId));
+    }
+
+    /**
+     * Send a request for the current entry list.
+     */
+    public void sendEntryListRequest() {
+        if (!isConnected()) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        if (now - lastTimeEntryListRequest > 5000) {
+            lastTimeEntryListRequest = now;
+            sendRequest(AccBroadcastingProtocol.buildEntryListRequest(model.connectionId));
         }
     }
 
+    /**
+     * Send a request for the current track data.
+     */
+    public void sendTrackDataRequest() {
+        if (!isConnected()) {
+            return;
+        }
+        sendRequest(AccBroadcastingProtocol.buildTrackDataRequest(model.connectionId));
+    }
+
+    //
+    //                      Broadcasting callbacks.
+    //
     @Override
     public void onRegistrationResult(int connectionId, boolean success, boolean readOnly, String message) {
         if (success == false) {
@@ -262,13 +313,10 @@ public class AccConnection
 
         model.connectionId = connectionId;
         model.readOnly = readOnly;
+        model.gameConnected = true;
 
-        try {
-            getClient().sendEntryListRequest();
-            getClient().sendTrackDataRequest();
-        } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Error while sending entrylist and trackdata request", e);
-        }
+        sendEntryListRequest();
+        sendTrackDataRequest();
 
         EventBus.publish(new RegistrationResultEvent(connectionId, success, readOnly, message));
     }
@@ -403,14 +451,7 @@ public class AccConnection
             EventBus.publish(new RealtimeCarUpdateEvent(info));
         } else {
             //if the car doesnt exist in the model ask for a new entry list.
-            long now = System.currentTimeMillis();
-            if (now - lastTimeEntryListRequest > 5000) {
-                try {
-                    getClient().sendEntryListRequest();
-                } catch (Exception e) {
-                    LOG.log(Level.SEVERE, "Error while sending entrylist request", e);
-                }
-            }
+            sendEntryListRequest();
         }
     }
 
@@ -520,7 +561,7 @@ public class AccConnection
 
     public enum ExitState {
         NONE,
-        NORMAL,
+        USER,
         REFUSED,
         PORT_UNREACHABLE,
         EXCEPTION,

@@ -111,7 +111,7 @@ public class ConnectionController
         panel.portTextField.setValue(String.valueOf(connectionData.port));
         panel.connectionPWTextField.setValue(connectionData.connectionPassword);
         panel.commandPWTextField.setValue(connectionData.commandPassword);
-        client.sendRegisterRequest();
+        //client.sendRegisterRequest();
     }
 
     private void connectWithInput() {
@@ -144,7 +144,7 @@ public class ConnectionController
         } catch (SocketException e) {
             LOG.log(Level.SEVERE, "Error starting the connection to the game.", e);
         }
-        client.sendRegisterRequest();
+        //client.sendRegisterRequest();
     }
 
     @Override
@@ -171,7 +171,7 @@ public class ConnectionController
     }
 
     private void connectionClosedEvent(ConnectionClosedEvent event) {
-        if (event.getExitState() != AccConnection.ExitState.NORMAL) {
+        if (event.getExitState() != AccConnection.ExitState.USER) {
             showErrorMessage(event.getExitState());
         }
         panel.setDisconnected();

@@ -161,7 +161,7 @@ public class AppController
         } else if (e instanceof ConnectionClosedEvent) {
             RaceControlApplet.runLater(() -> {
                 ConnectionClosedEvent event = (ConnectionClosedEvent) e;
-                if (event.getExitState() == AccConnection.ExitState.NORMAL) {
+                if (event.getExitState() == AccConnection.ExitState.USER) {
                     appPanel.setActivePage(settingsPage);
                     appPanel.updateComponents();
                 } else if (event.getExitState() == AccConnection.ExitState.TIMEOUT) {

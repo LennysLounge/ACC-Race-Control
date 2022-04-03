@@ -51,6 +51,10 @@ public class Model {
      * Flag for when the connection is in read only mode.
      */
     public boolean readOnly;
+    /**
+     * Whether the game is connected or not.
+     */
+    public boolean gameConnected = false;
 
     /**
      * Creates a deep copy of the model.
@@ -68,6 +72,7 @@ public class Model {
         model.currentSessionId = currentSessionId;
         model.connectionId = connectionId;
         model.readOnly = readOnly;
+        model.gameConnected = gameConnected;
         return model;
     }
 }
