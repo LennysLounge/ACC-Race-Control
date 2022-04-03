@@ -28,6 +28,7 @@ import static racecontrol.client.extension.statistics.CarStatistics.SPLINE_POS;
 import static racecontrol.client.extension.statistics.CarStatistics.USE_REALTIME_POS;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
 import racecontrol.client.extension.statistics.CarStatisticsWritable;
+import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
 
 /**
@@ -98,8 +99,12 @@ public class RealtimePositionProcessor
             if (shouldUseRealtimePosition(info, carStats)) {
                 carStats.put(REALTIME_POSITION, pos);
             } else {
-                carStats.put(REALTIME_POSITION,
-                        client.getModel().cars.get(carStats.get(CAR_ID)).realtimeRaw.getPosition());
+                Car car = client.getModel().cars.get(carStats.get(CAR_ID));
+                int position = 0;
+                if (car != null) {
+                    position = car.realtimeRaw.getPosition();
+                }
+                carStats.put(REALTIME_POSITION, position);
             }
             carStats.put(USE_REALTIME_POS, shouldUseRealtimePosition(info, carStats));
             pos++;
