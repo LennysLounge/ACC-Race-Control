@@ -5,10 +5,25 @@
  */
 package racecontrol.client;
 
+import racecontrol.client.model.Model;
+
 /**
- *
+ * Base class for an extension to the client.
  * @author Leonard
  */
-public interface ClientExtension {
-    
+public abstract class ClientExtension {
+
+    /**
+     * Reference to the writable data model.
+     */
+    private Model writabelModel = new Model();
+
+    protected Model getWritableModel() {
+        return writabelModel;
+    }
+
+    protected void setWritableModel(Model model) {
+        this.writabelModel = model;
+    }
+
 }

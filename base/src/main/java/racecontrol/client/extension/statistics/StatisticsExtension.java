@@ -32,8 +32,8 @@ import racecontrol.client.extension.statistics.processors.FlagProcessor;
  *
  * @author Leonard
  */
-public class StatisticsExtension
-        implements EventListener, ClientExtension {
+public class StatisticsExtension extends ClientExtension
+        implements EventListener {
 
     /**
      * Singelton instance.

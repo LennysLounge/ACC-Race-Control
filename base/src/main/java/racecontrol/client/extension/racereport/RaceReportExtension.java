@@ -37,8 +37,8 @@ import racecontrol.client.extension.raceevent.RaceEventExtension;
  *
  * @author Leonard
  */
-public class RaceReportExtension
-        implements EventListener, ClientExtension {
+public class RaceReportExtension extends ClientExtension
+        implements EventListener {
 
     /**
      * Singelton instance.

@@ -34,8 +34,8 @@ import racecontrol.client.ClientExtension;
  *
  * @author Leonard
  */
-public class ResultsExtension
-        implements EventListener, ClientExtension {
+public class ResultsExtension extends ClientExtension
+        implements EventListener {
 
     private static final Logger LOG = Logger.getLogger(ResultsExtension.class.getName());
 

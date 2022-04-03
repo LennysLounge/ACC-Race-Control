@@ -51,8 +51,8 @@ import static racecontrol.persistance.PersistantConfigKeys.CONTACT_CONFIG_HINT_S
  *
  * @author Leonard
  */
-public class ContactExtension
-        implements EventListener, ClientExtension {
+public class ContactExtension extends ClientExtension
+        implements EventListener {
 
     /**
      * Singelton instance.
@@ -283,7 +283,7 @@ public class ContactExtension
             stagedContact = new ContactInfo(sessionTime,
                     REPLAY_EXTENSION.getReplayTimeFromSessionTime(sessionTime),
                     car,
-                    CLIENT.getModel().currentSessionId);
+                    getWritableModel().currentSessionId);
             stagedContactTimestamp = System.currentTimeMillis();
         }
     }
@@ -346,7 +346,7 @@ public class ContactExtension
         CarInfo closestCar = closestCarO.get();
         // log 
         if (closestCar != null) {
-            int trackMeters = CLIENT.getModel().trackInfo.getTrackMeters();
+            int trackMeters = getWritableModel().trackInfo.getTrackMeters();
             float distance = (closestCar.getRealtime().getSplinePosition()
                     - subject.getSplinePosition()) * trackMeters;
             LOG.info(String.format("Contact: ?%s\t\t%.2fm\t%s",
@@ -478,7 +478,7 @@ public class ContactExtension
         }
 
         float distance = getDistance(info.getClosestCar().getRealtime(),
-                info.getFlaggedCar().getRealtime()) * CLIENT.getModel().trackInfo.getTrackMeters();
+                info.getFlaggedCar().getRealtime()) * getWritableModel().trackInfo.getTrackMeters();
         if (Math.abs(distance) > YELLOW_FLAG_DISTANCE_THRESHOLD) {
             return false;
         }
@@ -487,7 +487,7 @@ public class ContactExtension
     }
 
     private void logYellowFlagContactInfo(YellowFlagContactInfo info) {
-        int trackMeters = CLIENT.getModel().trackInfo.getTrackMeters();
+        int trackMeters = getWritableModel().trackInfo.getTrackMeters();
         LOG.info(String.format("\t\t%s\t%.2fm",
                 info.getClosestCar().getCarNumberString(),
                 getDistance(info.getClosestCar().getRealtime(),
@@ -499,7 +499,7 @@ public class ContactExtension
         ContactInfo contact = new ContactInfo(
                 info.getSessionTime(),
                 REPLAY_EXTENSION.getReplayTimeFromSessionTime(info.getSessionTime()),
-                CLIENT.getModel().currentSessionId)
+                getWritableModel().currentSessionId)
                 .withCar(info.getSessionTime(), info.getFlaggedCar())
                 .withCar(info.getSessionTime(), info.getClosestCar())
                 .withYellowFlaggedCars(Arrays.asList(info.getFlaggedCar().getCarId()))

@@ -22,8 +22,8 @@ import racecontrol.client.data.CarInfo;
  *
  * @author Leonard
  */
-public class AutobroadcastExtension
-        implements EventListener, ClientExtension {
+public class AutobroadcastExtension extends ClientExtension
+        implements EventListener {
 
     /**
      * Singelton instance.

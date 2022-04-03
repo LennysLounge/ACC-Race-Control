@@ -35,8 +35,8 @@ import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
  *
  * @author Leonard
  */
-public class GoogleSheetsAPIExtension
-        implements EventListener, ClientExtension {
+public class GoogleSheetsAPIExtension extends ClientExtension
+        implements EventListener {
 
     /**
      * Singelton instance.

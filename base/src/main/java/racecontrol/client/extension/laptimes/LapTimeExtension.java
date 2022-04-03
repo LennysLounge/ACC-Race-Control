@@ -38,8 +38,8 @@ import racecontrol.client.ClientExtension;
  *
  * @author Leonard
  */
-public class LapTimeExtension
-        implements EventListener, ClientExtension {
+public class LapTimeExtension extends ClientExtension
+        implements EventListener {
 
     /**
      * This classes logger.

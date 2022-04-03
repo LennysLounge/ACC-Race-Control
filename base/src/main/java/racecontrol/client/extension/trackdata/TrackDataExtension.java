@@ -26,8 +26,8 @@ import racecontrol.client.ClientExtension;
  *
  * @author Leonard
  */
-public class TrackDataExtension
-        implements EventListener, ClientExtension {
+public class TrackDataExtension extends ClientExtension
+        implements EventListener {
 
     private static final Logger LOG = Logger.getLogger(TrackDataExtension.class.getName());
 

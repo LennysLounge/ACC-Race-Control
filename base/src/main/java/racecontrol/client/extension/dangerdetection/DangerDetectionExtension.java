@@ -36,8 +36,8 @@ import racecontrol.utility.TimeUtils;
  *
  * @author Leonard
  */
-public class DangerDetectionExtension
-        implements EventListener, ClientExtension {
+public class DangerDetectionExtension extends ClientExtension
+        implements EventListener {
 
     /**
      * Singelton instance.

@@ -134,6 +134,8 @@ public class AccBroadcastingClient
         model.hostAddress = requireNonNull(hostAddress, "hostAddress");
         model.hostPort = requireNonNull(hostPort, "hostPort");
 
+        extensions.forEach(extension -> extension.setWritableModel(model));
+
         connection = new AccConnection(model);
         connection.start();
     }

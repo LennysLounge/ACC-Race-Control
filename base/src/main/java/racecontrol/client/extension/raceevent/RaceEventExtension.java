@@ -30,8 +30,8 @@ import racecontrol.eventbus.EventListener;
  *
  * @author Leonard
  */
-public class RaceEventExtension
-        implements EventListener, ClientExtension {
+public class RaceEventExtension extends ClientExtension
+        implements EventListener {
 
     /**
      * Singleton instance.

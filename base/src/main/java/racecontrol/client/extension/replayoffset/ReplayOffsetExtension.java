@@ -24,8 +24,8 @@ import racecontrol.client.ClientExtension;
  *
  * @author Leonard
  */
-public class ReplayOffsetExtension
-        implements EventListener, ClientExtension {
+public class ReplayOffsetExtension extends ClientExtension
+        implements EventListener {
 
     /**
      * Explaination of how this works:

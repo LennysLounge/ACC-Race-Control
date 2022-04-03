@@ -28,8 +28,8 @@ import racecontrol.utility.TimeUtils;
  *
  * @author Leonard
  */
-public class VirtualSafetyCarExtension
-        implements EventListener, ClientExtension {
+public class VirtualSafetyCarExtension extends ClientExtension
+        implements EventListener {
 
     /**
      * This class's logger.
