@@ -174,7 +174,7 @@ public class AccBroadcastingClient
      * Send unregister request.
      */
     public void sendUnregisterRequest() {
-        if (connection != null) {
+        if (connection == null) {
             return;
         }
         connection.sendRequest(AccBroadcastingProtocol
