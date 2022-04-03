@@ -6,6 +6,8 @@
 package racecontrol.client.model;
 
 import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.Map;
 import racecontrol.client.data.SessionId;
 import racecontrol.client.data.TrackInfo;
 import racecontrol.client.data.enums.SessionType;
@@ -64,6 +66,10 @@ public class Model {
      * Current session.
      */
     public Session session = new Session();
+    /**
+     * Collection of all cars for this event.
+     */
+    public Map<Integer, Car> cars = new HashMap<>();
 
     /**
      * Creates a deep copy of the model.
@@ -84,6 +90,8 @@ public class Model {
         model.gameConnected = gameConnected;
         model.trackInfo = trackInfo;
         model.session = session.copy();
+        model.cars = new HashMap<>();
+        cars.forEach((id, car) -> model.cars.put(id, car.copy()));
         return model;
     }
 }

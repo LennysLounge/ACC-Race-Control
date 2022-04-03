@@ -323,6 +323,7 @@ public class AccConnection
     @Override
     public void onRealtimeUpdate(SessionInfo sessionInfo) {
         SessionInfo oldInfo = model.session.raw;
+        model.session.raw = sessionInfo;
 
         //Check for disconnected cars.
         checkForMissedRealtimeCarUpdates();
@@ -471,6 +472,7 @@ public class AccConnection
 
     @Override
     public void onTrackData(TrackInfo info) {
+        model.trackInfo = info;
         EventBus.publish(new TrackInfoEvent(info));
     }
 

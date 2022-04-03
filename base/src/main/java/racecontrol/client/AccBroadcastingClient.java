@@ -18,7 +18,6 @@ import racecontrol.client.extension.contact.ContactExtension;
 import racecontrol.client.extension.dangerdetection.DangerDetectionExtension;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
 import racecontrol.client.extension.laptimes.LapTimeExtension;
-import racecontrol.client.extension.model.ModelExtension;
 import racecontrol.client.extension.raceevent.RaceEventExtension;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.extension.racereport.RaceReportExtension;
@@ -79,7 +78,6 @@ public class AccBroadcastingClient
 
     public void initialise() {
         //instanciate extensions
-        extensions.add(new ModelExtension());
         extensions.add(ContactExtension.getInstance());
         extensions.add(GoogleSheetsAPIExtension.getInstance());
         extensions.add(new LapTimeExtension());
