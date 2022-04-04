@@ -10,8 +10,6 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static racecontrol.client.protocol.enums.CarLocation.TRACK;
 import static racecontrol.client.extension.statistics.CarStatistics.CAR_LOCATION;
-import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_LAP_TIME;
-import static racecontrol.client.extension.statistics.CarStatistics.DELTA;
 import static racecontrol.client.extension.statistics.CarStatistics.POSITION;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
@@ -26,7 +24,6 @@ import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_TWO;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
-import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_LAP_INVALID;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.BestLaptime;
@@ -106,10 +103,10 @@ public class QualifyingBestTableModel
         applet.fill(COLOR_WHITE);
         if (stats.get(CAR_LOCATION) == TRACK) {
             applet.fill(LookAndFeel.COLOR_WHITE);
-            if (stats.get(CURRENT_LAP_INVALID)) {
+            if (car.currentLap.isInvalid()) {
                 applet.fill(LookAndFeel.COLOR_RED);
             }
-            text = TimeUtils.asLapTime(stats.get(CURRENT_LAP_TIME));
+            text = TimeUtils.asLapTime(car.currentLap.getLapTimeMS());
         }
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
@@ -118,16 +115,13 @@ public class QualifyingBestTableModel
 
     protected void deltaRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-
         String text = "--";
-        if (stats.get(CAR_LOCATION) == TRACK) {
-
+        if (car.carLocation == TRACK) {
             applet.fill(LookAndFeel.COLOR_RACE);
-            if (stats.get(DELTA) > 0) {
+            if (car.delta > 0) {
                 applet.fill(LookAndFeel.COLOR_RED);
             }
-            text = TimeUtils.asDelta(stats.get(DELTA));
+            text = TimeUtils.asDelta(car.delta);
         }
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontRegular());

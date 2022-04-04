@@ -12,12 +12,12 @@ import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.protocol.LapInfo;
 import racecontrol.client.protocol.SessionInfo;
 import racecontrol.client.events.RealtimeUpdateEvent;
+import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
 import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.client.extension.trackdata.TrackData;
 import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.eventbus.Event;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_CAR_AHEAD;
 import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_CAR_BEHIND;
 import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_LEADER;
@@ -60,10 +60,11 @@ public class GapProcessor extends StatisticsProcessor {
     public void onRealtimeUpdate(SessionInfo info) {
 
         //calculate gap to session best lap time.
-        for (CarStatisticsWritable car : getCars().values()) {
+        for (CarStatisticsWritable stats : getCars().values()) {
+            Car car = client.getModel().cars.get(stats.get(CAR_ID));
             LapInfo sessionBestLap = info.getBestSessionLap();
-            int diff = car.get(BEST_LAP_TIME) - sessionBestLap.getLapTimeMS();
-            car.put(LAP_TIME_GAP_TO_SESSION_BEST, diff);
+            int diff = car.sessionBestLap.getLapTimeMS() - sessionBestLap.getLapTimeMS();
+            stats.put(LAP_TIME_GAP_TO_SESSION_BEST, diff);
         }
 
         // Skip if we dont know the track or the v map.

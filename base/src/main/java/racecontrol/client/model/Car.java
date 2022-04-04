@@ -7,9 +7,7 @@ package racecontrol.client.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import racecontrol.client.protocol.DriverInfo;
 import racecontrol.client.protocol.LapInfo;
-import racecontrol.client.protocol.RealtimeInfo;
 import racecontrol.client.protocol.enums.CarLocation;
 import racecontrol.client.protocol.enums.CarModel;
 import racecontrol.client.protocol.enums.Nationality;
@@ -120,7 +118,7 @@ public class Car {
     /**
      * Session best lap.
      */
-    public LapInfo bestSessionLap = new LapInfo();
+    public LapInfo sessionBestLap = new LapInfo();
     /**
      * Last completed lap.
      */
@@ -137,6 +135,15 @@ public class Car {
      */
     public String carNumberString() {
         return String.format("#%-3d", carNumber);
+    }
+
+    /**
+     * Returns the predicted lap time.
+     *
+     * @return the predicted lap time.
+     */
+    public int predictedLapTime() {
+        return sessionBestLap.getLapTimeMS() + delta;
     }
 
     /**
@@ -181,7 +188,7 @@ public class Car {
         car.splinePosition = splinePosition;
         car.lapCount = lapCount;
         car.delta = delta;
-        car.bestSessionLap = bestSessionLap;
+        car.sessionBestLap = sessionBestLap;
         car.lastLap = lastLap;
         car.currentLap = currentLap;
         return car;

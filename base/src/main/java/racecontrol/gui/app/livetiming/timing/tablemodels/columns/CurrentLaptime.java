@@ -8,16 +8,8 @@ package racecontrol.gui.app.livetiming.timing.tablemodels.columns;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static racecontrol.client.protocol.enums.CarLocation.TRACK;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_LAP_TIME;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_LOCATION;
-import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_LAP_INVALID;
-import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_LAP_TIME;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_LAP_TIME;
-import racecontrol.client.extension.statistics.CarStatistics;
-import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
 import racecontrol.gui.LookAndFeel;
-import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.lpui.table.LPTable;
 import racecontrol.gui.lpui.table.LPTableColumn;
@@ -41,16 +33,14 @@ public class CurrentLaptime
     public static void currentLapRenderer(PApplet applet,
             LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-
         String text = "--";
         applet.fill(COLOR_WHITE);
-        if (stats.get(CAR_LOCATION) == TRACK) {
+        if (car.carLocation == TRACK) {
             applet.fill(LookAndFeel.COLOR_WHITE);
-            if (stats.get(CURRENT_LAP_INVALID)) {
+            if (car.currentLap.isInvalid()) {
                 applet.fill(LookAndFeel.COLOR_RED);
             }
-            text = TimeUtils.asLapTime(stats.get(CURRENT_LAP_TIME));
+            text = TimeUtils.asLapTime(car.currentLap.getLapTimeMS());
         }
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontRegular());

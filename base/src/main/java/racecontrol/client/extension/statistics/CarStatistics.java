@@ -75,18 +75,6 @@ public class CarStatistics {
     //             Properties
     //
     public static final Key<Integer> CAR_ID = new Key<>(Integer.class, 0);
-
-    
-    // Laps
-    public static final Key<Integer> CURRENT_LAP_TIME = new Key<>(Integer.class, 0);
-    public static final Key<Integer> LAST_LAP_TIME = new Key<>(Integer.class, 0);
-    public static final Key<Integer> BEST_LAP_TIME = new Key<>(Integer.class, 0);
-    public static final Key<Integer> DELTA = new Key<>(Integer.class, 0);
-    public static final Key<Integer> PREDICTED_LAP_TIME = new Key<>(Integer.class, 0);
-    public static final Key<Boolean> CURRENT_LAP_INVALID = new Key<>(Boolean.class, false);
-    public static final Key<Boolean> LAST_LAP_INVALID = new Key<>(Boolean.class, false);
-    public static final Key<Boolean> BEST_LAP_INVALID = new Key<>(Boolean.class, false);
-    public static final Key<Integer> LAP_COUNT = new Key<>(Integer.class, 0);
     // Gaps
     public static final Key<Integer> LAP_TIME_GAP_TO_SESSION_BEST = new Key<>(Integer.class, 0);
     public static final Key<Integer> GAP_TO_LEADER = new Key<>(Integer.class, 0);

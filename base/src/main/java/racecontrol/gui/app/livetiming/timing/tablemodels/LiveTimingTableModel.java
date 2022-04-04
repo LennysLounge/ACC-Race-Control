@@ -15,7 +15,6 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
 import static racecontrol.client.protocol.enums.SessionType.RACE;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_LEADER;
 import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_POSITION_AHEAD;
 import static racecontrol.client.extension.statistics.CarStatistics.IS_FOCUSED_ON;
@@ -64,7 +63,7 @@ public abstract class LiveTimingTableModel
                 applet.fill(COLOR_ORANGE);
             }
         } else {
-            if (stats.get(BEST_LAP_TIME) != Integer.MAX_VALUE
+            if (car.sessionBestLap.getLapTimeMS() != Integer.MAX_VALUE
                     && stats.get(LAP_TIME_GAP_TO_SESSION_BEST) != 0) {
                 text = TimeUtils.asDelta(stats.get(LAP_TIME_GAP_TO_SESSION_BEST));
             }

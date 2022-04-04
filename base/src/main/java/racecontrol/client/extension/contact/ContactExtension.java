@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
 import racecontrol.client.ClientExtension;
-import racecontrol.client.protocol.CarInfo;
 import racecontrol.client.protocol.RealtimeInfo;
 import racecontrol.client.protocol.SessionInfo;
 import racecontrol.client.protocol.enums.CarLocation;
@@ -34,7 +33,6 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.extension.dangerdetection.YellowFlagEvent;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
-import static racecontrol.client.extension.statistics.CarStatistics.LAP_COUNT;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_FINISHED;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
@@ -397,7 +395,7 @@ public class ContactExtension extends ClientExtension
                 .map(car -> {
                     CarStatistics stats = STATISTICS_EXTENSION.getCar(car.id);
                     String carNumber = String.valueOf(car.carNumber);
-                    String lap = String.valueOf(stats.get(SESSION_FINISHED) ? "F" : (stats.get(LAP_COUNT) + 1));
+                    String lap = String.valueOf(stats.get(SESSION_FINISHED) ? "F" : (car.lapCount + 1));
                     boolean isInvalid = car.currentLap.isInvalid()
                             && info.getSessionID().getType() != RACE;
                     boolean isSpun = info.getYellowFlaggedCars().contains(car.id);

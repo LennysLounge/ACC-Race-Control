@@ -14,17 +14,16 @@ import racecontrol.client.protocol.SessionInfo;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
-import static racecontrol.client.extension.statistics.CarStatistics.DELTA;
 import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_POSITION_AHEAD;
 import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_POSITION_BEHIND;
 import static racecontrol.client.extension.statistics.CarStatistics.IS_FOCUSED_ON;
 import static racecontrol.client.extension.statistics.CarStatistics.IS_IN_PITS;
-import static racecontrol.client.extension.statistics.CarStatistics.PREDICTED_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.SPLINE_POS;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
 
 /**
@@ -56,11 +55,12 @@ public class RatingProcessorImpl
 
     @Override
     public Entry calculateRating(Entry entry) {
+        Car car = entry.getCar();
         CarStatistics stats = StatisticsExtension.getInstance()
                 .getCar(entry.getCar().id);
         // sort cars by their race position from first to last.
         List<CarStatistics> carsSorted = getClient().getModel().cars.values().stream()
-                .map(car -> StatisticsExtension.getInstance().getCar(car.id))
+                .map(car_ -> StatisticsExtension.getInstance().getCar(car_.id))
                 .sorted((c1, c2) -> Float.compare(c1.get(REALTIME_POSITION), c2.get(REALTIME_POSITION)))
                 .collect(Collectors.toList());
         int index = stats.get(REALTIME_POSITION) - 1;
@@ -163,8 +163,8 @@ public class RatingProcessorImpl
 
         // Pace rating. Quick predicted lap times give a higher rating.
         // Session best has priority.
-        float deltaPace = 1 - clamp(stats.get(DELTA) / -500f);
-        int sessionBestDif = stats.get(PREDICTED_LAP_TIME) - stats.get(SESSION_BEST_LAP_TIME);
+        float deltaPace = 1 - clamp(car.delta / -500f);
+        int sessionBestDif = car.predictedLapTime() - stats.get(SESSION_BEST_LAP_TIME);
         float sessionBestPace = 1 - clamp(sessionBestDif / 1000f);
         entry.setPace(Math.max(deltaPace / 2, sessionBestPace));
 

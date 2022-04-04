@@ -7,9 +7,6 @@ package racecontrol.gui.app.livetiming.timing.tablemodels.columns;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_LAP_TIME;
-import static racecontrol.client.extension.statistics.CarStatistics.LAST_LAP_INVALID;
-import static racecontrol.client.extension.statistics.CarStatistics.LAST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_LAP_TIME;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
@@ -42,11 +39,11 @@ public class LastLaptime
             LPTable.RenderContext context) {
         Car car = (Car) context.object;
         CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-        int lastLapTime = stats.get(LAST_LAP_TIME);
-        int bestLapTime = stats.get(BEST_LAP_TIME);
+        int lastLapTime = car.lastLap.getLapTimeMS();
+        int bestLapTime = car.sessionBestLap.getLapTimeMS();
         int sessionbestLapTime = stats.get(SESSION_BEST_LAP_TIME);
 
-        if (stats.get(LAST_LAP_INVALID)) {
+        if (car.lastLap.isInvalid()) {
             applet.fill(COLOR_RED);
         } else if (lastLapTime == sessionbestLapTime) {
             applet.fill(COLOR_PURPLE);

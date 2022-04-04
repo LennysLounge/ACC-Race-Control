@@ -17,28 +17,19 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
 import racecontrol.eventbus.Event;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_LAP_INVALID;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_TWO;
 import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
 import static racecontrol.client.extension.statistics.CarStatistics.CAR_LOCATION;
 import static racecontrol.client.extension.statistics.CarStatistics.CUP_POSITION;
-import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_LAP_INVALID;
-import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_LAP_TIME;
-import static racecontrol.client.extension.statistics.CarStatistics.DELTA;
 import static racecontrol.client.extension.statistics.CarStatistics.IS_FOCUSED_ON;
 import static racecontrol.client.extension.statistics.CarStatistics.IS_IN_PITS;
 import static racecontrol.client.extension.statistics.CarStatistics.IS_SESSION_BEST;
-import static racecontrol.client.extension.statistics.CarStatistics.LAP_COUNT;
-import static racecontrol.client.extension.statistics.CarStatistics.LAST_LAP_INVALID;
-import static racecontrol.client.extension.statistics.CarStatistics.LAST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.LAST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarStatistics.LAST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarStatistics.LAST_SECTOR_TWO;
 import static racecontrol.client.extension.statistics.CarStatistics.POSITION;
-import static racecontrol.client.extension.statistics.CarStatistics.PREDICTED_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_ID;
 import racecontrol.client.model.Car;
 
@@ -77,16 +68,6 @@ public class DataProcessor extends StatisticsProcessor {
 
         carStats.put(CAR_ID, info.getCarId());
 
-        // Laps
-        carStats.put(CURRENT_LAP_TIME, info.getCurrentLap().getLapTimeMS());
-        carStats.put(LAST_LAP_TIME, info.getLastLap().getLapTimeMS());
-        carStats.put(BEST_LAP_TIME, info.getBestSessionLap().getLapTimeMS());
-        carStats.put(DELTA, info.getDelta());
-        carStats.put(PREDICTED_LAP_TIME, info.getBestSessionLap().getLapTimeMS() + info.getDelta());
-        carStats.put(CURRENT_LAP_INVALID, info.getCurrentLap().isInvalid());
-        carStats.put(LAST_LAP_INVALID, info.getLastLap().isInvalid());
-        carStats.put(BEST_LAP_INVALID, info.getBestSessionLap().isInvalid());
-        carStats.put(LAP_COUNT, info.getLaps());
         // Sectors
         LapInfo lap = info.getBestSessionLap();
         carStats.put(BEST_SECTOR_ONE, intOrDefault(lap.getSplits().get(0), 0));
@@ -111,12 +92,13 @@ public class DataProcessor extends StatisticsProcessor {
     }
 
     public void onRealtimeUpdate(SessionInfo info) {
-        for (CarStatisticsWritable car : getCars().values()) {
-            car.put(IS_FOCUSED_ON, info.getFocusedCarIndex() == car.get(CAR_ID));
-            car.put(SESSION_ID, client.getModel().currentSessionId);
-            car.put(IS_SESSION_BEST,
+        for (CarStatisticsWritable stats : getCars().values()) {
+            Car car = client.getModel().cars.get(stats.get(CAR_ID));
+            stats.put(IS_FOCUSED_ON, info.getFocusedCarIndex() == stats.get(CAR_ID));
+            stats.put(SESSION_ID, client.getModel().currentSessionId);
+            stats.put(IS_SESSION_BEST,
                     info.getBestSessionLap().getLapTimeMS() != Integer.MAX_VALUE
-                    && info.getBestSessionLap().getLapTimeMS() == car.get(BEST_LAP_TIME)
+                    && info.getBestSessionLap().getLapTimeMS() == car.sessionBestLap.getLapTimeMS()
             );
         }
     }

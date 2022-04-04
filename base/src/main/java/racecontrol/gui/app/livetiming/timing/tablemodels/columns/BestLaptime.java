@@ -7,7 +7,6 @@ package racecontrol.gui.app.livetiming.timing.tablemodels.columns;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_LAP_TIME;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
@@ -38,7 +37,7 @@ public class BestLaptime
             LPTable.RenderContext context) {
         Car car = (Car) context.object;
         CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-        int bestLapTime = stats.get(BEST_LAP_TIME);
+        int bestLapTime = car.sessionBestLap.getLapTimeMS();
         int sessionbestLapTime = stats.get(SESSION_BEST_LAP_TIME);
         if (bestLapTime == sessionbestLapTime) {
             applet.fill(COLOR_PURPLE);
