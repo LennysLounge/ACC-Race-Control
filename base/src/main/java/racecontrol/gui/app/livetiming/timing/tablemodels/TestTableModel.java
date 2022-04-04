@@ -16,6 +16,9 @@ import static racecontrol.client.extension.statistics.CarStatistics.PITLANE_COUN
 import static racecontrol.client.extension.statistics.CarStatistics.PITLANE_COUNT_ACCURATE;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.CarStatistics;
+import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
+import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.client.model.Car;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.ConstructorColumn;
@@ -71,14 +74,17 @@ public class TestTableModel
     @Override
     public void sort() {
         entries = entries.stream()
-                .sorted((c1, c2)
-                        -> c1.get(REALTIME_POSITION).compareTo(c2.get(REALTIME_POSITION))
-                )
+                .sorted((car1, car2) -> {
+                    CarStatistics c1 = StatisticsExtension.getInstance().getCar(car1.id);
+                    CarStatistics c2 = StatisticsExtension.getInstance().getCar(car2.id);
+                    return c1.get(REALTIME_POSITION).compareTo(c2.get(REALTIME_POSITION));
+                })
                 .collect(toList());
     }
 
     private void r1(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
 
         String text = String.format("%.5f", getClient().getModel().cars.get(stats.get(CAR_ID)).position * 1f);
         applet.fill(COLOR_WHITE);
@@ -87,7 +93,8 @@ public class TestTableModel
     }
 
     private void r2(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
 
         String text = String.format("%.5f", getClient().getModel().cars.get(stats.get(CAR_ID)).trackPosition * 1f);
         applet.fill(COLOR_WHITE);
@@ -96,39 +103,10 @@ public class TestTableModel
     }
 
     private void r3(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
 
         String text = String.format("%.5f", getClient().getModel().cars.get(stats.get(CAR_ID)).splinePosition);
-        applet.fill(COLOR_WHITE);
-        applet.textAlign(CENTER, CENTER);
-        applet.text(text, context.width / 2f, context.height / 2f);
-    }
-
-    private void r4(PApplet applet, LPTable.RenderContext context) {
-        int count = ((CarStatistics) context.object).get(PITLANE_COUNT);
-        boolean isAccurate = ((CarStatistics) context.object).get(PITLANE_COUNT_ACCURATE);
-
-        String text = String.format("%d", count)
-                + (isAccurate ? "" : "*");
-        applet.fill(COLOR_WHITE);
-        applet.textAlign(CENTER, CENTER);
-        applet.text(text, context.width / 2f, context.height / 2f);
-    }
-
-    private void r5(PApplet applet, LPTable.RenderContext context) {
-        int over = ((CarStatistics) context.object).get(OVERTAKE_INDICATOR);
-        String text = String.valueOf(over);
-        applet.fill(COLOR_WHITE);
-        applet.textAlign(CENTER, CENTER);
-        applet.text(text, context.width / 2f, context.height / 2f);
-    }
-
-    private void r6(PApplet applet, LPTable.RenderContext context) {
-        int time = ((CarStatistics) context.object).get(CURRENT_SECTOR_THREE_CALC);
-        String text = "";
-        if (time != 0) {
-            text = TimeUtils.asSeconds(time);
-        }
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);

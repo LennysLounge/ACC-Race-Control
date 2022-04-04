@@ -105,11 +105,7 @@ public class LiveTimingTableController
     }
 
     private void updateTableModel() {
-        List<CarStatistics> cars = client.getModel().cars.values().stream()
-                .map(car -> statisticsExtension.getCar(car.id))
-                .collect(Collectors.toList());
-
-        model.setEntries(cars);
+        model.setEntries(new ArrayList<>(client.getModel().cars.values()));
         model.sort();
         table.invalidate();
     }
@@ -123,8 +119,7 @@ public class LiveTimingTableController
             long now = System.currentTimeMillis();
             if (now - lastTableClick < 500) {
                 //was double click
-                client.sendChangeFocusRequest(
-                        ((CarStatistics) model.getEntry(row)).get(CAR_ID));
+                client.sendChangeFocusRequest(model.getEntry(row).id);
             }
         }
         lastTableClickRow = row;

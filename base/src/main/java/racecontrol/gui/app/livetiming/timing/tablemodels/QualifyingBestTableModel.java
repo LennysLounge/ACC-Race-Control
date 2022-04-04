@@ -22,12 +22,13 @@ import racecontrol.utility.TimeUtils;
 import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_TWO;
-import static racecontrol.client.extension.statistics.CarStatistics.LAP_COUNT;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_TWO;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_LAP_INVALID;
+import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.client.model.Car;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.BestLaptime;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.ConstructorColumn;
@@ -88,14 +89,18 @@ public class QualifyingBestTableModel
     @Override
     public void sort() {
         entries = entries.stream()
-                .sorted((c1, c2)
-                        -> c1.get(POSITION).compareTo(c2.get(POSITION))
+                .sorted((car1, car2) -> {
+                    CarStatistics c1 = StatisticsExtension.getInstance().getCar(car1.id);
+                    CarStatistics c2 = StatisticsExtension.getInstance().getCar(car2.id);
+                    return c1.get(POSITION).compareTo(c2.get(POSITION));
+                }
                 )
                 .collect(toList());
     }
 
     protected void lapTimeRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
 
         String text = "--";
         applet.fill(COLOR_WHITE);
@@ -112,7 +117,8 @@ public class QualifyingBestTableModel
     }
 
     protected void deltaRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
 
         String text = "--";
         if (stats.get(CAR_LOCATION) == TRACK) {
@@ -129,7 +135,8 @@ public class QualifyingBestTableModel
     }
 
     protected void bestSectorOneRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int splitTime = stats.get(BEST_SECTOR_ONE);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_ONE);
 
@@ -147,7 +154,8 @@ public class QualifyingBestTableModel
     }
 
     protected void bestSectorTwoRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int splitTime = stats.get(BEST_SECTOR_TWO);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_TWO);
 
@@ -165,7 +173,8 @@ public class QualifyingBestTableModel
     }
 
     protected void bestSectorThreeRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int splitTime = stats.get(BEST_SECTOR_THREE);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_THREE);
 

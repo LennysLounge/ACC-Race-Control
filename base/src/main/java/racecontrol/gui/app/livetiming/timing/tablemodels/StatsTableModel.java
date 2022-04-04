@@ -27,7 +27,10 @@ import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.lpui.table.LPTable.RenderContext;
 import racecontrol.gui.lpui.table.LPTableColumn;
 import static racecontrol.client.extension.statistics.CarStatistics.RACE_START_POSITION_ACCURATE;
+import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import static racecontrol.client.extension.statistics.CarStatistics.SPEED_TRAP_SPEED;
+import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.client.model.Car;
 import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.ConstructorColumn;
@@ -88,14 +91,17 @@ public class StatsTableModel
     @Override
     public void sort() {
         entries = entries.stream()
-                .sorted((c1, c2)
-                        -> c1.get(REALTIME_POSITION).compareTo(c2.get(REALTIME_POSITION))
-                )
+                .sorted((car1, car2) -> {
+                    CarStatistics c1 = StatisticsExtension.getInstance().getCar(car1.id);
+                    CarStatistics c2 = StatisticsExtension.getInstance().getCar(car2.id);
+                    return c1.get(REALTIME_POSITION).compareTo(c2.get(REALTIME_POSITION));
+                })
                 .collect(toList());
     }
 
     private void placesLostGainedRenderer(PApplet applet, RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int placesGained = stats.get(PLACES_GAINED);
         int size = 10 * (int) Math.signum(placesGained);
         float x = context.width / 2f - 15;
@@ -129,7 +135,8 @@ public class StatsTableModel
     }
 
     private void startingPositionRenderer(PApplet applet, RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int startPos = stats.get(RACE_START_POSITION);
         String text = String.valueOf(startPos)
                 + (stats.get(RACE_START_POSITION_ACCURATE) ? "" : "*");
@@ -143,7 +150,8 @@ public class StatsTableModel
     }
 
     private void pitCountRenderer(PApplet applet, RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         String text = String.valueOf(stats.get(PITLANE_COUNT))
                 + (stats.get(PITLANE_COUNT_ACCURATE) ? "" : "*");
         applet.fill(COLOR_WHITE);
@@ -153,7 +161,8 @@ public class StatsTableModel
     }
 
     private void pitTimeRenderer(PApplet applet, RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         if (stats.get(PITLANE_TIME) > 0) {
             String text = TimeUtils.asDurationShort(stats.get(PITLANE_TIME));
             applet.fill(COLOR_WHITE);
@@ -164,7 +173,8 @@ public class StatsTableModel
     }
 
     private void pitTimeStationaryRenderer(PApplet applet, RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         if (stats.get(PITLANE_TIME) > 0) {
             String text = TimeUtils.asDurationShort(stats.get(PITLANE_TIME_STATIONARY));
             applet.fill(COLOR_WHITE);
@@ -175,7 +185,8 @@ public class StatsTableModel
     }
 
     private void speedTrapRenderer(PApplet applet, RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
 
         String text = "--";
         if (stats.get(SPEED_TRAP_SPEED) > 0) {
@@ -192,7 +203,8 @@ public class StatsTableModel
     }
 
     private void stintTimeRenderer(PApplet applet, RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         String text = TimeUtils.asDurationShort(stats.get(DRIVER_STINT_TIME));
         text = text + (stats.get(DRIVER_STINT_TIME_ACCURATE) ? "" : "*");
         applet.fill(COLOR_WHITE);

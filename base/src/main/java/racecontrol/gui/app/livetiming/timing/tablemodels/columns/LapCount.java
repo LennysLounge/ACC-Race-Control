@@ -7,20 +7,11 @@ package racecontrol.gui.app.livetiming.timing.tablemodels.columns;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_LAP_TIME;
-import static racecontrol.client.extension.statistics.CarStatistics.LAP_COUNT;
-import static racecontrol.client.extension.statistics.CarStatistics.LAST_LAP_INVALID;
-import static racecontrol.client.extension.statistics.CarStatistics.LAST_LAP_TIME;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_LAP_TIME;
-import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.model.Car;
 import racecontrol.gui.LookAndFeel;
-import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
-import static racecontrol.gui.LookAndFeel.COLOR_RACE;
-import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.lpui.table.LPTable;
 import racecontrol.gui.lpui.table.LPTableColumn;
-import racecontrol.utility.TimeUtils;
 
 /**
  *
@@ -39,7 +30,8 @@ public class LapCount
 
     public static void lapCountRenderer(PApplet applet,
             LPTable.RenderContext context) {
-        String text = String.valueOf(((CarStatistics) context.object).get(LAP_COUNT));
+        Car car = (Car) context.object;
+        String text = String.valueOf(car.lapCount);
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontRegular());

@@ -11,6 +11,8 @@ import static racecontrol.client.extension.statistics.CarStatistics.IS_IN_PITS;
 import static racecontrol.client.extension.statistics.CarStatistics.IS_YELLOW_FLAG;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_FINISHED;
 import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.client.model.Car;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_BLACK;
 import static racecontrol.gui.LookAndFeel.COLOR_GREEN_FLAG;
@@ -40,7 +42,8 @@ public class PitFlagColumn
         if (!(context.object instanceof CarStatistics)) {
             return;
         }
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         if (stats.get(SESSION_FINISHED)) {
             applet.fill(COLOR_WHITE);
             applet.rect(1, 1, context.width - 2, context.height - 2);

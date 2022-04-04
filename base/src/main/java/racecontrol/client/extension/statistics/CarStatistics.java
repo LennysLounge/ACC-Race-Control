@@ -76,18 +76,7 @@ public class CarStatistics {
     //
     public static final Key<Integer> CAR_ID = new Key<>(Integer.class, 0);
 
-    // Identity
-    public static final Key<String> FIRSTNAME = new Key<>(String.class, "");
-    public static final Key<String> SURNAME = new Key<>(String.class, "");
-    public static final Key<String> FULL_NAME = new Key<>(String.class, "");
-    public static final Key<String> NAME = new Key<>(String.class, "");
-    public static final Key<String> SHORT_NAME = new Key<>(String.class, "");
-    public static final Key<Integer> CAR_NUMBER = new Key<>(Integer.class, 0);
-    public static final Key<CarModel> CAR_MODEL = new Key<>(CarModel.class, CarModel.ERROR);
-    public static final Key<DriverCategory> CATEGORY = new Key<>(DriverCategory.class, DriverCategory.BRONZE);
-    public static final Key<Integer> DRIVER_INDEX = new Key<>(Integer.class, 0);
-    public static final Key<DriverList> DRIVER_LIST = new Key<>(DriverList.class, new DriverList());
-    public static final Key<String> TEAM_NAME = new Key<>(String.class, "");
+    
     // Laps
     public static final Key<Integer> CURRENT_LAP_TIME = new Key<>(Integer.class, 0);
     public static final Key<Integer> LAST_LAP_TIME = new Key<>(Integer.class, 0);

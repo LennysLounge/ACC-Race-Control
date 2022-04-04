@@ -11,10 +11,11 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
 import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_CAR_AHEAD;
 import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_CAR_BEHIND;
-import static racecontrol.client.extension.statistics.CarStatistics.LAP_COUNT;
 import static racecontrol.client.extension.statistics.CarStatistics.RACE_DISTANCE_COMPLEX;
 import static racecontrol.client.extension.statistics.CarStatistics.SPLINE_POS;
 import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.client.model.Car;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_ORANGE;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
@@ -78,13 +79,15 @@ public class RelativeTableModel
         if (entries.isEmpty()) {
             return;
         }
-        selectedCar = entries.get(0);
+        selectedCar = StatisticsExtension.getInstance().getCar(entries.get(0).id);
         if (getSelectedRow() > 0 && getSelectedRow() < entries.size()) {
-            selectedCar = entries.get(getSelectedRow());
+            selectedCar = StatisticsExtension.getInstance().getCar(entries.get(getSelectedRow()).id);
         }
         final CarStatistics pivot = selectedCar;
         entries = entries.stream()
-                .sorted((c1, c2) -> {
+                .sorted((car1, car2) -> {
+                    CarStatistics c1 = StatisticsExtension.getInstance().getCar(car1.id);
+                    CarStatistics c2 = StatisticsExtension.getInstance().getCar(car2.id);
                     float c1dif = pivot.get(SPLINE_POS) - c1.get(SPLINE_POS);
                     c1dif -= (Math.abs(c1dif) > 0.5) ? Math.signum(c1dif) : 0;
                     float c2dif = pivot.get(SPLINE_POS) - c2.get(SPLINE_POS);
@@ -99,7 +102,8 @@ public class RelativeTableModel
         boolean isLapped = false;
         boolean isLapping = false;
         if (selectedCar != null) {
-            CarStatistics stats = (CarStatistics) context.object;
+            Car car = (Car) context.object;
+            CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
             float distance = stats.get(RACE_DISTANCE_COMPLEX)
                     - selectedCar.get(RACE_DISTANCE_COMPLEX);
             isLapped = distance < -0.5;
@@ -109,7 +113,8 @@ public class RelativeTableModel
     }
 
     private void gapToNextRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
 
         int gap = 0;
         String text = "--";
@@ -132,19 +137,20 @@ public class RelativeTableModel
     }
 
     private void totalGapRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
 
         String text = "--";
         if (context.rowIndex < getSelectedRow()) {
             int gap = 0;
             for (int i = getSelectedRow() - 1; i >= context.rowIndex; i--) {
-                gap += getEntry(i).get(GAP_TO_CAR_BEHIND);
+                gap += StatisticsExtension.getInstance().getCar(getEntry(i).id).get(GAP_TO_CAR_BEHIND);
             }
             text = TimeUtils.asGap(gap);
         } else if (context.rowIndex > getSelectedRow()) {
             int gap = 0;
             for (int i = getSelectedRow() + 1; i <= context.rowIndex; i++) {
-                gap += getEntry(i).get(GAP_TO_CAR_AHEAD);
+                gap += StatisticsExtension.getInstance().getCar(getEntry(i).id).get(GAP_TO_CAR_AHEAD);
             }
             text = TimeUtils.asGap(-gap);
         }

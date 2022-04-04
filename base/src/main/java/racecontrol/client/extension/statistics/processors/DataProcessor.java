@@ -24,18 +24,10 @@ import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_
 import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_TWO;
 import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
 import static racecontrol.client.extension.statistics.CarStatistics.CAR_LOCATION;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_MODEL;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_NUMBER;
-import static racecontrol.client.extension.statistics.CarStatistics.CATEGORY;
 import static racecontrol.client.extension.statistics.CarStatistics.CUP_POSITION;
 import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_LAP_INVALID;
 import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.DELTA;
-import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_INDEX;
-import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_LIST;
-import racecontrol.client.extension.statistics.CarStatistics.DriverList;
-import static racecontrol.client.extension.statistics.CarStatistics.FIRSTNAME;
-import static racecontrol.client.extension.statistics.CarStatistics.FULL_NAME;
 import static racecontrol.client.extension.statistics.CarStatistics.IS_FOCUSED_ON;
 import static racecontrol.client.extension.statistics.CarStatistics.IS_IN_PITS;
 import static racecontrol.client.extension.statistics.CarStatistics.IS_SESSION_BEST;
@@ -45,13 +37,9 @@ import static racecontrol.client.extension.statistics.CarStatistics.LAST_LAP_TIM
 import static racecontrol.client.extension.statistics.CarStatistics.LAST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarStatistics.LAST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarStatistics.LAST_SECTOR_TWO;
-import static racecontrol.client.extension.statistics.CarStatistics.NAME;
 import static racecontrol.client.extension.statistics.CarStatistics.POSITION;
 import static racecontrol.client.extension.statistics.CarStatistics.PREDICTED_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_ID;
-import static racecontrol.client.extension.statistics.CarStatistics.SHORT_NAME;
-import static racecontrol.client.extension.statistics.CarStatistics.SURNAME;
-import static racecontrol.client.extension.statistics.CarStatistics.TEAM_NAME;
 import racecontrol.client.model.Car;
 
 /**
@@ -89,18 +77,6 @@ public class DataProcessor extends StatisticsProcessor {
 
         carStats.put(CAR_ID, info.getCarId());
 
-        // Identity
-        carStats.put(FIRSTNAME, car.getDriver().firstName);
-        carStats.put(SURNAME, car.getDriver().lastName);
-        carStats.put(FULL_NAME, car.getDriver().fullName());
-        carStats.put(NAME, car.getDriver().truncatedName());
-        carStats.put(SHORT_NAME, car.getDriver().shortName);
-        carStats.put(CAR_NUMBER, car.carNumber);
-        carStats.put(CAR_MODEL, car.carModel);
-        carStats.put(CATEGORY, car.getDriver().category);
-        carStats.put(DRIVER_INDEX, (int) info.getDriverIndex());
-        carStats.put(DRIVER_LIST, new DriverList(car.drivers));
-        carStats.put(TEAM_NAME, car.teamName);
         // Laps
         carStats.put(CURRENT_LAP_TIME, info.getCurrentLap().getLapTimeMS());
         carStats.put(LAST_LAP_TIME, info.getLastLap().getLapTimeMS());

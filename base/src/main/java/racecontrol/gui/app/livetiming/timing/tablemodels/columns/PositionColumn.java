@@ -11,6 +11,8 @@ import static racecontrol.client.extension.statistics.CarStatistics.IS_FOCUSED_O
 import static racecontrol.client.extension.statistics.CarStatistics.IS_SESSION_BEST;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.client.model.Car;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.lpui.table.LPTable;
@@ -32,10 +34,9 @@ public class PositionColumn
     }
 
     protected void positionRenderer(PApplet applet, LPTable.RenderContext context) {
-        if (!(context.object instanceof CarStatistics)) {
-            return;
-        }
-        CarStatistics stats = (CarStatistics) context.object;
+
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
 
         applet.noStroke();
         int bgColor = LookAndFeel.COLOR_RED;

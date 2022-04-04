@@ -21,6 +21,8 @@ import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_TWO;
 import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.client.model.Car;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
 import static racecontrol.gui.LookAndFeel.COLOR_RACE;
@@ -87,7 +89,8 @@ public class QualifyingLastTableModel
     }
 
     protected void lastLapRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int lastLapTime = stats.get(LAST_LAP_TIME);
         int bestLapTime = stats.get(BEST_LAP_TIME);
         int sessionbestLapTime = stats.get(SESSION_BEST_LAP_TIME);
@@ -112,7 +115,8 @@ public class QualifyingLastTableModel
     }
 
     protected void lastSectorOneRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int splitTime = stats.get(LAST_SECTOR_ONE);
         int bestSplitTime = stats.get(BEST_SECTOR_ONE);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_ONE);
@@ -137,7 +141,8 @@ public class QualifyingLastTableModel
     }
 
     protected void lastSectorTwoRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int splitTime = stats.get(LAST_SECTOR_TWO);
         int bestSplitTime = stats.get(BEST_SECTOR_TWO);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_TWO);
@@ -161,7 +166,8 @@ public class QualifyingLastTableModel
     }
 
     protected void lastSectorThreeRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int splitTime = stats.get(LAST_SECTOR_THREE);
         int bestSplitTime = stats.get(BEST_SECTOR_THREE);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_THREE);

@@ -12,6 +12,8 @@ import static racecontrol.client.extension.statistics.CarStatistics.LAST_LAP_INV
 import static racecontrol.client.extension.statistics.CarStatistics.LAST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_LAP_TIME;
 import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.client.model.Car;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
 import static racecontrol.gui.LookAndFeel.COLOR_RACE;
@@ -38,7 +40,8 @@ public class LastLaptime
 
     public static void lastLapRenderer(PApplet applet,
             LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int lastLapTime = stats.get(LAST_LAP_TIME);
         int bestLapTime = stats.get(BEST_LAP_TIME);
         int sessionbestLapTime = stats.get(SESSION_BEST_LAP_TIME);

@@ -25,6 +25,8 @@ import static racecontrol.client.extension.statistics.CarStatistics.LAP_TIME_GAP
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.client.model.Car;
 import static racecontrol.gui.LookAndFeel.COLOR_ORANGE;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.utility.TimeUtils;
@@ -43,10 +45,11 @@ public abstract class LiveTimingTableModel
     /**
      * Ordered list of car entries
      */
-    protected List<CarStatistics> entries = new LinkedList<>();
+    protected List<Car> entries = new LinkedList<>();
 
     protected void gapRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
 
         applet.fill(COLOR_WHITE);
         String text = "--";
@@ -73,7 +76,8 @@ public abstract class LiveTimingTableModel
     }
 
     protected void gapToLeaderRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         String text = "--";
         if (stats.get(SESSION_ID).getType() == RACE) {
             if (stats.get(LAPS_BEHIND_SPLIT)) {
@@ -98,7 +102,8 @@ public abstract class LiveTimingTableModel
     @Override
     public int getSelectedRow() {
         for (int i = 0; i < entries.size(); i++) {
-            var stats = entries.get(i);
+            Car car = entries.get(i);
+            var stats = StatisticsExtension.getInstance().getCar(car.id);
             if (stats.get(IS_FOCUSED_ON)) {
                 return i;
             }
@@ -115,11 +120,11 @@ public abstract class LiveTimingTableModel
 
     public abstract String getName();
 
-    public void setEntries(List<CarStatistics> entries) {
+    public void setEntries(List<Car> entries) {
         this.entries = entries;
     }
 
-    public CarStatistics getEntry(int row) {
+    public Car getEntry(int row) {
         if (row < entries.size()) {
             return entries.get(row);
         }

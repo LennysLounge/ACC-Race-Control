@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.protocol.BroadcastingEvent;
 import racecontrol.client.protocol.RealtimeInfo;
 import static racecontrol.client.protocol.enums.BroadcastingEventType.PENALTYCOMMMSG;
@@ -21,11 +22,11 @@ import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
 import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
 import static racecontrol.client.extension.statistics.CarStatistics.CAR_LOCATION;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_NUMBER;
 import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT_TIME_ACCURATE;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
 import racecontrol.client.extension.statistics.CarStatisticsWritable;
+import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
 import racecontrol.utility.TimeUtils;
 
@@ -111,9 +112,10 @@ public class StintTimeProcessor
 
     private void broadcastingEvent(BroadcastingEvent event) {
         if (event.getType() == PENALTYCOMMMSG) {
+            Car car = getClient().getModel().cars.get(event.getCarId());
             CarStatisticsWritable stats = getCars().get(event.getCarId());
             LOG.info(event.getMessage()
-                    + "\t" + stats.get(CAR_NUMBER)
+                    + "\t" + car.carNumberString()
                     + "\t" + TimeUtils.asDurationShort(stats.get(DRIVER_STINT_TIME))
                     + "\t" + stats.get(CAR_LOCATION)
             );

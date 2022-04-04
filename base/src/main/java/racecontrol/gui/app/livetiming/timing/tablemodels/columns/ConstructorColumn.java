@@ -10,8 +10,8 @@ import java.util.Map;
 import processing.core.PApplet;
 import processing.core.PImage;
 import racecontrol.client.protocol.enums.CarModel;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_MODEL;
 import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.model.Car;
 import static racecontrol.gui.LookAndFeel.COLOR_MEDIUM_GRAY;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import static racecontrol.gui.RaceControlApplet.getApplet;
@@ -39,11 +39,9 @@ public class ConstructorColumn
     }
 
     protected void constructorRenderer(PApplet applet, LPTable.RenderContext context) {
-        if (!(context.object instanceof CarStatistics)) {
-            return;
-        }
-        CarStatistics stats = (CarStatistics) context.object;
-        CarModel model = stats.get(CAR_MODEL);
+        Car car = (Car) context.object;
+        
+        CarModel model = car.carModel;
         if (!constructorImages.containsKey(model)) {
             if (model == CarModel.ERROR) {
                 constructorImages.put(model, null);

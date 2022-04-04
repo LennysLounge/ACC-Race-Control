@@ -9,13 +9,12 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_MODEL;
-import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_INDEX;
-import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_LIST;
 import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT_TIME_ACCURATE;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.client.model.Car;
 import racecontrol.client.model.Driver;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
@@ -74,9 +73,12 @@ public class DriversTableModel
     @Override
     public void sort() {
         entries = entries.stream()
-                .sorted((c1, c2)
-                        -> c1.get(REALTIME_POSITION).compareTo(c2.get(REALTIME_POSITION))
-                )
+                .sorted((car1, car2)
+                        -> {
+                    CarStatistics c1 = StatisticsExtension.getInstance().getCar(car1.id);
+                    CarStatistics c2 = StatisticsExtension.getInstance().getCar(car2.id);
+                    return c1.get(REALTIME_POSITION).compareTo(c2.get(REALTIME_POSITION));
+                })
                 .collect(toList());
     }
 
@@ -87,24 +89,25 @@ public class DriversTableModel
 
     @Override
     public float getRowHeight(int rowIndex) {
-        CarStatistics car = getEntry(rowIndex);
+        Car car = getEntry(rowIndex);
         if (car == null) {
             return LINE_HEIGHT;
         }
-        return LINE_HEIGHT * (car.get(DRIVER_LIST).getDrivers().size() - 1) * 0.6f
+        return LINE_HEIGHT * (car.driverCount) * 0.6f
                 + LINE_HEIGHT;
     }
 
     protected void nameRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int i = 0;
-        for (Driver driver : stats.get(DRIVER_LIST).getDrivers()) {
+        for (Driver driver : car.drivers) {
             String name = driver.fullName();
             applet.fill(COLOR_WHITE);
             applet.textAlign(LEFT, CENTER);
-            if (i == stats.get(DRIVER_INDEX)) {
+            if (i == car.driverIndexRealtime) {
                 applet.textFont(LookAndFeel.fontMedium());
-                if (stats.get(DRIVER_LIST).getDrivers().size() > 1) {
+                if (car.drivers.size() > 1) {
                     name = "<" + name + ">";
                 }
             } else {
@@ -116,10 +119,9 @@ public class DriversTableModel
     }
 
     private void driverCategoryRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
-
+        Car car = (Car) context.object;
         int i = 0;
-        for (Driver driver : stats.get(DRIVER_LIST).getDrivers()) {
+        for (Driver driver : car.drivers) {
             String name = driver.category.getText();
             applet.fill(COLOR_WHITE);
             applet.textAlign(LEFT, CENTER);
@@ -130,9 +132,8 @@ public class DriversTableModel
     }
 
     private void carClassRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
-
-        String name = stats.get(CAR_MODEL).getCategory().getText();
+        Car car = (Car) context.object;
+        String name = car.carModel.getCategory().getText();
         applet.fill(COLOR_WHITE);
         applet.textAlign(LEFT, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
@@ -140,9 +141,8 @@ public class DriversTableModel
     }
 
     private void carRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
-
-        String name = stats.get(CAR_MODEL).getName();
+        Car car = (Car) context.object;
+        String name = car.carModel.getName();
         applet.fill(COLOR_WHITE);
         applet.textAlign(LEFT, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
@@ -150,7 +150,8 @@ public class DriversTableModel
     }
 
     private void stintTimeRenderer(PApplet applet, LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         String text = TimeUtils.asDurationShort(stats.get(DRIVER_STINT_TIME));
         text = text + (stats.get(DRIVER_STINT_TIME_ACCURATE) ? "" : "*");
         applet.fill(COLOR_WHITE);

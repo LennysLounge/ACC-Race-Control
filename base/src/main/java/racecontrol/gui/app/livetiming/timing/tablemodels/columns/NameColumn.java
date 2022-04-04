@@ -8,8 +8,7 @@ package racecontrol.gui.app.livetiming.timing.tablemodels.columns;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import static racecontrol.client.extension.statistics.CarStatistics.NAME;
-import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.model.Car;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_LAPPED;
@@ -42,10 +41,7 @@ public class NameColumn
             LPTable.RenderContext context,
             boolean isLapped,
             boolean isLapping) {
-        if (!(context.object instanceof CarStatistics)) {
-            return;
-        }
-        String name = ((CarStatistics) context.object).get(NAME);
+        Car car = (Car) context.object;
 
         if (context.isMouseOverRow) {
             applet.fill(COLOR_DARK_RED);
@@ -61,7 +57,8 @@ public class NameColumn
         }
         applet.textAlign(LEFT, CENTER);
         applet.textFont(LookAndFeel.fontMedium());
-        applet.text(name, context.height / 4f, context.height / 2f);
+        applet.text(car.getDriver().truncatedName(), context.height / 4f,
+                context.height / 2f);
     }
 
 }

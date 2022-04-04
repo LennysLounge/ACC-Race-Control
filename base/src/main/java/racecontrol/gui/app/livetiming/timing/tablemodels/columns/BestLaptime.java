@@ -10,6 +10,8 @@ import static processing.core.PConstants.CENTER;
 import static racecontrol.client.extension.statistics.CarStatistics.BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_LAP_TIME;
 import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.client.model.Car;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
@@ -34,7 +36,8 @@ public class BestLaptime
 
     public static void bestLapRenderer(PApplet applet,
             LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int bestLapTime = stats.get(BEST_LAP_TIME);
         int sessionbestLapTime = stats.get(SESSION_BEST_LAP_TIME);
         if (bestLapTime == sessionbestLapTime) {

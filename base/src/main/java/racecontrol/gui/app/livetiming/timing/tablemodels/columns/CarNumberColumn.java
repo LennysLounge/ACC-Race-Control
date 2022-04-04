@@ -16,10 +16,12 @@ import static racecontrol.client.protocol.enums.CarCategory.GT3;
 import static racecontrol.client.protocol.enums.CarCategory.ST;
 import static racecontrol.client.protocol.enums.CarCategory.ST22;
 import static racecontrol.client.protocol.enums.CarCategory.TCX;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_MODEL;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_NUMBER;
-import static racecontrol.client.extension.statistics.CarStatistics.CATEGORY;
 import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.model.Car;
+import static racecontrol.client.protocol.enums.DriverCategory.BRONZE;
+import static racecontrol.client.protocol.enums.DriverCategory.GOLD;
+import static racecontrol.client.protocol.enums.DriverCategory.PLATINUM;
+import static racecontrol.client.protocol.enums.DriverCategory.SILVER;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_GT4;
 import static racecontrol.gui.LookAndFeel.COLOR_SUPER_TROFEO;
@@ -44,14 +46,11 @@ public class CarNumberColumn
     }
 
     protected void carNumberRenderer(PApplet applet, LPTable.RenderContext context) {
-        if (!(context.object instanceof CarStatistics)) {
-            return;
-        }
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
 
         int backColor = 0;
         int frontColor = 0;
-        switch (stats.get(CATEGORY)) {
+        switch (car.getDriver().category) {
             case BRONZE:
                 backColor = LookAndFeel.COLOR_RED;
                 frontColor = LookAndFeel.COLOR_BLACK;
@@ -71,7 +70,7 @@ public class CarNumberColumn
         applet.rect(0, 1, context.width, context.height - 2);
 
         //render GT4 / Cup / Super trofeo corners.
-        CarCategory cat = stats.get(CAR_MODEL).getCategory();
+        CarCategory cat = car.carModel.getCategory();
         if (cat != GT3) {
             applet.fill(COLOR_WHITE);
             applet.beginShape();
@@ -108,7 +107,7 @@ public class CarNumberColumn
         applet.fill(frontColor);
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontMedium());
-        applet.text(String.valueOf(stats.get(CAR_NUMBER)),
+        applet.text(String.valueOf(car.carNumber),
                 context.width / 2f, context.height / 2f);
     }
 

@@ -8,6 +8,8 @@ package racecontrol.gui.app.livetiming.timing.tablemodels.columns;
 import processing.core.PApplet;
 import static racecontrol.client.extension.statistics.CarStatistics.OVERTAKE_INDICATOR;
 import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.client.model.Car;
 import static racecontrol.gui.LookAndFeel.COLOR_RACE;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import racecontrol.gui.lpui.table.LPTable;
@@ -29,7 +31,8 @@ public class OvertakeIndicator
 
     public static void overtakeRenderer(PApplet applet,
             LPTable.RenderContext context) {
-        CarStatistics stats = (CarStatistics) context.object;
+        Car car = (Car) context.object;
+        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int overtake = stats.get(OVERTAKE_INDICATOR);
         if (overtake != 0) {
             int size = 10 * (int) Math.signum(overtake);
