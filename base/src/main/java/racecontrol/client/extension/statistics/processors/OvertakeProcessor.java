@@ -69,10 +69,6 @@ public class OvertakeProcessor
         }
 
         for (Car car : client.getModel().cars.values()) {
-            if (car.realtimeRaw.isDefault()) {
-                return;
-            }
-
             CarStatisticsWritable stats = getCars().get(car.id);
 
             if (prevPositions.containsKey(car.id)) {

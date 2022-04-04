@@ -102,7 +102,7 @@ public class RealtimePositionProcessor
                 Car car = client.getModel().cars.get(carStats.get(CAR_ID));
                 int position = 0;
                 if (car != null) {
-                    position = car.realtimeRaw.getPosition();
+                    position = car.position;
                 }
                 carStats.put(REALTIME_POSITION, position);
             }

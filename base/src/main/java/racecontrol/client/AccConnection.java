@@ -435,7 +435,23 @@ public class AccConnection
         //update model
         if (model.cars.containsKey(info.getCarId())) {
             Car car = model.cars.get(info.getCarId());
-            car.realtimeRaw = info;
+            car.driverIndexRealtime = info.getDriverIndex();
+            car.driverCount = info.getDriverCount();
+            car.gear = info.getGear();
+            car.yaw = info.getYaw();
+            car.pitch = info.getPitch();
+            car.roll = info.getRoll();
+            car.carLocation = info.getLocation();
+            car.kmh = info.getKMH();
+            car.position = info.getPosition();
+            car.cupPosition = info.getCupPosition();
+            car.trackPosition = info.getTrackPosition();
+            car.splinePosition = info.getSplinePosition();
+            car.lapCount = info.getLaps();
+            car.delta = info.getDelta();
+            car.bestSessionLap = info.getBestSessionLap();
+            car.lastLap = info.getLastLap();
+            car.currentLap = info.getCurrentLap();
             EventBus.publish(new RealtimeCarUpdateEvent(info));
         } else {
             //if the car doesnt exist in the model ask for a new entry list.

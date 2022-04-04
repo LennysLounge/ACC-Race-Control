@@ -49,8 +49,7 @@ public class GapCalculator {
         if (trackData.getGt3VelocityMap().isEmpty()) {
             return calculateGapNaive(behind, infront);
         }
-        return calculateGap(behind.realtimeRaw.getSplinePosition(),
-                infront.realtimeRaw.getSplinePosition());
+        return calculateGap(behind.splinePosition, infront.splinePosition);
     }
 
     public float calculateGap(float behind, float infront) {
@@ -137,11 +136,9 @@ public class GapCalculator {
      * @return gap from -> to in ms.
      */
     public float calculateGapNaive(Car behind, Car infront) {
-        RealtimeInfo prev = behind.realtimeRaw;
-        RealtimeInfo now = infront.realtimeRaw;
-        float splineDistance = (now.getSplinePosition()) - (prev.getSplinePosition());
+        float splineDistance = infront.splinePosition - behind.splinePosition;
         float trackDistance = trackData.getTrackMeters() * splineDistance;
-        float averageSpeed = (prev.getKMH() + now.getKMH()) / 2f / 3.6f;
+        float averageSpeed = (infront.kmh + behind.kmh) / 2f / 3.6f;
         return trackDistance / averageSpeed * 1000;
     }
 

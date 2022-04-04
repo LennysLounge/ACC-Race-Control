@@ -14,8 +14,6 @@ import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_SECT
 import static racecontrol.client.extension.statistics.CarStatistics.OVERTAKE_INDICATOR;
 import static racecontrol.client.extension.statistics.CarStatistics.PITLANE_COUNT;
 import static racecontrol.client.extension.statistics.CarStatistics.PITLANE_COUNT_ACCURATE;
-import static racecontrol.client.extension.statistics.CarStatistics.PITLANE_TIME_STATIONARY;
-import static racecontrol.client.extension.statistics.CarStatistics.RACE_DISTANCE_COMPLEX;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.CarStatistics;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
@@ -82,7 +80,7 @@ public class TestTableModel
     private void r1(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
-        String text = String.format("%.5f", getClient().getModel().cars.get(stats.get(CAR_ID)).realtimeRaw.getPosition() * 1f);
+        String text = String.format("%.5f", getClient().getModel().cars.get(stats.get(CAR_ID)).position * 1f);
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);
@@ -91,7 +89,7 @@ public class TestTableModel
     private void r2(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
-        String text = String.format("%.5f", getClient().getModel().cars.get(stats.get(CAR_ID)).realtimeRaw.getTrackPosition() * 1f);
+        String text = String.format("%.5f", getClient().getModel().cars.get(stats.get(CAR_ID)).trackPosition * 1f);
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);
@@ -100,7 +98,7 @@ public class TestTableModel
     private void r3(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
 
-        String text = String.format("%.5f", getClient().getModel().cars.get(stats.get(CAR_ID)).realtimeRaw.getSplinePosition());
+        String text = String.format("%.5f", getClient().getModel().cars.get(stats.get(CAR_ID)).splinePosition);
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);

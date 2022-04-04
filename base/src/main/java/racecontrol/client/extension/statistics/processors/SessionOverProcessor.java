@@ -59,7 +59,7 @@ public class SessionOverProcessor
         SessionInfo info = getClient().getModel().session.raw;
         if (info.getSessionType() == RACE
                 && info.getPhase() == SESSIONOVER
-                && car.realtimeRaw.getPosition() == 1) {
+                && car.position == 1) {
             isSessionOver = true;
         }
 

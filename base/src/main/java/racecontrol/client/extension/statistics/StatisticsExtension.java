@@ -87,7 +87,7 @@ public class StatisticsExtension extends ClientExtension
     }
 
     public CarStatistics getCar(int carId) {
-        return cars.get(carId).getReadonly();
+        return cars.getOrDefault(carId, new CarStatisticsWritable()).getReadonly();
     }
 
 }

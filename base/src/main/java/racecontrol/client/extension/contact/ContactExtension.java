@@ -89,9 +89,9 @@ public class ContactExtension extends ClientExtension
     private long stagedContactTimestamp = 0;
     /**
      * Holds car data for the past time. Maps session time to a map of carId to
-     * realtimeInfo.
+     * a car model copy.
      */
-    private final Map<Integer, Map<Integer, RealtimeInfo>> history = new HashMap<>();
+    private final Map<Integer, Map<Integer, Car>> history = new HashMap<>();
     /**
      * maximum time the history is saved for.
      */
@@ -217,7 +217,8 @@ public class ContactExtension extends ClientExtension
         if (!history.containsKey(sessionTime)) {
             history.put(sessionTime, new HashMap<>());
         }
-        history.get(sessionTime).put(info.getCarId(), info);
+        Car car = getWritableModel().cars.get(info.getCarId());
+        history.get(sessionTime).put(car.id, car.copy());
     }
 
     /**
@@ -275,8 +276,8 @@ public class ContactExtension extends ClientExtension
         Car car = getWritableModel().cars.get(event.getCarId()).copy();
 
         // use realtime data from history
-        car.realtimeRaw = history.get(sessionTime)
-                .getOrDefault(car.id, car.realtimeRaw);
+        car = history.get(sessionTime)
+                .getOrDefault(car.id, car.copy());
 
         if (stagedContact != null) {
             stagedContact = stagedContact.withCar(sessionTime, car);
@@ -323,34 +324,29 @@ public class ContactExtension extends ClientExtension
     private ContactInfo findOtherCars(ContactInfo contact) {
         // find history entry for the session time
         int time = getSessionTimeFromHistory(contact.getSessionEarliestTime());
-        Map<Integer, RealtimeInfo> h = history.get(time);
+        Map<Integer, Car> h = history.get(time);
 
         // find other car with the smallest distance
         int subjectId = contact.getCars().get(0).id;
-        RealtimeInfo subject = h.get(subjectId);
-        Optional<Car> closestCarO = h.values().stream()
-                .filter(r -> r.getCarId() != subject.getCarId())
+        Car subject = h.get(subjectId);
+        Optional<Car> closestCarOption = h.values().stream()
+                .filter(r -> r.id != subject.id)
                 .min((r1, r2) -> {
                     float d1 = Math.abs(getDistance(r1, subject));
                     float d2 = Math.abs(getDistance(r2, subject));
                     return ((Float) d1).compareTo(d2);
-                })
-                .map(r -> {
-                    Car car = getWritableModel().cars.get(r.getCarId()).copy();
-                    car.realtimeRaw = r;
-                    return car;
                 });
 
-        if (closestCarO.isEmpty()) {
+        if (closestCarOption.isEmpty()) {
             return contact;
         }
 
-        Car closestCar = closestCarO.get();
+        Car closestCar = closestCarOption.get();
         // log 
         if (closestCar != null) {
             int trackMeters = getWritableModel().trackInfo.getTrackMeters();
-            float distance = (closestCar.realtimeRaw.getSplinePosition()
-                    - subject.getSplinePosition()) * trackMeters;
+            float distance = (closestCar.splinePosition
+                    - subject.splinePosition) * trackMeters;
             LOG.info(String.format("Contact: ?%s\t\t%.2fm\t%s",
                     closestCar.carNumberString(),
                     distance,
@@ -402,7 +398,7 @@ public class ContactExtension extends ClientExtension
                     CarStatistics stats = STATISTICS_EXTENSION.getCar(car.id);
                     String carNumber = String.valueOf(car.carNumber);
                     String lap = String.valueOf(stats.get(SESSION_FINISHED) ? "F" : (stats.get(LAP_COUNT) + 1));
-                    boolean isInvalid = car.realtimeRaw.getCurrentLap().isInvalid()
+                    boolean isInvalid = car.currentLap.isInvalid()
                             && info.getSessionID().getType() != RACE;
                     boolean isSpun = info.getYellowFlaggedCars().contains(car.id);
                     return String.format("%s%s%s%s",
@@ -433,11 +429,11 @@ public class ContactExtension extends ClientExtension
         Optional<Car> closestCarInstant
                 = getWritableModel().cars.values().stream()
                         .filter(car -> car.id != flaggedCar.id)
-                        .filter(car -> car.realtimeRaw.getLocation() != CarLocation.NONE)
-                        .filter(car -> car.realtimeRaw.getLocation() != CarLocation.PITLANE)
+                        .filter(car -> car.carLocation != CarLocation.NONE)
+                        .filter(car -> car.carLocation != CarLocation.PITLANE)
                         .min((c1, c2) -> {
-                            float d1 = Math.abs(getDistance(c1.realtimeRaw, flaggedCar.realtimeRaw));
-                            float d2 = Math.abs(getDistance(c2.realtimeRaw, flaggedCar.realtimeRaw));
+                            float d1 = Math.abs(getDistance(c1, flaggedCar));
+                            float d2 = Math.abs(getDistance(c2, flaggedCar));
                             return Float.compare(d1, d2);
                         });
 
@@ -475,12 +471,12 @@ public class ContactExtension extends ClientExtension
     }
 
     private boolean isPossibleContact(YellowFlagContactInfo info) {
-        if (info.getFlaggedCar().realtimeRaw.getLaps() < 1) {
+        if (info.getFlaggedCar().lapCount < 1) {
             return false;
         }
 
-        float distance = getDistance(info.getClosestCar().realtimeRaw,
-                info.getFlaggedCar().realtimeRaw) * getWritableModel().trackInfo.getTrackMeters();
+        float distance = getDistance(info.getClosestCar(),
+                info.getFlaggedCar()) * getWritableModel().trackInfo.getTrackMeters();
         if (Math.abs(distance) > YELLOW_FLAG_DISTANCE_THRESHOLD) {
             return false;
         }
@@ -492,8 +488,8 @@ public class ContactExtension extends ClientExtension
         int trackMeters = getWritableModel().trackInfo.getTrackMeters();
         LOG.info(String.format("\t\t%s\t%.2fm",
                 info.getClosestCar().carNumberString(),
-                getDistance(info.getClosestCar().realtimeRaw,
-                        info.getFlaggedCar().realtimeRaw) * trackMeters
+                getDistance(info.getClosestCar(),
+                        info.getFlaggedCar()) * trackMeters
         ));
     }
 
@@ -521,8 +517,8 @@ public class ContactExtension extends ClientExtension
      * @param r2 RealtimeInfo for car 2.
      * @return The spline distance between two cars.
      */
-    private float getDistance(RealtimeInfo r1, RealtimeInfo r2) {
-        float distance = r1.getSplinePosition() - r2.getSplinePosition();
+    private float getDistance(Car r1, Car r2) {
+        float distance = r1.splinePosition - r2.splinePosition;
         if (distance > 0.5f) {
             distance -= 1f;
         }

@@ -152,7 +152,7 @@ public class Hotkeys {
         Car focusedCar = model.cars.get(focusedCarIndex);
 
         List<Car> cars = model.cars.values().stream()
-                .sorted((c1, c2) -> c2.realtimeRaw.getPosition() - c1.realtimeRaw.getPosition())
+                .sorted((c1, c2) -> c2.position - c1.position)
                 .collect(Collectors.toList());
         int index = cars.indexOf(focusedCar);
         int target = index + direction;
@@ -166,8 +166,8 @@ public class Hotkeys {
     }
 
     private int compareSplinePos(Car c1, Car c2) {
-        float s1 = c1.realtimeRaw.getSplinePosition();
-        float s2 = c2.realtimeRaw.getSplinePosition();
+        float s1 = c1.splinePosition;
+        float s2 = c2.splinePosition;
         if (s1 > s2) {
             return 1;
         }

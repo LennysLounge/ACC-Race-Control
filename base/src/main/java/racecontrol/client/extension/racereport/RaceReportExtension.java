@@ -100,15 +100,15 @@ public class RaceReportExtension extends ClientExtension
         DriverRecord dr = sessions.get(sessionId).get(e.getCar().id);
 
         //set position and lap count
-        dr.setPosition(e.getCar().realtimeRaw.getPosition());
-        dr.setLapCount(e.getCar().realtimeRaw.getLaps());
+        dr.setPosition(e.getCar().position);
+        dr.setLapCount(e.getCar().lapCount);
 
         int deltaToLeader = 0;
 
         // if we are in a race session, calculate offset to leader.
         if (sessionId.getType() == RACE) {
             //if this car is the leader add the leader offset.
-            int lapCount = e.getCar().realtimeRaw.getLaps();
+            int lapCount = e.getCar().lapCount;
             long now = System.currentTimeMillis();
             if (!leaderOffset.containsKey(lapCount)) {
                 leaderOffset.put(lapCount, now);

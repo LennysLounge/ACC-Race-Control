@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import static racecontrol.client.AccBroadcastingClient.getClient;
-import racecontrol.client.protocol.CarInfo;
 import racecontrol.client.protocol.LapInfo;
 import racecontrol.client.protocol.RealtimeInfo;
 import racecontrol.client.protocol.SessionInfo;
@@ -144,11 +143,11 @@ public class SectorTimesProcessor
 
     private void onLapCompleted(Car car) {
         CarStatisticsWritable carStats = getCars().get(car.id);
-        int lapTime = car.realtimeRaw.getLastLap().getLapTimeMS();
+        int lapTime = car.lastLap.getLapTimeMS();
         int s3Time = lapTime - carStats.get(CURRENT_SECTOR_ONE_CALC) - carStats.get(CURRENT_SECTOR_TWO_CALC);
         carStats.put(CURRENT_SECTOR_THREE_CALC, s3Time);
 
-        LapInfo lastLap = car.realtimeRaw.getLastLap();
+        LapInfo lastLap = car.lastLap;
         carStats.put(CURRENT_SECTOR_ONE, lastLap.getSplits().get(0));
         carStats.put(CURRENT_SECTOR_TWO, lastLap.getSplits().get(1));
         carStats.put(CURRENT_SECTOR_THREE, lastLap.getSplits().get(2));
@@ -194,7 +193,7 @@ public class SectorTimesProcessor
     private void debugLog(Car car) {
         if (trackData != null) {
             CarStatisticsWritable carStats = getCars().get(car.id);
-            LapInfo lastLap = car.realtimeRaw.getLastLap();
+            LapInfo lastLap = car.lastLap;
             // Sector suggestions.
             if (sectorSuggestions.containsKey(car.id)) {
                 int s1Time = lastLap.getSplits().get(0);
