@@ -169,7 +169,7 @@ public class LapTimeExtension extends ClientExtension
             for (Entry<Integer, List<Integer>> entry : laps.entrySet()) {
                 Car car = getWritableModel().cars.get(entry.getKey());
                 writer.print(car.carNumber);
-                writer.print("," + car.getDriver().getFirstName() + " " + car.getDriver().getLastName());
+                writer.print("," + car.getDriver().fullName());
                 for (int lap : entry.getValue()) {
                     writer.print("," + lap);
                 }

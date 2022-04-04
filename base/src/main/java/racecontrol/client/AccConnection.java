@@ -14,13 +14,12 @@ import java.net.DatagramSocket;
 import java.net.PortUnreachableException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import racecontrol.Main;
 import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.protocol.BroadcastingEvent;
@@ -48,6 +47,7 @@ import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
 import racecontrol.client.events.TrackInfoEvent;
 import racecontrol.client.model.Car;
+import racecontrol.client.model.Driver;
 import racecontrol.client.model.Model;
 import racecontrol.client.protocol.enums.Nationality;
 import racecontrol.eventbus.EventBus;
@@ -379,7 +379,7 @@ public class AccConnection
                 if (now - car.lastUpdate > model.updateInterval * 10) {
                     car.connected = false;
 
-                    String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
+                    String name = car.getDriver().fullName();
                     LOG.info("Car disconnected: " + car.carNumberString() + "\t" + name);
                     UILogger.log("Car disconnected: " + car.carNumberString() + "\t" + name);
                     EventBus.publish(new CarDisconnectedEvent(car));
@@ -457,17 +457,26 @@ public class AccConnection
         car.cupCategory = carInfo.getCupCatergory();
         car.driverIndex = carInfo.getCurrentDriverIndex();
         car.nationality = Nationality.fromId(carInfo.getCarNationality());
-        car.drivers = carInfo.getDrivers();
+        car.drivers = carInfo.getDrivers().stream()
+                .map(driverInfo -> {
+                    var driver = new Driver();
+                    driver.firstName = driverInfo.getFirstName();
+                    driver.lastName = driverInfo.getLastName();
+                    driver.shortName = driverInfo.getShortName();
+                    driver.category = driverInfo.getCategory();
+                    driver.nationality = driverInfo.getDriverNationality();
+                    return driver;
+                })
+                .collect(Collectors.toList());
         model.cars.put(car.id, car);
 
         //Fire Car connection event if the car is new.
         if (newConnection) {
-            String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
-            LOG.info("Car connected: " + car.carNumberString() + "\t" + name);
-            UILogger.log("Car connected: " + car.carNumberString() + "\t" + name);
+            LOG.info("Car connected: " + car.carNumberString() + "\t" + car.getDriver().fullName());
+            UILogger.log("Car connected: " + car.carNumberString() + "\t" + car.getDriver().fullName());
             EventBus.publish(new CarConnectedEvent(car));
         }
-        
+
         EventBus.publish(new EntryListCarUpdateEvent(carInfo));
     }
 

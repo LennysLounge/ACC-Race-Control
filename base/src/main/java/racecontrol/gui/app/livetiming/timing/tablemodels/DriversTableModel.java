@@ -9,7 +9,6 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import racecontrol.client.protocol.DriverInfo;
 import static racecontrol.client.extension.statistics.CarStatistics.CAR_MODEL;
 import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_INDEX;
 import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_LIST;
@@ -17,6 +16,7 @@ import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT
 import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT_TIME_ACCURATE;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.CarStatistics;
+import racecontrol.client.model.Driver;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
@@ -98,8 +98,8 @@ public class DriversTableModel
     protected void nameRenderer(PApplet applet, LPTable.RenderContext context) {
         CarStatistics stats = (CarStatistics) context.object;
         int i = 0;
-        for (DriverInfo info : stats.get(DRIVER_LIST).getDrivers()) {
-            String name = info.getFirstName() + " " + info.getLastName();
+        for (Driver driver : stats.get(DRIVER_LIST).getDrivers()) {
+            String name = driver.fullName();
             applet.fill(COLOR_WHITE);
             applet.textAlign(LEFT, CENTER);
             if (i == stats.get(DRIVER_INDEX)) {
@@ -119,8 +119,8 @@ public class DriversTableModel
         CarStatistics stats = (CarStatistics) context.object;
 
         int i = 0;
-        for (DriverInfo info : stats.get(DRIVER_LIST).getDrivers()) {
-            String name = info.getCategory().getText();
+        for (Driver driver : stats.get(DRIVER_LIST).getDrivers()) {
+            String name = driver.category.getText();
             applet.fill(COLOR_WHITE);
             applet.textAlign(LEFT, CENTER);
             applet.textFont(LookAndFeel.fontRegular());

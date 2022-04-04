@@ -88,7 +88,7 @@ public class RaceReportExtension extends ClientExtension
         // add a driver record if one does not exist.
         if (!sessions.get(sessionId).containsKey(e.getCar().id)) {
             String driverName = e.getCar().drivers.stream()
-                    .map(driverInfo -> driverInfo.getFirstName() + " " + driverInfo.getLastName())
+                    .map(driver -> driver.fullName())
                     .collect(Collectors.joining(", "));
             sessions.get(sessionId).put(e.getCar().id,
                     new DriverRecord(

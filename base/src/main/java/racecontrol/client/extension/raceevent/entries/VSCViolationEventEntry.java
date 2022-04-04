@@ -72,7 +72,7 @@ public class VSCViolationEventEntry
         String carNumber = String.valueOf(car.carNumber);
         int background_color = 0;
         int text_color = 0;
-        switch (car.getDriver().getCategory()) {
+        switch (car.getDriver().category) {
             case BRONZE:
                 background_color = LookAndFeel.COLOR_RED;
                 text_color = LookAndFeel.COLOR_BLACK;

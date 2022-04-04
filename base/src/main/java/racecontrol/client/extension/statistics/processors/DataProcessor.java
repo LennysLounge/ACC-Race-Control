@@ -90,14 +90,14 @@ public class DataProcessor extends StatisticsProcessor {
         carStats.put(CAR_ID, info.getCarId());
 
         // Identity
-        carStats.put(FIRSTNAME, car.getDriver().getFirstName());
-        carStats.put(SURNAME, car.getDriver().getLastName());
-        carStats.put(FULL_NAME, car.getDriver().getFirstName() + " " + car.getDriver().getLastName());
-        carStats.put(NAME, getName(car.getDriver()));
-        carStats.put(SHORT_NAME, car.getDriver().getShortName());
+        carStats.put(FIRSTNAME, car.getDriver().firstName);
+        carStats.put(SURNAME, car.getDriver().lastName);
+        carStats.put(FULL_NAME, car.getDriver().fullName());
+        carStats.put(NAME, car.getDriver().truncatedName());
+        carStats.put(SHORT_NAME, car.getDriver().shortName);
         carStats.put(CAR_NUMBER, car.carNumber);
         carStats.put(CAR_MODEL, car.carModel);
-        carStats.put(CATEGORY, car.getDriver().getCategory());
+        carStats.put(CATEGORY, car.getDriver().category);
         carStats.put(DRIVER_INDEX, (int) info.getDriverIndex());
         carStats.put(DRIVER_LIST, new DriverList(car.drivers));
         carStats.put(TEAM_NAME, car.teamName);

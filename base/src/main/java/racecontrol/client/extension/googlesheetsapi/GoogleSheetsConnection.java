@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import racecontrol.Main;
-import racecontrol.client.protocol.CarInfo;
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConnection.State.CONNECTING;
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConnection.State.OFFLINE;
 import static racecontrol.client.extension.googlesheetsapi.GoogleSheetsConnection.State.RUNNING;
@@ -253,7 +252,7 @@ public class GoogleSheetsConnection {
         event.carsConnected.stream()
                 .forEach(car -> {
                     String name = car.drivers.stream()
-                            .map(driver -> driver.getFirstName() + " " + driver.getLastName())
+                            .map(driver -> driver.fullName())
                             .collect(Collectors.joining("\n"));
                     entries.put(name, car.carNumber);
                 });

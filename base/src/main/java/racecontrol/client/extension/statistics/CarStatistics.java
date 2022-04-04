@@ -8,8 +8,7 @@ package racecontrol.client.extension.statistics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
-import racecontrol.client.protocol.DriverInfo;
+import racecontrol.client.model.Driver;
 import racecontrol.client.protocol.SessionId;
 import racecontrol.client.protocol.enums.CarLocation;
 import racecontrol.client.protocol.enums.CarModel;
@@ -169,17 +168,17 @@ public class CarStatistics {
 
     public static class DriverList {
 
-        private final List<DriverInfo> drivers;
+        private final List<Driver> drivers;
 
         public DriverList() {
             this(new ArrayList<>());
         }
 
-        public DriverList(List<DriverInfo> drivers) {
+        public DriverList(List<Driver> drivers) {
             this.drivers = drivers;
         }
 
-        public List<DriverInfo> getDrivers() {
+        public List<Driver> getDrivers() {
             return drivers;
         }
     }

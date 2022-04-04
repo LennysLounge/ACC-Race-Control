@@ -60,7 +60,7 @@ public class Car {
     /**
      * List of drivers on this car.
      */
-    public List<DriverInfo> drivers = new ArrayList<>();
+    public List<Driver> drivers = new ArrayList<>();
     /**
      * Currently driving driver index.
      */
@@ -144,7 +144,7 @@ public class Car {
      *
      * @return The current driver.
      */
-    public DriverInfo getDriver() {
+    public Driver getDriver() {
         //read driver from the realtime info
         if (drivers.size() > driverIndexRealtime) {
             return drivers.get(driverIndexRealtime);
@@ -153,7 +153,7 @@ public class Car {
             return drivers.get(driverIndex);
         } else {
             //else we return an empty driver.
-            return new DriverInfo();
+            return new Driver();
         }
     }
 
