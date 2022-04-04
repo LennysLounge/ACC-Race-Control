@@ -76,22 +76,6 @@ public class AccConnection
      */
     private boolean running = true;
     /**
-     * Maps a car id to the ammount of missed realtime updates.
-     */
-    private final Map<Integer, Integer> missedRealtimeUpdates = new HashMap<>();
-    /**
-     * Ammount of missed realtime updates before disconnect.
-     */
-    private final int maximumRealtimeMisses = 5;
-    /**
-     * List of cars that have received a realtime update this tick.
-     */
-    private final List<Integer> realtimeUpdatesReceived = new ArrayList<>();
-    /**
-     * List of cars that have recentrly connected.
-     */
-    private final List<Integer> newConnectedCars = new ArrayList<>();
-    /**
      * True means that the client is supposed to switch camera as soon as a
      * replay starts.
      */
@@ -319,8 +303,7 @@ public class AccConnection
         SessionInfo oldInfo = model.session.raw;
         model.session.raw = sessionInfo;
 
-        //Check for disconnected cars.
-        checkForMissedRealtimeCarUpdates();
+        checkForDisconnects();
 
         //initialise sessionId.
         if (!model.currentSessionId.isValid()) {
@@ -389,29 +372,20 @@ public class AccConnection
         EventBus.publish(new RealtimeUpdateEvent(sessionInfo));
     }
 
-    private void checkForMissedRealtimeCarUpdates() {
-        //reset missed updates to 0 for cars that have received on.
-        realtimeUpdatesReceived.forEach(carId -> missedRealtimeUpdates.put(carId, 0));
+    private void checkForDisconnects() {
+        long now = System.currentTimeMillis();
+        model.cars.values().forEach(car -> {
+            if (car.connected) {
+                if (now - car.lastUpdate > model.updateInterval * 10) {
+                    car.connected = false;
 
-        //increase misses for cars that did not update
-        model.cars.values().stream()
-                .map(car -> car.id)
-                .filter(carId -> !realtimeUpdatesReceived.contains(carId))
-                .forEach(carId -> {
-                    missedRealtimeUpdates.put(carId, missedRealtimeUpdates.getOrDefault(carId, 0) + 1);
-                });
-
-        realtimeUpdatesReceived.clear();
-
-        //disconnect cars with excess of misses
-        Iterator<Map.Entry<Integer, Integer>> iter = missedRealtimeUpdates.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry<Integer, Integer> entry = iter.next();
-            if (entry.getValue() >= maximumRealtimeMisses) {
-                onCarDisconnect(model.cars.get(entry.getKey()));
-                iter.remove();
+                    String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
+                    LOG.info("Car disconnected: " + car.carNumberString() + "\t" + name);
+                    UILogger.log("Car disconnected: " + car.carNumberString() + "\t" + name);
+                    EventBus.publish(new CarDisconnectedEvent(car));
+                }
             }
-        }
+        });
     }
 
     private void initSessionId(SessionInfo sessionInfo) {
@@ -429,45 +403,36 @@ public class AccConnection
 
     @Override
     public void onRealtimeCarUpdate(RealtimeInfo info) {
-        //Update realtime misses to avoid disconnect.
-        realtimeUpdatesReceived.add(info.getCarId());
-
-        //update model
-        if (model.cars.containsKey(info.getCarId())) {
-            Car car = model.cars.get(info.getCarId());
-            car.driverIndexRealtime = info.getDriverIndex();
-            car.driverCount = info.getDriverCount();
-            car.gear = info.getGear();
-            car.yaw = info.getYaw();
-            car.pitch = info.getPitch();
-            car.roll = info.getRoll();
-            car.carLocation = info.getLocation();
-            car.kmh = info.getKMH();
-            car.position = info.getPosition();
-            car.cupPosition = info.getCupPosition();
-            car.trackPosition = info.getTrackPosition();
-            car.splinePosition = info.getSplinePosition();
-            car.lapCount = info.getLaps();
-            car.delta = info.getDelta();
-            car.bestSessionLap = info.getBestSessionLap();
-            car.lastLap = info.getLastLap();
-            car.currentLap = info.getCurrentLap();
-            EventBus.publish(new RealtimeCarUpdateEvent(info));
-        } else {
+        if (!model.cars.containsKey(info.getCarId())) {
             //if the car doesnt exist in the model ask for a new entry list.
             sendEntryListRequest();
+            return;
         }
+        Car car = model.cars.get(info.getCarId());
+        car.lastUpdate = System.currentTimeMillis();
+        car.connected = true;
+        car.driverIndexRealtime = info.getDriverIndex();
+        car.driverCount = info.getDriverCount();
+        car.gear = info.getGear();
+        car.yaw = info.getYaw();
+        car.pitch = info.getPitch();
+        car.roll = info.getRoll();
+        car.carLocation = info.getLocation();
+        car.kmh = info.getKMH();
+        car.position = info.getPosition();
+        car.cupPosition = info.getCupPosition();
+        car.trackPosition = info.getTrackPosition();
+        car.splinePosition = info.getSplinePosition();
+        car.lapCount = info.getLaps();
+        car.delta = info.getDelta();
+        car.bestSessionLap = info.getBestSessionLap();
+        car.lastLap = info.getLastLap();
+        car.currentLap = info.getCurrentLap();
+        EventBus.publish(new RealtimeCarUpdateEvent(info));
     }
 
     @Override
     public void onEntryListUpdate(List<Integer> carIds) {
-        //add any new carIds.
-        carIds.forEach(carId -> {
-            if (!model.cars.containsKey(carId)) {
-                model.cars.put(carId, new Car());
-                newConnectedCars.add(carId);
-            }
-        });
         EventBus.publish(new EntryListUpdateEvent(carIds));
     }
 
@@ -479,25 +444,30 @@ public class AccConnection
 
     @Override
     public void onEntryListCarUpdate(CarInfo carInfo) {
-        //Fire Car connection event if the car is new.
-        if (newConnectedCars.contains(carInfo.getCarId())) {
-            //add car to the model.
-            Car car = model.cars.get(carInfo.getCarId());
-            car.id = carInfo.getCarId();
-            car.carModel = carInfo.getCarModel();
-            car.teamName = carInfo.getTeamName();
-            car.carNumber = carInfo.getCarNumber();
-            car.cupCategory = carInfo.getCupCatergory();
-            car.driverIndex = carInfo.getCurrentDriverIndex();
-            car.nationality = Nationality.fromId(carInfo.getCarNationality());
-            car.drivers = carInfo.getDrivers();
+        Car car = model.cars.getOrDefault(carInfo.getCarId(), new Car());
 
+        boolean newConnection = car.connected == false;
+
+        car.lastUpdate = System.currentTimeMillis();
+        car.connected = true;
+        car.id = carInfo.getCarId();
+        car.carModel = carInfo.getCarModel();
+        car.teamName = carInfo.getTeamName();
+        car.carNumber = carInfo.getCarNumber();
+        car.cupCategory = carInfo.getCupCatergory();
+        car.driverIndex = carInfo.getCurrentDriverIndex();
+        car.nationality = Nationality.fromId(carInfo.getCarNationality());
+        car.drivers = carInfo.getDrivers();
+        model.cars.put(car.id, car);
+
+        //Fire Car connection event if the car is new.
+        if (newConnection) {
             String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
             LOG.info("Car connected: " + car.carNumberString() + "\t" + name);
             UILogger.log("Car connected: " + car.carNumberString() + "\t" + name);
             EventBus.publish(new CarConnectedEvent(car));
-            newConnectedCars.remove(Integer.valueOf(carInfo.getCarId()));
         }
+        
         EventBus.publish(new EntryListCarUpdateEvent(carInfo));
     }
 
@@ -528,16 +498,6 @@ public class AccConnection
                 info.getCloudLevel(), info.getRainLevel(), info.getWetness(),
                 info.getBestSessionLap());
         EventBus.publish(new SessionPhaseChangedEvent(correctedSessionInfo, init));
-    }
-
-    private void onCarDisconnect(Car car) {
-        //remove car from the model.
-        // TODO: mark car as disconnected.
-
-        String name = car.getDriver().getFirstName() + " " + car.getDriver().getLastName();
-        LOG.info("Car disconnected: " + car.carNumberString() + "\t" + name);
-        UILogger.log("Car disconnected: " + car.carNumberString() + "\t" + name);
-        EventBus.publish(new CarDisconnectedEvent(car));
     }
 
     /**

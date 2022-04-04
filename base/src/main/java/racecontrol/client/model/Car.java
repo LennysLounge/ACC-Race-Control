@@ -26,6 +26,14 @@ public class Car {
      */
     public int id;
     /**
+     * Timestamp of the last update to this car.
+     */
+    public long lastUpdate = 0;
+    /**
+     * True if the car is currently connected.
+     */
+    public boolean connected = false;
+    /**
      * The car model.
      */
     public CarModel carModel = CarModel.ERROR;
@@ -149,7 +157,7 @@ public class Car {
         }
     }
 
-    public Car copy() {
+    public synchronized Car copy() {
         Car car = new Car();
         car.id = id;
         car.carModel = carModel;

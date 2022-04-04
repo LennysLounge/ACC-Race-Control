@@ -18,9 +18,8 @@ public class Session {
      * Raw session info object.
      */
     public SessionInfo raw = new SessionInfo();
-    
 
-    public Session copy() {
+    public synchronized Session copy() {
         Session session = new Session();
         session.raw = raw;
         return session;

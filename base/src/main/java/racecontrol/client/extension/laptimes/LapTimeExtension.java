@@ -122,7 +122,6 @@ public class LapTimeExtension extends ClientExtension
     }
 
     private void onLapComplete(LapInfo lap, boolean isPB, boolean isSB) {
-        LOG.info("lap completed for id: " + lap.getCarId());
         Car car = getWritableModel().cars.get(lap.getCarId());
 
         boolean isFirstLap = lapCount.get(lap.getCarId()) == 1;

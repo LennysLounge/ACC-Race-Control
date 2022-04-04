@@ -76,7 +76,7 @@ public class Model {
      *
      * @return a deep copy of this model.
      */
-    public Model copy() {
+    public synchronized Model copy() {
         Model model = new Model();
         model.hostAddress = hostAddress;
         model.hostPort = hostPort;
