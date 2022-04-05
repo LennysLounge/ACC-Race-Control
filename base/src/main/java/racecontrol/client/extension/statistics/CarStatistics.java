@@ -80,8 +80,6 @@ public class CarStatistics {
     public static final Key<Integer> CURRENT_SECTOR_TWO = new Key<>(Integer.class, 0);
     public static final Key<Integer> CURRENT_SECTOR_THREE = new Key<>(Integer.class, 0);
     // Status
-    public static final Key<Boolean> IS_FOCUSED_ON = new Key<>(Boolean.class, false);
-    public static final Key<Boolean> IS_SESSION_BEST = new Key<>(Boolean.class, false);
     public static final Key<Boolean> IS_WHITE_FLAG = new Key<>(Boolean.class, false);
     public static final Key<Boolean> IS_YELLOW_FLAG = new Key<>(Boolean.class, false);
     // Realtime position

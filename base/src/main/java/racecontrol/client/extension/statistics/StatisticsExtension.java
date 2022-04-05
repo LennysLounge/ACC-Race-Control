@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import racecontrol.client.events.CarConnectedEvent;
-import racecontrol.client.extension.statistics.processors.DataProcessor;
 import racecontrol.client.extension.statistics.processors.OvertakeProcessor;
 import racecontrol.client.extension.statistics.processors.PitTimeProcessor;
 import racecontrol.client.extension.statistics.processors.PlacesLostGainedProcessor;
@@ -23,8 +22,12 @@ import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.ClientExtension;
+import racecontrol.client.events.RealtimeUpdateEvent;
+import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
+import static racecontrol.client.extension.statistics.CarStatistics.SESSION_ID;
 import racecontrol.client.extension.statistics.processors.FlagProcessor;
 import racecontrol.client.model.Car;
+import racecontrol.client.protocol.SessionInfo;
 
 /**
  * Gathers data and statistics for the cars.
@@ -62,7 +65,6 @@ public class StatisticsExtension extends ClientExtension
     private StatisticsExtension() {
         EventBus.register(this);
         this.processors = new ArrayList<>();
-        processors.add(new DataProcessor(cars));
         processors.add(new SectorTimesProcessor(cars));
         processors.add(new SessionOverProcessor(cars));
         processors.add(new RealtimePositionProcessor(cars));
@@ -78,10 +80,21 @@ public class StatisticsExtension extends ClientExtension
     public void onEvent(Event e) {
         if (e instanceof CarConnectedEvent) {
             Car car = ((CarConnectedEvent) e).getCar();
-            cars.put(car.id, new CarStatisticsWritable());
+            var stats = new CarStatisticsWritable();
+            stats.put(CAR_ID, car.id);
+            cars.put(car.id, stats);
+        } else if (e instanceof RealtimeUpdateEvent) {
+            onRealtimeUpdate(((RealtimeUpdateEvent) e).getSessionInfo());
         }
 
         processors.forEach(processor -> processor.onEvent(e));
+    }
+
+    public void onRealtimeUpdate(SessionInfo info) {
+        for (CarStatisticsWritable stats : cars.values()) {
+            Car car = getWritableModel().cars.get(stats.get(CAR_ID));
+            stats.put(SESSION_ID, getWritableModel().currentSessionId);
+        }
     }
 
     public CarStatistics getCar(int carId) {

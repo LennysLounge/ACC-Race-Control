@@ -15,7 +15,6 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
 import static racecontrol.client.protocol.enums.SessionType.RACE;
-import static racecontrol.client.extension.statistics.CarStatistics.IS_FOCUSED_ON;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
@@ -93,8 +92,7 @@ public abstract class LiveTimingTableModel
     public int getSelectedRow() {
         for (int i = 0; i < entries.size(); i++) {
             Car car = entries.get(i);
-            var stats = StatisticsExtension.getInstance().getCar(car.id);
-            if (stats.get(IS_FOCUSED_ON)) {
+            if (car.isFocused) {
                 return i;
             }
         }

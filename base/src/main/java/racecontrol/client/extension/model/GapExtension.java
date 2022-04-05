@@ -17,6 +17,7 @@ import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.client.model.Car;
 import racecontrol.client.protocol.SessionInfo;
 import racecontrol.eventbus.Event;
+import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 
 /**
@@ -36,6 +37,10 @@ public class GapExtension
      * Gap calculator.
      */
     private final GapCalculator gapCalculator = new GapCalculator();
+
+    public GapExtension() {
+        EventBus.register(this);
+    }
 
     @Override
     public void onEvent(Event e) {
@@ -59,6 +64,7 @@ public class GapExtension
 
         // calculate gaps to position ahead/behind and leader.
         List<Car> cars = getWritableModel().cars.values().stream()
+                .filter(car -> car.connected)
                 .sorted((c1, c2) -> {
                     CarStatistics car1 = StatisticsExtension.getInstance().getCar(c1.id);
                     CarStatistics car2 = StatisticsExtension.getInstance().getCar(c2.id);
@@ -95,6 +101,7 @@ public class GapExtension
         // calculate gaps to car ahead and behind.
         // cap to cars ahead / behind
         cars = getWritableModel().cars.values().stream()
+                .filter(car -> car.connected)
                 .sorted((c1, c2) -> {
                     return Float.compare(c1.splinePosition, c2.splinePosition);
                 })

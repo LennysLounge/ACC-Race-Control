@@ -7,8 +7,6 @@ package racecontrol.gui.app.livetiming.timing.tablemodels.columns;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static racecontrol.client.extension.statistics.CarStatistics.IS_FOCUSED_ON;
-import static racecontrol.client.extension.statistics.CarStatistics.IS_SESSION_BEST;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
@@ -41,10 +39,10 @@ public class PositionColumn
         applet.noStroke();
         int bgColor = LookAndFeel.COLOR_RED;
         int fgColor = LookAndFeel.COLOR_WHITE;
-        if (stats.get(IS_SESSION_BEST)) {
+        if (car.isSessionBestLaptime) {
             bgColor = LookAndFeel.COLOR_PURPLE;
             fgColor = LookAndFeel.COLOR_WHITE;
-        } else if (stats.get(IS_FOCUSED_ON)) {
+        } else if (car.isFocused) {
             bgColor = LookAndFeel.COLOR_WHITE;
             fgColor = LookAndFeel.COLOR_BLACK;
         }

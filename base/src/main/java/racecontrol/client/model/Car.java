@@ -172,6 +172,14 @@ public class Car {
      * Gap to the car behind. Max int if no car behind.
      */
     public int gapBehind = Integer.MAX_VALUE;
+    /**
+     * True if the car is the session best lap time holder.
+     */
+    public boolean isSessionBestLaptime;
+    /**
+     * True if the car is currently in focus.
+     */
+    public boolean isFocused;
 
     /**
      * Returns the car number formated as "#XXX".

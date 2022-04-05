@@ -13,10 +13,6 @@ import racecontrol.client.protocol.RealtimeInfo;
 import racecontrol.client.protocol.SessionInfo;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
-import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_POSITION_AHEAD;
-import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_POSITION_BEHIND;
-import static racecontrol.client.extension.statistics.CarStatistics.IS_FOCUSED_ON;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.SPLINE_POS;
@@ -58,17 +54,20 @@ public class RatingProcessorImpl
         CarStatistics stats = StatisticsExtension.getInstance()
                 .getCar(entry.getCar().id);
         // sort cars by their race position from first to last.
-        List<CarStatistics> carsSorted = getClient().getModel().cars.values().stream()
-                .map(car_ -> StatisticsExtension.getInstance().getCar(car_.id))
-                .sorted((c1, c2) -> Float.compare(c1.get(REALTIME_POSITION), c2.get(REALTIME_POSITION)))
+        List<Car> carSorted = getClient().getModel().cars.values().stream()
+                .sorted((car1, car2) -> {
+                    var c1 = StatisticsExtension.getInstance().getCar(car1.id);
+                    var c2 = StatisticsExtension.getInstance().getCar(car2.id);
+                    return Float.compare(c1.get(REALTIME_POSITION), c2.get(REALTIME_POSITION));
+                })
                 .collect(Collectors.toList());
         int index = stats.get(REALTIME_POSITION) - 1;
 
-        if (index < 0 || index >= carsSorted.size()) {
+        if (index < 0 || index >= carSorted.size()) {
             return entry;
         }
 
-        if (!carsSorted.get(index).get(CAR_ID).equals(stats.get(CAR_ID))) {
+        if (carSorted.get(index).id != car.id) {
             return entry;
         }
 
@@ -77,11 +76,11 @@ public class RatingProcessorImpl
         }
 
         // gap to car ahead linearly scaled from 1.5s to 0
-        float proximityFront = 1 - clamp(stats.get(GAP_TO_POSITION_AHEAD) / 2500f);
+        float proximityFront = 1 - clamp(car.gapPositionAhead / 2500f);
         entry.setProximityFont(proximityFront);
 
         // gap to car behind, linearly scaled from 1.5s to 0
-        float proximityBehind = 1 - clamp(stats.get(GAP_TO_POSITION_BEHIND) / 2500f);
+        float proximityBehind = 1 - clamp(car.gapPositionBehind / 2500f);
         entry.setProximityRear(proximityBehind);
 
         // overall proximity is the bigger proximity either ahead or behind.
@@ -105,7 +104,7 @@ public class RatingProcessorImpl
 
         // Focus changed penalty. When the focus changes, cars that are not in
         // focus get a rating penatly to avoid fast switching.
-        if (stats.get(IS_FOCUSED_ON)) {
+        if (car.isFocused) {
             entry.setFocusFast(1f);
             entry.setFocusSlow(1f);
             entry.setFocus(1f);
@@ -121,20 +120,20 @@ public class RatingProcessorImpl
         int count = 0;
         // looking 2.5 seconds backwards
         int countBack = 0;
-        int distance = stats.get(GAP_TO_POSITION_BEHIND);
+        int distance = car.gapPositionBehind;
         int i = index + 1;
-        while (distance < 2500 && i < carsSorted.size()) {
+        while (distance < 2500 && i < carSorted.size()) {
             countBack++;
-            distance += carsSorted.get(i).get(GAP_TO_POSITION_BEHIND);
+            distance += carSorted.get(i).gapPositionBehind;
             i++;
         }
         // looking 2.5 seconds ahead
         int countFront = 0;
-        distance = stats.get(GAP_TO_POSITION_AHEAD);
+        distance = car.gapPositionAhead;
         i = index - 1;
         while (distance < 2500 && i > 0) {
             countFront++;
-            distance += carsSorted.get(i).get(GAP_TO_POSITION_AHEAD);
+            distance += carSorted.get(i).gapPositionAhead;
             i--;
         }
         entry.setPackBack(countBack);
@@ -146,17 +145,17 @@ public class RatingProcessorImpl
         float packProximityRating = 0;
         // looking backwards
         int currentIndex = index + 1;
-        distance = stats.get(GAP_TO_POSITION_BEHIND);
-        while (distance < 2500 && currentIndex < carsSorted.size()) {
+        distance = car.gapPositionBehind;
+        while (distance < 2500 && currentIndex < carSorted.size()) {
             packProximityRating += 1 - distance / 2500f;
-            distance += carsSorted.get(currentIndex++).get(GAP_TO_POSITION_AHEAD);
+            distance += carSorted.get(currentIndex++).gapPositionBehind;
         }
         // looking forwards
         currentIndex = index - 1;
-        distance = stats.get(GAP_TO_POSITION_AHEAD);
+        distance = car.gapPositionAhead;
         while (distance < 2500 && currentIndex > 0) {
             packProximityRating += 1 - distance / 2500f;
-            distance += carsSorted.get(currentIndex--).get(GAP_TO_POSITION_AHEAD);
+            distance += carSorted.get(currentIndex--).gapPositionAhead;
         }
         entry.setPackProximity(packProximityRating);
 
@@ -169,7 +168,7 @@ public class RatingProcessorImpl
 
         // Pace focus. When we are spectating a lap we want to keep looking at
         // that lap until it is invalidated or done.
-        if (stats.get(IS_FOCUSED_ON)) {
+        if (car.isFocused) {
             entry.setPaceFocus(1f);
         } else {
             CarStatistics focusedCar = StatisticsExtension.getInstance().getCar(focusedCarId);
