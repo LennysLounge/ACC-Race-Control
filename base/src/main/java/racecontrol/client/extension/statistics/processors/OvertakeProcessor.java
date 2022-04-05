@@ -14,7 +14,6 @@ import static racecontrol.client.protocol.enums.SessionType.RACE;
 import racecontrol.client.events.AfterPacketReceivedEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import static racecontrol.client.extension.statistics.CarStatistics.OVERTAKE_INDICATOR;
-import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
 import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.client.model.Car;
@@ -72,13 +71,13 @@ public class OvertakeProcessor
             CarStatisticsWritable stats = getCars().get(car.id);
 
             if (prevPositions.containsKey(car.id)) {
-                int diff = stats.get(REALTIME_POSITION) - prevPositions.get(car.id);
+                int diff = car.realtimePosition - prevPositions.get(car.id);
                 if (diff != 0) {
                     stats.put(OVERTAKE_INDICATOR, diff);
                     timestamps.put(car.id, System.currentTimeMillis());
                 }
             }
-            prevPositions.put(car.id, stats.get(REALTIME_POSITION));
+            prevPositions.put(car.id, car.realtimePosition);
         }
     }
 

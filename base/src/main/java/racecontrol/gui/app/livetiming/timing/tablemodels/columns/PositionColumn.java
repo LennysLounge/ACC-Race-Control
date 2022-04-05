@@ -7,9 +7,6 @@ package racecontrol.gui.app.livetiming.timing.tablemodels.columns;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
-import racecontrol.client.extension.statistics.CarStatistics;
-import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
@@ -32,9 +29,7 @@ public class PositionColumn
     }
 
     protected void positionRenderer(PApplet applet, LPTable.RenderContext context) {
-
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
 
         applet.noStroke();
         int bgColor = LookAndFeel.COLOR_RED;
@@ -51,7 +46,7 @@ public class PositionColumn
         applet.fill(fgColor);
         applet.textAlign(CENTER, CENTER);
         applet.textFont(LookAndFeel.fontMedium());
-        applet.text(String.valueOf(stats.get(REALTIME_POSITION)),
+        applet.text(String.valueOf(car.realtimePosition),
                 context.width / 2f, context.height / 2f);
     }
 

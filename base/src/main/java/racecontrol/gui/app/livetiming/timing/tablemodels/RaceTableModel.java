@@ -8,9 +8,6 @@ package racecontrol.gui.app.livetiming.timing.tablemodels;
 import static java.util.stream.Collectors.toList;
 import racecontrol.gui.lpui.table.LPTableColumn;
 import static processing.core.PConstants.RIGHT;
-import racecontrol.client.extension.statistics.CarStatistics;
-import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
-import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.BestLaptime;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.ConstructorColumn;
@@ -63,11 +60,7 @@ public class RaceTableModel
     @Override
     public void sort() {
         entries = entries.stream()
-                .sorted((car1, car2) -> {
-                    CarStatistics c1 = StatisticsExtension.getInstance().getCar(car1.id);
-                    CarStatistics c2 = StatisticsExtension.getInstance().getCar(car2.id);
-                    return c1.get(REALTIME_POSITION).compareTo(c2.get(REALTIME_POSITION));
-                })
+                .sorted((car1, car2) -> Integer.compare(car1.realtimePosition, car2.realtimePosition))
                 .collect(toList());
     }
 }

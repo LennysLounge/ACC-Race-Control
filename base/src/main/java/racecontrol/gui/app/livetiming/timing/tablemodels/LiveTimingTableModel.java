@@ -16,7 +16,6 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
 import static racecontrol.client.AccBroadcastingClient.getClient;
 import static racecontrol.client.protocol.enums.SessionType.RACE;
-import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
@@ -42,14 +41,13 @@ public abstract class LiveTimingTableModel
 
     protected void gapRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
 
         applet.fill(COLOR_WHITE);
         String text = "--";
 
         if (getClient().getModel().currentSessionId.getType() == RACE) {
             int gap = car.gapPositionAhead;
-            if (stats.get(REALTIME_POSITION) > 1) {
+            if (car.realtimePosition > 1) {
                 text = TimeUtils.asGap(gap);
             }
 

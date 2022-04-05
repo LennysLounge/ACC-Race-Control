@@ -11,7 +11,6 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import racecontrol.client.extension.autobroadcast.Entry;
-import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import static racecontrol.gui.LookAndFeel.COLOR_BLUE;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
@@ -68,11 +67,7 @@ public class RatingTableModel
 
     public void sortPosition() {
         entriesNew = entriesNew.stream()
-                .sorted((c1, c2) -> {
-                    var c1Stat = statistics.getCar(c1.getCar().id);
-                    var c2Stat = statistics.getCar(c2.getCar().id);
-                    return c1Stat.get(REALTIME_POSITION).compareTo(c2Stat.get(REALTIME_POSITION));
-                })
+                .sorted((c1, c2) -> Integer.compare(c1.getCar().realtimePosition, c2.getCar().realtimePosition))
                 .collect(toList());
     }
 

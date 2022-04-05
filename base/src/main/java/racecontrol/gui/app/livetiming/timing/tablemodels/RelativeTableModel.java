@@ -9,8 +9,6 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
-import static racecontrol.client.extension.statistics.CarStatistics.RACE_DISTANCE_COMPLEX;
-import static racecontrol.client.extension.statistics.CarStatistics.SPLINE_POS;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
@@ -38,7 +36,7 @@ import racecontrol.utility.TimeUtils;
 public class RelativeTableModel
         extends LiveTimingTableModel {
 
-    private CarStatistics selectedCar = null;
+    private Car selectedCar = null;
 
     @Override
     public LPTableColumn[] getColumns() {
@@ -77,18 +75,16 @@ public class RelativeTableModel
         if (entries.isEmpty()) {
             return;
         }
-        selectedCar = StatisticsExtension.getInstance().getCar(entries.get(0).id);
+        selectedCar = entries.get(0);
         if (getSelectedRow() > 0 && getSelectedRow() < entries.size()) {
-            selectedCar = StatisticsExtension.getInstance().getCar(entries.get(getSelectedRow()).id);
+            selectedCar = entries.get(getSelectedRow());
         }
-        final CarStatistics pivot = selectedCar;
+        final Car pivot = selectedCar;
         entries = entries.stream()
-                .sorted((car1, car2) -> {
-                    CarStatistics c1 = StatisticsExtension.getInstance().getCar(car1.id);
-                    CarStatistics c2 = StatisticsExtension.getInstance().getCar(car2.id);
-                    float c1dif = pivot.get(SPLINE_POS) - c1.get(SPLINE_POS);
+                .sorted((c1, c2) -> {
+                    float c1dif = pivot.splinePosition - c1.splinePosition;
                     c1dif -= (Math.abs(c1dif) > 0.5) ? Math.signum(c1dif) : 0;
-                    float c2dif = pivot.get(SPLINE_POS) - c2.get(SPLINE_POS);
+                    float c2dif = pivot.splinePosition - c2.splinePosition;
                     c2dif -= (Math.abs(c2dif) > 0.5) ? Math.signum(c2dif) : 0;
                     return Float.compare(c1dif, c2dif);
                 })
@@ -101,9 +97,8 @@ public class RelativeTableModel
         boolean isLapping = false;
         if (selectedCar != null) {
             Car car = (Car) context.object;
-            CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-            float distance = stats.get(RACE_DISTANCE_COMPLEX)
-                    - selectedCar.get(RACE_DISTANCE_COMPLEX);
+            float distance = car.raceDistance
+                    - selectedCar.raceDistance;
             isLapped = distance < -0.5;
             isLapping = distance > 0.5;
         }

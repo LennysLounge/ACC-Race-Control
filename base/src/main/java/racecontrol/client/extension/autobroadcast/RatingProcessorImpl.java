@@ -13,8 +13,6 @@ import racecontrol.client.protocol.RealtimeInfo;
 import racecontrol.client.protocol.SessionInfo;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
-import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
-import static racecontrol.client.extension.statistics.CarStatistics.SPLINE_POS;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
@@ -50,17 +48,13 @@ public class RatingProcessorImpl
     @Override
     public Entry calculateRating(Entry entry) {
         Car car = entry.getCar();
-        CarStatistics stats = StatisticsExtension.getInstance()
-                .getCar(entry.getCar().id);
         // sort cars by their race position from first to last.
         List<Car> carSorted = getClient().getModel().cars.values().stream()
                 .sorted((car1, car2) -> {
-                    var c1 = StatisticsExtension.getInstance().getCar(car1.id);
-                    var c2 = StatisticsExtension.getInstance().getCar(car2.id);
-                    return Float.compare(c1.get(REALTIME_POSITION), c2.get(REALTIME_POSITION));
+                    return Float.compare(car1.realtimePosition, car2.realtimePosition);
                 })
                 .collect(Collectors.toList());
-        int index = stats.get(REALTIME_POSITION) - 1;
+        int index = car.realtimePosition - 1;
 
         if (index < 0 || index >= carSorted.size()) {
             return entry;
@@ -97,7 +91,7 @@ public class RatingProcessorImpl
 
         // Position rating. Having a higher position gives a better rating.
         // scaled from p1 to last place linearly.
-        float position = stats.get(REALTIME_POSITION) * 1f
+        float position = car.realtimePosition * 1f
                 / getClient().getModel().cars.size() * 1f;
         entry.setPosition(1 - position);
 
@@ -173,7 +167,7 @@ public class RatingProcessorImpl
         } else {
             CarStatistics focusedCar = StatisticsExtension.getInstance().getCar(focusedCarId);
             // we ignore the first 20% of a lap
-            if (stats.get(SPLINE_POS) < 0.2) {
+            if (car.splinePosition < 0.2) {
                 entry.setPaceFocus(0f);
             } else {
                 if (focusedCarCrossedFinish) {

@@ -10,13 +10,7 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static racecontrol.client.AccBroadcastingClient.getClient;
 import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
-import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_SECTOR_THREE_CALC;
-import static racecontrol.client.extension.statistics.CarStatistics.OVERTAKE_INDICATOR;
-import static racecontrol.client.extension.statistics.CarStatistics.PITLANE_COUNT;
-import static racecontrol.client.extension.statistics.CarStatistics.PITLANE_COUNT_ACCURATE;
-import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.CarStatistics;
-import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
@@ -27,7 +21,6 @@ import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PitFlagColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PositionColumn;
 import racecontrol.gui.lpui.table.LPTable;
 import racecontrol.gui.lpui.table.LPTableColumn;
-import racecontrol.utility.TimeUtils;
 
 /**
  *
@@ -74,11 +67,7 @@ public class TestTableModel
     @Override
     public void sort() {
         entries = entries.stream()
-                .sorted((car1, car2) -> {
-                    CarStatistics c1 = StatisticsExtension.getInstance().getCar(car1.id);
-                    CarStatistics c2 = StatisticsExtension.getInstance().getCar(car2.id);
-                    return c1.get(REALTIME_POSITION).compareTo(c2.get(REALTIME_POSITION));
-                })
+                .sorted((car1, car2) -> Integer.compare(car1.realtimePosition, car2.realtimePosition))
                 .collect(toList());
     }
 

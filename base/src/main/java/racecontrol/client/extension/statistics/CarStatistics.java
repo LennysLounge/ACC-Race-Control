@@ -82,11 +82,6 @@ public class CarStatistics {
     // Status
     public static final Key<Boolean> IS_WHITE_FLAG = new Key<>(Boolean.class, false);
     public static final Key<Boolean> IS_YELLOW_FLAG = new Key<>(Boolean.class, false);
-    // Realtime position
-    public static final Key<Float> RACE_DISTANCE_SIMPLE = new Key<>(Float.class, 0f);
-    public static final Key<Float> RACE_DISTANCE_COMPLEX = new Key<>(Float.class, 0f);
-    public static final Key<Float> SPLINE_POS = new Key<>(Float.class, 0f);
-    public static final Key<Integer> REALTIME_POSITION = new Key<>(Integer.class, 0);
     // Session over
     public static final Key<Boolean> SESSION_FINISHED = new Key<>(Boolean.class, false);
     // Overtake indicator

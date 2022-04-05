@@ -13,7 +13,6 @@ import racecontrol.client.events.CarConnectedEvent;
 import racecontrol.client.extension.statistics.processors.OvertakeProcessor;
 import racecontrol.client.extension.statistics.processors.PitTimeProcessor;
 import racecontrol.client.extension.statistics.processors.PlacesLostGainedProcessor;
-import racecontrol.client.extension.statistics.processors.RealtimePositionProcessor;
 import racecontrol.client.extension.statistics.processors.SectorTimesProcessor;
 import racecontrol.client.extension.statistics.processors.SessionOverProcessor;
 import racecontrol.client.extension.statistics.processors.SpeedProcessor;
@@ -64,7 +63,6 @@ public class StatisticsExtension extends ClientExtension
         this.processors = new ArrayList<>();
         processors.add(new SectorTimesProcessor(cars));
         processors.add(new SessionOverProcessor(cars));
-        processors.add(new RealtimePositionProcessor(cars));
         processors.add(new OvertakeProcessor(cars));
         processors.add(new PlacesLostGainedProcessor(cars));
         processors.add(new PitTimeProcessor(cars));

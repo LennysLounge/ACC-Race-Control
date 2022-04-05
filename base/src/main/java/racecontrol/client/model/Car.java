@@ -97,6 +97,10 @@ public class Car {
      */
     public int position;
     /**
+     * Current leaderboard position in realtime.
+     */
+    public int realtimePosition;
+    /**
      * Current leaderboard position in the cup.
      */
     public int cupPosition;
@@ -108,6 +112,11 @@ public class Car {
      * Position along the track spline.
      */
     public float splinePosition;
+    /**
+     * Distance driven in the session. Corrects the error when adding LapCount
+     * and spline position.
+     */
+    public float raceDistance;
     /**
      * Ammount of laps completed.
      */

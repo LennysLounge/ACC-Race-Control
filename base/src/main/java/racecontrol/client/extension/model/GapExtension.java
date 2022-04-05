@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import racecontrol.client.ClientExtension;
 import racecontrol.client.events.RealtimeUpdateEvent;
-import racecontrol.client.extension.statistics.CarStatistics;
-import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
-import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.extension.trackdata.TrackData;
 import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.client.model.Car;
@@ -65,11 +62,7 @@ public class GapExtension
         // calculate gaps to position ahead/behind and leader.
         List<Car> cars = getWritableModel().cars.values().stream()
                 .filter(car -> car.connected)
-                .sorted((c1, c2) -> {
-                    CarStatistics car1 = StatisticsExtension.getInstance().getCar(c1.id);
-                    CarStatistics car2 = StatisticsExtension.getInstance().getCar(c2.id);
-                    return car1.get(REALTIME_POSITION).compareTo(car2.get(REALTIME_POSITION));
-                })
+                .sorted((c1, c2) -> Float.compare(c1.realtimePosition, c2.realtimePosition))
                 .collect(Collectors.toList());
 
         for (int i = 0; i < cars.size(); i++) {

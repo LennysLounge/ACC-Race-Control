@@ -11,7 +11,6 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT_TIME_ACCURATE;
-import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
@@ -73,12 +72,7 @@ public class DriversTableModel
     @Override
     public void sort() {
         entries = entries.stream()
-                .sorted((car1, car2)
-                        -> {
-                    CarStatistics c1 = StatisticsExtension.getInstance().getCar(car1.id);
-                    CarStatistics c2 = StatisticsExtension.getInstance().getCar(car2.id);
-                    return c1.get(REALTIME_POSITION).compareTo(c2.get(REALTIME_POSITION));
-                })
+                .sorted((car1, car2) -> Integer.compare(car1.realtimePosition, car2.realtimePosition))
                 .collect(toList());
     }
 

@@ -17,12 +17,12 @@ import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
 import static racecontrol.client.extension.statistics.CarStatistics.PLACES_GAINED;
 import static racecontrol.client.extension.statistics.CarStatistics.RACE_START_POSITION;
-import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
 import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.eventbus.Event;
 import static racecontrol.client.extension.statistics.CarStatistics.RACE_START_POSITION_ACCURATE;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_FINISHED;
+import racecontrol.client.extension.statistics.StatisticsExtension;
 
 /**
  *
@@ -67,7 +67,7 @@ public class PlacesLostGainedProcessor
                         }
 
                         if (!carStats.get(SESSION_FINISHED)) {
-                            int lostGained = carStats.get(REALTIME_POSITION) - carStats.get(RACE_START_POSITION);
+                            int lostGained = car.realtimePosition - carStats.get(RACE_START_POSITION);
                             carStats.put(PLACES_GAINED, lostGained);
                         }
                     });
@@ -90,9 +90,9 @@ public class PlacesLostGainedProcessor
                 && (info.getPhase() == SESSION
                 || info.getPhase() == PRESESSION)) {
             client.getModel().cars.values().stream()
-                    .map(car -> getCars().get(car.id))
-                    .forEach(carStats -> {
-                        carStats.put(RACE_START_POSITION, carStats.get(REALTIME_POSITION));
+                    .forEach(car -> {
+                        var carStats = getCars().get(car.id);
+                        carStats.put(RACE_START_POSITION, car.realtimePosition);
                         carStats.put(RACE_START_POSITION_ACCURATE, true);
                     });
         }
