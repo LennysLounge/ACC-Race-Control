@@ -13,12 +13,9 @@ import java.util.logging.Logger;
 import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.protocol.LapInfo;
 import racecontrol.client.protocol.RealtimeInfo;
-import racecontrol.client.protocol.SessionInfo;
 import racecontrol.client.protocol.enums.CarLocation;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
-import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.extension.laptimes.LapCompletedEvent;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
 import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_SECTOR_ONE;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
 import racecontrol.client.extension.statistics.CarStatisticsWritable;
@@ -31,10 +28,6 @@ import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_SECT
 import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_SECTOR_TWO_CALC;
 import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_SECTOR_THREE_CALC;
 import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_SECTOR_TWO;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_LAP_TIME;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_ONE;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_THREE;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_TWO;
 import racecontrol.client.model.Car;
 
 /**
@@ -74,8 +67,6 @@ public class SectorTimesProcessor
     public void onEvent(Event e) {
         if (e instanceof RealtimeCarUpdateEvent) {
             onRealtimeCarUpdate(((RealtimeCarUpdateEvent) e).getInfo());
-        } else if (e instanceof RealtimeUpdateEvent) {
-            onRealtimeUpdate(((RealtimeUpdateEvent) e).getSessionInfo());
         } else if (e instanceof LapCompletedEvent) {
             if (enableLogging) {
                 debugLog(((LapCompletedEvent) e).getCar());
@@ -159,34 +150,6 @@ public class SectorTimesProcessor
     private boolean sectorTwoCrossed(RealtimeInfo info) {
         return prevSplinePosition.get(info.getCarId()) < trackData.getSectorTwoLine()
                 && info.getSplinePosition() > trackData.getSectorTwoLine();
-    }
-
-    private void onRealtimeUpdate(SessionInfo info) {
-        LapInfo sessionBestLap = info.getBestSessionLap();
-
-        // find best sectors.
-        int bestSectorOne = Integer.MAX_VALUE;
-        int bestSectorTwo = Integer.MAX_VALUE;
-        int bestSectorThree = Integer.MAX_VALUE;
-        for (CarStatisticsWritable stats : getCars().values()) {
-            Car car = getClient().getModel().cars.get(stats.get(CAR_ID));
-            if (car.bestLap.getSplits().get(0) < bestSectorOne) {
-                bestSectorOne = car.bestLap.getSplits().get(0);
-            }
-            if (car.bestLap.getSplits().get(1) < bestSectorTwo) {
-                bestSectorTwo = car.bestLap.getSplits().get(1);
-            }
-            if (car.bestLap.getSplits().get(2) < bestSectorThree) {
-                bestSectorThree = car.bestLap.getSplits().get(3);
-            }
-        }
-        // write session bests to cars.
-        for (CarStatisticsWritable car : getCars().values()) {
-            car.put(SESSION_BEST_LAP_TIME, sessionBestLap.getLapTimeMS());
-            car.put(SESSION_BEST_SECTOR_ONE, bestSectorOne);
-            car.put(SESSION_BEST_SECTOR_TWO, bestSectorTwo);
-            car.put(SESSION_BEST_SECTOR_THREE, bestSectorThree);
-        }
     }
 
     private void debugLog(Car car) {

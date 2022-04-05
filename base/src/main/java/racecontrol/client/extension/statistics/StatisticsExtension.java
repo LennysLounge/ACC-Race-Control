@@ -22,12 +22,9 @@ import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.ClientExtension;
-import racecontrol.client.events.RealtimeUpdateEvent;
 import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_ID;
 import racecontrol.client.extension.statistics.processors.FlagProcessor;
 import racecontrol.client.model.Car;
-import racecontrol.client.protocol.SessionInfo;
 
 /**
  * Gathers data and statistics for the cars.
@@ -83,18 +80,9 @@ public class StatisticsExtension extends ClientExtension
             var stats = new CarStatisticsWritable();
             stats.put(CAR_ID, car.id);
             cars.put(car.id, stats);
-        } else if (e instanceof RealtimeUpdateEvent) {
-            onRealtimeUpdate(((RealtimeUpdateEvent) e).getSessionInfo());
         }
 
         processors.forEach(processor -> processor.onEvent(e));
-    }
-
-    public void onRealtimeUpdate(SessionInfo info) {
-        for (CarStatisticsWritable stats : cars.values()) {
-            Car car = getWritableModel().cars.get(stats.get(CAR_ID));
-            stats.put(SESSION_ID, getWritableModel().currentSessionId);
-        }
     }
 
     public CarStatistics getCar(int carId) {

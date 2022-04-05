@@ -87,7 +87,6 @@ public class CarStatistics {
     public static final Key<Float> RACE_DISTANCE_COMPLEX = new Key<>(Float.class, 0f);
     public static final Key<Float> SPLINE_POS = new Key<>(Float.class, 0f);
     public static final Key<Integer> REALTIME_POSITION = new Key<>(Integer.class, 0);
-    public static final Key<Boolean> USE_REALTIME_POS = new Key<>(Boolean.class, false);
     // Session over
     public static final Key<Boolean> SESSION_FINISHED = new Key<>(Boolean.class, false);
     // Overtake indicator
@@ -110,13 +109,6 @@ public class CarStatistics {
     // Stint time
     public static final Key<Integer> DRIVER_STINT_TIME = new Key<>(Integer.class, 0);
     public static final Key<Boolean> DRIVER_STINT_TIME_ACCURATE = new Key<>(Boolean.class, false);
-
-    // Session
-    public static final Key<Integer> SESSION_BEST_LAP_TIME = new Key<>(Integer.class, 0);
-    public static final Key<Integer> SESSION_BEST_SECTOR_ONE = new Key<>(Integer.class, 0);
-    public static final Key<Integer> SESSION_BEST_SECTOR_TWO = new Key<>(Integer.class, 0);
-    public static final Key<Integer> SESSION_BEST_SECTOR_THREE = new Key<>(Integer.class, 0);
-    public static final Key<SessionId> SESSION_ID = new Key<>(SessionId.class, new SessionId());
 
     public static class DriverList {
 

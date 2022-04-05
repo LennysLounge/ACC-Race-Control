@@ -14,7 +14,6 @@ import racecontrol.client.protocol.SessionInfo;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.SPLINE_POS;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
@@ -162,7 +161,8 @@ public class RatingProcessorImpl
         // Pace rating. Quick predicted lap times give a higher rating.
         // Session best has priority.
         float deltaPace = 1 - clamp(car.delta / -500f);
-        int sessionBestDif = car.predictedLapTime() - stats.get(SESSION_BEST_LAP_TIME);
+        int sessionBestDif = car.predictedLapTime()
+                - getClient().getModel().session.raw.getBestSessionLap().getLapTimeMS();
         float sessionBestPace = 1 - clamp(sessionBestDif / 1000f);
         entry.setPace(Math.max(deltaPace / 2, sessionBestPace));
 

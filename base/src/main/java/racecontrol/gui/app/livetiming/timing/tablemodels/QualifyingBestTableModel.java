@@ -8,18 +8,14 @@ package racecontrol.gui.app.livetiming.timing.tablemodels;
 import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
+import static racecontrol.client.AccBroadcastingClient.getClient;
 import static racecontrol.client.protocol.enums.CarLocation.TRACK;
-import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
 import racecontrol.gui.lpui.table.LPTable;
 import racecontrol.gui.lpui.table.LPTableColumn;
 import racecontrol.utility.TimeUtils;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_ONE;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_THREE;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_TWO;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
-import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.BestLaptime;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
@@ -118,9 +114,8 @@ public class QualifyingBestTableModel
 
     protected void bestSectorOneRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int splitTime = car.bestLap.getSplits().get(0);
-        int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_ONE);
+        int sessionBestSplitTime = getClient().getModel().session.sessionBestSplits.get(0);
 
         String text = "--";
         applet.fill(COLOR_WHITE);
@@ -137,9 +132,8 @@ public class QualifyingBestTableModel
 
     protected void bestSectorTwoRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int splitTime = car.bestLap.getSplits().get(1);
-        int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_TWO);
+        int sessionBestSplitTime = getClient().getModel().session.sessionBestSplits.get(1);
 
         String text = "--";
         applet.fill(COLOR_WHITE);
@@ -156,9 +150,8 @@ public class QualifyingBestTableModel
 
     protected void bestSectorThreeRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int splitTime = car.bestLap.getSplits().get(0);
-        int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_THREE);
+        int sessionBestSplitTime = getClient().getModel().session.sessionBestSplits.get(2);
 
         String text = "--";
         applet.fill(COLOR_WHITE);

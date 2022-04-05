@@ -14,9 +14,9 @@ import java.util.logging.Logger;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
+import static racecontrol.client.AccBroadcastingClient.getClient;
 import static racecontrol.client.protocol.enums.SessionType.RACE;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
@@ -47,7 +47,7 @@ public abstract class LiveTimingTableModel
         applet.fill(COLOR_WHITE);
         String text = "--";
 
-        if (stats.get(SESSION_ID).getType() == RACE) {
+        if (getClient().getModel().currentSessionId.getType() == RACE) {
             int gap = car.gapPositionAhead;
             if (stats.get(REALTIME_POSITION) > 1) {
                 text = TimeUtils.asGap(gap);
@@ -70,9 +70,8 @@ public abstract class LiveTimingTableModel
 
     protected void gapToLeaderRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         String text = "--";
-        if (stats.get(SESSION_ID).getType() == RACE) {
+        if (getClient().getModel().currentSessionId.getType() == RACE) {
             if (car.gapToLeader != 0) {
                 text = TimeUtils.asGap(car.gapToLeader);
             }
