@@ -425,7 +425,7 @@ public class AccConnection
         car.splinePosition = info.getSplinePosition();
         car.lapCount = info.getLaps();
         car.delta = info.getDelta();
-        car.sessionBestLap = info.getBestSessionLap();
+        car.bestLap = info.getBestSessionLap();
         car.lastLap = info.getLastLap();
         car.currentLap = info.getCurrentLap();
         EventBus.publish(new RealtimeCarUpdateEvent(info));

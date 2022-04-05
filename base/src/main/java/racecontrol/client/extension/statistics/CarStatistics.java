@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Map;
 import racecontrol.client.model.Driver;
 import racecontrol.client.protocol.SessionId;
-import racecontrol.client.protocol.enums.CarLocation;
-import racecontrol.client.protocol.enums.CarModel;
-import racecontrol.client.protocol.enums.DriverCategory;
 
 /**
  * Car statistics where the properties are read only.
@@ -75,16 +72,6 @@ public class CarStatistics {
     //             Properties
     //
     public static final Key<Integer> CAR_ID = new Key<>(Integer.class, 0);
-    // Gaps
-    public static final Key<Integer> LAP_TIME_GAP_TO_SESSION_BEST = new Key<>(Integer.class, 0);
-    public static final Key<Integer> GAP_TO_LEADER = new Key<>(Integer.class, 0);
-    public static final Key<Integer> GAP_TO_POSITION_AHEAD = new Key<>(Integer.class, 0);
-    public static final Key<Integer> GAP_TO_POSITION_BEHIND = new Key<>(Integer.class, 0);
-    public static final Key<Integer> GAP_TO_CAR_AHEAD = new Key<>(Integer.class, 0);
-    public static final Key<Integer> GAP_TO_CAR_BEHIND = new Key<>(Integer.class, 0);
-    public static final Key<Integer> LAPS_BEHIND_LEADER = new Key<>(Integer.class, 0);
-    public static final Key<Boolean> LAPS_BEHIND_SPLIT = new Key<>(Boolean.class, false);
-    public static final Key<Float> RACE_DISTANCE_BEHIND_LEADER = new Key<>(Float.class, 0f);
     // Sectors
     public static final Key<Integer> CURRENT_SECTOR_ONE_CALC = new Key<>(Integer.class, 0);
     public static final Key<Integer> CURRENT_SECTOR_TWO_CALC = new Key<>(Integer.class, 0);
@@ -92,17 +79,7 @@ public class CarStatistics {
     public static final Key<Integer> CURRENT_SECTOR_ONE = new Key<>(Integer.class, 0);
     public static final Key<Integer> CURRENT_SECTOR_TWO = new Key<>(Integer.class, 0);
     public static final Key<Integer> CURRENT_SECTOR_THREE = new Key<>(Integer.class, 0);
-    public static final Key<Integer> LAST_SECTOR_ONE = new Key<>(Integer.class, 0);
-    public static final Key<Integer> LAST_SECTOR_TWO = new Key<>(Integer.class, 0);
-    public static final Key<Integer> LAST_SECTOR_THREE = new Key<>(Integer.class, 0);
-    public static final Key<Integer> BEST_SECTOR_ONE = new Key<>(Integer.class, 0);
-    public static final Key<Integer> BEST_SECTOR_TWO = new Key<>(Integer.class, 0);
-    public static final Key<Integer> BEST_SECTOR_THREE = new Key<>(Integer.class, 0);
     // Status
-    public static final Key<Integer> POSITION = new Key<>(Integer.class, 0);
-    public static final Key<Integer> CUP_POSITION = new Key<>(Integer.class, 0);
-    public static final Key<Boolean> IS_IN_PITS = new Key<>(Boolean.class, false);
-    public static final Key<CarLocation> CAR_LOCATION = new Key<>(CarLocation.class, CarLocation.NONE);
     public static final Key<Boolean> IS_FOCUSED_ON = new Key<>(Boolean.class, false);
     public static final Key<Boolean> IS_SESSION_BEST = new Key<>(Boolean.class, false);
     public static final Key<Boolean> IS_WHITE_FLAG = new Key<>(Boolean.class, false);

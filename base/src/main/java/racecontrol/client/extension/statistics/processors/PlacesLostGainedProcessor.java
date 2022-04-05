@@ -16,7 +16,6 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
 import static racecontrol.client.extension.statistics.CarStatistics.PLACES_GAINED;
-import static racecontrol.client.extension.statistics.CarStatistics.POSITION;
 import static racecontrol.client.extension.statistics.CarStatistics.RACE_START_POSITION;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
@@ -60,11 +59,10 @@ public class PlacesLostGainedProcessor
         if (info.getSessionType() == RACE
                 && info.getPhase().getId() >= SESSION.getId()) {
             client.getModel().cars.values().stream()
-                    .map(car -> getCars().get(car.id))
-                    .forEach(carStats -> {
-
+                    .forEach(car -> {
+                        var carStats = getCars().get(car.id);
                         if (carStats.get(RACE_START_POSITION) == 0) {
-                            carStats.put(RACE_START_POSITION, carStats.get(POSITION));
+                            carStats.put(RACE_START_POSITION, car.position);
                             carStats.put(RACE_START_POSITION_ACCURATE, false);
                         }
 

@@ -15,12 +15,7 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
 import static racecontrol.client.protocol.enums.SessionType.RACE;
-import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_LEADER;
-import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_POSITION_AHEAD;
 import static racecontrol.client.extension.statistics.CarStatistics.IS_FOCUSED_ON;
-import static racecontrol.client.extension.statistics.CarStatistics.LAPS_BEHIND_LEADER;
-import static racecontrol.client.extension.statistics.CarStatistics.LAPS_BEHIND_SPLIT;
-import static racecontrol.client.extension.statistics.CarStatistics.LAP_TIME_GAP_TO_SESSION_BEST;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_ID;
 import racecontrol.client.extension.statistics.CarStatistics;
@@ -54,7 +49,7 @@ public abstract class LiveTimingTableModel
         String text = "--";
 
         if (stats.get(SESSION_ID).getType() == RACE) {
-            int gap = stats.get(GAP_TO_POSITION_AHEAD);
+            int gap = car.gapPositionAhead;
             if (stats.get(REALTIME_POSITION) > 1) {
                 text = TimeUtils.asGap(gap);
             }
@@ -63,9 +58,9 @@ public abstract class LiveTimingTableModel
                 applet.fill(COLOR_ORANGE);
             }
         } else {
-            if (car.sessionBestLap.getLapTimeMS() != Integer.MAX_VALUE
-                    && stats.get(LAP_TIME_GAP_TO_SESSION_BEST) != 0) {
-                text = TimeUtils.asDelta(stats.get(LAP_TIME_GAP_TO_SESSION_BEST));
+            if (car.bestLap.getLapTimeMS() != Integer.MAX_VALUE
+                    && car.deltaToSessionBest != 0) {
+                text = TimeUtils.asDelta(car.deltaToSessionBest);
             }
         }
 
@@ -79,12 +74,8 @@ public abstract class LiveTimingTableModel
         CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         String text = "--";
         if (stats.get(SESSION_ID).getType() == RACE) {
-            if (stats.get(LAPS_BEHIND_SPLIT)) {
-                text = String.format("+%d Laps", stats.get(LAPS_BEHIND_LEADER));
-            } else {
-                if (stats.get(GAP_TO_LEADER) != 0) {
-                    text = TimeUtils.asGap(stats.get(GAP_TO_LEADER));
-                }
+            if (car.gapToLeader != 0) {
+                text = TimeUtils.asGap(car.gapToLeader);
             }
         }
         applet.textAlign(RIGHT, CENTER);

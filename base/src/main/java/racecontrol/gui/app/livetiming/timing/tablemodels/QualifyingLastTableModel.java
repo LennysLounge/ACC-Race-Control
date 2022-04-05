@@ -7,12 +7,6 @@ package racecontrol.gui.app.livetiming.timing.tablemodels;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_ONE;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_THREE;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_TWO;
-import static racecontrol.client.extension.statistics.CarStatistics.LAST_SECTOR_ONE;
-import static racecontrol.client.extension.statistics.CarStatistics.LAST_SECTOR_THREE;
-import static racecontrol.client.extension.statistics.CarStatistics.LAST_SECTOR_TWO;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_THREE;
@@ -89,7 +83,7 @@ public class QualifyingLastTableModel
         Car car = (Car) context.object;
         CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int lastLapTime = car.lastLap.getLapTimeMS();
-        int bestLapTime = car.sessionBestLap.getLapTimeMS();
+        int bestLapTime = car.bestLap.getLapTimeMS();
         int sessionbestLapTime = stats.get(SESSION_BEST_LAP_TIME);
 
         if (car.lastLap.isInvalid()) {
@@ -114,8 +108,8 @@ public class QualifyingLastTableModel
     protected void lastSectorOneRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
         CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-        int splitTime = stats.get(LAST_SECTOR_ONE);
-        int bestSplitTime = stats.get(BEST_SECTOR_ONE);
+        int splitTime = car.lastLap.getSplits().get(0);
+        int bestSplitTime = car.bestLap.getSplits().get(0);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_ONE);
 
         String text = "--";
@@ -140,8 +134,8 @@ public class QualifyingLastTableModel
     protected void lastSectorTwoRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
         CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-        int splitTime = stats.get(LAST_SECTOR_TWO);
-        int bestSplitTime = stats.get(BEST_SECTOR_TWO);
+        int splitTime = car.lastLap.getSplits().get(0);
+        int bestSplitTime = car.bestLap.getSplits().get(0);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_TWO);
 
         String text = "--";
@@ -165,8 +159,8 @@ public class QualifyingLastTableModel
     protected void lastSectorThreeRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
         CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-        int splitTime = stats.get(LAST_SECTOR_THREE);
-        int bestSplitTime = stats.get(BEST_SECTOR_THREE);
+        int splitTime = car.lastLap.getSplits().get(0);
+        int bestSplitTime = car.bestLap.getSplits().get(0);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_THREE);
 
         String text = "--";

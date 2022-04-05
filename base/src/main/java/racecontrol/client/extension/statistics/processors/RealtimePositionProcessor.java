@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.protocol.RealtimeInfo;
 import racecontrol.client.protocol.SessionInfo;
-import static racecontrol.client.protocol.enums.CarLocation.PITLANE;
 import static racecontrol.client.protocol.enums.SessionPhase.PRESESSION;
 import static racecontrol.client.protocol.enums.SessionType.RACE;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
@@ -19,7 +18,6 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
 import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_LOCATION;
 import static racecontrol.client.extension.statistics.CarStatistics.RACE_DISTANCE_COMPLEX;
 import static racecontrol.client.extension.statistics.CarStatistics.RACE_DISTANCE_SIMPLE;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
@@ -129,7 +127,8 @@ public class RealtimePositionProcessor
     private void sessionPhaseChanged(SessionInfo info) {
         if (info.getPhase() == PRESESSION) {
             getCars().values().forEach(carStats -> {
-                if (carStats.get(CAR_LOCATION) == PITLANE) {
+                Car car = client.getModel().cars.get(carStats.get(CAR_ID));
+                if (car.isInPit()) {
                     carStats.put(RACE_DISTANCE_COMPLEX, -1f);
                 }
             });

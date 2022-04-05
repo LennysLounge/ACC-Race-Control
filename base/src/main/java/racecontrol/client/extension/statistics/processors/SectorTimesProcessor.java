@@ -18,9 +18,7 @@ import racecontrol.client.protocol.enums.CarLocation;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.extension.laptimes.LapCompletedEvent;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_ONE;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_THREE;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_TWO;
+import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
 import static racecontrol.client.extension.statistics.CarStatistics.CURRENT_SECTOR_ONE;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
 import racecontrol.client.extension.statistics.CarStatisticsWritable;
@@ -170,15 +168,16 @@ public class SectorTimesProcessor
         int bestSectorOne = Integer.MAX_VALUE;
         int bestSectorTwo = Integer.MAX_VALUE;
         int bestSectorThree = Integer.MAX_VALUE;
-        for (CarStatisticsWritable car : getCars().values()) {
-            if (car.get(BEST_SECTOR_ONE) < bestSectorOne) {
-                bestSectorOne = car.get(BEST_SECTOR_ONE);
+        for (CarStatisticsWritable stats : getCars().values()) {
+            Car car = getClient().getModel().cars.get(stats.get(CAR_ID));
+            if (car.bestLap.getSplits().get(0) < bestSectorOne) {
+                bestSectorOne = car.bestLap.getSplits().get(0);
             }
-            if (car.get(BEST_SECTOR_TWO) < bestSectorTwo) {
-                bestSectorTwo = car.get(BEST_SECTOR_TWO);
+            if (car.bestLap.getSplits().get(1) < bestSectorTwo) {
+                bestSectorTwo = car.bestLap.getSplits().get(1);
             }
-            if (car.get(BEST_SECTOR_THREE) < bestSectorThree) {
-                bestSectorThree = car.get(BEST_SECTOR_THREE);
+            if (car.bestLap.getSplits().get(2) < bestSectorThree) {
+                bestSectorThree = car.bestLap.getSplits().get(3);
             }
         }
         // write session bests to cars.

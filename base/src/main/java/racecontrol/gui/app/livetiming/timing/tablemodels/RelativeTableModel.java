@@ -9,8 +9,6 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
-import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_CAR_AHEAD;
-import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_CAR_BEHIND;
 import static racecontrol.client.extension.statistics.CarStatistics.RACE_DISTANCE_COMPLEX;
 import static racecontrol.client.extension.statistics.CarStatistics.SPLINE_POS;
 import racecontrol.client.extension.statistics.CarStatistics;
@@ -119,10 +117,10 @@ public class RelativeTableModel
         int gap = 0;
         String text = "--";
         if (context.rowIndex < getSelectedRow()) {
-            gap = stats.get(GAP_TO_CAR_BEHIND);
+            gap = car.gapBehind;
             text = TimeUtils.asGap(gap);
         } else if (context.rowIndex > getSelectedRow()) {
-            gap = stats.get(GAP_TO_CAR_AHEAD);
+            gap = car.gapAhead;
             text = TimeUtils.asGap(-gap);
         }
 
@@ -144,13 +142,13 @@ public class RelativeTableModel
         if (context.rowIndex < getSelectedRow()) {
             int gap = 0;
             for (int i = getSelectedRow() - 1; i >= context.rowIndex; i--) {
-                gap += StatisticsExtension.getInstance().getCar(getEntry(i).id).get(GAP_TO_CAR_BEHIND);
+                gap += getEntry(i).gapBehind;
             }
             text = TimeUtils.asGap(gap);
         } else if (context.rowIndex > getSelectedRow()) {
             int gap = 0;
             for (int i = getSelectedRow() + 1; i <= context.rowIndex; i++) {
-                gap += StatisticsExtension.getInstance().getCar(getEntry(i).id).get(GAP_TO_CAR_AHEAD);
+                gap += getEntry(i).gapAhead;
             }
             text = TimeUtils.asGap(-gap);
         }

@@ -7,7 +7,6 @@ package racecontrol.gui.app.livetiming.timing.tablemodels.columns;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static racecontrol.client.extension.statistics.CarStatistics.IS_IN_PITS;
 import static racecontrol.client.extension.statistics.CarStatistics.IS_YELLOW_FLAG;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_FINISHED;
 import racecontrol.client.extension.statistics.CarStatistics;
@@ -15,7 +14,6 @@ import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_BLACK;
-import static racecontrol.gui.LookAndFeel.COLOR_GREEN_FLAG;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.COLOR_YELLOW;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
@@ -53,7 +51,7 @@ public class PitFlagColumn
             for (int i = 0; i < 6; i++) {
                 applet.rect(1 + w * (i % 2), 1 + h * i, w, h);
             }
-        } else if (stats.get(IS_IN_PITS)) {
+        } else if (car.isInPit()) {
             applet.noStroke();
             applet.fill(COLOR_WHITE);
             applet.rect(1, 1, context.width - 2, context.height - 2);

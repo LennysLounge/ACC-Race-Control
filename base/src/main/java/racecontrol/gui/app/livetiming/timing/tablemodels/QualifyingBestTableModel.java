@@ -9,17 +9,12 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static racecontrol.client.protocol.enums.CarLocation.TRACK;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_LOCATION;
-import static racecontrol.client.extension.statistics.CarStatistics.POSITION;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
 import racecontrol.gui.lpui.table.LPTable;
 import racecontrol.gui.lpui.table.LPTableColumn;
 import racecontrol.utility.TimeUtils;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_ONE;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_THREE;
-import static racecontrol.client.extension.statistics.CarStatistics.BEST_SECTOR_TWO;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_ONE;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_THREE;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_SECTOR_TWO;
@@ -86,22 +81,15 @@ public class QualifyingBestTableModel
     @Override
     public void sort() {
         entries = entries.stream()
-                .sorted((car1, car2) -> {
-                    CarStatistics c1 = StatisticsExtension.getInstance().getCar(car1.id);
-                    CarStatistics c2 = StatisticsExtension.getInstance().getCar(car2.id);
-                    return c1.get(POSITION).compareTo(c2.get(POSITION));
-                }
-                )
+                .sorted((c1, c2) -> Integer.compare(c1.position, c2.position))
                 .collect(toList());
     }
 
     protected void lapTimeRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-
         String text = "--";
         applet.fill(COLOR_WHITE);
-        if (stats.get(CAR_LOCATION) == TRACK) {
+        if (car.carLocation == TRACK) {
             applet.fill(LookAndFeel.COLOR_WHITE);
             if (car.currentLap.isInvalid()) {
                 applet.fill(LookAndFeel.COLOR_RED);
@@ -131,7 +119,7 @@ public class QualifyingBestTableModel
     protected void bestSectorOneRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
         CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-        int splitTime = stats.get(BEST_SECTOR_ONE);
+        int splitTime = car.bestLap.getSplits().get(0);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_ONE);
 
         String text = "--";
@@ -150,7 +138,7 @@ public class QualifyingBestTableModel
     protected void bestSectorTwoRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
         CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-        int splitTime = stats.get(BEST_SECTOR_TWO);
+        int splitTime = car.bestLap.getSplits().get(1);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_TWO);
 
         String text = "--";
@@ -169,7 +157,7 @@ public class QualifyingBestTableModel
     protected void bestSectorThreeRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
         CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-        int splitTime = stats.get(BEST_SECTOR_THREE);
+        int splitTime = car.bestLap.getSplits().get(0);
         int sessionBestSplitTime = stats.get(SESSION_BEST_SECTOR_THREE);
 
         String text = "--";

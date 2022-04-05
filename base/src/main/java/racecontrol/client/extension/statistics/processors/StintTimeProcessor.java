@@ -21,7 +21,6 @@ import racecontrol.client.events.BroadcastingEventEvent;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
 import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_LOCATION;
 import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT_TIME_ACCURATE;
 import racecontrol.client.extension.statistics.StatisticsProcessor;
@@ -117,7 +116,7 @@ public class StintTimeProcessor
             LOG.info(event.getMessage()
                     + "\t" + car.carNumberString()
                     + "\t" + TimeUtils.asDurationShort(stats.get(DRIVER_STINT_TIME))
-                    + "\t" + stats.get(CAR_LOCATION)
+                    + "\t" + car.carLocation
             );
 
             if (!servedPenalty.contains(event.getCarId())) {

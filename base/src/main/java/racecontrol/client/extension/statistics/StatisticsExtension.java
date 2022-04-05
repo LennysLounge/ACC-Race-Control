@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import racecontrol.client.events.CarConnectedEvent;
 import racecontrol.client.extension.statistics.processors.DataProcessor;
-import racecontrol.client.extension.statistics.processors.GapProcessor;
 import racecontrol.client.extension.statistics.processors.OvertakeProcessor;
 import racecontrol.client.extension.statistics.processors.PitTimeProcessor;
 import racecontrol.client.extension.statistics.processors.PlacesLostGainedProcessor;
@@ -67,7 +66,6 @@ public class StatisticsExtension extends ClientExtension
         processors.add(new SectorTimesProcessor(cars));
         processors.add(new SessionOverProcessor(cars));
         processors.add(new RealtimePositionProcessor(cars));
-        processors.add(new GapProcessor(cars));
         processors.add(new OvertakeProcessor(cars));
         processors.add(new PlacesLostGainedProcessor(cars));
         processors.add(new PitTimeProcessor(cars));

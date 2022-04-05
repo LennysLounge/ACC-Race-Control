@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import racecontrol.client.protocol.LapInfo;
 import racecontrol.client.protocol.enums.CarLocation;
+import static racecontrol.client.protocol.enums.CarLocation.PITLANE;
 import racecontrol.client.protocol.enums.CarModel;
 import racecontrol.client.protocol.enums.Nationality;
 
@@ -116,9 +117,9 @@ public class Car {
      */
     public int delta;
     /**
-     * Session best lap.
+     * Best lap.
      */
-    public LapInfo sessionBestLap = new LapInfo();
+    public LapInfo bestLap = new LapInfo();
     /**
      * Last completed lap.
      */
@@ -127,6 +128,50 @@ public class Car {
      * Current lap.
      */
     public LapInfo currentLap = new LapInfo();
+    /**
+     * Laptime delta to the session best lap.
+     */
+    public int deltaToSessionBest;
+    /**
+     * Car id of the car a position ahead. 0 if no car ahead.
+     */
+    public int carPositionAhead = 0;
+    /**
+     * Car id of the car a position behind. 0 if no car behind.
+     */
+    public int carPositionBehind = 0;
+    /**
+     * Gap to the car a position ahead. Max int if no car ahead.
+     */
+    public int gapPositionAhead = Integer.MAX_VALUE;
+    /**
+     * Gap to the car a position behind. Max int if no car behind.
+     */
+    public int gapPositionBehind = Integer.MAX_VALUE;
+    /**
+     * Gap to the leader.
+     */
+    public int gapToLeader;
+    /**
+     * laps behind the leader.
+     */
+    public float lapsBehindLeader;
+    /**
+     * Car id of the car ahead. 0 if no car ahead.
+     */
+    public int carAhead = 0;
+    /**
+     * Car id of the car behind. 0 if no car behind.
+     */
+    public int carBehind = 0;
+    /**
+     * Gap to the car ahead. Max int if no car ahead.
+     */
+    public int gapAhead = Integer.MAX_VALUE;
+    /**
+     * Gap to the car behind. Max int if no car behind.
+     */
+    public int gapBehind = Integer.MAX_VALUE;
 
     /**
      * Returns the car number formated as "#XXX".
@@ -143,7 +188,16 @@ public class Car {
      * @return the predicted lap time.
      */
     public int predictedLapTime() {
-        return sessionBestLap.getLapTimeMS() + delta;
+        return bestLap.getLapTimeMS() + delta;
+    }
+
+    /**
+     * Returns true if the car is currently in the pitlane.
+     *
+     * @return true if the car is currently in the pitlane.
+     */
+    public boolean isInPit() {
+        return carLocation == PITLANE;
     }
 
     /**
@@ -188,7 +242,7 @@ public class Car {
         car.splinePosition = splinePosition;
         car.lapCount = lapCount;
         car.delta = delta;
-        car.sessionBestLap = sessionBestLap;
+        car.bestLap = bestLap;
         car.lastLap = lastLap;
         car.currentLap = currentLap;
         return car;

@@ -17,7 +17,6 @@ import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
 import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_POSITION_AHEAD;
 import static racecontrol.client.extension.statistics.CarStatistics.GAP_TO_POSITION_BEHIND;
 import static racecontrol.client.extension.statistics.CarStatistics.IS_FOCUSED_ON;
-import static racecontrol.client.extension.statistics.CarStatistics.IS_IN_PITS;
 import static racecontrol.client.extension.statistics.CarStatistics.REALTIME_POSITION;
 import static racecontrol.client.extension.statistics.CarStatistics.SESSION_BEST_LAP_TIME;
 import static racecontrol.client.extension.statistics.CarStatistics.SPLINE_POS;
@@ -73,7 +72,7 @@ public class RatingProcessorImpl
             return entry;
         }
 
-        if (stats.get(IS_IN_PITS)) {
+        if (car.isInPit()) {
             return entry;
         }
 

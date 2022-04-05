@@ -37,7 +37,7 @@ public class BestLaptime
             LPTable.RenderContext context) {
         Car car = (Car) context.object;
         CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-        int bestLapTime = car.sessionBestLap.getLapTimeMS();
+        int bestLapTime = car.bestLap.getLapTimeMS();
         int sessionbestLapTime = stats.get(SESSION_BEST_LAP_TIME);
         if (bestLapTime == sessionbestLapTime) {
             applet.fill(COLOR_PURPLE);

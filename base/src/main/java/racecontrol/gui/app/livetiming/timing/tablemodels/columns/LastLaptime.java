@@ -40,7 +40,7 @@ public class LastLaptime
         Car car = (Car) context.object;
         CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int lastLapTime = car.lastLap.getLapTimeMS();
-        int bestLapTime = car.sessionBestLap.getLapTimeMS();
+        int bestLapTime = car.bestLap.getLapTimeMS();
         int sessionbestLapTime = stats.get(SESSION_BEST_LAP_TIME);
 
         if (car.lastLap.isInvalid()) {
