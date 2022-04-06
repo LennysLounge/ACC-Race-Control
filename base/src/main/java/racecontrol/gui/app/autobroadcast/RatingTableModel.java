@@ -11,7 +11,6 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import racecontrol.client.extension.autobroadcast.Entry;
-import racecontrol.client.extension.statistics.StatisticsExtension;
 import static racecontrol.gui.LookAndFeel.COLOR_BLUE;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
@@ -30,12 +29,9 @@ import racecontrol.gui.lpui.table.LPTableColumn;
 public class RatingTableModel
         extends LiveTimingTableModel {
 
-    private final StatisticsExtension statistics;
-
     private List<Entry> entriesNew = new ArrayList<>();
 
     public RatingTableModel() {
-        statistics = StatisticsExtension.getInstance();
     }
 
     public void setEntriesNew(List<Entry> entriesNew) {
@@ -51,7 +47,7 @@ public class RatingTableModel
     public Object getValueAt(int column, int row) {
         Entry entry = entriesNew.get(row);
         if (column <= 3) {
-            return statistics.getCar(entry.getCar().id);
+            return entry.getCar();
         }
         return entry;
     }

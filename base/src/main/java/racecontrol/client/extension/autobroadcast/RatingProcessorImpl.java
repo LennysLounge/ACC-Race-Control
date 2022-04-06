@@ -13,8 +13,6 @@ import racecontrol.client.protocol.RealtimeInfo;
 import racecontrol.client.protocol.SessionInfo;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
-import racecontrol.client.extension.statistics.CarStatistics;
-import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
 
@@ -165,7 +163,6 @@ public class RatingProcessorImpl
         if (car.isFocused) {
             entry.setPaceFocus(1f);
         } else {
-            CarStatistics focusedCar = StatisticsExtension.getInstance().getCar(focusedCarId);
             // we ignore the first 20% of a lap
             if (car.splinePosition < 0.2) {
                 entry.setPaceFocus(0f);

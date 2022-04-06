@@ -15,10 +15,6 @@ import racecontrol.eventbus.EventListener;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.gui.lpui.LPContainer;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
-import racecontrol.client.extension.statistics.CarStatistics;
-import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.app.livetiming.timing.tablemodels.DriversTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingBestTableModel;
@@ -44,10 +40,6 @@ public class LiveTimingTableController
      * Reference to the connection client.
      */
     private final AccBroadcastingClient client;
-    /**
-     * The statistics extension.
-     */
-    private final StatisticsExtension statisticsExtension;
     /**
      * The live timing table.
      */
@@ -81,7 +73,6 @@ public class LiveTimingTableController
 
     public LiveTimingTableController() {
         EventBus.register(this);
-        statisticsExtension = StatisticsExtension.getInstance();
         client = AccBroadcastingClient.getClient();
         table.setCellClickAction((column, row) -> onCellClickAction(column, row));
 

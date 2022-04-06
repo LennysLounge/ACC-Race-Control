@@ -8,10 +8,6 @@ package racecontrol.gui.app.livetiming.timing.tablemodels;
 import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static racecontrol.client.AccBroadcastingClient.getClient;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
-import racecontrol.client.extension.statistics.CarStatistics;
-import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
@@ -73,9 +69,8 @@ public class TestTableModel
 
     private void r1(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
 
-        String text = String.format("%.5f", getClient().getModel().cars.get(stats.get(CAR_ID)).position * 1f);
+        String text = String.format("%.5f", car.position * 1f);
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);
@@ -83,9 +78,7 @@ public class TestTableModel
 
     private void r2(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-
-        String text = String.format("%.5f", getClient().getModel().cars.get(stats.get(CAR_ID)).trackPosition * 1f);
+        String text = String.format("%.5f", car.trackPosition * 1f);
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);
@@ -93,9 +86,7 @@ public class TestTableModel
 
     private void r3(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-
-        String text = String.format("%.5f", getClient().getModel().cars.get(stats.get(CAR_ID)).splinePosition);
+        String text = String.format("%.5f", car.splinePosition);
         applet.fill(COLOR_WHITE);
         applet.textAlign(CENTER, CENTER);
         applet.text(text, context.width / 2f, context.height / 2f);

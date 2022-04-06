@@ -16,7 +16,6 @@ import static racecontrol.client.protocol.enums.CarCategory.GT3;
 import static racecontrol.client.protocol.enums.CarCategory.ST;
 import static racecontrol.client.protocol.enums.CarCategory.ST22;
 import static racecontrol.client.protocol.enums.CarCategory.TCX;
-import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.model.Car;
 import static racecontrol.client.protocol.enums.DriverCategory.BRONZE;
 import static racecontrol.client.protocol.enums.DriverCategory.GOLD;

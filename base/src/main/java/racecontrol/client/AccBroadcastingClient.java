@@ -29,7 +29,6 @@ import racecontrol.client.extension.raceevent.RaceEventExtension;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.extension.racereport.RaceReportExtension;
 import racecontrol.client.extension.results.ResultsExtension;
-import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.extension.model.SpeedExtension;
 import racecontrol.client.extension.model.StintTimeExtension;
 import racecontrol.client.extension.trackdata.TrackDataExtension;
@@ -109,9 +108,6 @@ public class AccBroadcastingClient
         extensions.add(VirtualSafetyCarExtension.getInstance());
         extensions.add(RaceEventExtension.get());
         extensions.add(AutobroadcastExtension.getInstance());
-
-        // statistics should always go last.
-        extensions.add(StatisticsExtension.getInstance());
     }
 
     @Override

@@ -8,8 +8,6 @@ package racecontrol.gui.app.livetiming.timing.tablemodels;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static racecontrol.client.AccBroadcastingClient.getClient;
-import racecontrol.client.extension.statistics.CarStatistics;
-import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_PURPLE;
@@ -102,7 +100,6 @@ public class QualifyingLastTableModel
 
     protected void lastSectorOneRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int splitTime = car.lastLap.getSplits().get(0);
         int bestSplitTime = car.bestLap.getSplits().get(0);
         int sessionBestSplitTime = getClient().getModel().session.sessionBestSplits.get(0);
@@ -128,7 +125,6 @@ public class QualifyingLastTableModel
 
     protected void lastSectorTwoRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int splitTime = car.lastLap.getSplits().get(0);
         int bestSplitTime = car.bestLap.getSplits().get(0);
         int sessionBestSplitTime = getClient().getModel().session.sessionBestSplits.get(1);
@@ -153,7 +149,6 @@ public class QualifyingLastTableModel
 
     protected void lastSectorThreeRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int splitTime = car.lastLap.getSplits().get(0);
         int bestSplitTime = car.bestLap.getSplits().get(0);
         int sessionBestSplitTime = getClient().getModel().session.sessionBestSplits.get(2);

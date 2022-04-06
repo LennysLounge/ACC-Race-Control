@@ -9,8 +9,6 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import racecontrol.client.extension.statistics.CarStatistics;
-import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
 import racecontrol.client.model.Driver;
 import racecontrol.gui.LookAndFeel;
@@ -91,7 +89,6 @@ public class DriversTableModel
 
     protected void nameRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
         int i = 0;
         for (Driver driver : car.drivers) {
             String name = driver.fullName();

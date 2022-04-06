@@ -7,14 +7,11 @@ package racecontrol.client.extension.model;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
-import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.ClientExtension;
 import racecontrol.client.protocol.SessionInfo;
 import static racecontrol.client.protocol.enums.SessionType.RACE;
 import racecontrol.client.events.AfterPacketReceivedEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
-import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;

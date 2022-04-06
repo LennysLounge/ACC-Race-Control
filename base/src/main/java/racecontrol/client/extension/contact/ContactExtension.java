@@ -33,8 +33,6 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.extension.dangerdetection.YellowFlagEvent;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
-import racecontrol.client.extension.statistics.CarStatistics;
-import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
 import racecontrol.persistance.PersistantConfig;
 import static racecontrol.persistance.PersistantConfigKeys.CONTACT_CONFIG_ADVANCED_ENABLED;
@@ -72,10 +70,6 @@ public class ContactExtension extends ClientExtension
      * Reference to the google sheets api extension.
      */
     private final GoogleSheetsAPIExtension GOOGLE_SHEETS_EXTENSION;
-    /**
-     * Reference to the statistics extension.
-     */
-    private final StatisticsExtension STATISTICS_EXTENSION;
     /**
      * Last contact that is waiting to be commited.
      */
@@ -144,7 +138,6 @@ public class ContactExtension extends ClientExtension
         CLIENT = AccBroadcastingClient.getClient();
         REPLAY_EXTENSION = ReplayOffsetExtension.getInstance();
         GOOGLE_SHEETS_EXTENSION = GoogleSheetsAPIExtension.getInstance();
-        STATISTICS_EXTENSION = StatisticsExtension.getInstance();
 
         enabled = PersistantConfig.get(CONTACT_CONFIG_ENABLED);
         advancedDetectionEnabled = PersistantConfig.get(CONTACT_CONFIG_ADVANCED_ENABLED);
@@ -392,7 +385,6 @@ public class ContactExtension extends ClientExtension
         String cars = info.isGameContact() ? "" : "possible\n";
         cars += info.getCars().stream()
                 .map(car -> {
-                    CarStatistics stats = STATISTICS_EXTENSION.getCar(car.id);
                     String carNumber = String.valueOf(car.carNumber);
                     String lap = String.valueOf(car.isCheckeredFlag ? "F" : (car.lapCount + 1));
                     boolean isInvalid = car.currentLap.isInvalid()
@@ -417,7 +409,6 @@ public class ContactExtension extends ClientExtension
         Car flaggedCar = event.getCar();
 
         // skip yellows that happen when a car has finished the race.
-        CarStatistics stats = STATISTICS_EXTENSION.getCar(flaggedCar.id);
         if (flaggedCar.isCheckeredFlag) {
             return;
         }
