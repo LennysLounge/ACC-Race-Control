@@ -3,7 +3,7 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.client.extension.statistics.processors;
+package racecontrol.client.extension.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import static racecontrol.client.AccBroadcastingClient.getClient;
+import racecontrol.client.ClientExtension;
 import racecontrol.client.protocol.BroadcastingEvent;
 import racecontrol.client.protocol.RealtimeInfo;
 import static racecontrol.client.protocol.enums.BroadcastingEventType.PENALTYCOMMMSG;
@@ -20,23 +21,21 @@ import static racecontrol.client.protocol.enums.SessionPhase.SESSION;
 import racecontrol.client.events.BroadcastingEventEvent;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
-import static racecontrol.client.extension.statistics.CarStatistics.CAR_ID;
-import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT_TIME;
-import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT_TIME_ACCURATE;
-import racecontrol.client.extension.statistics.StatisticsProcessor;
-import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
+import racecontrol.eventbus.EventBus;
+import racecontrol.eventbus.EventListener;
 import racecontrol.utility.TimeUtils;
 
 /**
  *
  * @author Leonard
  */
-public class StintTimeProcessor
-        extends StatisticsProcessor {
+public class StintTimeExtension
+        extends ClientExtension
+        implements EventListener {
 
-    private static final Logger LOG = Logger.getLogger(StintTimeProcessor.class.getName());
+    private static final Logger LOG = Logger.getLogger(StintTimeExtension.class.getName());
     /**
      * Maps carId's to the timestamp for when their stint timer starts.
      */
@@ -50,8 +49,8 @@ public class StintTimeProcessor
      */
     private final List<Integer> servedPenalty = new ArrayList<>();
 
-    public StintTimeProcessor(Map<Integer, CarStatisticsWritable> cars) {
-        super(cars);
+    public StintTimeExtension() {
+        EventBus.register(this);
     }
 
     @Override
@@ -59,7 +58,7 @@ public class StintTimeProcessor
         if (e instanceof SessionPhaseChangedEvent) {
             sessionPhaseChanged((SessionPhaseChangedEvent) e);
         } else if (e instanceof RealtimeCarUpdateEvent) {
-            realtimeCarUpdate(((RealtimeCarUpdateEvent) e).getInfo());
+            carUpdate(((RealtimeCarUpdateEvent) e).getInfo());
         } else if (e instanceof BroadcastingEventEvent) {
             broadcastingEvent(((BroadcastingEventEvent) e).getEvent());
         }
@@ -69,20 +68,20 @@ public class StintTimeProcessor
         // reset all stint timers, set timestamps and set accurate flag.
         if (event.getSessionInfo().getPhase() == SESSION) {
             long now = System.currentTimeMillis();
-            getCars().values().forEach(carStat -> {
-                stintStartTimestamp.put(carStat.get(CAR_ID), now);
-                carStat.put(DRIVER_STINT_TIME, 0);
-                carStat.put(DRIVER_STINT_TIME_ACCURATE, !event.isInitialisation());
+            getWritableModel().cars.values().forEach(car -> {
+                stintStartTimestamp.put(car.id, now);
+                car.driverStintTime = 0;
+                car.driverStintTimeAccurate = !event.isInitialisation();
             });
         }
     }
 
-    private void realtimeCarUpdate(RealtimeInfo info) {
-        CarStatisticsWritable carStats = getCars().get(info.getCarId());
+    private void carUpdate(RealtimeInfo info) {
+        Car car = getWritableModel().cars.get(info.getCarId());
         long now = System.currentTimeMillis();
-        if (!stintStartTimestamp.containsKey(info.getCarId())) {
-            stintStartTimestamp.put(info.getCarId(), now);
-            carStats.put(DRIVER_STINT_TIME_ACCURATE, false);
+        if (!stintStartTimestamp.containsKey(car.id)) {
+            stintStartTimestamp.put(car.id, now);
+            car.driverStintTimeAccurate = false;
         }
         if (!prevCarLocation.containsKey(info.getCarId())) {
             prevCarLocation.put(info.getCarId(), info.getLocation());
@@ -95,14 +94,13 @@ public class StintTimeProcessor
                 // only reset if we didnt serve a penalty.
                 if (!servedPenalty.contains(info.getCarId())) {
                     stintStartTimestamp.put(info.getCarId(), now);
-                    carStats.put(DRIVER_STINT_TIME_ACCURATE, true);
+                    car.driverStintTimeAccurate = true;
                 } else {
                     servedPenalty.remove(servedPenalty.indexOf(info.getCarId()));
                 }
             }
             // set stint time
-            carStats.put(DRIVER_STINT_TIME,
-                    (int) (now - stintStartTimestamp.get(info.getCarId())));
+            car.driverStintTime = (int) (now - stintStartTimestamp.get(car.id));
         }
 
         // save car location.
@@ -112,13 +110,11 @@ public class StintTimeProcessor
     private void broadcastingEvent(BroadcastingEvent event) {
         if (event.getType() == PENALTYCOMMMSG) {
             Car car = getClient().getModel().cars.get(event.getCarId());
-            CarStatisticsWritable stats = getCars().get(event.getCarId());
             LOG.info(event.getMessage()
                     + "\t" + car.carNumberString()
-                    + "\t" + TimeUtils.asDurationShort(stats.get(DRIVER_STINT_TIME))
+                    + "\t" + TimeUtils.asDurationShort(car.driverStintTime)
                     + "\t" + car.carLocation
             );
-
             if (!servedPenalty.contains(event.getCarId())) {
                 servedPenalty.add(event.getCarId());
             }

@@ -11,14 +11,13 @@ import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_FINISHED;
-import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
 import racecontrol.client.protocol.RealtimeInfo;
 import racecontrol.client.protocol.SessionInfo;
 import static racecontrol.client.protocol.enums.SessionPhase.PRESESSION;
 import static racecontrol.client.protocol.enums.SessionType.RACE;
 import racecontrol.eventbus.Event;
+import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 
 /**
@@ -29,6 +28,10 @@ import racecontrol.eventbus.EventListener;
 public class RealtimePositionExtension
         extends ClientExtension
         implements EventListener {
+
+    public RealtimePositionExtension() {
+        EventBus.register(this);
+    }
 
     @Override
     public void onEvent(Event e) {
@@ -69,10 +72,9 @@ public class RealtimePositionExtension
 
         int pos = 1;
         for (var car : carsSorted) {
-            var carStats = StatisticsExtension.getInstance().getCar(car.id);
             if (info.getSessionType() == RACE
                     && info.getSessionTime() > 15000
-                    && !carStats.get(SESSION_FINISHED)) {
+                    && !car.isCheckeredFlag) {
                 car.realtimePosition = pos;
             } else {
                 car.realtimePosition = car.position;

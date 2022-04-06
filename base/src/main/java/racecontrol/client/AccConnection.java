@@ -418,7 +418,7 @@ public class AccConnection
         car.pitch = info.getPitch();
         car.roll = info.getRoll();
         car.carLocation = info.getLocation();
-        car.kmh = info.getKMH();
+        car.KMH = info.getKMH();
         car.position = info.getPosition();
         car.cupPosition = info.getCupPosition();
         car.trackPosition = info.getTrackPosition();

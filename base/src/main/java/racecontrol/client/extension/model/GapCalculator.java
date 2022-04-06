@@ -136,7 +136,7 @@ public class GapCalculator {
     public float calculateGapNaive(Car behind, Car infront) {
         float splineDistance = infront.splinePosition - behind.splinePosition;
         float trackDistance = trackData.getTrackMeters() * splineDistance;
-        float averageSpeed = (infront.kmh + behind.kmh) / 2f / 3.6f;
+        float averageSpeed = (infront.KMH + behind.KMH) / 2f / 3.6f;
         return trackDistance / averageSpeed * 1000;
     }
 

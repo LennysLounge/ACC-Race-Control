@@ -72,38 +72,6 @@ public class CarStatistics {
     //             Properties
     //
     public static final Key<Integer> CAR_ID = new Key<>(Integer.class, 0);
-    // Sectors
-    public static final Key<Integer> CURRENT_SECTOR_ONE_CALC = new Key<>(Integer.class, 0);
-    public static final Key<Integer> CURRENT_SECTOR_TWO_CALC = new Key<>(Integer.class, 0);
-    public static final Key<Integer> CURRENT_SECTOR_THREE_CALC = new Key<>(Integer.class, 0);
-    public static final Key<Integer> CURRENT_SECTOR_ONE = new Key<>(Integer.class, 0);
-    public static final Key<Integer> CURRENT_SECTOR_TWO = new Key<>(Integer.class, 0);
-    public static final Key<Integer> CURRENT_SECTOR_THREE = new Key<>(Integer.class, 0);
-    // Status
-    public static final Key<Boolean> IS_WHITE_FLAG = new Key<>(Boolean.class, false);
-    public static final Key<Boolean> IS_YELLOW_FLAG = new Key<>(Boolean.class, false);
-    // Session over
-    public static final Key<Boolean> SESSION_FINISHED = new Key<>(Boolean.class, false);
-    // Overtake indicator
-    public static final Key<Integer> OVERTAKE_INDICATOR = new Key<>(Integer.class, 0);
-    // Places lost and gained
-    public static final Key<Integer> RACE_START_POSITION = new Key<>(Integer.class, 0);
-    public static final Key<Boolean> RACE_START_POSITION_ACCURATE = new Key<>(Boolean.class, false);
-    public static final Key<Integer> PLACES_GAINED = new Key<>(Integer.class, 0);
-    // Pitlane time
-    public static final Key<Integer> PITLANE_TIME = new Key<>(Integer.class, 0);
-    public static final Key<Integer> PITLANE_TIME_STATIONARY = new Key<>(Integer.class, 0);
-    public static final Key<Integer> PITLANE_COUNT = new Key<>(Integer.class, 0);
-    public static final Key<Boolean> PITLANE_COUNT_ACCURATE = new Key<>(Boolean.class, false);
-    // Speed
-    public static final Key<Integer> SPEED_TRAP_SPEED = new Key<>(Integer.class, 0);
-    public static final Key<Integer> MAX_SPEED_TRAP_SPEED = new Key<>(Integer.class, 0);
-    public static final Key<Integer> MAXIMUM_SPEED = new Key<>(Integer.class, 0);
-    public static final Key<Integer> MAX_MAXIMUM_SPEED = new Key<>(Integer.class, 0);
-    public static final Key<Integer> CURRENT_SPEED = new Key<>(Integer.class, 0);
-    // Stint time
-    public static final Key<Integer> DRIVER_STINT_TIME = new Key<>(Integer.class, 0);
-    public static final Key<Boolean> DRIVER_STINT_TIME_ACCURATE = new Key<>(Boolean.class, false);
 
     public static class DriverList {
 

@@ -26,6 +26,14 @@ public class Session {
     public List<Integer> sessionBestSplits = Arrays.asList(Integer.MAX_VALUE,
             Integer.MAX_VALUE,
             Integer.MAX_VALUE);
+    /**
+     * Maximum speed reached in this session.
+     */
+    public int maxKMH;
+    /**
+     * Maximum speed reached at the speed trap in this session.
+     */
+    public int maxSpeedTrapKMH;
 
     public synchronized Session copy() {
         Session session = new Session();

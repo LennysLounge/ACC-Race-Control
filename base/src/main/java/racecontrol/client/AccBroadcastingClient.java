@@ -20,12 +20,18 @@ import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
 import racecontrol.client.extension.laptimes.LapTimeExtension;
 import racecontrol.client.extension.model.GapExtension;
 import racecontrol.client.extension.model.ModelExtension;
+import racecontrol.client.extension.model.OvertakeExtension;
+import racecontrol.client.extension.model.PitTimeExtension;
+import racecontrol.client.extension.model.PlacesLostGainedExtension;
 import racecontrol.client.extension.model.RealtimePositionExtension;
+import racecontrol.client.extension.model.SessionOverExtension;
 import racecontrol.client.extension.raceevent.RaceEventExtension;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.extension.racereport.RaceReportExtension;
 import racecontrol.client.extension.results.ResultsExtension;
 import racecontrol.client.extension.statistics.StatisticsExtension;
+import racecontrol.client.extension.model.SpeedExtension;
+import racecontrol.client.extension.model.StintTimeExtension;
 import racecontrol.client.extension.trackdata.TrackDataExtension;
 import racecontrol.client.extension.vsc.VirtualSafetyCarExtension;
 import racecontrol.client.model.Model;
@@ -80,10 +86,17 @@ public class AccBroadcastingClient
     }
 
     public void initialise() {
-        //instanciate extensions
-        extensions.add(new GapExtension());
+        // model extensions
         extensions.add(new ModelExtension());
+        extensions.add(new GapExtension());
         extensions.add(new RealtimePositionExtension());
+        extensions.add(new SessionOverExtension());
+        extensions.add(new OvertakeExtension());
+        extensions.add(new SpeedExtension());
+        extensions.add(new PitTimeExtension());
+        extensions.add(new PlacesLostGainedExtension());
+        extensions.add(new StintTimeExtension());
+        // other extensions
         extensions.add(ContactExtension.getInstance());
         extensions.add(GoogleSheetsAPIExtension.getInstance());
         extensions.add(new LapTimeExtension());

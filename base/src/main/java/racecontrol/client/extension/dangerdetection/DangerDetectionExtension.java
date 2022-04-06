@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 import processing.core.PVector;
-import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.ClientExtension;
 import racecontrol.client.protocol.RealtimeInfo;
 import racecontrol.client.protocol.SessionInfo;
@@ -26,6 +25,7 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.extension.trackdata.TrackData;
 import racecontrol.client.extension.trackdata.TrackDataEvent;
+import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
@@ -47,10 +47,6 @@ public class DangerDetectionExtension extends ClientExtension
      * This class's logger.
      */
     private static final Logger LOG = Logger.getLogger(DangerDetectionExtension.class.getName());
-    /**
-     * Reference to the connection client.
-     */
-    private final AccBroadcastingClient client;
     /**
      * Base tolerance for the direction.
      */
@@ -126,7 +122,6 @@ public class DangerDetectionExtension extends ClientExtension
 
     private DangerDetectionExtension() {
         EventBus.register(this);
-        client = AccBroadcastingClient.getClient();
     }
 
     @Override
@@ -134,8 +129,12 @@ public class DangerDetectionExtension extends ClientExtension
         if (e instanceof TrackDataEvent) {
             onTrackData(((TrackDataEvent) e).getTrackData());
         } else if (e instanceof RealtimeCarUpdateEvent) {
-            doPitExitProtection(((RealtimeCarUpdateEvent) e).getInfo());
-            testTolerances(((RealtimeCarUpdateEvent) e).getInfo());
+            RealtimeInfo info = ((RealtimeCarUpdateEvent) e).getInfo();
+            doPitExitProtection(info);
+            testTolerances(info);
+            Car car = getWritableModel().cars.get(info.getCarId());
+            car.isWhiteFlag = isCarWhiteFlag(car.id);
+            car.isYellowFlag = isCarYellowFlag(car.id);
         } else if (e instanceof RealtimeUpdateEvent) {
             removeFlags();
         }

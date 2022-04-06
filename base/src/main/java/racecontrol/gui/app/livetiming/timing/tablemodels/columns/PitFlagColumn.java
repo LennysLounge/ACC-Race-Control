@@ -7,10 +7,6 @@ package racecontrol.gui.app.livetiming.timing.tablemodels.columns;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static racecontrol.client.extension.statistics.CarStatistics.IS_YELLOW_FLAG;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_FINISHED;
-import racecontrol.client.extension.statistics.CarStatistics;
-import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
 import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_BLACK;
@@ -37,12 +33,11 @@ public class PitFlagColumn
     }
 
     protected void pitRenderer(PApplet applet, LPTable.RenderContext context) {
-        if (!(context.object instanceof CarStatistics)) {
+        if (!(context.object instanceof Car)) {
             return;
         }
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-        if (stats.get(SESSION_FINISHED)) {
+        if (car.isCheckeredFlag) {
             applet.fill(COLOR_WHITE);
             applet.rect(1, 1, context.width - 2, context.height - 2);
             float w = (context.width - 2) / 2;
@@ -61,7 +56,7 @@ public class PitFlagColumn
             applet.text("P", context.width / 2f, context.height / 2f);
             applet.textFont(LookAndFeel.fontMedium());
             applet.textSize(LookAndFeel.TEXT_SIZE);
-        } else if (stats.get(IS_YELLOW_FLAG)) {
+        } else if (car.isYellowFlag) {
             applet.fill(COLOR_YELLOW);
             applet.rect(1, 1, context.width - 2, context.height - 2);
         }

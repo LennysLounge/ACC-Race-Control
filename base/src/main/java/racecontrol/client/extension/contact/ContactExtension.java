@@ -33,7 +33,6 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.extension.dangerdetection.YellowFlagEvent;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_FINISHED;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
@@ -395,7 +394,7 @@ public class ContactExtension extends ClientExtension
                 .map(car -> {
                     CarStatistics stats = STATISTICS_EXTENSION.getCar(car.id);
                     String carNumber = String.valueOf(car.carNumber);
-                    String lap = String.valueOf(stats.get(SESSION_FINISHED) ? "F" : (car.lapCount + 1));
+                    String lap = String.valueOf(car.isCheckeredFlag ? "F" : (car.lapCount + 1));
                     boolean isInvalid = car.currentLap.isInvalid()
                             && info.getSessionID().getType() != RACE;
                     boolean isSpun = info.getYellowFlaggedCars().contains(car.id);
@@ -419,7 +418,7 @@ public class ContactExtension extends ClientExtension
 
         // skip yellows that happen when a car has finished the race.
         CarStatistics stats = STATISTICS_EXTENSION.getCar(flaggedCar.id);
-        if (stats.get(SESSION_FINISHED)) {
+        if (flaggedCar.isCheckeredFlag) {
             return;
         }
 

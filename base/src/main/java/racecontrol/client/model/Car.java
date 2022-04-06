@@ -75,7 +75,7 @@ public class Car {
     /**
      * Speed of the car.
      */
-    public int kmh;
+    public int KMH;
     /**
      * Yaw of the car.
      */
@@ -188,7 +188,63 @@ public class Car {
     /**
      * True if the car is currently in focus.
      */
-    public boolean isFocused;
+    public boolean isFocused = false;
+    /**
+     * True if the car is yellow flagged.
+     */
+    public boolean isYellowFlag = false;
+    /**
+     * True if the car is white flagged.
+     */
+    public boolean isWhiteFlag = false;
+    /**
+     * True if the car is checkered flagged.
+     */
+    public boolean isCheckeredFlag = false;
+    /**
+     * Indicates if this car has overtakes someone.
+     */
+    public int overtakeIndicator;
+    /**
+     * Maximum speed reached.
+     */
+    public int maxKMH;
+    /**
+     * Speed at the speed trap.
+     */
+    public int speedTrapKMH;
+    /**
+     * Start position for a race.
+     */
+    public int raceStartPosition;
+    /**
+     * True if the race start position is accurate.
+     */
+    public boolean raceStartPositionAccurate = false;
+    /**
+     * Time spend in the pitlane for the last pitstop.
+     */
+    public int pitLaneTime;
+    /**
+     * Time spend stationary in the pitlane for the last pitstop.
+     */
+    public int pitLaneTimeStationary;
+    /**
+     * How many pitstops were done.
+     */
+    public int pitlaneCount;
+    /**
+     * True if the pitlane count is accurate.
+     */
+    public boolean pitlaneCountAccurate;
+    /**
+     * The stint time of the current driver.
+     */
+    public int driverStintTime;
+    /**
+     * True if the driver stint time is accurate.
+     */
+    public boolean driverStintTimeAccurate;
 
     /**
      * Returns the car number formated as "#XXX".
@@ -252,7 +308,7 @@ public class Car {
         car.pitch = pitch;
         car.roll = roll;
         car.carLocation = carLocation;
-        car.kmh = kmh;
+        car.KMH = KMH;
         car.position = position;
         car.cupPosition = cupPosition;
         car.trackPosition = trackPosition;

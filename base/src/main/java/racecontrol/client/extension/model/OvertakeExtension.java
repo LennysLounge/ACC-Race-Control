@@ -3,38 +3,32 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.client.extension.statistics.processors;
+package racecontrol.client.extension.model;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 import racecontrol.client.AccBroadcastingClient;
+import racecontrol.client.ClientExtension;
 import racecontrol.client.protocol.SessionInfo;
 import static racecontrol.client.protocol.enums.SessionType.RACE;
 import racecontrol.client.events.AfterPacketReceivedEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
-import static racecontrol.client.extension.statistics.CarStatistics.OVERTAKE_INDICATOR;
-import racecontrol.client.extension.statistics.StatisticsProcessor;
 import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
+import racecontrol.eventbus.EventBus;
+import racecontrol.eventbus.EventListener;
 
 /**
  * Finds when a car has finished its session.
  *
  * @author Leonard
  */
-public class OvertakeProcessor
-        extends StatisticsProcessor {
+public class OvertakeExtension
+        extends ClientExtension
+        implements EventListener {
 
-    /**
-     * This class's logger.
-     */
-    private static final Logger LOG = Logger.getLogger(OvertakeProcessor.class.getName());
-    /**
-     * Reference to the game.
-     */
-    private final AccBroadcastingClient client;
     /**
      * Ms the indicator should be visible for.
      */
@@ -48,9 +42,8 @@ public class OvertakeProcessor
      */
     private final Map<Integer, Long> timestamps = new HashMap<>();
 
-    public OvertakeProcessor(Map<Integer, CarStatisticsWritable> cars) {
-        super(cars);
-        this.client = AccBroadcastingClient.getClient();
+    public OvertakeExtension() {
+        EventBus.register(this);
     }
 
     @Override
@@ -67,13 +60,11 @@ public class OvertakeProcessor
             return;
         }
 
-        for (Car car : client.getModel().cars.values()) {
-            CarStatisticsWritable stats = getCars().get(car.id);
-
+        for (Car car : getWritableModel().cars.values()) {
             if (prevPositions.containsKey(car.id)) {
                 int diff = car.realtimePosition - prevPositions.get(car.id);
                 if (diff != 0) {
-                    stats.put(OVERTAKE_INDICATOR, diff);
+                    car.overtakeIndicator = diff;
                     timestamps.put(car.id, System.currentTimeMillis());
                 }
             }
@@ -87,8 +78,7 @@ public class OvertakeProcessor
         while (iter.hasNext()) {
             var entry = iter.next();
             if ((now - entry.getValue()) > INDICATOR_TIME) {
-                CarStatisticsWritable stats = getCars().get(entry.getKey());
-                stats.put(OVERTAKE_INDICATOR, 0);
+                getWritableModel().cars.get(entry.getKey()).overtakeIndicator = 0;
                 iter.remove();
             }
         }

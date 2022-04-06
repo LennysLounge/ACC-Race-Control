@@ -3,11 +3,10 @@
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
-package racecontrol.client.extension.statistics.processors;
+package racecontrol.client.extension.model;
 
-import java.util.Map;
-import racecontrol.client.AccBroadcastingClient;
 import static racecontrol.client.AccBroadcastingClient.getClient;
+import racecontrol.client.ClientExtension;
 import racecontrol.client.protocol.SessionInfo;
 import static racecontrol.client.protocol.enums.SessionPhase.SESSIONOVER;
 import static racecontrol.client.protocol.enums.SessionType.PRACTICE;
@@ -16,30 +15,27 @@ import static racecontrol.client.protocol.enums.SessionType.RACE;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
 import racecontrol.client.extension.laptimes.LapCompletedEvent;
-import static racecontrol.client.extension.statistics.CarStatistics.SESSION_FINISHED;
-import racecontrol.client.extension.statistics.StatisticsProcessor;
-import racecontrol.client.extension.statistics.CarStatisticsWritable;
 import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
+import racecontrol.eventbus.EventBus;
+import racecontrol.eventbus.EventListener;
 
 /**
  * Finds when a car has finished its session.
  *
  * @author Leonard
  */
-public class SessionOverProcessor
-        extends StatisticsProcessor {
+public class SessionOverExtension
+        extends ClientExtension
+        implements EventListener {
 
     /**
-     * Reference to the game client.
+     * Flag to track if the session is over or not.
      */
-    private final AccBroadcastingClient client;
-
     private boolean isSessionOver = false;
 
-    public SessionOverProcessor(Map<Integer, CarStatisticsWritable> cars) {
-        super(cars);
-        client = AccBroadcastingClient.getClient();
+    public SessionOverExtension() {
+        EventBus.register(this);
     }
 
     @Override
@@ -65,13 +61,15 @@ public class SessionOverProcessor
 
         // when the session is over we set the finished flag for the car.
         if (isSessionOver) {
-            getCars().get(car.id).put(SESSION_FINISHED, true);
+            car.isCheckeredFlag = true;
         }
     }
 
     private void onSessionChanged(SessionInfo info) {
         // reset finished flag
-        getCars().values().forEach(carStats -> carStats.put(SESSION_FINISHED, false));
+        getWritableModel().cars.values().forEach(car
+                -> car.isCheckeredFlag = false
+        );
         isSessionOver = false;
     }
 

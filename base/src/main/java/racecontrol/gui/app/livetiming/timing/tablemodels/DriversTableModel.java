@@ -9,8 +9,6 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT_TIME;
-import static racecontrol.client.extension.statistics.CarStatistics.DRIVER_STINT_TIME_ACCURATE;
 import racecontrol.client.extension.statistics.CarStatistics;
 import racecontrol.client.extension.statistics.StatisticsExtension;
 import racecontrol.client.model.Car;
@@ -145,9 +143,8 @@ public class DriversTableModel
 
     private void stintTimeRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        CarStatistics stats = StatisticsExtension.getInstance().getCar(car.id);
-        String text = TimeUtils.asDurationShort(stats.get(DRIVER_STINT_TIME));
-        text = text + (stats.get(DRIVER_STINT_TIME_ACCURATE) ? "" : "*");
+        String text = TimeUtils.asDurationShort(car.driverStintTime);
+        text = text + (car.driverStintTimeAccurate ? "" : "*");
         applet.fill(COLOR_WHITE);
         applet.textAlign(LEFT, CENTER);
         applet.textFont(LookAndFeel.fontRegular());
