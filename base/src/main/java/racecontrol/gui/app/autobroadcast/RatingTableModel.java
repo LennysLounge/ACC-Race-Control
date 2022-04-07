@@ -12,6 +12,8 @@ import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import racecontrol.client.extension.autobroadcast.Entry;
 import static racecontrol.gui.LookAndFeel.COLOR_BLUE;
+import static racecontrol.gui.LookAndFeel.COLOR_DARK_BLUE;
+import static racecontrol.gui.LookAndFeel.COLOR_DARK_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.app.livetiming.timing.tablemodels.LiveTimingTableModel;
@@ -47,7 +49,7 @@ public class RatingTableModel
     public Object getValueAt(int column, int row) {
         Entry entry = entriesNew.get(row);
         if (column <= 3) {
-            return entry.getCar();
+            return entry.car;
         }
         return entry;
     }
@@ -63,7 +65,7 @@ public class RatingTableModel
 
     public void sortPosition() {
         entriesNew = entriesNew.stream()
-                .sorted((c1, c2) -> Integer.compare(c1.getCar().realtimePosition, c2.getCar().realtimePosition))
+                .sorted((c1, c2) -> Integer.compare(c1.car.realtimePosition, c2.car.realtimePosition))
                 .collect(toList());
     }
 
@@ -87,9 +89,6 @@ public class RatingTableModel
             new LPTableColumn("Proximity")
             .setMinWidth(100)
             .setCellRenderer(this::proximityRenderer),
-            new LPTableColumn("Pack")
-            .setMinWidth(100)
-            .setCellRenderer(this::packRenderer),
             new LPTableColumn("Position")
             .setMinWidth(100)
             .setCellRenderer(this::positionRenderer),
@@ -111,68 +110,27 @@ public class RatingTableModel
             .setCellRenderer(this::ratingRenderer),};
     }
 
-    private void proximityFrontRenderer(PApplet applet, RenderContext context) {
-        Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getProximityFront());
-    }
-
-    private void proximityRearRenderer(PApplet applet, RenderContext context) {
-        Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getProximityRear());
-    }
-
     private void proximityRenderer(PApplet applet, RenderContext context) {
         Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getProximity());
+        renderValue(applet, context, entry.proximity);
     }
 
     private void positionRenderer(PApplet applet, RenderContext context) {
         Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getPosition());
+        renderValue(applet, context, entry.position);
     }
 
     private void focusRenderer(PApplet applet, RenderContext context) {
         Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getFocus());
-    }
-
-    private void focusSlowRenderer(PApplet applet, RenderContext context) {
-        Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getFocusSlow());
+        renderValue(applet, context, entry.focus);
     }
 
     private void ratingRenderer(PApplet applet, RenderContext context) {
         Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getRating());
-    }
-
-    private void packRenderer(PApplet applet, RenderContext context) {
-        Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getPack());
-    }
-
-    private void packProximityRenderer(PApplet applet, RenderContext context) {
-        Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getPackProximity());
-    }
-
-    private void packFrontRenderer(PApplet applet, RenderContext context) {
-        Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getPackFront());
-    }
-
-    private void paceRenderer(PApplet applet, RenderContext context) {
-        Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getPace());
-    }
-
-    private void paceFocusRenderer(PApplet applet, RenderContext context) {
-        Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.getPaceFocus());
+        renderValueDouble(applet, context, entry.getRating(), entry.getRatingNoFocus());
     }
 
     private void renderValue(PApplet applet, RenderContext context, float value) {
-
         float w = context.width * Math.max(0, Math.min(1, Math.abs(value)));
         if (value < 0) {
             applet.fill(COLOR_RED);
@@ -185,7 +143,32 @@ public class RatingTableModel
         applet.textAlign(CENTER, CENTER);
         applet.fill(COLOR_WHITE);
         applet.text(String.format("%.2f", value), context.width / 2, context.height / 2);
+    }
 
+    private void renderValueDouble(PApplet applet,
+            RenderContext context,
+            float primary,
+            float secondary) {
+        float w = context.width * Math.max(0, Math.min(1, Math.abs(secondary)));
+        if (secondary < 0) {
+            applet.fill(COLOR_DARK_RED);
+            applet.rect(context.width - w, 0, w, context.height);
+        } else {
+            applet.fill(COLOR_DARK_BLUE);
+            applet.rect(0, 0, w, context.height);
+        }
+        w = context.width * Math.max(0, Math.min(1, Math.abs(primary)));
+        if (primary < 0) {
+            applet.fill(COLOR_RED);
+            applet.rect(context.width - w, 0, w, context.height);
+        } else {
+            applet.fill(COLOR_BLUE);
+            applet.rect(0, 0, w, context.height);
+        }
+
+        applet.textAlign(CENTER, CENTER);
+        applet.fill(COLOR_WHITE);
+        applet.text(String.format("%.2f", primary), context.width / 2, context.height / 2);
     }
 
 }

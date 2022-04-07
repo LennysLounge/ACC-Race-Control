@@ -67,7 +67,7 @@ public class RealtimePositionExtension
     private void findRealtimePosition(SessionInfo info) {
         // sort cars based on their race distance.
         var carsSorted = getWritableModel().cars.values().stream()
-                .sorted((c1, c2) -> Float.compare(c1.raceDistance, c2.raceDistance))
+                .sorted((c1, c2) -> -Float.compare(c1.raceDistance, c2.raceDistance))
                 .collect(Collectors.toList());
 
         int pos = 1;

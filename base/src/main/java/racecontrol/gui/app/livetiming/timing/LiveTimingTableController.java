@@ -15,6 +15,7 @@ import racecontrol.eventbus.EventListener;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.gui.lpui.LPContainer;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.app.livetiming.timing.tablemodels.DriversTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.QualifyingBestTableModel;
@@ -96,7 +97,9 @@ public class LiveTimingTableController
     }
 
     private void updateTableModel() {
-        model.setEntries(new ArrayList<>(client.getModel().cars.values()));
+        model.setEntries(client.getModel().cars.values().stream()
+                .filter(car -> car.connected)
+                .collect(Collectors.toList()));
         model.sort();
         table.invalidate();
     }

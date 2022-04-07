@@ -91,7 +91,8 @@ public class Model {
         model.trackInfo = trackInfo;
         model.session = session.copy();
         model.cars = new HashMap<>();
-        cars.forEach((id, car) -> model.cars.put(id, car.copy()));
+        Map<Integer, Car> originalCars = new HashMap<>(cars);
+        originalCars.forEach((id, car) -> model.cars.put(id, car.copy()));
         return model;
     }
 }

@@ -7,6 +7,7 @@ package racecontrol.client.extension.autobroadcast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import racecontrol.client.AccBroadcastingClient;
@@ -17,6 +18,7 @@ import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.ClientExtension;
 import racecontrol.client.model.Car;
+import racecontrol.client.protocol.enums.SessionType;
 
 /**
  *
@@ -73,18 +75,39 @@ public class AutobroadcastExtension extends ClientExtension
 
     private void onSessionUpdate(SessionInfo info) {
         updateRatings();
-
-        if (entries.size() > 0 && enabled) {
-            Car focus = entries.get(0).getCar();
-            if (info.getFocusedCarIndex() != focus.id) {
-                client.sendSetCameraRequestWithFocus(focus.id, "setVR", "-");
-                LOG.info("Chaning focus to " + focus.carNumberString() + " with rating: " + entries.get(0).getRating());
-            }
+        if (!enabled) {
+            return;
         }
+        if (entries.isEmpty()) {
+            return;
+        }
+        if (info.getSessionType() == SessionType.RACE
+                && info.getSessionTime() < 15000) {
+            // during first 15 seconds of the race only focus on the leader
+            // this is to wait for the realtime position to activate.
+            Optional<Entry> leader = entries.stream()
+                    .sorted((e1, e2) -> Integer.compare(e1.car.realtimePosition, e2.car.realtimePosition))
+                    .findFirst();
+            if (leader.isPresent()) {
+                if (info.getFocusedCarIndex() != leader.get().car.id) {
+                    client.sendSetCameraRequestWithFocus(leader.get().car.id, "setVR", "-");
+                }
+            }
+            return;
+        }
+
+        Car focus = entries.get(0).car;
+        if (info.getFocusedCarIndex() != focus.id) {
+            client.sendSetCameraRequestWithFocus(focus.id, "setVR", "-");
+            LOG.info("Changing focus to " + focus.carNumberString() + " with rating: " + entries.get(0).getRating());
+
+        }
+
     }
 
     private void updateRatings() {
         entries = getWritableModel().cars.values().stream()
+                .filter(car -> car.connected)
                 .map(car -> {
                     Entry entry = new Entry(car);
                     for (RatingProcessor p : processors) {
