@@ -57,7 +57,7 @@ public class ModelExtension
                     bestSectorTwo = car.bestLap.getSplits().get(1);
                 }
                 if (car.bestLap.getSplits().get(2) < bestSectorThree) {
-                    bestSectorThree = car.bestLap.getSplits().get(3);
+                    bestSectorThree = car.bestLap.getSplits().get(2);
                 }
             }
         }

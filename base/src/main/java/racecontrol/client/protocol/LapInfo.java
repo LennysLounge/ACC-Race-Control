@@ -5,8 +5,8 @@
  */
 package racecontrol.client.protocol;
 
+import java.util.Arrays;
 import racecontrol.client.protocol.enums.LapType;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -18,7 +18,7 @@ public class LapInfo {
     int lapTimeMS;
     int carId;
     int driverIndex;
-    List<Integer> splits = new LinkedList<>();
+    List<Integer> splits = Arrays.asList(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
     boolean isInvalid;
     boolean isValidForBest;
     LapType type = LapType.ERROR;

@@ -5,6 +5,7 @@
  */
 package racecontrol.client.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import racecontrol.client.protocol.SessionInfo;
@@ -38,6 +39,9 @@ public class Session {
     public synchronized Session copy() {
         Session session = new Session();
         session.raw = raw;
+        session.sessionBestSplits = new ArrayList<>(sessionBestSplits);
+        session.maxKMH = maxKMH;
+        session.maxSpeedTrapKMH = maxSpeedTrapKMH;
         return session;
     }
 }
