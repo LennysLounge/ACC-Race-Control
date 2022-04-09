@@ -38,6 +38,7 @@ public class TrackDataController
 
     private final TrackDataPanel dataPanel;
     private final TrackMapPanel mapPanel;
+    private final CameraDefsController cameraDefsController = new CameraDefsController();
     private final LPTabPanel tabPanel = new LPTabPanel();
 
     private final TrackDataExtension trackDataExtension;
@@ -80,6 +81,7 @@ public class TrackDataController
 
         tabPanel.addTab(dataPanel);
         tabPanel.addTab(mapPanel);
+        tabPanel.addTab(cameraDefsController.getPanel());
         tabPanel.setTabIndex(0);
     }
 
@@ -114,6 +116,8 @@ public class TrackDataController
 
     private void onTrackData() {
         trackData = trackDataExtension.getTrackData();
+        mapPanel.trackData = trackData;
+        dataPanel.speedTrapLine = trackData.getSpeedTrapLine();
 
         dataPanel.trackNameLabel.setText(trackData.getTrackname());
         dataPanel.sectorOneTextField.setValue(String.format("%.4f", trackData.getSectorOneLine()).replace(",", "."));

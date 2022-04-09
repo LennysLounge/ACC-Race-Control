@@ -53,6 +53,7 @@ public class TrackDataExtension extends ClientExtension
     public void onEvent(Event e) {
         if (e instanceof TrackInfoEvent) {
             loadTrackData(((TrackInfoEvent) e).getInfo());
+            LOG.info("publishing track data event");
             EventBus.publish(new TrackDataEvent(trackData));
         }
     }
@@ -72,8 +73,8 @@ public class TrackDataExtension extends ClientExtension
     public TrackData getTrackData() {
         return trackData;
     }
-    
-    public void useTrackData(TrackData trackData){
+
+    public void useTrackData(TrackData trackData) {
         this.trackData = trackData;
         EventBus.publish(new TrackDataEvent(trackData));
     }

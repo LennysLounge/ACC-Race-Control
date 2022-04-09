@@ -14,7 +14,6 @@ import static processing.core.PConstants.LEFT;
 import racecontrol.Main;
 import racecontrol.gui.app.logging.LoggingPanel;
 import racecontrol.gui.app.racecontrol.RaceControlController;
-import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.AccConnection;
 import racecontrol.client.events.ConnectionClosedEvent;
 import racecontrol.client.events.ConnectionOpenedEvent;
@@ -26,6 +25,7 @@ import racecontrol.eventbus.EventListener;
 import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.app.autobroadcast.AutobroadcastController;
 import racecontrol.gui.app.livetiming.LiveTimingController;
+import racecontrol.gui.app.trackdata.TrackDataController;
 import racecontrol.gui.lpui.LPComponent;
 import racecontrol.gui.lpui.LPContainer;
 
@@ -67,7 +67,7 @@ public class AppController
         pageControllers.add(new LoggingPanel());
         //pageControllers.add(new TestPanel());
         //pageControllers.add(new DangerDetectionController());
-        //pageControllers.add(new TrackDataController());
+        pageControllers.add(new TrackDataController());
 
         // Add page controllers from extension modules.
         Main.getModules().forEach(module -> {
