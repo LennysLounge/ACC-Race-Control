@@ -112,7 +112,7 @@ public class RatingTableModel
 
     private void proximityRenderer(PApplet applet, RenderContext context) {
         Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.proximity);
+        renderValueShrink(applet, context, entry.proximity);
     }
 
     private void positionRenderer(PApplet applet, RenderContext context) {
@@ -145,11 +145,26 @@ public class RatingTableModel
         applet.text(String.format("%.2f", value), context.width / 2, context.height / 2);
     }
 
+    private void renderValueShrink(PApplet applet, RenderContext context, float value) {
+        float w = context.width * Math.max(0, Math.min(1, shrink(Math.abs(value))));
+        if (value < 0) {
+            applet.fill(COLOR_RED);
+            applet.rect(context.width - w, 0, w, context.height);
+        } else {
+            applet.fill(COLOR_BLUE);
+            applet.rect(0, 0, w, context.height);
+        }
+
+        applet.textAlign(CENTER, CENTER);
+        applet.fill(COLOR_WHITE);
+        applet.text(String.format("%.2f", value), context.width / 2, context.height / 2);
+    }
+
     private void renderValueDouble(PApplet applet,
             RenderContext context,
             float primary,
             float secondary) {
-        float w = context.width * Math.max(0, Math.min(1, Math.abs(secondary)));
+        float w = context.width * Math.max(0, Math.min(1, shrink(Math.abs(secondary))));
         if (secondary < 0) {
             applet.fill(COLOR_DARK_RED);
             applet.rect(context.width - w, 0, w, context.height);
@@ -157,7 +172,7 @@ public class RatingTableModel
             applet.fill(COLOR_DARK_BLUE);
             applet.rect(0, 0, w, context.height);
         }
-        w = context.width * Math.max(0, Math.min(1, Math.abs(primary)));
+        w = context.width * Math.max(0, Math.min(1, shrink(Math.abs(primary))));
         if (primary < 0) {
             applet.fill(COLOR_RED);
             applet.rect(context.width - w, 0, w, context.height);
@@ -169,6 +184,10 @@ public class RatingTableModel
         applet.textAlign(CENTER, CENTER);
         applet.fill(COLOR_WHITE);
         applet.text(String.format("%.2f", primary), context.width / 2, context.height / 2);
+    }
+
+    private float shrink(float v) {
+        return 1f - 1f / (v + 1);
     }
 
 }

@@ -5,8 +5,6 @@
  */
 package racecontrol.client.extension.autobroadcast;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.protocol.RealtimeInfo;
 import racecontrol.client.protocol.SessionInfo;
@@ -46,7 +44,7 @@ public class RatingProcessorImpl
     public Entry calculateRating(Entry entry) {
         Car car = entry.car;
 
-        if (car.isInPit()) {
+        if (!isCarValidForRating(car)) {
             return entry;
         }
 
@@ -57,22 +55,28 @@ public class RatingProcessorImpl
         Car currentCar = car;
         int gap = 0;
         while (currentCar.carPositionAhead != 0) {
-            gap += currentCar.gapPositionAhead;
-            if (gap > 2500) {
-                break;
-            }
-            proximity += Math.pow(1 - (gap / 2500f), 2);
+            // move to car ahead.
             currentCar = getClient().getModel().cars.get(currentCar.carPositionAhead);
-        }
-        currentCar = car;
-        gap = 0;
-        while (currentCar.carPositionBehind != 0) {
             gap += currentCar.gapPositionBehind;
             if (gap > 2500) {
                 break;
             }
-            proximity += Math.pow(1 - (gap / 2500f), 2);
+            if (isCarValidForRating(currentCar)) {
+                proximity += Math.pow(1 - (gap / 2500f), 2);
+            }
+        }
+        currentCar = car;
+        gap = 0;
+        while (currentCar.carPositionBehind != 0) {
+            // move to car behind
             currentCar = getClient().getModel().cars.get(currentCar.carPositionBehind);
+            gap += currentCar.gapPositionAhead;
+            if (gap > 2500) {
+                break;
+            }
+            if (isCarValidForRating(currentCar)) {
+                proximity += Math.pow(1 - (gap / 2500f), 2);
+            }
         }
         entry.proximity = proximity;
 
@@ -127,6 +131,13 @@ public class RatingProcessorImpl
 
     private float clamp(float v) {
         return Math.max(0, Math.min(1, v));
+    }
+
+    private boolean isCarValidForRating(Car car) {
+        return !car.isInPit()
+                && !car.isCheckeredFlag
+                && !car.isYellowFlag
+                && !car.isWhiteFlag;
     }
 
 }
