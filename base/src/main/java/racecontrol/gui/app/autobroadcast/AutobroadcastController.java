@@ -5,10 +5,12 @@
  */
 package racecontrol.gui.app.autobroadcast;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.extension.autobroadcast.AutobroadcastExtension;
-import racecontrol.client.extension.autobroadcast.Entry;
+import racecontrol.client.protocol.SessionInfo;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
@@ -17,6 +19,7 @@ import static racecontrol.gui.RaceControlApplet.getApplet;
 import racecontrol.gui.app.Menu;
 import racecontrol.gui.app.PageController;
 import racecontrol.gui.lpui.LPContainer;
+import racecontrol.utility.TimeUtils;
 
 /**
  *
@@ -82,6 +85,22 @@ public class AutobroadcastController
                     tableModel.sortPosition();
                 }
                 panel.ratingTable.invalidate();
+
+                SessionInfo info = ((RealtimeUpdateEvent) e).getSessionInfo();
+                panel.currentCamera.setTextFixed(info.getActiveCameraSet() + " " + info.getActiveCamera());
+
+                long countDown = extension.getNextCamChange() - System.currentTimeMillis();
+                panel.nextCameraCountdown.setTextFixed("Next cam in: " + TimeUtils.asDelta((int) countDown) + "s");
+
+                List<Long> camScreenTimes = extension.getCamScreenTime();
+                final long totalScreenTime = camScreenTimes.get(0)
+                        + camScreenTimes.get(1)
+                        + camScreenTimes.get(2)
+                        + camScreenTimes.get(3);
+                String percents = extension.getCamScreenTime().stream()
+                        .map(l -> String.format("%.1f%%", l * 100f / totalScreenTime))
+                        .collect(Collectors.joining(", "));
+                panel.cameraScreenTime.setTextFixed("screen time share: " + percents);
             });
         }
     }

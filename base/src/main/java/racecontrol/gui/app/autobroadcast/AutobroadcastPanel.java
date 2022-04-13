@@ -27,6 +27,10 @@ public class AutobroadcastPanel
     private final LPLabel sortByRatingLabel = new LPLabel("Sort by rating");
     protected final LPTable ratingTable = new LPTable();
 
+    protected final LPLabel currentCamera = new LPLabel("");
+    protected final LPLabel nextCameraCountdown = new LPLabel("");
+    protected final LPLabel cameraScreenTime = new LPLabel("");
+
     public AutobroadcastPanel() {
         enableCheckBox.setPosition(20, 10);
         addComponent(enableCheckBox);
@@ -36,6 +40,18 @@ public class AutobroadcastPanel
         addComponent(sortByRatingCheckBox);
         addComponent(sortByRatingLabel);
         addComponent(ratingTable);
+
+        addComponent(currentCamera);
+        currentCamera.setPosition(20, LINE_HEIGHT);
+        currentCamera.setSize(500, LINE_HEIGHT);
+
+        addComponent(nextCameraCountdown);
+        nextCameraCountdown.setPosition(20, LINE_HEIGHT * 2);
+        nextCameraCountdown.setSize(500, LINE_HEIGHT);
+
+        addComponent(cameraScreenTime);
+        cameraScreenTime.setPosition(20, LINE_HEIGHT * 3);
+        cameraScreenTime.setSize(500, LINE_HEIGHT);
     }
 
     @Override

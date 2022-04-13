@@ -44,6 +44,11 @@ public class LPLabel
         this.setSize(getApplet().textWidth(text), LookAndFeel.LINE_HEIGHT);
         invalidate();
     }
+    
+    public void setTextFixed(String text) {
+        this.text = text;
+        invalidate();
+    }
 
     public void setHAlign(int hAlign) {
         this.hAlign = hAlign;
@@ -53,7 +58,7 @@ public class LPLabel
     public void draw(PApplet applet) {
         applet.fill(LookAndFeel.COLOR_DARK_GRAY);
         applet.noStroke();
-        //applet.stroke(0);
+        //applet.stroke(255);
         applet.rect(0, 0, getWidth(), getHeight());
 
         applet.fill(LookAndFeel.COLOR_WHITE);

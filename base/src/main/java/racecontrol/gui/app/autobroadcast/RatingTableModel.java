@@ -11,6 +11,7 @@ import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import racecontrol.client.extension.autobroadcast.Entry;
+import racecontrol.client.model.Car;
 import static racecontrol.gui.LookAndFeel.COLOR_BLUE;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_BLUE;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_RED;
@@ -18,6 +19,7 @@ import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import racecontrol.gui.app.livetiming.timing.tablemodels.LiveTimingTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
+import racecontrol.gui.app.livetiming.timing.tablemodels.columns.ConstructorColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.NameColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PitFlagColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PositionColumn;
@@ -84,8 +86,9 @@ public class RatingTableModel
         return new LPTableColumn[]{
             new PositionColumn(),
             new NameColumn(),
-            new PitFlagColumn(),
+            new ConstructorColumn(),
             new CarNumberColumn(),
+            new PitFlagColumn(),
             new LPTableColumn("Proximity")
             .setMinWidth(100)
             .setCellRenderer(this::proximityRenderer),
