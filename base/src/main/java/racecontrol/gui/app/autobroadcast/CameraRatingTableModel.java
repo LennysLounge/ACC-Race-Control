@@ -10,8 +10,8 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import racecontrol.client.extension.autobroadcast.Entry;
-import racecontrol.client.model.Car;
+import racecontrol.client.extension.autobroadcast.CameraRating;
+import racecontrol.client.extension.autobroadcast.CameraRating;
 import static racecontrol.gui.LookAndFeel.COLOR_BLUE;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_BLUE;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_RED;
@@ -30,15 +30,15 @@ import racecontrol.gui.lpui.table.LPTableColumn;
  *
  * @author Leonard
  */
-public class RatingTableModel
+public class CameraRatingTableModel
         extends LiveTimingTableModel {
 
-    private List<Entry> entriesNew = new ArrayList<>();
+    private List<CameraRating> entriesNew = new ArrayList<>();
 
-    public RatingTableModel() {
+    public CameraRatingTableModel() {
     }
 
-    public void setEntriesNew(List<Entry> entriesNew) {
+    public void setEntriesNew(List<CameraRating> entriesNew) {
         this.entriesNew = entriesNew;
     }
 
@@ -49,11 +49,7 @@ public class RatingTableModel
 
     @Override
     public Object getValueAt(int column, int row) {
-        Entry entry = entriesNew.get(row);
-        if (column <= 3) {
-            return entry.car;
-        }
-        return entry;
+        return entriesNew.get(row);
     }
 
     @Override
@@ -65,9 +61,9 @@ public class RatingTableModel
         return "";
     }
 
-    public void sortPosition() {
+    public void sortName() {
         entriesNew = entriesNew.stream()
-                .sorted((c1, c2) -> Integer.compare(c1.car.realtimePosition, c2.car.realtimePosition))
+                .sorted((c1, c2) -> c1.camSet.compareTo(c2.camSet))
                 .collect(toList());
     }
 
@@ -77,59 +73,59 @@ public class RatingTableModel
                 .collect(toList());
     }
 
-    public Entry getEntryNew(int index) {
-        return entriesNew.get(index);
-    }
-
     @Override
     public LPTableColumn[] getColumns() {
         return new LPTableColumn[]{
-            new PositionColumn(),
-            new NameColumn(),
-            new ConstructorColumn(),
-            new CarNumberColumn(),
-            new PitFlagColumn(),
-            new LPTableColumn("Proximity")
+            new LPTableColumn("Name")
             .setMinWidth(100)
-            .setCellRenderer(this::proximityRenderer),
-            new LPTableColumn("Position")
+            .setCellRenderer(this::nameRenderer),
+            new LPTableColumn("Situation")
             .setMinWidth(100)
-            .setCellRenderer(this::positionRenderer),
+            .setCellRenderer(this::SituationRenderer),
+            new LPTableColumn("Screen time")
+            .setMinWidth(100)
+            .setCellRenderer(this::ScreenTimeRenderer),
+            new LPTableColumn("ST Error")
+            .setMinWidth(100)
+            .setCellRenderer(this::ScreenTimeErrorRenderer),
             new LPTableColumn("Focus")
             .setMinWidth(100)
-            .setCellRenderer(this::focusRenderer),/*
-            new LPTableColumn("Pace")
-            .setMinWidth(100)
-            .setCellRenderer(this::paceRenderer),
-            new LPTableColumn("Pace Focus")
-            .setMinWidth(100)
-            .setCellRenderer(this::paceFocusRenderer),
-            new LPTableColumn("Slow")
-            .setMaxWidth(150)
-            .setMinWidth(150)
-            .setCellRenderer(this::focusSlowRenderer),*/
+            .setCellRenderer(this::focusRenderer),
             new LPTableColumn("Rating")
             .setMinWidth(100)
             .setCellRenderer(this::ratingRenderer),};
     }
 
-    private void proximityRenderer(PApplet applet, RenderContext context) {
-        Entry entry = (Entry) context.object;
-        renderValueShrink(applet, context, entry.proximity);
+    private void nameRenderer(PApplet applet, RenderContext context) {
+        CameraRating entry = (CameraRating) context.object;
+
+        applet.textAlign(CENTER, CENTER);
+        applet.fill(COLOR_WHITE);
+        applet.text(entry.camSet, context.width / 2, context.height / 2);
     }
 
-    private void positionRenderer(PApplet applet, RenderContext context) {
-        Entry entry = (Entry) context.object;
-        renderValue(applet, context, entry.position);
+    private void SituationRenderer(PApplet applet, RenderContext context) {
+        CameraRating entry = (CameraRating) context.object;
+        renderValue(applet, context, entry.situation);
+    }
+
+    private void ScreenTimeRenderer(PApplet applet, RenderContext context) {
+        CameraRating entry = (CameraRating) context.object;
+        renderValue(applet, context, entry.screenTime);
+    }
+
+    private void ScreenTimeErrorRenderer(PApplet applet, RenderContext context) {
+        CameraRating entry = (CameraRating) context.object;
+        renderValueShrink(applet, context, entry.screenTimeError);
     }
 
     private void focusRenderer(PApplet applet, RenderContext context) {
-        Entry entry = (Entry) context.object;
+        CameraRating entry = (CameraRating) context.object;
         renderValue(applet, context, entry.focus);
     }
 
     private void ratingRenderer(PApplet applet, RenderContext context) {
-        Entry entry = (Entry) context.object;
+        CameraRating entry = (CameraRating) context.object;
         renderValueDouble(applet, context, entry.getRating(), entry.getRatingNoFocus());
     }
 

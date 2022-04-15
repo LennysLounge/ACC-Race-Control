@@ -6,20 +6,16 @@
 package racecontrol.client.extension.autobroadcast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import racecontrol.client.AccBroadcastingClient;
+import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.protocol.SessionInfo;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.ClientExtension;
-import racecontrol.client.events.ConnectionOpenedEvent;
-import static racecontrol.client.protocol.enums.SessionType.RACE;
 
 /**
  *
@@ -37,41 +33,37 @@ public class AutobroadcastExtension extends ClientExtension
      */
     private static final Logger LOG = Logger.getLogger(AutobroadcastExtension.class.getName());
     /**
-     * Reference to the game client.
-     */
-    private final AccBroadcastingClient client;
-    /**
      * List of ratings processors.
      */
     private final List<RatingProcessor> processors = new ArrayList<>();
     /**
-     * List of current entries.
+     * List of current car ratings.
      */
-    private List<Entry> entries = new ArrayList<>();
+    private List<CarRating> carRatings = new ArrayList<>();
+    /**
+     * List of camera ratings.
+     */
+    private final List<CameraRating> cameraRatings = new ArrayList<>();
     /**
      * Whether or not the extension is enabled.
      */
     private boolean enabled = false;
     /**
-     * Next cam change timestmap.
+     * Last camera update timestmap.
      */
-    private long nextCamChange = 0;
+    private long lastCameraUpdate = 0;
     /**
      * Last cam change timestmap.
      */
-    private long lastSessionUpdate = 0;
+    private long lastCameraChange = 0;
     /**
-     * Counts the screentime of each camera in milliseconds.
+     * Current camera rating.
      */
-    private final long[] camScreenTime = {0, 0, 0, 0};
-    /**
-     * Expected screen time for each camera.
-     */
-    private final float[] expectedScreenTime = {0.35f, 0.35f, 0.15f, 0.15f};
-    /**
-     * Current camera index.
-     */
-    private int currentCamera = 0;
+    private CameraRating currentCameraRating = null;
+
+    private int currentFocusedCarId = 0;
+
+    private String currentCameraSet = "";
 
     public static AutobroadcastExtension getInstance() {
         if (instance == null) {
@@ -82,108 +74,67 @@ public class AutobroadcastExtension extends ClientExtension
 
     private AutobroadcastExtension() {
         EventBus.register(this);
-        client = AccBroadcastingClient.getClient();
         processors.add(new RatingProcessorImpl());
+
+        cameraRatings.add(new CameraRating("set1", 0.35f));
+        cameraRatings.add(new CameraRating("set2", 0.35f));
+        cameraRatings.add(new CameraRating("Helicam", 0.15f));
+        cameraRatings.add(new CameraRating("Onboard", 0.15f));
+        currentCameraRating = cameraRatings.get(0);
     }
 
     @Override
     public void onEvent(Event e) {
         processors.forEach(p -> p.onEvent(e));
         if (e instanceof RealtimeUpdateEvent) {
+            testCameraChange(((RealtimeUpdateEvent) e).getSessionInfo());
             onSessionUpdate(((RealtimeUpdateEvent) e).getSessionInfo());
         }
     }
 
+    private void testCameraChange(SessionInfo info) {
+        if (info.getFocusedCarIndex() != currentFocusedCarId
+                || !info.getActiveCameraSet().equals(currentCameraSet)) {
+            currentFocusedCarId = info.getFocusedCarIndex();
+            currentCameraSet = info.getActiveCameraSet();
+            lastCameraChange = System.currentTimeMillis();
+            lastCameraUpdate = lastCameraChange;
+            currentCameraRating = null;
+            for (var cameraRating : cameraRatings) {
+                if (cameraRating.camSet.equals(currentCameraSet)) {
+                    currentCameraRating = cameraRating;
+                    break;
+                }
+            }
+            LOG.info("cam changed to " + info.getActiveCameraSet() + " " + currentCameraRating);
+        }
+    }
+
     private void onSessionUpdate(SessionInfo info) {
-        entries = updateRatings();
+        carRatings = updateCarRatings();
+        updateCameraRatings();
 
         // If the autopilot is not enabled we dont need to do anything else. 
         if (!enabled) {
             return;
         }
-        if (entries.isEmpty()) {
+        if (carRatings.isEmpty()) {
             return;
         }
 
-        long now = System.currentTimeMillis();
-        // update screen time of the current camera.
-        camScreenTime[currentCamera] += now - lastSessionUpdate;
-        lastSessionUpdate = now;
-
-        if (now > nextCamChange) {
-            // duration of the next camera.
-            int camDuration = ThreadLocalRandom.current().nextInt(5, 26) * 1000;
-
-            // find which camera to use next to meet the expected screen time.
-            long totalScreenTime = camScreenTime[0]
-                    + camScreenTime[1]
-                    + camScreenTime[2]
-                    + camScreenTime[3]
-                    + camDuration;
-            int nextCamIndex = 0;
-            float bestError = 999999;
-            for (int i = 0; i < 4; i++) {
-                float error = camScreenTime[i] - expectedScreenTime[i] * totalScreenTime;
-                if (error < bestError) {
-                    nextCamIndex = i;
-                    bestError = error;
-                }
-            }
-            
-            // translate to camSet and camera
-            String nextCamSet = "set1";
-            String nextCamera = "-";
-            switch (nextCamIndex) {
-                case 0:
-                    nextCamSet = "set1";
-                    nextCamera = "-";
-                    break;
-                case 1:
-                    nextCamSet = "set2";
-                    nextCamera = "-";
-                    break;
-                case 2:
-                    nextCamSet = "Helicam";
-                    nextCamera = "-";
-                    break;
-                case 3:
-                    nextCamSet = "Onboard";
-                    nextCamera = "Onboard0";
-                    break;
-            }
-
-            // find car to focus on.
-            List<Entry> cars = entries;
-            if (info.getSessionType() == RACE && info.getSessionTime() < 15000) {
-                // always choose leader for first 15 seconds.
-                cars.sort((e1, e2) -> Integer.compare(e1.car.realtimePosition, e2.car.realtimePosition));
-            } else {
-                cars.sort((e1, e2) -> -Float.compare(e1.getRating(), e2.getRating()));
-            }
-            Entry nextCar = cars.get(0);
-
-            // switch camera if necessary
-            if (info.getFocusedCarIndex() != nextCar.car.id
-                    || !info.getActiveCameraSet().equals(nextCamSet)) {
-                LOG.info("Autobroadcast setting camera to car "
-                        + nextCar.car.carNumberString()
-                        + " to camset " + nextCamSet
-                        + " and camera " + nextCamera);
-                client.sendSetCameraRequestWithFocus(nextCar.car.id,
-                        nextCamSet,
-                        nextCamera);
-            }
-
-            currentCamera = nextCamIndex;
-            nextCamChange = now + camDuration;
+        // sort camera's by rating and switch to the best rated camera
+        cameraRatings.sort((c1, c2) -> -Float.compare(c1.getRating(), c2.getRating()));
+        if (currentCameraRating != cameraRatings.get(0)) {
+            LOG.info("Changing camera to " + cameraRatings.get(0).camSet);
+            getClient().sendSetCameraRequest(cameraRatings.get(0).camSet, "Onboard0");
         }
     }
 
-    private List<Entry> updateRatings() {
+    private List<CarRating> updateCarRatings() {
         return getWritableModel().cars.values().stream()
                 .filter(car -> car.connected)
                 .map(car -> {
-                    Entry entry = new Entry(car);
+                    CarRating entry = new CarRating(car);
                     for (RatingProcessor p : processors) {
                         entry = p.calculateRating(entry);
                     }
@@ -192,32 +143,55 @@ public class AutobroadcastExtension extends ClientExtension
                 .collect(Collectors.toList());
     }
 
-    public List<Entry> getEntries() {
-        return entries;
+    private void updateCameraRatings() {
+        // update the screen time for the current camera
+        long now = System.currentTimeMillis();
+        if (currentCameraRating != null) {
+            currentCameraRating.screenTime += now - lastCameraUpdate;
+        }
+        lastCameraUpdate = now;
+
+        int totalScreenTime = cameraRatings.stream()
+                .map(rating -> rating.screenTime)
+                .reduce(0, Integer::sum);
+
+        for (var camera : cameraRatings) {
+            // Over representation in screen time will reduce the rating.
+            // Under representation will increase it.
+            float screenTimeError = camera.screenTime - camera.screenTimeShare * totalScreenTime;
+            camera.screenTimeError = 1 - screenTimeError / 60000f;
+
+            // focus penalty
+            if (camera == currentCameraRating) {
+                camera.focus = 1f;
+            } else {
+                camera.focus = clamp((now - lastCameraChange) / 30000f);
+            }
+        }
+    }
+
+    public List<CarRating> getCarEntries() {
+        return carRatings;
+    }
+
+    public List<CameraRating> getCameraRatings() {
+        return cameraRatings;
     }
 
     public void setEnabled(boolean state) {
         this.enabled = state;
         if (this.enabled) {
             // reset camera settings.
-            camScreenTime[0] = 0;
-            camScreenTime[1] = 0;
-            camScreenTime[2] = 0;
-            camScreenTime[3] = 0;
-            currentCamera = 0;
-            lastSessionUpdate = System.currentTimeMillis();
-            nextCamChange = lastSessionUpdate;
+            for (var camera : cameraRatings) {
+                camera.screenTime = 0;
+            }
+            lastCameraChange = System.currentTimeMillis();
+            lastCameraUpdate = lastCameraChange;
         }
     }
 
-    public long getNextCamChange() {
-        return nextCamChange;
-    }
-
-    public List<Long> getCamScreenTime() {
-        return Arrays.stream(camScreenTime)
-                .boxed()
-                .collect(Collectors.toList());
+    private float clamp(float v) {
+        return Math.max(0, Math.min(1, v));
     }
 
 }

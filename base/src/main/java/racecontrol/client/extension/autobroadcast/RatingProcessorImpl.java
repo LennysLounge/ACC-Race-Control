@@ -41,7 +41,7 @@ public class RatingProcessorImpl
     }
 
     @Override
-    public Entry calculateRating(Entry entry) {
+    public CarRating calculateRating(CarRating entry) {
         Car car = entry.car;
 
         if (!isCarValidForRating(car)) {
@@ -104,8 +104,7 @@ public class RatingProcessorImpl
     }
 
     @Override
-    public void onEvent(Event e
-    ) {
+    public void onEvent(Event e) {
         if (e instanceof RealtimeUpdateEvent) {
             sessionUpdate(((RealtimeUpdateEvent) e).getSessionInfo());
         } else if (e instanceof RealtimeCarUpdateEvent) {

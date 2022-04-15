@@ -17,5 +17,5 @@ public interface RatingProcessor {
 
     public void onEvent(Event e);
 
-    public Entry calculateRating(Entry entry);
+    public CarRating calculateRating(CarRating entry);
 }

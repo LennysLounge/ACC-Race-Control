@@ -25,6 +25,8 @@ public class AutobroadcastPanel
 
     protected final LPCheckBox sortByRatingCheckBox = new LPCheckBox();
     private final LPLabel sortByRatingLabel = new LPLabel("Sort by rating");
+    protected final LPCheckBox showCameraRatingsCheckBox = new LPCheckBox();
+    private final LPLabel showCameraRatingsLabel = new LPLabel("Show camera ratings");
     protected final LPTable ratingTable = new LPTable();
 
     protected final LPLabel currentCamera = new LPLabel("");
@@ -39,6 +41,8 @@ public class AutobroadcastPanel
 
         addComponent(sortByRatingCheckBox);
         addComponent(sortByRatingLabel);
+        addComponent(showCameraRatingsCheckBox);
+        addComponent(showCameraRatingsLabel);
         addComponent(ratingTable);
 
         addComponent(currentCamera);
@@ -51,7 +55,7 @@ public class AutobroadcastPanel
 
         addComponent(cameraScreenTime);
         cameraScreenTime.setPosition(20, LINE_HEIGHT * 3);
-        cameraScreenTime.setSize(500, LINE_HEIGHT);
+        cameraScreenTime.setSize(800, LINE_HEIGHT);
     }
 
     @Override
@@ -67,6 +71,8 @@ public class AutobroadcastPanel
 
         sortByRatingCheckBox.setPosition(20, h - LINE_HEIGHT * 11);
         sortByRatingLabel.setPosition(50, h - LINE_HEIGHT * 11 - 10);
+        showCameraRatingsCheckBox.setPosition(200, h - LINE_HEIGHT * 11);
+        showCameraRatingsLabel.setPosition(230, h - LINE_HEIGHT * 11 - 10);
     }
 
 }

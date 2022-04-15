@@ -13,7 +13,7 @@ import racecontrol.client.model.Car;
  *
  * @author Leonard
  */
-public class Entry {
+public class CarRating {
 
     /**
      * Car info for this entry.
@@ -36,7 +36,7 @@ public class Entry {
      */
     public float tieBraker;
 
-    public Entry(Car car) {
+    public CarRating(Car car) {
         this.car = car;
     }
 

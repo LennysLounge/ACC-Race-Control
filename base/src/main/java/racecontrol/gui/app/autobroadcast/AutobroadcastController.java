@@ -5,7 +5,6 @@
  */
 package racecontrol.gui.app.autobroadcast;
 
-import java.util.List;
 import java.util.stream.Collectors;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.events.RealtimeUpdateEvent;
@@ -19,7 +18,6 @@ import static racecontrol.gui.RaceControlApplet.getApplet;
 import racecontrol.gui.app.Menu;
 import racecontrol.gui.app.PageController;
 import racecontrol.gui.lpui.LPContainer;
-import racecontrol.utility.TimeUtils;
 
 /**
  *
@@ -40,7 +38,11 @@ public class AutobroadcastController
     /**
      * The table model for the rating table.
      */
-    private final RatingTableModel tableModel;
+    private final CarRatingTableModel carRatingModel;
+    /**
+     * The table model for the rating table.
+     */
+    private final CameraRatingTableModel cameraRatingModel;
     /**
      * Menu item.
      */
@@ -56,12 +58,14 @@ public class AutobroadcastController
         extension = AutobroadcastExtension.getInstance();
 
         panel = new AutobroadcastPanel();
-        tableModel = new RatingTableModel();
+        carRatingModel = new CarRatingTableModel();
+        cameraRatingModel = new CameraRatingTableModel();
 
-        panel.ratingTable.setTableModel(tableModel);
+        panel.ratingTable.setTableModel(carRatingModel);
         panel.ratingTable.setCellClickAction(this::onCellClickAction);
 
         panel.enableCheckBox.setChangeAction(this::enableCheckboxChanged);
+        panel.showCameraRatingsCheckBox.setChangeAction(this::showCameraRatingsChanged);
     }
 
     @Override
@@ -78,27 +82,28 @@ public class AutobroadcastController
     public void onEvent(Event e) {
         if (e instanceof RealtimeUpdateEvent) {
             RaceControlApplet.runLater(() -> {
-                tableModel.setEntriesNew(extension.getEntries());
+                carRatingModel.setEntriesNew(extension.getCarEntries());
+                cameraRatingModel.setEntriesNew(extension.getCameraRatings());
                 if (panel.sortByRatingCheckBox.isSelected()) {
-                    tableModel.sortRating();
+                    carRatingModel.sortRating();
+                    cameraRatingModel.sortRating();
                 } else {
-                    tableModel.sortPosition();
+                    carRatingModel.sortPosition();
+                    cameraRatingModel.sortName();
                 }
                 panel.ratingTable.invalidate();
 
                 SessionInfo info = ((RealtimeUpdateEvent) e).getSessionInfo();
                 panel.currentCamera.setTextFixed(info.getActiveCameraSet() + " " + info.getActiveCamera());
 
-                long countDown = extension.getNextCamChange() - System.currentTimeMillis();
-                panel.nextCameraCountdown.setTextFixed("Next cam in: " + TimeUtils.asDelta((int) countDown) + "s");
-
-                List<Long> camScreenTimes = extension.getCamScreenTime();
-                final long totalScreenTime = camScreenTimes.get(0)
-                        + camScreenTimes.get(1)
-                        + camScreenTimes.get(2)
-                        + camScreenTimes.get(3);
-                String percents = extension.getCamScreenTime().stream()
-                        .map(l -> String.format("%.1f%%", l * 100f / totalScreenTime))
+                int totalScreenTime = extension.getCameraRatings().stream()
+                        .map(rating -> rating.screenTime)
+                        .reduce(0, Integer::sum);
+                String percents = extension.getCameraRatings().stream()
+                        .map(rating -> {
+                            float p = rating.screenTime * 100f / totalScreenTime;
+                            return String.format("%s: %.1f%%", rating.camSet, p);
+                        })
                         .collect(Collectors.joining(", "));
                 panel.cameraScreenTime.setTextFixed("screen time share: " + percents);
             });
@@ -106,15 +111,25 @@ public class AutobroadcastController
     }
 
     private void onCellClickAction(int column, int row) {
-        if (row >= tableModel.getRowCount()) {
-            return;
+        if (!panel.showCameraRatingsCheckBox.isSelected()) {
+            if (row >= carRatingModel.getRowCount()) {
+                return;
+            }
+            client.sendChangeFocusRequest(
+                    carRatingModel.getEntryNew(row).car.id);
         }
-        client.sendChangeFocusRequest(
-                tableModel.getEntryNew(row).car.id);
     }
 
     private void enableCheckboxChanged(boolean state) {
         AutobroadcastExtension.getInstance().setEnabled(state);
+    }
+
+    private void showCameraRatingsChanged(boolean state) {
+        if (state) {
+            panel.ratingTable.setTableModel(cameraRatingModel);
+        } else {
+            panel.ratingTable.setTableModel(carRatingModel);
+        }
     }
 
 }
