@@ -6,7 +6,9 @@
 package racecontrol.client.extension.autobroadcast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import static racecontrol.client.AccBroadcastingClient.getClient;
@@ -16,6 +18,8 @@ import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.ClientExtension;
+import racecontrol.client.events.CarConnectedEvent;
+import static racecontrol.client.protocol.enums.SessionType.RACE;
 
 /**
  *
@@ -65,6 +69,8 @@ public class AutobroadcastExtension extends ClientExtension
 
     private String currentCameraSet = "";
 
+    private long lastCarUpdate = 0;
+
     public static AutobroadcastExtension getInstance() {
         if (instance == null) {
             instance = new AutobroadcastExtension();
@@ -89,6 +95,8 @@ public class AutobroadcastExtension extends ClientExtension
         if (e instanceof RealtimeUpdateEvent) {
             testCameraChange(((RealtimeUpdateEvent) e).getSessionInfo());
             onSessionUpdate(((RealtimeUpdateEvent) e).getSessionInfo());
+        } else if (e instanceof CarConnectedEvent) {
+            carRatings.add(new CarRating(((CarConnectedEvent) e).getCar()));
         }
     }
 
@@ -99,6 +107,7 @@ public class AutobroadcastExtension extends ClientExtension
             currentCameraSet = info.getActiveCameraSet();
             lastCameraChange = System.currentTimeMillis();
             lastCameraUpdate = lastCameraChange;
+            lastCarUpdate = lastCameraChange;
             currentCameraRating = null;
             for (var cameraRating : cameraRatings) {
                 if (cameraRating.camSet.equals(currentCameraSet)) {
@@ -111,7 +120,7 @@ public class AutobroadcastExtension extends ClientExtension
     }
 
     private void onSessionUpdate(SessionInfo info) {
-        carRatings = updateCarRatings();
+        updateCarRatings();
         updateCameraRatings();
 
         // If the autopilot is not enabled we dont need to do anything else. 
@@ -122,25 +131,53 @@ public class AutobroadcastExtension extends ClientExtension
             return;
         }
 
+        // find the car we should focus on.
+        if (info.getSessionType() == RACE && info.getSessionTime() < 15000) {
+            // always focus on leader at the start of the race.
+            carRatings.sort((c1, c2) -> Integer.compare(c1.car.position, c2.car.position));
+        } else {
+            carRatings.sort((c1, c2) -> -Float.compare(c1.getRating(), c2.getRating()));
+        }
+        CarRating nextCar = carRatings.get(0);
+
         // sort camera's by rating and switch to the best rated camera
         cameraRatings.sort((c1, c2) -> -Float.compare(c1.getRating(), c2.getRating()));
-        if (currentCameraRating != cameraRatings.get(0)) {
-            LOG.info("Changing camera to " + cameraRatings.get(0).camSet);
-            getClient().sendSetCameraRequest(cameraRatings.get(0).camSet, "Onboard0");
+        CameraRating nextCamera = cameraRatings.get(0);
+
+        if (currentFocusedCarId != nextCar.car.id
+                || currentCameraRating != nextCamera) {
+            LOG.info("Changing camera to " + nextCar.car.carNumberString() + " and " + cameraRatings.get(0).camSet);
+            getClient().sendSetCameraRequestWithFocus(nextCar.car.id,
+                    nextCamera.camSet,
+                    "Onboard0");
         }
+
     }
 
-    private List<CarRating> updateCarRatings() {
-        return getWritableModel().cars.values().stream()
-                .filter(car -> car.connected)
-                .map(car -> {
-                    CarRating entry = new CarRating(car);
-                    for (RatingProcessor p : processors) {
-                        entry = p.calculateRating(entry);
-                    }
-                    return entry;
-                })
-                .collect(Collectors.toList());
+    private void updateCarRatings() {
+        // remove cars that are not connected.
+        var iterator = carRatings.iterator();
+        while (iterator.hasNext()) {
+            CarRating car = iterator.next();
+            if (!car.car.connected) {
+                iterator.remove();
+            }
+            // else update car
+        }
+
+        // update screen time for current car.
+        long now = System.currentTimeMillis();
+        for (CarRating rating : carRatings) {
+            if (rating.car.isFocused) {
+                rating.screenTime += now - lastCarUpdate;
+            }
+        }
+        lastCarUpdate = now;
+
+        // update rating from all cars.
+        for (RatingProcessor p : processors) {
+            p.calculateRating(carRatings);
+        }
     }
 
     private void updateCameraRatings() {
@@ -187,6 +224,7 @@ public class AutobroadcastExtension extends ClientExtension
             }
             lastCameraChange = System.currentTimeMillis();
             lastCameraUpdate = lastCameraChange;
+            lastCarUpdate = lastCameraChange;
         }
     }
 

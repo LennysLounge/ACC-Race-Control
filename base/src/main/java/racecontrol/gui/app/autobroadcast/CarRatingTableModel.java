@@ -10,12 +10,14 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.LEFT;
 import racecontrol.client.extension.autobroadcast.CarRating;
 import static racecontrol.gui.LookAndFeel.COLOR_BLUE;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_BLUE;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_RED;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
+import static racecontrol.gui.LookAndFeel.TEXT_SIZE;
 import racecontrol.gui.app.livetiming.timing.tablemodels.LiveTimingTableModel;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.CarNumberColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.ConstructorColumn;
@@ -24,6 +26,7 @@ import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PitFlagColumn;
 import racecontrol.gui.app.livetiming.timing.tablemodels.columns.PositionColumn;
 import racecontrol.gui.lpui.table.LPTable.RenderContext;
 import racecontrol.gui.lpui.table.LPTableColumn;
+import racecontrol.utility.TimeUtils;
 
 /**
  *
@@ -49,7 +52,7 @@ public class CarRatingTableModel
     @Override
     public Object getValueAt(int column, int row) {
         CarRating entry = entriesNew.get(row);
-        if (column <= 3) {
+        if (column <= 4) {
             return entry.car;
         }
         return entry;
@@ -88,12 +91,18 @@ public class CarRatingTableModel
             new ConstructorColumn(),
             new CarNumberColumn(),
             new PitFlagColumn(),
+            new LPTableColumn("Time")
+            .setMinWidth(100)
+            .setCellRenderer(this::screenTimeRenderer),
             new LPTableColumn("Proximity")
             .setMinWidth(100)
             .setCellRenderer(this::proximityRenderer),
             new LPTableColumn("Position")
             .setMinWidth(100)
             .setCellRenderer(this::positionRenderer),
+            new LPTableColumn("Screen time")
+            .setMinWidth(100)
+            .setCellRenderer(this::screenTimeErrorRenderer),
             new LPTableColumn("Focus")
             .setMinWidth(100)
             .setCellRenderer(this::focusRenderer),/*
@@ -110,6 +119,18 @@ public class CarRatingTableModel
             new LPTableColumn("Rating")
             .setMinWidth(100)
             .setCellRenderer(this::ratingRenderer),};
+    }
+
+    private void screenTimeRenderer(PApplet applet, RenderContext context) {
+        CarRating entry = (CarRating) context.object;
+        applet.textAlign(CENTER, CENTER);
+        applet.fill(COLOR_WHITE);
+        applet.text(TimeUtils.asDurationShort(entry.screenTime), context.width / 2, context.height / 2);
+    }
+
+    private void screenTimeErrorRenderer(PApplet applet, RenderContext context) {
+        CarRating entry = (CarRating) context.object;
+        renderValueShrink(applet, context, entry.screenTimeError);
     }
 
     private void proximityRenderer(PApplet applet, RenderContext context) {

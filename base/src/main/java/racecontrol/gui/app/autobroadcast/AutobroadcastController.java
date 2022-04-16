@@ -18,6 +18,7 @@ import static racecontrol.gui.RaceControlApplet.getApplet;
 import racecontrol.gui.app.Menu;
 import racecontrol.gui.app.PageController;
 import racecontrol.gui.lpui.LPContainer;
+import racecontrol.utility.TimeUtils;
 
 /**
  *
@@ -106,6 +107,12 @@ public class AutobroadcastController
                         })
                         .collect(Collectors.joining(", "));
                 panel.cameraScreenTime.setTextFixed("screen time share: " + percents);
+
+                int carScreenTime = extension.getCarEntries().stream()
+                        .map(rating -> rating.screenTime)
+                        .reduce(0, Integer::sum);
+                panel.screenTimeLabel.setTextFixed(TimeUtils.asDuration(carScreenTime));
+
             });
         }
     }

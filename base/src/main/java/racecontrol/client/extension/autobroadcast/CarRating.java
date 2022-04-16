@@ -20,6 +20,14 @@ public class CarRating {
      */
     public final Car car;
     /**
+     * Screen time for this car.
+     */
+    public int screenTime;
+    /**
+     * Screen time for this car.
+     */
+    public float screenTimeError;
+    /**
      * The more cars are close to this car the higher this rating.
      */
     public float proximity;
@@ -45,6 +53,6 @@ public class CarRating {
     }
 
     public float getRatingNoFocus() {
-        return (tieBraker + proximity) * position;
+        return proximity * position + screenTimeError + tieBraker;
     }
 }

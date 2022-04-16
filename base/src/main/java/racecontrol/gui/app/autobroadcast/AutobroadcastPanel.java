@@ -30,7 +30,7 @@ public class AutobroadcastPanel
     protected final LPTable ratingTable = new LPTable();
 
     protected final LPLabel currentCamera = new LPLabel("");
-    protected final LPLabel nextCameraCountdown = new LPLabel("");
+    protected final LPLabel screenTimeLabel = new LPLabel("");
     protected final LPLabel cameraScreenTime = new LPLabel("");
 
     public AutobroadcastPanel() {
@@ -49,9 +49,9 @@ public class AutobroadcastPanel
         currentCamera.setPosition(20, LINE_HEIGHT);
         currentCamera.setSize(500, LINE_HEIGHT);
 
-        addComponent(nextCameraCountdown);
-        nextCameraCountdown.setPosition(20, LINE_HEIGHT * 2);
-        nextCameraCountdown.setSize(500, LINE_HEIGHT);
+        addComponent(screenTimeLabel);
+        screenTimeLabel.setPosition(20, LINE_HEIGHT * 2);
+        screenTimeLabel.setSize(500, LINE_HEIGHT);
 
         addComponent(cameraScreenTime);
         cameraScreenTime.setPosition(20, LINE_HEIGHT * 3);

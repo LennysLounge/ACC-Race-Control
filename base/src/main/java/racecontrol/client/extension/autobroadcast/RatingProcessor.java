@@ -5,6 +5,7 @@
  */
 package racecontrol.client.extension.autobroadcast;
 
+import java.util.List;
 import racecontrol.eventbus.Event;
 
 /**
@@ -17,5 +18,5 @@ public interface RatingProcessor {
 
     public void onEvent(Event e);
 
-    public CarRating calculateRating(CarRating entry);
+    public void calculateRating(List<CarRating> entries);
 }

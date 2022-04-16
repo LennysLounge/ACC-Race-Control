@@ -5,6 +5,7 @@
  */
 package racecontrol.client.extension.autobroadcast;
 
+import java.util.List;
 import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.protocol.RealtimeInfo;
 import racecontrol.client.protocol.SessionInfo;
@@ -41,66 +42,79 @@ public class RatingProcessorImpl
     }
 
     @Override
-    public CarRating calculateRating(CarRating entry) {
-        Car car = entry.car;
+    public void calculateRating(List<CarRating> entries) {
+        int totalScreenTime = entries.stream()
+                .map(entry -> entry.screenTime)
+                .reduce(0, Integer::sum);
 
-        if (!isCarValidForRating(car)) {
-            return entry;
-        }
+        for (CarRating entry : entries) {
+            Car car = entry.car;
 
-        // proximity rating. Battles with multiple cars are more desirable.
-        // each car within 2.5 seconds adds their proportinal ammount to the
-        // rating.
-        float proximity = 0;
-        Car currentCar = car;
-        int gap = 0;
-        while (currentCar.carPositionAhead != 0) {
-            // move to car ahead.
-            currentCar = getClient().getModel().cars.get(currentCar.carPositionAhead);
-            gap += currentCar.gapPositionBehind;
-            if (gap > 2500) {
-                break;
+            if (!isCarValidForRating(car)) {
+                entry.screenTimeError = 0;
+                entry.proximity = 0;
+                entry.position = 0;
+                entry.focus = 0;
+                continue;
             }
-            if (isCarValidForRating(currentCar)) {
-                proximity += Math.pow(1 - (gap / 2500f), 2);
+
+            // Screen time error from expected screen time.
+            entry.screenTimeError = 1 - (entry.screenTime - totalScreenTime * 1f / entries.size()) / 600000f;
+
+            // proximity rating. Battles with multiple cars are more desirable.
+            // each car within 2.5 seconds adds their proportinal ammount to the
+            // rating.
+            final float PROXIMITY_EXPONENT = 3;
+            final float MAX_DISTANCE = 2000;
+            float proximity = 0;
+            Car currentCar = car;
+            int gap = 0;
+            while (currentCar.carPositionAhead != 0) {
+                // move to car ahead.
+                currentCar = getClient().getModel().cars.get(currentCar.carPositionAhead);
+                gap += currentCar.gapPositionBehind;
+                if (gap > MAX_DISTANCE) {
+                    break;
+                }
+                if (isCarValidForRating(currentCar)) {
+                    proximity += Math.pow(1 - (gap / MAX_DISTANCE), PROXIMITY_EXPONENT);
+                }
             }
-        }
-        currentCar = car;
-        gap = 0;
-        while (currentCar.carPositionBehind != 0) {
-            // move to car behind
-            currentCar = getClient().getModel().cars.get(currentCar.carPositionBehind);
-            gap += currentCar.gapPositionAhead;
-            if (gap > 2500) {
-                break;
+            currentCar = car;
+            gap = 0;
+            while (currentCar.carPositionBehind != 0) {
+                // move to car behind
+                currentCar = getClient().getModel().cars.get(currentCar.carPositionBehind);
+                gap += currentCar.gapPositionAhead;
+                if (gap > MAX_DISTANCE) {
+                    break;
+                }
+                if (isCarValidForRating(currentCar)) {
+                    proximity += Math.pow(1 - (gap / MAX_DISTANCE), PROXIMITY_EXPONENT);
+                }
             }
-            if (isCarValidForRating(currentCar)) {
-                proximity += Math.pow(1 - (gap / 2500f), 2);
+            entry.proximity = proximity;
+
+            // Position rating. Fights in higher positions are more desirable.
+            // sort cars by their race position from first to last.
+            int carCount = (int) getClient().getModel().cars.values().stream()
+                    .filter(c -> c.connected)
+                    .count();
+            entry.position = 1 - (car.realtimePosition * 1f / carCount * 1f);
+
+            // Focus changed penalty. When the focus changes, cars that are not in
+            // focus get a rating penatly to avoid fast switching.
+            if (car.isFocused) {
+                entry.focus = 1f;
+            } else {
+                int msSinceFocusChange = (int) (System.currentTimeMillis() - focusChangedTimeStamp);
+                entry.focus = clamp(msSinceFocusChange / 60000f);
             }
+
+            // Tie braker: a very small value used to brake ties.
+            // For now it scales with the position from P1=0.001 to 0
+            entry.tieBraker = entry.position * 0.001f;
         }
-        entry.proximity = proximity;
-
-        // Position rating. Fights in higher positions are more desirable.
-        // sort cars by their race position from first to last.
-        int carCount = (int) getClient().getModel().cars.values().stream()
-                .filter(c -> c.connected)
-                .count();
-        entry.position = 1 - (car.realtimePosition * 1f / carCount * 1f);
-
-        // Focus changed penalty. When the focus changes, cars that are not in
-        // focus get a rating penatly to avoid fast switching.
-        if (car.isFocused) {
-            entry.focus = 1f;
-        } else {
-            int msSinceFocusChange = (int) (System.currentTimeMillis() - focusChangedTimeStamp);
-            entry.focus = clamp(msSinceFocusChange / 60000f);
-        }
-
-        // Tie braker: a very small value used to brake ties.
-        // For now it scales with the position from P1=0.001 to 0
-        entry.tieBraker = entry.position * 0.001f;
-
-        return entry;
     }
 
     @Override
