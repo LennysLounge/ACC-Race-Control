@@ -246,6 +246,9 @@ public class DangerDetectionExtension
         if (!hasTrackData) {
             return false;
         }
+        if (velocityMap.size() == 0) {
+            return false;
+        }
         if (info.getLocation() != CarLocation.TRACK) {
             return false;
         }
@@ -328,6 +331,9 @@ public class DangerDetectionExtension
     }
 
     private float getValueFromMap(List<Float> map, float position) {
+        if (map.isEmpty()) {
+            return 0;
+        }
         int size = map.size();
         int lowerIndex = (int) Math.floor(position * size) % size;
         int upperIndex = (lowerIndex + 1) % size;
@@ -338,6 +344,9 @@ public class DangerDetectionExtension
     }
 
     private float getDMapValue(float position) {
+        if (directionMap.isEmpty()) {
+            return 0;
+        }
         int size = directionMap.size();
         int lowerIndex = (int) Math.floor(position * size) % size;
         int upperIndex = (lowerIndex + 1) % size;

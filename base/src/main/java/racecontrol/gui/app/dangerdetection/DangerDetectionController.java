@@ -295,6 +295,10 @@ public class DangerDetectionController
     }
 
     private float getVMapValue(float splinePos) {
+        if (trackData.getGt3VelocityMap().isEmpty()) {
+            return 0;
+        }
+
         int size = trackData.getGt3VelocityMap().size();
         int lowerIndex = (int) Math.floor(splinePos * size) % size;
         int upperIndex = (lowerIndex + 1) % size;
@@ -306,6 +310,10 @@ public class DangerDetectionController
     }
 
     private float getDMapValue(float splinePos) {
+        if (trackData.getDirectionMap().isEmpty()) {
+            return 0;
+        }
+
         int size = trackData.getDirectionMap().size();
         int lowerIndex = (int) Math.floor(splinePos * size) % size;
         if (lowerIndex < 0) {

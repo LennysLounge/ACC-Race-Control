@@ -6,6 +6,7 @@ Changes:
         The option to use a custom api key is still there, if there are every problem with the default key.
 * Added the option to automatically detect the connection settings from the configuration file.
 * Added a relative mode to the live timing which shows cars relative to each other.
+* Added support for the American track Pack DLC.
 
         
 

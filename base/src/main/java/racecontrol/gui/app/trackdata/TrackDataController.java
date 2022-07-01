@@ -75,8 +75,8 @@ public class TrackDataController
         dataPanel.vMap = vMap;
         dataPanel.dirMap = dirMap;
 
-        dataPanel.saveToFileButton.setAction(() -> saveAll());
-        dataPanel.saveButton.setAction(() -> useData());
+        dataPanel.saveToFileButton.setAction(this::saveAll);
+        dataPanel.saveButton.setAction(this::useData);
 
         tabPanel.addTab(dataPanel);
         tabPanel.addTab(mapPanel);
@@ -97,7 +97,9 @@ public class TrackDataController
     public void onEvent(Event e) {
         if (e instanceof TrackDataEvent) {
             RaceControlApplet.runLater(() -> {
-                onTrackInfo();
+                onTrackData();
+                mapPanel.trackData = ((TrackDataEvent) e).getTrackData();
+                dataPanel.speedTrapLine = ((TrackDataEvent) e).getTrackData().getSpeedTrapLine();
             });
         } else if (e instanceof RealtimeCarUpdateEvent) {
             RaceControlApplet.runLater(() -> {
@@ -107,15 +109,10 @@ public class TrackDataController
                 dataPanel.invalidate();
                 //mapPanel.invalidate();
             });
-        } else if (e instanceof TrackDataEvent) {
-            RaceControlApplet.runLater(() -> {
-                mapPanel.trackData = ((TrackDataEvent) e).getTrackData();
-                dataPanel.speedTrapLine = ((TrackDataEvent) e).getTrackData().getSpeedTrapLine();
-            });
         }
     }
 
-    private void onTrackInfo() {
+    private void onTrackData() {
         trackData = trackDataExtension.getTrackData();
 
         dataPanel.trackNameLabel.setText(trackData.getTrackname());
