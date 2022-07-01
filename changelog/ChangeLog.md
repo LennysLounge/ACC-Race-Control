@@ -2,8 +2,10 @@
 
 Changes:
 * Verified ACC Race Control with google api's.
-    * Race Control now comes with a default API key that has been verified by google, which means it is no longer necessary to generate you own.
+    * Race Control now comes with a default API key that has been verified by Google, which means it is no longer necessary to generate you own.
         The option to use a custom api key is still there, if there are every problem with the default key.
+* Added the option to automatically detect the connection settings from the configuration file.
+* Added a relative mode to the live timing which shows cars relative to each other.
 
         
 
