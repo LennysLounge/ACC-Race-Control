@@ -1,3 +1,12 @@
+# v1.5.0
+
+Changes:
+* Verified ACC Race Control with google api's.
+    * Race Control now comes with a default API key that has been verified by google, which means it is no longer necessary to generate you own.
+        The option to use a custom api key is still there, if there are every problem with the default key.
+
+        
+
 # v1.4.2
 
 Changes:

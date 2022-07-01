@@ -91,15 +91,15 @@ public class GoogleSheetsConnection {
         this.configuration = configuration;
 
         try {
-            sheetService = new GoogleSheetsService(configuration.getSpreadsheetLink());
+            sheetService = new GoogleSheetsService(configuration.getSpreadsheetLink(), configuration.getCredentialsPath());
         } catch (IllegalArgumentException ex) {
             LOG.log(Level.SEVERE, "The spreadsheet URL is not valid.", ex);
             JOptionPane.showMessageDialog(null, "The given spreadsheet link is not valid."
                     + "\nMake sure you copy the whole URL.",
                     "Error extracting spreadsheet Id", ERROR_MESSAGE);
             return;
-        } catch (RuntimeException ex) {
-            LOG.log(Level.SEVERE, "Error starting the Google Sheets service.", ex.getCause());
+        } catch (RuntimeException e) {
+            LOG.log(Level.SEVERE, "Error starting the Google Sheets service.", e);
             JOptionPane.showMessageDialog(null, "There was an error starting the Google API service.",
                     "Error starting API Service", ERROR_MESSAGE);
             return;

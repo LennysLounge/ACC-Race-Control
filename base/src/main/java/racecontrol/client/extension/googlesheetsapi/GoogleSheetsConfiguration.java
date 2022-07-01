@@ -17,17 +17,20 @@ public class GoogleSheetsConfiguration {
     public final static String CAR_INFO_COLUMN = "D";
 
     private final String spreadsheetLink;
+    private final String credentialsPath;
     private final String findEmptyRowRange;
     private final String replayOffsetCell;
     private final String sessionTimeColumn;
     private final String carInfoColumn;
 
     public GoogleSheetsConfiguration(String spreadsheetLink,
+            String credentialsPath,
             String findEmptyRowRange,
             String replayOffsetCell,
             String sessionTimeColumn,
             String carInfoColumn) {
         this.spreadsheetLink = spreadsheetLink;
+        this.credentialsPath = credentialsPath;
         this.findEmptyRowRange = findEmptyRowRange;
         this.replayOffsetCell = replayOffsetCell;
         this.sessionTimeColumn = sessionTimeColumn;
@@ -36,6 +39,10 @@ public class GoogleSheetsConfiguration {
 
     public String getSpreadsheetLink() {
         return spreadsheetLink;
+    }
+
+    public String getCredentialsPath() {
+        return credentialsPath;
     }
 
     public String getFindEmptyRowRange() {
