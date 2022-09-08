@@ -22,14 +22,15 @@ public interface AppExtensionModule {
     public String getName();
 
     /**
-     * Returns the client extension for this module.
+     * Returns the client extension for this module. Null if no extension is
+     * required.
      *
      * @return The client extension for this module.
      */
     public ClientExtension getExtension();
 
     /**
-     * Returns the page controller for this module
+     * Returns the page controller for this module. Null if no page is required.
      *
      * @return The page controller for this module.
      */
