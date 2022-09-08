@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.logging.Logger;
+import racecontrol.Main;
 import racecontrol.client.events.ConnectionClosedEvent;
 import racecontrol.client.extension.autobroadcast.AutobroadcastExtension;
 import racecontrol.client.extension.contact.ContactExtension;
@@ -108,6 +109,14 @@ public class AccBroadcastingClient
         extensions.add(VirtualSafetyCarExtension.getInstance());
         extensions.add(RaceEventExtension.get());
         extensions.add(AutobroadcastExtension.getInstance());
+
+        // add extension from modules.
+        Main.getModules().forEach(module -> {
+            var extension = module.getExtension();
+            if (extension != null) {
+                extensions.add(extension);
+            }
+        });
     }
 
     @Override
