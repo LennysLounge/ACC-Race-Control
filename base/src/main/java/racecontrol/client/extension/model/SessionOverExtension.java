@@ -17,8 +17,6 @@ import racecontrol.client.events.SessionPhaseChangedEvent;
 import racecontrol.client.extension.laptimes.LapCompletedEvent;
 import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 
 /**
  * Finds when a car has finished its session.
@@ -26,8 +24,7 @@ import racecontrol.eventbus.EventListener;
  * @author Leonard
  */
 public class SessionOverExtension
-        extends ClientExtension
-        implements EventListener {
+        extends ClientExtension {
 
     /**
      * Flag to track if the session is over or not.
@@ -35,7 +32,6 @@ public class SessionOverExtension
     private boolean isSessionOver = false;
 
     public SessionOverExtension() {
-        EventBus.register(this);
     }
 
     @Override

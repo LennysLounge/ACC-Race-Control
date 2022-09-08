@@ -14,8 +14,6 @@ import racecontrol.client.events.AfterPacketReceivedEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 
 /**
  * Finds when a car has finished its session.
@@ -23,8 +21,7 @@ import racecontrol.eventbus.EventListener;
  * @author Leonard
  */
 public class OvertakeExtension
-        extends ClientExtension
-        implements EventListener {
+        extends ClientExtension {
 
     /**
      * Ms the indicator should be visible for.
@@ -40,7 +37,6 @@ public class OvertakeExtension
     private final Map<Integer, Long> timestamps = new HashMap<>();
 
     public OvertakeExtension() {
-        EventBus.register(this);
     }
 
     @Override

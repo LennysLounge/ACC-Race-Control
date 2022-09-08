@@ -27,15 +27,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import racecontrol.eventbus.EventListener;
 import racecontrol.client.ClientExtension;
 
 /**
  *
  * @author Leonard
  */
-public class ResultsExtension extends ClientExtension
-        implements EventListener {
+public class ResultsExtension
+        extends ClientExtension {
 
     private static final Logger LOG = Logger.getLogger(ResultsExtension.class.getName());
 

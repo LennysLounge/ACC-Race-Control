@@ -10,8 +10,6 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.model.Car;
 import racecontrol.client.protocol.SessionInfo;
 import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 
 /**
  * General extension for basic model properties.
@@ -19,11 +17,9 @@ import racecontrol.eventbus.EventListener;
  * @author Leonard
  */
 public class ModelExtension
-        extends ClientExtension
-        implements EventListener {
+        extends ClientExtension {
 
     public ModelExtension() {
-        EventBus.register(this);
     }
 
     @Override

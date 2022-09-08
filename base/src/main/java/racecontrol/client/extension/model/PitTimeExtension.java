@@ -16,16 +16,13 @@ import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
 import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 
 /**
  *
  * @author Leonard
  */
 public class PitTimeExtension
-        extends ClientExtension
-        implements EventListener {
+        extends ClientExtension {
 
     /**
      * Map from carId's to the time they entered the pitlane.
@@ -37,7 +34,6 @@ public class PitTimeExtension
     private final Map<Integer, Long> pitStationaryTimestamp = new HashMap<>();
 
     public PitTimeExtension() {
-        EventBus.register(this);
     }
 
     @Override

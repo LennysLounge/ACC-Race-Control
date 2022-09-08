@@ -23,8 +23,6 @@ import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
 import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 import racecontrol.utility.TimeUtils;
 
 /**
@@ -32,8 +30,7 @@ import racecontrol.utility.TimeUtils;
  * @author Leonard
  */
 public class StintTimeExtension
-        extends ClientExtension
-        implements EventListener {
+        extends ClientExtension {
 
     private static final Logger LOG = Logger.getLogger(StintTimeExtension.class.getName());
     /**
@@ -50,7 +47,6 @@ public class StintTimeExtension
     private final List<Integer> servedPenalty = new ArrayList<>();
 
     public StintTimeExtension() {
-        EventBus.register(this);
     }
 
     @Override

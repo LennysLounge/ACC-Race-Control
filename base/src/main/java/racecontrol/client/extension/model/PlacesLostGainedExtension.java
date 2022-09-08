@@ -14,19 +14,15 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.events.SessionPhaseChangedEvent;
 import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 
 /**
  *
  * @author Leonard
  */
 public class PlacesLostGainedExtension
-        extends ClientExtension
-        implements EventListener {
+        extends ClientExtension {
 
     public PlacesLostGainedExtension() {
-        EventBus.register(this);
     }
 
     @Override

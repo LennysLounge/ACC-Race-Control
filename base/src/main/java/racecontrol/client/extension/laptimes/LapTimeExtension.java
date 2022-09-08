@@ -29,7 +29,6 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
 import racecontrol.client.ClientExtension;
 import racecontrol.client.model.Car;
@@ -38,8 +37,7 @@ import racecontrol.client.model.Car;
  *
  * @author Leonard
  */
-public class LapTimeExtension extends ClientExtension
-        implements EventListener {
+public class LapTimeExtension extends ClientExtension {
 
     /**
      * This classes logger.
@@ -79,7 +77,6 @@ public class LapTimeExtension extends ClientExtension
     private final boolean isLoggingEnabled;
 
     public LapTimeExtension() {
-        EventBus.register(this);
         client = AccBroadcastingClient.getClient();
         this.isLoggingEnabled = false;
         if (isLoggingEnabled) {

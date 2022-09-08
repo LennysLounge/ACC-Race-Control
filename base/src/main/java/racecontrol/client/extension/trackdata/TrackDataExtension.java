@@ -19,15 +19,14 @@ import racecontrol.client.protocol.TrackInfo;
 import racecontrol.client.events.TrackInfoEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 import racecontrol.client.ClientExtension;
 
 /**
  *
  * @author Leonard
  */
-public class TrackDataExtension extends ClientExtension
-        implements EventListener {
+public class TrackDataExtension
+        extends ClientExtension {
 
     private static final Logger LOG = Logger.getLogger(TrackDataExtension.class.getName());
 
@@ -46,7 +45,6 @@ public class TrackDataExtension extends ClientExtension
     }
 
     private TrackDataExtension() {
-        EventBus.register(this);
     }
 
     @Override

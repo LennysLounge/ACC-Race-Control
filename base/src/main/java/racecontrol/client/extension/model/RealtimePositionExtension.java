@@ -17,8 +17,6 @@ import racecontrol.client.protocol.SessionInfo;
 import static racecontrol.client.protocol.enums.SessionPhase.PRESESSION;
 import static racecontrol.client.protocol.enums.SessionType.RACE;
 import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 
 /**
  * Calculates the realtime position by using a corrected race distance.
@@ -26,11 +24,9 @@ import racecontrol.eventbus.EventListener;
  * @author Leonard
  */
 public class RealtimePositionExtension
-        extends ClientExtension
-        implements EventListener {
+        extends ClientExtension {
 
     public RealtimePositionExtension() {
-        EventBus.register(this);
     }
 
     @Override

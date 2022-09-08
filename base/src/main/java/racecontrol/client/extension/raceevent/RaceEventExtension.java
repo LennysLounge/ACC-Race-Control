@@ -24,14 +24,13 @@ import racecontrol.client.extension.vsc.events.VSCStartEvent;
 import racecontrol.client.extension.vsc.events.VSCViolationEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 
 /**
  *
  * @author Leonard
  */
-public class RaceEventExtension extends ClientExtension
-        implements EventListener {
+public class RaceEventExtension
+        extends ClientExtension {
 
     /**
      * Singleton instance.
@@ -50,7 +49,6 @@ public class RaceEventExtension extends ClientExtension
     }
 
     private RaceEventExtension() {
-        EventBus.register(this);
     }
 
     @Override

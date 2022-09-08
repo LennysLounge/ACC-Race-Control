@@ -6,17 +6,12 @@
 package racecontrol.client.extension.autobroadcast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import static racecontrol.client.AccBroadcastingClient.getClient;
 import racecontrol.client.protocol.SessionInfo;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 import racecontrol.client.ClientExtension;
 import racecontrol.client.events.CarConnectedEvent;
 import static racecontrol.client.protocol.enums.SessionType.RACE;
@@ -25,8 +20,8 @@ import static racecontrol.client.protocol.enums.SessionType.RACE;
  *
  * @author Leonard
  */
-public class AutobroadcastExtension extends ClientExtension
-        implements EventListener {
+public class AutobroadcastExtension
+        extends ClientExtension {
 
     /**
      * Singelton instance.
@@ -79,7 +74,6 @@ public class AutobroadcastExtension extends ClientExtension
     }
 
     private AutobroadcastExtension() {
-        EventBus.register(this);
         processors.add(new RatingProcessorImpl());
 
         cameraRatings.add(new CameraRating("set1", 0.35f));

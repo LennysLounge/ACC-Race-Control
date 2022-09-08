@@ -14,8 +14,6 @@ import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.client.model.Car;
 import racecontrol.client.protocol.SessionInfo;
 import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 
 /**
  * An extension for calculating gaps to other cars.
@@ -23,8 +21,7 @@ import racecontrol.eventbus.EventListener;
  * @author Leonard
  */
 public class GapExtension
-        extends ClientExtension
-        implements EventListener {
+        extends ClientExtension {
 
     /**
      * Current track data.
@@ -36,7 +33,6 @@ public class GapExtension
     private final GapCalculator gapCalculator = new GapCalculator();
 
     public GapExtension() {
-        EventBus.register(this);
     }
 
     @Override

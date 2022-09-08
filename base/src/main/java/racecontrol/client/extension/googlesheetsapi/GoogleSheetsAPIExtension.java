@@ -35,8 +35,8 @@ import racecontrol.client.model.Car;
  *
  * @author Leonard
  */
-public class GoogleSheetsAPIExtension extends ClientExtension
-        implements EventListener {
+public class GoogleSheetsAPIExtension
+        extends ClientExtension {
 
     /**
      * Singelton instance.
@@ -75,7 +75,6 @@ public class GoogleSheetsAPIExtension extends ClientExtension
     }
 
     private GoogleSheetsAPIExtension() {
-        EventBus.register(this);
         REPLAY_OFFSET_EXTENSION = ReplayOffsetExtension.getInstance();
         CLIENT = AccBroadcastingClient.getClient();
         connection = new GoogleSheetsConnection();

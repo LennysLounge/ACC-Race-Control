@@ -16,16 +16,13 @@ import racecontrol.client.extension.trackdata.TrackData;
 import racecontrol.client.extension.trackdata.TrackDataEvent;
 import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 
 /**
  *
  * @author Leonard
  */
 public class SpeedExtension
-        extends ClientExtension
-        implements EventListener {
+        extends ClientExtension {
 
     /**
      * Track data for the current track.
@@ -37,7 +34,6 @@ public class SpeedExtension
     private final Map<Integer, Float> prevPosition = new HashMap<>();
 
     public SpeedExtension() {
-        EventBus.register(this);
     }
 
     @Override

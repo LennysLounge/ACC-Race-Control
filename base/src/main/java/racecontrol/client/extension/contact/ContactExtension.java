@@ -47,8 +47,8 @@ import static racecontrol.persistance.PersistantConfigKeys.CONTACT_CONFIG_HINT_S
  *
  * @author Leonard
  */
-public class ContactExtension extends ClientExtension
-        implements EventListener {
+public class ContactExtension
+        extends ClientExtension {
 
     /**
      * Singelton instance.
@@ -134,7 +134,6 @@ public class ContactExtension extends ClientExtension
      * Private constructor.
      */
     private ContactExtension() {
-        EventBus.register(this);
         CLIENT = AccBroadcastingClient.getClient();
         REPLAY_EXTENSION = ReplayOffsetExtension.getInstance();
         GOOGLE_SHEETS_EXTENSION = GoogleSheetsAPIExtension.getInstance();

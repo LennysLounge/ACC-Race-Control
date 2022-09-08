@@ -20,7 +20,6 @@ import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 import racecontrol.logging.UILogger;
 import racecontrol.utility.TimeUtils;
 
@@ -28,8 +27,8 @@ import racecontrol.utility.TimeUtils;
  *
  * @author Leonard
  */
-public class VirtualSafetyCarExtension extends ClientExtension
-        implements EventListener {
+public class VirtualSafetyCarExtension
+        extends ClientExtension {
 
     /**
      * This class's logger.
@@ -81,7 +80,6 @@ public class VirtualSafetyCarExtension extends ClientExtension
     }
 
     private VirtualSafetyCarExtension() {
-        EventBus.register(this);
         CLIENT = AccBroadcastingClient.getClient();
         GOOGLE_SHEETS_EXTENSION = GoogleSheetsAPIExtension.getInstance();
     }

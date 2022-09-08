@@ -7,7 +7,6 @@ package racecontrol.client.extension.replayoffset;
 
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 import racecontrol.client.events.BroadcastingEventEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.protocol.BroadcastingEvent;
@@ -24,8 +23,8 @@ import racecontrol.client.ClientExtension;
  *
  * @author Leonard
  */
-public class ReplayOffsetExtension extends ClientExtension
-        implements EventListener {
+public class ReplayOffsetExtension
+        extends ClientExtension {
 
     /**
      * Explaination of how this works:
@@ -128,7 +127,6 @@ public class ReplayOffsetExtension extends ClientExtension
     }
 
     private ReplayOffsetExtension() {
-        EventBus.register(this);
         client = AccBroadcastingClient.getClient();
         replayStartTime = 0;
         gameConnectionTime = 0;

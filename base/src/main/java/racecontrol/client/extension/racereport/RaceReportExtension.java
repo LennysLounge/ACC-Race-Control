@@ -25,8 +25,6 @@ import racecontrol.client.protocol.enums.SessionType;
 import static racecontrol.client.protocol.enums.SessionType.RACE;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.eventbus.Event;
-import racecontrol.eventbus.EventBus;
-import racecontrol.eventbus.EventListener;
 import racecontrol.client.extension.laptimes.LapCompletedEvent;
 import racecontrol.client.extension.results.ResultsExtension;
 import racecontrol.utility.TimeUtils;
@@ -37,8 +35,8 @@ import racecontrol.client.extension.raceevent.RaceEventExtension;
  *
  * @author Leonard
  */
-public class RaceReportExtension extends ClientExtension
-        implements EventListener {
+public class RaceReportExtension
+        extends ClientExtension {
 
     /**
      * Singelton instance.
@@ -70,7 +68,6 @@ public class RaceReportExtension extends ClientExtension
     }
 
     private RaceReportExtension() {
-        EventBus.register(this);
     }
 
     @Override
