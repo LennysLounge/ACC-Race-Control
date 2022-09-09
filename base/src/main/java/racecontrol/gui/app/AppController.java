@@ -63,11 +63,11 @@ public class AppController
         List<PageController> pageControllers = new ArrayList<>();
         pageControllers.add(liveTimingController);
         pageControllers.add(new RaceControlController());
-        pageControllers.add(new AutobroadcastController());
+        //pageControllers.add(new AutobroadcastController());
         pageControllers.add(new LoggingPanel());
         //pageControllers.add(new TestPanel());
         //pageControllers.add(new DangerDetectionController());
-        pageControllers.add(new TrackDataController());
+        //pageControllers.add(new TrackDataController());
 
         // Add page controllers from extension modules.
         Main.getModules().forEach(module -> {

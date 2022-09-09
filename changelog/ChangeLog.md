@@ -1,6 +1,8 @@
 # v1.5.1
 
 Changes:
+* Add an API to allow to create extensions for Race Control.
+    For an example on how to create an extension visit https://github.com/LennysLounge/ACC-Race-Control-Extension-Example.
 
 # v1.5.0
 
