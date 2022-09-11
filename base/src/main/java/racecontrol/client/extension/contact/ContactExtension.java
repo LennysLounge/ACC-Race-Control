@@ -391,7 +391,7 @@ public class ContactExtension
                     boolean isSpun = info.getYellowFlaggedCars().contains(car.id);
                     return String.format("%s%s%s%s",
                             carNumber,
-                            sendLapNumber ? ("[" + lap + "]") : "",
+                            sendLapNumber ? (" [" + lap + "]") : "",
                             sendSpin ? (isSpun ? " Spin" : "") : "",
                             sendInvalid ? (isInvalid ? " Invalid" : "") : "");
                 })
