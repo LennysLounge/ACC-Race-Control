@@ -32,6 +32,7 @@ import racecontrol.client.extension.racereport.RaceReportExtension;
 import racecontrol.client.extension.results.ResultsExtension;
 import racecontrol.client.extension.model.SpeedExtension;
 import racecontrol.client.extension.model.StintTimeExtension;
+import racecontrol.client.extension.returntogarage.ReturnToGarageExtension;
 import racecontrol.client.extension.trackdata.TrackDataExtension;
 import racecontrol.client.extension.vsc.VirtualSafetyCarExtension;
 import racecontrol.client.model.Model;
@@ -109,6 +110,7 @@ public class AccBroadcastingClient
         extensions.add(VirtualSafetyCarExtension.getInstance());
         extensions.add(RaceEventExtension.get());
         extensions.add(AutobroadcastExtension.getInstance());
+        extensions.add(new ReturnToGarageExtension());
 
         // add extension from modules.
         Main.getModules().forEach(module -> {
