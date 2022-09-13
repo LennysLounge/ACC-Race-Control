@@ -15,10 +15,12 @@ import racecontrol.client.extension.contact.ContactEvent;
 import racecontrol.client.extension.contact.ContactInfo;
 import racecontrol.client.extension.raceevent.entries.ContactEventEntry;
 import racecontrol.client.extension.raceevent.entries.RaceEventEntry;
+import racecontrol.client.extension.raceevent.entries.ReturnToGarageEntry;
 import racecontrol.client.extension.raceevent.entries.SimpleEventEntry;
 import racecontrol.client.extension.raceevent.entries.VSCViolationEventEntry;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.extension.replayoffset.ReplayStartKnownEvent;
+import racecontrol.client.extension.returntogarage.ReturnToGarageEvent;
 import racecontrol.client.extension.vsc.events.VSCEndEvent;
 import racecontrol.client.extension.vsc.events.VSCStartEvent;
 import racecontrol.client.extension.vsc.events.VSCViolationEvent;
@@ -65,6 +67,8 @@ public class RaceEventExtension
             onVSCViolation((VSCViolationEvent) e);
         } else if (e instanceof ReplayStartKnownEvent) {
             updateReplayTimes();
+        } else if (e instanceof ReturnToGarageEvent) {
+            onReturnToGarage((ReturnToGarageEvent) e);
         }
     }
 
@@ -139,6 +143,12 @@ public class RaceEventExtension
                 "VSC violation",
                 false,
                 e);
+        entries.add(entry);
+        EventBus.publish(new RaceEventEvent(entry));
+    }
+
+    private void onReturnToGarage(ReturnToGarageEvent e) {
+        RaceEventEntry entry = new ReturnToGarageEntry(e);
         entries.add(entry);
         EventBus.publish(new RaceEventEvent(entry));
     }

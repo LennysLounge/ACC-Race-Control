@@ -12,6 +12,7 @@ import racecontrol.client.ClientExtension;
 import racecontrol.client.events.CarConnectedEvent;
 import racecontrol.client.events.CarDisconnectedEvent;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
+import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.model.Car;
 import racecontrol.client.protocol.RealtimeInfo;
 import racecontrol.client.protocol.enums.CarLocation;
@@ -48,23 +49,33 @@ public class ReturnToGarageExtension
             Car car = ((CarDisconnectedEvent) e).getCar();
             carLocations.remove(car.id);
         } else if (e instanceof RealtimeCarUpdateEvent) {
-            RealtimeInfo info = ((RealtimeCarUpdateEvent) e).getInfo();
-            Car car = getWritableModel().cars.get(info.getCarId());
-
-            boolean wasRTG = car.carLocation == PITLANE
-                    && (carLocations.get(car.id) == TRACK || carLocations.get(car.id) == PITEXIT);
-
-            if (wasRTG) {
-                LOG.info("Car "
-                        + getWritableModel().cars.get(info.getCarId()).carNumberString()
-                        + " Returned to garage at "
-                        + TimeUtils.asDuration(getWritableModel().session.raw.getSessionTime())
-                );
-                EventBus.publish(new ReturnToGarageEvent());
-            }
-            carLocations.put(info.getCarId(), info.getLocation());
-
+            onRealtimeUpdate(((RealtimeCarUpdateEvent) e).getInfo());
         }
+    }
+
+    private void onRealtimeUpdate(RealtimeInfo info) {
+        Car car = getWritableModel().cars.get(info.getCarId());
+
+        if (car.carLocation == PITLANE
+                && (carLocations.get(car.id) == TRACK
+                || carLocations.get(car.id) == PITEXIT)) {
+            int sessionTime = getWritableModel().session.raw.getSessionTime();
+
+            LOG.info("Car "
+                    + car.carNumberString()
+                    + " Returned to garage at "
+                    + TimeUtils.asDuration(sessionTime)
+            );
+
+            EventBus.publish(new ReturnToGarageEvent(
+                    getWritableModel().currentSessionId,
+                    getWritableModel().session.raw.getSessionTime(),
+                    ReplayOffsetExtension.getInstance()
+                            .getReplayTimeFromSessionTime(sessionTime),
+                    car
+            ));
+        }
+        carLocations.put(info.getCarId(), info.getLocation());
     }
 
 }
