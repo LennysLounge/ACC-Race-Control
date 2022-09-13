@@ -40,7 +40,7 @@ public class ReturnToGarageEntry
     public ReturnToGarageEntry(ReturnToGarageEvent event) {
         super(event.getSessionId(),
                 event.getSessionTime(),
-                "RTG",
+                "Return to garage",
                 true
         );
         setReplayTime(event.getReplayTime());
