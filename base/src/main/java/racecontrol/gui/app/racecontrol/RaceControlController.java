@@ -20,6 +20,7 @@ import racecontrol.eventbus.EventListener;
 import racecontrol.client.extension.contact.ContactInfo;
 import racecontrol.client.extension.contact.ContactEvent;
 import racecontrol.client.extension.raceevent.RaceEventEvent;
+import racecontrol.client.extension.raceevent.entries.ReturnToGarageEntry;
 import racecontrol.client.extension.racereport.RaceReportExtension;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.extension.replayoffset.ReplayStartKnownEvent;
@@ -113,6 +114,8 @@ public class RaceControlController
                     ((ContactEventEntry) entry).onInfoClicked(mouseX, mouseY);
                 } else if (entry instanceof VSCViolationEventEntry) {
                     ((VSCViolationEventEntry) entry).onInfoClicked(mouseX, mouseY);
+                } else if (entry instanceof ReturnToGarageEntry) {
+                    ((ReturnToGarageEntry) entry).onInfoClicked(mouseX, mouseY);
                 }
             };
 

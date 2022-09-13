@@ -142,6 +142,20 @@ public class ReturnToGarageEntry
         return carInfoRenderer;
     }
 
+    /**
+     * Triggers the action for when the info cell was clicked.
+     *
+     * @param x the x position of the mouse when clicked.
+     * @param y the y position of the mouse when clicked.
+     */
+    public void onInfoClicked(int x, int y) {
+        //Car column clicked
+        int index = (int) (x / (LINE_HEIGHT * 1.25f));
+        if (index < 1) {
+            getClient().sendChangeFocusRequest(event.getCar().id);
+        }
+    }
+
     @Override
     public String getInfo() {
         return event.getCar().carNumberString();
