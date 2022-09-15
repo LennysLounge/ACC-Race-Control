@@ -11,7 +11,9 @@ import java.util.logging.Logger;
 import racecontrol.client.ClientExtension;
 import racecontrol.client.events.CarConnectedEvent;
 import racecontrol.client.events.CarDisconnectedEvent;
+import racecontrol.client.events.ConnectionOpenedEvent;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
+import racecontrol.client.extension.googlesheetsapi.GoogleSheetsAPIExtension;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.model.Car;
 import racecontrol.client.protocol.RealtimeInfo;
@@ -90,14 +92,18 @@ public class ReturnToGarageExtension
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof CarConnectedEvent) {
+        if (e instanceof ConnectionOpenedEvent) {
+            carLocations.clear();
+        } else if (e instanceof CarConnectedEvent) {
             Car car = ((CarConnectedEvent) e).getCar();
             carLocations.put(car.id, car.carLocation);
         } else if (e instanceof CarDisconnectedEvent) {
             Car car = ((CarDisconnectedEvent) e).getCar();
             carLocations.remove(car.id);
         } else if (e instanceof RealtimeCarUpdateEvent) {
-            onRealtimeUpdate(((RealtimeCarUpdateEvent) e).getInfo());
+            if (enabled) {
+                onRealtimeUpdate(((RealtimeCarUpdateEvent) e).getInfo());
+            }
         }
     }
 
@@ -122,6 +128,11 @@ public class ReturnToGarageExtension
                             .getReplayTimeFromSessionTime(sessionTime),
                     car
             ));
+            // push to google sheet
+            GoogleSheetsAPIExtension.getInstance().sendIncident(
+                    sessionTime,
+                    String.valueOf(car.carNumber) + " RTG"
+            );
         }
         carLocations.put(info.getCarId(), info.getLocation());
     }
