@@ -1,8 +1,10 @@
 # v1.5.1
 
 Changes:
-* Add an API to allow to create extensions for Race Control.
+* Added an API to allow to create extensions for Race Control.
     For an example on how to create an extension visit https://github.com/LennysLounge/ACC-Race-Control-Extension-Example.
+* Added a "Return to Garage" detection.
+    Car that dont enter the pits through the pit entry will be recorded as having returned to pits.
 
 # v1.5.0
 
