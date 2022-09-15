@@ -77,6 +77,7 @@ public class ReturnToGarageExtension
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        carLocations.clear();
         PersistantConfig.put(RTG_ENABLED, enabled);
         EventBus.publish(new ReturnToGarageEnabledEvent(enabled));
     }
