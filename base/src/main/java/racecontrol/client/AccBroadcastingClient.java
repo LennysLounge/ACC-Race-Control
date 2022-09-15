@@ -110,7 +110,7 @@ public class AccBroadcastingClient
         extensions.add(VirtualSafetyCarExtension.getInstance());
         extensions.add(RaceEventExtension.get());
         extensions.add(AutobroadcastExtension.getInstance());
-        extensions.add(new ReturnToGarageExtension());
+        extensions.add(ReturnToGarageExtension.getInstance());
 
         // add extension from modules.
         Main.getModules().forEach(module -> {

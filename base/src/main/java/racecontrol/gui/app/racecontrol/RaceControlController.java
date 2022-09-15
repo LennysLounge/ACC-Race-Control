@@ -27,6 +27,8 @@ import racecontrol.client.extension.racereport.RaceReportExtension;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.extension.replayoffset.ReplayStartKnownEvent;
 import racecontrol.client.extension.replayoffset.ReplayStartRequiresSearchEvent;
+import racecontrol.client.extension.returntogarage.ReturnToGarageEnabledEvent;
+import racecontrol.client.extension.returntogarage.ReturnToGarageExtension;
 import racecontrol.client.extension.vsc.events.VSCEndEvent;
 import racecontrol.client.extension.vsc.events.VSCStartEvent;
 import racecontrol.client.model.Car;
@@ -85,6 +87,7 @@ public class RaceControlController
         panel.googleSheetsButton.setAction(googleSheetsController::openSettingsPanel);
         panel.virtualSafetyCarButton.setAction(virtualSafetyCarController::openSettingsPanel);
         panel.contactButton.setAction(contactConfigController::openSettingsPanel);
+        panel.returnToGarageButton.setAction(this::returnToGarageButtonPressed);
 
         updateContactButton(PersistantConfig.get(CONTACT_CONFIG_ENABLED));
     }
@@ -121,13 +124,19 @@ public class RaceControlController
                         ((ContactExtensionEnabledEvent) e).getNewState()
                 );
             });
+        } else if (e instanceof ReturnToGarageEnabledEvent) {
+            RaceControlApplet.runLater(()
+                    -> updateRTGButton(
+                            ((ReturnToGarageEnabledEvent) e).getNewState()
+                    )
+            );
         } else if (e instanceof VSCStartEvent) {
             RaceControlApplet.runLater(() -> updateVSCButton(true));
         } else if (e instanceof VSCEndEvent) {
             RaceControlApplet.runLater(() -> updateVSCButton(false));
-        }else if(e instanceof GoogleSheetsConnectedEvent){
+        } else if (e instanceof GoogleSheetsConnectedEvent) {
             RaceControlApplet.runLater(() -> updateGoogleSheetsButton(true));
-        }else if(e instanceof GoogleSheetsDisconnetedEvent){
+        } else if (e instanceof GoogleSheetsDisconnetedEvent) {
             RaceControlApplet.runLater(() -> updateGoogleSheetsButton(false));
         }
     }
@@ -147,13 +156,27 @@ public class RaceControlController
             panel.virtualSafetyCarButton.setBackgroundColor(COLOR_GRAY);
         }
     }
-    
+
     private void updateGoogleSheetsButton(boolean isHighlighted) {
         if (isHighlighted) {
             panel.googleSheetsButton.setBackgroundColor(COLOR_DARK_RED);
         } else {
             panel.googleSheetsButton.setBackgroundColor(COLOR_GRAY);
         }
+    }
+
+    private void updateRTGButton(boolean isHighlighted) {
+        if (isHighlighted) {
+            panel.returnToGarageButton.setBackgroundColor(COLOR_DARK_RED);
+        } else {
+            panel.returnToGarageButton.setBackgroundColor(COLOR_GRAY);
+        }
+    }
+
+    private void returnToGarageButtonPressed() {
+        ReturnToGarageExtension.getInstance().setEnabled(
+                !ReturnToGarageExtension.getInstance().isEnabled()
+        );
     }
 
     private final RaceEventTableModel.ClickAction infoClickAction

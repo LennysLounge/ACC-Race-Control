@@ -38,5 +38,9 @@ public interface PersistantConfigKeys {
     public Key<Boolean> CONTACT_CONFIG_HINT_LAPCOUNT = new Key<>(Boolean.class, true, "contactConfigHintLapCount");
     public Key<Boolean> CONTACT_CONFIG_HINT_SPIN = new Key<>(Boolean.class, true, "contactConfigHintSpin");
     public Key<Boolean> CONTACT_CONFIG_HINT_INVALID = new Key<>(Boolean.class, true, "contactConfigHintInvalid");
+    /**
+     * Return to garage extension
+     */
+    public Key<Boolean> RTG_ENABLED = new Key<>(Boolean.class, false, "returnToGarageEnabled");
 
 }

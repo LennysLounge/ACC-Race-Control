@@ -21,6 +21,8 @@ import static racecontrol.client.protocol.enums.CarLocation.PITLANE;
 import static racecontrol.client.protocol.enums.CarLocation.TRACK;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
+import racecontrol.persistance.PersistantConfig;
+import static racecontrol.persistance.PersistantConfigKeys.RTG_ENABLED;
 import racecontrol.utility.TimeUtils;
 
 /**
@@ -31,14 +33,60 @@ public class ReturnToGarageExtension
         extends ClientExtension {
 
     /**
+     * Singelton instance.
+     */
+    private static ReturnToGarageExtension instance;
+    /**
      * This class's logger.
      */
     private static final Logger LOG = Logger.getLogger(ReturnToGarageExtension.class.getName());
-
+    /**
+     * Wether or not the extension is enabled.
+     */
+    private boolean enabled;
     /**
      * A map of CarId to their previous car location.
      */
     private final Map<Integer, CarLocation> carLocations = new HashMap<>();
+
+    /**
+     * Get the instance of this extension.
+     *
+     * @return the instance of this extension
+     */
+    public static ReturnToGarageExtension getInstance() {
+        if (instance == null) {
+            instance = new ReturnToGarageExtension();
+        }
+        return instance;
+    }
+
+    /**
+     * Private constructor.
+     */
+    private ReturnToGarageExtension() {
+        setEnabled(PersistantConfig.get(RTG_ENABLED));
+    }
+
+    /**
+     * Set the extension enabled or not.
+     *
+     * @param enabled wheter the extension is enabled or not
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        PersistantConfig.put(RTG_ENABLED, enabled);
+        EventBus.publish(new ReturnToGarageEnabledEvent(enabled));
+    }
+
+    /**
+     * Return true if the extension is enabled.
+     *
+     * @return Return true if the extension is enabled
+     */
+    public boolean isEnabled() {
+        return enabled;
+    }
 
     @Override
     public void onEvent(Event e) {
