@@ -12,20 +12,26 @@ import racecontrol.client.extension.raceevent.entries.ContactEventEntry;
 import racecontrol.client.extension.raceevent.entries.RaceEventEntry;
 import racecontrol.client.extension.raceevent.entries.VSCViolationEventEntry;
 import racecontrol.gui.app.racecontrol.virtualsafetycar.VirtualSafetyCarConfigController;
-import racecontrol.client.protocol.CarInfo;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.client.extension.contact.ContactInfo;
 import racecontrol.client.extension.contact.ContactEvent;
+import racecontrol.client.extension.contact.ContactExtensionEnabledEvent;
+import racecontrol.client.extension.googlesheetsapi.GoogleSheetsConnectedEvent;
+import racecontrol.client.extension.googlesheetsapi.GoogleSheetsDisconnetedEvent;
 import racecontrol.client.extension.raceevent.RaceEventEvent;
 import racecontrol.client.extension.raceevent.entries.ReturnToGarageEntry;
 import racecontrol.client.extension.racereport.RaceReportExtension;
 import racecontrol.client.extension.replayoffset.ReplayOffsetExtension;
 import racecontrol.client.extension.replayoffset.ReplayStartKnownEvent;
 import racecontrol.client.extension.replayoffset.ReplayStartRequiresSearchEvent;
+import racecontrol.client.extension.vsc.events.VSCEndEvent;
+import racecontrol.client.extension.vsc.events.VSCStartEvent;
 import racecontrol.client.model.Car;
+import static racecontrol.gui.LookAndFeel.COLOR_DARK_RED;
+import static racecontrol.gui.LookAndFeel.COLOR_GRAY;
 import static racecontrol.gui.RaceControlApplet.getApplet;
 import racecontrol.gui.app.Menu;
 import racecontrol.gui.app.Menu.MenuItem;
@@ -33,6 +39,8 @@ import racecontrol.gui.app.PageController;
 import racecontrol.gui.app.racecontrol.contact.ContactConfigController;
 import racecontrol.gui.app.racecontrol.googlesheetsapi.GoogleSheetsController;
 import racecontrol.logging.UILogger;
+import racecontrol.persistance.PersistantConfig;
+import static racecontrol.persistance.PersistantConfigKeys.CONTACT_CONFIG_ENABLED;
 
 /**
  *
@@ -77,6 +85,8 @@ public class RaceControlController
         panel.googleSheetsButton.setAction(googleSheetsController::openSettingsPanel);
         panel.virtualSafetyCarButton.setAction(virtualSafetyCarController::openSettingsPanel);
         panel.contactButton.setAction(contactConfigController::openSettingsPanel);
+
+        updateContactButton(PersistantConfig.get(CONTACT_CONFIG_ENABLED));
     }
 
     @Override
@@ -105,6 +115,44 @@ public class RaceControlController
             });
         } else if (e instanceof RaceEventEvent) {
             tableModel.addEntry(((RaceEventEvent) e).getEntry());
+        } else if (e instanceof ContactExtensionEnabledEvent) {
+            RaceControlApplet.runLater(() -> {
+                updateContactButton(
+                        ((ContactExtensionEnabledEvent) e).getNewState()
+                );
+            });
+        } else if (e instanceof VSCStartEvent) {
+            RaceControlApplet.runLater(() -> updateVSCButton(true));
+        } else if (e instanceof VSCEndEvent) {
+            RaceControlApplet.runLater(() -> updateVSCButton(false));
+        }else if(e instanceof GoogleSheetsConnectedEvent){
+            RaceControlApplet.runLater(() -> updateGoogleSheetsButton(true));
+        }else if(e instanceof GoogleSheetsDisconnetedEvent){
+            RaceControlApplet.runLater(() -> updateGoogleSheetsButton(false));
+        }
+    }
+
+    private void updateContactButton(boolean isHighlighted) {
+        if (isHighlighted) {
+            panel.contactButton.setBackgroundColor(COLOR_DARK_RED);
+        } else {
+            panel.contactButton.setBackgroundColor(COLOR_GRAY);
+        }
+    }
+
+    private void updateVSCButton(boolean isHighlighted) {
+        if (isHighlighted) {
+            panel.virtualSafetyCarButton.setBackgroundColor(COLOR_DARK_RED);
+        } else {
+            panel.virtualSafetyCarButton.setBackgroundColor(COLOR_GRAY);
+        }
+    }
+    
+    private void updateGoogleSheetsButton(boolean isHighlighted) {
+        if (isHighlighted) {
+            panel.googleSheetsButton.setBackgroundColor(COLOR_DARK_RED);
+        } else {
+            panel.googleSheetsButton.setBackgroundColor(COLOR_GRAY);
         }
     }
 

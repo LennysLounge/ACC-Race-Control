@@ -138,7 +138,7 @@ public class ContactExtension
         REPLAY_EXTENSION = ReplayOffsetExtension.getInstance();
         GOOGLE_SHEETS_EXTENSION = GoogleSheetsAPIExtension.getInstance();
 
-        enabled = PersistantConfig.get(CONTACT_CONFIG_ENABLED);
+        setEnabled(PersistantConfig.get(CONTACT_CONFIG_ENABLED));
         advancedDetectionEnabled = PersistantConfig.get(CONTACT_CONFIG_ADVANCED_ENABLED);
         sendLapNumber = PersistantConfig.get(CONTACT_CONFIG_HINT_LAPCOUNT);
         sendSpin = PersistantConfig.get(CONTACT_CONFIG_HINT_SPIN);
@@ -149,6 +149,7 @@ public class ContactExtension
     public void setEnabled(boolean state) {
         enabled = state;
         PersistantConfig.put(CONTACT_CONFIG_ENABLED, state);
+        EventBus.publish(new ContactExtensionEnabledEvent(enabled));
     }
 
     public void setAdvancedEnabled(boolean state) {
