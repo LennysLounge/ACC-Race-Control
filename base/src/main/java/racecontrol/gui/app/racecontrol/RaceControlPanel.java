@@ -33,7 +33,7 @@ public class RaceControlPanel
     protected final LPButton googleSheetsButton;
     protected final LPButton virtualSafetyCarButton;
     protected final LPButton contactButton;
-    protected final LPButton placeHolder3;
+    protected final LPButton returnToGarageButton;
 
     private boolean showFindReplayButton = false;
 
@@ -72,8 +72,8 @@ public class RaceControlPanel
         addComponent(virtualSafetyCarButton);
         contactButton = new LPButton("Contact");
         addComponent(contactButton);
-        placeHolder3 = new LPButton("placeHolder3");
-        //addComponent(placeHolder3);
+        returnToGarageButton = new LPButton("Return to Garage");
+        addComponent(returnToGarageButton);
 
     }
 
@@ -97,8 +97,8 @@ public class RaceControlPanel
         virtualSafetyCarButton.setPosition(buttonWidth + buttonPadding, heightOffset + buttonPadding * 2);
         contactButton.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
         contactButton.setPosition(buttonPadding * 2, heightOffset + buttonHeight + buttonPadding);
-        placeHolder3.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
-        placeHolder3.setPosition(buttonWidth + buttonPadding, heightOffset + buttonHeight + buttonPadding);
+        returnToGarageButton.setSize(buttonWidth - buttonPadding * 3, buttonHeight - buttonPadding * 3);
+        returnToGarageButton.setPosition(buttonWidth + buttonPadding, heightOffset + buttonHeight + buttonPadding);
 
         float headerHeight = heightOffset + buttonHeight * 2 + LINE_HEIGHT;
         eventListLabel.setPosition(20, headerHeight - LINE_HEIGHT);
