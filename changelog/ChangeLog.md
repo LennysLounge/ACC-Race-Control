@@ -1,3 +1,11 @@
+# v1.5.2
+
+Changes:
+* Add support for version 1.9.
+* Add car information for new cars.
+* Add track information for Valencia Ricardo Tormo.
+
+
 # v1.5.1
 
 Changes:

@@ -24,7 +24,9 @@ import racecontrol.eventbus.EventBus;
 import racecontrol.eventbus.EventListener;
 import racecontrol.gui.RaceControlApplet;
 import racecontrol.gui.app.autobroadcast.AutobroadcastController;
+import racecontrol.gui.app.dangerdetection.DangerDetectionController;
 import racecontrol.gui.app.livetiming.LiveTimingController;
+import racecontrol.gui.app.test.TestPanel;
 import racecontrol.gui.app.trackdata.TrackDataController;
 import racecontrol.gui.lpui.LPComponent;
 import racecontrol.gui.lpui.LPContainer;
@@ -63,11 +65,11 @@ public class AppController
         List<PageController> pageControllers = new ArrayList<>();
         pageControllers.add(liveTimingController);
         pageControllers.add(new RaceControlController());
-        //pageControllers.add(new AutobroadcastController());
+        pageControllers.add(new AutobroadcastController());
         pageControllers.add(new LoggingPanel());
-        //pageControllers.add(new TestPanel());
-        //pageControllers.add(new DangerDetectionController());
-        //pageControllers.add(new TrackDataController());
+        pageControllers.add(new TestPanel());
+        pageControllers.add(new DangerDetectionController());
+        pageControllers.add(new TrackDataController());
 
         // Add page controllers from extension modules.
         Main.getModules().forEach(module -> {
