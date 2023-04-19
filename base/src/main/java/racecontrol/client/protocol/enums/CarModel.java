@@ -54,6 +54,9 @@ public enum CarModel {
     LAMBORGHINI_HURACAN_ST_EVO2(29, "Lamborghini Huracan ST EVO2", "Lamborghini", ST22),
     BMW_M4_GT3(30, "BMW M4 GT3", "BMW", GT3),
     AUDI_R8_LMS_EVO2(31, "Audi R8 LMS Evo 2", "Audi", GT3),
+    FERRARI_296_GT3(32, "FERRARI 296 GT3", "Ferrari", GT3),
+    LAMBORGHINI_HURACAN_EVO2(33, "Lamborghini Huracan EVO2", "Lamborghini", GT3),
+    PORSCHE_992_GT3_R(34, "Porsche 992 GT3 R", "Porsche", GT3),
     // GT4's
     ALPINE_A110_GT4(50, "Alpine A110 GT4", "Alpine", GT4),
     ASTON_MARTIN_VANTAGE_GT4(51, "Aston Martin Vantage GT4", "Aston-Martin", GT4),
