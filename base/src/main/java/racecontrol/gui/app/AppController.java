@@ -39,6 +39,10 @@ public class AppController
         implements EventListener {
 
     /**
+     * Show debug panels.
+     */
+    private final boolean SHOW_DEBUG = false;
+    /**
      * The GUI component.
      */
     private final AppPanel appPanel = new AppPanel();
@@ -65,11 +69,15 @@ public class AppController
         List<PageController> pageControllers = new ArrayList<>();
         pageControllers.add(liveTimingController);
         pageControllers.add(new RaceControlController());
-        pageControllers.add(new AutobroadcastController());
+        if (SHOW_DEBUG) {
+            pageControllers.add(new AutobroadcastController());
+        }
         pageControllers.add(new LoggingPanel());
-        pageControllers.add(new TestPanel());
-        pageControllers.add(new DangerDetectionController());
-        pageControllers.add(new TrackDataController());
+        if (SHOW_DEBUG) {
+            pageControllers.add(new TestPanel());
+            pageControllers.add(new DangerDetectionController());
+            pageControllers.add(new TrackDataController());
+        }
 
         // Add page controllers from extension modules.
         Main.getModules().forEach(module -> {
