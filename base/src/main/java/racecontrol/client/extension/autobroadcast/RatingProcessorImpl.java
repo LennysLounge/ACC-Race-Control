@@ -71,7 +71,11 @@ public class RatingProcessorImpl
             int gap = 0;
             while (currentCar.carPositionAhead != 0) {
                 // move to car ahead.
-                currentCar = getClient().getModel().cars.get(currentCar.carPositionAhead);
+                var nextCar = getClient().getModel().getCar(currentCar.carPositionAhead);
+                if (nextCar.isEmpty()) {
+                    break;
+                }
+                currentCar = nextCar.get();
                 gap += currentCar.gapPositionBehind;
                 if (gap > MAX_DISTANCE) {
                     break;
@@ -84,7 +88,11 @@ public class RatingProcessorImpl
             gap = 0;
             while (currentCar.carPositionBehind != 0) {
                 // move to car behind
-                currentCar = getClient().getModel().cars.get(currentCar.carPositionBehind);
+                var prevCar = getClient().getModel().getCar(currentCar.carPositionBehind);
+                if (prevCar.isEmpty()) {
+                    break;
+                }
+                currentCar = prevCar.get();
                 gap += currentCar.gapPositionAhead;
                 if (gap > MAX_DISTANCE) {
                     break;
@@ -97,7 +105,7 @@ public class RatingProcessorImpl
 
             // Position rating. Fights in higher positions are more desirable.
             // sort cars by their race position from first to last.
-            int carCount = (int) getClient().getModel().cars.values().stream()
+            int carCount = (int) getClient().getModel().getCars().stream()
                     .filter(c -> c.connected)
                     .count();
             entry.position = 1 - (car.realtimePosition * 1f / carCount * 1f);

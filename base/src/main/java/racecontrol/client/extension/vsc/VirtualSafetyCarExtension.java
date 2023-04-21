@@ -135,7 +135,9 @@ public class VirtualSafetyCarExtension
         VSCRecord record = carsOverTheLimit.get(carId);
 
         String logText = String.format("VSC violation by car %s \t+%d kmh \t%s s",
-                CLIENT.getModel().cars.get(carId).carNumberString(),
+                CLIENT.getModel().getCar(carId)
+                        .map(car -> car.carNumberString())
+                        .orElse("#-"),
                 record.speedOver,
                 TimeUtils.asDelta(record.timeOver));
 
@@ -151,7 +153,9 @@ public class VirtualSafetyCarExtension
         // log to spreadsheet.
         GOOGLE_SHEETS_EXTENSION.sendIncident(record.sessionTimeStamp,
                 String.format("%s\n+%d kmh\n%s s",
-                        CLIENT.getModel().cars.get(record.carId).carNumber,
+                        CLIENT.getModel().getCar(record.carId)
+                                .map(car -> car.carNumber)
+                                .orElse(-1),
                         record.speedOver,
                         TimeUtils.asDelta(record.timeOver)));
     }

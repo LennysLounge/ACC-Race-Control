@@ -64,7 +64,7 @@ public class StintTimeExtension
         // reset all stint timers, set timestamps and set accurate flag.
         if (event.getSessionInfo().getPhase() == SESSION) {
             long now = System.currentTimeMillis();
-            getWritableModel().cars.values().forEach(car -> {
+            getWritableModel().getCars().forEach(car -> {
                 stintStartTimestamp.put(car.id, now);
                 car.driverStintTime = 0;
                 car.driverStintTimeAccurate = !event.isInitialisation();
@@ -73,7 +73,7 @@ public class StintTimeExtension
     }
 
     private void carUpdate(RealtimeInfo info) {
-        Car car = getWritableModel().cars.get(info.getCarId());
+        var car = getWritableModel().getCar(info.getCarId()).get();
         long now = System.currentTimeMillis();
         if (!stintStartTimestamp.containsKey(car.id)) {
             stintStartTimestamp.put(car.id, now);
@@ -105,7 +105,7 @@ public class StintTimeExtension
 
     private void broadcastingEvent(BroadcastingEvent event) {
         if (event.getType() == PENALTYCOMMMSG) {
-            Car car = getClient().getModel().cars.get(event.getCarId());
+            Car car = getClient().getModel().getCar(event.getCarId()).get();
             LOG.info(event.getMessage()
                     + "\t" + car.carNumberString()
                     + "\t" + TimeUtils.asDurationShort(car.driverStintTime)

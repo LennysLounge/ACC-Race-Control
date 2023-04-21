@@ -7,11 +7,11 @@ package racecontrol.gui.hotkey;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import processing.event.KeyEvent;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.protocol.CarInfo;
 import racecontrol.client.model.Car;
 import racecontrol.client.model.Model;
 
@@ -130,12 +130,15 @@ public class Hotkeys {
     private void moveFocusRelative(int direction) {
         Model model = client.getModel();
         int focusedCarIndex = model.session.raw.getFocusedCarIndex();
-        Car focusedCar = model.cars.get(focusedCarIndex);
+        Optional<Car> focusedCar = model.getCar(focusedCarIndex);
+        if (focusedCar.isEmpty()) {
+            return;
+        }
 
-        List<Car> cars = model.cars.values().stream()
+        List<Car> cars = model.getCars().stream()
                 .sorted((c1, c2) -> compareSplinePos(c1, c2))
                 .collect(Collectors.toList());
-        int index = cars.indexOf(focusedCar);
+        int index = cars.indexOf(focusedCar.get());
         int target = index + direction;
         if (target < 0) {
             target = cars.size();
@@ -149,12 +152,12 @@ public class Hotkeys {
     private void moveFocusAbsolute(int direction) {
         Model model = client.getModel();
         int focusedCarIndex = model.session.raw.getFocusedCarIndex();
-        Car focusedCar = model.cars.get(focusedCarIndex);
+        var focusedCar = model.getCar(focusedCarIndex);
 
-        List<Car> cars = model.cars.values().stream()
+        List<Car> cars = model.getCars().stream()
                 .sorted((c1, c2) -> c2.position - c1.position)
                 .collect(Collectors.toList());
-        int index = cars.indexOf(focusedCar);
+        int index = cars.indexOf(focusedCar.get());
         int target = index + direction;
         if (target < 0) {
             target = cars.size();

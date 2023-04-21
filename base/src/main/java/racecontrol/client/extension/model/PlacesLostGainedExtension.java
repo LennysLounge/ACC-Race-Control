@@ -40,7 +40,7 @@ public class PlacesLostGainedExtension
         // update the places lost gained.
         if (info.getSessionType() == RACE
                 && info.getPhase().getId() >= SESSION.getId()) {
-            getWritableModel().cars.values().stream()
+            getWritableModel().getCars().stream()
                     .forEach(car -> {
                         if (car.raceStartPosition == 0) {
                             car.raceStartPosition = car.position;
@@ -52,7 +52,7 @@ public class PlacesLostGainedExtension
 
     private void sessionChanged(SessionInfo info) {
         // set the starting position for each car to 0
-        getWritableModel().cars.values().stream()
+        getWritableModel().getCars().stream()
                 .forEach(car -> {
                     car.raceStartPosition = 0;
                     car.raceStartPositionAccurate = false;
@@ -63,7 +63,7 @@ public class PlacesLostGainedExtension
         if (info.getSessionType() == RACE
                 && (info.getPhase() == SESSION
                 || info.getPhase() == PRESESSION)) {
-            getWritableModel().cars.values().stream()
+            getWritableModel().getCars().stream()
                     .forEach(car -> {
                         car.raceStartPosition = car.realtimePosition;
                         car.raceStartPositionAccurate = true;

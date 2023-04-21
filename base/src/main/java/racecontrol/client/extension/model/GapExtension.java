@@ -47,7 +47,7 @@ public class GapExtension
 
     public void onSessionUpdate(SessionInfo info) {
         //calculate gap to session best lap time.
-        for (Car car : getWritableModel().cars.values()) {
+        for (Car car : getWritableModel().getCars()) {
             if (!car.connected) {
                 continue;
             }
@@ -56,7 +56,7 @@ public class GapExtension
         }
 
         // calculate gaps to position ahead/behind and leader.
-        List<Car> cars = getWritableModel().cars.values().stream()
+        List<Car> cars = getWritableModel().getCars().stream()
                 .filter(car -> car.connected)
                 .sorted((c1, c2) -> Float.compare(c1.realtimePosition, c2.realtimePosition))
                 .collect(Collectors.toList());
@@ -89,7 +89,7 @@ public class GapExtension
 
         // calculate gaps to car ahead and behind.
         // cap to cars ahead / behind
-        cars = getWritableModel().cars.values().stream()
+        cars = getWritableModel().getCars().stream()
                 .filter(car -> car.connected)
                 .sorted((c1, c2) -> {
                     return Float.compare(c1.splinePosition, c2.splinePosition);

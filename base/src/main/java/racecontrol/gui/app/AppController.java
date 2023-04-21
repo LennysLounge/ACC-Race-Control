@@ -41,7 +41,7 @@ public class AppController
     /**
      * Show debug panels.
      */
-    private final boolean SHOW_DEBUG = false;
+    private final boolean SHOW_DEBUG = true;
     /**
      * The GUI component.
      */

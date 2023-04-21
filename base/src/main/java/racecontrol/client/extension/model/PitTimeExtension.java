@@ -49,7 +49,7 @@ public class PitTimeExtension
         if (info.getPhase() == PRESESSION) {
             pitEntryTimestamp.clear();
             pitStationaryTimestamp.clear();
-            getWritableModel().cars.values().stream()
+            getWritableModel().getCars().stream()
                     .forEach(car -> {
                         car.pitLaneTime = 0;
                         car.pitLaneTimeStationary = 0;
@@ -63,7 +63,7 @@ public class PitTimeExtension
         if (info.getLocation() == PITLANE) {
 
             long now = System.currentTimeMillis();
-            Car car = getWritableModel().cars.get(info.getCarId());
+            Car car = getWritableModel().getCar(info.getCarId()).get();
 
             // if car has entered the pits, set the timestamp, reset the
             // pit timers and increment pit count.

@@ -97,7 +97,7 @@ public class LiveTimingTableController
     }
 
     private void updateTableModel() {
-        model.setEntries(client.getModel().cars.values().stream()
+        model.setEntries(client.getModel().getCars().stream()
                 .filter(car -> car.connected)
                 .collect(Collectors.toList()));
         model.sort();

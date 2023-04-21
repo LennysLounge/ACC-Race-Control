@@ -132,7 +132,7 @@ public class DangerDetectionExtension extends ClientExtension
             RealtimeInfo info = ((RealtimeCarUpdateEvent) e).getInfo();
             doPitExitProtection(info);
             testTolerances(info);
-            Car car = getWritableModel().cars.get(info.getCarId());
+            Car car = getWritableModel().getCar(info.getCarId()).get();
             car.isWhiteFlag = isCarWhiteFlag(car.id);
             car.isYellowFlag = isCarYellowFlag(car.id);
         } else if (e instanceof RealtimeUpdateEvent) {
@@ -294,7 +294,9 @@ public class DangerDetectionExtension extends ClientExtension
                 int sessionTime = info.getSessionTime();
                 int replayTime = ReplayOffsetExtension.getInstance().getReplayTimeFromSessionTime(sessionTime);
                 String logMessage = "Yellow Flag nr." + idCounter + " :"
-                        + getWritableModel().cars.get(carId).carNumberString()
+                        + getWritableModel().getCar(carId)
+                                .map(car -> car.carNumberString())
+                                .orElse("#-")
                         + "\t" + TimeUtils.asDuration(sessionTime)
                         + "\t" + TimeUtils.asDuration(replayTime)
                         + "\t";
@@ -303,7 +305,7 @@ public class DangerDetectionExtension extends ClientExtension
 
                 LOG.info(logMessage);
                 EventBus.publish(new YellowFlagEvent(
-                        getWritableModel().cars.get(carId),
+                        getWritableModel().getCar(carId).get(),
                         sessionTime,
                         idCounter++
                 ));

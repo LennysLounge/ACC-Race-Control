@@ -92,7 +92,7 @@ public class GoogleSheetsAPIExtension
 
     public void start(GoogleSheetsConfiguration config) {
         connection.start(config);
-        connection.sendCarsConnection(getWritableModel().cars.values().stream()
+        connection.sendCarsConnection(getWritableModel().getCars().stream()
                 .collect(Collectors.toList())
         );
     }

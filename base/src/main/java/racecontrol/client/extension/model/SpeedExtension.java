@@ -51,7 +51,7 @@ public class SpeedExtension
     }
 
     private void carUpdate(RealtimeInfo info) {
-        Car car = getWritableModel().cars.get(info.getCarId());
+        Car car = getWritableModel().getCar(info.getCarId()).get();
 
         // Save maximum speed.
         if (car.KMH > car.maxKMH) {
@@ -76,7 +76,7 @@ public class SpeedExtension
         // find fastest speed trap
         int maxSpeedTrap = 0;
         int maxSpeed = 0;
-        for (Car car : getWritableModel().cars.values()) {
+        for (Car car : getWritableModel().getCars()) {
             maxSpeedTrap = Math.max(maxSpeedTrap, car.speedTrapKMH);
             maxSpeed = Math.max(maxSpeed, car.maxKMH);
         }
@@ -85,7 +85,7 @@ public class SpeedExtension
     }
 
     private void resetData() {
-        getWritableModel().cars.values().forEach(car -> {
+        getWritableModel().getCars().forEach(car -> {
             car.maxKMH = 0;
             car.speedTrapKMH = 0;
         });

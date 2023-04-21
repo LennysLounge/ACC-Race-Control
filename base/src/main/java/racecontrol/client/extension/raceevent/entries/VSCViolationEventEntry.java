@@ -19,7 +19,6 @@ import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.client.extension.vsc.events.VSCViolationEvent;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.model.Car;
-import racecontrol.client.protocol.CarInfo;
 import racecontrol.client.protocol.SessionId;
 import racecontrol.client.protocol.enums.CarCategory;
 import static racecontrol.client.protocol.enums.CarCategory.CUP;
@@ -57,7 +56,7 @@ public class VSCViolationEventEntry
         super(sessionId, sessionTime, typeDesciptor, hasReplay);
         this.client = AccBroadcastingClient.getClient();
         this.violation = info;
-        this.car = client.getModel().cars.get(violation.getCarId());
+        this.car = client.getModel().getCar(violation.getCarId()).get();
     }
 
     /**
@@ -155,7 +154,7 @@ public class VSCViolationEventEntry
     };
 
     private boolean isCarConnected(int carId) {
-        return client.getModel().cars.keySet().contains(carId);
+        return client.getModel().hasCarWithIndex(carId);
     }
 
     /**

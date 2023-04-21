@@ -119,7 +119,7 @@ public class LapTimeExtension extends ClientExtension {
     }
 
     private void onLapComplete(LapInfo lap, boolean isPB, boolean isSB) {
-        Car car = getWritableModel().cars.get(lap.getCarId());
+        Car car = getWritableModel().getCar(lap.getCarId()).get();
 
         boolean isFirstLap = lapCount.get(lap.getCarId()) == 1;
         int lapNr = lapCount.get(lap.getCarId());
@@ -164,9 +164,12 @@ public class LapTimeExtension extends ClientExtension {
         try ( PrintWriter writer = new PrintWriter(logFile)) {
 
             for (Entry<Integer, List<Integer>> entry : laps.entrySet()) {
-                Car car = getWritableModel().cars.get(entry.getKey());
-                writer.print(car.carNumber);
-                writer.print("," + car.getDriver().fullName());
+                var car = getWritableModel().getCar(entry.getKey());
+                if (car.isEmpty()) {
+                    continue;
+                }
+                writer.print(car.get().carNumber);
+                writer.print("," + car.get().getDriver().fullName());
                 for (int lap : entry.getValue()) {
                     writer.print("," + lap);
                 }

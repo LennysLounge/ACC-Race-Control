@@ -31,7 +31,7 @@ public class ModelExtension
     }
 
     public void onSessionUpdate(SessionInfo info) {
-        for (Car car : getWritableModel().cars.values()) {
+        for (Car car : getWritableModel().getCars()) {
             car.isFocused = info.getFocusedCarIndex() == car.id;
             if (info.getBestSessionLap().getLapTimeMS() != Integer.MAX_VALUE) {
                 car.isSessionBestLaptime = info.getBestSessionLap().getLapTimeMS() == car.bestLap.getLapTimeMS();
@@ -45,7 +45,7 @@ public class ModelExtension
         int bestSectorTwo = Integer.MAX_VALUE;
         int bestSectorThree = Integer.MAX_VALUE;
         if (info.getBestSessionLap().getLapTimeMS() != Integer.MAX_VALUE) {
-            for (Car car : getWritableModel().cars.values()) {
+            for (Car car : getWritableModel().getCars()) {
                 if (car.bestLap.getSplits().get(0) < bestSectorOne) {
                     bestSectorOne = car.bestLap.getSplits().get(0);
                 }

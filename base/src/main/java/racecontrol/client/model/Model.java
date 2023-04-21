@@ -6,8 +6,10 @@
 package racecontrol.client.model;
 
 import java.net.InetAddress;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import racecontrol.client.protocol.SessionId;
 import racecontrol.client.protocol.TrackInfo;
 import racecontrol.client.protocol.enums.SessionType;
@@ -69,7 +71,7 @@ public class Model {
     /**
      * Collection of all cars for this event.
      */
-    public Map<Integer, Car> cars = new HashMap<>();
+    private Map<Integer, Car> cars = new HashMap<>();
 
     /**
      * Creates a deep copy of the model.
@@ -94,5 +96,47 @@ public class Model {
         Map<Integer, Car> originalCars = new HashMap<>(cars);
         originalCars.forEach((id, car) -> model.cars.put(id, car.copy()));
         return model;
+    }
+
+    /**
+     * Returns if the models contains a car with a given index.
+     *
+     * @param index The index to look for.
+     * @return True if the models contains a car with that index.
+     */
+    public boolean hasCarWithIndex(int index) {
+        return cars.containsKey(index);
+    }
+
+    /**
+     * Returns the car with a given index.
+     *
+     * @param index The index of the car to get.
+     * @return An optional of the car.
+     */
+    public Optional<Car> getCar(int index) {
+        var car = cars.get(index);
+        if (car == null) {
+            return Optional.empty();
+        }
+        return Optional.of(car);
+    }
+
+    /**
+     * Returns all cars in the model
+     *
+     * @return A collection of all cars in the model
+     */
+    public Collection<Car> getCars() {
+        return cars.values();
+    }
+
+    /**
+     * Add a car to the model.
+     *
+     * @param car The car to add.
+     */
+    public void putCar(Car car) {
+        cars.put(car.id, car);
     }
 }

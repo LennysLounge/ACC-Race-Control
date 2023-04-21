@@ -206,7 +206,7 @@ public class ContactExtension
         if (!history.containsKey(sessionTime)) {
             history.put(sessionTime, new HashMap<>());
         }
-        Car car = getWritableModel().cars.get(info.getCarId());
+        Car car = getWritableModel().getCar(info.getCarId()).get();
         history.get(sessionTime).put(car.id, car.copy());
     }
 
@@ -262,7 +262,8 @@ public class ContactExtension
         // to get an accurate timing we subtract that offset.
         int sessionTime = getSessionTimeFromHistory(
                 getWritableModel().session.raw.getSessionTime() - 5000);
-        Car car = getWritableModel().cars.get(event.getCarId()).copy();
+        Car car = getWritableModel().getCar(event.getCarId())
+                .map(c -> c.copy()).get();
 
         // use realtime data from history
         car = history.get(sessionTime)
@@ -414,7 +415,7 @@ public class ContactExtension
 
         // find closest car at the moment the yellow flag was shown.
         Optional<Car> closestCarInstant
-                = getWritableModel().cars.values().stream()
+                = getWritableModel().getCars().stream()
                         .filter(car -> car.id != flaggedCar.id)
                         .filter(car -> car.carLocation != CarLocation.NONE)
                         .filter(car -> car.carLocation != CarLocation.PITLANE)

@@ -52,8 +52,10 @@ public class CameraDefsController
 
             float currentSplinePos = 0;
             Model model = getClient().getModel();
-            if (model.cars.containsKey(info.getFocusedCarIndex())) {
-                currentSplinePos = model.cars.get(info.getFocusedCarIndex()).splinePosition;
+            if (model.hasCarWithIndex(info.getFocusedCarIndex())) {
+                currentSplinePos = model.getCar(info.getFocusedCarIndex())
+                        .map(car -> car.splinePosition)
+                        .orElse(0f);
             }
 
             panel.currentSplinePos = currentSplinePos;
@@ -98,7 +100,7 @@ public class CameraDefsController
         if (newCam.equals(currentCam)) {
             return;
         }
-        
+
         // camera did change. Record current car position
         if (camChanges.get(newCamSet).containsKey(newCam)) {
             camChanges.get(newCamSet).get(newCam).add(currentSplinePos);

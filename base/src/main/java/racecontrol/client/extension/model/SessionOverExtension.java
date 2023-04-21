@@ -63,7 +63,7 @@ public class SessionOverExtension
 
     private void onSessionChanged(SessionInfo info) {
         // reset finished flag
-        getWritableModel().cars.values().forEach(car
+        getWritableModel().getCars().forEach(car
                 -> car.isCheckeredFlag = false
         );
         isSessionOver = false;

@@ -43,7 +43,7 @@ public class RealtimePositionExtension
     }
 
     private void calculateRaceDistance(RealtimeInfo info) {
-        Car car = getWritableModel().cars.get(info.getCarId());
+        Car car = getWritableModel().getCar(info.getCarId()).get();
         float raceDistance = info.getSplinePosition() + info.getLaps();
         // correct for the error around the lap reset.
         if (info.getSplinePosition() > 0.95f
@@ -62,7 +62,7 @@ public class RealtimePositionExtension
 
     private void findRealtimePosition(SessionInfo info) {
         // sort cars based on their race distance.
-        var carsSorted = getWritableModel().cars.values().stream()
+        var carsSorted = getWritableModel().getCars().stream()
                 .sorted((c1, c2) -> -Float.compare(c1.raceDistance, c2.raceDistance))
                 .collect(Collectors.toList());
 
@@ -80,7 +80,7 @@ public class RealtimePositionExtension
     }
 
     private void resetDistances() {
-        getWritableModel().cars.values().forEach(car -> {
+        getWritableModel().getCars().forEach(car -> {
             car.raceDistance = 0;
         });
     }
@@ -90,7 +90,7 @@ public class RealtimePositionExtension
         // to the pits by not pressing drive. This puts them ahead of everyone.
         // give a penalty to avoid this.
         if (info.getPhase() == PRESESSION) {
-            getWritableModel().cars.values().forEach(car -> {
+            getWritableModel().getCars().forEach(car -> {
                 if (car.isInPit()) {
                     car.raceDistance = -1f;
                 }

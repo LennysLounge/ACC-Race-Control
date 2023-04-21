@@ -57,7 +57,7 @@ public class OvertakeExtension
             return;
         }
 
-        for (Car car : getWritableModel().cars.values()) {
+        for (Car car : getWritableModel().getCars()) {
             if (prevPositions.containsKey(car.id)) {
                 int diff = car.realtimePosition - prevPositions.get(car.id);
                 if (diff != 0) {
@@ -75,7 +75,9 @@ public class OvertakeExtension
         while (iter.hasNext()) {
             var entry = iter.next();
             if ((now - entry.getValue()) > INDICATOR_TIME) {
-                getWritableModel().cars.get(entry.getKey()).overtakeIndicator = 0;
+                getWritableModel().getCar(entry.getKey()).ifPresent(car -> {
+                    car.overtakeIndicator = 0;
+                });
                 iter.remove();
             }
         }

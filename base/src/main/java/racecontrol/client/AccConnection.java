@@ -374,7 +374,7 @@ public class AccConnection
 
     private void checkForDisconnects() {
         long now = System.currentTimeMillis();
-        model.cars.values().forEach(car -> {
+        model.getCars().forEach(car -> {
             if (car.connected) {
                 if (now - car.lastUpdate > model.updateInterval * 10) {
                     car.connected = false;
@@ -403,32 +403,32 @@ public class AccConnection
 
     @Override
     public void onRealtimeCarUpdate(RealtimeInfo info) {
-        if (!model.cars.containsKey(info.getCarId())) {
+        var carOpt = model.getCar(info.getCarId());
+        carOpt.ifPresentOrElse(car -> {
+            car.lastUpdate = System.currentTimeMillis();
+            car.connected = true;
+            car.driverIndexRealtime = info.getDriverIndex();
+            car.driverCount = info.getDriverCount();
+            car.gear = info.getGear();
+            car.yaw = info.getYaw();
+            car.pitch = info.getPitch();
+            car.roll = info.getRoll();
+            car.carLocation = info.getLocation();
+            car.KMH = info.getKMH();
+            car.position = info.getPosition();
+            car.cupPosition = info.getCupPosition();
+            car.trackPosition = info.getTrackPosition();
+            car.splinePosition = info.getSplinePosition();
+            car.lapCount = info.getLaps();
+            car.delta = info.getDelta();
+            car.bestLap = info.getBestSessionLap();
+            car.lastLap = info.getLastLap();
+            car.currentLap = info.getCurrentLap();
+            EventBus.publish(new RealtimeCarUpdateEvent(info));
+        }, () -> {
             //if the car doesnt exist in the model ask for a new entry list.
             sendEntryListRequest();
-            return;
-        }
-        Car car = model.cars.get(info.getCarId());
-        car.lastUpdate = System.currentTimeMillis();
-        car.connected = true;
-        car.driverIndexRealtime = info.getDriverIndex();
-        car.driverCount = info.getDriverCount();
-        car.gear = info.getGear();
-        car.yaw = info.getYaw();
-        car.pitch = info.getPitch();
-        car.roll = info.getRoll();
-        car.carLocation = info.getLocation();
-        car.KMH = info.getKMH();
-        car.position = info.getPosition();
-        car.cupPosition = info.getCupPosition();
-        car.trackPosition = info.getTrackPosition();
-        car.splinePosition = info.getSplinePosition();
-        car.lapCount = info.getLaps();
-        car.delta = info.getDelta();
-        car.bestLap = info.getBestSessionLap();
-        car.lastLap = info.getLastLap();
-        car.currentLap = info.getCurrentLap();
-        EventBus.publish(new RealtimeCarUpdateEvent(info));
+        });
     }
 
     @Override
@@ -444,7 +444,7 @@ public class AccConnection
 
     @Override
     public void onEntryListCarUpdate(CarInfo carInfo) {
-        Car car = model.cars.getOrDefault(carInfo.getCarId(), new Car());
+        Car car = model.getCar(carInfo.getCarId()).orElse(new Car());
 
         boolean newConnection = car.connected == false;
 
@@ -468,7 +468,7 @@ public class AccConnection
                     return driver;
                 })
                 .collect(Collectors.toList());
-        model.cars.put(car.id, car);
+        model.putCar(car);
 
         //Fire Car connection event if the car is new.
         if (newConnection) {

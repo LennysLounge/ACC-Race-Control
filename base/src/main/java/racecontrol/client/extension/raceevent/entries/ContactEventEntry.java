@@ -19,7 +19,6 @@ import static racecontrol.gui.LookAndFeel.COLOR_SUPER_TROFEO;
 import static racecontrol.gui.LookAndFeel.COLOR_WHITE;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.client.AccBroadcastingClient;
-import racecontrol.client.protocol.CarInfo;
 import racecontrol.client.protocol.SessionId;
 import racecontrol.client.protocol.enums.CarCategory;
 import static racecontrol.client.protocol.enums.CarCategory.CUP;
@@ -171,7 +170,7 @@ public class ContactEventEntry
     }
 
     private boolean isCarConnected(int carId) {
-        return client.getModel().cars.keySet().contains(carId);
+        return client.getModel().hasCarWithIndex(carId);
     }
 
     @Override

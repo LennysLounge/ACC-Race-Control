@@ -12,7 +12,6 @@ import racecontrol.client.extension.raceevent.entries.ContactEventEntry;
 import racecontrol.client.extension.raceevent.entries.RaceEventEntry;
 import racecontrol.client.extension.raceevent.entries.VSCViolationEventEntry;
 import racecontrol.gui.app.racecontrol.virtualsafetycar.VirtualSafetyCarConfigController;
-import racecontrol.client.protocol.CarInfo;
 import racecontrol.client.events.SessionChangedEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.eventbus.EventBus;
@@ -130,7 +129,7 @@ public class RaceControlController
     }
 
     private void createDummyContactEvent() {
-        int nCars = (int) Math.floor(Math.random() * Math.min(6, getClient().getModel().cars.size()) + 1);
+        int nCars = (int) Math.floor(Math.random() * Math.min(6, getClient().getModel().getCars().size()) + 1);
         int sessionTime = getClient().getModel().session.raw.getSessionTime();
         ContactInfo incident = new ContactInfo(
                 sessionTime,
@@ -152,9 +151,9 @@ public class RaceControlController
     }
 
     private Car getRandomCar() {
-        int r = (int) Math.floor(Math.random() * getClient().getModel().cars.size());
+        int r = (int) Math.floor(Math.random() * getClient().getModel().getCars().size());
         int i = 0;
-        for (Car car : getClient().getModel().cars.values()) {
+        for (Car car : getClient().getModel().getCars()) {
             if (i++ == r) {
                 return car;
             }

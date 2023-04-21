@@ -214,7 +214,7 @@ public class AccBroadcastingClient
         if (connection == null) {
             return;
         }
-        if (!model.cars.containsKey(carIndex)) {
+        if (!model.hasCarWithIndex(carIndex)) {
             return;
         }
         connection.sendRequest(AccBroadcastingProtocol
@@ -254,7 +254,7 @@ public class AccBroadcastingClient
         if (connection == null) {
             return;
         }
-        if (!model.cars.containsKey(carIndex)) {
+        if (!model.hasCarWithIndex(carIndex)) {
             return;
         }
         connection.sendRequest(AccBroadcastingProtocol
