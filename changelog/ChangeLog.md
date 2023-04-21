@@ -1,5 +1,10 @@
 # v1.5.2
 
+Bug fixes:
+* Fixed an issue where disconnecting and reconnecting would crash the program.
+
+# v1.5.2
+
 Changes:
 * Add support for version 1.9.
 * Add car information for new cars.
