@@ -14,6 +14,7 @@ import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.eventbus.Event;
 import racecontrol.client.ClientExtension;
 import racecontrol.client.events.CarConnectedEvent;
+import racecontrol.client.events.ConnectionClosedEvent;
 import static racecontrol.client.protocol.enums.SessionType.RACE;
 
 /**
@@ -91,6 +92,8 @@ public class AutobroadcastExtension
             onSessionUpdate(((RealtimeUpdateEvent) e).getSessionInfo());
         } else if (e instanceof CarConnectedEvent) {
             carRatings.add(new CarRating(((CarConnectedEvent) e).getCar()));
+        } else if (e instanceof ConnectionClosedEvent) {
+            carRatings.clear();
         }
     }
 

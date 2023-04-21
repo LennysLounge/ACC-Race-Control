@@ -11,6 +11,7 @@ import racecontrol.client.ClientExtension;
 import racecontrol.client.protocol.SessionInfo;
 import static racecontrol.client.protocol.enums.SessionType.RACE;
 import racecontrol.client.events.AfterPacketReceivedEvent;
+import racecontrol.client.events.ConnectionClosedEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.model.Car;
 import racecontrol.eventbus.Event;
@@ -45,6 +46,9 @@ public class OvertakeExtension
             sessionUpdate(((RealtimeUpdateEvent) e).getSessionInfo());
         } else if (e instanceof AfterPacketReceivedEvent) {
             resetIndicators();
+        } else if (e instanceof ConnectionClosedEvent) {
+            prevPositions.clear();
+            timestamps.clear();
         }
     }
 
