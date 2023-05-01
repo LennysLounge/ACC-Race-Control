@@ -12,8 +12,6 @@ Changes:
         * prioritise leading cars over backmarkers
         * prioritise battles between two or more drivers
     
-        
-
 Bug fixes:
 * Fixed an issue where disconnecting and reconnecting would crash the program.
 
