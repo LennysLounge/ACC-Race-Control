@@ -30,6 +30,8 @@ import racecontrol.gui.app.test.TestPanel;
 import racecontrol.gui.app.trackdata.TrackDataController;
 import racecontrol.gui.lpui.LPComponent;
 import racecontrol.gui.lpui.LPContainer;
+import racecontrol.persistance.PersistantConfig;
+import static racecontrol.persistance.PersistantConfigKeys.ENABLE_EXPERIMENTAL_FEATURES;
 
 /**
  *
@@ -41,7 +43,7 @@ public class AppController
     /**
      * Show debug panels.
      */
-    private final boolean SHOW_DEBUG = true;
+    private final boolean SHOW_DEBUG = false;
     /**
      * The GUI component.
      */
@@ -69,7 +71,8 @@ public class AppController
         List<PageController> pageControllers = new ArrayList<>();
         pageControllers.add(liveTimingController);
         pageControllers.add(new RaceControlController());
-        if (SHOW_DEBUG) {
+        if (SHOW_DEBUG
+                || PersistantConfig.get(ENABLE_EXPERIMENTAL_FEATURES)) {
             pageControllers.add(new AutobroadcastController());
         }
         pageControllers.add(new LoggingPanel());

@@ -1,5 +1,19 @@
 # v1.5.2
 
+Changes:
+* Add an experimental features auto cam to automatically control the broadcasting camera.
+    To enable the auto cam, check the "enable experimental features" checkbox on the settings page.
+    It is an experimental features which means that it is not finished and more work is necessary.
+    However it is already quit usable to create a dynamic broadcast without the 
+    intervention of a human broadcaster. This is particularly usefull for long endurance races
+    where a broadcaster is on a break.
+    * The auto cam will:
+        * share roughly equal screen time between drivers
+        * prioritise leading cars over backmarkers
+        * prioritise battles between two or more drivers
+    
+        
+
 Bug fixes:
 * Fixed an issue where disconnecting and reconnecting would crash the program.
 

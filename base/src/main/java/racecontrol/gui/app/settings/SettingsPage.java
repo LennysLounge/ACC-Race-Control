@@ -12,13 +12,18 @@ import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.lpui.LPContainer;
 import racecontrol.gui.lpui.LPLabel;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import processing.core.PApplet;
 import racecontrol.gui.CustomPApplet;
+import static racecontrol.gui.LookAndFeel.TEXT_SIZE;
 import racecontrol.gui.app.Menu;
 import racecontrol.gui.app.Menu.MenuItem;
 import racecontrol.gui.app.PageController;
 import racecontrol.gui.app.settings.connection.ConnectionController;
+import racecontrol.gui.lpui.LPCheckBox;
 import racecontrol.gui.lpui.LPScrollPanel;
+import racecontrol.persistance.PersistantConfig;
+import static racecontrol.persistance.PersistantConfigKeys.ENABLE_EXPERIMENTAL_FEATURES;
 
 /**
  *
@@ -33,7 +38,11 @@ public class SettingsPage
      */
     private static final Logger LOG = Logger.getLogger(SettingsPage.class.getName());
 
-    private final LPLabel versionLabel = new LPLabel("Version: " + Version.VERSION);
+    private final LPLabel versionLabel
+            = new LPLabel("Version: " + Version.VERSION);
+    private final LPLabel experimentalFeaturesLabel
+            = new LPLabel("Enable experimental features");
+    private final LPCheckBox experimentalFeaturesCheckbox = new LPCheckBox();
     private final ChangeLogPanel changeLogPanel = new ChangeLogPanel();
     private final LPScrollPanel changeLogScrollPanel = new LPScrollPanel();
     private final LPLabel changelogLabel = new LPLabel("Changelog:");
@@ -61,6 +70,14 @@ public class SettingsPage
     }
 
     private void initComponents() {
+        addComponent(experimentalFeaturesLabel);
+        addComponent(experimentalFeaturesCheckbox);
+        experimentalFeaturesCheckbox.setSelected(
+                PersistantConfig.get(ENABLE_EXPERIMENTAL_FEATURES)
+        );
+        experimentalFeaturesCheckbox.setChangeAction(
+                this::experimentalFeaturesCheckBoxChanged
+        );
         addComponent(versionLabel);
         addComponent(changeLogScrollPanel);
         changeLogScrollPanel.setComponent(changeLogPanel);
@@ -73,6 +90,9 @@ public class SettingsPage
 
     @Override
     public void onResize(float w, float h) {
+        experimentalFeaturesLabel.setPosition(20, getHeight() - LINE_HEIGHT * 2);
+        experimentalFeaturesCheckbox.setPosition(400 - LINE_HEIGHT,
+                getHeight() - LINE_HEIGHT * 2 + (LINE_HEIGHT - TEXT_SIZE) / 2);
         versionLabel.setPosition(20, getHeight() - LINE_HEIGHT);
 
         changelogLabel.setPosition(435, 0);
@@ -90,6 +110,18 @@ public class SettingsPage
     @Override
     public Menu.MenuItem getMenuItem() {
         return menuItem;
+    }
+
+    public void experimentalFeaturesCheckBoxChanged(boolean newState) {
+        PersistantConfig.put(
+                ENABLE_EXPERIMENTAL_FEATURES,
+                !PersistantConfig.get(ENABLE_EXPERIMENTAL_FEATURES)
+        );
+        if (newState) {
+            JOptionPane.showMessageDialog(null,
+                    "To enable experimental features please restart Race Control"
+            );
+        }
     }
 
 }

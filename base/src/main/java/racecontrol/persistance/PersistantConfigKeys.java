@@ -19,6 +19,12 @@ public interface PersistantConfigKeys {
     public Key<String> CREDENTIALS_FILE_PATH = new Key<>(String.class, "Google Sheets Api Key\\credentials.json", "credentialsFile");
 
     /**
+     * Enable experimental features.
+     */
+    public Key<Boolean> ENABLE_EXPERIMENTAL_FEATURES
+            = new Key<>(Boolean.class, false, "enableExperimentalFeatures");
+
+    /**
      * Connection settings.
      */
     public Key<String> CONNECTION_IP = new Key<>(String.class, "127.0.0.1", "connectionIp");
