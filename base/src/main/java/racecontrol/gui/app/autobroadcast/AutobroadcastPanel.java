@@ -1,8 +1,10 @@
 package racecontrol.gui.app.autobroadcast;
 
 import processing.core.PApplet;
+import racecontrol.gui.LookAndFeel;
 import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
+import static racecontrol.gui.LookAndFeel.TEXT_SIZE;
 import racecontrol.gui.lpui.LPCheckBox;
 import racecontrol.gui.lpui.LPContainer;
 import racecontrol.gui.lpui.LPLabel;
@@ -29,9 +31,8 @@ public class AutobroadcastPanel
     private final LPLabel showCameraRatingsLabel = new LPLabel("Show camera ratings");
     protected final LPTable ratingTable = new LPTable();
 
-    protected final LPLabel currentCamera = new LPLabel("");
-    protected final LPLabel screenTimeLabel = new LPLabel("");
-    protected final LPLabel cameraScreenTime = new LPLabel("");
+    protected final LPLabel currentCamera = new LPLabel("Current Camera:");
+    protected final LPLabel screenTimeLabel = new LPLabel("Total on time: ");
 
     public AutobroadcastPanel() {
         enableCheckBox.setPosition(20, 10);
@@ -53,9 +54,6 @@ public class AutobroadcastPanel
         screenTimeLabel.setPosition(20, LINE_HEIGHT * 2);
         screenTimeLabel.setSize(500, LINE_HEIGHT);
 
-        addComponent(cameraScreenTime);
-        cameraScreenTime.setPosition(20, LINE_HEIGHT * 3);
-        cameraScreenTime.setSize(800, LINE_HEIGHT);
     }
 
     @Override
@@ -66,13 +64,15 @@ public class AutobroadcastPanel
 
     @Override
     public void onResize(float w, float h) {
-        ratingTable.setPosition(10, h - LINE_HEIGHT * 10 - 10);
-        ratingTable.setSize(w - 20, LINE_HEIGHT * 10);
+        ratingTable.setPosition(10, LINE_HEIGHT * 4);
+        ratingTable.setSize(w - 20, h - LINE_HEIGHT * 4);
 
-        sortByRatingCheckBox.setPosition(20, h - LINE_HEIGHT * 11);
-        sortByRatingLabel.setPosition(50, h - LINE_HEIGHT * 11 - 10);
-        showCameraRatingsCheckBox.setPosition(200, h - LINE_HEIGHT * 11);
-        showCameraRatingsLabel.setPosition(230, h - LINE_HEIGHT * 11 - 10);
+        sortByRatingCheckBox.setPosition(20, LINE_HEIGHT * 3
+                + (LINE_HEIGHT - TEXT_SIZE) / 2);
+        sortByRatingLabel.setPosition(50, LINE_HEIGHT * 3);
+        showCameraRatingsCheckBox.setPosition(200, LINE_HEIGHT * 3
+                + (LINE_HEIGHT - TEXT_SIZE) / 2);
+        showCameraRatingsLabel.setPosition(230, LINE_HEIGHT * 3);
     }
 
 }

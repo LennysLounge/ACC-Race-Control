@@ -16,6 +16,9 @@ import racecontrol.client.ClientExtension;
 import racecontrol.client.events.CarConnectedEvent;
 import racecontrol.client.events.ConnectionClosedEvent;
 import static racecontrol.client.protocol.enums.SessionType.RACE;
+import racecontrol.eventbus.EventBus;
+import racecontrol.gui.app.autobroadcast.AutobroadcastDisabledEvent;
+import racecontrol.gui.app.autobroadcast.AutobroadcastEnabledEvent;
 
 /**
  *
@@ -215,6 +218,7 @@ public class AutobroadcastExtension
     public void setEnabled(boolean state) {
         this.enabled = state;
         if (this.enabled) {
+            EventBus.publish(new AutobroadcastEnabledEvent());
             // reset camera settings.
             for (var camera : cameraRatings) {
                 camera.screenTime = 0;
@@ -222,6 +226,8 @@ public class AutobroadcastExtension
             lastCameraChange = System.currentTimeMillis();
             lastCameraUpdate = lastCameraChange;
             lastCarUpdate = lastCameraChange;
+        } else {
+            EventBus.publish(new AutobroadcastDisabledEvent());
         }
     }
 

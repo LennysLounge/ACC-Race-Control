@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Random;
 import processing.core.PApplet;
 import racecontrol.gui.LookAndFeel;
-import static racecontrol.gui.LookAndFeel.COLOR_DARK_GRAY;
 import static racecontrol.gui.LookAndFeel.LINE_HEIGHT;
 import racecontrol.gui.lpui.LPButton;
 import racecontrol.gui.lpui.LPContainer;

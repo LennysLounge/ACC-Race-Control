@@ -31,6 +31,10 @@ public class LPLabel
      * Text align vertical.
      */
     private int vAlign = CENTER;
+    /**
+     * Background color for the label.
+     */
+    private int background = LookAndFeel.COLOR_DARK_GRAY;
 
     public LPLabel(String text) {
         this.text = text;
@@ -44,7 +48,7 @@ public class LPLabel
         this.setSize(getApplet().textWidth(text), LookAndFeel.LINE_HEIGHT);
         invalidate();
     }
-    
+
     public void setTextFixed(String text) {
         this.text = text;
         invalidate();
@@ -54,9 +58,13 @@ public class LPLabel
         this.hAlign = hAlign;
     }
 
+    public void setBackground(int color) {
+        this.background = color;
+    }
+
     @Override
     public void draw(PApplet applet) {
-        applet.fill(LookAndFeel.COLOR_DARK_GRAY);
+        applet.fill(background);
         applet.noStroke();
         //applet.stroke(255);
         applet.rect(0, 0, getWidth(), getHeight());

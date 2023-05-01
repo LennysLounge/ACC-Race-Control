@@ -5,7 +5,6 @@
  */
 package racecontrol.gui.app.autobroadcast;
 
-import java.util.stream.Collectors;
 import racecontrol.client.AccBroadcastingClient;
 import racecontrol.client.events.RealtimeUpdateEvent;
 import racecontrol.client.extension.autobroadcast.AutobroadcastExtension;
@@ -17,6 +16,7 @@ import racecontrol.gui.RaceControlApplet;
 import static racecontrol.gui.RaceControlApplet.getApplet;
 import racecontrol.gui.app.Menu;
 import racecontrol.gui.app.PageController;
+import racecontrol.gui.app.statuspanel.StatusPanelManager;
 import racecontrol.gui.lpui.LPContainer;
 import racecontrol.utility.TimeUtils;
 
@@ -81,7 +81,9 @@ public class AutobroadcastController
 
     @Override
     public void onEvent(Event e) {
-        if (e instanceof RealtimeUpdateEvent) {
+        if (e instanceof AutobroadcastDisabledEvent) {
+            panel.enableCheckBox.setSelected(false);
+        } else if (e instanceof RealtimeUpdateEvent) {
             RaceControlApplet.runLater(() -> {
                 carRatingModel.setEntriesNew(extension.getCarEntries());
                 cameraRatingModel.setEntriesNew(extension.getCameraRatings());
@@ -95,23 +97,18 @@ public class AutobroadcastController
                 panel.ratingTable.invalidate();
 
                 SessionInfo info = ((RealtimeUpdateEvent) e).getSessionInfo();
-                panel.currentCamera.setTextFixed(info.getActiveCameraSet() + " " + info.getActiveCamera());
-
-                int totalScreenTime = extension.getCameraRatings().stream()
-                        .map(rating -> rating.screenTime)
-                        .reduce(0, Integer::sum);
-                String percents = extension.getCameraRatings().stream()
-                        .map(rating -> {
-                            float p = rating.screenTime * 100f / totalScreenTime;
-                            return String.format("%s: %.1f%%", rating.camSet, p);
-                        })
-                        .collect(Collectors.joining(", "));
-                panel.cameraScreenTime.setTextFixed("screen time share: " + percents);
+                panel.currentCamera.setTextFixed(
+                        "Current camera: "
+                        + info.getActiveCameraSet() + " " + info.getActiveCamera()
+                );
 
                 int carScreenTime = extension.getCarEntries().stream()
                         .map(rating -> rating.screenTime)
                         .reduce(0, Integer::sum);
-                panel.screenTimeLabel.setTextFixed(TimeUtils.asDuration(carScreenTime));
+                panel.screenTimeLabel.setTextFixed(
+                        "Total on time: "
+                        + TimeUtils.asDuration(carScreenTime)
+                );
 
             });
         }
@@ -129,6 +126,11 @@ public class AutobroadcastController
 
     private void enableCheckboxChanged(boolean state) {
         AutobroadcastExtension.getInstance().setEnabled(state);
+        if (state) {
+            StatusPanelManager.getInstance().addStatusPanel(
+                    new AutobroadcastEnableStatusPanel()
+            );
+        }
     }
 
     private void showCameraRatingsChanged(boolean state) {
