@@ -1,3 +1,10 @@
+# v1.5.4
+
+Changes:
+    
+Bug fixes:
+* Correctly display the places lost / gained.
+
 # v1.5.3
 
 Changes:
