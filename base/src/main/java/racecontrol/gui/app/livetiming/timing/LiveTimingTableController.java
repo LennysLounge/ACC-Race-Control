@@ -165,7 +165,6 @@ public class LiveTimingTableController
             tableModels.add(TABLE_MODEL_RACE);
             tableModels.add(TABLE_MODEL_STATS);
             tableModels.add(TABLE_MODEL_DRIVERS);
-            tableModels.add(new TestTableModel());
             model = TABLE_MODEL_RACE;
         }
         table.setTableModel(model);
