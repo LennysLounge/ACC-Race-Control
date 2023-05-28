@@ -84,13 +84,13 @@ public class StatsTableModel
 
     private void placesLostGainedRenderer(PApplet applet, RenderContext context) {
         Car car = (Car) context.object;
-        int placesGained = car.raceStartPosition - car.realtimePosition;
-        int size = 10 * (int) Math.signum(placesGained);
+        int placesLost = car.realtimePosition - car.raceStartPosition;
+        int size = 10 * (int) Math.signum(placesLost);
         float x = context.width / 2f - 15;
         float y = context.height / 2f + size / 2f;
         applet.strokeWeight(3);
-        if (placesGained != 0) {
-            if (placesGained < 0) {
+        if (placesLost != 0) {
+            if (placesLost < 0) {
                 applet.stroke(COLOR_RACE);
                 applet.fill(COLOR_RACE);
             } else {
@@ -106,9 +106,9 @@ public class StatsTableModel
         applet.strokeWeight(1);
         applet.noStroke();
 
-        String text = String.valueOf(Math.abs(placesGained))
+        String text = String.valueOf(Math.abs(placesLost))
                 + (car.raceStartPositionAccurate ? "" : "*");
-        if (placesGained == 0) {
+        if (placesLost == 0) {
             text = "--";
         }
         applet.textAlign(LEFT, CENTER);
