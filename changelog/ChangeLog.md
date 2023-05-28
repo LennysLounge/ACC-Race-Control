@@ -1,6 +1,7 @@
 # v1.5.4
 
 Changes:
+* Add support for the Mclaren 720S GT3 Evo.
     
 Bug fixes:
 * Correctly display the places lost / gained.
