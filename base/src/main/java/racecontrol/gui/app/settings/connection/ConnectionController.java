@@ -115,6 +115,7 @@ public class ConnectionController
     }
 
     private void connectWithInput() {
+        LOG.info("Try connecting with input");
         InetAddress hostAddress;
         try {
             hostAddress = InetAddress.getByName(panel.ipTextField.getValue());

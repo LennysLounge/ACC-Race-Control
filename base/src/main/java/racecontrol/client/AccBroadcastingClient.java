@@ -147,6 +147,14 @@ public class AccBroadcastingClient
             return;
         }
 
+        LOG.info("Connecting to game with:\n"
+                + "\tdisplayName: " + displayName
+                + "\tconnection passwrod: " + connectionPassword
+                + "\tcommand password: " + commandPassword
+                + "\tupdate Interval: " + updateInterval
+                + "\thost address: " + hostAddress
+                + "\thost port: " + hostPort);
+
         model = new Model();
         model.displayName = requireNonNull(displayName, "displayName");
         model.connectionPassword = requireNonNull(connectionPassword, "connectionPassword");
