@@ -115,7 +115,7 @@ public class AutobroadcastExtension
                     break;
                 }
             }
-            LOG.info("cam changed to " + info.getActiveCameraSet() + " " + currentCameraRating);
+            LOG.fine("cam changed to " + info.getActiveCameraSet() + " " + currentCameraRating);
         }
     }
 

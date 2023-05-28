@@ -54,4 +54,14 @@ public class BroadcastingEvent {
         return carId;
     }
 
+    @Override
+    public String toString() {
+        return "BroadcastingEvent{"
+                + "Type=" + Type
+                + ", message=" + message
+                + ", timeMs=" + timeMs
+                + ", carId=" + carId
+                + '}';
+    }
+
 }

@@ -65,4 +65,17 @@ public class LapInfo {
         return type;
     }
 
+    @Override
+    public String toString() {
+        return "LapInfo{"
+                + "lapTimeMS=" + lapTimeMS
+                + ", carId=" + carId
+                + ", driverIndex=" + driverIndex
+                + ", splits=" + splits
+                + ", isInvalid=" + isInvalid
+                + ", isValidForBest=" + isValidForBest
+                + ", type=" + type
+                + '}';
+    }
+
 }

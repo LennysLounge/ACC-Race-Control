@@ -51,4 +51,15 @@ public class DriverInfo {
         return driverNationality;
     }
 
+    @Override
+    public String toString() {
+        return "DriverInfo{"
+                + "firstName=" + firstName
+                + ", lastName=" + lastName
+                + ", shortName=" + shortName
+                + ", category=" + category
+                + ", driverNationality=" + driverNationality
+                + '}';
+    }
+
 }

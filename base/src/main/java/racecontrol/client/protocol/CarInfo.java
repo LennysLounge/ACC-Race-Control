@@ -102,8 +102,25 @@ public class CarInfo {
     public List<DriverInfo> getDrivers() {
         return Collections.unmodifiableList(drivers);
     }
-    
-    public String getCarNumberString(){
+
+    public String getCarNumberString() {
         return carNumberString;
     }
+
+    @Override
+    public String toString() {
+        return "CarInfo{"
+                + "carId=" + carId
+                + ", carModel=" + carModel
+                + ", teamName=" + teamName
+                + ", carNumber=" + carNumber
+                + ", cupCatergory=" + cupCatergory
+                + ", currentDriverIndex=" + currentDriverIndex
+                + ", carNationality=" + carNationality
+                + ", drivers=" + drivers
+                + ", realtime=" + realtime
+                + ", carNumberString=" + carNumberString
+                + '}';
+    }
+
 }

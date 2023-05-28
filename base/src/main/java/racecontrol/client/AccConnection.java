@@ -52,6 +52,7 @@ import racecontrol.client.model.Model;
 import racecontrol.client.protocol.enums.Nationality;
 import racecontrol.eventbus.EventBus;
 import racecontrol.logging.UILogger;
+import racecontrol.utility.TimeUtils;
 
 /**
  *
@@ -307,6 +308,7 @@ public class AccConnection
 
         //initialise sessionId.
         if (!model.currentSessionId.isValid()) {
+            LOG.info("Initialising session");
             initSessionId(sessionInfo);
             // fast forward to correct phase
             while (sessionInfo.getPhase().getId() > sessionPhase.getId()) {
@@ -380,6 +382,10 @@ public class AccConnection
                     car.connected = false;
 
                     String name = car.getDriver().fullName();
+
+                    LOG.fine("Car " + car.carNumberString()
+                            + " received last update "
+                            + (now - car.lastUpdate) + "ms ago.");
                     LOG.info("Car disconnected: " + car.carNumberString() + "\t" + name);
                     UILogger.log("Car disconnected: " + car.carNumberString() + "\t" + name);
                     EventBus.publish(new CarDisconnectedEvent(car));
@@ -389,6 +395,11 @@ public class AccConnection
     }
 
     private void initSessionId(SessionInfo sessionInfo) {
+        LOG.fine("Initialising session: "
+                + "Type=" + sessionInfo.getSessionType()
+                + ", Phase=" + sessionInfo.getPhase()
+                + ", Time=" + TimeUtils.asDuration(sessionInfo.getSessionEndTime())
+        );
         SessionType type = sessionInfo.getSessionType();
         int sessionIndex = sessionInfo.getSessionIndex();
         int sessionNumber = sessionCounter.getOrDefault(type, -1) + 1;
@@ -403,8 +414,7 @@ public class AccConnection
 
     @Override
     public void onRealtimeCarUpdate(RealtimeInfo info) {
-        var carOpt = model.getCar(info.getCarId());
-        carOpt.ifPresentOrElse(car -> {
+        model.getCar(info.getCarId()).ifPresentOrElse(car -> {
             car.lastUpdate = System.currentTimeMillis();
             car.connected = true;
             car.driverIndexRealtime = info.getDriverIndex();
@@ -427,6 +437,7 @@ public class AccConnection
             EventBus.publish(new RealtimeCarUpdateEvent(info));
         }, () -> {
             //if the car doesnt exist in the model ask for a new entry list.
+            LOG.fine("Realtime update for unknown car. Sending entry list request");
             sendEntryListRequest();
         });
     }

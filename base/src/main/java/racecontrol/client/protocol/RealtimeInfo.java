@@ -132,9 +132,34 @@ public class RealtimeInfo {
     public LapInfo getCurrentLap() {
         return currentLap;
     }
-    
-    public boolean isDefault(){
+
+    public boolean isDefault() {
         return isDefault;
+    }
+
+    @Override
+    public String toString() {
+        return "RealtimeInfo{"
+                + "carId=" + carId
+                + ", driverIndex=" + driverIndex
+                + ", driverCount=" + driverCount
+                + ", gear=" + gear
+                + ", yaw=" + yaw
+                + ", pitch=" + pitch
+                + ", roll=" + roll
+                + ", location=" + location
+                + ", kmh=" + kmh
+                + ", position=" + position
+                + ", cupPosition=" + cupPosition
+                + ", trackPosition=" + trackPosition
+                + ", splinePosition=" + splinePosition
+                + ", laps=" + laps
+                + ", delta=" + delta
+                + ", bestSessionLap=" + bestSessionLap
+                + ", lastLap=" + lastLap
+                + ", currentLap=" + currentLap
+                + ", isDefault=" + isDefault
+                + '}';
     }
 
 }

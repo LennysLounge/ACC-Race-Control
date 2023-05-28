@@ -5,7 +5,6 @@
  */
 package racecontrol.client.protocol;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -53,6 +52,17 @@ public class TrackInfo {
 
     public List<String> getHudPages() {
         return Collections.unmodifiableList(hudPages);
+    }
+
+    @Override
+    public String toString() {
+        return "TrackInfo{"
+                + "trackName=" + trackName
+                + ", trackId=" + trackId
+                + ", trackMeters=" + trackMeters
+                + ", cameraSets=" + cameraSets
+                + ", hudPages=" + hudPages
+                + '}';
     }
 
 }

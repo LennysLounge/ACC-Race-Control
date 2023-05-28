@@ -144,4 +144,31 @@ public class SessionInfo {
     public LapInfo getBestSessionLap() {
         return bestSessionLap;
     }
+
+    @Override
+    public String toString() {
+        return "SessionInfo{"
+                + "eventIndex=" + eventIndex
+                + ", sessionIndex=" + sessionIndex
+                + ", sessionType=" + sessionType
+                + ", phase=" + phase
+                + ", sessionTime=" + sessionTime
+                + ", sessionEndTime=" + sessionEndTime
+                + ", focusedCarIndex=" + focusedCarIndex
+                + ", activeCameraSet=" + activeCameraSet
+                + ", activeCamera=" + activeCamera
+                + ", currentHudPage=" + currentHudPage
+                + ", replayPlaying=" + replayPlaying
+                + ", replaySessionTime=" + replaySessionTime
+                + ", replayRemainingTime=" + replayRemainingTime
+                + ", timeOfDay=" + timeOfDay
+                + ", ambientTemp=" + ambientTemp
+                + ", trackTemp=" + trackTemp
+                + ", cloudLevel=" + cloudLevel
+                + ", rainLevel=" + rainLevel
+                + ", wetness=" + wetness
+                + ", bestSessionLap=" + bestSessionLap
+                + '}';
+    }
+
 }

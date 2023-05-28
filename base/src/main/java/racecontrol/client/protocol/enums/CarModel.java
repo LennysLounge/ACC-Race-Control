@@ -107,4 +107,15 @@ public enum CarModel {
     public String getConstructor() {
         return constructor;
     }
+
+    @Override
+    public String toString() {
+        return "CarModel{"
+                + "type=" + type
+                + ", name=" + name
+                + ", constructor=" + constructor
+                + ", category=" + category
+                + '}';
+    }
+
 }
