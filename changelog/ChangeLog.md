@@ -5,7 +5,9 @@ Changes:
     
 Bug fixes:
 * Correctly display the places lost / gained.
+* Correctly display the drivers table in the live timing table.
 * Fix a potential crash in the accident detection algorithm.
+
 
 # v1.5.3
 

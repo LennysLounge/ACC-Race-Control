@@ -83,18 +83,17 @@ public class DriversTableModel
         if (car == null) {
             return LINE_HEIGHT;
         }
-        return LINE_HEIGHT * (car.driverCount) * 0.6f
-                + LINE_HEIGHT;
+        return LINE_HEIGHT * (car.drivers.size() - 1) * 0.6f + LINE_HEIGHT;
     }
 
     protected void nameRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        int i = 0;
+        float y = LINE_HEIGHT / 2f;
         for (Driver driver : car.drivers) {
             String name = driver.fullName();
             applet.fill(COLOR_WHITE);
             applet.textAlign(LEFT, CENTER);
-            if (i == car.driverIndexRealtime) {
+            if (car.getDriver() == driver) {
                 applet.textFont(LookAndFeel.fontMedium());
                 if (car.drivers.size() > 1) {
                     name = "<" + name + ">";
@@ -102,8 +101,8 @@ public class DriversTableModel
             } else {
                 applet.textFont(LookAndFeel.fontRegular());
             }
-            applet.text(name, 10f, LINE_HEIGHT / 2f + (LINE_HEIGHT * 0.6f) * i);
-            i++;
+            applet.text(name, 10f, y);
+            y += LINE_HEIGHT * 0.6f;
         }
     }
 
