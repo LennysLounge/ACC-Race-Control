@@ -319,6 +319,16 @@ public class ContactExtension
         // find other car with the smallest distance
         int subjectId = contact.getCars().get(0).id;
         Car subject = h.get(subjectId);
+        if (h == null) {
+            // The car cannot be found in the history map.
+            // I theory this should never happen but it is possible for a car
+            // to miss a realtime update and then the car will be missing from
+            // the history aswell. If an accident event is received with that
+            // car then it will return null here.
+            // We just return the contact as is since anything else would not
+            // make sense.
+            return contact;
+        }
         Optional<Car> closestCarOption = h.values().stream()
                 .filter(r -> r.id != subject.id)
                 .min((r1, r2) -> {
