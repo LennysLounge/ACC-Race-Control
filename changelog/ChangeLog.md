@@ -1,3 +1,8 @@
+# v1.5.5
+
+Bug fixes:
+* Fix a bug where cars would disconnect continously after a while.
+
 # v1.5.4
 
 Changes:
