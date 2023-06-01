@@ -34,15 +34,6 @@ public class RealtimePositionExtension
     public void onEvent(Event e) {
         if (e instanceof RealtimeCarUpdateEvent) {
             calculateRaceDistance(((RealtimeCarUpdateEvent) e).getInfo());
-
-            try {
-                RealtimeInfo info = ((RealtimeCarUpdateEvent) e).getInfo();
-                FileOutputStream outputStream = new FileOutputStream("test.csv", true);
-                outputStream.write((String.valueOf(info.getSplinePosition()) + "; " + String.valueOf(info.getLaps()) + "\n").getBytes()
-                );
-                outputStream.close();
-            } catch (Exception ex) {
-            }
         } else if (e instanceof RealtimeUpdateEvent) {
             findRealtimePosition(((RealtimeUpdateEvent) e).getSessionInfo());
         } else if (e instanceof SessionChangedEvent) {
