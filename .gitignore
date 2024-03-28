@@ -33,7 +33,7 @@ Monitor/build
 #ignore api credentials.
 credentials.json
 
-
+/.idea
 
 
 
