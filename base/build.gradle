@@ -1,92 +1,94 @@
-plugins{
+plugins {
     id 'java'
     id 'jacoco'
     id 'application'
-    id 'maven'
+    id 'maven-publish'
 }
 
 apply from: "${rootDir}/gradle/versioning.gradle"
 apply from: "${rootDir}/gradle/license-header.gradle"
 def distributionName = "ACC Race Control " + project.ext.versionString
 
-
-application{
+application {
     mainClass = 'racecontrol.Main'
 }
 
 repositories {
-    jcenter()
     mavenCentral()
 }
 
-sourceSets{
-    main{
-        resources{
+sourceSets {
+    main {
+        resources {
             srcDirs "src/main/resources", "../changelog"
         }
     }
 }
 
 dependencies {
-    testImplementation     'junit:junit:4.13'
-    
-    //compile group: 'org.processing', name: 'core', version: '3.3.6'
-    implementation 'org.processing:core:3.3.6'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.0'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.0'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.12.0'
-    implementation 'com.google.apis:google-api-services-sheets:v4-rev20200707-1.30.10'
-    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.30.4'
-    implementation 'com.google.api-client:google-api-client:1.30.4'
+    testImplementation 'junit:junit:4.13.2'
+
+    //compileOnly group: 'org.processing', name: 'core', version: '3.3.6'
+    implementation 'org.processing:core:3.3.7'
+    compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.17.0'
+    compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.17.0'
+    compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.17.0'
+    implementation 'com.google.apis:google-api-services-sheets:v4-rev20240319-2.0.0'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.35.0'
+    implementation 'com.google.api-client:google-api-client:2.4.0'
 }
 
-run{
+run {
     dependsOn installDist
-    workingDir new File(new File(buildDir, 'install'),distributionName)    
+    workingDir new File(new File(buildDir, 'install'), distributionName)
     jvmArgs("-splash:data/loading.png")
 }
 
-distributions{
-    main{
+distributions {
+    main {
         distributionBaseName = distributionName
         contents {
-            into("/Google Sheets API Key"){
+            into("/Google Sheets API Key") {
                 from "credentials"
             }
         }
     }
 }
 
-configure(install.repositories.mavenInstaller){
-    pom.project{
-        groupId = 'org.leonard-schuengel'
-        artifactId = 'acc-race-control'
-        version = '1.0'
+publishing {
+    publications {
+         mavenJava(MavenPublication) {
+             pom {
+                 groupId = 'org.leonard-schuengel'
+                 artifactId = 'acc-race-control'
+                 version = '1.0'
+             }
+        }
     }
 }
 
-task copyLibs(type:Copy){
+tasks.register('copyLibs', Copy) {
     group = "Release"
     from configurations.runtimeClasspath
     from jar
     into "$projectDir/build/release/" + distributionName + "/lib"
+    setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
 }
-task copyDist(type:Copy){
+tasks.register('copyDist', Copy) {
     group = "Release"
     from "$projectDir/src/dist"
     into "$projectDir/build/release/" + distributionName
+    setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
 }
 
-task buildRelease(type: Zip){
+tasks.register('buildRelease', Zip) {
     group = "Release"
     dependsOn copyLibs
     dependsOn copyDist
-    dependsOn install
     from "$projectDir/build/release/" + distributionName
-    archiveName distributionName + ".zip"
-    destinationDir(file("$projectDir/build/release/"))
+    setArchiveBaseName(distributionName)
+    setDestinationDirectory(file("$projectDir/build/release/"))
 }
-
 
 
 /*
@@ -94,5 +96,9 @@ compileJava {
     options.compilerArgs << '-Xlint:unchecked'
 }
 */
+
+processResources {
+    setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+}
 
 

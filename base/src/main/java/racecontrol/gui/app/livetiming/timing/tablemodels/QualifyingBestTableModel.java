@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Leonard Schüngel
+ * Copyright (c) 2021 Leonard Schï¿½ngel
  * 
  * For licensing information see the included license (LICENSE.txt)
  */
@@ -150,7 +150,7 @@ public class QualifyingBestTableModel
 
     protected void bestSectorThreeRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        int splitTime = car.bestLap.getSplits().get(0);
+        int splitTime = car.bestLap.getSplits().get(2);
         int sessionBestSplitTime = getClient().getModel().session.sessionBestSplits.get(2);
 
         String text = "--";

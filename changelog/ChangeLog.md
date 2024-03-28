@@ -1,3 +1,8 @@
+# v1.5.6
+
+Bug Fixes:
+* Fixed a bug where third sector times will be identical to First Sector times for all cars
+
 # v1.5.5
 
 Bug fixes:
