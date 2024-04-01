@@ -1,3 +1,16 @@
+# v1.5.6
+
+Bug fixes:
+* Avoid a crash when using Acc RaceControl on the Nordschleife.
+* There is currently a bug with the game which means that some features do not work correctly on the Nordschleife. These features are unlikely to be fixed unless Kunos fixes the bug in the game. Using RaceControl on other tracks behaves like normal.  
+A non exhaustive list of incorrectly working features:
+    * changing hud pages
+    * changing to tv/helicopter camera
+    * gap calculation
+    * advanced collision detection for endurance races.  
+
+
+
 # v1.5.5
 
 Bug fixes:

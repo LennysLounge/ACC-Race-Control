@@ -44,6 +44,9 @@ public class GapCalculator {
      * @return gap from -> to in ms.
      */
     public float calculateGap(Car behind, Car infront) {
+        if (trackData == null) {
+            return 0.0f;
+        }
         if (trackData.getGt3VelocityMap().isEmpty()) {
             return calculateGapNaive(behind, infront);
         }
