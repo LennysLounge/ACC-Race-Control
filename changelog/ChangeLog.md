@@ -8,6 +8,7 @@ A non exhaustive list of incorrectly working features:
     * changing to tv/helicopter camera
     * gap calculation
     * advanced collision detection for endurance races.  
+* Fixed a bug where third sector times will be identical to First Sector times for all cars (Fixed by Github@NoComment1105).
 
 
 

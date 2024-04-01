@@ -125,8 +125,8 @@ public class QualifyingLastTableModel
 
     protected void lastSectorTwoRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        int splitTime = car.lastLap.getSplits().get(0);
-        int bestSplitTime = car.bestLap.getSplits().get(0);
+        int splitTime = car.lastLap.getSplits().get(1);
+        int bestSplitTime = car.bestLap.getSplits().get(1);
         int sessionBestSplitTime = getClient().getModel().session.sessionBestSplits.get(1);
 
         String text = "--";
@@ -149,8 +149,8 @@ public class QualifyingLastTableModel
 
     protected void lastSectorThreeRenderer(PApplet applet, LPTable.RenderContext context) {
         Car car = (Car) context.object;
-        int splitTime = car.lastLap.getSplits().get(0);
-        int bestSplitTime = car.bestLap.getSplits().get(0);
+        int splitTime = car.lastLap.getSplits().get(2);
+        int bestSplitTime = car.bestLap.getSplits().get(2);
         int sessionBestSplitTime = getClient().getModel().session.sessionBestSplits.get(2);
 
         String text = "--";
