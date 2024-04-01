@@ -10,5 +10,5 @@ package racecontrol.utility;
  * @author Leonard
  */
 public interface Version {
-    String VERSION = "1.5.5";
+    String VERSION = "1.5.6";
 }
