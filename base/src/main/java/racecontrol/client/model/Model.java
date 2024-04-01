@@ -6,6 +6,7 @@
 package racecontrol.client.model;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,7 +64,13 @@ public class Model {
     /**
      * Track information.
      */
-    public TrackInfo trackInfo;
+    public TrackInfo trackInfo = new TrackInfo(
+        "Unknown",
+         Integer.MAX_VALUE,
+         5000,
+         new HashMap<>(),
+         new ArrayList<>()
+    );
     /**
      * Current session.
      */
