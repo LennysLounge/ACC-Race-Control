@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2021 Leonard Schüngel
+ * 
+ * For licensing information see the included license (LICENSE.txt)
+ */
 package racecontrol.gui.app.autobroadcast;
 
 import processing.core.PApplet;
@@ -10,11 +15,6 @@ import racecontrol.gui.lpui.LPContainer;
 import racecontrol.gui.lpui.LPLabel;
 import racecontrol.gui.lpui.table.LPTable;
 
-/*
- * Copyright (c) 2021 Leonard Schüngel
- * 
- * For licensing information see the included license (LICENSE.txt)
- */
 /**
  *
  * @author Leonard
