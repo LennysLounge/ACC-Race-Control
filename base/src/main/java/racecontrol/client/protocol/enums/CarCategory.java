@@ -13,6 +13,7 @@ package racecontrol.client.protocol.enums;
 public enum CarCategory {
     GT3("GT3"),
     GT4("GT4"),
+    GT2("GT2"),
     ST("ST"),
     ST22("ST"),
     CUP("CUP"),

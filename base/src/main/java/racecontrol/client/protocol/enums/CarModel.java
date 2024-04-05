@@ -14,6 +14,7 @@ import static racecontrol.client.protocol.enums.CarCategory.ST;
 import static racecontrol.client.protocol.enums.CarCategory.ST22;
 import static racecontrol.client.protocol.enums.CarCategory.TCX;
 import static racecontrol.client.protocol.enums.CarCategory.CHL;
+import static racecontrol.client.protocol.enums.CarCategory.GT2;
 
 /**
  * The different car models in the game.
@@ -70,6 +71,13 @@ public enum CarModel {
     MCLAREN_570S_GT4(59, "McLaren 570S GT4", "McLaren", GT4),
     MERCEDES_AMG_GT4(60, "Mercedes AMG GT4", "Mercedes-AMG", GT4),
     PORSCHE_718_CAYMAN_GT4_CLUBSPORT(61, "Porsche 718 Cayman GT4 Clubsport", "Porsche", GT4),
+    // GT2's
+    AUDI_R8_LSM_GT2(80, "Audi R8 LMS GT2", "Audi", GT2),
+    KTM_X_BOW_GT2(82, "KTM XBOW GT2", "KTM", GT2),
+    MASERATI_MC20_GT2(83, "Maserati MC20 GT2", "Maserati", GT2),
+    MERCEDES_AMG_GT2(84, "Mercedes AMG GT2", "Mercedes-AMG", GT2),
+    PORSCHE_911_GT2_RS_CS_EVO(85, "Porsche 911 GT2 RS CS Evo", "Porsche", GT2),
+    PORSCHE_935(86, "Porsche 935", "Porsche", GT2),
     ERROR(999, "ERROR", "Error", NONE);
 
     private final int type;
