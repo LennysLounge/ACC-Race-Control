@@ -3,6 +3,14 @@
 Changes:
 * Add support for GT2 dlc cars (Audi, KTM, Maserati, Mercedes, Porsche 911, Porsche 935)
 
+Bug fixes:
+* Disable yellow flag detection.  
+    With version 1.10 and upwards of the game the broadcasting api has changed a little but
+    which means that the yellow flag detection does not work correctly and would show every car
+    as causing a yellow flag.
+    Until this change in the api is reverted or a workaround has been found the
+    yellow flag detection will remain disabled.
+
 # v1.5.6
 
 Bug fixes:
