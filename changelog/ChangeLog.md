@@ -1,3 +1,8 @@
+# v1.5.7
+
+Changes:
+* Add support for GT2 dlc cars (Audi, KTM, Maserati, Mercedes, Porsche 911, Porsche 935)
+
 # v1.5.6
 
 Bug fixes:
