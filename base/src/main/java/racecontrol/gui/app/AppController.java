@@ -43,7 +43,7 @@ public class AppController
     /**
      * Show debug panels.
      */
-    private final boolean SHOW_DEBUG = false;
+    private final boolean SHOW_DEBUG = true;
     /**
      * The GUI component.
      */
@@ -80,6 +80,7 @@ public class AppController
             pageControllers.add(new TestPanel());
             pageControllers.add(new DangerDetectionController());
             pageControllers.add(new TrackDataController());
+            pageControllers.add(new OrientationController());
         }
 
         // Add page controllers from extension modules.
