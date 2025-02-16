@@ -45,7 +45,7 @@ public class TrackDataController
 
     private TrackData trackData;
 
-    private final int mapSize = 200;
+    private final int mapSize = 1000;
 
     private final List<Float> vMap = new ArrayList<>();
     private final List<List<Float>> vMapTotal = new ArrayList<>();
