@@ -420,9 +420,9 @@ public class AccConnection
             car.driverIndexRealtime = info.getDriverIndex();
             car.driverCount = info.getDriverCount();
             car.gear = info.getGear();
-            car.yaw = info.getYaw();
-            car.pitch = info.getPitch();
-            car.roll = info.getRoll();
+            car.yaw = info.getWorldPositionY();
+            car.pitch = info.getWorldPositionX();
+            car.roll = info.getHeading();
             car.carLocation = info.getLocation();
             car.KMH = info.getKMH();
             car.position = info.getPosition();

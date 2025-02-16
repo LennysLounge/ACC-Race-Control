@@ -77,15 +77,15 @@ public class RealtimeInfo {
         return gear;
     }
 
-    public float getYaw() {
+    public float getWorldPositionY() {
         return yaw;
     }
 
-    public float getPitch() {
+    public float getWorldPositionX() {
         return pitch;
     }
 
-    public float getRoll() {
+    public float getHeading() {
         return roll;
     }
 

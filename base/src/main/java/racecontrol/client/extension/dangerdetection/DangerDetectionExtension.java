@@ -226,7 +226,7 @@ public class DangerDetectionExtension extends ClientExtension
         }
 
         float vDiff = info.getKMH() - getValueFromMap(velocityMap, info.getSplinePosition());
-        float dDiff = Math.abs(angleBetewen(info.getYaw(), getDMapValue(info.getSplinePosition())));
+        float dDiff = Math.abs(angleBetewen(info.getHeading(), getDMapValue(info.getSplinePosition())));
 
         float vTolerance = getValueFromMap(velocityToleranceWhiteMap, info.getSplinePosition());
         if (info.getKMH() < vTolerance) {

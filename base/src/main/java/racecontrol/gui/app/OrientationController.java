@@ -59,7 +59,7 @@ public class OrientationController
         if (e instanceof RealtimeCarUpdateEvent) {
             RealtimeInfo info = ((RealtimeCarUpdateEvent) e).getInfo();
             synchronized (positions) {
-                PVector pos = new PVector(info.getPitch(), -info.getYaw(), info.getRoll());
+                PVector pos = new PVector(info.getWorldPositionX(), -info.getWorldPositionY(), info.getHeading());
                 if (pos.x < min_x) {
                     min_x = pos.x;
                 }

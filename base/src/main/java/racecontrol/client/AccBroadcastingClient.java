@@ -104,13 +104,7 @@ public class AccBroadcastingClient
         extensions.add(ReplayOffsetExtension.getInstance());
         extensions.add(new ResultsExtension());
         extensions.add(TrackDataExtension.getInstance());
-        /**
-         * Danger detection currently does not work because of changes to the broadcasting api.
-         * The yaw direction of the cars is no longer available. 
-         * This may or may not be changed again in the future at which point the danger detection
-         * must be reevaluated.
-         */
-        //extensions.add(DangerDetectionExtension.getInstance());
+        extensions.add(DangerDetectionExtension.getInstance());
         extensions.add(VirtualSafetyCarExtension.getInstance());
         extensions.add(VirtualSafetyCarExtension.getInstance());
         extensions.add(RaceEventExtension.get());

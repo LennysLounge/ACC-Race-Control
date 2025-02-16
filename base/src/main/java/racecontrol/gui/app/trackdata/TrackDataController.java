@@ -160,7 +160,7 @@ public class TrackDataController
             if (index == mapSize) {
                 index = 0;
             }
-            dirMapTotal.get(index).add(info.getYaw());
+            dirMapTotal.get(index).add(info.getHeading());
             dirMapTotal.get(index).sort((a, b) -> a.compareTo(b));
             dirMap.set(index, getAverageAngel(dirMapTotal.get(index)));
         }

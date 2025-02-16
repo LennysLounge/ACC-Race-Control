@@ -261,7 +261,7 @@ public class DangerDetectionController
                         applet.beginShape();
                     }
                     prevSplinePos = info.getSplinePosition();
-                    float current = info.getYaw();
+                    float current = info.getHeading();
                     float map = getDMapValue(info.getSplinePosition());
                     applet.vertex(info.getSplinePosition() * w,
                             h / 2f + angleBetewen(current, map) * angleScale);
@@ -283,7 +283,7 @@ public class DangerDetectionController
                     applet.fill(255, 255, 0);
                 }
                 var info = carV.get(carId).get(carV.get(carId).size() - 1);
-                float current = info.getYaw();
+                float current = info.getHeading();
                 float map = getDMapValue(info.getSplinePosition());
                 applet.ellipse(info.getSplinePosition() * w,
                         h / 2f + angleBetewen(current, map) * angleScale,

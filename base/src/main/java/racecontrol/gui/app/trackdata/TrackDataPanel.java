@@ -216,7 +216,7 @@ public class TrackDataPanel
         // draw vmap markers
         for (RealtimeInfo info : carStateSafe) {
             float x = graphWidth * info.getSplinePosition();
-            float y = PApplet.map(info.getYaw(), -PApplet.PI, PApplet.PI, graphHeight - 10, 10);
+            float y = PApplet.map(info.getHeading(), -PApplet.PI, PApplet.PI, graphHeight - 10, 10);
             dirMapGraph.beginDraw();
             dirMapGraph.point(x, y);
             dirMapGraph.endDraw();
@@ -252,7 +252,7 @@ public class TrackDataPanel
         applet.fill(COLOR_WHITE);
         for (RealtimeInfo info : carStateSafe) {
             float x = graphWidth * info.getSplinePosition();
-            float y = PApplet.map(info.getYaw(), -PApplet.PI, PApplet.PI, graphHeight - 10, 10);
+            float y = PApplet.map(info.getHeading(), -PApplet.PI, PApplet.PI, graphHeight - 10, 10);
             applet.ellipse(x, y, 6, 6);
         }
 
