@@ -1,3 +1,12 @@
+# v1.5.8
+
+Changes:
+* Add support for the Ford Mustang GT3
+* Enabled yellow flag detection.
+    The update of the game that causes this issue was resolved. This update
+    makes sure to fix up the yellow flag detection to work with the newest verison
+    of the game.
+
 # v1.5.7
 
 Changes:
