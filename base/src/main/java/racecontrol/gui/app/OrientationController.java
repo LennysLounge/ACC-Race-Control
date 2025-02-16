@@ -5,12 +5,11 @@
  */
 package racecontrol.gui.app;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import processing.core.PApplet;
-import static processing.core.PApplet.abs;
 import static processing.core.PApplet.map;
-import static processing.core.PApplet.max;
 import processing.core.PVector;
 import racecontrol.client.events.RealtimeCarUpdateEvent;
 import racecontrol.client.events.RealtimeUpdateEvent;
@@ -31,13 +30,14 @@ public class OrientationController
 
     private final Menu.MenuItem menuItem;
 
-    private List<PVector> positions = new ArrayList<>();
+    private Map<Integer, PVector> positions = new HashMap<>();
     private float min_x;
     private float max_x;
     private float min_y;
     private float max_y;
     private float min_z;
     private float max_z;
+    private int focusedId = 0;
 
     public OrientationController() {
         EventBus.register(this);
@@ -59,7 +59,7 @@ public class OrientationController
         if (e instanceof RealtimeCarUpdateEvent) {
             RealtimeInfo info = ((RealtimeCarUpdateEvent) e).getInfo();
             synchronized (positions) {
-                PVector pos = new PVector(info.getRoll(), -info.getYaw(), info.getPitch());
+                PVector pos = new PVector(info.getPitch(), -info.getYaw(), info.getRoll());
                 if (pos.x < min_x) {
                     min_x = pos.x;
                 }
@@ -78,12 +78,13 @@ public class OrientationController
                 if (pos.z < min_z) {
                     min_z = pos.z;
                 }
-                positions.add(pos);
+                positions.put(info.getCarId(), pos);
 
             }
         } else if (e instanceof RealtimeUpdateEvent) {
             synchronized (positions) {
                 positions.clear();
+                focusedId = ((RealtimeUpdateEvent)e).getSessionInfo().getFocusedCarIndex();
             }
             invalidate();
         }
@@ -97,11 +98,22 @@ public class OrientationController
         applet.fill(255, 255, 0);
         applet.noStroke();
         synchronized (positions) {
-            for (PVector pos : positions) {
+            for (Entry<Integer, PVector> entry : positions.entrySet()) {
+                PVector pos = entry.getValue();
+                int id = entry.getKey();
+                if(id == focusedId){
+                    applet.fill(0, 255, 255);
+                }else{
+                    applet.fill(255, 255, 0);
+                }
                 float x = map(pos.x, min_x, max_x, 20, getWidth() - 20);
                 float y = map(pos.y, min_y, max_y, 20, getHeight() - 20);
-                float z = map(pos.z, min_z, max_z, 1, 50);
-                applet.ellipse(x, y, z, z);
+                //float z = map(pos.z, min_z, max_z, 1, 50);
+                applet.noStroke();
+                applet.ellipse(x, y, 10, 10);
+                
+                applet.stroke(255);
+                applet.line(x, y, x+(float)Math.cos(pos.z)*20, y+(float)Math.sin(pos.z)*20);
             }
         }
 
